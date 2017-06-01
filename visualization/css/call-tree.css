@@ -1,0 +1,147 @@
+@font-face {
+    font-family: "Gotham Pro";
+    font-weight: bold;
+    src: url(../font/GothamProBold.ttf);
+}
+
+@font-face {
+    font-family: "Menlo";
+    font-weight: normal;
+    src: url(../font/Menlo-Regular.ttf);
+}
+
+body {
+    font-family: "Gotham Pro", sans-serif;
+    font-weight: normal;
+}
+main {
+    width: 700px;
+    display: block;
+    margin: calc(50vh - 150px) auto 100px;
+}
+h1 {
+    width: 100%;
+    text-align: center;
+    font-family: "Gotham Pro", sans-serif;
+    font-weight: bold;
+}
+h2 {
+    padding-bottom: 10px;
+    border-bottom: solid;
+    margin-bottom: 40px;
+}
+form {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 20px;
+}
+section {
+    background-color: white;
+    padding: 0;
+    margin-bottom: 30px;
+}
+.call-tree {
+    position: relative;
+    height: 800px;
+}
+ol {
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    height: 50px;
+    bottom: 0;
+    width: 100%;
+}
+li {
+    display: inline-block;
+    position: absolute;
+    list-style: none;
+    height: 25px;
+    z-index: 1;
+    background-size: cover;
+    background: #5457FF linear-gradient(#5EDAFF, #5457FF) fixed center;
+    box-sizing: border-box;
+    border-top: solid white 1px;
+}
+.call-tree .method-name {
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-family: Menlo, sans-serif;
+    font-size: 14px;
+    color: white;
+    padding: 0 0 0 2px;
+}
+.detail {
+    background-color: #222;
+    font-family: "Menlo", "Gotham Pro", sans-serif;
+    font-weight: normal;
+    color: white;
+    display: none;
+    position: absolute;
+    pointer-events: none;
+    z-index: 100;
+    padding: 10px 15px 15px;
+}
+
+.detail h3 {
+    font-size: 14px;
+    margin-top: 0;
+    margin-bottom: 5px;
+}
+.detail b {
+    font-size: 18px;
+}
+.detail p {
+    margin: 0;
+    font-size: 12px;
+}
+.inputfile {
+    width: 0;
+    height: 0;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+
+.inputfile + label {
+    font-size: 14px;
+    color: white;
+    background-color: #18A3FA;
+    display: inline-block;
+    padding: 15px 25px;
+    border-radius: 30px;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.inputfile + label:hover {
+    background-color: #0887d7;
+}
+
+.inputfile + label {
+    cursor: pointer;
+}
+
+.inputfile + label * {
+    pointer-events: none;
+}
+
+footer {
+    background-color: #222;
+    color: white;
+    font-family: Menlo, sans-serif;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    padding-right: 30px;
+    /*padding: 5px 10px;*/
+}
+footer p {
+    width: 100%;
+    text-align: right;
+    margin: 5px 0;
+}

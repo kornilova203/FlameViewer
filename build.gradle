@@ -1,0 +1,28 @@
+version '1.0'
+
+apply plugin: 'java'
+apply plugin: 'application'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+mainClassName = 'org.jetbrains.test.Main'
+
+jar {
+    manifest {
+        attributes "Premain-Class": "Profiler.ProfilingAgent"
+    }
+}
+
+task runApp(type: JavaExec, dependsOn: build) {
+    classpath = sourceSets.test.runtimeClasspath
+    main = "org.jetbrains.test.Main"
+    jvmArgs += ["-javaagent:${jar.getArchivePath()}"]
+}
