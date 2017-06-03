@@ -41,7 +41,7 @@ jar {
 task profileClass(type: JavaExec, dependsOn: build) {
     classpath = sourceSets.test.runtimeClasspath
 //    main = "org.jetbrains.test.SimpleExample"
-    main = "org.jetbrains.test.TestApplication"
+    main = "org.jetbrains.test.TestApplicationWithoutSleep"
     jvmArgs += ["-javaagent:${jar.getArchivePath()}"]
 }
 
@@ -49,7 +49,7 @@ jmh {
     warmupIterations = 5
     iterations = 10
     fork = 2
-    include = "simpleExample"
-//    include = "testApplication"
+//    include = "simpleExample"
+    include = "testApplicationWithoutSleep"
     jvmArgs = "-javaagent:${jar.getArchivePath()}"
 }

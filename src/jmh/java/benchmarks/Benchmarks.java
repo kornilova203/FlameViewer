@@ -1,8 +1,7 @@
 package benchmarks;
 
 import org.jetbrains.test.SimpleExample;
-import org.jetbrains.test.SimpleExampleWithProfiler;
-import org.jetbrains.test.TestApplication;
+import org.jetbrains.test.TestApplicationWithoutSleep;
 import org.openjdk.jmh.annotations.*;
 
 import java.util.concurrent.TimeUnit;
@@ -10,9 +9,8 @@ import java.util.concurrent.TimeUnit;
 @State(Scope.Benchmark)
 public class Benchmarks {
 
-    private TestApplication ta = new TestApplication();
     private SimpleExample sa = new SimpleExample();
-    private SimpleExampleWithProfiler sawp = new SimpleExampleWithProfiler();
+    private TestApplicationWithoutSleep taws = new TestApplicationWithoutSleep();
 
     @Benchmark
     @BenchmarkMode(Mode.AverageTime)
@@ -30,7 +28,7 @@ public class Benchmarks {
     @Benchmark
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void simpleExampleWithProfiler() {
-        sawp.start();
+    public void testApplicationWithoutSleep() {
+        taws.start();
     }
 }
