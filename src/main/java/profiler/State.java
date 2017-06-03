@@ -1,4 +1,4 @@
-package Profiler;
+package profiler;
 
 public class State {
     private final String name;

@@ -3,13 +3,13 @@ package org.jetbrains.test;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import static Profiler.Profiler.methodStart;
+import static profiler.Profiler.methodStart;
 
 /**
  * Created by Liudmila Kornilova
  * on 04.05.17.
  *
- * Application for testing Profiler
+ * Application for testing profiler
  * it has only one thread and determined call tree with following structure:
  * start
  *  fun1

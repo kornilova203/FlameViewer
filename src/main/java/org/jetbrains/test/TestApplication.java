@@ -7,7 +7,7 @@ import java.io.IOException;
  * Created by Liudmila Kornilova
  * on 04.05.17.
  *
- * Application for testing Profiler
+ * Application for testing profiler
  * it has only one thread and determined call tree with following structure:
  * start
  *  fun1
@@ -17,6 +17,8 @@ import java.io.IOException;
  *          fun5
  *              fun6
  *  fun2
+ *
+ *  total sleep = 164ms
  */
 
 public class TestApplication {

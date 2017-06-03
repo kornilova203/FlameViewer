@@ -3,8 +3,6 @@ package org.jetbrains.test;
 import java.util.List;
 import java.util.Random;
 
-import static Profiler.Profiler.methodStart;
-
 /**
  * Nikolay.Tropin
  * 18-Apr-17
@@ -39,7 +37,7 @@ public class DummyApplication {
     }
 
     private void abc(String s) {
-//        Profiler.State state = methodStart();
+//        profiler.State state = methodStart();
 
         sleep();
         if (stop()) {
@@ -55,7 +53,7 @@ public class DummyApplication {
     }
 
     private void def(String s) {
-//        Profiler.State state = methodStart();
+//        profiler.State state = methodStart();
 
         sleep();
         if (stop()) {
@@ -71,7 +69,7 @@ public class DummyApplication {
     }
 
     private void xyz(String s) {
-//        Profiler.State state = methodStart();
+//        profiler.State state = methodStart();
 
         sleep();
         if (stop()) {

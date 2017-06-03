@@ -1,4 +1,4 @@
-package Profiler;
+package profiler;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -32,8 +32,10 @@ public class ProfilingAgent implements ClassFileTransformer {
             ClassReader cr = new ClassReader(classfileBuffer);
             // TODO: compute maxs and frames manually
             ClassWriter cw = new ClassWriter(cr, ClassWriter.COMPUTE_FRAMES);
-            TraceClassVisitor cv = new TraceClassVisitor(cw, new PrintWriter(System.out));
-            cr.accept(new AddProfilerClassVisitor(cv), 0);
+            // uncomment for debugging
+//            TraceClassVisitor cv = new TraceClassVisitor(cw, new PrintWriter(System.out));
+//            cr.accept(new AddProfilerClassVisitor(cv), 0);
+            cr.accept(new AddProfilerClassVisitor(cw), 0);
 
             return cw.toByteArray();
         }
@@ -67,8 +69,8 @@ class AddProfilerMethodVisitor extends LocalVariablesSorter {
     @Override
     public void visitCode() {
         super.visitCode(); // TODO: check if `visitCode` is necessary here
-        mv.visitMethodInsn(INVOKESTATIC, "Profiler/Profiler",
-                "methodStart", "()LProfiler/State;", false);
+        mv.visitMethodInsn(INVOKESTATIC, "profiler/Profiler",
+                "methodStart", "()Lprofiler/State;", false);
         // TODO: check is it correct to use `LONG_TYPE` for object
         state = newLocal(Type.LONG_TYPE);
         mv.visitVarInsn(ASTORE, state);
@@ -78,7 +80,7 @@ class AddProfilerMethodVisitor extends LocalVariablesSorter {
     public void visitInsn(int opcode) {
         if ((opcode >= IRETURN && opcode <= RETURN) || opcode == ATHROW) {
             mv.visitVarInsn(ALOAD, state);
-            mv.visitMethodInsn(INVOKEVIRTUAL, "Profiler/State", "methodFinish", "()V", false);
+            mv.visitMethodInsn(INVOKEVIRTUAL, "profiler/State", "methodFinish", "()V", false);
         }
         mv.visitInsn(opcode);
     }

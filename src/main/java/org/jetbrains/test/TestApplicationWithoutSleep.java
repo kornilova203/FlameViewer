@@ -7,7 +7,7 @@ import java.io.PrintWriter;
  * Created by Liudmila Kornilova
  * on 04.05.17.
  *
- * Application for testing Profiler
+ * Application for testing profiler
  * It does not have sleep() calls
  * it has only one thread and determined call tree with following structure:
  * start

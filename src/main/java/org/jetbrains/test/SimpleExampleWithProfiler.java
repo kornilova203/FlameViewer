@@ -1,12 +1,10 @@
 package org.jetbrains.test;
 
-
-import Profiler.State;
-
-import static Profiler.Profiler.methodStart;
+import profiler.State;
+import static profiler.Profiler.methodStart;
 
 public class SimpleExampleWithProfiler {
-    public static void main(String[] args) {
+    public void start() {
         State state = methodStart();
         state.methodFinish();
     }
