@@ -11,6 +11,9 @@ repositories {
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
+    compile "org.ow2.asm:asm:5.2"
+    compile "org.ow2.asm:asm-util:5.2" // TraceClassVisitor (for debugging)
+    compile group: 'org.ow2.asm', name: 'asm-commons', version: '5.0.3' // LocalVariablesSorter
 }
 
 mainClassName = 'org.jetbrains.test.Main'
@@ -21,8 +24,9 @@ jar {
     }
 }
 
-task runApp(type: JavaExec, dependsOn: build) {
+task profileClass(type: JavaExec, dependsOn: build) {
     classpath = sourceSets.test.runtimeClasspath
-    main = "org.jetbrains.test.Main"
+//    main = "org.jetbrains.test.SimpleExample"
+    main = "org.jetbrains.test.TestApplication"
     jvmArgs += ["-javaagent:${jar.getArchivePath()}"]
 }

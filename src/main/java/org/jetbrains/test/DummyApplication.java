@@ -39,7 +39,7 @@ public class DummyApplication {
     }
 
     private void abc(String s) {
-        Profiler.State state = methodStart(s);
+//        Profiler.State state = methodStart();
 
         sleep();
         if (stop()) {
@@ -51,11 +51,11 @@ public class DummyApplication {
         else {
             xyz(nextArg());
         }
-        state.methodFinish();
+//        state.methodFinish();
     }
 
     private void def(String s) {
-        Profiler.State state = methodStart(s);
+//        Profiler.State state = methodStart();
 
         sleep();
         if (stop()) {
@@ -67,11 +67,11 @@ public class DummyApplication {
         else {
             xyz(nextArg());
         }
-        state.methodFinish();
+//        state.methodFinish();
     }
 
     private void xyz(String s) {
-        Profiler.State state = methodStart(s);
+//        Profiler.State state = methodStart();
 
         sleep();
         if (stop()) {
@@ -83,7 +83,7 @@ public class DummyApplication {
         else {
             def(nextArg());
         }
-        state.methodFinish();
+//        state.methodFinish();
     }
 
     public void start() {
