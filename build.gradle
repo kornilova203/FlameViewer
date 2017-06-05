@@ -1,3 +1,5 @@
+import me.champeau.gradle.JMHPluginExtension
+
 version '1.0'
 
 apply plugin: 'java'
@@ -32,24 +34,29 @@ dependencies {
 
 mainClassName = 'org.jetbrains.test.Main'
 
-jar {
+task packAgent (type: Jar, dependsOn: classes) {
     manifest {
         attributes "Premain-Class": "profiler.ProfilingAgent"
     }
+    archiveName = 'javaagent.jar'
+    from sourceSets.main.output
+    include '**/profiler/*'
+    includeEmptyDirs = false
 }
 
-task profileClass(type: JavaExec, dependsOn: build) {
+task profileClass(type: JavaExec, dependsOn: [build, packAgent]) {
     classpath = sourceSets.test.runtimeClasspath
 //    main = "org.jetbrains.test.SimpleExample"
     main = "org.jetbrains.test.TestApplicationWithoutSleep"
-    jvmArgs += ["-javaagent:${jar.getArchivePath()}"]
+    jvmArgs += ["-javaagent:${packAgent.getArchivePath()}"]
 }
 
 jmh {
+    packAgent.execute()
     warmupIterations = 5
     iterations = 10
     fork = 2
 //    include = "simpleExample"
     include = "testApplicationWithoutSleep"
-    jvmArgs = "-javaagent:${jar.getArchivePath()}"
+    jvmArgs = "-javaagent:${packAgent.getArchivePath()}"
 }
