@@ -25,7 +25,7 @@ public class Profiler {
     }
 
     static synchronized void writeToFile(String str) {
-        // TODO: check if it is the best way to write data to file
+        // TODO: check is there better ways to write data to file (GZIPOutputStream?)
         try (FileWriter fw = new FileWriter("out.txt", true);
              BufferedWriter bw = new BufferedWriter(fw);
              PrintWriter out = new PrintWriter(bw)) {

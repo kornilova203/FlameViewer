@@ -58,6 +58,7 @@ class AddProfilerClassVisitor extends ClassVisitor {
     }
 }
 
+// TODO: implement this using AdviceAdapter
 class AddProfilerMethodVisitor extends LocalVariablesSorter {
     private int state;
 
