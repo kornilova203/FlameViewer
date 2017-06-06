@@ -1,8 +1,5 @@
 package org.jetbrains.test;
 
-import java.io.FileWriter;
-import java.io.IOException;
-
 /**
  * Created by Liudmila Kornilova
  * on 04.05.17.
@@ -21,7 +18,7 @@ import java.io.IOException;
  *  total sleep = 164ms
  */
 
-public class TestApplication {
+public class TestWithSleep {
     private void fun1() throws InterruptedException {
         Thread.sleep(3);
         fun3();
@@ -64,7 +61,7 @@ public class TestApplication {
     }
 
     public static void main(String[] args) throws InterruptedException {
-        TestApplication ta = new TestApplication();
+        TestWithSleep ta = new TestWithSleep();
         ta.start();
     }
 }

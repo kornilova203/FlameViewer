@@ -1,7 +1,6 @@
 package org.jetbrains.test;
 
 import java.io.FileNotFoundException;
-import java.io.PrintWriter;
 
 /**
  * Created by Liudmila Kornilova
@@ -22,7 +21,7 @@ import java.io.PrintWriter;
  *  fun2
  */
 
-public class TestApplicationWithoutSleep {
+public class Test {
     private void fun1() {
         fun3();
     }
@@ -60,7 +59,7 @@ public class TestApplicationWithoutSleep {
     }
 
     public static void main(String[] args) throws InterruptedException, FileNotFoundException {
-        TestApplicationWithoutSleep ta = new TestApplicationWithoutSleep();
+        Test ta = new Test();
         ta.start();
     }
 }

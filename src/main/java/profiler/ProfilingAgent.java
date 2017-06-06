@@ -15,6 +15,7 @@ import org.objectweb.asm.util.TraceClassVisitor;
 
 import static org.objectweb.asm.Opcodes.*;
 
+// TODO: add insertion of try-finally block
 public class ProfilingAgent implements ClassFileTransformer {
     public static void premain(String args, Instrumentation inst) throws IOException {
         FileWriter fileWriter = new FileWriter("out.txt");

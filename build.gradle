@@ -54,7 +54,5 @@ jmh {
     warmupIterations = 5
     iterations = 10
     fork = 2
-//    include = "simpleExample"
-    include = "testApplicationWithoutSleep"
-    jvmArgs = "-javaagent:${packAgent.getArchivePath()}"
+    include = "test.*"
 }
