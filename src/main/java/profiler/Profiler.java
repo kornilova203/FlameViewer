@@ -17,11 +17,11 @@ public class Profiler {
         Thread thread = Thread.currentThread();
         StackTraceElement method = thread.getStackTrace()[2];
         String name = method.getClassName() + "." + method.getMethodName();
-        int threadHashCode = thread.hashCode();
+        long threadId = thread.getId();
 
-        writeToFile(threadHashCode + " s " + name + " " + time);
+        writeToFile(threadId + " s " + name + " " + time);
 
-        return new State(name, threadHashCode);
+        return new State(name, threadId);
     }
 
     static synchronized void writeToFile(String str) {

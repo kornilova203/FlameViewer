@@ -2,14 +2,14 @@ package profiler;
 
 public class State {
     private final String name;
-    private final int threadHashCode;
+    private final long threadId;
 
-    State(String name, int threadHashCode) {
+    State(String name, long threadId) {
         this.name = name;
-        this.threadHashCode = threadHashCode;
+        this.threadId = threadId;
     }
 
     public void methodFinish() {
-        Profiler.writeToFile(threadHashCode + " f " + name + " " + System.nanoTime());
+        Profiler.writeToFile(threadId + " f " + name + " " + System.nanoTime());
     }
 }
