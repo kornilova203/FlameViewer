@@ -38,4 +38,12 @@ public class SimpleExample {
         Profiler.log(String.valueOf(a));
         return a;
     }
+
+    public static void doTryCatch() {
+        try {
+            System.out.println(1);
+        } catch (Exception ignored) {
+
+        }
+    }
 }

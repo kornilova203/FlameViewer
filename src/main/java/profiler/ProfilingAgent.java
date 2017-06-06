@@ -66,6 +66,7 @@ class AddProfilerMethodVisitor extends AdviceAdapter {
 
     @Override
     protected void onMethodEnter() {
+        System.out.println("onMethodEnter " + methodDesc);
         mv.visitMethodInsn(INVOKESTATIC, "profiler/Profiler",
                 "methodStart", "()Lprofiler/State;", false);
         // TODO: check is it correct to use `LONG_TYPE` for object

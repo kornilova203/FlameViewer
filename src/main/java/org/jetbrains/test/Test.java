@@ -59,11 +59,17 @@ public class Test {
         return a;
     }
 
-    private void fun7() {
-        fun8();
+    private boolean fun7() {
+        try{
+            fun8();
+        } catch (Exception ignored) {
+
+        }
+        return false;
     }
 
     private void fun8() {
+//        throw new RuntimeException("Something went wrong");
     }
 
     public void start() {
