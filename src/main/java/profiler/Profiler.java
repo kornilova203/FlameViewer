@@ -12,11 +12,11 @@ public class Profiler {
      *
      * @return State object which contains info about method. This object has methodFinish() method
      */
-    public static State methodStart() {
+    public static State methodStart(String desc) {
         long time = System.nanoTime();
         Thread thread = Thread.currentThread();
         StackTraceElement method = thread.getStackTrace()[2];
-        String name = method.getClassName() + "." + method.getMethodName();
+        String name = method.getClassName() + "." + method.getMethodName() + " " + desc;
         long threadId = thread.getId();
 
         log(threadId + " s " + name + " " + time);

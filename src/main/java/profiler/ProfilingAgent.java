@@ -49,7 +49,7 @@ class AddProfilerClassVisitor extends ClassVisitor {
     @Override
     public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
         MethodVisitor mv = cv.visitMethod(access, name, desc, signature, exceptions);
-        if (mv != null) {
+        if (mv != null && !name.equals("toString")) {
             mv = new AddProfilerMethodVisitor(access, name, desc, mv);
         }
         return mv;
@@ -66,12 +66,16 @@ class AddProfilerMethodVisitor extends AdviceAdapter {
 
     @Override
     protected void onMethodEnter() {
-        System.out.println("onMethodEnter " + methodDesc);
+//        LDC "desc"
+//        INVOKESTATIC profiler/Profiler.methodStart (Ljava/lang/String;)Lprofiler/State;
+//        System.out.println("onMethodEnter " + methodDesc);
+        mv.visitLdcInsn(methodDesc);
         mv.visitMethodInsn(INVOKESTATIC, "profiler/Profiler",
-                "methodStart", "()Lprofiler/State;", false);
+                "methodStart", "(Ljava/lang/String;)Lprofiler/State;", false);
         // TODO: check is it correct to use `LONG_TYPE` for object
         state = newLocal(Type.LONG_TYPE);
         mv.visitVarInsn(ASTORE, state);
+
     }
 
     // opcode:
@@ -115,7 +119,6 @@ class AddProfilerMethodVisitor extends AdviceAdapter {
 //            INVOKEVIRTUAL java/lang/Object.toString ()Ljava/lang/String;
 //            INVOKESTATIC profiler/Profiler.log (Ljava/lang/String;)V
 //            INVOKEVIRTUAL org/jetbrains/test/SimpleExample$TestClass.toString ()Ljava/lang/String;
-            // TODO: check if returning object has it's overwritten toString()
             dup();
             mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Object", "toString",
                     "()Ljava/lang/String;", false);
