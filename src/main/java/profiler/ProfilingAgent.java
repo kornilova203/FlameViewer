@@ -7,13 +7,10 @@ import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.lang.instrument.Instrumentation;
 import java.security.ProtectionDomain;
-import java.util.Objects;
 
 import org.objectweb.asm.*;
-import org.objectweb.asm.commons.LocalVariablesSorter;
+import org.objectweb.asm.commons.AdviceAdapter;
 import org.objectweb.asm.util.TraceClassVisitor;
-
-import static org.objectweb.asm.Opcodes.*;
 
 // TODO: add insertion of try-finally block
 public class ProfilingAgent implements ClassFileTransformer {
@@ -52,25 +49,23 @@ class AddProfilerClassVisitor extends ClassVisitor {
     @Override
     public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
         MethodVisitor mv = cv.visitMethod(access, name, desc, signature, exceptions);
-        if (mv != null && !Objects.equals(name, "<init>")) {
-            mv = new AddProfilerMethodVisitor(access, desc, mv);
+        if (mv != null) {
+            mv = new AddProfilerMethodVisitor(access, name, desc, mv);
         }
         return mv;
     }
 }
 
-// TODO: implement this using AdviceAdapter
-class AddProfilerMethodVisitor extends LocalVariablesSorter {
+class AddProfilerMethodVisitor extends AdviceAdapter {
     private int state;
 
-    public AddProfilerMethodVisitor(int access, String desc,
+    public AddProfilerMethodVisitor(int access, String name, String desc,
                                     MethodVisitor mv) {
-        super(Opcodes.ASM5, access, desc, mv);
+        super(Opcodes.ASM5, mv, access, name, desc);
     }
 
     @Override
-    public void visitCode() {
-        super.visitCode(); // TODO: check if `visitCode` is necessary here
+    protected void onMethodEnter() {
         mv.visitMethodInsn(INVOKESTATIC, "profiler/Profiler",
                 "methodStart", "()Lprofiler/State;", false);
         // TODO: check is it correct to use `LONG_TYPE` for object
@@ -79,11 +74,8 @@ class AddProfilerMethodVisitor extends LocalVariablesSorter {
     }
 
     @Override
-    public void visitInsn(int opcode) {
-        if ((opcode >= IRETURN && opcode <= RETURN) || opcode == ATHROW) {
-            mv.visitVarInsn(ALOAD, state);
-            mv.visitMethodInsn(INVOKEVIRTUAL, "profiler/State", "methodFinish", "()V", false);
-        }
-        mv.visitInsn(opcode);
+    protected void onMethodExit(int opcode) {
+        mv.visitVarInsn(ALOAD, state);
+        mv.visitMethodInsn(INVOKEVIRTUAL, "profiler/State", "methodFinish", "()V", false);
     }
 }
