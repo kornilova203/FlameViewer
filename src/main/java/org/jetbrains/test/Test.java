@@ -22,28 +22,41 @@ import java.io.FileNotFoundException;
  */
 
 public class Test {
-    private void fun1() {
+    private class TestClass {
+        private final int val = 42;
+    }
+
+    private int fun1() {
+        int a = 23;
         fun3();
+        return a;
     }
 
-    private void fun2() {
+    private TestClass fun2() {
+        TestClass testClass = new TestClass();
+        return testClass;
     }
 
-    private void fun3() {
+    private TestClass fun3() {
         fun4();
         fun4();
         fun5();
+        return new TestClass();
     }
 
-    private void fun4() {
+    private long fun4() {
+        return 1234567;
     }
 
-    private void fun5() {
+    private float fun5() {
         fun6();
+        return (float) 123.456;
     }
 
-    private void fun6() {
+    private double fun6() {
+        double a = 123.456;
         fun7();
+        return a;
     }
 
     private void fun7() {

@@ -10,6 +10,6 @@ public class State {
     }
 
     public void methodFinish() {
-        Profiler.writeToFile(threadId + " f " + name + " " + System.nanoTime());
+        Profiler.log(threadId + " f " + name + " " + System.nanoTime());
     }
 }

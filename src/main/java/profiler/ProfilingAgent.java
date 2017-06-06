@@ -31,9 +31,9 @@ public class ProfilingAgent implements ClassFileTransformer {
             // TODO: compute maxs and frames manually
             ClassWriter cw = new ClassWriter(cr, ClassWriter.COMPUTE_FRAMES);
             // uncomment for debugging
-//            TraceClassVisitor cv = new TraceClassVisitor(cw, new PrintWriter(System.out));
-//            cr.accept(new AddProfilerClassVisitor(cv), 0);
-            cr.accept(new AddProfilerClassVisitor(cw), 0);
+            TraceClassVisitor cv = new TraceClassVisitor(cw, new PrintWriter(System.out));
+            cr.accept(new AddProfilerClassVisitor(cv), 0);
+//            cr.accept(new AddProfilerClassVisitor(cw), 0);
 
             return cw.toByteArray();
         }
@@ -59,8 +59,8 @@ class AddProfilerClassVisitor extends ClassVisitor {
 class AddProfilerMethodVisitor extends AdviceAdapter {
     private int state;
 
-    public AddProfilerMethodVisitor(int access, String name, String desc,
-                                    MethodVisitor mv) {
+    AddProfilerMethodVisitor(int access, String name, String desc,
+                             MethodVisitor mv) {
         super(Opcodes.ASM5, mv, access, name, desc);
     }
 
@@ -73,9 +73,53 @@ class AddProfilerMethodVisitor extends AdviceAdapter {
         mv.visitVarInsn(ASTORE, state);
     }
 
+    // opcode:
+    // RETURN
+    // IRETURN int
+    // FRETURN
+    // ARETURN object
+    // LRETURN long integer
+    // DRETURN
+    // ATHROW
     @Override
     protected void onMethodExit(int opcode) {
+//        ILOAD 0
+//        INVOKESTATIC java/lang/String.valueOf (I)Ljava/lang/String;
+//        INVOKESTATIC profiler/Profiler.log (Ljava/lang/String;)V
+//        ILOAD 0
+//        IRETURN
         mv.visitVarInsn(ALOAD, state);
-        mv.visitMethodInsn(INVOKEVIRTUAL, "profiler/State", "methodFinish", "()V", false);
+        mv.visitMethodInsn(INVOKEVIRTUAL, "profiler/State", "methodFinish",
+                "()V", false);
+        if (opcode == RETURN) {
+            return;
+        }
+        if (opcode == IRETURN) {
+            dup();
+            mv.visitMethodInsn(INVOKESTATIC, "java/lang/String",
+                    "valueOf", "(I)Ljava/lang/String;", false);
+        } else if (opcode == LRETURN) {
+            dup2();
+            mv.visitMethodInsn(INVOKESTATIC, "java/lang/String",
+                    "valueOf", "(J)Ljava/lang/String;", false);
+        } else if (opcode == FRETURN) {
+            dup();
+            mv.visitMethodInsn(INVOKESTATIC, "java/lang/String",
+                    "valueOf", "(F)Ljava/lang/String;", false);
+        } else if (opcode == DRETURN) {
+            dup2();
+            mv.visitMethodInsn(INVOKESTATIC, "java/lang/String",
+                    "valueOf", "(D)Ljava/lang/String;", false);
+        } else if (opcode == ARETURN) {
+//            INVOKEVIRTUAL java/lang/Object.toString ()Ljava/lang/String;
+//            INVOKESTATIC profiler/Profiler.log (Ljava/lang/String;)V
+//            INVOKEVIRTUAL org/jetbrains/test/SimpleExample$TestClass.toString ()Ljava/lang/String;
+            // TODO: check if returning object has it's overwritten toString()
+            dup();
+            mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Object", "toString",
+                    "()Ljava/lang/String;", false);
+        }
+        mv.visitMethodInsn(INVOKESTATIC, "profiler/Profiler", "log",
+                "(Ljava/lang/String;)V", false);
     }
 }

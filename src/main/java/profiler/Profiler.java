@@ -19,12 +19,12 @@ public class Profiler {
         String name = method.getClassName() + "." + method.getMethodName();
         long threadId = thread.getId();
 
-        writeToFile(threadId + " s " + name + " " + time);
+        log(threadId + " s " + name + " " + time);
 
         return new State(name, threadId);
     }
 
-    static synchronized void writeToFile(String str) {
+    public static synchronized void log(String str) {
         // TODO: check is there better ways to write data to file (GZIPOutputStream? java.util.logging?)
         try (FileWriter fw = new FileWriter("out/out.txt", true);
              BufferedWriter bw = new BufferedWriter(fw);
