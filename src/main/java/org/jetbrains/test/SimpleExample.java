@@ -33,7 +33,8 @@ public class SimpleExample {
         arrayList.add(1);
         arrayList.add(2);
         arrayList.add(3);
-        simpleExample.instanceGetsParams(123, 23);
+        simpleExample.instanceGetsParams(false, 123, Pattern.compile("some.*(pattern)?"), 23);
+        simpleExample.getFalse();
     }
 
     private static TestClass start() {
@@ -64,7 +65,15 @@ public class SimpleExample {
 //        System.out.println(b);
     }
 
-    private void instanceGetsParams(long l, int a) {
+    private void instanceGetsParams(boolean b, long l, Pattern p, int a) {
+
+    }
+
+    private boolean getFalse() {
+        return false;
+    }
+
+    private void unused(char c) {
 
     }
 

@@ -15,8 +15,6 @@ import org.objectweb.asm.*;
 import org.objectweb.asm.commons.AdviceAdapter;
 import org.objectweb.asm.util.TraceClassVisitor;
 
-import static org.objectweb.asm.Opcodes.ACC_STATIC;
-
 // TODO: add insertion of try-finally block
 public class ProfilingAgent implements ClassFileTransformer {
     public static void premain(String args, Instrumentation inst) throws IOException {
@@ -64,7 +62,7 @@ class AddProfilerClassVisitor extends ClassVisitor {
 class AddProfilerMethodVisitor extends AdviceAdapter {
     private final int state = newLocal(Type.LONG_TYPE);
     private final static Pattern allParamsPattern = Pattern.compile("(\\(.*\\))");
-    private final static Pattern paramsPattern = Pattern.compile("(\\[?)(C|Z|S|I|J|F|D|(:?L[^;]+;))");
+    private final static Pattern paramsPattern = Pattern.compile("(\\[?)(C|Z|S|I|J|F|D|B|(:?L[^;]+;))");
 
     AddProfilerMethodVisitor(int access, String name, String desc,
                              MethodVisitor mv) {
@@ -73,9 +71,6 @@ class AddProfilerMethodVisitor extends AdviceAdapter {
 
     @Override
     protected void onMethodEnter() {
-//        LDC "desc"
-//        INVOKESTATIC profiler/Profiler.methodStart (Ljava/lang/String;)Lprofiler/State;
-        System.out.println("onMethodEnter " + methodDesc);
         mv.visitLdcInsn(methodDesc);
         mv.visitMethodInsn(INVOKESTATIC, "profiler/Profiler",
                 "methodStart", "(Ljava/lang/String;)Lprofiler/State;", false);
@@ -96,19 +91,25 @@ class AddProfilerMethodVisitor extends AdviceAdapter {
         Matcher mParam = paramsPattern.matcher(paramsDescriptor);
 
         int pos = 0;
-        if ((methodAccess & ACC_STATIC) != ACC_STATIC) { // if method is not static
+        if ((methodAccess & ACC_STATIC) == 0) { // if method is not static
             pos++;
+            logThis();
         }
         while (mParam.find()) {
-            pos = paramLog(mParam.group(), pos);
+            pos = logParam(mParam.group(), pos);
         }
     }
 
-    private int paramLog(String type, int pos) {
-//        ILOAD 0
-//        INVOKESTATIC java/lang/String.valueOf (I)Ljava/lang/String;
-//        INVOKESTATIC profiler/Profiler.log (Ljava/lang/String;)V
-        if (Objects.equals(type, "I") || Objects.equals(type, "Z")) { // int or boolean
+    private void logThis() {
+
+    }
+
+    private int logParam(String type, int pos) {
+        if (Objects.equals(type, "I") ||
+                Objects.equals(type, "Z") || // boolean
+                Objects.equals(type, "C") ||
+                Objects.equals(type, "B") || // byte
+                Objects.equals(type, "S")) { // short
             visitVarInsn(ILOAD, pos);
             pos++;
         } else if (Objects.equals(type, "J")) {
@@ -122,25 +123,24 @@ class AddProfilerMethodVisitor extends AdviceAdapter {
             pos += 2;
         } else { // object
             visitVarInsn(ALOAD, pos);
-            pos += 1;
+            invokeToString();
+            log();
+            return pos + 1;
         }
-        convertToString(type);
+        invokeStringValueOf(type);
         log();
 
         return pos;
     }
 
-    private void convertToString(String type) {
-        if (Objects.equals(type, "I") ||
-                Objects.equals(type, "J") ||
-                Objects.equals(type, "F") ||
-                Objects.equals(type, "D")) {
-            mv.visitMethodInsn(INVOKESTATIC, "java/lang/String",
-                    "valueOf", "(" + type + ")Ljava/lang/String;", false);
-        } else { // object
-            mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Object", "toString",
-                    "()Ljava/lang/String;", false);
-        }
+    private void invokeStringValueOf(String type) {
+        mv.visitMethodInsn(INVOKESTATIC, "java/lang/String",
+                "valueOf", "(" + type + ")Ljava/lang/String;", false);
+    }
+
+    private void invokeToString() {
+        mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Object", "toString",
+                "()Ljava/lang/String;", false);
     }
 
     private void log() {
@@ -148,54 +148,36 @@ class AddProfilerMethodVisitor extends AdviceAdapter {
                 "(Ljava/lang/String;)V", false);
     }
 
-    // opcode:
-    // RETURN
-    // IRETURN int
-    // FRETURN
-    // ARETURN object
-    // LRETURN long integer
-    // DRETURN
-    // ATHROW
     @Override
     protected void onMethodExit(int opcode) {
-//        ILOAD 0
-//        INVOKESTATIC java/lang/String.valueOf (I)Ljava/lang/String;
-//        INVOKESTATIC profiler/Profiler.log (Ljava/lang/String;)V
-//        ILOAD 0
-//        IRETURN
         mv.visitVarInsn(ALOAD, state);
         mv.visitMethodInsn(INVOKEVIRTUAL, "profiler/State", "methodFinish",
                 "()V", false);
+        logReturnValue(opcode);
+    }
+
+    private void logReturnValue(int opcode) {
         if (opcode == RETURN) {
             return;
         }
         if (opcode == IRETURN) {
             dup();
-            convertToString("I");
+            invokeStringValueOf("I");
         } else if (opcode == LRETURN) {
             dup2();
-            convertToString("J");
+            invokeStringValueOf("J");
         } else if (opcode == FRETURN) {
             dup();
-            convertToString("F");
+            invokeStringValueOf("F");
         } else if (opcode == DRETURN) {
             dup2();
-            convertToString("D");
+            invokeStringValueOf("D");
         } else if (opcode == ARETURN) {
-//            INVOKEVIRTUAL java/lang/Object.toString ()Ljava/lang/String;
-//            INVOKESTATIC profiler/Profiler.log (Ljava/lang/String;)V
-//            INVOKEVIRTUAL org/jetbrains/test/SimpleExample$TestClass.toString ()Ljava/lang/String;
             dup();
-            mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Object", "toString",
-                    "()Ljava/lang/String;", false);
-        }
-        mv.visitMethodInsn(INVOKESTATIC, "profiler/Profiler", "log",
-                "(Ljava/lang/String;)V", false);
-    }
+            invokeToString();
+        } else { // ATHROW
 
-//    @Override
-//    public void visitLocalVariable(String name, String desc, String signature, Label start, Label end, int index) {
-//        System.out.println(name + " " + desc + " " + signature + " " + start);
-//        super.visitLocalVariable(name, desc, signature, start, end, index);
-//    }
+        }
+        log();
+    }
 }
