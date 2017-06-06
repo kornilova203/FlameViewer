@@ -7,10 +7,15 @@ import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.lang.instrument.Instrumentation;
 import java.security.ProtectionDomain;
+import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.objectweb.asm.*;
 import org.objectweb.asm.commons.AdviceAdapter;
 import org.objectweb.asm.util.TraceClassVisitor;
+
+import static org.objectweb.asm.Opcodes.ACC_STATIC;
 
 // TODO: add insertion of try-finally block
 public class ProfilingAgent implements ClassFileTransformer {
@@ -49,7 +54,7 @@ class AddProfilerClassVisitor extends ClassVisitor {
     @Override
     public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
         MethodVisitor mv = cv.visitMethod(access, name, desc, signature, exceptions);
-        if (mv != null && !name.equals("toString")) {
+        if (mv != null && !name.equals("toString") && !name.equals("main")) {
             mv = new AddProfilerMethodVisitor(access, name, desc, mv);
         }
         return mv;
@@ -57,7 +62,9 @@ class AddProfilerClassVisitor extends ClassVisitor {
 }
 
 class AddProfilerMethodVisitor extends AdviceAdapter {
-    private int state;
+    private final int state = newLocal(Type.LONG_TYPE);
+    private final static Pattern allParamsPattern = Pattern.compile("(\\(.*\\))");
+    private final static Pattern paramsPattern = Pattern.compile("(\\[?)(C|Z|S|I|J|F|D|(:?L[^;]+;))");
 
     AddProfilerMethodVisitor(int access, String name, String desc,
                              MethodVisitor mv) {
@@ -68,14 +75,77 @@ class AddProfilerMethodVisitor extends AdviceAdapter {
     protected void onMethodEnter() {
 //        LDC "desc"
 //        INVOKESTATIC profiler/Profiler.methodStart (Ljava/lang/String;)Lprofiler/State;
-//        System.out.println("onMethodEnter " + methodDesc);
+        System.out.println("onMethodEnter " + methodDesc);
         mv.visitLdcInsn(methodDesc);
         mv.visitMethodInsn(INVOKESTATIC, "profiler/Profiler",
                 "methodStart", "(Ljava/lang/String;)Lprofiler/State;", false);
         // TODO: check is it correct to use `LONG_TYPE` for object
-        state = newLocal(Type.LONG_TYPE);
         mv.visitVarInsn(ASTORE, state);
+        addParamLogging();
+    }
 
+    /**
+     * Insert instructions for logging all method parameters
+     */
+    private void addParamLogging() {
+        Matcher m = allParamsPattern.matcher(methodDesc);
+        if (!m.find()) {
+            throw new IllegalArgumentException("Method signature does not contain parameters");
+        }
+        String paramsDescriptor = m.group(1);
+        Matcher mParam = paramsPattern.matcher(paramsDescriptor);
+
+        int pos = 0;
+//        if ((methodAccess & ACC_STATIC) == ACC_STATIC) { // if method is static
+//            pos++;
+//        }
+        while (mParam.find()) {
+            pos = paramLog(mParam.group(), pos);
+        }
+    }
+
+    private int paramLog(String type, int pos) {
+//        ILOAD 0
+//        INVOKESTATIC java/lang/String.valueOf (I)Ljava/lang/String;
+//        INVOKESTATIC profiler/Profiler.log (Ljava/lang/String;)V
+        if (Objects.equals(type, "I")) {
+            visitVarInsn(ILOAD, pos);
+            pos++;
+        } else if (Objects.equals(type, "J")) {
+            visitVarInsn(LLOAD, pos);
+            pos += 2;
+        } else if (Objects.equals(type, "F")) {
+            visitVarInsn(FLOAD, pos);
+            pos += 1;
+        } else if (Objects.equals(type, "D")) {
+            visitVarInsn(DLOAD, pos);
+            pos += 2;
+        } else { // object
+            visitVarInsn(ALOAD, pos);
+            pos += 1;
+        }
+        convertToString(type);
+        log();
+
+        return pos;
+    }
+
+    private void convertToString(String type) {
+        if (Objects.equals(type, "I") ||
+                Objects.equals(type, "J") ||
+                Objects.equals(type, "F") ||
+                Objects.equals(type, "D")) {
+            mv.visitMethodInsn(INVOKESTATIC, "java/lang/String",
+                    "valueOf", "(" + type + ")Ljava/lang/String;", false);
+        } else { // object
+            mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Object", "toString",
+                    "()Ljava/lang/String;", false);
+        }
+    }
+
+    private void log() {
+        mv.visitMethodInsn(INVOKESTATIC, "profiler/Profiler", "log",
+                "(Ljava/lang/String;)V", false);
     }
 
     // opcode:
@@ -101,20 +171,16 @@ class AddProfilerMethodVisitor extends AdviceAdapter {
         }
         if (opcode == IRETURN) {
             dup();
-            mv.visitMethodInsn(INVOKESTATIC, "java/lang/String",
-                    "valueOf", "(I)Ljava/lang/String;", false);
+            convertToString("I");
         } else if (opcode == LRETURN) {
             dup2();
-            mv.visitMethodInsn(INVOKESTATIC, "java/lang/String",
-                    "valueOf", "(J)Ljava/lang/String;", false);
+            convertToString("J");
         } else if (opcode == FRETURN) {
             dup();
-            mv.visitMethodInsn(INVOKESTATIC, "java/lang/String",
-                    "valueOf", "(F)Ljava/lang/String;", false);
+            convertToString("F");
         } else if (opcode == DRETURN) {
             dup2();
-            mv.visitMethodInsn(INVOKESTATIC, "java/lang/String",
-                    "valueOf", "(D)Ljava/lang/String;", false);
+            convertToString("D");
         } else if (opcode == ARETURN) {
 //            INVOKEVIRTUAL java/lang/Object.toString ()Ljava/lang/String;
 //            INVOKESTATIC profiler/Profiler.log (Ljava/lang/String;)V
@@ -126,4 +192,10 @@ class AddProfilerMethodVisitor extends AdviceAdapter {
         mv.visitMethodInsn(INVOKESTATIC, "profiler/Profiler", "log",
                 "(Ljava/lang/String;)V", false);
     }
+
+//    @Override
+//    public void visitLocalVariable(String name, String desc, String signature, Label start, Label end, int index) {
+//        System.out.println(name + " " + desc + " " + signature + " " + start);
+//        super.visitLocalVariable(name, desc, signature, start, end, index);
+//    }
 }
