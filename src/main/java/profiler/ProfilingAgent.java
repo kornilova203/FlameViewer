@@ -63,6 +63,8 @@ class AddProfilerMethodVisitor extends AdviceAdapter {
     private final int state = newLocal(Type.LONG_TYPE);
     private final static Pattern allParamsPattern = Pattern.compile("(\\(.*\\))");
     private final static Pattern paramsPattern = Pattern.compile("(\\[?)(C|Z|S|I|J|F|D|B|(:?L[^;]+;))");
+    private final static Pattern returnType = Pattern.compile("(?<=\\)).*"); // (?<=\)).*
+    private final static Pattern baseTypes = Pattern.compile("([CZSIJFDB])");
 
     AddProfilerMethodVisitor(int access, String name, String desc,
                              MethodVisitor mv) {
@@ -105,11 +107,7 @@ class AddProfilerMethodVisitor extends AdviceAdapter {
     }
 
     private int logParam(String type, int pos) {
-        if (Objects.equals(type, "I") ||
-                Objects.equals(type, "Z") || // boolean
-                Objects.equals(type, "C") ||
-                Objects.equals(type, "B") || // byte
-                Objects.equals(type, "S")) { // short
+        if (isI(type)) { // if I S B C Z
             visitVarInsn(ILOAD, pos);
             pos++;
         } else if (Objects.equals(type, "J")) {
@@ -121,6 +119,11 @@ class AddProfilerMethodVisitor extends AdviceAdapter {
         } else if (Objects.equals(type, "D")) {
             visitVarInsn(DLOAD, pos);
             pos += 2;
+        } else if (type.startsWith("[")) { // array
+            visitVarInsn(ALOAD, pos);
+            invokeArraysToString(type);
+            log();
+            return pos + 1;
         } else { // object
             visitVarInsn(ALOAD, pos);
             invokeToString();
@@ -131,6 +134,30 @@ class AddProfilerMethodVisitor extends AdviceAdapter {
         log();
 
         return pos;
+    }
+
+    /**
+     * Inserts method Arrays.toString(..)
+     * @param type type of parameter (starts with '[')
+     * INVOKESTATIC java/util/Arrays.toString ([I)Ljava/lang/String;
+     */
+    private void invokeArraysToString(String type) {
+        if (baseTypes.matcher(type.substring(1)).matches()) { // if it is base type
+            mv.visitMethodInsn(INVOKESTATIC, "java/util/Arrays",
+                    "toString", "(" + type + ")Ljava/lang/String;", false);
+        } else {
+            mv.visitMethodInsn(INVOKESTATIC, "java/util/Arrays",
+                    "toString", "([L)Ljava/lang/String;", false);
+        }
+
+    }
+
+    private boolean isI(String type) {
+        return Objects.equals(type, "I") ||
+                Objects.equals(type, "Z") || // boolean
+                Objects.equals(type, "C") ||
+                Objects.equals(type, "B") || // byte
+                Objects.equals(type, "S"); // short
     }
 
     private void invokeStringValueOf(String type) {
@@ -172,12 +199,24 @@ class AddProfilerMethodVisitor extends AdviceAdapter {
         } else if (opcode == DRETURN) {
             dup2();
             invokeStringValueOf("D");
-        } else if (opcode == ARETURN) {
+        } else if (opcode == ARETURN) { // object or array
             dup();
-            invokeToString();
+            aReturnToString();
         } else { // ATHROW
 
         }
         log();
+    }
+
+    private void aReturnToString() {
+        Matcher matcher = returnType.matcher(methodDesc);
+        if (!matcher.find()) { //
+            throw new IllegalArgumentException("Method signature does not contain return value");
+        }
+        if (matcher.group().startsWith("[")) { // if it is an array
+            invokeArraysToString(matcher.group());
+        } else { // object
+            invokeToString();
+        }
     }
 }

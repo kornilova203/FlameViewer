@@ -4,6 +4,7 @@ import profiler.Profiler;
 import profiler.State;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.regex.Pattern;
 
 public class SimpleExample {
@@ -32,14 +33,17 @@ public class SimpleExample {
         ArrayList<Integer> arrayList = new ArrayList<>();
         arrayList.add(1);
         arrayList.add(2);
-        arrayList.add(3);
-        simpleExample.instanceGetsParams(false, 123, Pattern.compile("some.*(pattern)?"), 23);
+        arrayList.add(3);int[] arr = new int[3];
+        arr[0] = 11;
+        arr[1] = 22;
+        arr[2] = 33;
+        simpleExample.instanceGetsParams(false, arr, 123, Pattern.compile("some.*(pattern)?"), 23);
         simpleExample.getFalse();
+//        simpleExample.getArrayOfPatterns();
     }
 
     private static TestClass start() {
         TestClass testClass = new TestClass();
-        Profiler.log(testClass.toString());
         return testClass;
     }
     public static long returnJ() {
@@ -65,7 +69,7 @@ public class SimpleExample {
 //        System.out.println(b);
     }
 
-    private void instanceGetsParams(boolean b, long l, Pattern p, int a) {
+    private void instanceGetsParams(boolean b, int[] arr, long l, Pattern p, int a) {
 
     }
 
@@ -74,7 +78,11 @@ public class SimpleExample {
     }
 
     private void unused(char c) {
-
+        int[] arr = new int[3];
+        arr[0] = 11;
+        arr[1] = 22;
+        arr[2] = 33;
+//        Arrays.toString(arr);
     }
 
     public static void doTryCatch() {
@@ -84,4 +92,11 @@ public class SimpleExample {
 //
 //        }
     }
+
+//    public Pattern[] getArrayOfPatterns() {
+//        Pattern[] patterns = new Pattern[2];
+//        patterns[0] = Pattern.compile("1.*");
+//        patterns[1] = Pattern.compile("2.*");
+//        return patterns;
+//    }
 }
