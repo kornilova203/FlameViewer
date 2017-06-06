@@ -96,9 +96,9 @@ class AddProfilerMethodVisitor extends AdviceAdapter {
         Matcher mParam = paramsPattern.matcher(paramsDescriptor);
 
         int pos = 0;
-//        if ((methodAccess & ACC_STATIC) == ACC_STATIC) { // if method is static
-//            pos++;
-//        }
+        if ((methodAccess & ACC_STATIC) != ACC_STATIC) { // if method is not static
+            pos++;
+        }
         while (mParam.find()) {
             pos = paramLog(mParam.group(), pos);
         }
@@ -108,7 +108,7 @@ class AddProfilerMethodVisitor extends AdviceAdapter {
 //        ILOAD 0
 //        INVOKESTATIC java/lang/String.valueOf (I)Ljava/lang/String;
 //        INVOKESTATIC profiler/Profiler.log (Ljava/lang/String;)V
-        if (Objects.equals(type, "I")) {
+        if (Objects.equals(type, "I") || Objects.equals(type, "Z")) { // int or boolean
             visitVarInsn(ILOAD, pos);
             pos++;
         } else if (Objects.equals(type, "J")) {

@@ -33,7 +33,7 @@ public class SimpleExample {
         arrayList.add(1);
         arrayList.add(2);
         arrayList.add(3);
-//        simpleExample.instanceGetsParams(false, arrayList, 23);
+        simpleExample.instanceGetsParams(123, 23);
     }
 
     private static TestClass start() {
@@ -64,10 +64,9 @@ public class SimpleExample {
 //        System.out.println(b);
     }
 
-//    private void instanceGetsParams(boolean b, ArrayList<Integer> arrayList, int a) {
+    private void instanceGetsParams(long l, int a) {
 
-
-//    }
+    }
 
     public static void doTryCatch() {
 //        try {
