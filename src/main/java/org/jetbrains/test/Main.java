@@ -11,8 +11,8 @@ import java.util.stream.IntStream;
 public class Main {
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        FileWriter fileWriter = new FileWriter("out.txt");
-        fileWriter.close();
+//        FileWriter fileWriter = new FileWriter("out.txt");
+//        fileWriter.close();
         ExecutorService service = Executors.newFixedThreadPool(3);
         for(int i = 0; i < 5; i++) {
             int start = 100 * i;

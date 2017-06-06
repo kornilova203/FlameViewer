@@ -44,8 +44,7 @@ task packAgent (type: Jar, dependsOn: classes) {
 
 task profileClass(type: JavaExec, dependsOn: [build, packAgent]) {
     classpath = sourceSets.test.runtimeClasspath
-//    main = "org.jetbrains.test.SimpleExample"
-    main = "org.jetbrains.test.TestApplicationWithoutSleep"
+    main = "org.jetbrains.test.Test"
     jvmArgs += ["-javaagent:${packAgent.getArchivePath()}"]
 }
 
