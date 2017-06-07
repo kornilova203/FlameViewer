@@ -75,7 +75,7 @@ public class SimpleExample {
     }
 
     public static double returnD() {
-        State state = Profiler.methodStart("desc");
+//        State state = Profiler.methodStart("desc");
         double a = 12345.45;
         return a;
     }
@@ -146,8 +146,8 @@ public class SimpleExample {
     }
 
     private void unused(Pattern[] patterns) {
-        State state = Profiler.methodStart("desc" + patterns.toString() + "some text");
-        state.methodFinish(" ");
+//        State state = Profiler.methodStart("desc",patterns.toString() + "some text");
+//        state.methodFinish(" ");
     }
 
     public static void main(String[] args) {

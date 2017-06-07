@@ -29,14 +29,14 @@ public class Profiler {
      *
      * @return State object which contains info about method. This object has methodFinish() method
      */
-    public static State methodStart(String desc) {
+    public static State methodStart(String desc, String parameters) {
         long time = System.nanoTime();
         Thread thread = Thread.currentThread();
         StackTraceElement method = thread.getStackTrace()[2];
-        String name = method.getClassName() + "." + method.getMethodName() + " " + desc;
+        String name = method.getClassName() + "." + method.getMethodName() + "⊗" + desc;
         long threadId = thread.getId();
 
-        log(threadId + " s " + name + " " + time);
+        log(threadId + "⊗s⊗" + name + "⊗" + parameters + "⊗" + time);
 
         return new State(name, threadId);
     }

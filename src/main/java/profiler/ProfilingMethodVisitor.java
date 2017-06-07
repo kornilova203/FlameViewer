@@ -39,22 +39,22 @@ class ProfilingMethodVisitor extends AdviceAdapter {
         String parameterDesc = getParamDesc();
         boolean isStatic = isStatic();
         if (Objects.equals(parameterDesc, "()") && isStatic) { // if there is no input parameters and it's static (no this)
-            mv.visitLdcInsn(methodDesc + " static");
+            mv.visitLdcInsn(methodDesc + "⊗static");
+            mv.visitLdcInsn(""); // no input parameters
         } else {
+            mv.visitLdcInsn(methodDesc + (isStatic ? "⊗static" : "⊗non-static"));
             createStringBuilder();
-            mv.visitLdcInsn(methodDesc + (isStatic ? " static ":""));
-            invokeStringBuilderAppend();
             appendParamsToStringBuilder(parameterDesc, isStatic);
             invokeStringBuilderToString();
         }
         mv.visitMethodInsn(INVOKESTATIC, "profiler/Profiler",
-                "methodStart", "(Ljava/lang/String;)Lprofiler/State;", false);
+                "methodStart", "(Ljava/lang/String;Ljava/lang/String;)Lprofiler/State;", false);
         // TODO: check is it correct to use `LONG_TYPE` for object
         mv.visitVarInsn(ASTORE, state);
     }
 
     private void addDelimiter() {
-        mv.visitLdcInsn("~");
+        mv.visitLdcInsn("⇑");
         invokeStringBuilderAppend();
     }
 
@@ -98,8 +98,10 @@ class ProfilingMethodVisitor extends AdviceAdapter {
         if (!isStatic) {
             pos++;
             // TODO: check if it is correct to print `this` in <init>
-            addDelimiter();
             appendThisToStringBuilder();
+        }
+        if (mParam.find()) {
+            pos = appendParam(mParam.group(), pos);
         }
         while (mParam.find()) {
             addDelimiter();
@@ -196,7 +198,7 @@ class ProfilingMethodVisitor extends AdviceAdapter {
     private void convertReturnValToString(int opcode) {
         if (opcode == RETURN) {
             mv.visitVarInsn(ALOAD, state);
-            mv.visitLdcInsn("");
+            mv.visitLdcInsn(""); // no return param
             return;
         }
         if (opcode == IRETURN) {

@@ -10,6 +10,6 @@ public class State {
     }
 
     public void methodFinish(String returnVal) {
-        Profiler.log(threadId + " f " + name + " " + returnVal + " " + System.nanoTime());
+        Profiler.log(threadId + "⊗f⊗" + name + "⊗" + returnVal + "⊗" + System.nanoTime());
     }
 }
