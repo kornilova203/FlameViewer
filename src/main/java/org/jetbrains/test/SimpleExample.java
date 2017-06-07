@@ -55,6 +55,11 @@ public class SimpleExample {
         returns2DArrayOfStrings();
     }
 
+    @Override
+    public String toString() {
+        return "I am an instance of SimpleExample";
+    }
+
     private static TestClass start() {
         TestClass testClass = new TestClass();
         return testClass;
@@ -88,6 +93,7 @@ public class SimpleExample {
     }
 
     private boolean getFalse() {
+        System.out.println(this.toString());
         return false;
     }
 

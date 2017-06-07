@@ -45,6 +45,7 @@ class ProfilingMethodVisitor extends AdviceAdapter {
         int pos = 0;
         if ((methodAccess & ACC_STATIC) == 0) { // if method is not static
             pos++;
+            // TODO: check if it is correct to print `this` in <init>
             logThis();
         }
         while (mParam.find()) {
@@ -53,7 +54,9 @@ class ProfilingMethodVisitor extends AdviceAdapter {
     }
 
     private void logThis() {
-
+        mv.visitVarInsn(ALOAD, 0);
+        invokeToString();
+        log();
     }
 
     private int logParam(String type, int pos) {
