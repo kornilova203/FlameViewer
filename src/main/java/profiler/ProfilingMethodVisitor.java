@@ -23,12 +23,16 @@ class ProfilingMethodVisitor extends AdviceAdapter {
 
     @Override
     protected void onMethodEnter() {
-        mv.visitLdcInsn(methodDesc);
+        mv.visitLdcInsn(methodDesc + (isStatic() ? " static":""));
         mv.visitMethodInsn(INVOKESTATIC, "profiler/Profiler",
                 "methodStart", "(Ljava/lang/String;)Lprofiler/State;", false);
         // TODO: check is it correct to use `LONG_TYPE` for object
         mv.visitVarInsn(ASTORE, state);
         addParamLogging();
+    }
+
+    private boolean isStatic() {
+        return (methodAccess & ACC_STATIC) != 0;
     }
 
     /**
@@ -43,7 +47,7 @@ class ProfilingMethodVisitor extends AdviceAdapter {
         Matcher mParam = paramsPattern.matcher(paramsDescriptor);
 
         int pos = 0;
-        if ((methodAccess & ACC_STATIC) == 0) { // if method is not static
+        if (!isStatic()) {
             pos++;
             // TODO: check if it is correct to print `this` in <init>
             logThis();
