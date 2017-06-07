@@ -4,7 +4,7 @@ import profiler.Profiler;
 import profiler.State;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashSet;
 import java.util.regex.Pattern;
 
 public class SimpleExample {
@@ -30,19 +30,29 @@ public class SimpleExample {
         getsParameters(5, "hello", 12345678);
 
         SimpleExample simpleExample = new SimpleExample();
-        ArrayList<Integer> arrayList = new ArrayList<>();
-        arrayList.add(1);
-        arrayList.add(2);
-        arrayList.add(3);int[] arr = new int[3];
+        int[] arr = new int[3];
         arr[0] = 11;
         arr[1] = 22;
         arr[2] = 33;
         Pattern[] patterns = new Pattern[2];
         patterns[0] = Pattern.compile("1.*");
         patterns[1] = Pattern.compile("2.*");
-        simpleExample.instanceGetsParams(false, arr, patterns, 123, Pattern.compile("some.*(pattern)?"), 23);
+        ArrayList<String> arrayList = new ArrayList<>();
+        arrayList.add("some");
+        arrayList.add("arrayList");
+        simpleExample.instanceGetsParams(arrayList, false, arr, patterns, 123, Pattern.compile("some.*(pattern)?"), 23);
         simpleExample.getFalse();
-//        simpleExample.getArrayOfPatterns();
+        returnsArrayList();
+        returnsArrayListOfStrings();
+        returnsArrayOfHashSets();
+        returnsHashSetOfArraysOfStrings();
+
+        HashSet<String[]> hashSet = new HashSet<>();
+        hashSet.add(new String[] {"hello", "how", "are", "you?"});
+        hashSet.add(new String[] {"another", "array", "of", "strings"});
+        getsHashSetOfArraysOfStrings(hashSet, 1);
+
+        returns2DArrayOfStrings();
     }
 
     private static TestClass start() {
@@ -69,23 +79,16 @@ public class SimpleExample {
         int b = 23;
         Pattern[] patterns = new Pattern[10];
         patterns[5] = Pattern.compile("s0{3}me?p.*rn");
-//        System.out.println(a);
-//        System.out.println(s);
-//        System.out.println(b);
         return patterns;
     }
 
-    private int[] instanceGetsParams(boolean b, int[] arr, Pattern[] patterns,  long l, Pattern p, int a) {
+    private int[] instanceGetsParams(ArrayList<String> arrayList, boolean b, int[] arr, Pattern[] patterns,
+                                     long l, Pattern p, int a) {
         return new int[20];
     }
 
     private boolean getFalse() {
         return false;
-    }
-
-    private void unused(Pattern[] patterns) {
-        Arrays.toString(patterns);
-//        Arrays.toString(arr);
     }
 
     public static void doTryCatch() {
@@ -96,10 +99,47 @@ public class SimpleExample {
 //        }
     }
 
-//    public Pattern[] getArrayOfPatterns() {
-//        Pattern[] patterns = new Pattern[2];
-//        patterns[0] = Pattern.compile("1.*");
-//        patterns[1] = Pattern.compile("2.*");
-//        return patterns;
-//    }
+    private static ArrayList<Integer> returnsArrayList() {
+        ArrayList<Integer> arrayList = new ArrayList<>();
+        arrayList.add(23);
+        arrayList.add(123);
+        return arrayList;
+    }
+
+    private static ArrayList<String> returnsArrayListOfStrings() {
+        ArrayList<String> arrayList = new ArrayList<>();
+        arrayList.add("hello, ");
+        arrayList.add("world!");
+        return arrayList;
+    }
+
+    private static HashSet<Pattern>[] returnsArrayOfHashSets() {
+        HashSet<Pattern>[] hashSets = new HashSet[7];
+        hashSets[0] = new HashSet<>();
+        hashSets[0].add(Pattern.compile("1.*"));
+        hashSets[0].add(Pattern.compile("2.*"));
+        hashSets[1] = new HashSet<>();
+        return hashSets;
+    }
+
+    private static HashSet<String[]> returnsHashSetOfArraysOfStrings() {
+        HashSet<String[]> hashSet = new HashSet<>();
+        hashSet.add(new String[] {"hello", "how", "are", "you?"});
+        hashSet.add(new String[] {"another", "array", "of", "strings"});
+        return hashSet;
+    }
+
+    private static void getsHashSetOfArraysOfStrings(HashSet<String[]> strings, int a) {
+
+    }
+
+    private static String[][] returns2DArrayOfStrings() {
+        String[][] strings = new String[5][2];
+        strings[0][0] = "hello";
+        strings[0][1] = "world";
+        return strings;
+    }
+
+    private void unused(Pattern[] patterns) {
+    }
 }
