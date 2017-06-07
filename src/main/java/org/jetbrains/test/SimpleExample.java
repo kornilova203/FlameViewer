@@ -37,7 +37,10 @@ public class SimpleExample {
         arr[0] = 11;
         arr[1] = 22;
         arr[2] = 33;
-        simpleExample.instanceGetsParams(false, arr, 123, Pattern.compile("some.*(pattern)?"), 23);
+        Pattern[] patterns = new Pattern[2];
+        patterns[0] = Pattern.compile("1.*");
+        patterns[1] = Pattern.compile("2.*");
+        simpleExample.instanceGetsParams(false, arr, patterns, 123, Pattern.compile("some.*(pattern)?"), 23);
         simpleExample.getFalse();
 //        simpleExample.getArrayOfPatterns();
     }
@@ -69,7 +72,7 @@ public class SimpleExample {
 //        System.out.println(b);
     }
 
-    private void instanceGetsParams(boolean b, int[] arr, long l, Pattern p, int a) {
+    private void instanceGetsParams(boolean b, int[] arr, Pattern[] patterns,  long l, Pattern p, int a) {
 
     }
 
@@ -77,11 +80,8 @@ public class SimpleExample {
         return false;
     }
 
-    private void unused(char c) {
-        int[] arr = new int[3];
-        arr[0] = 11;
-        arr[1] = 22;
-        arr[2] = 33;
+    private void unused(Pattern[] patterns) {
+        Arrays.toString(patterns);
 //        Arrays.toString(arr);
     }
 

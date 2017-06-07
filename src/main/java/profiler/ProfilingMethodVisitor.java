@@ -97,7 +97,7 @@ class ProfilingMethodVisitor extends AdviceAdapter {
                     "toString", "(" + type + ")Ljava/lang/String;", false);
         } else {
             mv.visitMethodInsn(INVOKESTATIC, "java/util/Arrays",
-                    "toString", "([L)Ljava/lang/String;", false);
+                    "toString", "([Ljava/lang/Object;)Ljava/lang/String;", false);
         }
 
     }
