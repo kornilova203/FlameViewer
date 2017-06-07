@@ -3,18 +3,49 @@
  * on 05.05.17
  */
 
+const DELIMITER = "⊗";
+const PARAMETERS_DELIMITER = "⇑";
+
 /**
  * Class of call-tree
  */
-class CallTree {
-    constructor(thread, startOfFirstTread, finishOfLastTread) {
-        this.name = thread.threadName;
-        this.tree = thread; // tree of nodes
-        this.depth = this.countDepthRecursively_(this.tree, 0, 0);
-        this.tree.startTime = 0;
-        this.layerHeight = 23; // layer height in pixels
-        this.startOfFirstTread = startOfFirstTread; // needed for calculating margins of div if there are multiple threads
-        this.commonDuration = finishOfLastTread - startOfFirstTread;
+
+class Parameter {
+    constructor(type, val) {
+        this.type = type;
+        this.val = val;
+    }
+}
+
+class Call {
+    constructor(name, desc, isStatic, parametersStr, startTime) {
+        this.name = name;
+        this.startTime = startTime;
+        this.duration = 0;
+        this.desc = desc;
+        this.isStatis = isStatic;
+        this.parameters = this.createParameters(parametersStr);
+    }
+
+    createParameters(parametersStr) {
+        const parameters = [];
+        const values = parametersStr.split(PARAMETERS_DELIMITER);
+        for (let value in values) {
+            parameters.push(new Parameter("noType", value));
+        }
+        return parameters;
+    }
+}
+
+class Thread {
+    constructor(threadId, methodName, methodDesc, isStatic, parameters, startTime) {
+        this.threadId = threadId;
+        this.calls = [];
+        this.calls.push(new Call(methodName, methodDesc, isStatic, parameters, startTime));
+        this.depth = 1;
+        this.startTime = startTime;
+        this.duration = 0;
+        // this.layerHeight = 23; // layer height in pixels
     }
 
     /**
@@ -167,9 +198,9 @@ $(window).on("load", function () {
             reader.readAsText(theFile);
             reader.addEventListener("load", function () {
                 try {
-                    const threadsJson = JSON.parse(reader.result);
+                    const fileData = reader.result;
                     clearDom();
-                    processData(threadsJson);
+                    processData(fileData);
                     $('main').css("margin-top", 30);
                     changeName(e);
                 }
@@ -199,31 +230,51 @@ $(window).on("load", function () {
 
     /**
      * Create call-trees
-     * @param threadsJson
+     * @param fileData
      */
-    function processData(threadsJson) {
-        const keys = Object.keys(threadsJson);
-        const threads = [];
-        for (let i in keys) { // create array with threads
-            threads.push(threadsJson[keys[i]]);
-        }
-        const startTimes = [];
-        const finishTimes = [];
-        for (let i in threads) {
-            startTimes.push(threads[i].startThreadTime);
-            finishTimes.push(threads[i].startThreadTime + threads[i].duration);
-        }
-        const startOfFirstThread = getMinOfArray(startTimes);
-        const finishOfFirstThread = getMaxOfArray(finishTimes);
-        for (let i in threads) {
-            new CallTree(threads[i], startOfFirstThread, finishOfFirstThread).createList($('main'));
-        }
-        function getMaxOfArray(numArray) {
-            return Math.max.apply(null, numArray);
-        }
+    function processData(fileData) {
+        const lines = fileData.split("\n");
+        const threads = {};
 
-        function getMinOfArray(numArray) {
-            return Math.min.apply(null, numArray);
+        for (let line in lines) {
+            const words = line.split(DELIMITER);
+            const threadIdStr = words[0];
+            const threadId = parseInt(threadIdStr);
+            const name = words[1];
+            const desc = words[2];
+            const isStatic = words[3] === "static";
+            const parameters = words[4];
+            const time = parseInt(words[5]);
+            let thread = threads[threadIdStr];
+            if (thread === undefined) {
+                threads[threadIdStr] = new Thread(threadId, name, desc, isStatic, parameters, time);
+            } else {
+                if (words[1] === "s") {
+                    thread.startMethod(words[2], words[3], words[4], words[5], words[6])
+                } else if (words[1] === "f") {
+                    thread.finishMethod(words[2], words[3], words[4], words[5],words[6]);
+                } else {
+                    throw new Error("Invalid file");
+                }
+            }
         }
+        // const startTimes = [];
+        // const finishTimes = [];
+        // for (let i in threads) {
+        //     startTimes.push(threads[i].startThreadTime);
+        //     finishTimes.push(threads[i].startThreadTime + threads[i].duration);
+        // }
+        // const startOfFirstThread = getMinOfArray(startTimes);
+        // const finishOfFirstThread = getMaxOfArray(finishTimes);
+        // for (let i in threads) {
+        //     new CallTree(threads[i], startOfFirstThread, finishOfFirstThread).createList($('main'));
+        // }
+        // function getMaxOfArray(numArray) {
+        //     return Math.max.apply(null, numArray);
+        // }
+        //
+        // function getMinOfArray(numArray) {
+        //     return Math.min.apply(null, numArray);
+        // }
     }
 });
