@@ -65,15 +65,18 @@ public class SimpleExample {
         return a;
     }
 
-    private static void getsParameters(int a, String s, long l) {
+    private static Pattern[] getsParameters(int a, String s, long l) {
         int b = 23;
+        Pattern[] patterns = new Pattern[10];
+        patterns[5] = Pattern.compile("s0{3}me?p.*rn");
 //        System.out.println(a);
 //        System.out.println(s);
 //        System.out.println(b);
+        return patterns;
     }
 
-    private void instanceGetsParams(boolean b, int[] arr, Pattern[] patterns,  long l, Pattern p, int a) {
-
+    private int[] instanceGetsParams(boolean b, int[] arr, Pattern[] patterns,  long l, Pattern p, int a) {
+        return new int[20];
     }
 
     private boolean getFalse() {
