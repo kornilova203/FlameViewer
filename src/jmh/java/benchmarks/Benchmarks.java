@@ -10,6 +10,7 @@ import java.util.concurrent.TimeUnit;
 public class Benchmarks {
 
     private Test taws = new Test();
+    private SimpleExample simpleExample = new SimpleExample();
 
     @Benchmark
     @BenchmarkMode(Mode.AverageTime)
@@ -20,14 +21,14 @@ public class Benchmarks {
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void test() {
-        taws.start();
+        simpleExample.start();
     }
 
     @Benchmark
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    @Fork(jvmArgs = "-javaagent:/home/lk/JetBrains/profiler/build/libs/javaagent.jar")
+    @Fork(jvmArgs = "-javaagent:/home/lk/java-profiling-plugin/build/libs/javaagent.jar")
     public void testProfiled() {
-        taws.start();
+        simpleExample.start();
     }
 }

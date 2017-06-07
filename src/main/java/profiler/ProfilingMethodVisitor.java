@@ -21,14 +21,67 @@ class ProfilingMethodVisitor extends AdviceAdapter {
         super(Opcodes.ASM5, mv, access, name, desc);
     }
 
+//    NEW java/lang/StringBuilder
+//    DUP
+//    INVOKESPECIAL java/lang/StringBuilder.<init> ()V
+//    LDC "desc"
+//    INVOKEVIRTUAL java/lang/StringBuilder.append (Ljava/lang/String;)Ljava/lang/StringBuilder;
+//    ALOAD 1
+//    INVOKEVIRTUAL java/lang/Object.toString ()Ljava/lang/String;
+//    INVOKEVIRTUAL java/lang/StringBuilder.append (Ljava/lang/String;)Ljava/lang/StringBuilder;
+//    LDC "some text"
+//    INVOKEVIRTUAL java/lang/StringBuilder.append (Ljava/lang/String;)Ljava/lang/StringBuilder;
+//    INVOKEVIRTUAL java/lang/StringBuilder.toString ()Ljava/lang/String;
+//    INVOKESTATIC profiler/Profiler.methodStart (Ljava/lang/String;)Lprofiler/State;
+//    ASTORE 2
     @Override
     protected void onMethodEnter() {
-        mv.visitLdcInsn(methodDesc + (isStatic() ? " static":""));
+        String parameterDesc = getParamDesc();
+        boolean isStatic = isStatic();
+        if (Objects.equals(parameterDesc, "()") && isStatic) { // if there is no input parameters and it's static (no this)
+            mv.visitLdcInsn(methodDesc + " static");
+        } else {
+            createStringBuilder();
+            mv.visitLdcInsn(methodDesc + (isStatic ? " static ":""));
+            invokeStringBuilderAppend();
+            appendParamsToStringBuilder(parameterDesc, isStatic);
+            invokeStringBuilderToString();
+        }
         mv.visitMethodInsn(INVOKESTATIC, "profiler/Profiler",
                 "methodStart", "(Ljava/lang/String;)Lprofiler/State;", false);
         // TODO: check is it correct to use `LONG_TYPE` for object
         mv.visitVarInsn(ASTORE, state);
-        addParamLogging();
+    }
+
+    private void addDelimiter() {
+        mv.visitLdcInsn("~");
+        invokeStringBuilderAppend();
+    }
+
+    private void invokeStringBuilderToString() {
+//        INVOKEVIRTUAL java/lang/StringBuilder.toString ()Ljava/lang/String;
+        mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/StringBuilder",
+                "toString", "()Ljava/lang/String;", false);
+    }
+
+    private String getParamDesc() {
+        Matcher m = allParamsPattern.matcher(methodDesc);
+        if (!m.find()) {
+            throw new IllegalArgumentException("Method signature does not contain parameters");
+        }
+        return m.group(1);
+    }
+
+    private void invokeStringBuilderAppend() {
+//        INVOKEVIRTUAL java/lang/StringBuilder.append (Ljava/lang/String;)Ljava/lang/StringBuilder;
+        mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/StringBuilder",
+                "append", "(Ljava/lang/String;)Ljava/lang/StringBuilder;", false);
+    }
+
+    private void createStringBuilder() {
+        mv.visitTypeInsn(NEW, "java/lang/StringBuilder");
+        dup();
+        mv.visitMethodInsn(INVOKESPECIAL, "java/lang/StringBuilder", "<init>", "()V", false);
     }
 
     private boolean isStatic() {
@@ -38,32 +91,29 @@ class ProfilingMethodVisitor extends AdviceAdapter {
     /**
      * Insert instructions for logging all method parameters
      */
-    private void addParamLogging() {
-        Matcher m = allParamsPattern.matcher(methodDesc);
-        if (!m.find()) {
-            throw new IllegalArgumentException("Method signature does not contain parameters");
-        }
-        String paramsDescriptor = m.group(1);
-        Matcher mParam = paramsPattern.matcher(paramsDescriptor);
+    private void appendParamsToStringBuilder(String parametersDesc, boolean isStatic) {
+        Matcher mParam = paramsPattern.matcher(parametersDesc);
 
         int pos = 0;
-        if (!isStatic()) {
+        if (!isStatic) {
             pos++;
             // TODO: check if it is correct to print `this` in <init>
-            logThis();
+            addDelimiter();
+            appendThisToStringBuilder();
         }
         while (mParam.find()) {
-            pos = logParam(mParam.group(), pos);
+            addDelimiter();
+            pos = appendParam(mParam.group(), pos);
         }
     }
 
-    private void logThis() {
+    private void appendThisToStringBuilder() {
         mv.visitVarInsn(ALOAD, 0);
         invokeToString();
-        log();
+        invokeStringBuilderAppend();
     }
 
-    private int logParam(String type, int pos) {
+    private int appendParam(String type, int pos) {
         if (isI(type)) { // if I S B C Z
             visitVarInsn(ILOAD, pos);
             pos++;
@@ -79,16 +129,16 @@ class ProfilingMethodVisitor extends AdviceAdapter {
         } else if (type.startsWith("[")) { // array
             visitVarInsn(ALOAD, pos);
             invokeArraysToString(type);
-            log();
+            invokeStringBuilderAppend();
             return pos + 1;
         } else { // object
             visitVarInsn(ALOAD, pos);
             invokeToString();
-            log();
+            invokeStringBuilderAppend();
             return pos + 1;
         }
         invokeStringValueOf(type);
-        log();
+        invokeStringBuilderAppend();
 
         return pos;
     }
@@ -127,42 +177,59 @@ class ProfilingMethodVisitor extends AdviceAdapter {
                 "()Ljava/lang/String;", false);
     }
 
-    private void log() {
-        mv.visitMethodInsn(INVOKESTATIC, "profiler/Profiler", "log",
+    @Override
+    protected void onMethodExit(int opcode) {
+//        ALOAD 2
+//        ALOAD 1
+//        INVOKEVIRTUAL java/lang/Object.toString ()Ljava/lang/String;
+//        INVOKEVIRTUAL profiler/State.methodFinish (Ljava/lang/String;)V
+
+//        ALOAD 2 // state
+//        LDC " "
+//        INVOKEVIRTUAL profiler/State.methodFinish (Ljava/lang/String;)V
+//        mv.visitVarInsn(ALOAD, state);
+        convertReturnValToString(opcode);
+        mv.visitMethodInsn(INVOKEVIRTUAL, "profiler/State", "methodFinish",
                 "(Ljava/lang/String;)V", false);
     }
 
-    @Override
-    protected void onMethodExit(int opcode) {
-        mv.visitVarInsn(ALOAD, state);
-        mv.visitMethodInsn(INVOKEVIRTUAL, "profiler/State", "methodFinish",
-                "()V", false);
-        logReturnValue(opcode);
-    }
-
-    private void logReturnValue(int opcode) {
+    private void convertReturnValToString(int opcode) {
         if (opcode == RETURN) {
+            mv.visitVarInsn(ALOAD, state);
+            mv.visitLdcInsn("");
             return;
         }
         if (opcode == IRETURN) {
-            dup();
+            insertStateBeforeSmallRetVal();
             invokeStringValueOf("I");
         } else if (opcode == LRETURN) {
-            dup2();
+            insertStateBeforeLargeRetVal();
             invokeStringValueOf("J");
         } else if (opcode == FRETURN) {
-            dup();
+            insertStateBeforeSmallRetVal();
             invokeStringValueOf("F");
         } else if (opcode == DRETURN) {
-            dup2();
+            insertStateBeforeLargeRetVal();
             invokeStringValueOf("D");
         } else if (opcode == ARETURN) { // object or array
-            dup();
+            insertStateBeforeSmallRetVal();
             aReturnToString();
         } else { // ATHROW
 
         }
-        log();
+    }
+
+    private void insertStateBeforeLargeRetVal() {
+        dup2();
+        mv.visitVarInsn(ALOAD, state);
+        mv.visitInsn(DUP_X2);
+        mv.visitInsn(POP);
+    }
+
+    private void insertStateBeforeSmallRetVal() {
+        dup();
+        mv.visitVarInsn(ALOAD, state);
+        mv.visitInsn(SWAP);
     }
 
     private void aReturnToString() {

@@ -5,7 +5,7 @@ import static profiler.Profiler.methodStart;
 
 public class SimpleExampleWithProfiler {
     public void start() {
-        State state = methodStart("desc");
-        state.methodFinish();
+//        State state = methodStart("desc");
+//        state.methodFinish();
     }
 }

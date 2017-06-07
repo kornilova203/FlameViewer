@@ -9,7 +9,7 @@ public class State {
         this.threadId = threadId;
     }
 
-    public void methodFinish() {
-        Profiler.log(threadId + " f " + name + " " + System.nanoTime());
+    public void methodFinish(String returnVal) {
+        Profiler.log(threadId + " f " + name + " " + returnVal + " " + System.nanoTime());
     }
 }

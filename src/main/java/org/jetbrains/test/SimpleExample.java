@@ -16,17 +16,17 @@ public class SimpleExample {
             return "val: " + a;
         }
         public void someFun() {
-            try {
-                System.out.println("try");
-            }
-            catch (Exception ignored){
-
-            }
+//            try {
+//                System.out.println("try");
+//            }
+//            catch (Exception ignored){
+//
+//            }
         }
     }
 
-    public static void main(String[] args) {
-        start();
+    public void start() {
+//        returnsTestClass();
         getsParameters(5, "hello", 12345678);
 
         SimpleExample simpleExample = new SimpleExample();
@@ -60,10 +60,10 @@ public class SimpleExample {
         return "I am an instance of SimpleExample";
     }
 
-    private static TestClass start() {
-        TestClass testClass = new TestClass();
-        return testClass;
-    }
+//    private static TestClass returnsTestClass() {
+//        TestClass testClass = new TestClass();
+//        return testClass;
+//    }
     public static long returnJ() {
         long a = 12345;
         return a;
@@ -93,13 +93,12 @@ public class SimpleExample {
     }
 
     private boolean getFalse() {
-        System.out.println(this.toString());
         return false;
     }
 
     public static void doTryCatch() {
 //        try {
-            System.out.println(1);
+//            System.out.println(1);
 //        } catch (Exception ignored) {
 //
 //        }
@@ -147,5 +146,12 @@ public class SimpleExample {
     }
 
     private void unused(Pattern[] patterns) {
+        State state = Profiler.methodStart("desc" + patterns.toString() + "some text");
+        state.methodFinish(" ");
+    }
+
+    public static void main(String[] args) {
+        SimpleExample simpleExample = new SimpleExample();
+        simpleExample.start();
     }
 }
