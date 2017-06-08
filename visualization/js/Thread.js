@@ -25,7 +25,7 @@ class Thread {
         }
     }
 
-    finishMethod(methodName, methodDesc, isStatic, returnVal, finishTime) {
+    finishMethod(methodName, returnVal, finishTime) {
         if (this.currentDepth === 0) {
             throw new Error("There is more method exits than method starts");
         }
@@ -33,7 +33,7 @@ class Thread {
         for (let i = 1; i < this.currentDepth; i++) {
             call = call.calls[call.calls.length - 1];
         }
-        if (call.name !== methodName.replace("<", "&lt;").replace(">", "&gt;")) {
+        if (call.className + "." + call.methodName !== methodName.replace("<", "&lt;").replace(">", "&gt;")) {
             throw new Error("Finish method is not a method which was recently started");
         }
         call.finishCall(returnVal, finishTime);
@@ -100,7 +100,7 @@ class Thread {
         const ol = $("<ol></ol>").appendTo(htmlElement);
         for (let i = 0; i < call.calls.length; i++) { // do not use for-in because order is important
             const childCall = call.calls[i];
-            const newLi = $(`<li><p class="method-name">${childCall.name}</p></li>`).appendTo(ol);
+            const newLi = $(`<li><p class="method-name">${childCall.methodName}</p></li>`).appendTo(ol);
             this.createPopup_(newLi, childCall);
             const left = (childCall.startTime - call.startTime) / call.duration;
             newLi.css("left", (left * 100) + "%");
@@ -116,8 +116,7 @@ class Thread {
      * @private
      */
     createPopup_(newLi, childNode) {
-        const popup = $(Thread.generatePopup_(childNode.name, childNode.startTime,
-            childNode.duration, childNode.parameters))
+        const popup = $(childNode._generatePopup())
             .appendTo($(".threadId" + this.threadId));
         newLi.bind("mousemove", (e) => {
             newLi.css("background", "#5457FF"); // highlight current <li> element
@@ -129,24 +128,5 @@ class Thread {
             popup.hide();
             return false;
         });
-    }
-
-    /**
-     * Generate popup element
-     * @param methodName
-     * @param className
-     * @param startTime
-     * @param duration
-     * @returns {string}
-     * @private
-     * @param arg
-     */
-    static generatePopup_(methodName, startTime, duration, arg) {
-        return '<div class="detail">' +
-                    '<h3>' + methodName + '</h3>' +
-                    '<p>Start time: ' + Math.round(startTime / 10000) / 100 + ' ms</p>' +
-                    '<p>Duration: ' + Math.round(duration / 10000) / 100 + ' ms</p>' +
-                    '<p>Argument: ' + arg + '</p>' +
-            '</div>';
     }
 }

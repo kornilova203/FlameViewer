@@ -3,4 +3,8 @@ class Parameter {
         this.type = type;
         this.val = val;
     }
+
+    toString() {
+        return this.type + " " + this.val;
+    }
 }

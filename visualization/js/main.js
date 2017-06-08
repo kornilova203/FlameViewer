@@ -46,7 +46,7 @@ $(window).on("load", function () {
         function changeName(e) {
             let fileName = '';
             if (this.files && this.files.length > 1)
-                fileName = ( this.getAttribute('data-multiple-caption') || '' ).replace('{count}', this.files.length);
+                fileName = ( this.getAttribute('data-multiple-caption') || '' ).replace('{count}', this.files.length.toString());
             else
                 fileName = e.target.value.split('\\').pop();
 
@@ -79,7 +79,7 @@ $(window).on("load", function () {
             if (words[1] === "s") {
                 thread.startMethod(name, desc, isStatic, parameters, time);
             } else if (words[1] === "f") {
-                thread.finishMethod(name, desc, isStatic, parameters, time);
+                thread.finishMethod(name, parameters, time);
             } else {
                 throw new Error("Invalid file");
             }

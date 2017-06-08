@@ -1,8 +1,5 @@
 package org.jetbrains.test;
 
-import profiler.Profiler;
-import profiler.State;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.regex.Pattern;
@@ -41,7 +38,7 @@ public class SimpleExample {
         arrayList.add("some");
         arrayList.add("arrayList");
         simpleExample.instanceGetsParams(arrayList, false, arr, patterns, 123, Pattern.compile("some.*(pattern)?"), 23);
-        simpleExample.getFalse();
+        simpleExample.returnsFalse();
         returnsArrayList();
         returnsArrayListOfStrings();
         returnsArrayOfHashSets();
@@ -92,7 +89,7 @@ public class SimpleExample {
         return new int[20];
     }
 
-    private boolean getFalse() {
+    private boolean returnsFalse() {
         return false;
     }
 
