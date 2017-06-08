@@ -1,14 +1,5 @@
-/**
- * Created by Liudmila Kornilova
- * on 05.05.17
- */
-
 const DELIMITER = "⊗";
 const PARAMETERS_DELIMITER = "⇑";
-
-/**
- * Class of call-tree
- */
 
 class Parameter {
     constructor(type, val) {
@@ -24,50 +15,63 @@ class Call {
         this.duration = 0;
         this.desc = desc;
         this.isStatis = isStatic;
-        this.parameters = this.createParameters(parametersStr);
+        this.parameters = Call.createParameters(parametersStr);
+        this.returnVal = null;
+        this.calls = [];
     }
 
-    createParameters(parametersStr) {
+    static createParameters(parametersStr) {
         const parameters = [];
         const values = parametersStr.split(PARAMETERS_DELIMITER);
-        for (let value in values) {
-            parameters.push(new Parameter("noType", value));
+        for (let i in values) {
+            //noinspection JSUnfilteredForInLoop
+            parameters.push(new Parameter("noType", values[i]));
         }
         return parameters;
+    }
+
+    finishCall(returnVal, finishTime) {
+        this.returnVal = new Parameter("noType", returnVal);
+        this.duration = finishTime - this.startTime;
     }
 }
 
 class Thread {
-    constructor(threadId, methodName, methodDesc, isStatic, parameters, startTime) {
+    /**
+     * Create new Thread
+     */
+    constructor(threadId, startTime) {
         this.threadId = threadId;
         this.calls = [];
-        this.calls.push(new Call(methodName, methodDesc, isStatic, parameters, startTime));
-        this.depth = 1;
+        this.depth = 0; // current depth of tree
         this.startTime = startTime;
         this.duration = 0;
         // this.layerHeight = 23; // layer height in pixels
     }
 
-    /**
-     * Count depth to calculate height of parent div
-     * @param subTree
-     * @param depth (current depth)
-     * @param maxDepth
-     * @returns depth of tree
-     * @private
-     */
-    countDepthRecursively_(subTree, depth, maxDepth) {
-        if (subTree.nodes.length === 0) {
-            return maxDepth;
+    startMethod(methodName, methodDesc, isStatic, parameters, startTime) {
+        let calls = this.calls;
+        for (let i = 0; i < this.depth; i++) {
+            calls = calls[calls.length - 1].calls;
         }
-        depth++;
-        if (depth > maxDepth) {
-            maxDepth = depth;
+        calls.push(new Call(methodName, methodDesc, isStatic, parameters, startTime));
+        this.depth++;
+    }
+
+    finishMethod(methodName, methodDesc, isStatic, returnVal, finishTime) {
+        if (this.depth === 0) {
+            throw new Error("There is more method exits than method starts");
         }
-        for (let i = 0; i < subTree.nodes.length; i++) {
-            maxDepth = this.countDepthRecursively_(subTree.nodes[i], depth, maxDepth);
+        let call = this.calls[this.calls.length - 1];
+        for (let i = 1; i < this.depth; i++) {
+            call = call.calls[call.calls.length - 1];
         }
-        return maxDepth;
+        if (call.name !== methodName) {
+            throw new Error("Finish method is not a method which was recently started");
+        }
+        call.finishCall(returnVal, finishTime);
+        this.duration = finishTime - this.startTime; // update duration of thread
+        this.depth--;
     }
 
     /**
@@ -164,6 +168,7 @@ class Thread {
      * @param duration
      * @returns {string}
      * @private
+     * @param arg
      */
     static generatePopup_(methodName, className, startTime, duration, arg) {
         return '<div class="detail"><h3>' + className + ".<b>" + methodName + '</b></h3>' +
@@ -205,7 +210,8 @@ $(window).on("load", function () {
                     changeName(e);
                 }
                 catch (exception) {
-                    alert("Invalid file :(");
+                    console.error(exception);
+                    // alert("Invalid file :(");
                 }
             });
         })(file);
@@ -236,28 +242,27 @@ $(window).on("load", function () {
         const lines = fileData.split("\n");
         const threads = {};
 
-        for (let line in lines) {
+        for (let i = 0; i < lines.length - 1; i++) {
+            const line = lines[i];
             const words = line.split(DELIMITER);
             const threadIdStr = words[0];
-            const threadId = parseInt(threadIdStr);
-            const name = words[1];
-            const desc = words[2];
-            const isStatic = words[3] === "static";
-            const parameters = words[4];
-            const time = parseInt(words[5]);
-            let thread = threads[threadIdStr];
-            if (thread === undefined) {
-                threads[threadIdStr] = new Thread(threadId, name, desc, isStatic, parameters, time);
+            const name = words[2];
+            const desc = words[3];
+            const isStatic = words[4] === "static";
+            const parameters = words[5];
+            const time = parseInt(words[6]);
+            let thread = getOrCreateThread(threadIdStr, time);
+
+            if (words[1] === "s") {
+                thread.startMethod(name, desc, isStatic, parameters, time);
+            } else if (words[1] === "f") {
+                thread.finishMethod(name, desc, isStatic, parameters, time);
             } else {
-                if (words[1] === "s") {
-                    thread.startMethod(words[2], words[3], words[4], words[5], words[6])
-                } else if (words[1] === "f") {
-                    thread.finishMethod(words[2], words[3], words[4], words[5],words[6]);
-                } else {
-                    throw new Error("Invalid file");
-                }
+                throw new Error("Invalid file");
             }
+
         }
+        console.log(threads);
         // const startTimes = [];
         // const finishTimes = [];
         // for (let i in threads) {
@@ -276,5 +281,13 @@ $(window).on("load", function () {
         // function getMinOfArray(numArray) {
         //     return Math.min.apply(null, numArray);
         // }
+
+        function getOrCreateThread(threadIdStr, time) {
+            const thread = threads[threadIdStr];
+            if (thread === undefined) {
+                return threads[threadIdStr] = new Thread(parseInt(threadIdStr), time);
+            }
+            return thread;
+        }
     }
 });
