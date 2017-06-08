@@ -1,6 +1,6 @@
 class Call {
     constructor(name, desc, isStatic, parametersStr, startTime) {
-        this.name = name;
+        this.name = name.replace("<", "&lt;").replace(">", "&gt;");
         this.startTime = startTime;
         this.duration = 0;
         this.desc = desc;

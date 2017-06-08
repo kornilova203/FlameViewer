@@ -86,6 +86,8 @@ $(window).on("load", function () {
 
         }
         console.log(threads);
+
+        drawThreads(threads);
         // const startTimes = [];
         // const finishTimes = [];
         // for (let i in threads) {
@@ -111,6 +113,32 @@ $(window).on("load", function () {
                 return threads[threadIdStr] = new Thread(parseInt(threadIdStr), time);
             }
             return thread;
+        }
+
+        function drawThreads(threads) {
+            /*
+             this variables are for positioning of separate threads' threes
+             */
+            let startOfFirstThread = threads[Object.keys(threads)[0]];
+            let finishOfLastThread = 0;
+            for (let key in threads) {
+                //noinspection JSUnfilteredForInLoop
+                if (threads[key].startTime < startOfFirstThread) {
+                    //noinspection JSUnfilteredForInLoop
+                    startOfFirstThread = threads[key].startTime;
+                }
+                //noinspection JSUnfilteredForInLoop
+                if (threads[key].startTime + threads[key].duration > finishOfLastThread) {
+                    //noinspection JSUnfilteredForInLoop
+                    finishOfLastThread = threads[key].startTime + threads[key].duration;
+                }
+            }
+            console.log(startOfFirstThread);
+            console.log(finishOfLastThread);
+            for (let key in threads) {
+                //noinspection JSUnfilteredForInLoop
+                threads[key].draw($("main"), startOfFirstThread, finishOfLastThread - startOfFirstThread);
+            }
         }
     }
 });
