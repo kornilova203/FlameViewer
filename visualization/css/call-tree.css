@@ -128,20 +128,3 @@ li {
 .inputfile + label * {
     pointer-events: none;
 }
-
-footer {
-    background-color: #222;
-    color: white;
-    font-family: Menlo, sans-serif;
-    position: fixed;
-    bottom: 0;
-    right: 0;
-    left: 0;
-    padding-right: 30px;
-    /*padding: 5px 10px;*/
-}
-footer p {
-    width: 100%;
-    text-align: right;
-    margin: 5px 0;
-}
