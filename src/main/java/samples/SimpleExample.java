@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.regex.Pattern;
 
 public class SimpleExample {
+    private HashSet<Integer> hashSet = new HashSet<>();
+
     private static class TestClass {
         private int a = 50;
 
@@ -49,6 +51,7 @@ public class SimpleExample {
         hashSet.add(new String[] {"another", "array", "of", "strings"});
         getsHashSetOfArraysOfStrings(hashSet, 1);
 
+        doComplicatedTask();
         returns2DArrayOfStrings();
     }
 
@@ -94,11 +97,11 @@ public class SimpleExample {
     }
 
     public static void doTryCatch() {
-//        try {
-//            System.out.println(1);
-//        } catch (Exception ignored) {
-//
-//        }
+        try {
+            System.out.println(1);
+        } catch (Exception ignored) {
+
+        }
     }
 
     private static ArrayList<Integer> returnsArrayList() {
@@ -140,6 +143,25 @@ public class SimpleExample {
         strings[0][0] = "hello";
         strings[0][1] = "world";
         return strings;
+    }
+
+    private void doCondition() {
+//        int i = 1;
+//        String string1 = "hello1";
+//        if (hashSet.isEmpty()) {
+//            System.out.println("hello");
+//        }
+//        String string2 = "hello2";
+//        if (hashSet.size() == 1) {
+//            System.out.println("hello");
+//        }
+//        System.out.println(string1);
+    }
+
+    private void doComplicatedTask() {
+        for (int i = 0; i < 10000; i++) {
+            hashSet.add(i * 2);
+        }
     }
 
     private void unused(Pattern[] patterns) {

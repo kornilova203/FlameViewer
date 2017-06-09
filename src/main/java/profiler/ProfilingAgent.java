@@ -27,12 +27,10 @@ public class ProfilingAgent implements ClassFileTransformer {
                             byte[] classfileBuffer) throws IllegalClassFormatException {
         if (className.startsWith("samples")) {
             ClassReader cr = new ClassReader(classfileBuffer);
-            // TODO: compute maxs and frames manually
             ClassWriter cw = new ClassWriter(cr, ClassWriter.COMPUTE_FRAMES);
             // uncomment for debugging
             TraceClassVisitor cv = new TraceClassVisitor(cw, new PrintWriter(System.out));
-            cr.accept(new ProfilingClassVisitor(cv), 0);
-//            cr.accept(new ProfilingClassVisitor(cw), 0);
+            cr.accept(new ProfilingClassVisitor(cv), ClassReader.EXPAND_FRAMES);
 
             return cw.toByteArray();
         }

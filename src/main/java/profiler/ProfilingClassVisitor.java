@@ -13,7 +13,7 @@ class ProfilingClassVisitor extends ClassVisitor {
     public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
         MethodVisitor mv = cv.visitMethod(access, name, desc, signature, exceptions);
         if (mv != null && !name.equals("toString") && !name.equals("main")) {
-            mv = new ProfilingMethodVisitor(access, name, desc, mv);
+            return new ProfilingMethodVisitor(access, name, desc, mv);
         }
         return mv;
     }

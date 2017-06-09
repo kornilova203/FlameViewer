@@ -21,19 +21,6 @@ class ProfilingMethodVisitor extends AdviceAdapter {
         super(Opcodes.ASM5, mv, access, name, desc);
     }
 
-//    NEW java/lang/StringBuilder
-//    DUP
-//    INVOKESPECIAL java/lang/StringBuilder.<init> ()V
-//    LDC "desc"
-//    INVOKEVIRTUAL java/lang/StringBuilder.append (Ljava/lang/String;)Ljava/lang/StringBuilder;
-//    ALOAD 1
-//    INVOKEVIRTUAL java/lang/Object.toString ()Ljava/lang/String;
-//    INVOKEVIRTUAL java/lang/StringBuilder.append (Ljava/lang/String;)Ljava/lang/StringBuilder;
-//    LDC "some text"
-//    INVOKEVIRTUAL java/lang/StringBuilder.append (Ljava/lang/String;)Ljava/lang/StringBuilder;
-//    INVOKEVIRTUAL java/lang/StringBuilder.toString ()Ljava/lang/String;
-//    INVOKESTATIC profiler/Profiler.methodStart (Ljava/lang/String;)Lprofiler/State;
-//    ASTORE 2
     @Override
     protected void onMethodEnter() {
         String parameterDesc = getParamDesc();
@@ -181,15 +168,6 @@ class ProfilingMethodVisitor extends AdviceAdapter {
 
     @Override
     protected void onMethodExit(int opcode) {
-//        ALOAD 2
-//        ALOAD 1
-//        INVOKEVIRTUAL java/lang/Object.toString ()Ljava/lang/String;
-//        INVOKEVIRTUAL profiler/State.methodFinish (Ljava/lang/String;)V
-
-//        ALOAD 2 // state
-//        LDC " "
-//        INVOKEVIRTUAL profiler/State.methodFinish (Ljava/lang/String;)V
-//        mv.visitVarInsn(ALOAD, state);
         convertReturnValToString(opcode);
         mv.visitMethodInsn(INVOKEVIRTUAL, "profiler/State", "methodFinish",
                 "(Ljava/lang/String;)V", false);
