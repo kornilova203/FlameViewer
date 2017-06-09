@@ -12,7 +12,9 @@ class ProfilingClassVisitor extends ClassVisitor {
     @Override
     public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
         MethodVisitor mv = cv.visitMethod(access, name, desc, signature, exceptions);
-        if (mv != null && !name.equals("toString") && !name.equals("main")) {
+        if (mv != null &&
+                !name.equals("toString") &&
+                (access & Opcodes.ACC_SYNTHETIC) == 0) { // exclude synthetic constructors
             return new ProfilingMethodVisitor(access, name, desc, mv);
         }
         return mv;
