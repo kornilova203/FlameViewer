@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.regex.Pattern;
 
+@SuppressWarnings({"UnnecessaryLocalVariable", "UnusedReturnValue", "SameParameterValue", "unchecked"})
 public class SimpleExample {
     private HashSet<Integer> hashSet = new HashSet<>();
 
@@ -14,45 +15,64 @@ public class SimpleExample {
         public String toString() {
             return "val: " + a;
         }
-        public void someFun() {
-//            try {
-//                System.out.println("try");
-//            }
-//            catch (Exception ignored){
-//
-//            }
+
+        void doSmth() {
+
         }
     }
 
     public void start() {
-//        returnsTestClass();
+        TestClass tc =  returnsTestClass();
+        tc.doSmth();
         getsParameters(5, "hello", 12345678);
 
-        SimpleExample simpleExample = new SimpleExample();
-        int[] arr = new int[3];
-        arr[0] = 11;
-        arr[1] = 22;
-        arr[2] = 33;
+
+        long J = returnJ();
+        Blackhole.consume(J);
+
+        float F = returnF();
+        Blackhole.consume(F);
+
+        double D = returnD();
+        Blackhole.consume(D);
+
         Pattern[] patterns = new Pattern[2];
         patterns[0] = Pattern.compile("1.*");
         patterns[1] = Pattern.compile("2.*");
         ArrayList<String> arrayList = new ArrayList<>();
         arrayList.add("some");
         arrayList.add("arrayList");
+        int[] arr = new int[3];
+        arr[0] = 11;
+        arr[1] = 22;
+        arr[2] = 33;
+        SimpleExample simpleExample = new SimpleExample();
         simpleExample.instanceGetsParams(arrayList, false, arr, patterns, 123, Pattern.compile("some.*(pattern)?"), 23);
+
         simpleExample.returnsFalse();
+
         returnsArrayList();
+
         returnsArrayListOfStrings();
+
         returnsArrayOfHashSets();
+
         returnsHashSetOfArraysOfStrings();
 
-        HashSet<String[]> hashSet = new HashSet<>();
-        hashSet.add(new String[] {"hello", "how", "are", "you?"});
-        hashSet.add(new String[] {"another", "array", "of", "strings"});
-        getsHashSetOfArraysOfStrings(hashSet, 1);
+        HashSet<String[]> stringsHashSet = new HashSet<>();
+        stringsHashSet.add(new String[] {"hello", "how", "are", "you?"});
+        stringsHashSet.add(new String[] {"another", "array", "of", "strings"});
+        getsHashSetOfArraysOfStrings(stringsHashSet, 1);
 
         doComplicatedTask();
+
         returns2DArrayOfStrings();
+
+        Blackhole.consume(hashSet);
+
+        doCondition();
+
+        doTryCatch();
     }
 
     @Override
@@ -60,33 +80,37 @@ public class SimpleExample {
         return "I am an instance of SimpleExample";
     }
 
-//    private static TestClass returnsTestClass() {
-//        TestClass testClass = new TestClass();
-//        return testClass;
-//    }
-    public static long returnJ() {
+    private static TestClass returnsTestClass() {
+        return new TestClass();
+    }
+
+    private static long returnJ() {
+        //noinspection UnnecessaryLocalVariable
         long a = 12345;
         return a;
     }
 
-    public static float returnF() {
+    private static float returnF() {
+        //noinspection UnnecessaryLocalVariable
         float a = (float) 12345.45;
         return a;
     }
 
-    public static double returnD() {
-//        State state = Profiler.methodStart("desc");
+    private static double returnD() {
         double a = 12345.45;
         return a;
     }
 
+    @SuppressWarnings("unused")
     private static Pattern[] getsParameters(int a, String s, long l) {
         int b = 23;
         Pattern[] patterns = new Pattern[10];
         patterns[5] = Pattern.compile("s0{3}me?p.*rn");
+        Blackhole.consume(b);
         return patterns;
     }
 
+    @SuppressWarnings("unused")
     private int[] instanceGetsParams(ArrayList<String> arrayList, boolean b, int[] arr, Pattern[] patterns,
                                      long l, Pattern p, int a) {
         return new int[20];
@@ -96,7 +120,7 @@ public class SimpleExample {
         return false;
     }
 
-    public static void doTryCatch() {
+    private static void doTryCatch() {
         try {
             System.out.println(1);
         } catch (Exception ignored) {
@@ -119,7 +143,7 @@ public class SimpleExample {
     }
 
     private static HashSet<Pattern>[] returnsArrayOfHashSets() {
-        HashSet<Pattern>[] hashSets = new HashSet[7];
+        HashSet<Pattern>[] hashSets = (HashSet<Pattern>[]) new Object[7];
         hashSets[0] = new HashSet<>();
         hashSets[0].add(Pattern.compile("1.*"));
         hashSets[0].add(Pattern.compile("2.*"));
@@ -134,6 +158,7 @@ public class SimpleExample {
         return hashSet;
     }
 
+    @SuppressWarnings("unused")
     private static void getsHashSetOfArraysOfStrings(HashSet<String[]> strings, int a) {
 
     }
@@ -146,16 +171,18 @@ public class SimpleExample {
     }
 
     private void doCondition() {
-//        int i = 1;
-//        String string1 = "hello1";
-//        if (hashSet.isEmpty()) {
-//            System.out.println("hello");
-//        }
-//        String string2 = "hello2";
-//        if (hashSet.size() == 1) {
-//            System.out.println("hello");
-//        }
-//        System.out.println(string1);
+        int i = 1;
+        String string1 = "hello1";
+        if (hashSet.isEmpty()) {
+            System.out.println("hello");
+        }
+        String string2 = "hello2";
+        if (hashSet.size() == 1) {
+            System.out.println("hello");
+        }
+        Blackhole.consume(string1);
+        Blackhole.consume(string2);
+        Blackhole.consume(i);
     }
 
     private void doComplicatedTask() {
@@ -164,6 +191,7 @@ public class SimpleExample {
         }
     }
 
+    @SuppressWarnings("unused")
     private void unused(Pattern[] patterns) {
 //        State state = Profiler.methodStart("desc",patterns.toString() + "some text");
 //        state.methodFinish(" ");
