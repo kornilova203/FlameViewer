@@ -1,7 +1,7 @@
 package benchmarks;
 
-import org.jetbrains.test.SimpleExample;
-import org.jetbrains.test.Test;
+import samples.SimpleExample;
+import samples.Test;
 import org.openjdk.jmh.annotations.*;
 
 import java.util.concurrent.TimeUnit;

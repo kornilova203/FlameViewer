@@ -1,4 +1,4 @@
-package org.jetbrains.test;
+package samples;
 
 /**
  * Created by Liudmila Kornilova

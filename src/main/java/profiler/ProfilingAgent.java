@@ -7,12 +7,8 @@ import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.lang.instrument.Instrumentation;
 import java.security.ProtectionDomain;
-import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.objectweb.asm.*;
-import org.objectweb.asm.commons.AdviceAdapter;
 import org.objectweb.asm.util.TraceClassVisitor;
 
 // TODO: add insertion of try-finally block
@@ -29,7 +25,7 @@ public class ProfilingAgent implements ClassFileTransformer {
                             Class<?> classBeingRedefined,
                             ProtectionDomain protectionDomain,
                             byte[] classfileBuffer) throws IllegalClassFormatException {
-        if (className.startsWith("org/jetbrains/test")) {
+        if (className.startsWith("samples")) {
             ClassReader cr = new ClassReader(classfileBuffer);
             // TODO: compute maxs and frames manually
             ClassWriter cw = new ClassWriter(cr, ClassWriter.COMPUTE_FRAMES);

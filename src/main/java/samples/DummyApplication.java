@@ -1,4 +1,4 @@
-package org.jetbrains.test;
+package samples;
 
 import java.util.List;
 import java.util.Random;

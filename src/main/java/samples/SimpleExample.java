@@ -1,4 +1,4 @@
-package org.jetbrains.test;
+package samples;
 
 import java.util.ArrayList;
 import java.util.HashSet;

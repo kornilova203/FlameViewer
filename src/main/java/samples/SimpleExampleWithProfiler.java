@@ -1,4 +1,4 @@
-package org.jetbrains.test;
+package samples;
 
 import profiler.State;
 import static profiler.Profiler.methodStart;
