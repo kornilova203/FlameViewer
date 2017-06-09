@@ -1,6 +1,6 @@
 package benchmarks;
 
-import samples.SimpleExample;
+import samples.Sample;
 import samples.Test;
 import org.openjdk.jmh.annotations.*;
 
@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
 public class Benchmarks {
 
     private Test taws = new Test();
-    private SimpleExample simpleExample = new SimpleExample();
+    private Sample sample = new Sample();
 
     @Benchmark
     @BenchmarkMode(Mode.AverageTime)
@@ -21,7 +21,7 @@ public class Benchmarks {
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void test() {
-        simpleExample.start();
+        sample.start();
     }
 
     @Benchmark
@@ -29,6 +29,6 @@ public class Benchmarks {
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     @Fork(jvmArgs = "-javaagent:/home/lk/java-profiling-plugin/build/libs/javaagent.jar")
     public void testProfiled() {
-        simpleExample.start();
+        sample.start();
     }
 }

@@ -5,11 +5,14 @@ import java.util.HashSet;
 import java.util.regex.Pattern;
 
 @SuppressWarnings({"UnnecessaryLocalVariable", "UnusedReturnValue", "SameParameterValue", "unchecked"})
-public class SimpleExample {
+public class Sample {
     private HashSet<Integer> hashSet = new HashSet<>();
 
     private static class TestClass {
         private int a = 50;
+//        TestClass() {
+//            a = 50;
+//        }
 
         @Override
         public String toString() {
@@ -22,7 +25,7 @@ public class SimpleExample {
     }
 
     public void start() {
-        TestClass tc =  returnsTestClass();
+        TestClass tc = new TestClass();
         tc.doSmth();
         getsParameters(5, "hello", 12345678);
 
@@ -46,10 +49,10 @@ public class SimpleExample {
         arr[0] = 11;
         arr[1] = 22;
         arr[2] = 33;
-        SimpleExample simpleExample = new SimpleExample();
-        simpleExample.instanceGetsParams(arrayList, false, arr, patterns, 123, Pattern.compile("some.*(pattern)?"), 23);
+        Sample sample = new Sample();
+        sample.instanceGetsParams(arrayList, false, arr, patterns, 123, Pattern.compile("some.*(pattern)?"), 23);
 
-        simpleExample.returnsFalse();
+        sample.returnsFalse();
 
         returnsArrayList();
 
@@ -77,12 +80,12 @@ public class SimpleExample {
 
     @Override
     public String toString() {
-        return "I am an instance of SimpleExample";
+        return "I am an instance of Sample";
     }
 
-    private static TestClass returnsTestClass() {
-        return new TestClass();
-    }
+//    private static TestClass returnsTestClass() {
+//        return new TestClass();
+//    }
 
     private static long returnJ() {
         //noinspection UnnecessaryLocalVariable
@@ -143,7 +146,7 @@ public class SimpleExample {
     }
 
     private static HashSet<Pattern>[] returnsArrayOfHashSets() {
-        HashSet<Pattern>[] hashSets = (HashSet<Pattern>[]) new Object[7];
+        HashSet<Pattern>[] hashSets = new HashSet[7];
         hashSets[0] = new HashSet<>();
         hashSets[0].add(Pattern.compile("1.*"));
         hashSets[0].add(Pattern.compile("2.*"));
@@ -198,7 +201,7 @@ public class SimpleExample {
     }
 
     public static void main(String[] args) {
-        SimpleExample simpleExample = new SimpleExample();
-        simpleExample.start();
+        Sample sample = new Sample();
+        sample.start();
     }
 }
