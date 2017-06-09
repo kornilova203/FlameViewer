@@ -30,7 +30,8 @@ public class ProfilingAgent implements ClassFileTransformer {
             ClassWriter cw = new ClassWriter(cr, ClassWriter.COMPUTE_FRAMES);
             // uncomment for debugging
             TraceClassVisitor cv = new TraceClassVisitor(cw, new PrintWriter(System.out));
-            cr.accept(new ProfilingClassVisitor(cv), ClassReader.EXPAND_FRAMES);
+            // SKIP_FRAMES avoids visiting frames that will be ignored and recomputed from scratch in the class writer.
+            cr.accept(new ProfilingClassVisitor(cv), ClassReader.SKIP_FRAMES);
 
             return cw.toByteArray();
         }
