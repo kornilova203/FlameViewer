@@ -15,12 +15,12 @@ message Event {
         string className = 1;
         string methodName = 2;
         bool isStatic = 3;
-        repeated Parameter inputParameters = 4;
+        repeated Var parameters = 4;
     }
 
     message Exit {
         // we dont need to save name of method in Exit event, do we?
-        Parameter returnValue = 1;
+        Var returnValue = 1;
     }
 
     message Exception {
@@ -28,7 +28,7 @@ message Event {
         string message = 2;
     }
 
-    message Parameter {
+    message Var {
         oneof value {
             sint32 I = 1; // int
             sint64 J = 2; // long
