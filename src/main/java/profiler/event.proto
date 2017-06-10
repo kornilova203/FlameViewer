@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package profiler;
 
+option java_outer_classname = "EventProtos";
+
 message Event {
     int64 threadId = 1;
     int64 time = 2;
