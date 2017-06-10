@@ -1,23 +1,40 @@
 package profiler;
 
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.lang.instrument.Instrumentation;
 import java.security.ProtectionDomain;
+import java.util.LinkedList;
 
 import org.objectweb.asm.*;
 import org.objectweb.asm.util.TraceClassVisitor;
 
-// TODO: add insertion of try-finally block
-public class ProfilingAgent implements ClassFileTransformer {
+public class ProfilingAgent {
+    public static LinkedList<EventData> loggingQueue = new LinkedList<>();
+
     public static void premain(String args, Instrumentation inst) throws IOException {
-        FileWriter fileWriter = new FileWriter("out/out.txt");
-        fileWriter.close();
-        inst.addTransformer(new ProfilingAgent());
+        Thread logger = new Thread(new Logger());
+        logger.setDaemon(true);
+        logger.start();
+
+        Runtime.getRuntime().addShutdownHook(
+                new Thread("shutdown-hook") {
+                    @Override
+                    public void run() {
+                        while (!loggingQueue.isEmpty()) {
+                            // wait for logger to log all events
+                            Thread.yield();
+                        }
+                        ReadSerializedData.print();
+                    }
+                });
+//        inst.addTransformer(new ProfilingClassFileTransformer());
     }
+}
+
+class ProfilingClassFileTransformer implements ClassFileTransformer {
 
     @Override
     public byte[] transform(ClassLoader loader,

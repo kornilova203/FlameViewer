@@ -27,18 +27,24 @@ public class Profiler {
     /**
      * Register start of method
      *
-     * @return State object which contains info about method. This object has methodFinish() method
+     * @param time
+     * @param owner
+     * @param name
+     * @param threadId
+     * @param parameters
      */
-    public static State methodStart(String desc, String parameters) {
-        long time = System.nanoTime();
-        Thread thread = Thread.currentThread();
-        StackTraceElement method = thread.getStackTrace()[2];
-        String name = method.getClassName() + "." + method.getMethodName() + "⊗" + desc;
-        long threadId = thread.getId();
+    public static void methodEnter(long time, String owner, String name, long threadId, Object[] parameters) {
+        EventProtos.Event.Enter enter = EventProtos.Event.Enter.newBuilder()
+                .setClassName(owner)
+                .setMethodName(name)
+//                .addAllParameters()
+                .build();
 
-        log(threadId + "⊗s⊗" + name + "⊗" + parameters + "⊗" + time);
-
-        return new State(name, threadId);
+        EventProtos.Event event = EventProtos.Event.newBuilder()
+                .setThreadId(threadId)
+                .setTime(time)
+//                .setEnter()
+                .build();
     }
 
     public static synchronized void log(String str) {

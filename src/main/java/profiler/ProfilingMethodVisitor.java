@@ -35,7 +35,7 @@ class ProfilingMethodVisitor extends AdviceAdapter {
             invokeStringBuilderToString();
         }
         mv.visitMethodInsn(INVOKESTATIC, "profiler/Profiler",
-                "methodStart", "(Ljava/lang/String;Ljava/lang/String;)Lprofiler/State;", false);
+                "methodEnter", "(Ljava/lang/String;Ljava/lang/String;)Lprofiler/State;", false);
         // TODO: check is it correct to use `LONG_TYPE` for object
         mv.visitVarInsn(ASTORE, state);
     }

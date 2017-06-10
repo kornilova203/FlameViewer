@@ -36,7 +36,7 @@ message Event {
             sint64 J = 2; // long
             bool Z = 3; // boolean
             uint32 C = 4; // char
-            sint32 S = 5; // string
+            sint32 S = 5; // short
             sint32 B = 6; // byte
             float F = 7; // float
             double D = 8; // double
