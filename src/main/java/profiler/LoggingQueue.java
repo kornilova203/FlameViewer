@@ -10,7 +10,7 @@ public class LoggingQueue {
     }
 
     synchronized EventData dequeue() {
-        return queue.removeLast();
+        return queue.removeFirst();
     }
 
     synchronized boolean isEmpty() {

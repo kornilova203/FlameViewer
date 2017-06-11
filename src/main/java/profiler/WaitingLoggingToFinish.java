@@ -11,7 +11,6 @@ public class WaitingLoggingToFinish extends Thread {
 
     @Override
     public void run() {
-        System.out.println("bye");
         while (!Agent.loggingQueue.isEmpty()) { // wait for logger to log all events
             Thread.yield();
         }

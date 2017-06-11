@@ -143,7 +143,23 @@ public class Sample {
     @SuppressWarnings("unused")
     private int[] instanceGetsParams(ArrayList<String> arrayList, boolean b, int[] arr, Pattern[] patterns,
                                      long l, Pattern p, int a) {
-        return new int[20];
+        long threadId = Thread.currentThread().getId();
+        Agent.loggingQueue.enqueue(new EnterEventData(
+                threadId,
+                System.currentTimeMillis(),
+                "samples/Sample",
+                "instanceGetsParams",
+                false,
+                new Object[] {arrayList, b, arr, patterns, l, p, a}));
+
+        int[] retArr = new int[20];
+
+        Agent.loggingQueue.enqueue(new ExitEventData(
+                threadId,
+                System.currentTimeMillis(),
+                retArr));
+
+        return retArr;
     }
 
     private boolean returnsFalse() {
