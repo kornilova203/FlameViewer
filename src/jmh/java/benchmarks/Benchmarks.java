@@ -1,7 +1,6 @@
 package benchmarks;
 
 import samples.Sample;
-import samples.Test;
 import org.openjdk.jmh.annotations.*;
 
 import java.util.concurrent.TimeUnit;
@@ -9,7 +8,6 @@ import java.util.concurrent.TimeUnit;
 @State(Scope.Benchmark)
 public class Benchmarks {
 
-    private Test taws = new Test();
     private Sample sample = new Sample();
 
     @Benchmark

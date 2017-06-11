@@ -3,21 +3,65 @@ package profiler;
 import java.io.*;
 import java.util.Arrays;
 import java.util.List;
+import java.util.OptionalInt;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+/**
+ * Thread which writes all events from loggingQueue to file
+ */
 public class Logger implements Runnable {
-    private File file = new File("out/events.ser");
+    private final File file;
+    private static File staticFile; // for debugging
+
+    Logger() {
+        File outDir = new File("out");
+        createDirIfNotExist(outDir);
+
+        file = createOutFile(outDir);
+        staticFile = file;
+        System.out.println(file.getAbsolutePath());
+    }
+
+    private File createOutFile(File outDir) {
+        File[] files = outDir.listFiles();
+        int max;
+        if (files != null) {
+            Pattern getNumPattern = Pattern.compile("[0-9]+");
+            OptionalInt optionalMax = Arrays.stream(files)
+                    .map(File::getName) // get names of files
+                    .map((name) -> {  // get part of name with number
+                        Matcher m = getNumPattern.matcher(name);
+                        if (m.find()) {
+                            return m.group();
+                        }
+                        return "0";
+                    })
+                    .mapToInt(Integer::parseInt)
+                    .max();
+            max = optionalMax.isPresent() ? optionalMax.getAsInt() : 0;
+        } else {
+            max = 0;
+        }
+        return new File(outDir.getAbsolutePath() + "/events" + ++max + ".ser");
+    }
+
+    private void createDirIfNotExist(File outDir) {
+        if (!outDir.exists()) {
+            try {
+                //noinspection ResultOfMethodCallIgnored
+                outDir.mkdir();
+            } catch (SecurityException se) {
+                //handle it
+            }
+        }
+    }
 
     @Override
     public void run() {
-        OutputStream outputStream = null;
-        try {
-            outputStream = new FileOutputStream(file);
-            outputStream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         while (true) {
+//            System.out.println("check");
             if (Agent.loggingQueue.isEmpty()) {
                 Thread.yield();
             } else {
@@ -85,5 +129,18 @@ public class Logger implements Runnable {
             varBuilder.setA(o.toString());
         }
         return varBuilder.build();
+    }
+
+    static void printDataForHuman() {
+        try {
+            InputStream inputStream = new FileInputStream(staticFile);
+            EventProtos.Event event = EventProtos.Event.parseDelimitedFrom(inputStream);
+            while (event != null) {
+                System.out.println(event.toString());
+                event = EventProtos.Event.parseDelimitedFrom(inputStream);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

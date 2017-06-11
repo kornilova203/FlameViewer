@@ -6,7 +6,6 @@ import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.lang.instrument.Instrumentation;
 import java.security.ProtectionDomain;
-import java.util.LinkedList;
 
 import org.objectweb.asm.*;
 import org.objectweb.asm.util.TraceClassVisitor;
@@ -16,21 +15,11 @@ public class Agent {
     public static LoggingQueue loggingQueue = new LoggingQueue();
 
     public static void premain(String args, Instrumentation inst) throws IOException {
-        Thread logger = new Thread(new Logger(), "Logger");
+        Thread logger = new Thread(new Logger(), "logging thread");
         logger.setDaemon(true);
         logger.start();
 
-        Runtime.getRuntime().addShutdownHook(
-                new Thread("shutdown-hook") {
-                    @Override
-                    public void run() {
-                        while (!loggingQueue.isEmpty()) {
-                            // wait for logger to log all events
-                            Thread.yield();
-                        }
-                        ReadSerializedData.print(); // for debugging
-                    }
-                });
+        Runtime.getRuntime().addShutdownHook( new WaitingLoggingToFinish("shutdown-hook"));
 //        inst.addTransformer(new ProfilingClassFileTransformer());
     }
 }

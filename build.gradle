@@ -28,8 +28,6 @@ dependencies {
     compile "org.ow2.asm:asm:5.2"
     compile "org.ow2.asm:asm-util:5.2" // TraceClassVisitor (for debugging)
     compile group: 'org.ow2.asm', name: 'asm-commons', version: '5.0.3' // AdviceAdapter
-    compile "net.openhft:chronicle-queue:4.5.27"
-    compile "org.slf4j:slf4j-simple:1.6.1"
     compile group: 'com.google.protobuf', name: 'protobuf-java', version: '3.3.1'
 }
 
@@ -46,8 +44,7 @@ task packAgent (type: Jar, dependsOn: classes) {
 }
 
 task profileClass(type: JavaExec, dependsOn: [build, packAgent]) {
-    classpath = sourceSets.test.runtimeClasspath
-//    main = "org.jetbrains.test.Test"
+    classpath = sourceSets.main.runtimeClasspath
     main = "samples.Sample"
     jvmArgs += ["-javaagent:${packAgent.getArchivePath()}"]
 }

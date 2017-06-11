@@ -28,7 +28,7 @@ public class Sample {
         }
     }
 
-    public void start() throws InterruptedException {
+    public void start() {
         TestClass tc = new TestClass();
         tc.doSmth();
         getsParameters(5, "hello", 12345678);
