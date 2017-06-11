@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package profiler;
+
+option java_outer_classname = "EventProtos";
+
+message Event {
+    int64 threadId = 1;
+    int64 time = 2;
+    oneof info {
+        Enter enter = 3;
+        Exit exit = 4;
+        Exception exception = 5;
+    }
+
+    message Enter {
+        string className = 1;
+        string methodName = 2;
+        bool isStatic = 3;
+        repeated Var parameters = 4;
+    }
+
+    message Exit {
+        // we dont need to save name of method in Exit event, do we?
+        Var returnValue = 1;
+    }
+
+    message Exception {
+        string type = 1;
+        string message = 2;
+    }
+
+    message Var {
+        oneof value {
+            sint32 I = 1; // int
+            sint64 J = 2; // long
+            bool Z = 3; // boolean
+            uint32 C = 4; // char
+            sint32 S = 5; // short
+            sint32 B = 6; // byte
+            float F = 7; // float
+            double D = 8; // double
+            string A = 9; // object
+        }
+    }
+}

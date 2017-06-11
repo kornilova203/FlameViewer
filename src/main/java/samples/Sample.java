@@ -1,5 +1,10 @@
 package samples;
 
+import profiler.EnterEventData;
+import profiler.ExitEventData;
+import profiler.Profiler;
+import profiler.ProfilingAgent;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.regex.Pattern;
@@ -24,7 +29,7 @@ public class Sample {
         }
     }
 
-    public void start() {
+    public void start() throws InterruptedException {
         TestClass tc = new TestClass();
         tc.doSmth();
         getsParameters(5, "hello", 12345678);
@@ -76,6 +81,8 @@ public class Sample {
         doCondition();
 
         doTryCatch();
+
+//        Thread.sleep(1000);
     }
 
     @Override
@@ -88,8 +95,26 @@ public class Sample {
 //    }
 
     private static long returnJ() {
+        long threadId = Thread.currentThread().getId();
+        ProfilingAgent.loggingQueue.addLast(
+                new EnterEventData(
+                        threadId,
+                        System.currentTimeMillis(),
+                        "samples/Sample",
+                        "returnJ",
+                        true,
+                        null
+                )
+        );
         //noinspection UnnecessaryLocalVariable
         long a = 12345;
+        ProfilingAgent.loggingQueue.addLast(
+                new ExitEventData(
+                        threadId,
+                        System.currentTimeMillis(),
+                        a
+                )
+        );
         return a;
     }
 
@@ -106,6 +131,9 @@ public class Sample {
 
     @SuppressWarnings("unused")
     private static Pattern[] getsParameters(int a, String s, long l) {
+        long threadId = Thread.currentThread().getId();
+//        Profiler.methodEnter(System.currentTimeMillis(), "samples/Sample", "getsParameters",
+//                threadId, new Object[] {a, s ,l});
         int b = 23;
         Pattern[] patterns = new Pattern[10];
         patterns[5] = Pattern.compile("s0{3}me?p.*rn");
@@ -125,7 +153,7 @@ public class Sample {
 
     private static void doTryCatch() {
         try {
-            System.out.println(1);
+            Blackhole.consume(1);
         } catch (Exception ignored) {
 
         }
@@ -196,11 +224,11 @@ public class Sample {
 
     @SuppressWarnings("unused")
     private void unused(Pattern[] patterns) {
-//        State state = Profiler.methodStart("desc",patterns.toString() + "some text");
+//        State state = Profiler.methodEnter("desc",patterns.toString() + "some text");
 //        state.methodFinish(" ");
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         Sample sample = new Sample();
         sample.start();
     }
