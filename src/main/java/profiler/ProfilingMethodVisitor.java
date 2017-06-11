@@ -46,7 +46,6 @@ class ProfilingMethodVisitor extends AdviceAdapter {
     }
 
     private void invokeStringBuilderToString() {
-//        INVOKEVIRTUAL java/lang/StringBuilder.toString ()Ljava/lang/String;
         mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/StringBuilder",
                 "toString", "()Ljava/lang/String;", false);
     }
@@ -60,7 +59,6 @@ class ProfilingMethodVisitor extends AdviceAdapter {
     }
 
     private void invokeStringBuilderAppend() {
-//        INVOKEVIRTUAL java/lang/StringBuilder.append (Ljava/lang/String;)Ljava/lang/StringBuilder;
         mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/StringBuilder",
                 "append", "(Ljava/lang/String;)Ljava/lang/StringBuilder;", false);
     }
@@ -195,7 +193,10 @@ class ProfilingMethodVisitor extends AdviceAdapter {
             insertStateBeforeSmallRetVal();
             aReturnToString();
         } else { // ATHROW
-
+            dup();
+            mv.visitVarInsn(ALOAD, state);
+            mv.visitInsn(SWAP);
+            invokeToString();
         }
     }
 
