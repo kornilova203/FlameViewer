@@ -12,8 +12,6 @@ import org.objectweb.asm.util.TraceClassVisitor;
 
 public class Agent {
 
-    public static LoggingQueue loggingQueue = new LoggingQueue();
-
     public static void premain(String args, Instrumentation inst) throws IOException {
         Thread logger = new Thread(new Logger(), "logging thread");
         logger.setDaemon(true);

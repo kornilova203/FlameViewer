@@ -3,17 +3,17 @@ package profiler;
 import java.util.LinkedList;
 
 public class LoggingQueue {
-    private final LinkedList<EventData> queue = new LinkedList<>();
+    private static final LinkedList<EventData> queue = new LinkedList<>();
 
-    public synchronized void enqueue(EventData eventData) {
+    public synchronized static void enqueue(EventData eventData) {
         queue.addLast(eventData);
     }
 
-    synchronized EventData dequeue() {
+    synchronized static EventData dequeue() {
         return queue.removeFirst();
     }
 
-    synchronized boolean isEmpty() {
+    synchronized static boolean isEmpty() {
         return queue.isEmpty();
     }
 }

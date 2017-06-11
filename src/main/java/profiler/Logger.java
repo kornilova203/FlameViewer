@@ -56,10 +56,10 @@ public class Logger implements Runnable {
     public void run() {
         //noinspection InfiniteLoopStatement
         while (true) {
-            if (Agent.loggingQueue.isEmpty()) {
+            if (LoggingQueue.isEmpty()) {
                 Thread.yield();
             } else {
-                logEvent(Agent.loggingQueue.dequeue());
+                logEvent(LoggingQueue.dequeue());
             }
         }
     }
