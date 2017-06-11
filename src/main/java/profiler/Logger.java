@@ -18,11 +18,10 @@ public class Logger implements Runnable {
             e.printStackTrace();
         }
         while (true) {
-//            System.out.println("check");
-            if (ProfilingAgent.loggingQueue.isEmpty()) {
+            if (Agent.loggingQueue.isEmpty()) {
                 Thread.yield();
             } else {
-                logEvent(ProfilingAgent.loggingQueue.removeFirst());
+                logEvent(Agent.loggingQueue.dequeue());
             }
         }
     }

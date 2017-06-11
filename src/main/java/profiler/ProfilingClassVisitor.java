@@ -14,7 +14,7 @@ class ProfilingClassVisitor extends ClassVisitor {
         MethodVisitor mv = cv.visitMethod(access, name, desc, signature, exceptions);
         if (mv != null &&
                 !name.equals("toString") &&
-                (access & Opcodes.ACC_SYNTHETIC) == 0) { // exclude synthetic constructors
+                (access & Opcodes.ACC_SYNTHETIC) == 0) { // exclude synthetic methods
             return new ProfilingMethodVisitor(access, name, desc, mv);
         }
         return mv;

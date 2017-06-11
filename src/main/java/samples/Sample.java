@@ -2,8 +2,7 @@ package samples;
 
 import profiler.EnterEventData;
 import profiler.ExitEventData;
-import profiler.Profiler;
-import profiler.ProfilingAgent;
+import profiler.Agent;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -96,7 +95,7 @@ public class Sample {
 
     private static long returnJ() {
         long threadId = Thread.currentThread().getId();
-        ProfilingAgent.loggingQueue.addLast(
+        Agent.loggingQueue.enqueue(
                 new EnterEventData(
                         threadId,
                         System.currentTimeMillis(),
@@ -108,7 +107,7 @@ public class Sample {
         );
         //noinspection UnnecessaryLocalVariable
         long a = 12345;
-        ProfilingAgent.loggingQueue.addLast(
+        Agent.loggingQueue.enqueue(
                 new ExitEventData(
                         threadId,
                         System.currentTimeMillis(),

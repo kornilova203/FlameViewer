@@ -11,11 +11,12 @@ import java.util.LinkedList;
 import org.objectweb.asm.*;
 import org.objectweb.asm.util.TraceClassVisitor;
 
-public class ProfilingAgent {
-    public static LinkedList<EventData> loggingQueue = new LinkedList<>();
+public class Agent {
+
+    public static LoggingQueue loggingQueue = new LoggingQueue();
 
     public static void premain(String args, Instrumentation inst) throws IOException {
-        Thread logger = new Thread(new Logger());
+        Thread logger = new Thread(new Logger(), "Logger");
         logger.setDaemon(true);
         logger.start();
 
@@ -27,7 +28,7 @@ public class ProfilingAgent {
                             // wait for logger to log all events
                             Thread.yield();
                         }
-                        ReadSerializedData.print();
+                        ReadSerializedData.print(); // for debugging
                     }
                 });
 //        inst.addTransformer(new ProfilingClassFileTransformer());
