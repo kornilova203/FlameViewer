@@ -1,9 +1,7 @@
 package profiler;
 
 import java.io.*;
-import java.util.Arrays;
-import java.util.List;
-import java.util.OptionalInt;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -26,23 +24,19 @@ public class Logger implements Runnable {
 
     private File createOutFile(File outDir) {
         File[] files = outDir.listFiles();
-        int max;
+        int max = 0;
         if (files != null) {
-            Pattern getNumPattern = Pattern.compile("[0-9]+");
-            OptionalInt optionalMax = Arrays.stream(files)
+            Optional<String> optionalMaxFileName = Arrays.stream(files)
                     .map(File::getName) // get names of files
-                    .map((name) -> {  // get part of name with number
-                        Matcher m = getNumPattern.matcher(name);
-                        if (m.find()) {
-                            return m.group();
-                        }
-                        return "0";
-                    })
-                    .mapToInt(Integer::parseInt)
-                    .max();
-            max = optionalMax.isPresent() ? optionalMax.getAsInt() : 0;
-        } else {
-            max = 0;
+                    .max(Comparator.naturalOrder());
+
+            if (optionalMaxFileName.isPresent()) {
+                Pattern getNumPattern = Pattern.compile("[0-9]+");
+                Matcher m = getNumPattern.matcher(optionalMaxFileName.get());
+                if (m.find()) {
+                    max = Integer.parseInt(m.group());
+                }
+            }
         }
         return new File(outDir.getAbsolutePath() + "/events" + ++max + ".ser");
     }
@@ -60,8 +54,8 @@ public class Logger implements Runnable {
 
     @Override
     public void run() {
+        //noinspection InfiniteLoopStatement
         while (true) {
-//            System.out.println("check");
             if (Agent.loggingQueue.isEmpty()) {
                 Thread.yield();
             } else {
