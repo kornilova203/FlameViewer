@@ -149,7 +149,7 @@ public class Sample {
                 "samples/Sample",
                 "instanceGetsParams",
                 false,
-                new Object[] {arrayList, b, arr, patterns, l, p, a}));
+                new Object[] {this, arrayList, b, arr, patterns, l, p, a}));
 
         int[] retArr = new int[20];
 
