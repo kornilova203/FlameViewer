@@ -84,27 +84,37 @@ public class Logger implements Runnable {
                 .setTime(eventData.time)
                 .setThreadId(eventData.threadId);
         if (eventData.getClass() == EnterEventData.class) {
-            EnterEventData enterEventData = (EnterEventData) eventData;
-            EventProtos.Event.Enter.Builder enterBuilder = EventProtos.Event.Enter.newBuilder()
-                    .setMethodName(enterEventData.methodName)
-                    .setClassName(enterEventData.className)
-                    .setIsStatic(enterEventData.isStatic);
-            if (enterEventData.parameters != null) {
-                List<EventProtos.Event.Var> parameters = Arrays.stream(enterEventData.parameters)
-                        .map(this::objectToVar)
-                        .collect(Collectors.toList());
-                enterBuilder.addAllParameters(parameters);
-            }
-            eventBuilder.setEnter(enterBuilder.build());
+            eventBuilder.setEnter(
+                    formEnterMessage((EnterEventData) eventData)
+            );
         } else {
-            ExitEventData exitEventData = (ExitEventData) eventData;
-            EventProtos.Event.Exit.Builder exitBuilder = EventProtos.Event.Exit.newBuilder();
-            if (exitEventData.returnValue != null) {
-                exitBuilder.setReturnValue(objectToVar(exitEventData.returnValue));
-            }
-            eventBuilder.setExit(exitBuilder.build());
+            eventBuilder.setExit(
+                    formExitMessage((ExitEventData) eventData)
+            );
         }
         writeToFile(eventBuilder.build());
+    }
+
+    private EventProtos.Event.Exit formExitMessage(ExitEventData exitEventData) {
+        EventProtos.Event.Exit.Builder exitBuilder = EventProtos.Event.Exit.newBuilder();
+        if (exitEventData.returnValue != null) {
+            exitBuilder.setReturnValue(objectToVar(exitEventData.returnValue));
+        }
+        return exitBuilder.build();
+    }
+
+    private EventProtos.Event.Enter formEnterMessage(EnterEventData enterEventData) {
+        EventProtos.Event.Enter.Builder enterBuilder = EventProtos.Event.Enter.newBuilder()
+                .setMethodName(enterEventData.methodName)
+                .setClassName(enterEventData.className)
+                .setIsStatic(enterEventData.isStatic);
+        if (enterEventData.parameters != null) {
+            List<EventProtos.Event.Var> parameters = Arrays.stream(enterEventData.parameters)
+                    .map(this::objectToVar)
+                    .collect(Collectors.toList());
+            enterBuilder.addAllParameters(parameters);
+        }
+        return enterBuilder.build();
     }
 
     private void writeToFile(EventProtos.Event event) {
