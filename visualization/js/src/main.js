@@ -1,7 +1,23 @@
 const messages = require('./event_pb');
+const $ = require('jquery');
+const jspb = require('google-protobuf');
+console.log(jspb);
 
-const message = new messages.Event();
-console.log(message);
+console.log(new messages.Event());
+
+const bytes = [
+    0x0a, 0x6, // field 1 (map_string_string), delimited, length 6
+    0x0a, 0x1, // field 1 in submessage (key), delimited, length 1
+    0x41,      // ASCII 'A'
+    0x12, 0x1, // field 2 in submessage (value), delimited, length 1
+    0x61       // ASCII 'a'
+];
+const arrayBuffer = new ArrayBuffer(8);
+const arr = new Uint8Array(arrayBuffer);
+for (let i = 0; i < 8; i++) {
+    arr[i] = bytes[i];
+}
+console.log("buffer: " + arrayBuffer);
 
 const DELIMITER = "⊗";
 const PARAMETERS_DELIMITER = "⇑";
@@ -28,19 +44,20 @@ $(window).on("load", function () {
 
         // Closure to capture the file information.
         reader.onload = (function (theFile) {
-            reader.readAsText(theFile);
+            reader.readAsArrayBuffer(theFile);
             reader.addEventListener("load", function () {
-                try {
-                    const fileData = reader.result;
-                    clearDom();
-                    processData(fileData);
-                    $('main').css("margin-top", 30);
-                    changeName(e);
-                }
-                catch (exception) {
-                    console.error(exception);
-                    // alert("Invalid file :(");
-                }
+                console.log(reader);
+                const arrayBuffer = reader.result;
+                console.log(arrayBuffer.byteLenght);
+                const byteArray = new Uint8Array(arrayBuffer);
+                console.log(byteArray);
+                clearDom();
+                const event = messages.Event.deserializeBinary(byteArray);
+                console.log(event);
+                // processData(fileData);
+                $('main').css("margin-top", 30);
+                changeName(e);
+
             });
         })(file);
 
