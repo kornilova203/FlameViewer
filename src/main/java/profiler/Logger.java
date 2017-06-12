@@ -10,19 +10,24 @@ import java.util.stream.Collectors;
  * Thread which writes all events from loggingQueue to file
  */
 public class Logger implements Runnable {
-    private final File file;
-    private static File staticFile; // for debugging
+    private static final File file = createOutFile();
+    // stream is package-private because it will be closed by WaitingLoggingToFinish thread
+    static final OutputStream outputStream;
 
-    Logger() {
+    static {
+        OutputStream temp = null;
+        try {
+            temp = new FileOutputStream(file);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        outputStream = temp;
+    }
+
+    private static File createOutFile() {
         File outDir = new File("out");
         createDirIfNotExist(outDir);
 
-        file = createOutFile(outDir);
-        staticFile = file;
-        System.out.println(file.getAbsolutePath());
-    }
-
-    private File createOutFile(File outDir) {
         File[] files = outDir.listFiles();
         int max = 0;
         if (files != null) {
@@ -30,11 +35,11 @@ public class Logger implements Runnable {
             OptionalInt optionalMax = Arrays.stream(files)
                     .map(File::getName) // get names of files
                     .map((name) -> {
-                            Matcher m = getNumPattern.matcher(name);
-                            if (m.find()) {
-                                return m.group();
-                            }
-                            return "0";
+                        Matcher m = getNumPattern.matcher(name);
+                        if (m.find()) {
+                            return m.group();
+                        }
+                        return "0";
                     })
                     .mapToInt(Integer::parseInt)
                     .max();
@@ -46,7 +51,7 @@ public class Logger implements Runnable {
         return new File(outDir.getAbsolutePath() + "/events" + ++max + ".ser");
     }
 
-    private void createDirIfNotExist(File outDir) {
+    private static void createDirIfNotExist(File outDir) {
         if (!outDir.exists()) {
             try {
                 //noinspection ResultOfMethodCallIgnored
@@ -98,7 +103,7 @@ public class Logger implements Runnable {
     }
 
     private void writeToFile(EventProtos.Event event) {
-        try (OutputStream outputStream = new FileOutputStream(file, true)) {
+        try {
             event.writeDelimitedTo(outputStream);
         } catch (IOException e) {
             e.printStackTrace();
@@ -131,8 +136,7 @@ public class Logger implements Runnable {
     }
 
     static void printDataForHuman() {
-        try {
-            InputStream inputStream = new FileInputStream(staticFile);
+        try (InputStream inputStream = new FileInputStream(file)) {
             EventProtos.Event event = EventProtos.Event.parseDelimitedFrom(inputStream);
             while (event != null) {
                 System.out.println(event.toString());
