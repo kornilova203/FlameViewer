@@ -1,6 +1,19 @@
 {
+  "name": "visualization-for-java-profiler",
+  "version": "1.0.0",
+  "description": "flamegraph",
+  "main": "index.html",
+  "scripts": {
+    "watch-js": "mkdir -p js/out && watchify js/src/main.js -o js/out/main.js -vd"
+  },
+  "author": "Liudmila Kornilova",
+  "license": "ISC",
+  "repository": "https://github.com/kornilova-l/java-profiling-plugin",
+  "dependencies": {
+    "jquery": "3.2.1",
+    "google-protobuf": "3.3.0"
+  },
   "devDependencies": {
-    "google-protobuf": "3.3.0",
-    "jquery": "3.2.1"
+    "watchify": "latest"
   }
 }

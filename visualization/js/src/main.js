@@ -1,3 +1,8 @@
+const messages = require('./event_pb');
+
+const message = new messages.Event();
+console.log(message);
+
 const DELIMITER = "⊗";
 const PARAMETERS_DELIMITER = "⇑";
 
