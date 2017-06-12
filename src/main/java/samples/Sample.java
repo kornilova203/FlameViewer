@@ -2,7 +2,7 @@ package samples;
 
 import profiler.EnterEventData;
 import profiler.ExitEventData;
-import profiler.Agent;
+import profiler.Logger;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -95,7 +95,7 @@ public class Sample {
 
     private static long returnJ() {
         long threadId = Thread.currentThread().getId();
-        Agent.queue.add(
+        Logger.queue.add(
                 new EnterEventData(
                         threadId,
                         System.currentTimeMillis(),
@@ -107,7 +107,7 @@ public class Sample {
         );
         //noinspection UnnecessaryLocalVariable
         long a = 12345;
-        Agent.queue.add(
+        Logger.queue.add(
                 new ExitEventData(
                         threadId,
                         System.currentTimeMillis(),
@@ -144,7 +144,7 @@ public class Sample {
     private int[] instanceGetsParams(ArrayList<String> arrayList, boolean b, int[] arr, Pattern[] patterns,
                                      long l, Pattern p, int a) {
         long threadId = Thread.currentThread().getId();
-        Agent.queue.add(new EnterEventData(
+        Logger.queue.add(new EnterEventData(
                 threadId,
                 System.currentTimeMillis(),
                 "samples/Sample",
@@ -154,7 +154,7 @@ public class Sample {
 
         int[] retArr = new int[20];
 
-        Agent.queue.add(new ExitEventData(
+        Logger.queue.add(new ExitEventData(
                 threadId,
                 System.currentTimeMillis(),
                 retArr));

@@ -2,6 +2,7 @@ package profiler;
 
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -10,6 +11,7 @@ import java.util.stream.Collectors;
  * Thread which writes all events from loggingQueue to file
  */
 public class Logger implements Runnable {
+    public static final ConcurrentLinkedQueue<EventData> queue = new ConcurrentLinkedQueue<>();
     private static final File file = createOutFile();
     // stream is package-private because it will be closed by WaitingLoggingToFinish thread
     static final OutputStream outputStream;
@@ -67,11 +69,11 @@ public class Logger implements Runnable {
     public void run() {
         //noinspection InfiniteLoopStatement
         while (true) {
-            if (Agent.queue.isEmpty()) {
+            if (queue.isEmpty()) {
                 Thread.yield();  // waits for queue to become non-empty
             } else {
                 isWriting = true;
-                logEvent(Agent.queue.poll());
+                logEvent(queue.poll());
                 isWriting = false;
             }
         }
