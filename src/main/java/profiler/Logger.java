@@ -109,10 +109,9 @@ public class Logger implements Runnable {
                 .setClassName(enterEventData.className)
                 .setIsStatic(enterEventData.isStatic);
         if (enterEventData.parameters != null) {
-            List<EventProtos.Event.Var> parameters = Arrays.stream(enterEventData.parameters)
-                    .map(this::objectToVar)
-                    .collect(Collectors.toList());
-            enterBuilder.addAllParameters(parameters);
+            for (int i = 0; i < enterEventData.parameters.length; i++) {
+                enterBuilder.addParameters(objectToVar(enterEventData.parameters[i]));
+            }
         }
         return enterBuilder.build();
     }
