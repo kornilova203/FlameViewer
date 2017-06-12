@@ -6,11 +6,14 @@ import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.lang.instrument.Instrumentation;
 import java.security.ProtectionDomain;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.objectweb.asm.*;
 import org.objectweb.asm.util.TraceClassVisitor;
 
 public class Agent {
+
+    public static final ConcurrentLinkedQueue<EventData> queue = new ConcurrentLinkedQueue<>();
 
     public static void premain(String args, Instrumentation inst) throws IOException {
         Thread logger = new Thread(new Logger(), "logging thread");

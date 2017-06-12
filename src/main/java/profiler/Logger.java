@@ -13,6 +13,7 @@ public class Logger implements Runnable {
     private static final File file = createOutFile();
     // stream is package-private because it will be closed by WaitingLoggingToFinish thread
     static final OutputStream outputStream;
+    static boolean isWriting = false;
 
     static {
         OutputStream temp = null;
@@ -66,10 +67,12 @@ public class Logger implements Runnable {
     public void run() {
         //noinspection InfiniteLoopStatement
         while (true) {
-            if (LoggingQueue.isEmpty()) {
-                Thread.yield();
+            if (Agent.queue.isEmpty()) {
+                Thread.yield();  // waits for queue to become non-empty
             } else {
-                logEvent(LoggingQueue.dequeue());
+                isWriting = true;
+                logEvent(Agent.queue.poll());
+                isWriting = false;
             }
         }
     }
