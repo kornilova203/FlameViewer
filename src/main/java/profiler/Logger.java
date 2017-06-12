@@ -26,16 +26,21 @@ public class Logger implements Runnable {
         File[] files = outDir.listFiles();
         int max = 0;
         if (files != null) {
-            Optional<String> optionalMaxFileName = Arrays.stream(files)
+            Pattern getNumPattern = Pattern.compile("[0-9]+");
+            OptionalInt optionalMax = Arrays.stream(files)
                     .map(File::getName) // get names of files
-                    .max(Comparator.naturalOrder());
+                    .map((name) -> {
+                            Matcher m = getNumPattern.matcher(name);
+                            if (m.find()) {
+                                return m.group();
+                            }
+                            return "0";
+                    })
+                    .mapToInt(Integer::parseInt)
+                    .max();
 
-            if (optionalMaxFileName.isPresent()) {
-                Pattern getNumPattern = Pattern.compile("[0-9]+");
-                Matcher m = getNumPattern.matcher(optionalMaxFileName.get());
-                if (m.find()) {
-                    max = Integer.parseInt(m.group());
-                }
+            if (optionalMax.isPresent()) {
+                max = optionalMax.getAsInt();
             }
         }
         return new File(outDir.getAbsolutePath() + "/events" + ++max + ".ser");
