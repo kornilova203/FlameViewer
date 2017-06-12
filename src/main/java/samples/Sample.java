@@ -11,6 +11,7 @@ import java.util.regex.Pattern;
 @SuppressWarnings({"UnnecessaryLocalVariable", "UnusedReturnValue", "SameParameterValue", "unchecked"})
 public class Sample {
     private HashSet<Integer> hashSet = new HashSet<>();
+    private static final ThreadLocal<Long> threadId = ThreadLocal.withInitial(() -> Thread.currentThread().getId());
 
     private static class TestClass {
         private int a = 50;
@@ -94,10 +95,9 @@ public class Sample {
 //    }
 
     private static long returnJ() {
-        long threadId = Thread.currentThread().getId();
         Logger.queue.add(
                 new EnterEventData(
-                        threadId,
+                        threadId.get(),
                         System.currentTimeMillis(),
                         "samples/Sample",
                         "returnJ",
@@ -109,7 +109,7 @@ public class Sample {
         long a = 12345;
         Logger.queue.add(
                 new ExitEventData(
-                        threadId,
+                        threadId.get(),
                         System.currentTimeMillis(),
                         a
                 )
@@ -143,9 +143,8 @@ public class Sample {
     @SuppressWarnings("unused")
     private int[] instanceGetsParams(ArrayList<String> arrayList, boolean b, int[] arr, Pattern[] patterns,
                                      long l, Pattern p, int a) {
-        long threadId = Thread.currentThread().getId();
         Logger.queue.add(new EnterEventData(
-                threadId,
+                threadId.get(),
                 System.currentTimeMillis(),
                 "samples/Sample",
                 "instanceGetsParams",
@@ -155,7 +154,7 @@ public class Sample {
         int[] retArr = new int[20];
 
         Logger.queue.add(new ExitEventData(
-                threadId,
+                threadId.get(),
                 System.currentTimeMillis(),
                 retArr));
 
