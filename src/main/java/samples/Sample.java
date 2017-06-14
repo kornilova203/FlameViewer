@@ -1,7 +1,6 @@
 package samples;
 
 import profiler.EnterEventData;
-import profiler.ExitEventData;
 import profiler.Logger;
 
 import java.util.ArrayList;
@@ -33,7 +32,6 @@ public class Sample {
         tc.doSmth();
         getsParameters(5, "hello", 12345678);
 
-
         long J = returnJ();
         Blackhole.consume(J);
 
@@ -54,7 +52,8 @@ public class Sample {
         arr[1] = 22;
         arr[2] = 33;
         Sample sample = new Sample();
-        sample.instanceGetsParams(arrayList, false, arr, patterns, 123, Pattern.compile("some.*(pattern)?"), 23);
+        sample.instanceGetsParams(arrayList, false, arr, patterns, 123,
+                Pattern.compile("some.*(pattern)?"), 23, 'c', (short) 12, (byte) 1, (float) 1.2, 1.2);
 
         sample.returnsFalse();
 
@@ -67,8 +66,8 @@ public class Sample {
         returnsHashSetOfArraysOfStrings();
 
         HashSet<String[]> stringsHashSet = new HashSet<>();
-        stringsHashSet.add(new String[] {"hello", "how", "are", "you?"});
-        stringsHashSet.add(new String[] {"another", "array", "of", "strings"});
+        stringsHashSet.add(new String[]{"hello", "how", "are", "you?"});
+        stringsHashSet.add(new String[]{"another", "array", "of", "strings"});
         getsHashSetOfArraysOfStrings(stringsHashSet, 1);
 
         doComplicatedTask();
@@ -80,6 +79,9 @@ public class Sample {
         doCondition();
 
         doTryCatch();
+        System.out.println("finish");
+        getInt(23);
+        instanceGetsI(23);
 
 //        Thread.sleep(1000);
     }
@@ -94,25 +96,25 @@ public class Sample {
 //    }
 
     private static long returnJ() {
-        Logger.queue.add(
-                new EnterEventData(
-                        Thread.currentThread().getId(),
-                        System.currentTimeMillis(),
-                        "samples/Sample",
-                        "returnJ",
-                        true,
-                        null
-                )
-        );
+//        Logger.queue.add(
+//                new EnterEventData(
+//                        Thread.currentThread().getId(),
+//                        System.currentTimeMillis(),
+//                        "samples/Sample",
+//                        "returnJ",
+//                        true,
+//                        null
+//                )
+//        );
         //noinspection UnnecessaryLocalVariable
         long a = 12345;
-        Logger.queue.add(
-                new ExitEventData(
-                        Thread.currentThread().getId(),
-                        System.currentTimeMillis(),
-                        a
-                )
-        );
+//        Logger.queue.add(
+//                new ExitEventData(
+//                        Thread.currentThread().getId(),
+//                        System.currentTimeMillis(),
+//                        a
+//                )
+//        );
         return a;
     }
 
@@ -123,15 +125,18 @@ public class Sample {
     }
 
     private static double returnD() {
+//        getArrayOfObj(new Object[]{"aaa", "bbb", 23});
         double a = 12345.45;
         return a;
+    }
+
+    private static void getArrayOfObj(Object[] objects) {
+
     }
 
     @SuppressWarnings("unused")
     private static Pattern[] getsParameters(int a, String s, long l) {
         long threadId = Thread.currentThread().getId();
-//        Profiler.methodEnter(System.currentTimeMillis(), "samples/Sample", "getsParameters",
-//                threadId, new Object[] {a, s ,l});
         int b = 23;
         Pattern[] patterns = new Pattern[10];
         patterns[5] = Pattern.compile("s0{3}me?p.*rn");
@@ -139,23 +144,40 @@ public class Sample {
         return patterns;
     }
 
+    private void instanceGetsI(int i) {
+
+    }
+
     @SuppressWarnings("unused")
     private int[] instanceGetsParams(ArrayList<String> arrayList, boolean b, int[] arr, Pattern[] patterns,
-                                     long l, Pattern p, int a) {
-        Logger.queue.add(new EnterEventData(
-                Thread.currentThread().getId(),
-                System.currentTimeMillis(),
-                "samples/Sample",
-                "instanceGetsParams",
-                false,
-                new Object[] {this, arrayList, b, arr, patterns, l, p, a}));
+                                     long l, Pattern p, int a, char c, short s, byte bt, float f, double d) {
+//        Logger.queue.add(new EnterEventData(
+//                Thread.currentThread().getId(),
+//                System.currentTimeMillis(),
+//                "samples/Sample",
+//                "instanceGetsParams",
+//                false,
+//                new Object[]{
+//                        this,
+//                        arrayList,
+//                        b,
+//                        arr,
+//                        patterns,
+//                        l,
+//                        p,
+//                        a,
+//                        c,
+//                        s,
+//                        bt,
+//                        f
+//                }));
 
         int[] retArr = new int[20];
 
-        Logger.queue.add(new ExitEventData(
-                Thread.currentThread().getId(),
-                System.currentTimeMillis(),
-                retArr));
+//        Logger.queue.add(new ExitEventData(
+//                Thread.currentThread().getId(),
+//                System.currentTimeMillis(),
+//                retArr));
 
         return retArr;
     }
@@ -197,13 +219,16 @@ public class Sample {
 
     private static HashSet<String[]> returnsHashSetOfArraysOfStrings() {
         HashSet<String[]> hashSet = new HashSet<>();
-        hashSet.add(new String[] {"hello", "how", "are", "you?"});
-        hashSet.add(new String[] {"another", "array", "of", "strings"});
+        hashSet.add(new String[]{"hello", "how", "are", "you?"});
+        hashSet.add(new String[]{"another", "array", "of", "strings"});
         return hashSet;
     }
 
     @SuppressWarnings("unused")
     private static void getsHashSetOfArraysOfStrings(HashSet<String[]> strings, int a) {
+    }
+
+    private static void getInt(int a) {
 
     }
 
@@ -236,10 +261,10 @@ public class Sample {
     }
 
     @SuppressWarnings("unused")
-    private void unused(Pattern[] patterns) {
-//        State state = Profiler.methodEnter("desc",patterns.toString() + "some text");
-//        state.methodFinish(" ");
-    }
+//    private void unused(Pattern[] patterns) {
+////        State state = Profiler.methodEnter("desc",patterns.toString() + "some text");
+////        state.methodFinish(" ");
+//    }
 
     public static void main(String[] args) throws InterruptedException {
         Sample sample = new Sample();

@@ -18,7 +18,7 @@ public class Agent {
         logger.start();
 
         Runtime.getRuntime().addShutdownHook( new WaitingLoggingToFinish("shutdown-hook"));
-//        inst.addTransformer(new ProfilingClassFileTransformer());
+        inst.addTransformer(new ProfilingClassFileTransformer());
     }
 }
 
@@ -36,7 +36,7 @@ class ProfilingClassFileTransformer implements ClassFileTransformer {
             // uncomment for debugging
             TraceClassVisitor cv = new TraceClassVisitor(cw, new PrintWriter(System.out));
             // SKIP_FRAMES avoids visiting frames that will be ignored and recomputed from scratch in the class writer.
-            cr.accept(new ProfilingClassVisitor(cv), ClassReader.SKIP_FRAMES);
+            cr.accept(new ProfilingClassVisitor(cv, className), ClassReader.SKIP_FRAMES);
 
             return cw.toByteArray();
         }
