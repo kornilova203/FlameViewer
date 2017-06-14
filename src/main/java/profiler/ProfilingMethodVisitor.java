@@ -14,8 +14,7 @@ class ProfilingMethodVisitor extends AdviceAdapter {
     private final String className;
     private final static Pattern allParamsPattern = Pattern.compile("(\\(.*\\))");
     private final static Pattern paramsPattern = Pattern.compile("(\\[?)(C|Z|S|I|J|F|D|B|(:?L[^;]+;))");
-//    private final static Pattern returnType = Pattern.compile("(?<=\\)).*"); // (?<=\)).*
-//    private final static Pattern baseTypes = Pattern.compile("([CZSIJFDB])");
+    private final static Pattern returnTypePattern = Pattern.compile("(?<=\\)).*"); // (?<=\)).*
 
     ProfilingMethodVisitor(int access, String methodName, String desc,
                            MethodVisitor mv, String className) {
@@ -27,8 +26,8 @@ class ProfilingMethodVisitor extends AdviceAdapter {
 
     @Override
     protected void onMethodEnter() {
-        createLogger();
-        createEnterEventData();
+        getQueue();
+        createEventData("Enter");
         getThreadId();
         getTime();
         getClassNameAndMethodName();
@@ -36,11 +35,6 @@ class ProfilingMethodVisitor extends AdviceAdapter {
         getArrayWithParameters();
         initEnterEventData();
         addToQueue();
-    }
-
-    @Override
-    protected void onMethodExit(int opcode) {
-        super.onMethodExit(opcode);
     }
 
     private void addToQueue() {
@@ -54,8 +48,8 @@ class ProfilingMethodVisitor extends AdviceAdapter {
                 "(JJLjava/lang/String;Ljava/lang/String;Z[Ljava/lang/Object;)V", false);
     }
 
-    private void createEnterEventData() {
-        mv.visitTypeInsn(NEW, "profiler/EnterEventData");
+    private void createEventData(String type) {
+        mv.visitTypeInsn(NEW, "profiler/" + type + "EventData");
         mv.visitInsn(DUP);
     }
 
@@ -66,16 +60,18 @@ class ProfilingMethodVisitor extends AdviceAdapter {
             arraySize = parametersDesc.length;
         }
         if (arraySize == 0 && isStatic()) { // null instead of Object[]
-            mv.visitInsn(ACONST_NULL);
+            loadNull();
         } else {
-            if (!isStatic()) {
+            if (!isStatic() && !Objects.equals(methodName, "<init>")) {
                 arraySize++;
             }
             createObjArray(arraySize);
             int index = 0;
             int posOfFirstParam = 0;
             if (!isStatic()) { // appendThis
-                loadThisToArr();
+                if (!Objects.equals(methodName, "<init>")) {
+                    loadThisToArr();
+                }
                 index = 1;
                 posOfFirstParam = 1;
             }
@@ -83,6 +79,10 @@ class ProfilingMethodVisitor extends AdviceAdapter {
                 loadParametersToArray(parametersDesc, index, posOfFirstParam);
             }
         }
+    }
+
+    private void loadNull() {
+        mv.visitInsn(ACONST_NULL);
     }
 
     private void loadParametersToArray(String[] parametersDesc, int index, int posOfFirstParam) {
@@ -109,35 +109,43 @@ class ProfilingMethodVisitor extends AdviceAdapter {
     private int paramToObj(String paramDesc, int pos) {
         switch (paramDesc) {
             case "I": // int
-                intToObj(pos);
+                mv.visitVarInsn(ILOAD, pos);
+                intToObj();
                 pos++;
                 break;
             case "J": // long
-                longToObj(pos);
+                mv.visitVarInsn(LLOAD, pos);
+                longToObj();
                 pos += 2;
                 break;
             case "Z": // boolean
-                booleanToObj(pos);
+                mv.visitVarInsn(ILOAD, pos);
+                booleanToObj();
                 pos++;
                 break;
             case "C": // char
-                charToObj(pos);
+                mv.visitVarInsn(ILOAD, pos);
+                charToObj();
                 pos++;
                 break;
             case "S": // short
-                shortToObj(pos);
+                mv.visitVarInsn(ILOAD, pos);
+                shortToObj();
                 pos++;
                 break;
             case "B": // byte
-                byteToObj(pos);
+                mv.visitVarInsn(ILOAD, pos);
+                byteToObj();
                 pos++;
                 break;
             case "F": // float
-                floatToObj(pos);
+                mv.visitVarInsn(FLOAD, pos);
+                floatToObj();
                 pos++;
                 break;
             case "D": // double
-                doubleToObj(pos);
+                mv.visitVarInsn(DLOAD, pos);
+                doubleToObj();
                 pos += 2;
                 break;
             default: // object
@@ -147,50 +155,42 @@ class ProfilingMethodVisitor extends AdviceAdapter {
         return pos;
     }
 
-    private void doubleToObj(int pos) {
-        mv.visitVarInsn(DLOAD, pos);
+    private void doubleToObj() {
         mv.visitMethodInsn(INVOKESTATIC, "java/lang/Double", "valueOf",
                 "(D)Ljava/lang/Double;", false);
     }
 
-    private void floatToObj(int pos) {
-        mv.visitVarInsn(FLOAD, pos);
+    private void floatToObj() {
         mv.visitMethodInsn(INVOKESTATIC, "java/lang/Float", "valueOf",
                 "(F)Ljava/lang/Float;", false);
     }
 
-    private void byteToObj(int pos) {
-        mv.visitVarInsn(ILOAD, pos);
+    private void byteToObj() {
         mv.visitMethodInsn(INVOKESTATIC, "java/lang/Byte", "valueOf",
                 "(B)Ljava/lang/Byte;", false);
     }
 
-    private void shortToObj(int pos) {
-        mv.visitVarInsn(ILOAD, pos);
+    private void shortToObj() {
         mv.visitMethodInsn(INVOKESTATIC, "java/lang/Short", "valueOf",
                 "(S)Ljava/lang/Short;", false);
     }
 
-    private void charToObj(int pos) {
-        mv.visitVarInsn(ILOAD, pos);
+    private void charToObj() {
         mv.visitMethodInsn(INVOKESTATIC, "java/lang/Character", "valueOf",
                 "(C)Ljava/lang/Character;", false);
     }
 
-    private void booleanToObj(int pos) {
-        mv.visitVarInsn(ILOAD, pos);
+    private void booleanToObj() {
         mv.visitMethodInsn(INVOKESTATIC, "java/lang/Boolean", "valueOf",
                 "(Z)Ljava/lang/Boolean;", false);
     }
 
-    private void longToObj(int pos) {
-        mv.visitVarInsn(LLOAD, pos);
+    private void longToObj() {
         mv.visitMethodInsn(INVOKESTATIC, "java/lang/Long", "valueOf",
                 "(J)Ljava/lang/Long;", false);
     }
 
-    private void intToObj(int pos) {
-        mv.visitVarInsn(ILOAD, pos);
+    private void intToObj() {
         mv.visitMethodInsn(INVOKESTATIC, "java/lang/Integer", "valueOf",
                 "(I)Ljava/lang/Integer;", false);
     }
@@ -220,7 +220,7 @@ class ProfilingMethodVisitor extends AdviceAdapter {
         mv.visitMethodInsn(INVOKESTATIC, "java/lang/System", "currentTimeMillis", "()J", false);
     }
 
-    private void createLogger() {
+    private void getQueue() {
         mv.visitFieldInsn(GETSTATIC, "profiler/Logger", "queue",
                 "Ljava/util/concurrent/LinkedBlockingDeque;");
     }
@@ -235,10 +235,8 @@ class ProfilingMethodVisitor extends AdviceAdapter {
     private String[] getParamsDesc() {
         ArrayList<String> paramsDesc = new ArrayList<>();
         String desc = getPartOfDescWithParam();
-        System.out.println("part: " + desc);
         Matcher m = paramsPattern.matcher(desc);
         while (m.find()) {
-            System.out.println("group: " + m.group());
             paramsDesc.add(m.group());
         }
         if (paramsDesc.isEmpty()) {
@@ -259,25 +257,111 @@ class ProfilingMethodVisitor extends AdviceAdapter {
 
 
     private boolean isStatic() {
-        return (methodAccess & ACC_STATIC) != 0 || methodName.equals("<init>"); // do not print 'this' in <init>
+        return (methodAccess & ACC_STATIC) != 0;
+    }
+
+    @Override
+    protected void onMethodExit(int opcode) {
+        if (opcode != RETURN) {
+            int sizeOfRetVal = getSizeOfRetVal(opcode);
+            dupRetVal(sizeOfRetVal);
+            getQueue();
+            swapRetValAndQueue(sizeOfRetVal);
+            createEventData("Exit");
+            swapRetValAndEvent(sizeOfRetVal);
+        } else {
+            getQueue();
+            createEventData("Exit");
+        }
+        retValToObj();
+        getThreadId();
+        getTime();
+        initExitEventData();
+        addToQueue();
+    }
+
+    private void retValToObj() {
+        Matcher m = returnTypePattern.matcher(methodDesc);
+        if (!m.find()) {
+            throw new IllegalArgumentException("Description does not have return value");
+        }
+        String retType = m.group();
+        if (Objects.equals(retType, "V")) {
+            loadNull();
+        } else {
+            convertToObj(retType);
+        }
+    }
+
+    private void convertToObj(String type) {
+        switch (type) {
+            case "I": // int
+                intToObj();
+                break;
+            case "J": // long
+                longToObj();
+                break;
+            case "Z": // boolean
+                booleanToObj();
+                break;
+            case "C": // char
+                charToObj();
+                break;
+            case "S": // short
+                shortToObj();
+                break;
+            case "B": // byte
+                byteToObj();
+                break;
+            case "F": // float
+                floatToObj();
+                break;
+            case "D": // double
+                doubleToObj();
+                break;
+        }
+    }
+
+    private void initExitEventData() {
+        mv.visitMethodInsn(INVOKESPECIAL, "profiler/ExitEventData", "<init>",
+                "(Ljava/lang/Object;JJ)V", false);
+    }
+
+    private void swapRetValAndEvent(int sizeOfRetVal) {
+        if (sizeOfRetVal == 1) {
+            dup2X1();
+        } else {
+            dup2X2();
+        }
+        pop2();
+    }
+
+    private void swapRetValAndQueue(int sizeOfRetVal) {
+        if (sizeOfRetVal == 1) {
+            swap();
+        } else {
+            dupX2();
+            pop();
+        }
     }
 
 
-    private boolean isI(String type) {
-        return Objects.equals(type, "I") ||
-                Objects.equals(type, "Z") || // boolean
-                Objects.equals(type, "C") ||
-                Objects.equals(type, "B") || // byte
-                Objects.equals(type, "S"); // short
+    private void dupRetVal(int sizeOfRetVal) {
+        if (sizeOfRetVal == 1) {
+            dup();
+        } else {
+            dup2();
+        }
+
     }
 
-
-//    @Override
-//    protected void onMethodExit(int opcode) {
-//        convertReturnValToString(opcode);
-//        mv.visitMethodInsn(INVOKEVIRTUAL, "profiler/State", "methodFinish",
-//                "(Ljava/lang/String;)V", false);
-//    }
+    private int getSizeOfRetVal(int opcode) {
+        if (opcode == LRETURN || // long
+                opcode == DRETURN) { // double
+            return 2;
+        }
+        return 1;
+    }
 
 //    private void convertReturnValToString(int opcode) {
 //        if (opcode == RETURN) {

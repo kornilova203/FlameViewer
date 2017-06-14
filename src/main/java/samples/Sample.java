@@ -1,6 +1,7 @@
 package samples;
 
 import profiler.EnterEventData;
+import profiler.ExitEventData;
 import profiler.Logger;
 
 import java.util.ArrayList;
@@ -108,13 +109,13 @@ public class Sample {
 //        );
         //noinspection UnnecessaryLocalVariable
         long a = 12345;
-//        Logger.queue.add(
-//                new ExitEventData(
-//                        Thread.currentThread().getId(),
-//                        System.currentTimeMillis(),
-//                        a
-//                )
-//        );
+        Logger.queue.add(
+                new ExitEventData(
+                        a,
+                        Thread.currentThread().getId(),
+                        System.currentTimeMillis()
+                )
+        );
         return a;
     }
 
