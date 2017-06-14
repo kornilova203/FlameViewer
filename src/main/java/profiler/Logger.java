@@ -73,8 +73,11 @@ public class Logger implements Runnable {
                 Thread.yield();  // waits for queue to become non-empty
             } else {
                 isWriting = true;
-                logEvent(queue.poll());
-                isWriting = false;
+                try {
+                    logEvent(queue.poll());
+                } finally {
+                    isWriting = false;
+                }
             }
         }
     }
