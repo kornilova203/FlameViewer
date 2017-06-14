@@ -14,13 +14,22 @@ public class WaitingLoggingToFinish extends Thread {
     @Override
     public void run() {
         while (!Logger.queue.isEmpty() || Logger.isWriting) { // wait for logger to log all events
-            Thread.yield();
+            try {
+                Thread.sleep(100); // Logger may dequeue queue but did not have time to update isWriting
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            if (Logger.isWriting) { // if still writing
+                Thread.yield();
+            } else { // queue is empty and logger is not writing
+                try {
+                    Logger.outputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Logger.printDataForHuman();
+                return;
+            }
         }
-        try {
-            Logger.outputStream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Logger.printDataForHuman();
     }
 }

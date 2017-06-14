@@ -2,16 +2,15 @@ package profiler;
 
 import java.io.*;
 import java.util.*;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.LinkedBlockingDeque;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 /**
  * Thread which writes all events from loggingQueue to file
  */
 public class Logger implements Runnable {
-    public static final ConcurrentLinkedQueue<EventData> queue = new ConcurrentLinkedQueue<>();
+    public static final LinkedBlockingDeque<EventData> queue = new LinkedBlockingDeque<>();
     private static final File file = createOutFile();
     // stream is package-private because it will be closed by WaitingLoggingToFinish thread
     static final OutputStream outputStream;
@@ -69,20 +68,16 @@ public class Logger implements Runnable {
     public void run() {
         //noinspection InfiniteLoopStatement
         while (true) {
-            if (queue.isEmpty()) {
-                Thread.yield();  // waits for queue to become non-empty
-            } else {
-                isWriting = true;
-                try {
-                    logEvent(queue.poll());
-                } finally {
-                    isWriting = false;
-                }
+            try {
+                logEvent(queue.take());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
     }
 
     private void logEvent(EventData eventData) {
+        isWriting = true;
         EventProtos.Event.Builder eventBuilder = EventProtos.Event.newBuilder()
                 .setTime(eventData.time)
                 .setThreadId(eventData.threadId);
@@ -96,6 +91,7 @@ public class Logger implements Runnable {
             );
         }
         writeToFile(eventBuilder.build());
+        isWriting = false;
     }
 
     private EventProtos.Event.Exit formExitMessage(ExitEventData exitEventData) {
