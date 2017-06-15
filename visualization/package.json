@@ -4,14 +4,15 @@
   "description": "flamegraph",
   "main": "index.html",
   "scripts": {
-    "watch-js": "mkdir -p js/out && watchify js/src/main.js -o js/out/main.js -vd"
+    "watch-js": "mkdir -p js/out && watchify js/src/canvas.js -o js/out/canvas.js"
   },
   "author": "Liudmila Kornilova",
   "license": "ISC",
   "repository": "https://github.com/kornilova-l/java-profiling-plugin",
   "dependencies": {
     "jquery": "3.2.1",
-    "google-protobuf": "3.3.0"
+    "google-protobuf": "3.3.0",
+    "createjs-easeljs": "0.8.2"
   },
   "devDependencies": {
     "watchify": "latest"
