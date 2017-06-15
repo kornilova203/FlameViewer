@@ -1,9 +1,5 @@
-version '1.0'
-
 apply plugin: 'java'
 apply plugin: 'application'
-
-sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
@@ -15,21 +11,28 @@ buildscript {
         maven {
             url "https://plugins.gradle.org/m2/"
         }
+        maven {
+            url 'http://dl.bintray.com/jetbrains/intellij-plugin-service'
+        }
+        dependencies {
+            classpath "me.champeau.gradle:jmh-gradle-plugin:0.3.1"
+        }
+
     }
     dependencies {
-        classpath "me.champeau.gradle:jmh-gradle-plugin:0.3.1"
+        classpath "gradle.plugin.org.jetbrains:gradle-intellij-plugin:0.1.10"
     }
 }
 
-apply plugin: "me.champeau.gradle.jmh"
-
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
     compile "org.ow2.asm:asm:5.2"
     compile "org.ow2.asm:asm-util:5.2" // TraceClassVisitor (for debugging)
     compile group: 'org.ow2.asm', name: 'asm-commons', version: '5.0.3' // AdviceAdapter
     compile group: 'com.google.protobuf', name: 'protobuf-java', version: '3.3.1'
 }
+
+apply plugin: "me.champeau.gradle.jmh"
+apply plugin: 'org.jetbrains.intellij'
 
 mainClassName = 'org.jetbrains.test.Main'
 
@@ -41,6 +44,11 @@ task packAgent (type: Jar, dependsOn: classes) {
     from sourceSets.main.output
     include '**/profiler/*'
     includeEmptyDirs = false
+}
+
+task copyStatic(type: Copy) {
+    from 'visualization'
+    into 'build/classes/main/visualization'
 }
 
 task profileClass(type: JavaExec, dependsOn: [build, packAgent]) {

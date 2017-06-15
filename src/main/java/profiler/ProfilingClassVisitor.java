@@ -5,8 +5,10 @@ import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
 class ProfilingClassVisitor extends ClassVisitor {
-    ProfilingClassVisitor(ClassVisitor cv) {
+    private final String className;
+    ProfilingClassVisitor(ClassVisitor cv, String className) {
         super(Opcodes.ASM5, cv);
+        this.className = className;
     }
 
     @Override
@@ -15,7 +17,7 @@ class ProfilingClassVisitor extends ClassVisitor {
         if (mv != null &&
                 !name.equals("toString") &&
                 (access & Opcodes.ACC_SYNTHETIC) == 0) { // exclude synthetic methods
-            return new ProfilingMethodVisitor(access, name, desc, mv);
+            return new ProfilingMethodVisitor(access, name, desc, mv, className);
         }
         return mv;
     }
