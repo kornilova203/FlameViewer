@@ -46,6 +46,11 @@ task packAgent (type: Jar, dependsOn: classes) {
     includeEmptyDirs = false
 }
 
+task copyStatic(type: Copy) {
+    from 'visualization'
+    into 'build/classes/main/visualization'
+}
+
 task profileClass(type: JavaExec, dependsOn: [build, packAgent]) {
     classpath = sourceSets.main.runtimeClasspath
     main = "samples.Sample"
