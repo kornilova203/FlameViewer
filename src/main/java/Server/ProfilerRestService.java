@@ -12,7 +12,7 @@ import org.jetbrains.io.Responses;
 import java.io.IOException;
 
 public class ProfilerRestService extends RestService {
-    private static final Logger LOG = Logger.getInstance("#LucindaAction");
+    private static final Logger LOG = Logger.getInstance(ProfilerRestService.class.getName());
     private final String PROFILER_SERVICE_NAME = "profiler";
 
     @NotNull
