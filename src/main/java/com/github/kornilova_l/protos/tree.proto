@@ -15,8 +15,10 @@ message Tree {
     message Call {
         int64 duration = 1;
         com.github.kornilova_l.protos.Event.Enter enter = 2;
-        com.github.kornilova_l.protos.Event.Exit exit = 3; // does not exist if JVM was stoped or if method threw exception
-        com.github.kornilova_l.protos.Event.Exception exception = 4; // if method threw exception
+        oneof exitInfo { // does not exist if JVM was stoped or if method threw exception
+            com.github.kornilova_l.protos.Event.Exit exit = 3;
+            com.github.kornilova_l.protos.Event.Exception exception = 4;
+        }
         repeated Call calls = 5;
         int64 startTime = 6; // only for trees which save original call structure
     }
