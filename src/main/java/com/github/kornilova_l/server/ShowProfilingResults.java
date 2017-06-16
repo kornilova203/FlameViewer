@@ -1,4 +1,4 @@
-package Server;
+package com.github.kornilova_l.server;
 
 import com.intellij.ide.browsers.actions.BaseOpenInBrowserAction;
 import com.intellij.openapi.actionSystem.AnAction;

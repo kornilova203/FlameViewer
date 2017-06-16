@@ -1,4 +1,4 @@
-package profiler;
+package com.github.kornilova_l.profiler;
 
 public class ExitEventData extends EventData {
     Object returnValue;

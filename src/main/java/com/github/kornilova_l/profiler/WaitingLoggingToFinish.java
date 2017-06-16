@@ -1,4 +1,4 @@
-package profiler;
+package com.github.kornilova_l.profiler;
 
 import java.io.IOException;
 

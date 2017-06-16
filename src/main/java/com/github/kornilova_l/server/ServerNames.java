@@ -1,4 +1,4 @@
-package Server;
+package com.github.kornilova_l.server;
 
 import com.intellij.openapi.diagnostic.Logger;
 

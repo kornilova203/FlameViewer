@@ -1,4 +1,4 @@
-package profiler;
+package com.github.kornilova_l.profiler;
 
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.MethodVisitor;
