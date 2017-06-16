@@ -1,5 +1,7 @@
 package com.github.kornilova_l.profiler;
 
+import com.github.kornilova_l.protos.EventProtos;
+
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.LinkedBlockingDeque;

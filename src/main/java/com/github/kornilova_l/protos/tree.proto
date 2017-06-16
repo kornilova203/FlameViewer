@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package com.github.kornilova_l.protos;
+
+option java_outer_classname = "TreeProtos";
+
+import "com/github/kornilova_l/protos/event.proto";
+
+message Tree {
+    int64 duration = 1;
+    repeated Call calls = 2;
+    int64 threadId = 3; // only for trees which save original call structure
+    int64 startTime = 4; // only for trees which save original call structure
+
+    message Call {
+        int64 duration = 1;
+        com.github.kornilova_l.protos.Event.Enter enter = 2;
+        com.github.kornilova_l.protos.Event.Exit exit = 3; // does not exist if JVM was stoped or if method threw exception
+        com.github.kornilova_l.protos.Event.Exception exception = 4; // if method threw exception
+        repeated Call calls = 5;
+        int64 startTime = 6; // only for trees which save original call structure
+    }
+}
