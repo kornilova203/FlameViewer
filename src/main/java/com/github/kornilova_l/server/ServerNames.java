@@ -12,4 +12,5 @@ class ServerNames {
     static final String ORIGINAL_TREE = MAIN_NAME + "/trees/original-tree";
     static final Pattern CSS_PATTERN = Pattern.compile(MAIN_NAME + "/css.+css$");
     static final Pattern JS_PATTERN = Pattern.compile(MAIN_NAME + "/js.+js$");
+    static final Pattern FONT_PATTERN = Pattern.compile(MAIN_NAME + "/.+ttf$");
 }

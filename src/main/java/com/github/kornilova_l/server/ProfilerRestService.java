@@ -45,9 +45,9 @@ public class ProfilerRestService extends RestService {
     public String execute(@NotNull QueryStringDecoder urlDecoder,
                           @NotNull FullHttpRequest request,
                           @NotNull ChannelHandlerContext context) throws IOException {
-        String url = urlDecoder.uri();
-        LOG.info("Request: " + url);
-        switch (url) {
+        String uri = urlDecoder.uri();
+        LOG.info("Request: " + uri);
+        switch (uri) {
             case ServerNames.RESULTS:
                 sendStatic(request, context, ServerNames.MAIN_NAME + "/index.html", "text/html");
                 break;
@@ -56,10 +56,12 @@ public class ProfilerRestService extends RestService {
                 sendTree(request, context, tree);
                 break;
             default:
-                if (ServerNames.CSS_PATTERN.matcher(url).matches()) {
-                    sendStatic(request, context, url, "text/css");
-                } else if (ServerNames.JS_PATTERN.matcher(url).matches()) {
-                    sendStatic(request, context, url, "text/javascript");
+                if (ServerNames.CSS_PATTERN.matcher(uri).matches()) {
+                    sendStatic(request, context, uri, "text/css");
+                } else if (ServerNames.JS_PATTERN.matcher(uri).matches()) {
+                    sendStatic(request, context, uri, "text/javascript");
+                } else if (ServerNames.FONT_PATTERN.matcher(uri).matches()) {
+                    sendStatic(request, context, uri, "application/octet-stream");
                 } else {
                     return "Not Found";
                 }
