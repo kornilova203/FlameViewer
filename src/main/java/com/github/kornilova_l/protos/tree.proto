@@ -8,9 +8,9 @@ import "com/github/kornilova_l/protos/event.proto";
 
 message Tree {
     int64 duration = 1;
-    repeated Call calls = 2;
+    int64 startTime = 2; // only for trees which save original call structure
     int64 threadId = 3; // only for trees which save original call structure
-    int64 startTime = 4; // only for trees which save original call structure
+    repeated Call calls = 4;
 
     message Call {
         int64 duration = 1;
@@ -19,7 +19,7 @@ message Tree {
             com.github.kornilova_l.protos.Event.Exit exit = 3;
             com.github.kornilova_l.protos.Event.Exception exception = 4;
         }
-        repeated Call calls = 5;
-        int64 startTime = 6; // only for trees which save original call structure
+        int64 startTime = 5; // only for trees which save original call structure
+        repeated Call calls = 6;
     }
 }
