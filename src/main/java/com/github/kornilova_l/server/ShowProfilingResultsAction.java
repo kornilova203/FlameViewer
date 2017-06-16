@@ -6,10 +6,10 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 
 import static com.intellij.ide.browsers.actions.OpenFileInDefaultBrowserActionKt.findUsingBrowser;
 
-public class ShowProfilingResults extends AnAction {
+public class ShowProfilingResultsAction extends AnAction {
     @Override
     public void actionPerformed(AnActionEvent event) {
-        System.out.println("ShowProfilingResults");
+        System.out.println("ShowProfilingResultsAction");
         BaseOpenInBrowserAction.Companion.open(event, findUsingBrowser());
     }
 }
