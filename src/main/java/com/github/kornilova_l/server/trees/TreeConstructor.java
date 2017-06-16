@@ -17,7 +17,6 @@ public class TreeConstructor {
             EventProtos.Event event = EventProtos.Event.parseDelimitedFrom(inputStream);
             OriginalTree originalTree = new OriginalTree(event.getTime(), event.getThreadId());
             while (event != null) {
-                System.out.println(event.toString());
                 originalTree.addEvent(event);
                 event = EventProtos.Event.parseDelimitedFrom(inputStream);
             }
