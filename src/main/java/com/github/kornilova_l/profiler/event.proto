@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package profiler;
+package com.github.kornilova_l.profiler;
 
 option java_outer_classname = "EventProtos";
 
