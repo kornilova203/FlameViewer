@@ -48,7 +48,7 @@ task packAgent (type: Jar, dependsOn: classes) {
 
 task copyStatic(type: Copy) {
     from 'visualization'
-    into 'build/classes/main/visualization'
+    into 'build/classes/main/flamegraph-profiler'
 }
 
 task profileClass(type: JavaExec, dependsOn: [build, packAgent]) {
