@@ -9,7 +9,7 @@ var jspb = require('google-protobuf');
 var goog = jspb;
 var global = Function('return this')();
 
-var src_main_java_com_github_kornilova_l_protos_event_pb = require('../../../../../../../src/main/java/com/github/kornilova_l/protos/event_pb.js');
+var src_main_java_com_github_kornilova_l_protos_event_pb = require('./event_pb.js');
 goog.exportSymbol('proto.com.github.kornilova_l.protos.Tree', null, global);
 goog.exportSymbol('proto.com.github.kornilova_l.protos.Tree.Call', null, global);
 
