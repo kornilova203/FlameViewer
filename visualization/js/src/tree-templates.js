@@ -11,7 +11,7 @@ if (typeof templates.tree == 'undefined') { templates.tree = {}; }
 
 
 templates.tree.getSectionForThread = function(opt_data, opt_ignored) {
-  return soydata.VERY_UNSAFE.ordainSanitizedHtml('<section id="' + soy.$$escapeHtmlAttribute(opt_data.threadId) + '"><h2>' + soy.$$escapeHtml(opt_data.threadId) + '</h2></section>');
+  return soydata.VERY_UNSAFE.ordainSanitizedHtml('<section id="section-' + soy.$$escapeHtmlAttribute(opt_data.threadId) + '"><h2>' + soy.$$escapeHtml(opt_data.threadId) + '</h2><canvas id="canvas-' + soy.$$escapeHtmlAttribute(opt_data.threadId) + '" width="700" height="700"></canvas></section>');
 };
 if (goog.DEBUG) {
   templates.tree.getSectionForThread.soyTemplateName = 'templates.tree.getSectionForThread';
