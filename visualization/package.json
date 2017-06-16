@@ -4,7 +4,7 @@
   "description": "flamegraph",
   "main": "index.html",
   "scripts": {
-    "watch-js": "mkdir -p js/out && watchify js/src/canvas.js -o js/out/canvas.js"
+    "watch-js": "mkdir -p js/out && watchify js/src/main.js -o js/out/main.js"
   },
   "author": "Liudmila Kornilova",
   "license": "ISC",
