@@ -2,17 +2,17 @@
 // Please don't edit this file by hand.
 
 /**
- * @fileoverview Templates in namespace tree.templates.
+ * @fileoverview Templates in namespace templates.tree.
  * @public
  */
 
-if (typeof tree == 'undefined') { var tree = {}; }
-if (typeof tree.templates == 'undefined') { tree.templates = {}; }
+if (typeof templates == 'undefined') { var templates = {}; }
+if (typeof templates.tree == 'undefined') { templates.tree = {}; }
 
 
-tree.templates.getSectionForThread = function(opt_data, opt_ignored) {
+templates.tree.getSectionForThread = function(opt_data, opt_ignored) {
   return soydata.VERY_UNSAFE.ordainSanitizedHtml('<section id="' + soy.$$escapeHtmlAttribute(opt_data.threadId) + '"><h2>' + soy.$$escapeHtml(opt_data.threadId) + '</h2></section>');
 };
 if (goog.DEBUG) {
-  tree.templates.getSectionForThread.soyTemplateName = 'tree.templates.getSectionForThread';
+  templates.tree.getSectionForThread.soyTemplateName = 'templates.tree.getSectionForThread';
 }
