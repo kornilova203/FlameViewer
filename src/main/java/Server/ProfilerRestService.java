@@ -43,7 +43,7 @@ public class ProfilerRestService extends RestService {
                           @NotNull FullHttpRequest request,
                           @NotNull ChannelHandlerContext context) throws IOException {
         String url = urlDecoder.uri();
-        LOG.info("Request: " + url);
+        ServerNames.LOG.info("Request: " + url);
         switch (url) {
             case ServerNames.RESULTS:
                 sendStatic(request, context, ServerNames.MAIN_NAME + "/index.html", "text/html");
@@ -69,7 +69,12 @@ public class ProfilerRestService extends RestService {
                 InputStream pageStream = getClass().getResourceAsStream(fileName)
         ) {
             byteOut.write(StreamUtil.loadFromStream(pageStream));
-            HttpResponse response = Responses.response(contentType, Unpooled.wrappedBuffer(byteOut.getInternalBuffer(), 0, byteOut.size()));
+            HttpResponse response = Responses.response(
+                    contentType,
+                    Unpooled.wrappedBuffer(
+                            byteOut.getInternalBuffer()
+                    )
+            );
             Responses.addNoCache(response);
             Responses.send(response, context.channel(), request);
         }
