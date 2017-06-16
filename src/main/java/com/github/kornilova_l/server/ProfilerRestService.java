@@ -53,8 +53,7 @@ public class ProfilerRestService extends RestService {
                 break;
             case ServerNames.ORIGINAL_TREE:
                 TreeProtos.Tree tree = constructTimeTree();
-                System.out.println(tree.toString());
-                sendTree(tree);
+                sendTree(request, context, tree);
                 break;
             default:
                 if (ServerNames.CSS_PATTERN.matcher(url).matches()) {
@@ -68,12 +67,18 @@ public class ProfilerRestService extends RestService {
         return null;
     }
 
-    private void sendTree(TreeProtos.Tree tree) {
-        // TODO: implement
+    private void sendTree(FullHttpRequest request,
+                          ChannelHandlerContext context,
+                          TreeProtos.Tree tree) {
+        HttpResponse response = Responses.response(
+                "application/octet-stream",
+                Unpooled.wrappedBuffer(tree.toByteArray())
+        );
+        Responses.addNoCache(response);
+        Responses.send(response, context.channel(), request);
     }
 
     private TreeProtos.Tree constructTimeTree() {
-//        int max = Logger.getLargestFileNum();
         TreeConstructor treeConstructor = new TreeConstructor(
                 new File("/home/lk/java-profiling-plugin/out/events64.ser")
         );
@@ -89,7 +94,10 @@ public class ProfilerRestService extends RestService {
                 InputStream pageStream = getClass().getResourceAsStream(fileName)
         ) {
             byteOut.write(StreamUtil.loadFromStream(pageStream));
-            HttpResponse response = Responses.response(contentType, Unpooled.wrappedBuffer(byteOut.getInternalBuffer(), 0, byteOut.size()));
+            HttpResponse response = Responses.response(
+                    contentType,
+                    Unpooled.wrappedBuffer(byteOut.getInternalBuffer())
+            );
             Responses.addNoCache(response);
             Responses.send(response, context.channel(), request);
         }
