@@ -108,13 +108,13 @@ public class Sample {
 //        );
         //noinspection UnnecessaryLocalVariable
         long a = 12345;
-        Logger.queue.add(
-                new ExitEventData(
-                        a,
-                        Thread.currentThread().getId(),
-                        System.currentTimeMillis()
-                )
-        );
+//        Logger.queue.add(
+//                new ExitEventData(
+//                        a,
+//                        Thread.currentThread().getId(),
+//                        System.currentTimeMillis()
+//                )
+//        );
         return a;
     }
 

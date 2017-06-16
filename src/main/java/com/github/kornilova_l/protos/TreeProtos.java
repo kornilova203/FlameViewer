@@ -24,28 +24,13 @@ public final class TreeProtos {
     long getDuration();
 
     /**
-     * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 2;</code>
+     * <pre>
+     * only for trees which save original call structure
+     * </pre>
+     *
+     * <code>int64 startTime = 2;</code>
      */
-    java.util.List<com.github.kornilova_l.protos.TreeProtos.Tree.Call> 
-        getCallsList();
-    /**
-     * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 2;</code>
-     */
-    com.github.kornilova_l.protos.TreeProtos.Tree.Call getCalls(int index);
-    /**
-     * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 2;</code>
-     */
-    int getCallsCount();
-    /**
-     * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 2;</code>
-     */
-    java.util.List<? extends com.github.kornilova_l.protos.TreeProtos.Tree.CallOrBuilder> 
-        getCallsOrBuilderList();
-    /**
-     * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 2;</code>
-     */
-    com.github.kornilova_l.protos.TreeProtos.Tree.CallOrBuilder getCallsOrBuilder(
-        int index);
+    long getStartTime();
 
     /**
      * <pre>
@@ -57,13 +42,28 @@ public final class TreeProtos {
     long getThreadId();
 
     /**
-     * <pre>
-     * only for trees which save original call structure
-     * </pre>
-     *
-     * <code>int64 startTime = 4;</code>
+     * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 4;</code>
      */
-    long getStartTime();
+    java.util.List<com.github.kornilova_l.protos.TreeProtos.Tree.Call> 
+        getCallsList();
+    /**
+     * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 4;</code>
+     */
+    com.github.kornilova_l.protos.TreeProtos.Tree.Call getCalls(int index);
+    /**
+     * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 4;</code>
+     */
+    int getCallsCount();
+    /**
+     * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 4;</code>
+     */
+    java.util.List<? extends com.github.kornilova_l.protos.TreeProtos.Tree.CallOrBuilder> 
+        getCallsOrBuilderList();
+    /**
+     * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 4;</code>
+     */
+    com.github.kornilova_l.protos.TreeProtos.Tree.CallOrBuilder getCallsOrBuilder(
+        int index);
   }
   /**
    * Protobuf type {@code com.github.kornilova_l.protos.Tree}
@@ -78,9 +78,9 @@ public final class TreeProtos {
     }
     private Tree() {
       duration_ = 0L;
-      calls_ = java.util.Collections.emptyList();
-      threadId_ = 0L;
       startTime_ = 0L;
+      threadId_ = 0L;
+      calls_ = java.util.Collections.emptyList();
     }
 
     @java.lang.Override
@@ -113,13 +113,9 @@ public final class TreeProtos {
               duration_ = input.readInt64();
               break;
             }
-            case 18: {
-              if (!((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
-                calls_ = new java.util.ArrayList<com.github.kornilova_l.protos.TreeProtos.Tree.Call>();
-                mutable_bitField0_ |= 0x00000002;
-              }
-              calls_.add(
-                  input.readMessage(com.github.kornilova_l.protos.TreeProtos.Tree.Call.parser(), extensionRegistry));
+            case 16: {
+
+              startTime_ = input.readInt64();
               break;
             }
             case 24: {
@@ -127,9 +123,13 @@ public final class TreeProtos {
               threadId_ = input.readInt64();
               break;
             }
-            case 32: {
-
-              startTime_ = input.readInt64();
+            case 34: {
+              if (!((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
+                calls_ = new java.util.ArrayList<com.github.kornilova_l.protos.TreeProtos.Tree.Call>();
+                mutable_bitField0_ |= 0x00000008;
+              }
+              calls_.add(
+                  input.readMessage(com.github.kornilova_l.protos.TreeProtos.Tree.Call.parser(), extensionRegistry));
               break;
             }
           }
@@ -140,7 +140,7 @@ public final class TreeProtos {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
-        if (((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
+        if (((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
           calls_ = java.util.Collections.unmodifiableList(calls_);
         }
         makeExtensionsImmutable();
@@ -181,87 +181,57 @@ public final class TreeProtos {
       com.github.kornilova_l.protos.EventProtos.Event.EnterOrBuilder getEnterOrBuilder();
 
       /**
-       * <pre>
-       * does not exist if JVM was stoped or if method threw exception
-       * </pre>
-       *
-       * <code>.com.github.kornilova_l.protos.Event.Exit exit = 3;</code>
-       */
-      boolean hasExit();
-      /**
-       * <pre>
-       * does not exist if JVM was stoped or if method threw exception
-       * </pre>
-       *
        * <code>.com.github.kornilova_l.protos.Event.Exit exit = 3;</code>
        */
       com.github.kornilova_l.protos.EventProtos.Event.Exit getExit();
       /**
-       * <pre>
-       * does not exist if JVM was stoped or if method threw exception
-       * </pre>
-       *
        * <code>.com.github.kornilova_l.protos.Event.Exit exit = 3;</code>
        */
       com.github.kornilova_l.protos.EventProtos.Event.ExitOrBuilder getExitOrBuilder();
 
       /**
-       * <pre>
-       * if method threw exception
-       * </pre>
-       *
-       * <code>.com.github.kornilova_l.protos.Event.Exception exception = 4;</code>
-       */
-      boolean hasException();
-      /**
-       * <pre>
-       * if method threw exception
-       * </pre>
-       *
        * <code>.com.github.kornilova_l.protos.Event.Exception exception = 4;</code>
        */
       com.github.kornilova_l.protos.EventProtos.Event.Exception getException();
       /**
-       * <pre>
-       * if method threw exception
-       * </pre>
-       *
        * <code>.com.github.kornilova_l.protos.Event.Exception exception = 4;</code>
        */
       com.github.kornilova_l.protos.EventProtos.Event.ExceptionOrBuilder getExceptionOrBuilder();
-
-      /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 5;</code>
-       */
-      java.util.List<com.github.kornilova_l.protos.TreeProtos.Tree.Call> 
-          getCallsList();
-      /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 5;</code>
-       */
-      com.github.kornilova_l.protos.TreeProtos.Tree.Call getCalls(int index);
-      /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 5;</code>
-       */
-      int getCallsCount();
-      /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 5;</code>
-       */
-      java.util.List<? extends com.github.kornilova_l.protos.TreeProtos.Tree.CallOrBuilder> 
-          getCallsOrBuilderList();
-      /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 5;</code>
-       */
-      com.github.kornilova_l.protos.TreeProtos.Tree.CallOrBuilder getCallsOrBuilder(
-          int index);
 
       /**
        * <pre>
        * only for trees which save original call structure
        * </pre>
        *
-       * <code>int64 startTime = 6;</code>
+       * <code>int64 startTime = 5;</code>
        */
       long getStartTime();
+
+      /**
+       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 6;</code>
+       */
+      java.util.List<com.github.kornilova_l.protos.TreeProtos.Tree.Call> 
+          getCallsList();
+      /**
+       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 6;</code>
+       */
+      com.github.kornilova_l.protos.TreeProtos.Tree.Call getCalls(int index);
+      /**
+       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 6;</code>
+       */
+      int getCallsCount();
+      /**
+       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 6;</code>
+       */
+      java.util.List<? extends com.github.kornilova_l.protos.TreeProtos.Tree.CallOrBuilder> 
+          getCallsOrBuilderList();
+      /**
+       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 6;</code>
+       */
+      com.github.kornilova_l.protos.TreeProtos.Tree.CallOrBuilder getCallsOrBuilder(
+          int index);
+
+      public com.github.kornilova_l.protos.TreeProtos.Tree.Call.ExitInfoCase getExitInfoCase();
     }
     /**
      * Protobuf type {@code com.github.kornilova_l.protos.Tree.Call}
@@ -276,8 +246,8 @@ public final class TreeProtos {
       }
       private Call() {
         duration_ = 0L;
-        calls_ = java.util.Collections.emptyList();
         startTime_ = 0L;
+        calls_ = java.util.Collections.emptyList();
       }
 
       @java.lang.Override
@@ -325,42 +295,44 @@ public final class TreeProtos {
               }
               case 26: {
                 com.github.kornilova_l.protos.EventProtos.Event.Exit.Builder subBuilder = null;
-                if (exit_ != null) {
-                  subBuilder = exit_.toBuilder();
+                if (exitInfoCase_ == 3) {
+                  subBuilder = ((com.github.kornilova_l.protos.EventProtos.Event.Exit) exitInfo_).toBuilder();
                 }
-                exit_ = input.readMessage(com.github.kornilova_l.protos.EventProtos.Event.Exit.parser(), extensionRegistry);
+                exitInfo_ =
+                    input.readMessage(com.github.kornilova_l.protos.EventProtos.Event.Exit.parser(), extensionRegistry);
                 if (subBuilder != null) {
-                  subBuilder.mergeFrom(exit_);
-                  exit_ = subBuilder.buildPartial();
+                  subBuilder.mergeFrom((com.github.kornilova_l.protos.EventProtos.Event.Exit) exitInfo_);
+                  exitInfo_ = subBuilder.buildPartial();
                 }
-
+                exitInfoCase_ = 3;
                 break;
               }
               case 34: {
                 com.github.kornilova_l.protos.EventProtos.Event.Exception.Builder subBuilder = null;
-                if (exception_ != null) {
-                  subBuilder = exception_.toBuilder();
+                if (exitInfoCase_ == 4) {
+                  subBuilder = ((com.github.kornilova_l.protos.EventProtos.Event.Exception) exitInfo_).toBuilder();
                 }
-                exception_ = input.readMessage(com.github.kornilova_l.protos.EventProtos.Event.Exception.parser(), extensionRegistry);
+                exitInfo_ =
+                    input.readMessage(com.github.kornilova_l.protos.EventProtos.Event.Exception.parser(), extensionRegistry);
                 if (subBuilder != null) {
-                  subBuilder.mergeFrom(exception_);
-                  exception_ = subBuilder.buildPartial();
+                  subBuilder.mergeFrom((com.github.kornilova_l.protos.EventProtos.Event.Exception) exitInfo_);
+                  exitInfo_ = subBuilder.buildPartial();
                 }
-
+                exitInfoCase_ = 4;
                 break;
               }
-              case 42: {
-                if (!((mutable_bitField0_ & 0x00000010) == 0x00000010)) {
+              case 40: {
+
+                startTime_ = input.readInt64();
+                break;
+              }
+              case 50: {
+                if (!((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
                   calls_ = new java.util.ArrayList<com.github.kornilova_l.protos.TreeProtos.Tree.Call>();
-                  mutable_bitField0_ |= 0x00000010;
+                  mutable_bitField0_ |= 0x00000020;
                 }
                 calls_.add(
                     input.readMessage(com.github.kornilova_l.protos.TreeProtos.Tree.Call.parser(), extensionRegistry));
-                break;
-              }
-              case 48: {
-
-                startTime_ = input.readInt64();
                 break;
               }
             }
@@ -371,7 +343,7 @@ public final class TreeProtos {
           throw new com.google.protobuf.InvalidProtocolBufferException(
               e).setUnfinishedMessage(this);
         } finally {
-          if (((mutable_bitField0_ & 0x00000010) == 0x00000010)) {
+          if (((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
             calls_ = java.util.Collections.unmodifiableList(calls_);
           }
           makeExtensionsImmutable();
@@ -390,6 +362,44 @@ public final class TreeProtos {
       }
 
       private int bitField0_;
+      private int exitInfoCase_ = 0;
+      private java.lang.Object exitInfo_;
+      public enum ExitInfoCase
+          implements com.google.protobuf.Internal.EnumLite {
+        EXIT(3),
+        EXCEPTION(4),
+        EXITINFO_NOT_SET(0);
+        private final int value;
+        private ExitInfoCase(int value) {
+          this.value = value;
+        }
+        /**
+         * @deprecated Use {@link #forNumber(int)} instead.
+         */
+        @java.lang.Deprecated
+        public static ExitInfoCase valueOf(int value) {
+          return forNumber(value);
+        }
+
+        public static ExitInfoCase forNumber(int value) {
+          switch (value) {
+            case 3: return EXIT;
+            case 4: return EXCEPTION;
+            case 0: return EXITINFO_NOT_SET;
+            default: return null;
+          }
+        }
+        public int getNumber() {
+          return this.value;
+        }
+      };
+
+      public ExitInfoCase
+      getExitInfoCase() {
+        return ExitInfoCase.forNumber(
+            exitInfoCase_);
+      }
+
       public static final int DURATION_FIELD_NUMBER = 1;
       private long duration_;
       /**
@@ -421,117 +431,91 @@ public final class TreeProtos {
       }
 
       public static final int EXIT_FIELD_NUMBER = 3;
-      private com.github.kornilova_l.protos.EventProtos.Event.Exit exit_;
       /**
-       * <pre>
-       * does not exist if JVM was stoped or if method threw exception
-       * </pre>
-       *
-       * <code>.com.github.kornilova_l.protos.Event.Exit exit = 3;</code>
-       */
-      public boolean hasExit() {
-        return exit_ != null;
-      }
-      /**
-       * <pre>
-       * does not exist if JVM was stoped or if method threw exception
-       * </pre>
-       *
        * <code>.com.github.kornilova_l.protos.Event.Exit exit = 3;</code>
        */
       public com.github.kornilova_l.protos.EventProtos.Event.Exit getExit() {
-        return exit_ == null ? com.github.kornilova_l.protos.EventProtos.Event.Exit.getDefaultInstance() : exit_;
+        if (exitInfoCase_ == 3) {
+           return (com.github.kornilova_l.protos.EventProtos.Event.Exit) exitInfo_;
+        }
+        return com.github.kornilova_l.protos.EventProtos.Event.Exit.getDefaultInstance();
       }
       /**
-       * <pre>
-       * does not exist if JVM was stoped or if method threw exception
-       * </pre>
-       *
        * <code>.com.github.kornilova_l.protos.Event.Exit exit = 3;</code>
        */
       public com.github.kornilova_l.protos.EventProtos.Event.ExitOrBuilder getExitOrBuilder() {
-        return getExit();
+        if (exitInfoCase_ == 3) {
+           return (com.github.kornilova_l.protos.EventProtos.Event.Exit) exitInfo_;
+        }
+        return com.github.kornilova_l.protos.EventProtos.Event.Exit.getDefaultInstance();
       }
 
       public static final int EXCEPTION_FIELD_NUMBER = 4;
-      private com.github.kornilova_l.protos.EventProtos.Event.Exception exception_;
       /**
-       * <pre>
-       * if method threw exception
-       * </pre>
-       *
-       * <code>.com.github.kornilova_l.protos.Event.Exception exception = 4;</code>
-       */
-      public boolean hasException() {
-        return exception_ != null;
-      }
-      /**
-       * <pre>
-       * if method threw exception
-       * </pre>
-       *
        * <code>.com.github.kornilova_l.protos.Event.Exception exception = 4;</code>
        */
       public com.github.kornilova_l.protos.EventProtos.Event.Exception getException() {
-        return exception_ == null ? com.github.kornilova_l.protos.EventProtos.Event.Exception.getDefaultInstance() : exception_;
+        if (exitInfoCase_ == 4) {
+           return (com.github.kornilova_l.protos.EventProtos.Event.Exception) exitInfo_;
+        }
+        return com.github.kornilova_l.protos.EventProtos.Event.Exception.getDefaultInstance();
       }
       /**
-       * <pre>
-       * if method threw exception
-       * </pre>
-       *
        * <code>.com.github.kornilova_l.protos.Event.Exception exception = 4;</code>
        */
       public com.github.kornilova_l.protos.EventProtos.Event.ExceptionOrBuilder getExceptionOrBuilder() {
-        return getException();
+        if (exitInfoCase_ == 4) {
+           return (com.github.kornilova_l.protos.EventProtos.Event.Exception) exitInfo_;
+        }
+        return com.github.kornilova_l.protos.EventProtos.Event.Exception.getDefaultInstance();
       }
 
-      public static final int CALLS_FIELD_NUMBER = 5;
-      private java.util.List<com.github.kornilova_l.protos.TreeProtos.Tree.Call> calls_;
-      /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 5;</code>
-       */
-      public java.util.List<com.github.kornilova_l.protos.TreeProtos.Tree.Call> getCallsList() {
-        return calls_;
-      }
-      /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 5;</code>
-       */
-      public java.util.List<? extends com.github.kornilova_l.protos.TreeProtos.Tree.CallOrBuilder> 
-          getCallsOrBuilderList() {
-        return calls_;
-      }
-      /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 5;</code>
-       */
-      public int getCallsCount() {
-        return calls_.size();
-      }
-      /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 5;</code>
-       */
-      public com.github.kornilova_l.protos.TreeProtos.Tree.Call getCalls(int index) {
-        return calls_.get(index);
-      }
-      /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 5;</code>
-       */
-      public com.github.kornilova_l.protos.TreeProtos.Tree.CallOrBuilder getCallsOrBuilder(
-          int index) {
-        return calls_.get(index);
-      }
-
-      public static final int STARTTIME_FIELD_NUMBER = 6;
+      public static final int STARTTIME_FIELD_NUMBER = 5;
       private long startTime_;
       /**
        * <pre>
        * only for trees which save original call structure
        * </pre>
        *
-       * <code>int64 startTime = 6;</code>
+       * <code>int64 startTime = 5;</code>
        */
       public long getStartTime() {
         return startTime_;
+      }
+
+      public static final int CALLS_FIELD_NUMBER = 6;
+      private java.util.List<com.github.kornilova_l.protos.TreeProtos.Tree.Call> calls_;
+      /**
+       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 6;</code>
+       */
+      public java.util.List<com.github.kornilova_l.protos.TreeProtos.Tree.Call> getCallsList() {
+        return calls_;
+      }
+      /**
+       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 6;</code>
+       */
+      public java.util.List<? extends com.github.kornilova_l.protos.TreeProtos.Tree.CallOrBuilder> 
+          getCallsOrBuilderList() {
+        return calls_;
+      }
+      /**
+       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 6;</code>
+       */
+      public int getCallsCount() {
+        return calls_.size();
+      }
+      /**
+       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 6;</code>
+       */
+      public com.github.kornilova_l.protos.TreeProtos.Tree.Call getCalls(int index) {
+        return calls_.get(index);
+      }
+      /**
+       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 6;</code>
+       */
+      public com.github.kornilova_l.protos.TreeProtos.Tree.CallOrBuilder getCallsOrBuilder(
+          int index) {
+        return calls_.get(index);
       }
 
       private byte memoizedIsInitialized = -1;
@@ -552,17 +536,17 @@ public final class TreeProtos {
         if (enter_ != null) {
           output.writeMessage(2, getEnter());
         }
-        if (exit_ != null) {
-          output.writeMessage(3, getExit());
+        if (exitInfoCase_ == 3) {
+          output.writeMessage(3, (com.github.kornilova_l.protos.EventProtos.Event.Exit) exitInfo_);
         }
-        if (exception_ != null) {
-          output.writeMessage(4, getException());
-        }
-        for (int i = 0; i < calls_.size(); i++) {
-          output.writeMessage(5, calls_.get(i));
+        if (exitInfoCase_ == 4) {
+          output.writeMessage(4, (com.github.kornilova_l.protos.EventProtos.Event.Exception) exitInfo_);
         }
         if (startTime_ != 0L) {
-          output.writeInt64(6, startTime_);
+          output.writeInt64(5, startTime_);
+        }
+        for (int i = 0; i < calls_.size(); i++) {
+          output.writeMessage(6, calls_.get(i));
         }
       }
 
@@ -579,21 +563,21 @@ public final class TreeProtos {
           size += com.google.protobuf.CodedOutputStream
             .computeMessageSize(2, getEnter());
         }
-        if (exit_ != null) {
+        if (exitInfoCase_ == 3) {
           size += com.google.protobuf.CodedOutputStream
-            .computeMessageSize(3, getExit());
+            .computeMessageSize(3, (com.github.kornilova_l.protos.EventProtos.Event.Exit) exitInfo_);
         }
-        if (exception_ != null) {
+        if (exitInfoCase_ == 4) {
           size += com.google.protobuf.CodedOutputStream
-            .computeMessageSize(4, getException());
-        }
-        for (int i = 0; i < calls_.size(); i++) {
-          size += com.google.protobuf.CodedOutputStream
-            .computeMessageSize(5, calls_.get(i));
+            .computeMessageSize(4, (com.github.kornilova_l.protos.EventProtos.Event.Exception) exitInfo_);
         }
         if (startTime_ != 0L) {
           size += com.google.protobuf.CodedOutputStream
-            .computeInt64Size(6, startTime_);
+            .computeInt64Size(5, startTime_);
+        }
+        for (int i = 0; i < calls_.size(); i++) {
+          size += com.google.protobuf.CodedOutputStream
+            .computeMessageSize(6, calls_.get(i));
         }
         memoizedSize = size;
         return size;
@@ -618,20 +602,25 @@ public final class TreeProtos {
           result = result && getEnter()
               .equals(other.getEnter());
         }
-        result = result && (hasExit() == other.hasExit());
-        if (hasExit()) {
-          result = result && getExit()
-              .equals(other.getExit());
-        }
-        result = result && (hasException() == other.hasException());
-        if (hasException()) {
-          result = result && getException()
-              .equals(other.getException());
-        }
-        result = result && getCallsList()
-            .equals(other.getCallsList());
         result = result && (getStartTime()
             == other.getStartTime());
+        result = result && getCallsList()
+            .equals(other.getCallsList());
+        result = result && getExitInfoCase().equals(
+            other.getExitInfoCase());
+        if (!result) return false;
+        switch (exitInfoCase_) {
+          case 3:
+            result = result && getExit()
+                .equals(other.getExit());
+            break;
+          case 4:
+            result = result && getException()
+                .equals(other.getException());
+            break;
+          case 0:
+          default:
+        }
         return result;
       }
 
@@ -649,21 +638,25 @@ public final class TreeProtos {
           hash = (37 * hash) + ENTER_FIELD_NUMBER;
           hash = (53 * hash) + getEnter().hashCode();
         }
-        if (hasExit()) {
-          hash = (37 * hash) + EXIT_FIELD_NUMBER;
-          hash = (53 * hash) + getExit().hashCode();
-        }
-        if (hasException()) {
-          hash = (37 * hash) + EXCEPTION_FIELD_NUMBER;
-          hash = (53 * hash) + getException().hashCode();
-        }
+        hash = (37 * hash) + STARTTIME_FIELD_NUMBER;
+        hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+            getStartTime());
         if (getCallsCount() > 0) {
           hash = (37 * hash) + CALLS_FIELD_NUMBER;
           hash = (53 * hash) + getCallsList().hashCode();
         }
-        hash = (37 * hash) + STARTTIME_FIELD_NUMBER;
-        hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-            getStartTime());
+        switch (exitInfoCase_) {
+          case 3:
+            hash = (37 * hash) + EXIT_FIELD_NUMBER;
+            hash = (53 * hash) + getExit().hashCode();
+            break;
+          case 4:
+            hash = (37 * hash) + EXCEPTION_FIELD_NUMBER;
+            hash = (53 * hash) + getException().hashCode();
+            break;
+          case 0:
+          default:
+        }
         hash = (29 * hash) + unknownFields.hashCode();
         memoizedHashCode = hash;
         return hash;
@@ -802,26 +795,16 @@ public final class TreeProtos {
             enter_ = null;
             enterBuilder_ = null;
           }
-          if (exitBuilder_ == null) {
-            exit_ = null;
-          } else {
-            exit_ = null;
-            exitBuilder_ = null;
-          }
-          if (exceptionBuilder_ == null) {
-            exception_ = null;
-          } else {
-            exception_ = null;
-            exceptionBuilder_ = null;
-          }
+          startTime_ = 0L;
+
           if (callsBuilder_ == null) {
             calls_ = java.util.Collections.emptyList();
-            bitField0_ = (bitField0_ & ~0x00000010);
+            bitField0_ = (bitField0_ & ~0x00000020);
           } else {
             callsBuilder_.clear();
           }
-          startTime_ = 0L;
-
+          exitInfoCase_ = 0;
+          exitInfo_ = null;
           return this;
         }
 
@@ -852,27 +835,32 @@ public final class TreeProtos {
           } else {
             result.enter_ = enterBuilder_.build();
           }
-          if (exitBuilder_ == null) {
-            result.exit_ = exit_;
-          } else {
-            result.exit_ = exitBuilder_.build();
+          if (exitInfoCase_ == 3) {
+            if (exitBuilder_ == null) {
+              result.exitInfo_ = exitInfo_;
+            } else {
+              result.exitInfo_ = exitBuilder_.build();
+            }
           }
-          if (exceptionBuilder_ == null) {
-            result.exception_ = exception_;
-          } else {
-            result.exception_ = exceptionBuilder_.build();
+          if (exitInfoCase_ == 4) {
+            if (exceptionBuilder_ == null) {
+              result.exitInfo_ = exitInfo_;
+            } else {
+              result.exitInfo_ = exceptionBuilder_.build();
+            }
           }
+          result.startTime_ = startTime_;
           if (callsBuilder_ == null) {
-            if (((bitField0_ & 0x00000010) == 0x00000010)) {
+            if (((bitField0_ & 0x00000020) == 0x00000020)) {
               calls_ = java.util.Collections.unmodifiableList(calls_);
-              bitField0_ = (bitField0_ & ~0x00000010);
+              bitField0_ = (bitField0_ & ~0x00000020);
             }
             result.calls_ = calls_;
           } else {
             result.calls_ = callsBuilder_.build();
           }
-          result.startTime_ = startTime_;
           result.bitField0_ = to_bitField0_;
+          result.exitInfoCase_ = exitInfoCase_;
           onBuilt();
           return result;
         }
@@ -920,17 +908,14 @@ public final class TreeProtos {
           if (other.hasEnter()) {
             mergeEnter(other.getEnter());
           }
-          if (other.hasExit()) {
-            mergeExit(other.getExit());
-          }
-          if (other.hasException()) {
-            mergeException(other.getException());
+          if (other.getStartTime() != 0L) {
+            setStartTime(other.getStartTime());
           }
           if (callsBuilder_ == null) {
             if (!other.calls_.isEmpty()) {
               if (calls_.isEmpty()) {
                 calls_ = other.calls_;
-                bitField0_ = (bitField0_ & ~0x00000010);
+                bitField0_ = (bitField0_ & ~0x00000020);
               } else {
                 ensureCallsIsMutable();
                 calls_.addAll(other.calls_);
@@ -943,7 +928,7 @@ public final class TreeProtos {
                 callsBuilder_.dispose();
                 callsBuilder_ = null;
                 calls_ = other.calls_;
-                bitField0_ = (bitField0_ & ~0x00000010);
+                bitField0_ = (bitField0_ & ~0x00000020);
                 callsBuilder_ = 
                   com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
                      getCallsFieldBuilder() : null;
@@ -952,8 +937,18 @@ public final class TreeProtos {
               }
             }
           }
-          if (other.getStartTime() != 0L) {
-            setStartTime(other.getStartTime());
+          switch (other.getExitInfoCase()) {
+            case EXIT: {
+              mergeExit(other.getExit());
+              break;
+            }
+            case EXCEPTION: {
+              mergeException(other.getException());
+              break;
+            }
+            case EXITINFO_NOT_SET: {
+              break;
+            }
           }
           onChanged();
           return this;
@@ -980,6 +975,21 @@ public final class TreeProtos {
           }
           return this;
         }
+        private int exitInfoCase_ = 0;
+        private java.lang.Object exitInfo_;
+        public ExitInfoCase
+            getExitInfoCase() {
+          return ExitInfoCase.forNumber(
+              exitInfoCase_);
+        }
+
+        public Builder clearExitInfo() {
+          exitInfoCase_ = 0;
+          exitInfo_ = null;
+          onChanged();
+          return this;
+        }
+
         private int bitField0_;
 
         private long duration_ ;
@@ -1125,38 +1135,25 @@ public final class TreeProtos {
           return enterBuilder_;
         }
 
-        private com.github.kornilova_l.protos.EventProtos.Event.Exit exit_ = null;
         private com.google.protobuf.SingleFieldBuilderV3<
             com.github.kornilova_l.protos.EventProtos.Event.Exit, com.github.kornilova_l.protos.EventProtos.Event.Exit.Builder, com.github.kornilova_l.protos.EventProtos.Event.ExitOrBuilder> exitBuilder_;
         /**
-         * <pre>
-         * does not exist if JVM was stoped or if method threw exception
-         * </pre>
-         *
-         * <code>.com.github.kornilova_l.protos.Event.Exit exit = 3;</code>
-         */
-        public boolean hasExit() {
-          return exitBuilder_ != null || exit_ != null;
-        }
-        /**
-         * <pre>
-         * does not exist if JVM was stoped or if method threw exception
-         * </pre>
-         *
          * <code>.com.github.kornilova_l.protos.Event.Exit exit = 3;</code>
          */
         public com.github.kornilova_l.protos.EventProtos.Event.Exit getExit() {
           if (exitBuilder_ == null) {
-            return exit_ == null ? com.github.kornilova_l.protos.EventProtos.Event.Exit.getDefaultInstance() : exit_;
+            if (exitInfoCase_ == 3) {
+              return (com.github.kornilova_l.protos.EventProtos.Event.Exit) exitInfo_;
+            }
+            return com.github.kornilova_l.protos.EventProtos.Event.Exit.getDefaultInstance();
           } else {
-            return exitBuilder_.getMessage();
+            if (exitInfoCase_ == 3) {
+              return exitBuilder_.getMessage();
+            }
+            return com.github.kornilova_l.protos.EventProtos.Event.Exit.getDefaultInstance();
           }
         }
         /**
-         * <pre>
-         * does not exist if JVM was stoped or if method threw exception
-         * </pre>
-         *
          * <code>.com.github.kornilova_l.protos.Event.Exit exit = 3;</code>
          */
         public Builder setExit(com.github.kornilova_l.protos.EventProtos.Event.Exit value) {
@@ -1164,152 +1161,129 @@ public final class TreeProtos {
             if (value == null) {
               throw new NullPointerException();
             }
-            exit_ = value;
+            exitInfo_ = value;
             onChanged();
           } else {
             exitBuilder_.setMessage(value);
           }
-
+          exitInfoCase_ = 3;
           return this;
         }
         /**
-         * <pre>
-         * does not exist if JVM was stoped or if method threw exception
-         * </pre>
-         *
          * <code>.com.github.kornilova_l.protos.Event.Exit exit = 3;</code>
          */
         public Builder setExit(
             com.github.kornilova_l.protos.EventProtos.Event.Exit.Builder builderForValue) {
           if (exitBuilder_ == null) {
-            exit_ = builderForValue.build();
+            exitInfo_ = builderForValue.build();
             onChanged();
           } else {
             exitBuilder_.setMessage(builderForValue.build());
           }
-
+          exitInfoCase_ = 3;
           return this;
         }
         /**
-         * <pre>
-         * does not exist if JVM was stoped or if method threw exception
-         * </pre>
-         *
          * <code>.com.github.kornilova_l.protos.Event.Exit exit = 3;</code>
          */
         public Builder mergeExit(com.github.kornilova_l.protos.EventProtos.Event.Exit value) {
           if (exitBuilder_ == null) {
-            if (exit_ != null) {
-              exit_ =
-                com.github.kornilova_l.protos.EventProtos.Event.Exit.newBuilder(exit_).mergeFrom(value).buildPartial();
+            if (exitInfoCase_ == 3 &&
+                exitInfo_ != com.github.kornilova_l.protos.EventProtos.Event.Exit.getDefaultInstance()) {
+              exitInfo_ = com.github.kornilova_l.protos.EventProtos.Event.Exit.newBuilder((com.github.kornilova_l.protos.EventProtos.Event.Exit) exitInfo_)
+                  .mergeFrom(value).buildPartial();
             } else {
-              exit_ = value;
+              exitInfo_ = value;
             }
             onChanged();
           } else {
-            exitBuilder_.mergeFrom(value);
+            if (exitInfoCase_ == 3) {
+              exitBuilder_.mergeFrom(value);
+            }
+            exitBuilder_.setMessage(value);
           }
-
+          exitInfoCase_ = 3;
           return this;
         }
         /**
-         * <pre>
-         * does not exist if JVM was stoped or if method threw exception
-         * </pre>
-         *
          * <code>.com.github.kornilova_l.protos.Event.Exit exit = 3;</code>
          */
         public Builder clearExit() {
           if (exitBuilder_ == null) {
-            exit_ = null;
-            onChanged();
+            if (exitInfoCase_ == 3) {
+              exitInfoCase_ = 0;
+              exitInfo_ = null;
+              onChanged();
+            }
           } else {
-            exit_ = null;
-            exitBuilder_ = null;
+            if (exitInfoCase_ == 3) {
+              exitInfoCase_ = 0;
+              exitInfo_ = null;
+            }
+            exitBuilder_.clear();
           }
-
           return this;
         }
         /**
-         * <pre>
-         * does not exist if JVM was stoped or if method threw exception
-         * </pre>
-         *
          * <code>.com.github.kornilova_l.protos.Event.Exit exit = 3;</code>
          */
         public com.github.kornilova_l.protos.EventProtos.Event.Exit.Builder getExitBuilder() {
-          
-          onChanged();
           return getExitFieldBuilder().getBuilder();
         }
         /**
-         * <pre>
-         * does not exist if JVM was stoped or if method threw exception
-         * </pre>
-         *
          * <code>.com.github.kornilova_l.protos.Event.Exit exit = 3;</code>
          */
         public com.github.kornilova_l.protos.EventProtos.Event.ExitOrBuilder getExitOrBuilder() {
-          if (exitBuilder_ != null) {
+          if ((exitInfoCase_ == 3) && (exitBuilder_ != null)) {
             return exitBuilder_.getMessageOrBuilder();
           } else {
-            return exit_ == null ?
-                com.github.kornilova_l.protos.EventProtos.Event.Exit.getDefaultInstance() : exit_;
+            if (exitInfoCase_ == 3) {
+              return (com.github.kornilova_l.protos.EventProtos.Event.Exit) exitInfo_;
+            }
+            return com.github.kornilova_l.protos.EventProtos.Event.Exit.getDefaultInstance();
           }
         }
         /**
-         * <pre>
-         * does not exist if JVM was stoped or if method threw exception
-         * </pre>
-         *
          * <code>.com.github.kornilova_l.protos.Event.Exit exit = 3;</code>
          */
         private com.google.protobuf.SingleFieldBuilderV3<
             com.github.kornilova_l.protos.EventProtos.Event.Exit, com.github.kornilova_l.protos.EventProtos.Event.Exit.Builder, com.github.kornilova_l.protos.EventProtos.Event.ExitOrBuilder> 
             getExitFieldBuilder() {
           if (exitBuilder_ == null) {
+            if (!(exitInfoCase_ == 3)) {
+              exitInfo_ = com.github.kornilova_l.protos.EventProtos.Event.Exit.getDefaultInstance();
+            }
             exitBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
                 com.github.kornilova_l.protos.EventProtos.Event.Exit, com.github.kornilova_l.protos.EventProtos.Event.Exit.Builder, com.github.kornilova_l.protos.EventProtos.Event.ExitOrBuilder>(
-                    getExit(),
+                    (com.github.kornilova_l.protos.EventProtos.Event.Exit) exitInfo_,
                     getParentForChildren(),
                     isClean());
-            exit_ = null;
+            exitInfo_ = null;
           }
+          exitInfoCase_ = 3;
+          onChanged();;
           return exitBuilder_;
         }
 
-        private com.github.kornilova_l.protos.EventProtos.Event.Exception exception_ = null;
         private com.google.protobuf.SingleFieldBuilderV3<
             com.github.kornilova_l.protos.EventProtos.Event.Exception, com.github.kornilova_l.protos.EventProtos.Event.Exception.Builder, com.github.kornilova_l.protos.EventProtos.Event.ExceptionOrBuilder> exceptionBuilder_;
         /**
-         * <pre>
-         * if method threw exception
-         * </pre>
-         *
-         * <code>.com.github.kornilova_l.protos.Event.Exception exception = 4;</code>
-         */
-        public boolean hasException() {
-          return exceptionBuilder_ != null || exception_ != null;
-        }
-        /**
-         * <pre>
-         * if method threw exception
-         * </pre>
-         *
          * <code>.com.github.kornilova_l.protos.Event.Exception exception = 4;</code>
          */
         public com.github.kornilova_l.protos.EventProtos.Event.Exception getException() {
           if (exceptionBuilder_ == null) {
-            return exception_ == null ? com.github.kornilova_l.protos.EventProtos.Event.Exception.getDefaultInstance() : exception_;
+            if (exitInfoCase_ == 4) {
+              return (com.github.kornilova_l.protos.EventProtos.Event.Exception) exitInfo_;
+            }
+            return com.github.kornilova_l.protos.EventProtos.Event.Exception.getDefaultInstance();
           } else {
-            return exceptionBuilder_.getMessage();
+            if (exitInfoCase_ == 4) {
+              return exceptionBuilder_.getMessage();
+            }
+            return com.github.kornilova_l.protos.EventProtos.Event.Exception.getDefaultInstance();
           }
         }
         /**
-         * <pre>
-         * if method threw exception
-         * </pre>
-         *
          * <code>.com.github.kornilova_l.protos.Event.Exception exception = 4;</code>
          */
         public Builder setException(com.github.kornilova_l.protos.EventProtos.Event.Exception value) {
@@ -1317,126 +1291,154 @@ public final class TreeProtos {
             if (value == null) {
               throw new NullPointerException();
             }
-            exception_ = value;
+            exitInfo_ = value;
             onChanged();
           } else {
             exceptionBuilder_.setMessage(value);
           }
-
+          exitInfoCase_ = 4;
           return this;
         }
         /**
-         * <pre>
-         * if method threw exception
-         * </pre>
-         *
          * <code>.com.github.kornilova_l.protos.Event.Exception exception = 4;</code>
          */
         public Builder setException(
             com.github.kornilova_l.protos.EventProtos.Event.Exception.Builder builderForValue) {
           if (exceptionBuilder_ == null) {
-            exception_ = builderForValue.build();
+            exitInfo_ = builderForValue.build();
             onChanged();
           } else {
             exceptionBuilder_.setMessage(builderForValue.build());
           }
-
+          exitInfoCase_ = 4;
           return this;
         }
         /**
-         * <pre>
-         * if method threw exception
-         * </pre>
-         *
          * <code>.com.github.kornilova_l.protos.Event.Exception exception = 4;</code>
          */
         public Builder mergeException(com.github.kornilova_l.protos.EventProtos.Event.Exception value) {
           if (exceptionBuilder_ == null) {
-            if (exception_ != null) {
-              exception_ =
-                com.github.kornilova_l.protos.EventProtos.Event.Exception.newBuilder(exception_).mergeFrom(value).buildPartial();
+            if (exitInfoCase_ == 4 &&
+                exitInfo_ != com.github.kornilova_l.protos.EventProtos.Event.Exception.getDefaultInstance()) {
+              exitInfo_ = com.github.kornilova_l.protos.EventProtos.Event.Exception.newBuilder((com.github.kornilova_l.protos.EventProtos.Event.Exception) exitInfo_)
+                  .mergeFrom(value).buildPartial();
             } else {
-              exception_ = value;
+              exitInfo_ = value;
             }
             onChanged();
           } else {
-            exceptionBuilder_.mergeFrom(value);
+            if (exitInfoCase_ == 4) {
+              exceptionBuilder_.mergeFrom(value);
+            }
+            exceptionBuilder_.setMessage(value);
           }
-
+          exitInfoCase_ = 4;
           return this;
         }
         /**
-         * <pre>
-         * if method threw exception
-         * </pre>
-         *
          * <code>.com.github.kornilova_l.protos.Event.Exception exception = 4;</code>
          */
         public Builder clearException() {
           if (exceptionBuilder_ == null) {
-            exception_ = null;
-            onChanged();
+            if (exitInfoCase_ == 4) {
+              exitInfoCase_ = 0;
+              exitInfo_ = null;
+              onChanged();
+            }
           } else {
-            exception_ = null;
-            exceptionBuilder_ = null;
+            if (exitInfoCase_ == 4) {
+              exitInfoCase_ = 0;
+              exitInfo_ = null;
+            }
+            exceptionBuilder_.clear();
           }
-
           return this;
         }
         /**
-         * <pre>
-         * if method threw exception
-         * </pre>
-         *
          * <code>.com.github.kornilova_l.protos.Event.Exception exception = 4;</code>
          */
         public com.github.kornilova_l.protos.EventProtos.Event.Exception.Builder getExceptionBuilder() {
-          
-          onChanged();
           return getExceptionFieldBuilder().getBuilder();
         }
         /**
-         * <pre>
-         * if method threw exception
-         * </pre>
-         *
          * <code>.com.github.kornilova_l.protos.Event.Exception exception = 4;</code>
          */
         public com.github.kornilova_l.protos.EventProtos.Event.ExceptionOrBuilder getExceptionOrBuilder() {
-          if (exceptionBuilder_ != null) {
+          if ((exitInfoCase_ == 4) && (exceptionBuilder_ != null)) {
             return exceptionBuilder_.getMessageOrBuilder();
           } else {
-            return exception_ == null ?
-                com.github.kornilova_l.protos.EventProtos.Event.Exception.getDefaultInstance() : exception_;
+            if (exitInfoCase_ == 4) {
+              return (com.github.kornilova_l.protos.EventProtos.Event.Exception) exitInfo_;
+            }
+            return com.github.kornilova_l.protos.EventProtos.Event.Exception.getDefaultInstance();
           }
         }
         /**
-         * <pre>
-         * if method threw exception
-         * </pre>
-         *
          * <code>.com.github.kornilova_l.protos.Event.Exception exception = 4;</code>
          */
         private com.google.protobuf.SingleFieldBuilderV3<
             com.github.kornilova_l.protos.EventProtos.Event.Exception, com.github.kornilova_l.protos.EventProtos.Event.Exception.Builder, com.github.kornilova_l.protos.EventProtos.Event.ExceptionOrBuilder> 
             getExceptionFieldBuilder() {
           if (exceptionBuilder_ == null) {
+            if (!(exitInfoCase_ == 4)) {
+              exitInfo_ = com.github.kornilova_l.protos.EventProtos.Event.Exception.getDefaultInstance();
+            }
             exceptionBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
                 com.github.kornilova_l.protos.EventProtos.Event.Exception, com.github.kornilova_l.protos.EventProtos.Event.Exception.Builder, com.github.kornilova_l.protos.EventProtos.Event.ExceptionOrBuilder>(
-                    getException(),
+                    (com.github.kornilova_l.protos.EventProtos.Event.Exception) exitInfo_,
                     getParentForChildren(),
                     isClean());
-            exception_ = null;
+            exitInfo_ = null;
           }
+          exitInfoCase_ = 4;
+          onChanged();;
           return exceptionBuilder_;
+        }
+
+        private long startTime_ ;
+        /**
+         * <pre>
+         * only for trees which save original call structure
+         * </pre>
+         *
+         * <code>int64 startTime = 5;</code>
+         */
+        public long getStartTime() {
+          return startTime_;
+        }
+        /**
+         * <pre>
+         * only for trees which save original call structure
+         * </pre>
+         *
+         * <code>int64 startTime = 5;</code>
+         */
+        public Builder setStartTime(long value) {
+          
+          startTime_ = value;
+          onChanged();
+          return this;
+        }
+        /**
+         * <pre>
+         * only for trees which save original call structure
+         * </pre>
+         *
+         * <code>int64 startTime = 5;</code>
+         */
+        public Builder clearStartTime() {
+          
+          startTime_ = 0L;
+          onChanged();
+          return this;
         }
 
         private java.util.List<com.github.kornilova_l.protos.TreeProtos.Tree.Call> calls_ =
           java.util.Collections.emptyList();
         private void ensureCallsIsMutable() {
-          if (!((bitField0_ & 0x00000010) == 0x00000010)) {
+          if (!((bitField0_ & 0x00000020) == 0x00000020)) {
             calls_ = new java.util.ArrayList<com.github.kornilova_l.protos.TreeProtos.Tree.Call>(calls_);
-            bitField0_ |= 0x00000010;
+            bitField0_ |= 0x00000020;
            }
         }
 
@@ -1444,7 +1446,7 @@ public final class TreeProtos {
             com.github.kornilova_l.protos.TreeProtos.Tree.Call, com.github.kornilova_l.protos.TreeProtos.Tree.Call.Builder, com.github.kornilova_l.protos.TreeProtos.Tree.CallOrBuilder> callsBuilder_;
 
         /**
-         * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 5;</code>
+         * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 6;</code>
          */
         public java.util.List<com.github.kornilova_l.protos.TreeProtos.Tree.Call> getCallsList() {
           if (callsBuilder_ == null) {
@@ -1454,7 +1456,7 @@ public final class TreeProtos {
           }
         }
         /**
-         * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 5;</code>
+         * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 6;</code>
          */
         public int getCallsCount() {
           if (callsBuilder_ == null) {
@@ -1464,7 +1466,7 @@ public final class TreeProtos {
           }
         }
         /**
-         * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 5;</code>
+         * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 6;</code>
          */
         public com.github.kornilova_l.protos.TreeProtos.Tree.Call getCalls(int index) {
           if (callsBuilder_ == null) {
@@ -1474,7 +1476,7 @@ public final class TreeProtos {
           }
         }
         /**
-         * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 5;</code>
+         * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 6;</code>
          */
         public Builder setCalls(
             int index, com.github.kornilova_l.protos.TreeProtos.Tree.Call value) {
@@ -1491,7 +1493,7 @@ public final class TreeProtos {
           return this;
         }
         /**
-         * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 5;</code>
+         * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 6;</code>
          */
         public Builder setCalls(
             int index, com.github.kornilova_l.protos.TreeProtos.Tree.Call.Builder builderForValue) {
@@ -1505,7 +1507,7 @@ public final class TreeProtos {
           return this;
         }
         /**
-         * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 5;</code>
+         * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 6;</code>
          */
         public Builder addCalls(com.github.kornilova_l.protos.TreeProtos.Tree.Call value) {
           if (callsBuilder_ == null) {
@@ -1521,7 +1523,7 @@ public final class TreeProtos {
           return this;
         }
         /**
-         * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 5;</code>
+         * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 6;</code>
          */
         public Builder addCalls(
             int index, com.github.kornilova_l.protos.TreeProtos.Tree.Call value) {
@@ -1538,7 +1540,7 @@ public final class TreeProtos {
           return this;
         }
         /**
-         * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 5;</code>
+         * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 6;</code>
          */
         public Builder addCalls(
             com.github.kornilova_l.protos.TreeProtos.Tree.Call.Builder builderForValue) {
@@ -1552,7 +1554,7 @@ public final class TreeProtos {
           return this;
         }
         /**
-         * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 5;</code>
+         * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 6;</code>
          */
         public Builder addCalls(
             int index, com.github.kornilova_l.protos.TreeProtos.Tree.Call.Builder builderForValue) {
@@ -1566,7 +1568,7 @@ public final class TreeProtos {
           return this;
         }
         /**
-         * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 5;</code>
+         * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 6;</code>
          */
         public Builder addAllCalls(
             java.lang.Iterable<? extends com.github.kornilova_l.protos.TreeProtos.Tree.Call> values) {
@@ -1581,12 +1583,12 @@ public final class TreeProtos {
           return this;
         }
         /**
-         * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 5;</code>
+         * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 6;</code>
          */
         public Builder clearCalls() {
           if (callsBuilder_ == null) {
             calls_ = java.util.Collections.emptyList();
-            bitField0_ = (bitField0_ & ~0x00000010);
+            bitField0_ = (bitField0_ & ~0x00000020);
             onChanged();
           } else {
             callsBuilder_.clear();
@@ -1594,7 +1596,7 @@ public final class TreeProtos {
           return this;
         }
         /**
-         * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 5;</code>
+         * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 6;</code>
          */
         public Builder removeCalls(int index) {
           if (callsBuilder_ == null) {
@@ -1607,14 +1609,14 @@ public final class TreeProtos {
           return this;
         }
         /**
-         * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 5;</code>
+         * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 6;</code>
          */
         public com.github.kornilova_l.protos.TreeProtos.Tree.Call.Builder getCallsBuilder(
             int index) {
           return getCallsFieldBuilder().getBuilder(index);
         }
         /**
-         * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 5;</code>
+         * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 6;</code>
          */
         public com.github.kornilova_l.protos.TreeProtos.Tree.CallOrBuilder getCallsOrBuilder(
             int index) {
@@ -1624,7 +1626,7 @@ public final class TreeProtos {
           }
         }
         /**
-         * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 5;</code>
+         * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 6;</code>
          */
         public java.util.List<? extends com.github.kornilova_l.protos.TreeProtos.Tree.CallOrBuilder> 
              getCallsOrBuilderList() {
@@ -1635,14 +1637,14 @@ public final class TreeProtos {
           }
         }
         /**
-         * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 5;</code>
+         * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 6;</code>
          */
         public com.github.kornilova_l.protos.TreeProtos.Tree.Call.Builder addCallsBuilder() {
           return getCallsFieldBuilder().addBuilder(
               com.github.kornilova_l.protos.TreeProtos.Tree.Call.getDefaultInstance());
         }
         /**
-         * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 5;</code>
+         * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 6;</code>
          */
         public com.github.kornilova_l.protos.TreeProtos.Tree.Call.Builder addCallsBuilder(
             int index) {
@@ -1650,7 +1652,7 @@ public final class TreeProtos {
               index, com.github.kornilova_l.protos.TreeProtos.Tree.Call.getDefaultInstance());
         }
         /**
-         * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 5;</code>
+         * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 6;</code>
          */
         public java.util.List<com.github.kornilova_l.protos.TreeProtos.Tree.Call.Builder> 
              getCallsBuilderList() {
@@ -1663,50 +1665,12 @@ public final class TreeProtos {
             callsBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
                 com.github.kornilova_l.protos.TreeProtos.Tree.Call, com.github.kornilova_l.protos.TreeProtos.Tree.Call.Builder, com.github.kornilova_l.protos.TreeProtos.Tree.CallOrBuilder>(
                     calls_,
-                    ((bitField0_ & 0x00000010) == 0x00000010),
+                    ((bitField0_ & 0x00000020) == 0x00000020),
                     getParentForChildren(),
                     isClean());
             calls_ = null;
           }
           return callsBuilder_;
-        }
-
-        private long startTime_ ;
-        /**
-         * <pre>
-         * only for trees which save original call structure
-         * </pre>
-         *
-         * <code>int64 startTime = 6;</code>
-         */
-        public long getStartTime() {
-          return startTime_;
-        }
-        /**
-         * <pre>
-         * only for trees which save original call structure
-         * </pre>
-         *
-         * <code>int64 startTime = 6;</code>
-         */
-        public Builder setStartTime(long value) {
-          
-          startTime_ = value;
-          onChanged();
-          return this;
-        }
-        /**
-         * <pre>
-         * only for trees which save original call structure
-         * </pre>
-         *
-         * <code>int64 startTime = 6;</code>
-         */
-        public Builder clearStartTime() {
-          
-          startTime_ = 0L;
-          onChanged();
-          return this;
         }
         public final Builder setUnknownFields(
             final com.google.protobuf.UnknownFieldSet unknownFields) {
@@ -1767,39 +1731,17 @@ public final class TreeProtos {
       return duration_;
     }
 
-    public static final int CALLS_FIELD_NUMBER = 2;
-    private java.util.List<com.github.kornilova_l.protos.TreeProtos.Tree.Call> calls_;
+    public static final int STARTTIME_FIELD_NUMBER = 2;
+    private long startTime_;
     /**
-     * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 2;</code>
+     * <pre>
+     * only for trees which save original call structure
+     * </pre>
+     *
+     * <code>int64 startTime = 2;</code>
      */
-    public java.util.List<com.github.kornilova_l.protos.TreeProtos.Tree.Call> getCallsList() {
-      return calls_;
-    }
-    /**
-     * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 2;</code>
-     */
-    public java.util.List<? extends com.github.kornilova_l.protos.TreeProtos.Tree.CallOrBuilder> 
-        getCallsOrBuilderList() {
-      return calls_;
-    }
-    /**
-     * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 2;</code>
-     */
-    public int getCallsCount() {
-      return calls_.size();
-    }
-    /**
-     * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 2;</code>
-     */
-    public com.github.kornilova_l.protos.TreeProtos.Tree.Call getCalls(int index) {
-      return calls_.get(index);
-    }
-    /**
-     * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 2;</code>
-     */
-    public com.github.kornilova_l.protos.TreeProtos.Tree.CallOrBuilder getCallsOrBuilder(
-        int index) {
-      return calls_.get(index);
+    public long getStartTime() {
+      return startTime_;
     }
 
     public static final int THREADID_FIELD_NUMBER = 3;
@@ -1815,17 +1757,39 @@ public final class TreeProtos {
       return threadId_;
     }
 
-    public static final int STARTTIME_FIELD_NUMBER = 4;
-    private long startTime_;
+    public static final int CALLS_FIELD_NUMBER = 4;
+    private java.util.List<com.github.kornilova_l.protos.TreeProtos.Tree.Call> calls_;
     /**
-     * <pre>
-     * only for trees which save original call structure
-     * </pre>
-     *
-     * <code>int64 startTime = 4;</code>
+     * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 4;</code>
      */
-    public long getStartTime() {
-      return startTime_;
+    public java.util.List<com.github.kornilova_l.protos.TreeProtos.Tree.Call> getCallsList() {
+      return calls_;
+    }
+    /**
+     * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 4;</code>
+     */
+    public java.util.List<? extends com.github.kornilova_l.protos.TreeProtos.Tree.CallOrBuilder> 
+        getCallsOrBuilderList() {
+      return calls_;
+    }
+    /**
+     * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 4;</code>
+     */
+    public int getCallsCount() {
+      return calls_.size();
+    }
+    /**
+     * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 4;</code>
+     */
+    public com.github.kornilova_l.protos.TreeProtos.Tree.Call getCalls(int index) {
+      return calls_.get(index);
+    }
+    /**
+     * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 4;</code>
+     */
+    public com.github.kornilova_l.protos.TreeProtos.Tree.CallOrBuilder getCallsOrBuilder(
+        int index) {
+      return calls_.get(index);
     }
 
     private byte memoizedIsInitialized = -1;
@@ -1843,14 +1807,14 @@ public final class TreeProtos {
       if (duration_ != 0L) {
         output.writeInt64(1, duration_);
       }
-      for (int i = 0; i < calls_.size(); i++) {
-        output.writeMessage(2, calls_.get(i));
+      if (startTime_ != 0L) {
+        output.writeInt64(2, startTime_);
       }
       if (threadId_ != 0L) {
         output.writeInt64(3, threadId_);
       }
-      if (startTime_ != 0L) {
-        output.writeInt64(4, startTime_);
+      for (int i = 0; i < calls_.size(); i++) {
+        output.writeMessage(4, calls_.get(i));
       }
     }
 
@@ -1863,17 +1827,17 @@ public final class TreeProtos {
         size += com.google.protobuf.CodedOutputStream
           .computeInt64Size(1, duration_);
       }
-      for (int i = 0; i < calls_.size(); i++) {
+      if (startTime_ != 0L) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(2, calls_.get(i));
+          .computeInt64Size(2, startTime_);
       }
       if (threadId_ != 0L) {
         size += com.google.protobuf.CodedOutputStream
           .computeInt64Size(3, threadId_);
       }
-      if (startTime_ != 0L) {
+      for (int i = 0; i < calls_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt64Size(4, startTime_);
+          .computeMessageSize(4, calls_.get(i));
       }
       memoizedSize = size;
       return size;
@@ -1893,12 +1857,12 @@ public final class TreeProtos {
       boolean result = true;
       result = result && (getDuration()
           == other.getDuration());
-      result = result && getCallsList()
-          .equals(other.getCallsList());
-      result = result && (getThreadId()
-          == other.getThreadId());
       result = result && (getStartTime()
           == other.getStartTime());
+      result = result && (getThreadId()
+          == other.getThreadId());
+      result = result && getCallsList()
+          .equals(other.getCallsList());
       return result;
     }
 
@@ -1912,16 +1876,16 @@ public final class TreeProtos {
       hash = (37 * hash) + DURATION_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
           getDuration());
+      hash = (37 * hash) + STARTTIME_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getStartTime());
+      hash = (37 * hash) + THREADID_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getThreadId());
       if (getCallsCount() > 0) {
         hash = (37 * hash) + CALLS_FIELD_NUMBER;
         hash = (53 * hash) + getCallsList().hashCode();
       }
-      hash = (37 * hash) + THREADID_FIELD_NUMBER;
-      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-          getThreadId());
-      hash = (37 * hash) + STARTTIME_FIELD_NUMBER;
-      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-          getStartTime());
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -2054,16 +2018,16 @@ public final class TreeProtos {
         super.clear();
         duration_ = 0L;
 
+        startTime_ = 0L;
+
+        threadId_ = 0L;
+
         if (callsBuilder_ == null) {
           calls_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000002);
+          bitField0_ = (bitField0_ & ~0x00000008);
         } else {
           callsBuilder_.clear();
         }
-        threadId_ = 0L;
-
-        startTime_ = 0L;
-
         return this;
       }
 
@@ -2089,17 +2053,17 @@ public final class TreeProtos {
         int from_bitField0_ = bitField0_;
         int to_bitField0_ = 0;
         result.duration_ = duration_;
+        result.startTime_ = startTime_;
+        result.threadId_ = threadId_;
         if (callsBuilder_ == null) {
-          if (((bitField0_ & 0x00000002) == 0x00000002)) {
+          if (((bitField0_ & 0x00000008) == 0x00000008)) {
             calls_ = java.util.Collections.unmodifiableList(calls_);
-            bitField0_ = (bitField0_ & ~0x00000002);
+            bitField0_ = (bitField0_ & ~0x00000008);
           }
           result.calls_ = calls_;
         } else {
           result.calls_ = callsBuilder_.build();
         }
-        result.threadId_ = threadId_;
-        result.startTime_ = startTime_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -2145,11 +2109,17 @@ public final class TreeProtos {
         if (other.getDuration() != 0L) {
           setDuration(other.getDuration());
         }
+        if (other.getStartTime() != 0L) {
+          setStartTime(other.getStartTime());
+        }
+        if (other.getThreadId() != 0L) {
+          setThreadId(other.getThreadId());
+        }
         if (callsBuilder_ == null) {
           if (!other.calls_.isEmpty()) {
             if (calls_.isEmpty()) {
               calls_ = other.calls_;
-              bitField0_ = (bitField0_ & ~0x00000002);
+              bitField0_ = (bitField0_ & ~0x00000008);
             } else {
               ensureCallsIsMutable();
               calls_.addAll(other.calls_);
@@ -2162,7 +2132,7 @@ public final class TreeProtos {
               callsBuilder_.dispose();
               callsBuilder_ = null;
               calls_ = other.calls_;
-              bitField0_ = (bitField0_ & ~0x00000002);
+              bitField0_ = (bitField0_ & ~0x00000008);
               callsBuilder_ = 
                 com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
                    getCallsFieldBuilder() : null;
@@ -2170,12 +2140,6 @@ public final class TreeProtos {
               callsBuilder_.addAllMessages(other.calls_);
             }
           }
-        }
-        if (other.getThreadId() != 0L) {
-          setThreadId(other.getThreadId());
-        }
-        if (other.getStartTime() != 0L) {
-          setStartTime(other.getStartTime());
         }
         onChanged();
         return this;
@@ -2230,244 +2194,42 @@ public final class TreeProtos {
         return this;
       }
 
-      private java.util.List<com.github.kornilova_l.protos.TreeProtos.Tree.Call> calls_ =
-        java.util.Collections.emptyList();
-      private void ensureCallsIsMutable() {
-        if (!((bitField0_ & 0x00000002) == 0x00000002)) {
-          calls_ = new java.util.ArrayList<com.github.kornilova_l.protos.TreeProtos.Tree.Call>(calls_);
-          bitField0_ |= 0x00000002;
-         }
-      }
-
-      private com.google.protobuf.RepeatedFieldBuilderV3<
-          com.github.kornilova_l.protos.TreeProtos.Tree.Call, com.github.kornilova_l.protos.TreeProtos.Tree.Call.Builder, com.github.kornilova_l.protos.TreeProtos.Tree.CallOrBuilder> callsBuilder_;
-
+      private long startTime_ ;
       /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 2;</code>
+       * <pre>
+       * only for trees which save original call structure
+       * </pre>
+       *
+       * <code>int64 startTime = 2;</code>
        */
-      public java.util.List<com.github.kornilova_l.protos.TreeProtos.Tree.Call> getCallsList() {
-        if (callsBuilder_ == null) {
-          return java.util.Collections.unmodifiableList(calls_);
-        } else {
-          return callsBuilder_.getMessageList();
-        }
+      public long getStartTime() {
+        return startTime_;
       }
       /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 2;</code>
+       * <pre>
+       * only for trees which save original call structure
+       * </pre>
+       *
+       * <code>int64 startTime = 2;</code>
        */
-      public int getCallsCount() {
-        if (callsBuilder_ == null) {
-          return calls_.size();
-        } else {
-          return callsBuilder_.getCount();
-        }
-      }
-      /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 2;</code>
-       */
-      public com.github.kornilova_l.protos.TreeProtos.Tree.Call getCalls(int index) {
-        if (callsBuilder_ == null) {
-          return calls_.get(index);
-        } else {
-          return callsBuilder_.getMessage(index);
-        }
-      }
-      /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 2;</code>
-       */
-      public Builder setCalls(
-          int index, com.github.kornilova_l.protos.TreeProtos.Tree.Call value) {
-        if (callsBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureCallsIsMutable();
-          calls_.set(index, value);
-          onChanged();
-        } else {
-          callsBuilder_.setMessage(index, value);
-        }
+      public Builder setStartTime(long value) {
+        
+        startTime_ = value;
+        onChanged();
         return this;
       }
       /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 2;</code>
+       * <pre>
+       * only for trees which save original call structure
+       * </pre>
+       *
+       * <code>int64 startTime = 2;</code>
        */
-      public Builder setCalls(
-          int index, com.github.kornilova_l.protos.TreeProtos.Tree.Call.Builder builderForValue) {
-        if (callsBuilder_ == null) {
-          ensureCallsIsMutable();
-          calls_.set(index, builderForValue.build());
-          onChanged();
-        } else {
-          callsBuilder_.setMessage(index, builderForValue.build());
-        }
+      public Builder clearStartTime() {
+        
+        startTime_ = 0L;
+        onChanged();
         return this;
-      }
-      /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 2;</code>
-       */
-      public Builder addCalls(com.github.kornilova_l.protos.TreeProtos.Tree.Call value) {
-        if (callsBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureCallsIsMutable();
-          calls_.add(value);
-          onChanged();
-        } else {
-          callsBuilder_.addMessage(value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 2;</code>
-       */
-      public Builder addCalls(
-          int index, com.github.kornilova_l.protos.TreeProtos.Tree.Call value) {
-        if (callsBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureCallsIsMutable();
-          calls_.add(index, value);
-          onChanged();
-        } else {
-          callsBuilder_.addMessage(index, value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 2;</code>
-       */
-      public Builder addCalls(
-          com.github.kornilova_l.protos.TreeProtos.Tree.Call.Builder builderForValue) {
-        if (callsBuilder_ == null) {
-          ensureCallsIsMutable();
-          calls_.add(builderForValue.build());
-          onChanged();
-        } else {
-          callsBuilder_.addMessage(builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 2;</code>
-       */
-      public Builder addCalls(
-          int index, com.github.kornilova_l.protos.TreeProtos.Tree.Call.Builder builderForValue) {
-        if (callsBuilder_ == null) {
-          ensureCallsIsMutable();
-          calls_.add(index, builderForValue.build());
-          onChanged();
-        } else {
-          callsBuilder_.addMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 2;</code>
-       */
-      public Builder addAllCalls(
-          java.lang.Iterable<? extends com.github.kornilova_l.protos.TreeProtos.Tree.Call> values) {
-        if (callsBuilder_ == null) {
-          ensureCallsIsMutable();
-          com.google.protobuf.AbstractMessageLite.Builder.addAll(
-              values, calls_);
-          onChanged();
-        } else {
-          callsBuilder_.addAllMessages(values);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 2;</code>
-       */
-      public Builder clearCalls() {
-        if (callsBuilder_ == null) {
-          calls_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000002);
-          onChanged();
-        } else {
-          callsBuilder_.clear();
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 2;</code>
-       */
-      public Builder removeCalls(int index) {
-        if (callsBuilder_ == null) {
-          ensureCallsIsMutable();
-          calls_.remove(index);
-          onChanged();
-        } else {
-          callsBuilder_.remove(index);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 2;</code>
-       */
-      public com.github.kornilova_l.protos.TreeProtos.Tree.Call.Builder getCallsBuilder(
-          int index) {
-        return getCallsFieldBuilder().getBuilder(index);
-      }
-      /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 2;</code>
-       */
-      public com.github.kornilova_l.protos.TreeProtos.Tree.CallOrBuilder getCallsOrBuilder(
-          int index) {
-        if (callsBuilder_ == null) {
-          return calls_.get(index);  } else {
-          return callsBuilder_.getMessageOrBuilder(index);
-        }
-      }
-      /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 2;</code>
-       */
-      public java.util.List<? extends com.github.kornilova_l.protos.TreeProtos.Tree.CallOrBuilder> 
-           getCallsOrBuilderList() {
-        if (callsBuilder_ != null) {
-          return callsBuilder_.getMessageOrBuilderList();
-        } else {
-          return java.util.Collections.unmodifiableList(calls_);
-        }
-      }
-      /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 2;</code>
-       */
-      public com.github.kornilova_l.protos.TreeProtos.Tree.Call.Builder addCallsBuilder() {
-        return getCallsFieldBuilder().addBuilder(
-            com.github.kornilova_l.protos.TreeProtos.Tree.Call.getDefaultInstance());
-      }
-      /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 2;</code>
-       */
-      public com.github.kornilova_l.protos.TreeProtos.Tree.Call.Builder addCallsBuilder(
-          int index) {
-        return getCallsFieldBuilder().addBuilder(
-            index, com.github.kornilova_l.protos.TreeProtos.Tree.Call.getDefaultInstance());
-      }
-      /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 2;</code>
-       */
-      public java.util.List<com.github.kornilova_l.protos.TreeProtos.Tree.Call.Builder> 
-           getCallsBuilderList() {
-        return getCallsFieldBuilder().getBuilderList();
-      }
-      private com.google.protobuf.RepeatedFieldBuilderV3<
-          com.github.kornilova_l.protos.TreeProtos.Tree.Call, com.github.kornilova_l.protos.TreeProtos.Tree.Call.Builder, com.github.kornilova_l.protos.TreeProtos.Tree.CallOrBuilder> 
-          getCallsFieldBuilder() {
-        if (callsBuilder_ == null) {
-          callsBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
-              com.github.kornilova_l.protos.TreeProtos.Tree.Call, com.github.kornilova_l.protos.TreeProtos.Tree.Call.Builder, com.github.kornilova_l.protos.TreeProtos.Tree.CallOrBuilder>(
-                  calls_,
-                  ((bitField0_ & 0x00000002) == 0x00000002),
-                  getParentForChildren(),
-                  isClean());
-          calls_ = null;
-        }
-        return callsBuilder_;
       }
 
       private long threadId_ ;
@@ -2508,42 +2270,244 @@ public final class TreeProtos {
         return this;
       }
 
-      private long startTime_ ;
+      private java.util.List<com.github.kornilova_l.protos.TreeProtos.Tree.Call> calls_ =
+        java.util.Collections.emptyList();
+      private void ensureCallsIsMutable() {
+        if (!((bitField0_ & 0x00000008) == 0x00000008)) {
+          calls_ = new java.util.ArrayList<com.github.kornilova_l.protos.TreeProtos.Tree.Call>(calls_);
+          bitField0_ |= 0x00000008;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilderV3<
+          com.github.kornilova_l.protos.TreeProtos.Tree.Call, com.github.kornilova_l.protos.TreeProtos.Tree.Call.Builder, com.github.kornilova_l.protos.TreeProtos.Tree.CallOrBuilder> callsBuilder_;
+
       /**
-       * <pre>
-       * only for trees which save original call structure
-       * </pre>
-       *
-       * <code>int64 startTime = 4;</code>
+       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 4;</code>
        */
-      public long getStartTime() {
-        return startTime_;
+      public java.util.List<com.github.kornilova_l.protos.TreeProtos.Tree.Call> getCallsList() {
+        if (callsBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(calls_);
+        } else {
+          return callsBuilder_.getMessageList();
+        }
       }
       /**
-       * <pre>
-       * only for trees which save original call structure
-       * </pre>
-       *
-       * <code>int64 startTime = 4;</code>
+       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 4;</code>
        */
-      public Builder setStartTime(long value) {
-        
-        startTime_ = value;
-        onChanged();
+      public int getCallsCount() {
+        if (callsBuilder_ == null) {
+          return calls_.size();
+        } else {
+          return callsBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 4;</code>
+       */
+      public com.github.kornilova_l.protos.TreeProtos.Tree.Call getCalls(int index) {
+        if (callsBuilder_ == null) {
+          return calls_.get(index);
+        } else {
+          return callsBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 4;</code>
+       */
+      public Builder setCalls(
+          int index, com.github.kornilova_l.protos.TreeProtos.Tree.Call value) {
+        if (callsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureCallsIsMutable();
+          calls_.set(index, value);
+          onChanged();
+        } else {
+          callsBuilder_.setMessage(index, value);
+        }
         return this;
       }
       /**
-       * <pre>
-       * only for trees which save original call structure
-       * </pre>
-       *
-       * <code>int64 startTime = 4;</code>
+       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 4;</code>
        */
-      public Builder clearStartTime() {
-        
-        startTime_ = 0L;
-        onChanged();
+      public Builder setCalls(
+          int index, com.github.kornilova_l.protos.TreeProtos.Tree.Call.Builder builderForValue) {
+        if (callsBuilder_ == null) {
+          ensureCallsIsMutable();
+          calls_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          callsBuilder_.setMessage(index, builderForValue.build());
+        }
         return this;
+      }
+      /**
+       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 4;</code>
+       */
+      public Builder addCalls(com.github.kornilova_l.protos.TreeProtos.Tree.Call value) {
+        if (callsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureCallsIsMutable();
+          calls_.add(value);
+          onChanged();
+        } else {
+          callsBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 4;</code>
+       */
+      public Builder addCalls(
+          int index, com.github.kornilova_l.protos.TreeProtos.Tree.Call value) {
+        if (callsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureCallsIsMutable();
+          calls_.add(index, value);
+          onChanged();
+        } else {
+          callsBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 4;</code>
+       */
+      public Builder addCalls(
+          com.github.kornilova_l.protos.TreeProtos.Tree.Call.Builder builderForValue) {
+        if (callsBuilder_ == null) {
+          ensureCallsIsMutable();
+          calls_.add(builderForValue.build());
+          onChanged();
+        } else {
+          callsBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 4;</code>
+       */
+      public Builder addCalls(
+          int index, com.github.kornilova_l.protos.TreeProtos.Tree.Call.Builder builderForValue) {
+        if (callsBuilder_ == null) {
+          ensureCallsIsMutable();
+          calls_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          callsBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 4;</code>
+       */
+      public Builder addAllCalls(
+          java.lang.Iterable<? extends com.github.kornilova_l.protos.TreeProtos.Tree.Call> values) {
+        if (callsBuilder_ == null) {
+          ensureCallsIsMutable();
+          com.google.protobuf.AbstractMessageLite.Builder.addAll(
+              values, calls_);
+          onChanged();
+        } else {
+          callsBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 4;</code>
+       */
+      public Builder clearCalls() {
+        if (callsBuilder_ == null) {
+          calls_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000008);
+          onChanged();
+        } else {
+          callsBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 4;</code>
+       */
+      public Builder removeCalls(int index) {
+        if (callsBuilder_ == null) {
+          ensureCallsIsMutable();
+          calls_.remove(index);
+          onChanged();
+        } else {
+          callsBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 4;</code>
+       */
+      public com.github.kornilova_l.protos.TreeProtos.Tree.Call.Builder getCallsBuilder(
+          int index) {
+        return getCallsFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 4;</code>
+       */
+      public com.github.kornilova_l.protos.TreeProtos.Tree.CallOrBuilder getCallsOrBuilder(
+          int index) {
+        if (callsBuilder_ == null) {
+          return calls_.get(index);  } else {
+          return callsBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 4;</code>
+       */
+      public java.util.List<? extends com.github.kornilova_l.protos.TreeProtos.Tree.CallOrBuilder> 
+           getCallsOrBuilderList() {
+        if (callsBuilder_ != null) {
+          return callsBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(calls_);
+        }
+      }
+      /**
+       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 4;</code>
+       */
+      public com.github.kornilova_l.protos.TreeProtos.Tree.Call.Builder addCallsBuilder() {
+        return getCallsFieldBuilder().addBuilder(
+            com.github.kornilova_l.protos.TreeProtos.Tree.Call.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 4;</code>
+       */
+      public com.github.kornilova_l.protos.TreeProtos.Tree.Call.Builder addCallsBuilder(
+          int index) {
+        return getCallsFieldBuilder().addBuilder(
+            index, com.github.kornilova_l.protos.TreeProtos.Tree.Call.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 4;</code>
+       */
+      public java.util.List<com.github.kornilova_l.protos.TreeProtos.Tree.Call.Builder> 
+           getCallsBuilderList() {
+        return getCallsFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilderV3<
+          com.github.kornilova_l.protos.TreeProtos.Tree.Call, com.github.kornilova_l.protos.TreeProtos.Tree.Call.Builder, com.github.kornilova_l.protos.TreeProtos.Tree.CallOrBuilder> 
+          getCallsFieldBuilder() {
+        if (callsBuilder_ == null) {
+          callsBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
+              com.github.kornilova_l.protos.TreeProtos.Tree.Call, com.github.kornilova_l.protos.TreeProtos.Tree.Call.Builder, com.github.kornilova_l.protos.TreeProtos.Tree.CallOrBuilder>(
+                  calls_,
+                  ((bitField0_ & 0x00000008) == 0x00000008),
+                  getParentForChildren(),
+                  isClean());
+          calls_ = null;
+        }
+        return callsBuilder_;
       }
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
@@ -2615,18 +2579,19 @@ public final class TreeProtos {
     java.lang.String[] descriptorData = {
       "\n(com/github/kornilova_l/protos/tree.pro" +
       "to\022\035com.github.kornilova_l.protos\032)com/g" +
-      "ithub/kornilova_l/protos/event.proto\"\224\003\n" +
-      "\004Tree\022\020\n\010duration\030\001 \001(\003\0227\n\005calls\030\002 \003(\0132(" +
-      ".com.github.kornilova_l.protos.Tree.Call" +
-      "\022\020\n\010threadId\030\003 \001(\003\022\021\n\tstartTime\030\004 \001(\003\032\233\002" +
+      "ithub/kornilova_l/protos/event.proto\"\244\003\n" +
+      "\004Tree\022\020\n\010duration\030\001 \001(\003\022\021\n\tstartTime\030\002 \001" +
+      "(\003\022\020\n\010threadId\030\003 \001(\003\0227\n\005calls\030\004 \003(\0132(.co" +
+      "m.github.kornilova_l.protos.Tree.Call\032\253\002" +
       "\n\004Call\022\020\n\010duration\030\001 \001(\003\0229\n\005enter\030\002 \001(\0132" +
       "*.com.github.kornilova_l.protos.Event.En" +
-      "ter\0227\n\004exit\030\003 \001(\0132).com.github.kornilova" +
-      "_l.protos.Event.Exit\022A\n\texception\030\004 \001(\0132",
-      "..com.github.kornilova_l.protos.Event.Ex" +
-      "ception\0227\n\005calls\030\005 \003(\0132(.com.github.korn" +
-      "ilova_l.protos.Tree.Call\022\021\n\tstartTime\030\006 " +
-      "\001(\003B\014B\nTreeProtosb\006proto3"
+      "ter\0229\n\004exit\030\003 \001(\0132).com.github.kornilova" +
+      "_l.protos.Event.ExitH\000\022C\n\texception\030\004 \001(",
+      "\0132..com.github.kornilova_l.protos.Event." +
+      "ExceptionH\000\022\021\n\tstartTime\030\005 \001(\003\0227\n\005calls\030" +
+      "\006 \003(\0132(.com.github.kornilova_l.protos.Tr" +
+      "ee.CallB\n\n\010exitInfoB\014B\nTreeProtosb\006proto" +
+      "3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -2646,13 +2611,13 @@ public final class TreeProtos {
     internal_static_com_github_kornilova_l_protos_Tree_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_github_kornilova_l_protos_Tree_descriptor,
-        new java.lang.String[] { "Duration", "Calls", "ThreadId", "StartTime", });
+        new java.lang.String[] { "Duration", "StartTime", "ThreadId", "Calls", });
     internal_static_com_github_kornilova_l_protos_Tree_Call_descriptor =
       internal_static_com_github_kornilova_l_protos_Tree_descriptor.getNestedTypes().get(0);
     internal_static_com_github_kornilova_l_protos_Tree_Call_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_github_kornilova_l_protos_Tree_Call_descriptor,
-        new java.lang.String[] { "Duration", "Enter", "Exit", "Exception", "Calls", "StartTime", });
+        new java.lang.String[] { "Duration", "Enter", "Exit", "Exception", "StartTime", "Calls", "ExitInfo", });
     com.github.kornilova_l.protos.EventProtos.getDescriptor();
   }
 
