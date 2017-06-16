@@ -10,8 +10,9 @@ class OriginalTree {
     private TreeProtos.Tree.Builder treeBuilder = TreeProtos.Tree.newBuilder();
     private TreeProtos.Tree tree = null;
 
-    OriginalTree(long startTime) {
-        treeBuilder.setStartTime(startTime);
+    OriginalTree(long startTime, long threadId) {
+        treeBuilder.setThreadId(threadId)
+                .setStartTime(startTime);
     }
 
     void addEvent(EventProtos.Event event) {
