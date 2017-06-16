@@ -143,7 +143,12 @@ public class Logger implements Runnable {
         } else if (o instanceof Double) {
             varBuilder.setD((Double) o);
         } else { // object
-            varBuilder.setA(o.toString());
+            varBuilder.setObject(
+                    EventProtos.Event.Object.newBuilder()
+                            .setType(o.getClass().toString())
+                            .setValue(o.toString())
+                            .build()
+            );
         }
         return varBuilder.build();
     }
