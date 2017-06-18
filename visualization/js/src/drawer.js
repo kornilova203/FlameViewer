@@ -42,7 +42,12 @@ class Drawer {
     };
 
     _createSection() {
-        $("main").append(templates.tree.getSectionForThread({threadId: this.tree.getThreadid()}).content);
+        $("main").append(templates.tree.getSectionForThread(
+            {
+                threadId: this.tree.getThreadid(),
+                canvasHeight: 400
+            }
+        ).content);
     };
 
     _drawCall(call, depth, colorId) {
