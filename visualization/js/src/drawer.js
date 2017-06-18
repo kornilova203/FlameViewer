@@ -17,6 +17,7 @@ class Drawer {
     drawTree() {
         // this._createSection();
         this.stage = new createjs.Stage("canvas-" + this.tree.getThreadid());
+        this.stage.enableMouseOver(20);
 
         this._drawRecursively(this.tree, 0);
 
@@ -68,18 +69,25 @@ class Drawer {
     }
 
     _createPopup(call, shape) {
+        const callId = this._getNextCallId();
         this.section.append(templates.tree.popupInOriginalTree(
             {
                 methodName: call.getEnter().getMethodname(),
                 className: call.getEnter().getClassname(),
                 duration: call.getDuration(),
                 startTime: call.getStarttime(),
-                callId: this._getNextCallId()
+                callId: callId
             }
         ).content);
-        shape.addEventListener("click", (e) => {
+        const detail = $("#detail-" + callId);
+        shape.addEventListener("rollover", (e) => {
+            detail.show();
+            detail.css("top", e.nativeEvent.y).css("left", e.nativeEvent.x);
             console.log(e);
         });
+        shape.addEventListener("rollout", () => {
+            detail.hide();
+        })
     }
 
     _getNextCallId() {
