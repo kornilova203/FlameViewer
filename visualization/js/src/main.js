@@ -2,9 +2,15 @@ const TreeProto = require('./tree_pb');
 const $ = require('jquery');
 
 const CANVAS_WIDTH = 700;
+const CANVAS_HEIGHT = 400;
+const LAYER_HEIGHT = 15;
 const RECT_GRAPHICS = new createjs.Graphics()
     .beginFill("#0887d7")
-    .drawRect(0, 0, CANVAS_WIDTH, 15);
+    .drawRect(0, 0, CANVAS_WIDTH, LAYER_HEIGHT);
+
+function flipY(y) {
+    return CANVAS_HEIGHT - y - LAYER_HEIGHT;
+}
 
 function createSectionForThread(threadId) {
     $("main").append(templates.tree.getSectionForThread({threadId: threadId}).content);
@@ -15,6 +21,7 @@ function drawTree(tree) {
     const stage = new createjs.Stage("canvas-" + tree.getThreadid());
 
     const shape = new createjs.Shape(RECT_GRAPHICS);
+    shape.y = flipY(0);
     stage.addChild(shape);
     stage.update();
 }
