@@ -1,6 +1,6 @@
 const CANVAS_WIDTH = 700;
-const CANVAS_HEIGHT = 400;
 const LAYER_HEIGHT = 15;
+const LAYER_GAP = 1;
 const COLORS = ["#18A3FA", "#0887d7"];
 
 class Drawer {
@@ -9,6 +9,7 @@ class Drawer {
         this.stage = null;
         this.duration = this.tree.getDuration();
         this.startTime = this.tree.getStarttime();
+        this.canvasSize = (LAYER_HEIGHT + LAYER_GAP) * this.tree.getDepth() + 70;
     }
 
     drawTree() {
@@ -37,15 +38,15 @@ class Drawer {
      * @returns {number}
      * @private
      */
-    static _flipY(y) {
-        return CANVAS_HEIGHT - y - LAYER_HEIGHT;
+    _flipY(y) {
+        return this.canvasSize - y - LAYER_HEIGHT;
     };
 
     _createSection() {
         $("main").append(templates.tree.getSectionForThread(
             {
                 threadId: this.tree.getThreadid(),
-                canvasHeight: 400
+                canvasHeight: this.canvasSize
             }
         ).content);
     };
@@ -57,7 +58,7 @@ class Drawer {
             .drawRect(0, 0, CANVAS_WIDTH, LAYER_HEIGHT);
         const offsetX = ((call.getStarttime() - this.startTime) / this.duration) * CANVAS_WIDTH;
         const scaleX = call.getDuration() / this.duration;
-        shape.setTransform(offsetX, Drawer._flipY(depth * 16), scaleX);
+        shape.setTransform(offsetX, this._flipY(depth * 16), scaleX);
         console.log(`draw: ${depth}\t${scaleX}\t${call.getEnter().getMethodname()}`);
         this.stage.addChild(shape);
     }
