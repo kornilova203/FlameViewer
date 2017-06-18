@@ -2,19 +2,19 @@ const TreeProto = require('./tree_pb');
 const $ = require('jquery');
 
 const CANVAS_WIDTH = 700;
+const RECT_GRAPHICS = new createjs.Graphics()
+    .beginFill("#0887d7")
+    .drawRect(0, 0, CANVAS_WIDTH, 15);
 
 function createSectionForThread(threadId) {
     $("main").append(templates.tree.getSectionForThread({threadId: threadId}).content);
 }
 
-
 function drawTree(tree) {
     createSectionForThread(tree.getThreadid());
     const stage = new createjs.Stage("canvas-" + tree.getThreadid());
-    const graphics = new createjs.Graphics();
-    graphics.beginFill("blue").drawRect(0, 0, CANVAS_WIDTH, 15);
 
-    const shape = new createjs.Shape(graphics);
+    const shape = new createjs.Shape(RECT_GRAPHICS);
     stage.addChild(shape);
     stage.update();
 }
@@ -23,13 +23,6 @@ function drawTree(tree) {
  * Main function
  */
 $(window).on("load", function () {
-    // const stage = new createjs.Stage("canvas");
-    // const text = new createjs.Text("Hello World", "20px Arial", "#ff7700");
-    // // text.x = 100;
-    // // text.textBaseline = "alphabetic";
-    // stage.addChild(text);
-    // stage.update();
-
     // const request = new XMLHttpRequest();
     // request.open("GET", "http://localhost:63343/flamegraph-profiler/trees/original-tree", true);
     // request.responseType = "arraybuffer";
@@ -44,9 +37,6 @@ $(window).on("load", function () {
     // request.send();
 
     // INPUT form for easier debugging
-    const input = document.querySelectorAll('.inputfile')[0];
-    const label = input.nextElementSibling;
-
     $('#file').on('change', function (e) {
         const file = e.target.files[0]; // FileList object
         const reader = new FileReader();
