@@ -19,7 +19,7 @@ if (goog.DEBUG) {
 
 
 templates.tree.popupInOriginalTree = function(opt_data, opt_ignored) {
-  return soydata.VERY_UNSAFE.ordainSanitizedHtml('<div class="detail"><h3>' + soy.$$escapeHtml(opt_data.className) + '.<b>' + soy.$$escapeHtml(opt_data.methodName) + '</b></h3><p>Start time: ' + soy.$$escapeHtml(opt_data.startTime) + 'ms</p><p>Duration: ' + soy.$$escapeHtml(opt_data.duration) + 'ms</p></div>');
+  return soydata.VERY_UNSAFE.ordainSanitizedHtml('<div class="detail" id="detail-' + soy.$$escapeHtmlAttribute(opt_data.callId) + '"><h3>' + soy.$$escapeHtml(opt_data.className) + '.<b>' + soy.$$escapeHtml(opt_data.methodName) + '</b></h3><p>Start time: ' + soy.$$escapeHtml(opt_data.startTime) + 'ms</p><p>Duration: ' + soy.$$escapeHtml(opt_data.duration) + 'ms</p></div>');
 };
 if (goog.DEBUG) {
   templates.tree.popupInOriginalTree.soyTemplateName = 'templates.tree.popupInOriginalTree';
