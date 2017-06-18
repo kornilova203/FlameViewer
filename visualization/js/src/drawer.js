@@ -11,26 +11,37 @@ class Drawer {
         this.stage = null;
     }
 
-    drawTree () {
+    drawTree() {
         this._createSection();
         this.stage = new createjs.Stage("canvas-" + this.tree.getThreadid());
 
-        const shape = new createjs.Shape(RECT_GRAPHICS);
-        shape.setTransform(0, Drawer._flipY(0));
-        this.stage.addChild(shape);
-
-        const shape2 = new createjs.Shape(RECT_GRAPHICS);
-        shape2.setTransform(0, Drawer._flipY(16), 0.7);
-        this.stage.addChild(shape2);
+        this._drawRecursively(this.tree, 0);
 
         this.stage.update();
     };
 
-    static _flipY (y) {
+    _drawRecursively(call, depth) {
+        const childCalls = call.getCallsList();
+        if (childCalls.length === 0) {
+            return;
+        }
+        for (let i = 0; i < childCalls.length; i++) {
+            this._drawCall(childCalls[i], depth);
+            this._drawRecursively(childCalls[i], depth + 1);
+        }
+    }
+
+    static _flipY(y) {
         return CANVAS_HEIGHT - y - LAYER_HEIGHT;
     };
 
-    _createSection () {
+    _createSection() {
         $("main").append(templates.tree.getSectionForThread({threadId: this.tree.getThreadid()}).content);
     };
+
+    _drawCall(call, depth) {
+        const shape = new createjs.Shape(RECT_GRAPHICS);
+        shape.setTransform(0, Drawer._flipY(depth * 16));
+        this.stage.addChild(shape);
+    }
 }
