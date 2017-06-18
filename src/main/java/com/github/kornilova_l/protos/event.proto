@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package profiler;
+package com.github.kornilova_l.protos;
 
 option java_outer_classname = "EventProtos";
 
@@ -21,13 +21,11 @@ message Event {
     }
 
     message Exit {
-        // we dont need to save name of method in Exit event, do we?
         Var returnValue = 1;
     }
 
     message Exception {
-        string type = 1;
-        string message = 2;
+        Object object = 1;
     }
 
     message Var {
@@ -40,7 +38,12 @@ message Event {
             sint32 B = 6; // byte
             float F = 7; // float
             double D = 8; // double
-            string A = 9; // object
+            Object object = 9; // object
         }
+    }
+
+    message Object {
+        string type = 1;
+        string value = 2;
     }
 }

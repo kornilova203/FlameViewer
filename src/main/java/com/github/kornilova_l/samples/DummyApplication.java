@@ -1,4 +1,4 @@
-package samples;
+package com.github.kornilova_l.samples;
 
 import java.util.List;
 import java.util.Random;

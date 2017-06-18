@@ -34,11 +34,11 @@ dependencies {
 apply plugin: "me.champeau.gradle.jmh"
 apply plugin: 'org.jetbrains.intellij'
 
-mainClassName = 'org.jetbrains.test.Main'
+mainClassName = 'com.github.kornilova_l.samples.Sample'
 
 task packAgent (type: Jar, dependsOn: classes) {
     manifest {
-        attributes "Premain-Class": "profiler.Agent"
+        attributes "Premain-Class": "com.github.kornilova_l.profiler.Agent"
     }
     archiveName = 'javaagent.jar'
     from sourceSets.main.output
@@ -53,7 +53,7 @@ task copyStatic(type: Copy) {
 
 task profileClass(type: JavaExec, dependsOn: [build, packAgent]) {
     classpath = sourceSets.main.runtimeClasspath
-    main = "samples.Sample"
+    main = "com.github.kornilova_l.samples.Sample"
     jvmArgs += ["-javaagent:${packAgent.getArchivePath()}"]
 }
 

@@ -1,4 +1,4 @@
-package profiler;
+package com.github.kornilova_l.profiler;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -30,7 +30,7 @@ class ProfilingClassFileTransformer implements ClassFileTransformer {
                             Class<?> classBeingRedefined,
                             ProtectionDomain protectionDomain,
                             byte[] classfileBuffer) throws IllegalClassFormatException {
-        if (className.startsWith("samples") && !className.startsWith("samples/Blackhole")) {
+        if (className.startsWith("com/github/kornilova_l/samples") && !className.startsWith("com/github/kornilova_l/samples/Blackhole")) {
             ClassReader cr = new ClassReader(classfileBuffer);
             ClassWriter cw = new ClassWriter(cr, ClassWriter.COMPUTE_FRAMES);
             // uncomment for debugging

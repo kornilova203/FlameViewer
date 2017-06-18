@@ -1,0 +1,12 @@
+{namespace templates.tree}
+
+/**
+ * Get section template for tree of particular thread
+ * @param threadId The name of the person.
+ */
+{template .getSectionForThread}
+<section id="section-{$threadId}">
+<h2>{$threadId}</h2>
+<canvas id="canvas-{$threadId}" width="700" height="700"></canvas>
+</section>
+{/template}

@@ -1,4 +1,6 @@
-package profiler;
+package com.github.kornilova_l.profiler;
+
+import com.github.kornilova_l.protos.EventProtos;
 
 import java.io.*;
 import java.util.*;
@@ -11,6 +13,7 @@ import java.util.regex.Pattern;
  */
 public class Logger implements Runnable {
     public static final LinkedBlockingDeque<EventData> queue = new LinkedBlockingDeque<>();
+    public static final File outDir = new File("out");
     private static final File file = createOutFile();
     // stream is package-private because it will be closed by WaitingLoggingToFinish thread
     static final OutputStream outputStream;
@@ -24,12 +27,10 @@ public class Logger implements Runnable {
             e.printStackTrace();
         }
         outputStream = temp;
+        createDirIfNotExist(outDir);
     }
 
-    private static File createOutFile() {
-        File outDir = new File("out");
-        createDirIfNotExist(outDir);
-
+    public static int getLargestFileNum() {
         File[] files = outDir.listFiles();
         int max = 0;
         if (files != null) {
@@ -39,7 +40,7 @@ public class Logger implements Runnable {
                     .map((name) -> {
                         Matcher m = getNumPattern.matcher(name);
                         if (m.find()) {
-                            return m.group();
+                            return m.group(); // get numbers from fileNames
                         }
                         return "0";
                     })
@@ -50,6 +51,11 @@ public class Logger implements Runnable {
                 max = optionalMax.getAsInt();
             }
         }
+        return max;
+    }
+
+    private static File createOutFile() {
+        int max = getLargestFileNum();
         return new File(outDir.getAbsolutePath() + "/events" + ++max + ".ser");
     }
 
@@ -143,7 +149,12 @@ public class Logger implements Runnable {
         } else if (o instanceof Double) {
             varBuilder.setD((Double) o);
         } else { // object
-            varBuilder.setA(o.toString());
+            varBuilder.setObject(
+                    EventProtos.Event.Object.newBuilder()
+                            .setType(o.getClass().toString())
+                            .setValue(o.toString())
+                            .build()
+            );
         }
         return varBuilder.build();
     }

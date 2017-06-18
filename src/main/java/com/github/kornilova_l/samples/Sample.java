@@ -1,8 +1,7 @@
-package samples;
+package com.github.kornilova_l.samples;
 
-import profiler.EnterEventData;
-import profiler.ExitEventData;
-import profiler.Logger;
+import com.github.kornilova_l.profiler.ExitEventData;
+import com.github.kornilova_l.profiler.Logger;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -109,13 +108,13 @@ public class Sample {
 //        );
         //noinspection UnnecessaryLocalVariable
         long a = 12345;
-        Logger.queue.add(
-                new ExitEventData(
-                        a,
-                        Thread.currentThread().getId(),
-                        System.currentTimeMillis()
-                )
-        );
+//        Logger.queue.add(
+//                new ExitEventData(
+//                        a,
+//                        Thread.currentThread().getId(),
+//                        System.currentTimeMillis()
+//                )
+//        );
         return a;
     }
 
@@ -263,8 +262,6 @@ public class Sample {
 
     @SuppressWarnings("unused")
 //    private void unused(Pattern[] patterns) {
-////        State state = Profiler.methodEnter("desc",patterns.toString() + "some text");
-////        state.methodFinish(" ");
 //    }
 
     public static void main(String[] args) throws InterruptedException {

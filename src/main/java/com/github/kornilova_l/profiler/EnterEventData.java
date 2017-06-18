@@ -1,4 +1,4 @@
-package profiler;
+package com.github.kornilova_l.profiler;
 
 public class EnterEventData extends EventData {
     String className;
