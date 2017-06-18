@@ -34,6 +34,7 @@ class OriginalTree {
     add it to calls of call which is on top of stack
      */
     private void finishCall(EventProtos.Event event) {
+        currentDepth--;
         TreeProtos.Tree.Call.Builder callBuilder = callsStack.removeFirst();
         if (event.getInfoCase() == EventProtos.Event.InfoCase.EXIT) {
             callBuilder.setExit(event.getExit());
@@ -54,7 +55,7 @@ class OriginalTree {
 
 
     private void createNewCall(EventProtos.Event event) {
-        if (++currentDepth < maxDepth) {
+        if (++currentDepth > maxDepth) {
             maxDepth = currentDepth;
         }
         callsStack.addFirst(
