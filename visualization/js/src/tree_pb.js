@@ -69,7 +69,8 @@ proto.com.github.kornilova_l.protos.Tree.toObject = function(includeInstance, ms
     starttime: jspb.Message.getFieldWithDefault(msg, 2, 0),
     threadid: jspb.Message.getFieldWithDefault(msg, 3, 0),
     callsList: jspb.Message.toObjectList(msg.getCallsList(),
-    proto.com.github.kornilova_l.protos.Tree.Call.toObject, includeInstance)
+    proto.com.github.kornilova_l.protos.Tree.Call.toObject, includeInstance),
+    depth: jspb.Message.getFieldWithDefault(msg, 5, 0)
   };
 
   if (includeInstance) {
@@ -122,6 +123,10 @@ proto.com.github.kornilova_l.protos.Tree.deserializeBinaryFromReader = function(
       var value = new proto.com.github.kornilova_l.protos.Tree.Call;
       reader.readMessage(value,proto.com.github.kornilova_l.protos.Tree.Call.deserializeBinaryFromReader);
       msg.addCalls(value);
+      break;
+    case 5:
+      var value = /** @type {number} */ (reader.readUint32());
+      msg.setDepth(value);
       break;
     default:
       reader.skipField();
@@ -178,6 +183,13 @@ proto.com.github.kornilova_l.protos.Tree.serializeBinaryToWriter = function(mess
       4,
       f,
       proto.com.github.kornilova_l.protos.Tree.Call.serializeBinaryToWriter
+    );
+  }
+  f = message.getDepth();
+  if (f !== 0) {
+    writer.writeUint32(
+      5,
+      f
     );
   }
 };
@@ -638,6 +650,21 @@ proto.com.github.kornilova_l.protos.Tree.prototype.addCalls = function(opt_value
 
 proto.com.github.kornilova_l.protos.Tree.prototype.clearCallsList = function() {
   this.setCallsList([]);
+};
+
+
+/**
+ * optional uint32 depth = 5;
+ * @return {number}
+ */
+proto.com.github.kornilova_l.protos.Tree.prototype.getDepth = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 5, 0));
+};
+
+
+/** @param {number} value */
+proto.com.github.kornilova_l.protos.Tree.prototype.setDepth = function(value) {
+  jspb.Message.setField(this, 5, value);
 };
 
 

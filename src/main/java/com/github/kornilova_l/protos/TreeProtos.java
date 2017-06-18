@@ -64,6 +64,11 @@ public final class TreeProtos {
      */
     com.github.kornilova_l.protos.TreeProtos.Tree.CallOrBuilder getCallsOrBuilder(
         int index);
+
+    /**
+     * <code>uint32 depth = 5;</code>
+     */
+    int getDepth();
   }
   /**
    * Protobuf type {@code com.github.kornilova_l.protos.Tree}
@@ -81,6 +86,7 @@ public final class TreeProtos {
       startTime_ = 0L;
       threadId_ = 0L;
       calls_ = java.util.Collections.emptyList();
+      depth_ = 0;
     }
 
     @java.lang.Override
@@ -130,6 +136,11 @@ public final class TreeProtos {
               }
               calls_.add(
                   input.readMessage(com.github.kornilova_l.protos.TreeProtos.Tree.Call.parser(), extensionRegistry));
+              break;
+            }
+            case 40: {
+
+              depth_ = input.readUInt32();
               break;
             }
           }
@@ -1792,6 +1803,15 @@ public final class TreeProtos {
       return calls_.get(index);
     }
 
+    public static final int DEPTH_FIELD_NUMBER = 5;
+    private int depth_;
+    /**
+     * <code>uint32 depth = 5;</code>
+     */
+    public int getDepth() {
+      return depth_;
+    }
+
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -1816,6 +1836,9 @@ public final class TreeProtos {
       for (int i = 0; i < calls_.size(); i++) {
         output.writeMessage(4, calls_.get(i));
       }
+      if (depth_ != 0) {
+        output.writeUInt32(5, depth_);
+      }
     }
 
     public int getSerializedSize() {
@@ -1838,6 +1861,10 @@ public final class TreeProtos {
       for (int i = 0; i < calls_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(4, calls_.get(i));
+      }
+      if (depth_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeUInt32Size(5, depth_);
       }
       memoizedSize = size;
       return size;
@@ -1863,6 +1890,8 @@ public final class TreeProtos {
           == other.getThreadId());
       result = result && getCallsList()
           .equals(other.getCallsList());
+      result = result && (getDepth()
+          == other.getDepth());
       return result;
     }
 
@@ -1886,6 +1915,8 @@ public final class TreeProtos {
         hash = (37 * hash) + CALLS_FIELD_NUMBER;
         hash = (53 * hash) + getCallsList().hashCode();
       }
+      hash = (37 * hash) + DEPTH_FIELD_NUMBER;
+      hash = (53 * hash) + getDepth();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -2028,6 +2059,8 @@ public final class TreeProtos {
         } else {
           callsBuilder_.clear();
         }
+        depth_ = 0;
+
         return this;
       }
 
@@ -2064,6 +2097,7 @@ public final class TreeProtos {
         } else {
           result.calls_ = callsBuilder_.build();
         }
+        result.depth_ = depth_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -2140,6 +2174,9 @@ public final class TreeProtos {
               callsBuilder_.addAllMessages(other.calls_);
             }
           }
+        }
+        if (other.getDepth() != 0) {
+          setDepth(other.getDepth());
         }
         onChanged();
         return this;
@@ -2509,6 +2546,32 @@ public final class TreeProtos {
         }
         return callsBuilder_;
       }
+
+      private int depth_ ;
+      /**
+       * <code>uint32 depth = 5;</code>
+       */
+      public int getDepth() {
+        return depth_;
+      }
+      /**
+       * <code>uint32 depth = 5;</code>
+       */
+      public Builder setDepth(int value) {
+        
+        depth_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>uint32 depth = 5;</code>
+       */
+      public Builder clearDepth() {
+        
+        depth_ = 0;
+        onChanged();
+        return this;
+      }
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
@@ -2579,19 +2642,19 @@ public final class TreeProtos {
     java.lang.String[] descriptorData = {
       "\n(com/github/kornilova_l/protos/tree.pro" +
       "to\022\035com.github.kornilova_l.protos\032)com/g" +
-      "ithub/kornilova_l/protos/event.proto\"\244\003\n" +
+      "ithub/kornilova_l/protos/event.proto\"\263\003\n" +
       "\004Tree\022\020\n\010duration\030\001 \001(\003\022\021\n\tstartTime\030\002 \001" +
       "(\003\022\020\n\010threadId\030\003 \001(\003\0227\n\005calls\030\004 \003(\0132(.co" +
-      "m.github.kornilova_l.protos.Tree.Call\032\253\002" +
-      "\n\004Call\022\020\n\010duration\030\001 \001(\003\0229\n\005enter\030\002 \001(\0132" +
-      "*.com.github.kornilova_l.protos.Event.En" +
-      "ter\0229\n\004exit\030\003 \001(\0132).com.github.kornilova" +
-      "_l.protos.Event.ExitH\000\022C\n\texception\030\004 \001(",
-      "\0132..com.github.kornilova_l.protos.Event." +
-      "ExceptionH\000\022\021\n\tstartTime\030\005 \001(\003\0227\n\005calls\030" +
-      "\006 \003(\0132(.com.github.kornilova_l.protos.Tr" +
-      "ee.CallB\n\n\010exitInfoB\014B\nTreeProtosb\006proto" +
-      "3"
+      "m.github.kornilova_l.protos.Tree.Call\022\r\n" +
+      "\005depth\030\005 \001(\r\032\253\002\n\004Call\022\020\n\010duration\030\001 \001(\003\022" +
+      "9\n\005enter\030\002 \001(\0132*.com.github.kornilova_l." +
+      "protos.Event.Enter\0229\n\004exit\030\003 \001(\0132).com.g" +
+      "ithub.kornilova_l.protos.Event.ExitH\000\022C\n",
+      "\texception\030\004 \001(\0132..com.github.kornilova_" +
+      "l.protos.Event.ExceptionH\000\022\021\n\tstartTime\030" +
+      "\005 \001(\003\0227\n\005calls\030\006 \003(\0132(.com.github.kornil" +
+      "ova_l.protos.Tree.CallB\n\n\010exitInfoB\014B\nTr" +
+      "eeProtosb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -2611,7 +2674,7 @@ public final class TreeProtos {
     internal_static_com_github_kornilova_l_protos_Tree_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_github_kornilova_l_protos_Tree_descriptor,
-        new java.lang.String[] { "Duration", "StartTime", "ThreadId", "Calls", });
+        new java.lang.String[] { "Duration", "StartTime", "ThreadId", "Calls", "Depth", });
     internal_static_com_github_kornilova_l_protos_Tree_Call_descriptor =
       internal_static_com_github_kornilova_l_protos_Tree_descriptor.getNestedTypes().get(0);
     internal_static_com_github_kornilova_l_protos_Tree_Call_fieldAccessorTable = new
