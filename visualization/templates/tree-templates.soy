@@ -2,11 +2,12 @@
 
 /**
  * Get section template for tree of particular thread
- * @param threadId The name of the person.
+ * @param threadId Thread id
+ * @param canvasHeight Height of canvas
  */
 {template .getSectionForThread}
 <section id="section-{$threadId}">
 <h2>{$threadId}</h2>
-<canvas id="canvas-{$threadId}" width="700" height="400"></canvas>
+<canvas id="canvas-{$threadId}" width="700" height="{$canvasHeight}"></canvas>
 </section>
 {/template}
