@@ -1,21 +1,24 @@
 const TreeProto = require('./tree_pb');
 const $ = require('jquery');
 
+const CANVAS_WIDTH = 700;
+
 function createSectionForThread(threadId) {
     $("main").append(templates.tree.getSectionForThread({threadId: threadId}).content);
 }
 
 
 function drawTree(tree) {
+    createSectionForThread(tree.getThreadid());
     const stage = new createjs.Stage("canvas-" + tree.getThreadid());
     const graphics = new createjs.Graphics();
-    graphics.beginFill("blue").drawRect(20, 20, 100, 50);
+    graphics.beginFill("blue").drawRect(0, 0, CANVAS_WIDTH, 15);
 
     const shape = new createjs.Shape(graphics);
     stage.addChild(shape);
     stage.update();
-
 }
+
 /**
  * Main function
  */
@@ -26,25 +29,36 @@ $(window).on("load", function () {
     // // text.textBaseline = "alphabetic";
     // stage.addChild(text);
     // stage.update();
+
+    // const request = new XMLHttpRequest();
+    // request.open("GET", "http://localhost:63343/flamegraph-profiler/trees/original-tree", true);
+    // request.responseType = "arraybuffer";
     //
-    // const circle = new createjs.Shape();
-    // circle.graphics.beginFill("DeepSkyBlue").drawCircle(0, 0, 50);
-    // circle.x = 0;
-    // circle.y = 0;
-    // stage.addChild(circle);
-    // stage.update();
+    // request.onload = function () {
+    //     const arrayBuffer = request.response;
+    //     const byteArray = new Uint8Array(arrayBuffer);
+    //     const tree = TreeProto.Tree.deserializeBinary(byteArray);
+    //     createSectionForThread(tree.getThreadid());
+    //     drawTree(tree);
+    // };
+    // request.send();
 
+    // INPUT form for easier debugging
+    const input = document.querySelectorAll('.inputfile')[0];
+    const label = input.nextElementSibling;
 
-    const request = new XMLHttpRequest();
-    request.open("GET", "http://localhost:63343/flamegraph-profiler/trees/original-tree", true);
-    request.responseType = "arraybuffer";
+    $('#file').on('change', function (e) {
+        const file = e.target.files[0]; // FileList object
+        const reader = new FileReader();
 
-    request.onload = function () {
-        const arrayBuffer = request.response;
-        const byteArray = new Uint8Array(arrayBuffer);
-        const tree = TreeProto.Tree.deserializeBinary(byteArray);
-        createSectionForThread(tree.getThreadid());
-        drawTree(tree);
-    };
-    request.send();
+        reader.onload = (function (theFile) {
+            reader.readAsArrayBuffer(theFile);
+            reader.addEventListener("load", function () {
+                const arrayBuffer = reader.result;
+                const byteArray = new Uint8Array(arrayBuffer);
+                const tree = TreeProto.Tree.deserializeBinary(byteArray);
+                drawTree(tree);
+            });
+        })(file);
+    });
 });
