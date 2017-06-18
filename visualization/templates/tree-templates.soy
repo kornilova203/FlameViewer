@@ -11,3 +11,18 @@
 <canvas id="canvas-{$threadId}" width="700" height="{$canvasHeight}"></canvas>
 </section>
 {/template}
+
+/**
+ * Generate popup for method in original tree
+ * @param duration
+ * @param startTime
+ * @param methodName
+ * @param className
+ */
+{template .popupInOriginalTree}
+<div class="detail">
+    <h3>{$className}.<b>{$methodName}</b></h3>
+    <p>Start time: {$startTime}ms</p>
+    <p>Duration: {$duration}ms</p>
+</div>
+{/template}

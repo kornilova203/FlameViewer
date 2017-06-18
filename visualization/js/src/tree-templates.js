@@ -16,3 +16,11 @@ templates.tree.getSectionForThread = function(opt_data, opt_ignored) {
 if (goog.DEBUG) {
   templates.tree.getSectionForThread.soyTemplateName = 'templates.tree.getSectionForThread';
 }
+
+
+templates.tree.popupInOriginalTree = function(opt_data, opt_ignored) {
+  return soydata.VERY_UNSAFE.ordainSanitizedHtml('<div class="detail"><h3>' + soy.$$escapeHtml(opt_data.className) + '.<b>' + soy.$$escapeHtml(opt_data.methodName) + '</b></h3><p>Start time: ' + soy.$$escapeHtml(opt_data.startTime) + 'ms</p><p>Duration: ' + soy.$$escapeHtml(opt_data.duration) + 'ms</p></div>');
+};
+if (goog.DEBUG) {
+  templates.tree.popupInOriginalTree.soyTemplateName = 'templates.tree.popupInOriginalTree';
+}
