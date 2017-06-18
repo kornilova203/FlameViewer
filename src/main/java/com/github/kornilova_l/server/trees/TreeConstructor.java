@@ -27,11 +27,12 @@ public class TreeConstructor {
         }
         return null;
     }
+
     public static void main(String[] args) throws IOException {
         TreeConstructor treeConstructor = new TreeConstructor(
                 new File("/home/lk/JetBrains/profiler/out/events13.ser")
         );
-        OutputStream outputStream = new FileOutputStream("out/original-tree1.ser");
+        OutputStream outputStream = new FileOutputStream("out/original-tree2.ser");
         treeConstructor.constructOriginalTree().writeTo(outputStream);
     }
 }

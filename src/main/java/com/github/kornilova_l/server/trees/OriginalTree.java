@@ -9,6 +9,8 @@ class OriginalTree {
     private final LinkedList<TreeProtos.Tree.Call.Builder> callsStack = new LinkedList<>();
     private TreeProtos.Tree.Builder treeBuilder = TreeProtos.Tree.newBuilder();
     private TreeProtos.Tree tree = null;
+    private int maxDepth = 0;
+    private int currentDepth = 0;
 
     OriginalTree(long startTime, long threadId) {
         treeBuilder.setThreadId(threadId)
@@ -52,6 +54,9 @@ class OriginalTree {
 
 
     private void createNewCall(EventProtos.Event event) {
+        if (++currentDepth < maxDepth) {
+            maxDepth = currentDepth;
+        }
         callsStack.addFirst(
                 TreeProtos.Tree.Call.newBuilder()
                         .setEnter(event.getEnter())
@@ -66,6 +71,7 @@ class OriginalTree {
             treeBuilder.setDuration(
                     exitTimeOfLastFinishedCall - treeBuilder.getStartTime()
             );
+            treeBuilder.setDepth(maxDepth);
             tree = treeBuilder.build();
             treeBuilder = null;
         } else { // something went wrong
