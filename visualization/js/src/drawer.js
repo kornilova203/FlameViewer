@@ -10,10 +10,12 @@ class Drawer {
         this.duration = this.tree.getDuration();
         this.startTime = this.tree.getStarttime();
         this.canvasSize = (LAYER_HEIGHT + LAYER_GAP) * this.tree.getDepth() + 70;
+        this.currentCallId = 0; // for popups
+        this.section = this._createSection();
     }
 
     drawTree() {
-        this._createSection();
+        // this._createSection();
         this.stage = new createjs.Stage("canvas-" + this.tree.getThreadid());
 
         this._drawRecursively(this.tree, 0);
@@ -49,6 +51,7 @@ class Drawer {
                 canvasHeight: this.canvasSize
             }
         ).content);
+        return $("#section-" + this.tree.getThreadid());
     };
 
     _drawCall(call, depth, colorId) {
@@ -60,6 +63,26 @@ class Drawer {
         const scaleX = call.getDuration() / this.duration;
         shape.setTransform(offsetX, this._flipY(depth * 16), scaleX);
         console.log(`draw: ${depth}\t${scaleX}\t${call.getEnter().getMethodname()}`);
+        this._createPopup(call, shape);
         this.stage.addChild(shape);
+    }
+
+    _createPopup(call, shape) {
+        this.section.append(templates.tree.popupInOriginalTree(
+            {
+                methodName: call.getEnter().getMethodname(),
+                className: call.getEnter().getClassname(),
+                duration: call.getDuration(),
+                startTime: call.getStarttime(),
+                callId: this._getNextCallId()
+            }
+        ).content);
+        shape.addEventListener("click", (e) => {
+            console.log(e);
+        });
+    }
+
+    _getNextCallId() {
+        return this.currentCallId++;
     }
 }
