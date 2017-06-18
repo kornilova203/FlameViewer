@@ -28,7 +28,8 @@ $(window).on("load", function () {
                 const arrayBuffer = reader.result;
                 const byteArray = new Uint8Array(arrayBuffer);
                 const tree = TreeProto.Tree.deserializeBinary(byteArray);
-                drawer.drawTree(tree);
+                const drawer = new Drawer(tree);
+                drawer.drawTree();
             });
         })(file);
     });

@@ -5,27 +5,32 @@ const RECT_GRAPHICS = new createjs.Graphics()
     .beginFill("#0887d7")
     .drawRect(0, 0, CANVAS_WIDTH, LAYER_HEIGHT);
 
-const drawer = {};
+class Drawer {
+    constructor(tree) {
+        this.tree = tree;
+        this.stage = null;
+    }
 
-drawer._flipY = function (y) {
-    return CANVAS_HEIGHT - y - LAYER_HEIGHT;
-};
+    drawTree () {
+        this._createSection();
+        this.stage = new createjs.Stage("canvas-" + this.tree.getThreadid());
 
-drawer._createSectionForThread = function (threadId) {
-    $("main").append(templates.tree.getSectionForThread({threadId: threadId}).content);
-};
+        const shape = new createjs.Shape(RECT_GRAPHICS);
+        shape.setTransform(0, Drawer._flipY(0));
+        this.stage.addChild(shape);
 
-drawer.drawTree = function (tree) {
-    drawer._createSectionForThread(tree.getThreadid());
-    const stage = new createjs.Stage("canvas-" + tree.getThreadid());
+        const shape2 = new createjs.Shape(RECT_GRAPHICS);
+        shape2.setTransform(0, Drawer._flipY(16), 0.7);
+        this.stage.addChild(shape2);
 
-    const shape = new createjs.Shape(RECT_GRAPHICS);
-    shape.setTransform(0, drawer._flipY(0));
-    stage.addChild(shape);
+        this.stage.update();
+    };
 
-    const shape2 = new createjs.Shape(RECT_GRAPHICS);
-    shape2.setTransform(0, drawer._flipY(16), 0.7);
-    stage.addChild(shape2);
+    static _flipY (y) {
+        return CANVAS_HEIGHT - y - LAYER_HEIGHT;
+    };
 
-    stage.update();
-};
+    _createSection () {
+        $("main").append(templates.tree.getSectionForThread({threadId: this.tree.getThreadid()}).content);
+    };
+}
