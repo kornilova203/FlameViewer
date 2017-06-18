@@ -4,7 +4,7 @@ package com.github.kornilova_l.protos;
 
 option java_outer_classname = "TreeProtos";
 
-import "src/main/java/com/github/kornilova_l/protos/event.proto";
+import "com/github/kornilova_l/protos/event.proto";
 
 message Tree {
     int64 duration = 1;
