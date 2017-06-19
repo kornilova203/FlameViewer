@@ -10,12 +10,11 @@ class Drawer {
         this.duration = this.tree.getDuration();
         this.startTime = this.tree.getStarttime();
         this.canvasSize = (LAYER_HEIGHT + LAYER_GAP) * this.tree.getDepth() + 70;
-        this.currentCallId = 0; // for popups
         this.section = this._createSection();
+        this._drawTree();
     }
 
-    drawTree() {
-        // this._createSection();
+    _drawTree() {
         this.stage = new createjs.Stage("canvas-" + this.tree.getThreadid());
         this.stage.enableMouseOver(20);
 

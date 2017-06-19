@@ -13,7 +13,7 @@ $(window).on("load", function () {
     //     const byteArray = new Uint8Array(arrayBuffer);
     //     const tree = TreeProto.Tree.deserializeBinary(byteArray);
     //     createSectionForThread(tree.getThreadid());
-    //     drawTree(tree);
+    //     _drawTree(tree);
     // };
     // request.send();
 
@@ -29,7 +29,6 @@ $(window).on("load", function () {
                 const byteArray = new Uint8Array(arrayBuffer);
                 const tree = TreeProto.Tree.deserializeBinary(byteArray);
                 const drawer = new Drawer(tree);
-                drawer.drawTree();
             });
         })(file);
     });
