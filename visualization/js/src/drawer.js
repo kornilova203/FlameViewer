@@ -1,16 +1,20 @@
-const CANVAS_WIDTH = 700;
+const MAIN_WIDTH = 700;
 const LAYER_HEIGHT = 15;
 const LAYER_GAP = 1;
 const COLORS = ["#18A3FA", "#0887d7"];
 
 class Drawer {
-    constructor(tree) {
+    constructor(tree, minStartTime, maxFinishTime) {
         this.tree = tree;
         this.stage = null;
         this.width = this.tree.getWidth();
-        this.canvasSize = (LAYER_HEIGHT + LAYER_GAP) * this.tree.getDepth() + 70;
+        const fullDuration = maxFinishTime - minStartTime
+        this.canvasWidth = this.width / fullDuration * MAIN_WIDTH;
+        this.canvasHeight = (LAYER_HEIGHT + LAYER_GAP) * this.tree.getDepth() + 70;
         this.threadId = this.tree.getTreeInfo().getThreadId();
-        this.section = this._createSection();
+
+        const canvasOffset = (this.tree.getTreeInfo().getStartTime() - minStartTime) / fullDuration * MAIN_WIDTH;
+        this.section = this._createSection(canvasOffset);
         this._drawTree();
     }
 
@@ -41,14 +45,16 @@ class Drawer {
      * @private
      */
     _flipY(y) {
-        return this.canvasSize - y - LAYER_HEIGHT;
+        return this.canvasHeight - y - LAYER_HEIGHT;
     };
 
-    _createSection() {
+    _createSection(canvasOffset) {
         const sectionContent = templates.tree.getSectionForThread(
             {
                 threadId: this.threadId,
-                canvasHeight: this.canvasSize
+                canvasHeight: this.canvasHeight,
+                canvasWidth: this.canvasWidth,
+                canvasOffset: canvasOffset
             }
         ).content;
         return $(sectionContent).appendTo($("main"));
@@ -58,8 +64,8 @@ class Drawer {
         const shape = new createjs.Shape();
         shape.graphics
             .beginFill(COLORS[colorId])
-            .drawRect(0, 0, CANVAS_WIDTH, LAYER_HEIGHT);
-        const offsetX = (node.getOffset() / this.width) * CANVAS_WIDTH;
+            .drawRect(0, 0, this.canvasWidth, LAYER_HEIGHT);
+        const offsetX = (node.getOffset() / this.width) * this.canvasWidth;
         const scaleX = node.getWidth() / this.width;
         shape.setTransform(offsetX, this._flipY(depth * 16), scaleX);
         console.log(`draw: ${depth}\t${scaleX}\t${node.getNodeInfo().getMethodName()}`);
@@ -77,7 +83,6 @@ class Drawer {
             }
         ).content;
         const popup = $(popupContent).appendTo(this.section);
-        console.log("popup:", popup);
         shape.addEventListener("mouseover", () => {
             popup.show();
         });

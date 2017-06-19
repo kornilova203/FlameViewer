@@ -4,11 +4,18 @@
  * Get section template for tree of particular thread
  * @param threadId Thread id
  * @param canvasHeight Height of canvas
+ * @param canvasWidth
+ * @param canvasOffset
  */
 {template .getSectionForThread}
 <section>
-<h2>{$threadId}</h2>
-<canvas id="canvas-{$threadId}" width="700" height="{$canvasHeight}"></canvas>
+    <h2>{$threadId}</h2>
+        <canvas
+            id="canvas-{$threadId}"
+            width="{$canvasWidth}"
+            height="{$canvasHeight}"
+            style="margin-left:{$canvasOffset}px">
+        </canvas>
 </section>
 {/template}
 

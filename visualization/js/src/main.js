@@ -1,8 +1,10 @@
-const TreeProto = require('./tree_pb');
-
 /**
  * Main function
  */
+const TreeProto = require('./tree_pb');
+
+const trees = [];
+
 $(window).on("load", function () {
     // const request = new XMLHttpRequest();
     // request.open("GET", "http://localhost:63343/flamegraph-profiler/trees/original-tree", true);
@@ -27,8 +29,30 @@ $(window).on("load", function () {
             reader.addEventListener("load", function () {
                 const arrayBuffer = reader.result;
                 const byteArray = new Uint8Array(arrayBuffer);
-                const tree = TreeProto.Tree.deserializeBinary(byteArray);
-                const drawer = new Drawer(tree);
+                trees.push(TreeProto.Tree.deserializeBinary(byteArray));
+                if (trees.length === 3) {
+                    let minStartTime = trees[0].getTreeInfo().getStartTime();
+                    let maxFinishTime = trees[0].getTreeInfo().getStartTime() + trees[0].getWidth();
+                    for (let i = 1; i < trees.length; i++) {
+                        const startTime = trees[i].getTreeInfo().getStartTime();
+                        if (startTime < minStartTime) {
+                            minStartTime = startTime;
+                        }
+                        if (startTime + trees[i].getWidth() > maxFinishTime) {
+                            maxFinishTime = startTime + trees[i].getWidth();
+                        }
+                    }
+                    for (let i = 0; i < trees.length; i++) {
+                        new Drawer(trees[i], minStartTime, maxFinishTime);
+                    }
+                }
+                // console.log(tree);
+                // console.log(TreeProto.Tree.prototype);
+                // console.log(TreeProto.Tree);
+                // const trees = jspb.Message.getRepeatedWrapperField(
+                //     TreeProto,
+                //     TreeProto.Tree);
+                // console.log(trees);
             });
         })(file);
     });

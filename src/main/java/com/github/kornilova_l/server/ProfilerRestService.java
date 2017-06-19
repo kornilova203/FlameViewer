@@ -12,10 +12,9 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.ide.RestService;
 import org.jetbrains.io.Responses;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Set;
 
 public class ProfilerRestService extends RestService {
 
@@ -52,8 +51,8 @@ public class ProfilerRestService extends RestService {
                 sendStatic(request, context, ServerNames.MAIN_NAME + "/index.html", "text/html");
                 break;
             case ServerNames.ORIGINAL_TREE:
-                TreeProtos.Tree tree = constructTimeTree();
-                sendTree(request, context, tree);
+                Set<TreeProtos.Tree> trees = constructTimeTrees();
+                sendTrees(request, context, trees);
                 break;
             default:
                 if (ServerNames.CSS_PATTERN.matcher(uri).matches()) {
@@ -69,22 +68,30 @@ public class ProfilerRestService extends RestService {
         return null;
     }
 
-    private void sendTree(FullHttpRequest request,
-                          ChannelHandlerContext context,
-                          TreeProtos.Tree tree) {
+    private static void sendTrees(FullHttpRequest request,
+                                  ChannelHandlerContext context,
+                                  Set<TreeProtos.Tree> trees) {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        for (TreeProtos.Tree tree : trees) {
+            try {
+                tree.writeDelimitedTo(outputStream);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         HttpResponse response = Responses.response(
                 "application/octet-stream",
-                Unpooled.wrappedBuffer(tree.toByteArray())
+                Unpooled.wrappedBuffer(outputStream.toByteArray())
         );
         Responses.addNoCache(response);
         Responses.send(response, context.channel(), request);
     }
 
-    private TreeProtos.Tree constructTimeTree() {
+    private static Set<TreeProtos.Tree> constructTimeTrees() {
         TreeConstructor treeConstructor = new TreeConstructor(
                 new File("/home/lk/java-profiling-plugin/out/events64.ser")
         );
-        return treeConstructor.constructOriginalTree();
+        return treeConstructor.constructOriginalTrees();
     }
 
     private void sendStatic(FullHttpRequest request,

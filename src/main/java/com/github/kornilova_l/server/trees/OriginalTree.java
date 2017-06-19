@@ -95,7 +95,6 @@ class OriginalTree {
                         .setIsStatic(event.getEnter().getIsStatic())
                         .addAllParameters(event.getEnter().getParametersList())
         );
-        System.out.println("tree start time: " + treeBuilder.getTreeInfo().getStartTime());
         long offset = event.getTime() - treeBuilder.getTreeInfo().getStartTime();
         nodeStack.addFirst(
                 TreeProtos.Tree.Node.newBuilder()
