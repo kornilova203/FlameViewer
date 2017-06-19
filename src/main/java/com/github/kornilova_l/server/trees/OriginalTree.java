@@ -6,14 +6,16 @@ import com.github.kornilova_l.protos.TreeProtos;
 import java.util.LinkedList;
 
 class OriginalTree {
-    private final LinkedList<TreeProtos.Tree.Call.Builder> callsStack = new LinkedList<>();
+    private final LinkedList<TreeProtos.Tree.Node.NodeInfo.Builder> nodeInfoStack = new LinkedList<>();
+    private final LinkedList<TreeProtos.Tree.Node.Builder> nodeStack = new LinkedList<>();
     private TreeProtos.Tree.Builder treeBuilder = TreeProtos.Tree.newBuilder();
+    private final TreeProtos.Tree.TreeInfo.Builder treeInfoBuilder = TreeProtos.Tree.TreeInfo.newBuilder();
     private TreeProtos.Tree tree = null;
     private int maxDepth = 0;
     private int currentDepth = 0;
 
     OriginalTree(long startTime, long threadId) {
-        treeBuilder.setThreadId(threadId)
+        treeInfoBuilder.setThreadId(threadId)
                 .setStartTime(startTime);
     }
 
@@ -22,55 +24,88 @@ class OriginalTree {
             throw new AssertionError("Tree was already built");
         }
         if (event.getInfoCase() == EventProtos.Event.InfoCase.ENTER) {
-            createNewCall(event);
+            pushNewNode(event);
         } else { // exit or exception
             finishCall(event);
         }
     }
 
     /*
-    pop callsStack
-    build this call
-    add it to calls of call which is on top of stack
+    pop nodeInfoStack
+    add result
+    pop nodeStack
+    set nodeInfo
+    set offset and width
+    build this node
+    add it to node which is on top of stack
      */
     private void finishCall(EventProtos.Event event) {
         currentDepth--;
-        TreeProtos.Tree.Call.Builder callBuilder = callsStack.removeFirst();
-        if (event.getInfoCase() == EventProtos.Event.InfoCase.EXIT) {
-            callBuilder.setExit(event.getExit());
-        } else {
-            callBuilder.setException(event.getException());
-        }
-        callBuilder.setDuration(
-                event.getTime() - callBuilder.getStartTime()
+        TreeProtos.Tree.Node.NodeInfo nodeInfo = buildNodeInfo(
+                nodeInfoStack.removeFirst(),
+                event
         );
-        if (!callsStack.isEmpty()) {
-            callsStack.getFirst().addCalls(
-                    callBuilder.build()
-            );
+        TreeProtos.Tree.Node node = buildNode(
+                nodeStack.removeFirst(),
+                nodeInfo,
+                event
+        );
+        if (!nodeStack.isEmpty()) {
+            nodeStack.getFirst().addNodes(node);
         } else {
-            treeBuilder.addCalls(callBuilder.build());
+            treeBuilder.addNodes(node);
         }
     }
 
+    private TreeProtos.Tree.Node buildNode(TreeProtos.Tree.Node.Builder nodeBuilder,
+                                           TreeProtos.Tree.Node.NodeInfo nodeInfo,
+                                           EventProtos.Event event) {
+        long width = event.getTime() - treeBuilder.getTreeInfo().getStartTime() - nodeBuilder.getOffset();
+        return nodeBuilder.setNodeInfo(nodeInfo)
+                .setWidth(width)
+                .build();
+    }
 
-    private void createNewCall(EventProtos.Event event) {
+    private static TreeProtos.Tree.Node.NodeInfo buildNodeInfo(TreeProtos.Tree.Node.NodeInfo.Builder nodeInfoBuilder,
+                                                               EventProtos.Event event) {
+        if (event.getInfoCase() == EventProtos.Event.InfoCase.EXIT) {
+            nodeInfoBuilder.setReturnValue(
+                    event.getExit().getReturnValue()
+            );
+        } else { // exception
+            nodeInfoBuilder.setException(
+                    event.getException()
+            );
+        }
+        return nodeInfoBuilder.build();
+    }
+
+
+    private void pushNewNode(EventProtos.Event event) {
         if (++currentDepth > maxDepth) {
             maxDepth = currentDepth;
         }
-        callsStack.addFirst(
-                TreeProtos.Tree.Call.newBuilder()
-                        .setEnter(event.getEnter())
-                        .setStartTime(event.getTime())
+        nodeInfoStack.addFirst(
+                TreeProtos.Tree.Node.NodeInfo.newBuilder()
+                        .setClassName(event.getEnter().getClassName())
+                        .setMethodName(event.getEnter().getMethodName())
+                        .setIsStatic(event.getEnter().getIsStatic())
+                        .addAllParameters(event.getEnter().getParametersList())
+        );
+        long offset = event.getTime() - treeBuilder.getTreeInfo().getStartTime();
+        nodeStack.addFirst(
+                TreeProtos.Tree.Node.newBuilder()
+                        .setOffset(offset)
         );
     }
 
     void buildTree() {
-        if (callsStack.isEmpty()) { // everything is okay
-            TreeProtos.Tree.Call lastFinishedCall = treeBuilder.getCalls(treeBuilder.getCallsCount() - 1);
-            long exitTimeOfLastFinishedCall = lastFinishedCall.getStartTime() + lastFinishedCall.getDuration();
-            treeBuilder.setDuration(
-                    exitTimeOfLastFinishedCall - treeBuilder.getStartTime()
+        if (nodeInfoStack.isEmpty()) { // everything is okay
+            TreeProtos.Tree.Node lastFinishedNode = treeBuilder.getNodes(treeBuilder.getNodesCount() - 1);
+            long treeWidth = lastFinishedNode.getOffset() + lastFinishedNode.getWidth();
+            treeBuilder.setTreeInfo(
+                    treeInfoBuilder.setDuration(treeWidth)
+                            .build()
             );
             treeBuilder.setDepth(maxDepth);
             tree = treeBuilder.build();
@@ -81,24 +116,30 @@ class OriginalTree {
     }
 
     /*
-    for all calls:
-    - pop call
-    - set duration
+    for all nodes:
+    - pop nodeInfo
+    - build
+    - pop node
+    - set nodeInfo
+    - set width
     - build and add it to calls of top of stack
     */
     private void finishAllCallsInStack() {
-        TreeProtos.Tree.Call lastFinishedCall = treeBuilder.getCalls(treeBuilder.getCallsCount() - 1);
-        long exitTimeOfLastFinishedCall = lastFinishedCall.getStartTime() + lastFinishedCall.getDuration();
+        TreeProtos.Tree.Node lastFinishedNode = treeBuilder.getNodes(treeBuilder.getNodesCount() - 1);
+        long treeWidth = lastFinishedNode.getOffset() + lastFinishedNode.getWidth();
 
-        while (!callsStack.isEmpty()) {
-            TreeProtos.Tree.Call.Builder callBuilder = callsStack.removeFirst();
-            callBuilder.setDuration(
-                    exitTimeOfLastFinishedCall - callBuilder.getStartTime()
-            );
-            if (!callsStack.isEmpty()) {
-                callsStack.getFirst().addCalls(callBuilder.build());
+        while (!nodeInfoStack.isEmpty()) {
+            TreeProtos.Tree.Node.Builder nodeBuilder = nodeStack.removeFirst();
+            TreeProtos.Tree.Node node = nodeBuilder
+                    .setNodeInfo(
+                            nodeInfoStack.removeFirst()
+                    )
+                    .setWidth(treeWidth - nodeBuilder.getOffset())
+                    .build();
+            if (!nodeStack.isEmpty()) {
+                nodeStack.getFirst().addNodes(node);
             } else {
-                treeBuilder.addCalls(callBuilder.build());
+                treeBuilder.addNodes(node);
             }
         }
     }
