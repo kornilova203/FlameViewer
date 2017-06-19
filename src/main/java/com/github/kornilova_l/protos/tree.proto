@@ -12,8 +12,8 @@ message Tree {
     uint32 depth = 3;
 
     message Node {
-        double offset = 1;
-        double width = 2;
+        int64 offset = 1; // how much time passed since start of tree
+        int64 width = 2; // how much time did node take
         NodeInfo node_info = 3;
         repeated Node nodes = 4;
 

@@ -159,14 +159,22 @@ public final class TreeProtos {
         com.google.protobuf.MessageOrBuilder {
 
       /**
-       * <code>double offset = 1;</code>
+       * <pre>
+       * how much time passed since start of tree
+       * </pre>
+       *
+       * <code>int64 offset = 1;</code>
        */
-      double getOffset();
+      long getOffset();
 
       /**
-       * <code>double width = 2;</code>
+       * <pre>
+       * how much time did node take
+       * </pre>
+       *
+       * <code>int64 width = 2;</code>
        */
-      double getWidth();
+      long getWidth();
 
       /**
        * <code>.com.github.kornilova_l.protos.Tree.Node.NodeInfo node_info = 3;</code>
@@ -217,8 +225,8 @@ public final class TreeProtos {
         super(builder);
       }
       private Node() {
-        offset_ = 0D;
-        width_ = 0D;
+        offset_ = 0L;
+        width_ = 0L;
         nodes_ = java.util.Collections.emptyList();
       }
 
@@ -247,14 +255,14 @@ public final class TreeProtos {
                 }
                 break;
               }
-              case 9: {
+              case 8: {
 
-                offset_ = input.readDouble();
+                offset_ = input.readInt64();
                 break;
               }
-              case 17: {
+              case 16: {
 
-                width_ = input.readDouble();
+                width_ = input.readInt64();
                 break;
               }
               case 26: {
@@ -1978,20 +1986,28 @@ public final class TreeProtos {
 
       private int bitField0_;
       public static final int OFFSET_FIELD_NUMBER = 1;
-      private double offset_;
+      private long offset_;
       /**
-       * <code>double offset = 1;</code>
+       * <pre>
+       * how much time passed since start of tree
+       * </pre>
+       *
+       * <code>int64 offset = 1;</code>
        */
-      public double getOffset() {
+      public long getOffset() {
         return offset_;
       }
 
       public static final int WIDTH_FIELD_NUMBER = 2;
-      private double width_;
+      private long width_;
       /**
-       * <code>double width = 2;</code>
+       * <pre>
+       * how much time did node take
+       * </pre>
+       *
+       * <code>int64 width = 2;</code>
        */
-      public double getWidth() {
+      public long getWidth() {
         return width_;
       }
 
@@ -2063,11 +2079,11 @@ public final class TreeProtos {
 
       public void writeTo(com.google.protobuf.CodedOutputStream output)
                           throws java.io.IOException {
-        if (offset_ != 0D) {
-          output.writeDouble(1, offset_);
+        if (offset_ != 0L) {
+          output.writeInt64(1, offset_);
         }
-        if (width_ != 0D) {
-          output.writeDouble(2, width_);
+        if (width_ != 0L) {
+          output.writeInt64(2, width_);
         }
         if (nodeInfo_ != null) {
           output.writeMessage(3, getNodeInfo());
@@ -2082,13 +2098,13 @@ public final class TreeProtos {
         if (size != -1) return size;
 
         size = 0;
-        if (offset_ != 0D) {
+        if (offset_ != 0L) {
           size += com.google.protobuf.CodedOutputStream
-            .computeDoubleSize(1, offset_);
+            .computeInt64Size(1, offset_);
         }
-        if (width_ != 0D) {
+        if (width_ != 0L) {
           size += com.google.protobuf.CodedOutputStream
-            .computeDoubleSize(2, width_);
+            .computeInt64Size(2, width_);
         }
         if (nodeInfo_ != null) {
           size += com.google.protobuf.CodedOutputStream
@@ -2114,14 +2130,10 @@ public final class TreeProtos {
         com.github.kornilova_l.protos.TreeProtos.Tree.Node other = (com.github.kornilova_l.protos.TreeProtos.Tree.Node) obj;
 
         boolean result = true;
-        result = result && (
-            java.lang.Double.doubleToLongBits(getOffset())
-            == java.lang.Double.doubleToLongBits(
-                other.getOffset()));
-        result = result && (
-            java.lang.Double.doubleToLongBits(getWidth())
-            == java.lang.Double.doubleToLongBits(
-                other.getWidth()));
+        result = result && (getOffset()
+            == other.getOffset());
+        result = result && (getWidth()
+            == other.getWidth());
         result = result && (hasNodeInfo() == other.hasNodeInfo());
         if (hasNodeInfo()) {
           result = result && getNodeInfo()
@@ -2141,10 +2153,10 @@ public final class TreeProtos {
         hash = (19 * hash) + getDescriptor().hashCode();
         hash = (37 * hash) + OFFSET_FIELD_NUMBER;
         hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-            java.lang.Double.doubleToLongBits(getOffset()));
+            getOffset());
         hash = (37 * hash) + WIDTH_FIELD_NUMBER;
         hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-            java.lang.Double.doubleToLongBits(getWidth()));
+            getWidth());
         if (hasNodeInfo()) {
           hash = (37 * hash) + NODE_INFO_FIELD_NUMBER;
           hash = (53 * hash) + getNodeInfo().hashCode();
@@ -2283,9 +2295,9 @@ public final class TreeProtos {
         }
         public Builder clear() {
           super.clear();
-          offset_ = 0D;
+          offset_ = 0L;
 
-          width_ = 0D;
+          width_ = 0L;
 
           if (nodeInfoBuilder_ == null) {
             nodeInfo_ = null;
@@ -2381,10 +2393,10 @@ public final class TreeProtos {
 
         public Builder mergeFrom(com.github.kornilova_l.protos.TreeProtos.Tree.Node other) {
           if (other == com.github.kornilova_l.protos.TreeProtos.Tree.Node.getDefaultInstance()) return this;
-          if (other.getOffset() != 0D) {
+          if (other.getOffset() != 0L) {
             setOffset(other.getOffset());
           }
-          if (other.getWidth() != 0D) {
+          if (other.getWidth() != 0L) {
             setWidth(other.getWidth());
           }
           if (other.hasNodeInfo()) {
@@ -2443,54 +2455,78 @@ public final class TreeProtos {
         }
         private int bitField0_;
 
-        private double offset_ ;
+        private long offset_ ;
         /**
-         * <code>double offset = 1;</code>
+         * <pre>
+         * how much time passed since start of tree
+         * </pre>
+         *
+         * <code>int64 offset = 1;</code>
          */
-        public double getOffset() {
+        public long getOffset() {
           return offset_;
         }
         /**
-         * <code>double offset = 1;</code>
+         * <pre>
+         * how much time passed since start of tree
+         * </pre>
+         *
+         * <code>int64 offset = 1;</code>
          */
-        public Builder setOffset(double value) {
+        public Builder setOffset(long value) {
           
           offset_ = value;
           onChanged();
           return this;
         }
         /**
-         * <code>double offset = 1;</code>
+         * <pre>
+         * how much time passed since start of tree
+         * </pre>
+         *
+         * <code>int64 offset = 1;</code>
          */
         public Builder clearOffset() {
           
-          offset_ = 0D;
+          offset_ = 0L;
           onChanged();
           return this;
         }
 
-        private double width_ ;
+        private long width_ ;
         /**
-         * <code>double width = 2;</code>
+         * <pre>
+         * how much time did node take
+         * </pre>
+         *
+         * <code>int64 width = 2;</code>
          */
-        public double getWidth() {
+        public long getWidth() {
           return width_;
         }
         /**
-         * <code>double width = 2;</code>
+         * <pre>
+         * how much time did node take
+         * </pre>
+         *
+         * <code>int64 width = 2;</code>
          */
-        public Builder setWidth(double value) {
+        public Builder setWidth(long value) {
           
           width_ = value;
           onChanged();
           return this;
         }
         /**
-         * <code>double width = 2;</code>
+         * <pre>
+         * how much time did node take
+         * </pre>
+         *
+         * <code>int64 width = 2;</code>
          */
         public Builder clearWidth() {
           
-          width_ = 0D;
+          width_ = 0L;
           onChanged();
           return this;
         }
@@ -4411,7 +4447,7 @@ public final class TreeProtos {
       "rnilova_l.protos.Tree.TreeInfo\0227\n\005nodes\030" +
       "\002 \003(\0132(.com.github.kornilova_l.protos.Tr" +
       "ee.Node\022\r\n\005depth\030\003 \001(\r\032\274\003\n\004Node\022\016\n\006offse" +
-      "t\030\001 \001(\001\022\r\n\005width\030\002 \001(\001\022D\n\tnode_info\030\003 \001(" +
+      "t\030\001 \001(\003\022\r\n\005width\030\002 \001(\003\022D\n\tnode_info\030\003 \001(" +
       "\01321.com.github.kornilova_l.protos.Tree.N" +
       "ode.NodeInfo\0227\n\005nodes\030\004 \003(\0132(.com.github",
       ".kornilova_l.protos.Tree.Node\032\225\002\n\010NodeIn" +
