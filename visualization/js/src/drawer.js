@@ -7,15 +7,15 @@ class Drawer {
     constructor(tree) {
         this.tree = tree;
         this.stage = null;
-        this.duration = this.tree.getDuration();
-        this.startTime = this.tree.getStarttime();
+        this.width = this.tree.getWidth();
         this.canvasSize = (LAYER_HEIGHT + LAYER_GAP) * this.tree.getDepth() + 70;
+        this.threadId = this.tree.getTreeInfo().getThreadId();
         this.section = this._createSection();
         this._drawTree();
     }
 
     _drawTree() {
-        this.stage = new createjs.Stage("canvas-" + this.tree.getThreadid());
+        this.stage = new createjs.Stage("canvas-" + this.threadId);
         this.stage.enableMouseOver(20);
 
         this._drawRecursively(this.tree, 0);
@@ -23,14 +23,14 @@ class Drawer {
         this.stage.update();
     };
 
-    _drawRecursively(call, depth) {
-        const childCalls = call.getCallsList();
-        if (childCalls.length === 0) {
+    _drawRecursively(node, depth) {
+        const childNodes = node.getNodesList();
+        if (childNodes.length === 0) {
             return;
         }
-        for (let i = 0; i < childCalls.length; i++) {
-            this._drawCall(childCalls[i], depth, i % 2);
-            this._drawRecursively(childCalls[i], depth + 1);
+        for (let i = 0; i < childNodes.length; i++) {
+            this._drawNode(childNodes[i], depth, i % 2);
+            this._drawRecursively(childNodes[i], depth + 1);
         }
     }
 
@@ -45,38 +45,39 @@ class Drawer {
     };
 
     _createSection() {
-        $("main").append(templates.tree.getSectionForThread(
+        const sectionContent = templates.tree.getSectionForThread(
             {
-                threadId: this.tree.getThreadid(),
+                threadId: this.threadId,
                 canvasHeight: this.canvasSize
             }
-        ).content);
-        return $("#section-" + this.tree.getThreadid());
+        ).content;
+        return $(sectionContent).appendTo($("main"));
     };
 
-    _drawCall(call, depth, colorId) {
+    _drawNode(node, depth, colorId) {
         const shape = new createjs.Shape();
         shape.graphics
             .beginFill(COLORS[colorId])
             .drawRect(0, 0, CANVAS_WIDTH, LAYER_HEIGHT);
-        const offsetX = ((call.getStarttime() - this.startTime) / this.duration) * CANVAS_WIDTH;
-        const scaleX = call.getDuration() / this.duration;
+        const offsetX = (node.getOffset() / this.width) * CANVAS_WIDTH;
+        const scaleX = node.getWidth() / this.width;
         shape.setTransform(offsetX, this._flipY(depth * 16), scaleX);
-        console.log(`draw: ${depth}\t${scaleX}\t${call.getEnter().getMethodname()}`);
-        this._createPopup(call, shape);
+        console.log(`draw: ${depth}\t${scaleX}\t${node.getNodeInfo().getMethodName()}`);
+        this._createPopup(node, shape);
         this.stage.addChild(shape);
     }
 
-    _createPopup(call, shape) {
+    _createPopup(node, shape) {
         const popupContent = templates.tree.popupInOriginalTree(
             {
-                methodName: call.getEnter().getMethodname(),
-                className: call.getEnter().getClassname(),
-                duration: call.getDuration(),
-                startTime: call.getStarttime()
+                methodName: node.getNodeInfo().getMethodName(),
+                className: node.getNodeInfo().getClassName(),
+                duration: node.getWidth(),
+                startTime: node.getOffset()
             }
         ).content;
         const popup = $(popupContent).appendTo(this.section);
+        console.log("popup:", popup);
         shape.addEventListener("mouseover", () => {
             popup.show();
         });
