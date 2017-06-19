@@ -1,4 +1,4 @@
-package com.github.kornilova_l.profiler;
+package com.github.kornilova_l.profiler.agent;
 
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
@@ -8,10 +8,6 @@ import java.io.*;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.security.ProtectionDomain;
-import java.util.ArrayList;
-import java.util.regex.Pattern;
-
-import static com.github.kornilova_l.profiler.Configuration.*;
 
 class ProfilingClassFileTransformer implements ClassFileTransformer {
 
@@ -20,15 +16,15 @@ class ProfilingClassFileTransformer implements ClassFileTransformer {
         readPatterns(new File(configFile));
     }
 
-    private void readPatterns(File configFile) {
+    private static void readPatterns(File configFile) {
         try (
                 InputStream inputStream = new FileInputStream(configFile);
                 BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))
         ) {
             String line = reader.readLine();
             while (line != null) {
-                addFullNamePattern(line);
-                addClassNamePattern(line);
+                Configuration.addFullNamePattern(line);
+                Configuration.addClassNamePattern(line);
                 line = reader.readLine();
             }
         } catch (IOException e) {
@@ -42,7 +38,7 @@ class ProfilingClassFileTransformer implements ClassFileTransformer {
                             Class<?> classBeingRedefined,
                             ProtectionDomain protectionDomain,
                             byte[] classfileBuffer) throws IllegalClassFormatException {
-        if (matchesAnyPattern(className, classNamePatterns)) {
+        if (Configuration.matchesAnyPattern(className, Configuration.classNamePatterns)) {
             ClassReader cr = new ClassReader(classfileBuffer);
             ClassWriter cw = new ClassWriter(cr, ClassWriter.COMPUTE_FRAMES);
             // uncomment for debugging

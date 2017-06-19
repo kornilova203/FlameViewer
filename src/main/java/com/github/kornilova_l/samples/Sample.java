@@ -1,13 +1,10 @@
 package com.github.kornilova_l.samples;
 
-import com.github.kornilova_l.profiler.ExitEventData;
-import com.github.kornilova_l.profiler.Logger;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.regex.Pattern;
 
-@SuppressWarnings({"UnnecessaryLocalVariable", "UnusedReturnValue", "SameParameterValue", "unchecked"})
+@SuppressWarnings({"UnnecessaryLocalVariable", "UnusedReturnValue", "SameParameterValue", "unchecked", "MethodMayBeStatic"})
 public class Sample {
     private HashSet<Integer> hashSet = new HashSet<>();
 

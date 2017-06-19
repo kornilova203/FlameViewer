@@ -38,7 +38,7 @@ mainClassName = 'com.github.kornilova_l.samples.Sample'
 
 task packAgent (type: Jar, dependsOn: classes) {
     manifest {
-        attributes "Premain-Class": "com.github.kornilova_l.profiler.Agent"
+        attributes "Premain-Class": "com.github.kornilova_l.profiler.agent.Agent"
     }
     archiveName = 'javaagent.jar'
     from sourceSets.main.output

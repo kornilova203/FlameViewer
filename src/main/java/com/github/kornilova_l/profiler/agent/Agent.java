@@ -1,14 +1,10 @@
-package com.github.kornilova_l.profiler;
+package com.github.kornilova_l.profiler.agent;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.lang.instrument.ClassFileTransformer;
-import java.lang.instrument.IllegalClassFormatException;
 import java.lang.instrument.Instrumentation;
-import java.security.ProtectionDomain;
 
-import org.objectweb.asm.*;
-import org.objectweb.asm.util.TraceClassVisitor;
+import com.github.kornilova_l.profiler.logger.Logger;
+import com.github.kornilova_l.profiler.logger.WaitingLoggingToFinish;
 
 public class Agent {
 

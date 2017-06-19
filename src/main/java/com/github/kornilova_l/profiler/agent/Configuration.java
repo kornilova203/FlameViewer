@@ -1,4 +1,4 @@
-package com.github.kornilova_l.profiler;
+package com.github.kornilova_l.profiler.agent;
 
 import java.util.ArrayList;
 import java.util.regex.Pattern;

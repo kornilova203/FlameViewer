@@ -1,4 +1,4 @@
-package com.github.kornilova_l.profiler;
+package com.github.kornilova_l.profiler.agent;
 
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
@@ -15,7 +15,7 @@ class ProfilingMethodVisitor extends AdviceAdapter {
     private final static Pattern allParamsPattern = Pattern.compile("(\\(.*\\))");
     private final static Pattern paramsPattern = Pattern.compile("(\\[?)(C|Z|S|I|J|F|D|B|(:?L[^;]+;))");
     private final static Pattern returnTypePattern = Pattern.compile("(?<=\\)).*"); // (?<=\)).*
-    private final static String PROFILER_PACKAGE_NAME = "com/github/kornilova_l/profiler/";
+    private final static String LOGGER_PACKAGE_NAME = "com/github/kornilova_l/profiler/logger/";
 
     ProfilingMethodVisitor(int access, String methodName, String desc,
                            MethodVisitor mv, String className) {
@@ -45,12 +45,12 @@ class ProfilingMethodVisitor extends AdviceAdapter {
     }
 
     private void initEnterEventData() {
-        mv.visitMethodInsn(INVOKESPECIAL, PROFILER_PACKAGE_NAME + "EnterEventData", "<init>",
+        mv.visitMethodInsn(INVOKESPECIAL, LOGGER_PACKAGE_NAME + "EnterEventData", "<init>",
                 "(JJLjava/lang/String;Ljava/lang/String;Z[Ljava/lang/Object;)V", false);
     }
 
     private void createEventData(String type) {
-        mv.visitTypeInsn(NEW, PROFILER_PACKAGE_NAME + type + "EventData");
+        mv.visitTypeInsn(NEW, LOGGER_PACKAGE_NAME + type + "EventData");
         mv.visitInsn(DUP);
     }
 
@@ -222,7 +222,7 @@ class ProfilingMethodVisitor extends AdviceAdapter {
     }
 
     private void getQueue() {
-        mv.visitFieldInsn(GETSTATIC, PROFILER_PACKAGE_NAME + "Logger", "queue",
+        mv.visitFieldInsn(GETSTATIC, LOGGER_PACKAGE_NAME + "Logger", "queue",
                 "Ljava/util/concurrent/LinkedBlockingDeque;");
     }
 
@@ -324,7 +324,7 @@ class ProfilingMethodVisitor extends AdviceAdapter {
     }
 
     private void initExitEventData() {
-        mv.visitMethodInsn(INVOKESPECIAL, PROFILER_PACKAGE_NAME + "ExitEventData", "<init>",
+        mv.visitMethodInsn(INVOKESPECIAL, LOGGER_PACKAGE_NAME + "ExitEventData", "<init>",
                 "(Ljava/lang/Object;JJ)V", false);
     }
 
@@ -356,7 +356,7 @@ class ProfilingMethodVisitor extends AdviceAdapter {
 
     }
 
-    private int getSizeOfRetVal(int opcode) {
+    private static int getSizeOfRetVal(int opcode) {
         if (opcode == LRETURN || // long
                 opcode == DRETURN) { // double
             return 2;

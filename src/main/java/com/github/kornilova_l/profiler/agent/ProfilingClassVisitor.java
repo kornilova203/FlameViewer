@@ -1,11 +1,8 @@
-package com.github.kornilova_l.profiler;
+package com.github.kornilova_l.profiler.agent;
 
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
-
-import static com.github.kornilova_l.profiler.Configuration.fullNamePatterns;
-import static com.github.kornilova_l.profiler.Configuration.matchesAnyPattern;
 
 class ProfilingClassVisitor extends ClassVisitor {
     private final String className;
@@ -21,9 +18,9 @@ class ProfilingClassVisitor extends ClassVisitor {
         if (mv != null &&
                 !methodName.equals("toString") &&
                 (access & Opcodes.ACC_SYNTHETIC) == 0 &&  // exclude synthetic methods
-                matchesAnyPattern(
+                Configuration.matchesAnyPattern(
                         className + "." + methodName,
-                        fullNamePatterns)) {
+                        Configuration.fullNamePatterns)) {
             return new ProfilingMethodVisitor(access, methodName, desc, mv, className);
         }
         return mv;

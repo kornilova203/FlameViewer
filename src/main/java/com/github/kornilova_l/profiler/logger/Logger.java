@@ -1,4 +1,4 @@
-package com.github.kornilova_l.profiler;
+package com.github.kornilova_l.profiler.logger;
 
 import com.github.kornilova_l.protos.EventProtos;
 
@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
  */
 public class Logger implements Runnable {
     public static final LinkedBlockingDeque<EventData> queue = new LinkedBlockingDeque<>();
-    public static final File outDir = new File("out");
+    private static final File outDir = new File("out");
     private static final File file = createOutFile();
     // stream is package-private because it will be closed by WaitingLoggingToFinish thread
     static final OutputStream outputStream;
@@ -30,7 +30,7 @@ public class Logger implements Runnable {
         createDirIfNotExist(outDir);
     }
 
-    public static int getLargestFileNum() {
+    private static int getLargestFileNum() {
         File[] files = outDir.listFiles();
         int max = 0;
         if (files != null) {
@@ -82,7 +82,7 @@ public class Logger implements Runnable {
         }
     }
 
-    private void logEvent(EventData eventData) {
+    private static void logEvent(EventData eventData) {
         isWriting = true;
         EventProtos.Event.Builder eventBuilder = EventProtos.Event.newBuilder()
                 .setTime(eventData.time)
@@ -100,7 +100,7 @@ public class Logger implements Runnable {
         isWriting = false;
     }
 
-    private EventProtos.Event.Exit formExitMessage(ExitEventData exitEventData) {
+    private static EventProtos.Event.Exit formExitMessage(ExitEventData exitEventData) {
         EventProtos.Event.Exit.Builder exitBuilder = EventProtos.Event.Exit.newBuilder();
         if (exitEventData.returnValue != null) {
             exitBuilder.setReturnValue(objectToVar(exitEventData.returnValue));
@@ -108,7 +108,7 @@ public class Logger implements Runnable {
         return exitBuilder.build();
     }
 
-    private EventProtos.Event.Enter formEnterMessage(EnterEventData enterEventData) {
+    private static EventProtos.Event.Enter formEnterMessage(EnterEventData enterEventData) {
         EventProtos.Event.Enter.Builder enterBuilder = EventProtos.Event.Enter.newBuilder()
                 .setMethodName(enterEventData.methodName)
                 .setClassName(enterEventData.className)
@@ -121,7 +121,7 @@ public class Logger implements Runnable {
         return enterBuilder.build();
     }
 
-    private void writeToFile(EventProtos.Event event) {
+    private static void writeToFile(EventProtos.Event event) {
         try {
             event.writeDelimitedTo(outputStream);
         } catch (IOException e) {
@@ -129,7 +129,7 @@ public class Logger implements Runnable {
         }
     }
 
-    private EventProtos.Event.Var objectToVar(Object o) {
+    private static EventProtos.Event.Var objectToVar(Object o) {
         EventProtos.Event.Var.Builder varBuilder = EventProtos.Event.Var.newBuilder();
         // TODO: https://stackoverflow.com/questions/29570767/switch-over-type-in-java
         if (o instanceof Integer) {

@@ -1,4 +1,4 @@
-package com.github.kornilova_l.profiler;
+package com.github.kornilova_l.profiler.logger;
 
 import java.io.IOException;
 
@@ -7,7 +7,7 @@ import java.io.IOException;
  * it waits for daemon Logger-thread to finish logging
  */
 public class WaitingLoggingToFinish extends Thread {
-    WaitingLoggingToFinish(String name) {
+    public WaitingLoggingToFinish(String name) {
         super(name);
     }
 
