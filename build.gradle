@@ -54,7 +54,7 @@ task copyStatic(type: Copy) {
 task profileClass(type: JavaExec, dependsOn: [build, packAgent]) {
     classpath = sourceSets.main.runtimeClasspath
     main = "com.github.kornilova_l.samples.Sample"
-    jvmArgs += ["-javaagent:${packAgent.getArchivePath()}"]
+    jvmArgs += ["-javaagent:${packAgent.getArchivePath()}=/home/lk/java-profiling-plugin/agent-config/agent01.config"]
 }
 
 jmh {
