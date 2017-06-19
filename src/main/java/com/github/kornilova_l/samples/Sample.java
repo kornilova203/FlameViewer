@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.regex.Pattern;
 
 @SuppressWarnings({"UnnecessaryLocalVariable", "UnusedReturnValue", "SameParameterValue", "unchecked", "MethodMayBeStatic"})
-public class Sample {
+public class Sample implements Runnable {
     private HashSet<Integer> hashSet = new HashSet<>();
 
     private static class TestClass {
@@ -24,7 +24,7 @@ public class Sample {
         }
     }
 
-    public void start() {
+    public void run() {
         TestClass tc = new TestClass();
         tc.doSmth();
         getsParameters(5, "hello", 12345678);
@@ -262,7 +262,9 @@ public class Sample {
 //    }
 
     public static void main(String[] args) throws InterruptedException {
-        Sample sample = new Sample();
-        sample.start();
+        Thread thread1 = new Thread(new Sample());
+        Thread thread2 = new Thread(new Sample());
+        thread1.start();
+        thread2.start();
     }
 }
