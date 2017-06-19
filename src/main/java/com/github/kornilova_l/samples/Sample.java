@@ -93,6 +93,11 @@ public class Sample implements Runnable {
 //    }
 
     private static long returnJ() {
+        try {
+            Thread.sleep(5);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 //        Logger.queue.add(
 //                new EnterEventData(
 //                        Thread.currentThread().getId(),
@@ -116,12 +121,22 @@ public class Sample implements Runnable {
     }
 
     private static float returnF() {
+        try {
+            Thread.sleep(5);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         //noinspection UnnecessaryLocalVariable
         float a = (float) 12345.45;
         return a;
     }
 
     private static double returnD() {
+        try {
+            Thread.sleep(5);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 //        getArrayOfObj(new Object[]{"aaa", "bbb", 23});
         double a = 12345.45;
         return a;
@@ -133,6 +148,11 @@ public class Sample implements Runnable {
 
     @SuppressWarnings("unused")
     private static Pattern[] getsParameters(int a, String s, long l) {
+        try {
+            Thread.sleep(5);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         long threadId = Thread.currentThread().getId();
         int b = 23;
         Pattern[] patterns = new Pattern[10];
@@ -142,7 +162,11 @@ public class Sample implements Runnable {
     }
 
     private void instanceGetsI(int i) {
-
+        try {
+            Thread.sleep(5);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @SuppressWarnings("unused")
@@ -168,7 +192,11 @@ public class Sample implements Runnable {
 //                        bt,
 //                        f
 //                }));
-
+        try {
+            Thread.sleep(5);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         int[] retArr = new int[20];
 
 //        Logger.queue.add(new ExitEventData(
@@ -180,10 +208,20 @@ public class Sample implements Runnable {
     }
 
     private boolean returnsFalse() {
+        try {
+            Thread.sleep(5);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         return false;
     }
 
     private static void doTryCatch() {
+        try {
+            Thread.sleep(5);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         try {
             Blackhole.consume(1);
         } catch (Exception ignored) {
@@ -192,6 +230,11 @@ public class Sample implements Runnable {
     }
 
     private static ArrayList<Integer> returnsArrayList() {
+        try {
+            Thread.sleep(5);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         ArrayList<Integer> arrayList = new ArrayList<>();
         arrayList.add(23);
         arrayList.add(123);
@@ -199,6 +242,11 @@ public class Sample implements Runnable {
     }
 
     private static ArrayList<String> returnsArrayListOfStrings() {
+        try {
+            Thread.sleep(5);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         ArrayList<String> arrayList = new ArrayList<>();
         arrayList.add("hello, ");
         arrayList.add("world!");
@@ -206,6 +254,11 @@ public class Sample implements Runnable {
     }
 
     private static HashSet<Pattern>[] returnsArrayOfHashSets() {
+        try {
+            Thread.sleep(5);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         HashSet<Pattern>[] hashSets = new HashSet[7];
         hashSets[0] = new HashSet<>();
         hashSets[0].add(Pattern.compile("1.*"));
@@ -215,6 +268,11 @@ public class Sample implements Runnable {
     }
 
     private static HashSet<String[]> returnsHashSetOfArraysOfStrings() {
+        try {
+            Thread.sleep(5);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         HashSet<String[]> hashSet = new HashSet<>();
         hashSet.add(new String[]{"hello", "how", "are", "you?"});
         hashSet.add(new String[]{"another", "array", "of", "strings"});
@@ -223,13 +281,28 @@ public class Sample implements Runnable {
 
     @SuppressWarnings("unused")
     private static void getsHashSetOfArraysOfStrings(HashSet<String[]> strings, int a) {
+        try {
+            Thread.sleep(5);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     private static void getInt(int a) {
+        try {
+            Thread.sleep(5);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
     }
 
     private static String[][] returns2DArrayOfStrings() {
+        try {
+            Thread.sleep(5);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         String[][] strings = new String[5][2];
         strings[0][0] = "hello";
         strings[0][1] = "world";
@@ -237,6 +310,11 @@ public class Sample implements Runnable {
     }
 
     private void doCondition() {
+        try {
+            Thread.sleep(5);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         int i = 1;
         String string1 = "hello1";
         if (hashSet.isEmpty()) {
@@ -252,6 +330,11 @@ public class Sample implements Runnable {
     }
 
     private void doComplicatedTask() {
+        try {
+            Thread.sleep(5);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         for (int i = 0; i < 10000; i++) {
             hashSet.add(i * 2);
         }
@@ -265,6 +348,7 @@ public class Sample implements Runnable {
         Thread thread1 = new Thread(new Sample());
         Thread thread2 = new Thread(new Sample());
         thread1.start();
+        Thread.sleep(25);
         thread2.start();
     }
 }
