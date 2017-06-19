@@ -11,8 +11,7 @@ public class EnterEventData extends EventData {
                    String methodName,
                    boolean isStatic,
                    Object[] parameters) {
-        this.threadId = threadId;
-        this.time = startTime;
+        super(startTime, threadId);
         this.className = className;
         this.methodName = methodName;
         this.isStatic = isStatic;

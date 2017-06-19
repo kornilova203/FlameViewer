@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
  */
 public class Logger implements Runnable {
     public static final LinkedBlockingDeque<EventData> queue = new LinkedBlockingDeque<>();
-    private static final File outDir = new File("out");
+    private static final File outDir = new File("/home/lk/java-profiling-plugin/out");
     private static final File file = createOutFile();
     // stream is package-private because it will be closed by WaitingLoggingToFinish thread
     static final OutputStream outputStream;

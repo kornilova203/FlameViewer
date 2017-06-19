@@ -21,18 +21,26 @@ buildscript {
     }
     dependencies {
         classpath "gradle.plugin.org.jetbrains:gradle-intellij-plugin:0.1.10"
+        classpath 'eu.appsatori:gradle-fatjar-plugin:0.3'
     }
 }
 
+configurations {
+    // configuration that holds jars to include in the jar
+    agentLibs
+}
+
 dependencies {
-    compile "org.ow2.asm:asm:5.2"
-    compile "org.ow2.asm:asm-util:5.2" // TraceClassVisitor (for debugging)
-    compile group: 'org.ow2.asm', name: 'asm-commons', version: '5.0.3' // AdviceAdapter
-    compile group: 'com.google.protobuf', name: 'protobuf-java', version: '3.3.1'
+    agentLibs "org.ow2.asm:asm:5.2"
+    agentLibs "org.ow2.asm:asm-util:5.2" // TraceClassVisitor (for debugging)
+    agentLibs group: 'org.ow2.asm', name: 'asm-commons', version: '5.0.3' // AdviceAdapter
+    agentLibs group: 'com.google.protobuf', name: 'protobuf-java', version: '3.3.1'
+    configurations.compile.extendsFrom(configurations.agentLibs)
 }
 
 apply plugin: "me.champeau.gradle.jmh"
 apply plugin: 'org.jetbrains.intellij'
+apply plugin: 'eu.appsatori.fatjar'
 
 mainClassName = 'com.github.kornilova_l.samples.Sample'
 
@@ -42,7 +50,29 @@ task packAgent (type: Jar, dependsOn: classes) {
     }
     archiveName = 'javaagent.jar'
     from sourceSets.main.output
-    include '**/profiler/*'
+    include '**/profiler/**'
+    includeEmptyDirs = false
+}
+
+jar {
+    from {
+        configurations.agentLibs.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    manifest {
+        attributes "Premain-Class": "com.github.kornilova_l.profiler.agent.Agent"
+    }
+    archiveName = 'javaagent.jar'
+}
+
+fatJar {
+    manifest {
+        attributes "Premain-Class": "com.github.kornilova_l.profiler.agent.Agent"
+    }
+    archiveName = 'fatjavaagent.jar'
+    include '**/kornilova_l/profiler/**'
+    include '**/kornilova_l/protos/**'
+    include '**/org/objectweb/asm/**'
+    include '**/com/google/protobuf/**'
     includeEmptyDirs = false
 }
 
@@ -54,6 +84,7 @@ task copyStatic(type: Copy) {
 task profileClass(type: JavaExec, dependsOn: [build, packAgent]) {
     classpath = sourceSets.main.runtimeClasspath
     main = "com.github.kornilova_l.samples.Sample"
+    print "${packAgent.getArchivePath()}"
     jvmArgs += ["-javaagent:${packAgent.getArchivePath()}=/home/lk/java-profiling-plugin/agent-config/agent01.config"]
 }
 

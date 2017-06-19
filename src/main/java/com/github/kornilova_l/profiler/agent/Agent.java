@@ -9,6 +9,7 @@ import com.github.kornilova_l.profiler.logger.WaitingLoggingToFinish;
 public class Agent {
 
     public static void premain(String configFile, Instrumentation inst) throws IOException {
+        System.out.println("I am an agent!");
         Thread logger = new Thread(new Logger(), "logging thread");
         logger.setDaemon(true);
         logger.start();

@@ -23,6 +23,7 @@ class ProfilingClassFileTransformer implements ClassFileTransformer {
         ) {
             String line = reader.readLine();
             while (line != null) {
+                System.out.println("Config: " + line);
                 Configuration.addFullNamePattern(line);
                 Configuration.addClassNamePattern(line);
                 line = reader.readLine();
@@ -38,7 +39,9 @@ class ProfilingClassFileTransformer implements ClassFileTransformer {
                             Class<?> classBeingRedefined,
                             ProtectionDomain protectionDomain,
                             byte[] classfileBuffer) throws IllegalClassFormatException {
-        if (Configuration.matchesAnyPattern(className, Configuration.classNamePatterns)) {
+        System.out.println(className);
+        if (!className.startsWith("java") &&
+                Configuration.matchesAnyPattern(className, Configuration.classNamePatterns)) {
             ClassReader cr = new ClassReader(classfileBuffer);
             ClassWriter cw = new ClassWriter(cr, ClassWriter.COMPUTE_FRAMES);
             // uncomment for debugging
