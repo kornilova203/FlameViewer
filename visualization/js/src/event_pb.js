@@ -88,7 +88,7 @@ proto.com.github.kornilova_l.protos.Event.prototype.toObject = function(opt_incl
  */
 proto.com.github.kornilova_l.protos.Event.toObject = function(includeInstance, msg) {
   var f, obj = {
-    threadid: jspb.Message.getFieldWithDefault(msg, 1, 0),
+    threadId: jspb.Message.getFieldWithDefault(msg, 1, 0),
     time: jspb.Message.getFieldWithDefault(msg, 2, 0),
     enter: (f = msg.getEnter()) && proto.com.github.kornilova_l.protos.Event.Enter.toObject(includeInstance, f),
     exit: (f = msg.getExit()) && proto.com.github.kornilova_l.protos.Event.Exit.toObject(includeInstance, f),
@@ -131,7 +131,7 @@ proto.com.github.kornilova_l.protos.Event.deserializeBinaryFromReader = function
     switch (field) {
     case 1:
       var value = /** @type {number} */ (reader.readInt64());
-      msg.setThreadid(value);
+      msg.setThreadId(value);
       break;
     case 2:
       var value = /** @type {number} */ (reader.readInt64());
@@ -180,7 +180,7 @@ proto.com.github.kornilova_l.protos.Event.prototype.serializeBinary = function()
  */
 proto.com.github.kornilova_l.protos.Event.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getThreadid();
+  f = message.getThreadId();
   if (f !== 0) {
     writer.writeInt64(
       1,
@@ -274,9 +274,9 @@ proto.com.github.kornilova_l.protos.Event.Enter.prototype.toObject = function(op
  */
 proto.com.github.kornilova_l.protos.Event.Enter.toObject = function(includeInstance, msg) {
   var f, obj = {
-    classname: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    methodname: jspb.Message.getFieldWithDefault(msg, 2, ""),
-    isstatic: jspb.Message.getFieldWithDefault(msg, 3, false),
+    className: jspb.Message.getFieldWithDefault(msg, 1, ""),
+    methodName: jspb.Message.getFieldWithDefault(msg, 2, ""),
+    isStatic: jspb.Message.getFieldWithDefault(msg, 3, false),
     parametersList: jspb.Message.toObjectList(msg.getParametersList(),
     proto.com.github.kornilova_l.protos.Event.Var.toObject, includeInstance)
   };
@@ -317,15 +317,15 @@ proto.com.github.kornilova_l.protos.Event.Enter.deserializeBinaryFromReader = fu
     switch (field) {
     case 1:
       var value = /** @type {string} */ (reader.readString());
-      msg.setClassname(value);
+      msg.setClassName(value);
       break;
     case 2:
       var value = /** @type {string} */ (reader.readString());
-      msg.setMethodname(value);
+      msg.setMethodName(value);
       break;
     case 3:
       var value = /** @type {boolean} */ (reader.readBool());
-      msg.setIsstatic(value);
+      msg.setIsStatic(value);
       break;
     case 4:
       var value = new proto.com.github.kornilova_l.protos.Event.Var;
@@ -360,21 +360,21 @@ proto.com.github.kornilova_l.protos.Event.Enter.prototype.serializeBinary = func
  */
 proto.com.github.kornilova_l.protos.Event.Enter.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getClassname();
+  f = message.getClassName();
   if (f.length > 0) {
     writer.writeString(
       1,
       f
     );
   }
-  f = message.getMethodname();
+  f = message.getMethodName();
   if (f.length > 0) {
     writer.writeString(
       2,
       f
     );
   }
-  f = message.getIsstatic();
+  f = message.getIsStatic();
   if (f) {
     writer.writeBool(
       3,
@@ -393,48 +393,48 @@ proto.com.github.kornilova_l.protos.Event.Enter.serializeBinaryToWriter = functi
 
 
 /**
- * optional string className = 1;
+ * optional string class_name = 1;
  * @return {string}
  */
-proto.com.github.kornilova_l.protos.Event.Enter.prototype.getClassname = function() {
+proto.com.github.kornilova_l.protos.Event.Enter.prototype.getClassName = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
 };
 
 
 /** @param {string} value */
-proto.com.github.kornilova_l.protos.Event.Enter.prototype.setClassname = function(value) {
+proto.com.github.kornilova_l.protos.Event.Enter.prototype.setClassName = function(value) {
   jspb.Message.setField(this, 1, value);
 };
 
 
 /**
- * optional string methodName = 2;
+ * optional string method_name = 2;
  * @return {string}
  */
-proto.com.github.kornilova_l.protos.Event.Enter.prototype.getMethodname = function() {
+proto.com.github.kornilova_l.protos.Event.Enter.prototype.getMethodName = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
 };
 
 
 /** @param {string} value */
-proto.com.github.kornilova_l.protos.Event.Enter.prototype.setMethodname = function(value) {
+proto.com.github.kornilova_l.protos.Event.Enter.prototype.setMethodName = function(value) {
   jspb.Message.setField(this, 2, value);
 };
 
 
 /**
- * optional bool isStatic = 3;
+ * optional bool is_static = 3;
  * Note that Boolean fields may be set to 0/1 when serialized from a Java server.
  * You should avoid comparisons like {@code val === true/false} in those cases.
  * @return {boolean}
  */
-proto.com.github.kornilova_l.protos.Event.Enter.prototype.getIsstatic = function() {
+proto.com.github.kornilova_l.protos.Event.Enter.prototype.getIsStatic = function() {
   return /** @type {boolean} */ (jspb.Message.getFieldWithDefault(this, 3, false));
 };
 
 
 /** @param {boolean} value */
-proto.com.github.kornilova_l.protos.Event.Enter.prototype.setIsstatic = function(value) {
+proto.com.github.kornilova_l.protos.Event.Enter.prototype.setIsStatic = function(value) {
   jspb.Message.setField(this, 3, value);
 };
 
@@ -518,7 +518,7 @@ proto.com.github.kornilova_l.protos.Event.Exit.prototype.toObject = function(opt
  */
 proto.com.github.kornilova_l.protos.Event.Exit.toObject = function(includeInstance, msg) {
   var f, obj = {
-    returnvalue: (f = msg.getReturnvalue()) && proto.com.github.kornilova_l.protos.Event.Var.toObject(includeInstance, f)
+    returnValue: (f = msg.getReturnValue()) && proto.com.github.kornilova_l.protos.Event.Var.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -558,7 +558,7 @@ proto.com.github.kornilova_l.protos.Event.Exit.deserializeBinaryFromReader = fun
     case 1:
       var value = new proto.com.github.kornilova_l.protos.Event.Var;
       reader.readMessage(value,proto.com.github.kornilova_l.protos.Event.Var.deserializeBinaryFromReader);
-      msg.setReturnvalue(value);
+      msg.setReturnValue(value);
       break;
     default:
       reader.skipField();
@@ -588,7 +588,7 @@ proto.com.github.kornilova_l.protos.Event.Exit.prototype.serializeBinary = funct
  */
 proto.com.github.kornilova_l.protos.Event.Exit.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getReturnvalue();
+  f = message.getReturnValue();
   if (f != null) {
     writer.writeMessage(
       1,
@@ -600,23 +600,23 @@ proto.com.github.kornilova_l.protos.Event.Exit.serializeBinaryToWriter = functio
 
 
 /**
- * optional Var returnValue = 1;
+ * optional Var return_value = 1;
  * @return {?proto.com.github.kornilova_l.protos.Event.Var}
  */
-proto.com.github.kornilova_l.protos.Event.Exit.prototype.getReturnvalue = function() {
+proto.com.github.kornilova_l.protos.Event.Exit.prototype.getReturnValue = function() {
   return /** @type{?proto.com.github.kornilova_l.protos.Event.Var} */ (
     jspb.Message.getWrapperField(this, proto.com.github.kornilova_l.protos.Event.Var, 1));
 };
 
 
 /** @param {?proto.com.github.kornilova_l.protos.Event.Var|undefined} value */
-proto.com.github.kornilova_l.protos.Event.Exit.prototype.setReturnvalue = function(value) {
+proto.com.github.kornilova_l.protos.Event.Exit.prototype.setReturnValue = function(value) {
   jspb.Message.setWrapperField(this, 1, value);
 };
 
 
-proto.com.github.kornilova_l.protos.Event.Exit.prototype.clearReturnvalue = function() {
-  this.setReturnvalue(undefined);
+proto.com.github.kornilova_l.protos.Event.Exit.prototype.clearReturnValue = function() {
+  this.setReturnValue(undefined);
 };
 
 
@@ -624,7 +624,7 @@ proto.com.github.kornilova_l.protos.Event.Exit.prototype.clearReturnvalue = func
  * Returns whether this field is set.
  * @return {!boolean}
  */
-proto.com.github.kornilova_l.protos.Event.Exit.prototype.hasReturnvalue = function() {
+proto.com.github.kornilova_l.protos.Event.Exit.prototype.hasReturnValue = function() {
   return jspb.Message.getField(this, 1) != null;
 };
 
@@ -1474,16 +1474,16 @@ proto.com.github.kornilova_l.protos.Event.Object.prototype.setValue = function(v
 
 
 /**
- * optional int64 threadId = 1;
+ * optional int64 thread_id = 1;
  * @return {number}
  */
-proto.com.github.kornilova_l.protos.Event.prototype.getThreadid = function() {
+proto.com.github.kornilova_l.protos.Event.prototype.getThreadId = function() {
   return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
 };
 
 
 /** @param {number} value */
-proto.com.github.kornilova_l.protos.Event.prototype.setThreadid = function(value) {
+proto.com.github.kornilova_l.protos.Event.prototype.setThreadId = function(value) {
   jspb.Message.setField(this, 1, value);
 };
 
