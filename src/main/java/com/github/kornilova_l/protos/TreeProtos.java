@@ -19,54 +19,44 @@ public final class TreeProtos {
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <code>int64 duration = 1;</code>
+     * <code>.com.github.kornilova_l.protos.Tree.TreeInfo tree_info = 1;</code>
      */
-    long getDuration();
+    boolean hasTreeInfo();
+    /**
+     * <code>.com.github.kornilova_l.protos.Tree.TreeInfo tree_info = 1;</code>
+     */
+    com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo getTreeInfo();
+    /**
+     * <code>.com.github.kornilova_l.protos.Tree.TreeInfo tree_info = 1;</code>
+     */
+    com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfoOrBuilder getTreeInfoOrBuilder();
 
     /**
-     * <pre>
-     * only for trees which save original call structure
-     * </pre>
-     *
-     * <code>int64 startTime = 2;</code>
+     * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 2;</code>
      */
-    long getStartTime();
-
+    java.util.List<com.github.kornilova_l.protos.TreeProtos.Tree.Node> 
+        getNodesList();
     /**
-     * <pre>
-     * only for trees which save original call structure
-     * </pre>
-     *
-     * <code>int64 threadId = 3;</code>
+     * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 2;</code>
      */
-    long getThreadId();
-
+    com.github.kornilova_l.protos.TreeProtos.Tree.Node getNodes(int index);
     /**
-     * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 4;</code>
+     * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 2;</code>
      */
-    java.util.List<com.github.kornilova_l.protos.TreeProtos.Tree.Call> 
-        getCallsList();
+    int getNodesCount();
     /**
-     * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 4;</code>
+     * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 2;</code>
      */
-    com.github.kornilova_l.protos.TreeProtos.Tree.Call getCalls(int index);
+    java.util.List<? extends com.github.kornilova_l.protos.TreeProtos.Tree.NodeOrBuilder> 
+        getNodesOrBuilderList();
     /**
-     * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 4;</code>
+     * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 2;</code>
      */
-    int getCallsCount();
-    /**
-     * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 4;</code>
-     */
-    java.util.List<? extends com.github.kornilova_l.protos.TreeProtos.Tree.CallOrBuilder> 
-        getCallsOrBuilderList();
-    /**
-     * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 4;</code>
-     */
-    com.github.kornilova_l.protos.TreeProtos.Tree.CallOrBuilder getCallsOrBuilder(
+    com.github.kornilova_l.protos.TreeProtos.Tree.NodeOrBuilder getNodesOrBuilder(
         int index);
 
     /**
-     * <code>uint32 depth = 5;</code>
+     * <code>uint32 depth = 3;</code>
      */
     int getDepth();
   }
@@ -82,10 +72,7 @@ public final class TreeProtos {
       super(builder);
     }
     private Tree() {
-      duration_ = 0L;
-      startTime_ = 0L;
-      threadId_ = 0L;
-      calls_ = java.util.Collections.emptyList();
+      nodes_ = java.util.Collections.emptyList();
       depth_ = 0;
     }
 
@@ -114,31 +101,29 @@ public final class TreeProtos {
               }
               break;
             }
-            case 8: {
+            case 10: {
+              com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo.Builder subBuilder = null;
+              if (treeInfo_ != null) {
+                subBuilder = treeInfo_.toBuilder();
+              }
+              treeInfo_ = input.readMessage(com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo.parser(), extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(treeInfo_);
+                treeInfo_ = subBuilder.buildPartial();
+              }
 
-              duration_ = input.readInt64();
               break;
             }
-            case 16: {
-
-              startTime_ = input.readInt64();
+            case 18: {
+              if (!((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
+                nodes_ = new java.util.ArrayList<com.github.kornilova_l.protos.TreeProtos.Tree.Node>();
+                mutable_bitField0_ |= 0x00000002;
+              }
+              nodes_.add(
+                  input.readMessage(com.github.kornilova_l.protos.TreeProtos.Tree.Node.parser(), extensionRegistry));
               break;
             }
             case 24: {
-
-              threadId_ = input.readInt64();
-              break;
-            }
-            case 34: {
-              if (!((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
-                calls_ = new java.util.ArrayList<com.github.kornilova_l.protos.TreeProtos.Tree.Call>();
-                mutable_bitField0_ |= 0x00000008;
-              }
-              calls_.add(
-                  input.readMessage(com.github.kornilova_l.protos.TreeProtos.Tree.Call.parser(), extensionRegistry));
-              break;
-            }
-            case 40: {
 
               depth_ = input.readUInt32();
               break;
@@ -151,8 +136,8 @@ public final class TreeProtos {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
-        if (((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
-          calls_ = java.util.Collections.unmodifiableList(calls_);
+        if (((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
+          nodes_ = java.util.Collections.unmodifiableList(nodes_);
         }
         makeExtensionsImmutable();
       }
@@ -169,96 +154,72 @@ public final class TreeProtos {
               com.github.kornilova_l.protos.TreeProtos.Tree.class, com.github.kornilova_l.protos.TreeProtos.Tree.Builder.class);
     }
 
-    public interface CallOrBuilder extends
-        // @@protoc_insertion_point(interface_extends:com.github.kornilova_l.protos.Tree.Call)
+    public interface NodeOrBuilder extends
+        // @@protoc_insertion_point(interface_extends:com.github.kornilova_l.protos.Tree.Node)
         com.google.protobuf.MessageOrBuilder {
 
       /**
-       * <code>int64 duration = 1;</code>
+       * <code>double offset = 1;</code>
        */
-      long getDuration();
+      double getOffset();
 
       /**
-       * <code>.com.github.kornilova_l.protos.Event.Enter enter = 2;</code>
+       * <code>double width = 2;</code>
        */
-      boolean hasEnter();
-      /**
-       * <code>.com.github.kornilova_l.protos.Event.Enter enter = 2;</code>
-       */
-      com.github.kornilova_l.protos.EventProtos.Event.Enter getEnter();
-      /**
-       * <code>.com.github.kornilova_l.protos.Event.Enter enter = 2;</code>
-       */
-      com.github.kornilova_l.protos.EventProtos.Event.EnterOrBuilder getEnterOrBuilder();
+      double getWidth();
 
       /**
-       * <code>.com.github.kornilova_l.protos.Event.Exit exit = 3;</code>
+       * <code>.com.github.kornilova_l.protos.Tree.Node.NodeInfo node_info = 3;</code>
        */
-      com.github.kornilova_l.protos.EventProtos.Event.Exit getExit();
+      boolean hasNodeInfo();
       /**
-       * <code>.com.github.kornilova_l.protos.Event.Exit exit = 3;</code>
+       * <code>.com.github.kornilova_l.protos.Tree.Node.NodeInfo node_info = 3;</code>
        */
-      com.github.kornilova_l.protos.EventProtos.Event.ExitOrBuilder getExitOrBuilder();
+      com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfo getNodeInfo();
+      /**
+       * <code>.com.github.kornilova_l.protos.Tree.Node.NodeInfo node_info = 3;</code>
+       */
+      com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfoOrBuilder getNodeInfoOrBuilder();
 
       /**
-       * <code>.com.github.kornilova_l.protos.Event.Exception exception = 4;</code>
+       * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 4;</code>
        */
-      com.github.kornilova_l.protos.EventProtos.Event.Exception getException();
+      java.util.List<com.github.kornilova_l.protos.TreeProtos.Tree.Node> 
+          getNodesList();
       /**
-       * <code>.com.github.kornilova_l.protos.Event.Exception exception = 4;</code>
+       * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 4;</code>
        */
-      com.github.kornilova_l.protos.EventProtos.Event.ExceptionOrBuilder getExceptionOrBuilder();
-
+      com.github.kornilova_l.protos.TreeProtos.Tree.Node getNodes(int index);
       /**
-       * <pre>
-       * only for trees which save original call structure
-       * </pre>
-       *
-       * <code>int64 startTime = 5;</code>
+       * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 4;</code>
        */
-      long getStartTime();
-
+      int getNodesCount();
       /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 6;</code>
+       * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 4;</code>
        */
-      java.util.List<com.github.kornilova_l.protos.TreeProtos.Tree.Call> 
-          getCallsList();
+      java.util.List<? extends com.github.kornilova_l.protos.TreeProtos.Tree.NodeOrBuilder> 
+          getNodesOrBuilderList();
       /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 6;</code>
+       * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 4;</code>
        */
-      com.github.kornilova_l.protos.TreeProtos.Tree.Call getCalls(int index);
-      /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 6;</code>
-       */
-      int getCallsCount();
-      /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 6;</code>
-       */
-      java.util.List<? extends com.github.kornilova_l.protos.TreeProtos.Tree.CallOrBuilder> 
-          getCallsOrBuilderList();
-      /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 6;</code>
-       */
-      com.github.kornilova_l.protos.TreeProtos.Tree.CallOrBuilder getCallsOrBuilder(
+      com.github.kornilova_l.protos.TreeProtos.Tree.NodeOrBuilder getNodesOrBuilder(
           int index);
-
-      public com.github.kornilova_l.protos.TreeProtos.Tree.Call.ExitInfoCase getExitInfoCase();
     }
     /**
-     * Protobuf type {@code com.github.kornilova_l.protos.Tree.Call}
+     * Protobuf type {@code com.github.kornilova_l.protos.Tree.Node}
      */
-    public  static final class Call extends
+    public  static final class Node extends
         com.google.protobuf.GeneratedMessageV3 implements
-        // @@protoc_insertion_point(message_implements:com.github.kornilova_l.protos.Tree.Call)
-        CallOrBuilder {
-      // Use Call.newBuilder() to construct.
-      private Call(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+        // @@protoc_insertion_point(message_implements:com.github.kornilova_l.protos.Tree.Node)
+        NodeOrBuilder {
+      // Use Node.newBuilder() to construct.
+      private Node(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
         super(builder);
       }
-      private Call() {
-        duration_ = 0L;
-        startTime_ = 0L;
-        calls_ = java.util.Collections.emptyList();
+      private Node() {
+        offset_ = 0D;
+        width_ = 0D;
+        nodes_ = java.util.Collections.emptyList();
       }
 
       @java.lang.Override
@@ -266,7 +227,7 @@ public final class TreeProtos {
       getUnknownFields() {
         return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
       }
-      private Call(
+      private Node(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
@@ -286,64 +247,36 @@ public final class TreeProtos {
                 }
                 break;
               }
-              case 8: {
+              case 9: {
 
-                duration_ = input.readInt64();
+                offset_ = input.readDouble();
                 break;
               }
-              case 18: {
-                com.github.kornilova_l.protos.EventProtos.Event.Enter.Builder subBuilder = null;
-                if (enter_ != null) {
-                  subBuilder = enter_.toBuilder();
-                }
-                enter_ = input.readMessage(com.github.kornilova_l.protos.EventProtos.Event.Enter.parser(), extensionRegistry);
-                if (subBuilder != null) {
-                  subBuilder.mergeFrom(enter_);
-                  enter_ = subBuilder.buildPartial();
-                }
+              case 17: {
 
+                width_ = input.readDouble();
                 break;
               }
               case 26: {
-                com.github.kornilova_l.protos.EventProtos.Event.Exit.Builder subBuilder = null;
-                if (exitInfoCase_ == 3) {
-                  subBuilder = ((com.github.kornilova_l.protos.EventProtos.Event.Exit) exitInfo_).toBuilder();
+                com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfo.Builder subBuilder = null;
+                if (nodeInfo_ != null) {
+                  subBuilder = nodeInfo_.toBuilder();
                 }
-                exitInfo_ =
-                    input.readMessage(com.github.kornilova_l.protos.EventProtos.Event.Exit.parser(), extensionRegistry);
+                nodeInfo_ = input.readMessage(com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfo.parser(), extensionRegistry);
                 if (subBuilder != null) {
-                  subBuilder.mergeFrom((com.github.kornilova_l.protos.EventProtos.Event.Exit) exitInfo_);
-                  exitInfo_ = subBuilder.buildPartial();
+                  subBuilder.mergeFrom(nodeInfo_);
+                  nodeInfo_ = subBuilder.buildPartial();
                 }
-                exitInfoCase_ = 3;
+
                 break;
               }
               case 34: {
-                com.github.kornilova_l.protos.EventProtos.Event.Exception.Builder subBuilder = null;
-                if (exitInfoCase_ == 4) {
-                  subBuilder = ((com.github.kornilova_l.protos.EventProtos.Event.Exception) exitInfo_).toBuilder();
+                if (!((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
+                  nodes_ = new java.util.ArrayList<com.github.kornilova_l.protos.TreeProtos.Tree.Node>();
+                  mutable_bitField0_ |= 0x00000008;
                 }
-                exitInfo_ =
-                    input.readMessage(com.github.kornilova_l.protos.EventProtos.Event.Exception.parser(), extensionRegistry);
-                if (subBuilder != null) {
-                  subBuilder.mergeFrom((com.github.kornilova_l.protos.EventProtos.Event.Exception) exitInfo_);
-                  exitInfo_ = subBuilder.buildPartial();
-                }
-                exitInfoCase_ = 4;
-                break;
-              }
-              case 40: {
-
-                startTime_ = input.readInt64();
-                break;
-              }
-              case 50: {
-                if (!((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
-                  calls_ = new java.util.ArrayList<com.github.kornilova_l.protos.TreeProtos.Tree.Call>();
-                  mutable_bitField0_ |= 0x00000020;
-                }
-                calls_.add(
-                    input.readMessage(com.github.kornilova_l.protos.TreeProtos.Tree.Call.parser(), extensionRegistry));
+                nodes_.add(
+                    input.readMessage(com.github.kornilova_l.protos.TreeProtos.Tree.Node.parser(), extensionRegistry));
                 break;
               }
             }
@@ -354,179 +287,1916 @@ public final class TreeProtos {
           throw new com.google.protobuf.InvalidProtocolBufferException(
               e).setUnfinishedMessage(this);
         } finally {
-          if (((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
-            calls_ = java.util.Collections.unmodifiableList(calls_);
+          if (((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
+            nodes_ = java.util.Collections.unmodifiableList(nodes_);
           }
           makeExtensionsImmutable();
         }
       }
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return com.github.kornilova_l.protos.TreeProtos.internal_static_com_github_kornilova_l_protos_Tree_Call_descriptor;
+        return com.github.kornilova_l.protos.TreeProtos.internal_static_com_github_kornilova_l_protos_Tree_Node_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return com.github.kornilova_l.protos.TreeProtos.internal_static_com_github_kornilova_l_protos_Tree_Call_fieldAccessorTable
+        return com.github.kornilova_l.protos.TreeProtos.internal_static_com_github_kornilova_l_protos_Tree_Node_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                com.github.kornilova_l.protos.TreeProtos.Tree.Call.class, com.github.kornilova_l.protos.TreeProtos.Tree.Call.Builder.class);
+                com.github.kornilova_l.protos.TreeProtos.Tree.Node.class, com.github.kornilova_l.protos.TreeProtos.Tree.Node.Builder.class);
+      }
+
+      public interface NodeInfoOrBuilder extends
+          // @@protoc_insertion_point(interface_extends:com.github.kornilova_l.protos.Tree.Node.NodeInfo)
+          com.google.protobuf.MessageOrBuilder {
+
+        /**
+         * <code>string method_name = 1;</code>
+         */
+        java.lang.String getMethodName();
+        /**
+         * <code>string method_name = 1;</code>
+         */
+        com.google.protobuf.ByteString
+            getMethodNameBytes();
+
+        /**
+         * <code>string class_name = 2;</code>
+         */
+        java.lang.String getClassName();
+        /**
+         * <code>string class_name = 2;</code>
+         */
+        com.google.protobuf.ByteString
+            getClassNameBytes();
+
+        /**
+         * <code>int64 duration = 3;</code>
+         */
+        long getDuration();
+
+        /**
+         * <pre>
+         * only for trees which save original call structure
+         * </pre>
+         *
+         * <code>int64 start_time = 4;</code>
+         */
+        long getStartTime();
+
+        /**
+         * <code>bool is_static = 5;</code>
+         */
+        boolean getIsStatic();
+
+        /**
+         * <pre>
+         * only for trees which save original call structure
+         * </pre>
+         *
+         * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 6;</code>
+         */
+        java.util.List<com.github.kornilova_l.protos.EventProtos.Event.Var> 
+            getParametersList();
+        /**
+         * <pre>
+         * only for trees which save original call structure
+         * </pre>
+         *
+         * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 6;</code>
+         */
+        com.github.kornilova_l.protos.EventProtos.Event.Var getParameters(int index);
+        /**
+         * <pre>
+         * only for trees which save original call structure
+         * </pre>
+         *
+         * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 6;</code>
+         */
+        int getParametersCount();
+        /**
+         * <pre>
+         * only for trees which save original call structure
+         * </pre>
+         *
+         * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 6;</code>
+         */
+        java.util.List<? extends com.github.kornilova_l.protos.EventProtos.Event.VarOrBuilder> 
+            getParametersOrBuilderList();
+        /**
+         * <pre>
+         * only for trees which save original call structure
+         * </pre>
+         *
+         * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 6;</code>
+         */
+        com.github.kornilova_l.protos.EventProtos.Event.VarOrBuilder getParametersOrBuilder(
+            int index);
+
+        /**
+         * <code>.com.github.kornilova_l.protos.Event.Var return_value = 7;</code>
+         */
+        com.github.kornilova_l.protos.EventProtos.Event.Var getReturnValue();
+        /**
+         * <code>.com.github.kornilova_l.protos.Event.Var return_value = 7;</code>
+         */
+        com.github.kornilova_l.protos.EventProtos.Event.VarOrBuilder getReturnValueOrBuilder();
+
+        /**
+         * <code>.com.github.kornilova_l.protos.Event.Exception exception = 8;</code>
+         */
+        com.github.kornilova_l.protos.EventProtos.Event.Exception getException();
+        /**
+         * <code>.com.github.kornilova_l.protos.Event.Exception exception = 8;</code>
+         */
+        com.github.kornilova_l.protos.EventProtos.Event.ExceptionOrBuilder getExceptionOrBuilder();
+
+        public com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfo.ResultCase getResultCase();
+      }
+      /**
+       * Protobuf type {@code com.github.kornilova_l.protos.Tree.Node.NodeInfo}
+       */
+      public  static final class NodeInfo extends
+          com.google.protobuf.GeneratedMessageV3 implements
+          // @@protoc_insertion_point(message_implements:com.github.kornilova_l.protos.Tree.Node.NodeInfo)
+          NodeInfoOrBuilder {
+        // Use NodeInfo.newBuilder() to construct.
+        private NodeInfo(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+          super(builder);
+        }
+        private NodeInfo() {
+          methodName_ = "";
+          className_ = "";
+          duration_ = 0L;
+          startTime_ = 0L;
+          isStatic_ = false;
+          parameters_ = java.util.Collections.emptyList();
+        }
+
+        @java.lang.Override
+        public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+          return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
+        }
+        private NodeInfo(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+          this();
+          int mutable_bitField0_ = 0;
+          try {
+            boolean done = false;
+            while (!done) {
+              int tag = input.readTag();
+              switch (tag) {
+                case 0:
+                  done = true;
+                  break;
+                default: {
+                  if (!input.skipField(tag)) {
+                    done = true;
+                  }
+                  break;
+                }
+                case 10: {
+                  java.lang.String s = input.readStringRequireUtf8();
+
+                  methodName_ = s;
+                  break;
+                }
+                case 18: {
+                  java.lang.String s = input.readStringRequireUtf8();
+
+                  className_ = s;
+                  break;
+                }
+                case 24: {
+
+                  duration_ = input.readInt64();
+                  break;
+                }
+                case 32: {
+
+                  startTime_ = input.readInt64();
+                  break;
+                }
+                case 40: {
+
+                  isStatic_ = input.readBool();
+                  break;
+                }
+                case 50: {
+                  if (!((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
+                    parameters_ = new java.util.ArrayList<com.github.kornilova_l.protos.EventProtos.Event.Var>();
+                    mutable_bitField0_ |= 0x00000020;
+                  }
+                  parameters_.add(
+                      input.readMessage(com.github.kornilova_l.protos.EventProtos.Event.Var.parser(), extensionRegistry));
+                  break;
+                }
+                case 58: {
+                  com.github.kornilova_l.protos.EventProtos.Event.Var.Builder subBuilder = null;
+                  if (resultCase_ == 7) {
+                    subBuilder = ((com.github.kornilova_l.protos.EventProtos.Event.Var) result_).toBuilder();
+                  }
+                  result_ =
+                      input.readMessage(com.github.kornilova_l.protos.EventProtos.Event.Var.parser(), extensionRegistry);
+                  if (subBuilder != null) {
+                    subBuilder.mergeFrom((com.github.kornilova_l.protos.EventProtos.Event.Var) result_);
+                    result_ = subBuilder.buildPartial();
+                  }
+                  resultCase_ = 7;
+                  break;
+                }
+                case 66: {
+                  com.github.kornilova_l.protos.EventProtos.Event.Exception.Builder subBuilder = null;
+                  if (resultCase_ == 8) {
+                    subBuilder = ((com.github.kornilova_l.protos.EventProtos.Event.Exception) result_).toBuilder();
+                  }
+                  result_ =
+                      input.readMessage(com.github.kornilova_l.protos.EventProtos.Event.Exception.parser(), extensionRegistry);
+                  if (subBuilder != null) {
+                    subBuilder.mergeFrom((com.github.kornilova_l.protos.EventProtos.Event.Exception) result_);
+                    result_ = subBuilder.buildPartial();
+                  }
+                  resultCase_ = 8;
+                  break;
+                }
+              }
+            }
+          } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+            throw e.setUnfinishedMessage(this);
+          } catch (java.io.IOException e) {
+            throw new com.google.protobuf.InvalidProtocolBufferException(
+                e).setUnfinishedMessage(this);
+          } finally {
+            if (((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
+              parameters_ = java.util.Collections.unmodifiableList(parameters_);
+            }
+            makeExtensionsImmutable();
+          }
+        }
+        public static final com.google.protobuf.Descriptors.Descriptor
+            getDescriptor() {
+          return com.github.kornilova_l.protos.TreeProtos.internal_static_com_github_kornilova_l_protos_Tree_Node_NodeInfo_descriptor;
+        }
+
+        protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+            internalGetFieldAccessorTable() {
+          return com.github.kornilova_l.protos.TreeProtos.internal_static_com_github_kornilova_l_protos_Tree_Node_NodeInfo_fieldAccessorTable
+              .ensureFieldAccessorsInitialized(
+                  com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfo.class, com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfo.Builder.class);
+        }
+
+        private int bitField0_;
+        private int resultCase_ = 0;
+        private java.lang.Object result_;
+        public enum ResultCase
+            implements com.google.protobuf.Internal.EnumLite {
+          RETURN_VALUE(7),
+          EXCEPTION(8),
+          RESULT_NOT_SET(0);
+          private final int value;
+          private ResultCase(int value) {
+            this.value = value;
+          }
+          /**
+           * @deprecated Use {@link #forNumber(int)} instead.
+           */
+          @java.lang.Deprecated
+          public static ResultCase valueOf(int value) {
+            return forNumber(value);
+          }
+
+          public static ResultCase forNumber(int value) {
+            switch (value) {
+              case 7: return RETURN_VALUE;
+              case 8: return EXCEPTION;
+              case 0: return RESULT_NOT_SET;
+              default: return null;
+            }
+          }
+          public int getNumber() {
+            return this.value;
+          }
+        };
+
+        public ResultCase
+        getResultCase() {
+          return ResultCase.forNumber(
+              resultCase_);
+        }
+
+        public static final int METHOD_NAME_FIELD_NUMBER = 1;
+        private volatile java.lang.Object methodName_;
+        /**
+         * <code>string method_name = 1;</code>
+         */
+        public java.lang.String getMethodName() {
+          java.lang.Object ref = methodName_;
+          if (ref instanceof java.lang.String) {
+            return (java.lang.String) ref;
+          } else {
+            com.google.protobuf.ByteString bs = 
+                (com.google.protobuf.ByteString) ref;
+            java.lang.String s = bs.toStringUtf8();
+            methodName_ = s;
+            return s;
+          }
+        }
+        /**
+         * <code>string method_name = 1;</code>
+         */
+        public com.google.protobuf.ByteString
+            getMethodNameBytes() {
+          java.lang.Object ref = methodName_;
+          if (ref instanceof java.lang.String) {
+            com.google.protobuf.ByteString b = 
+                com.google.protobuf.ByteString.copyFromUtf8(
+                    (java.lang.String) ref);
+            methodName_ = b;
+            return b;
+          } else {
+            return (com.google.protobuf.ByteString) ref;
+          }
+        }
+
+        public static final int CLASS_NAME_FIELD_NUMBER = 2;
+        private volatile java.lang.Object className_;
+        /**
+         * <code>string class_name = 2;</code>
+         */
+        public java.lang.String getClassName() {
+          java.lang.Object ref = className_;
+          if (ref instanceof java.lang.String) {
+            return (java.lang.String) ref;
+          } else {
+            com.google.protobuf.ByteString bs = 
+                (com.google.protobuf.ByteString) ref;
+            java.lang.String s = bs.toStringUtf8();
+            className_ = s;
+            return s;
+          }
+        }
+        /**
+         * <code>string class_name = 2;</code>
+         */
+        public com.google.protobuf.ByteString
+            getClassNameBytes() {
+          java.lang.Object ref = className_;
+          if (ref instanceof java.lang.String) {
+            com.google.protobuf.ByteString b = 
+                com.google.protobuf.ByteString.copyFromUtf8(
+                    (java.lang.String) ref);
+            className_ = b;
+            return b;
+          } else {
+            return (com.google.protobuf.ByteString) ref;
+          }
+        }
+
+        public static final int DURATION_FIELD_NUMBER = 3;
+        private long duration_;
+        /**
+         * <code>int64 duration = 3;</code>
+         */
+        public long getDuration() {
+          return duration_;
+        }
+
+        public static final int START_TIME_FIELD_NUMBER = 4;
+        private long startTime_;
+        /**
+         * <pre>
+         * only for trees which save original call structure
+         * </pre>
+         *
+         * <code>int64 start_time = 4;</code>
+         */
+        public long getStartTime() {
+          return startTime_;
+        }
+
+        public static final int IS_STATIC_FIELD_NUMBER = 5;
+        private boolean isStatic_;
+        /**
+         * <code>bool is_static = 5;</code>
+         */
+        public boolean getIsStatic() {
+          return isStatic_;
+        }
+
+        public static final int PARAMETERS_FIELD_NUMBER = 6;
+        private java.util.List<com.github.kornilova_l.protos.EventProtos.Event.Var> parameters_;
+        /**
+         * <pre>
+         * only for trees which save original call structure
+         * </pre>
+         *
+         * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 6;</code>
+         */
+        public java.util.List<com.github.kornilova_l.protos.EventProtos.Event.Var> getParametersList() {
+          return parameters_;
+        }
+        /**
+         * <pre>
+         * only for trees which save original call structure
+         * </pre>
+         *
+         * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 6;</code>
+         */
+        public java.util.List<? extends com.github.kornilova_l.protos.EventProtos.Event.VarOrBuilder> 
+            getParametersOrBuilderList() {
+          return parameters_;
+        }
+        /**
+         * <pre>
+         * only for trees which save original call structure
+         * </pre>
+         *
+         * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 6;</code>
+         */
+        public int getParametersCount() {
+          return parameters_.size();
+        }
+        /**
+         * <pre>
+         * only for trees which save original call structure
+         * </pre>
+         *
+         * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 6;</code>
+         */
+        public com.github.kornilova_l.protos.EventProtos.Event.Var getParameters(int index) {
+          return parameters_.get(index);
+        }
+        /**
+         * <pre>
+         * only for trees which save original call structure
+         * </pre>
+         *
+         * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 6;</code>
+         */
+        public com.github.kornilova_l.protos.EventProtos.Event.VarOrBuilder getParametersOrBuilder(
+            int index) {
+          return parameters_.get(index);
+        }
+
+        public static final int RETURN_VALUE_FIELD_NUMBER = 7;
+        /**
+         * <code>.com.github.kornilova_l.protos.Event.Var return_value = 7;</code>
+         */
+        public com.github.kornilova_l.protos.EventProtos.Event.Var getReturnValue() {
+          if (resultCase_ == 7) {
+             return (com.github.kornilova_l.protos.EventProtos.Event.Var) result_;
+          }
+          return com.github.kornilova_l.protos.EventProtos.Event.Var.getDefaultInstance();
+        }
+        /**
+         * <code>.com.github.kornilova_l.protos.Event.Var return_value = 7;</code>
+         */
+        public com.github.kornilova_l.protos.EventProtos.Event.VarOrBuilder getReturnValueOrBuilder() {
+          if (resultCase_ == 7) {
+             return (com.github.kornilova_l.protos.EventProtos.Event.Var) result_;
+          }
+          return com.github.kornilova_l.protos.EventProtos.Event.Var.getDefaultInstance();
+        }
+
+        public static final int EXCEPTION_FIELD_NUMBER = 8;
+        /**
+         * <code>.com.github.kornilova_l.protos.Event.Exception exception = 8;</code>
+         */
+        public com.github.kornilova_l.protos.EventProtos.Event.Exception getException() {
+          if (resultCase_ == 8) {
+             return (com.github.kornilova_l.protos.EventProtos.Event.Exception) result_;
+          }
+          return com.github.kornilova_l.protos.EventProtos.Event.Exception.getDefaultInstance();
+        }
+        /**
+         * <code>.com.github.kornilova_l.protos.Event.Exception exception = 8;</code>
+         */
+        public com.github.kornilova_l.protos.EventProtos.Event.ExceptionOrBuilder getExceptionOrBuilder() {
+          if (resultCase_ == 8) {
+             return (com.github.kornilova_l.protos.EventProtos.Event.Exception) result_;
+          }
+          return com.github.kornilova_l.protos.EventProtos.Event.Exception.getDefaultInstance();
+        }
+
+        private byte memoizedIsInitialized = -1;
+        public final boolean isInitialized() {
+          byte isInitialized = memoizedIsInitialized;
+          if (isInitialized == 1) return true;
+          if (isInitialized == 0) return false;
+
+          memoizedIsInitialized = 1;
+          return true;
+        }
+
+        public void writeTo(com.google.protobuf.CodedOutputStream output)
+                            throws java.io.IOException {
+          if (!getMethodNameBytes().isEmpty()) {
+            com.google.protobuf.GeneratedMessageV3.writeString(output, 1, methodName_);
+          }
+          if (!getClassNameBytes().isEmpty()) {
+            com.google.protobuf.GeneratedMessageV3.writeString(output, 2, className_);
+          }
+          if (duration_ != 0L) {
+            output.writeInt64(3, duration_);
+          }
+          if (startTime_ != 0L) {
+            output.writeInt64(4, startTime_);
+          }
+          if (isStatic_ != false) {
+            output.writeBool(5, isStatic_);
+          }
+          for (int i = 0; i < parameters_.size(); i++) {
+            output.writeMessage(6, parameters_.get(i));
+          }
+          if (resultCase_ == 7) {
+            output.writeMessage(7, (com.github.kornilova_l.protos.EventProtos.Event.Var) result_);
+          }
+          if (resultCase_ == 8) {
+            output.writeMessage(8, (com.github.kornilova_l.protos.EventProtos.Event.Exception) result_);
+          }
+        }
+
+        public int getSerializedSize() {
+          int size = memoizedSize;
+          if (size != -1) return size;
+
+          size = 0;
+          if (!getMethodNameBytes().isEmpty()) {
+            size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, methodName_);
+          }
+          if (!getClassNameBytes().isEmpty()) {
+            size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, className_);
+          }
+          if (duration_ != 0L) {
+            size += com.google.protobuf.CodedOutputStream
+              .computeInt64Size(3, duration_);
+          }
+          if (startTime_ != 0L) {
+            size += com.google.protobuf.CodedOutputStream
+              .computeInt64Size(4, startTime_);
+          }
+          if (isStatic_ != false) {
+            size += com.google.protobuf.CodedOutputStream
+              .computeBoolSize(5, isStatic_);
+          }
+          for (int i = 0; i < parameters_.size(); i++) {
+            size += com.google.protobuf.CodedOutputStream
+              .computeMessageSize(6, parameters_.get(i));
+          }
+          if (resultCase_ == 7) {
+            size += com.google.protobuf.CodedOutputStream
+              .computeMessageSize(7, (com.github.kornilova_l.protos.EventProtos.Event.Var) result_);
+          }
+          if (resultCase_ == 8) {
+            size += com.google.protobuf.CodedOutputStream
+              .computeMessageSize(8, (com.github.kornilova_l.protos.EventProtos.Event.Exception) result_);
+          }
+          memoizedSize = size;
+          return size;
+        }
+
+        private static final long serialVersionUID = 0L;
+        @java.lang.Override
+        public boolean equals(final java.lang.Object obj) {
+          if (obj == this) {
+           return true;
+          }
+          if (!(obj instanceof com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfo)) {
+            return super.equals(obj);
+          }
+          com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfo other = (com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfo) obj;
+
+          boolean result = true;
+          result = result && getMethodName()
+              .equals(other.getMethodName());
+          result = result && getClassName()
+              .equals(other.getClassName());
+          result = result && (getDuration()
+              == other.getDuration());
+          result = result && (getStartTime()
+              == other.getStartTime());
+          result = result && (getIsStatic()
+              == other.getIsStatic());
+          result = result && getParametersList()
+              .equals(other.getParametersList());
+          result = result && getResultCase().equals(
+              other.getResultCase());
+          if (!result) return false;
+          switch (resultCase_) {
+            case 7:
+              result = result && getReturnValue()
+                  .equals(other.getReturnValue());
+              break;
+            case 8:
+              result = result && getException()
+                  .equals(other.getException());
+              break;
+            case 0:
+            default:
+          }
+          return result;
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+          if (memoizedHashCode != 0) {
+            return memoizedHashCode;
+          }
+          int hash = 41;
+          hash = (19 * hash) + getDescriptor().hashCode();
+          hash = (37 * hash) + METHOD_NAME_FIELD_NUMBER;
+          hash = (53 * hash) + getMethodName().hashCode();
+          hash = (37 * hash) + CLASS_NAME_FIELD_NUMBER;
+          hash = (53 * hash) + getClassName().hashCode();
+          hash = (37 * hash) + DURATION_FIELD_NUMBER;
+          hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+              getDuration());
+          hash = (37 * hash) + START_TIME_FIELD_NUMBER;
+          hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+              getStartTime());
+          hash = (37 * hash) + IS_STATIC_FIELD_NUMBER;
+          hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+              getIsStatic());
+          if (getParametersCount() > 0) {
+            hash = (37 * hash) + PARAMETERS_FIELD_NUMBER;
+            hash = (53 * hash) + getParametersList().hashCode();
+          }
+          switch (resultCase_) {
+            case 7:
+              hash = (37 * hash) + RETURN_VALUE_FIELD_NUMBER;
+              hash = (53 * hash) + getReturnValue().hashCode();
+              break;
+            case 8:
+              hash = (37 * hash) + EXCEPTION_FIELD_NUMBER;
+              hash = (53 * hash) + getException().hashCode();
+              break;
+            case 0:
+            default:
+          }
+          hash = (29 * hash) + unknownFields.hashCode();
+          memoizedHashCode = hash;
+          return hash;
+        }
+
+        public static com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfo parseFrom(
+            java.nio.ByteBuffer data)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+          return PARSER.parseFrom(data);
+        }
+        public static com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfo parseFrom(
+            java.nio.ByteBuffer data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+          return PARSER.parseFrom(data, extensionRegistry);
+        }
+        public static com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfo parseFrom(
+            com.google.protobuf.ByteString data)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+          return PARSER.parseFrom(data);
+        }
+        public static com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfo parseFrom(
+            com.google.protobuf.ByteString data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+          return PARSER.parseFrom(data, extensionRegistry);
+        }
+        public static com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfo parseFrom(byte[] data)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+          return PARSER.parseFrom(data);
+        }
+        public static com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfo parseFrom(
+            byte[] data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+          return PARSER.parseFrom(data, extensionRegistry);
+        }
+        public static com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfo parseFrom(java.io.InputStream input)
+            throws java.io.IOException {
+          return com.google.protobuf.GeneratedMessageV3
+              .parseWithIOException(PARSER, input);
+        }
+        public static com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfo parseFrom(
+            java.io.InputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
+          return com.google.protobuf.GeneratedMessageV3
+              .parseWithIOException(PARSER, input, extensionRegistry);
+        }
+        public static com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfo parseDelimitedFrom(java.io.InputStream input)
+            throws java.io.IOException {
+          return com.google.protobuf.GeneratedMessageV3
+              .parseDelimitedWithIOException(PARSER, input);
+        }
+        public static com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfo parseDelimitedFrom(
+            java.io.InputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
+          return com.google.protobuf.GeneratedMessageV3
+              .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+        }
+        public static com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfo parseFrom(
+            com.google.protobuf.CodedInputStream input)
+            throws java.io.IOException {
+          return com.google.protobuf.GeneratedMessageV3
+              .parseWithIOException(PARSER, input);
+        }
+        public static com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfo parseFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
+          return com.google.protobuf.GeneratedMessageV3
+              .parseWithIOException(PARSER, input, extensionRegistry);
+        }
+
+        public Builder newBuilderForType() { return newBuilder(); }
+        public static Builder newBuilder() {
+          return DEFAULT_INSTANCE.toBuilder();
+        }
+        public static Builder newBuilder(com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfo prototype) {
+          return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+        }
+        public Builder toBuilder() {
+          return this == DEFAULT_INSTANCE
+              ? new Builder() : new Builder().mergeFrom(this);
+        }
+
+        @java.lang.Override
+        protected Builder newBuilderForType(
+            com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+          Builder builder = new Builder(parent);
+          return builder;
+        }
+        /**
+         * Protobuf type {@code com.github.kornilova_l.protos.Tree.Node.NodeInfo}
+         */
+        public static final class Builder extends
+            com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+            // @@protoc_insertion_point(builder_implements:com.github.kornilova_l.protos.Tree.Node.NodeInfo)
+            com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfoOrBuilder {
+          public static final com.google.protobuf.Descriptors.Descriptor
+              getDescriptor() {
+            return com.github.kornilova_l.protos.TreeProtos.internal_static_com_github_kornilova_l_protos_Tree_Node_NodeInfo_descriptor;
+          }
+
+          protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+              internalGetFieldAccessorTable() {
+            return com.github.kornilova_l.protos.TreeProtos.internal_static_com_github_kornilova_l_protos_Tree_Node_NodeInfo_fieldAccessorTable
+                .ensureFieldAccessorsInitialized(
+                    com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfo.class, com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfo.Builder.class);
+          }
+
+          // Construct using com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfo.newBuilder()
+          private Builder() {
+            maybeForceBuilderInitialization();
+          }
+
+          private Builder(
+              com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+            super(parent);
+            maybeForceBuilderInitialization();
+          }
+          private void maybeForceBuilderInitialization() {
+            if (com.google.protobuf.GeneratedMessageV3
+                    .alwaysUseFieldBuilders) {
+              getParametersFieldBuilder();
+            }
+          }
+          public Builder clear() {
+            super.clear();
+            methodName_ = "";
+
+            className_ = "";
+
+            duration_ = 0L;
+
+            startTime_ = 0L;
+
+            isStatic_ = false;
+
+            if (parametersBuilder_ == null) {
+              parameters_ = java.util.Collections.emptyList();
+              bitField0_ = (bitField0_ & ~0x00000020);
+            } else {
+              parametersBuilder_.clear();
+            }
+            resultCase_ = 0;
+            result_ = null;
+            return this;
+          }
+
+          public com.google.protobuf.Descriptors.Descriptor
+              getDescriptorForType() {
+            return com.github.kornilova_l.protos.TreeProtos.internal_static_com_github_kornilova_l_protos_Tree_Node_NodeInfo_descriptor;
+          }
+
+          public com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfo getDefaultInstanceForType() {
+            return com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfo.getDefaultInstance();
+          }
+
+          public com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfo build() {
+            com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfo result = buildPartial();
+            if (!result.isInitialized()) {
+              throw newUninitializedMessageException(result);
+            }
+            return result;
+          }
+
+          public com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfo buildPartial() {
+            com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfo result = new com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfo(this);
+            int from_bitField0_ = bitField0_;
+            int to_bitField0_ = 0;
+            result.methodName_ = methodName_;
+            result.className_ = className_;
+            result.duration_ = duration_;
+            result.startTime_ = startTime_;
+            result.isStatic_ = isStatic_;
+            if (parametersBuilder_ == null) {
+              if (((bitField0_ & 0x00000020) == 0x00000020)) {
+                parameters_ = java.util.Collections.unmodifiableList(parameters_);
+                bitField0_ = (bitField0_ & ~0x00000020);
+              }
+              result.parameters_ = parameters_;
+            } else {
+              result.parameters_ = parametersBuilder_.build();
+            }
+            if (resultCase_ == 7) {
+              if (returnValueBuilder_ == null) {
+                result.result_ = result_;
+              } else {
+                result.result_ = returnValueBuilder_.build();
+              }
+            }
+            if (resultCase_ == 8) {
+              if (exceptionBuilder_ == null) {
+                result.result_ = result_;
+              } else {
+                result.result_ = exceptionBuilder_.build();
+              }
+            }
+            result.bitField0_ = to_bitField0_;
+            result.resultCase_ = resultCase_;
+            onBuilt();
+            return result;
+          }
+
+          public Builder clone() {
+            return (Builder) super.clone();
+          }
+          public Builder setField(
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              Object value) {
+            return (Builder) super.setField(field, value);
+          }
+          public Builder clearField(
+              com.google.protobuf.Descriptors.FieldDescriptor field) {
+            return (Builder) super.clearField(field);
+          }
+          public Builder clearOneof(
+              com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+            return (Builder) super.clearOneof(oneof);
+          }
+          public Builder setRepeatedField(
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              int index, Object value) {
+            return (Builder) super.setRepeatedField(field, index, value);
+          }
+          public Builder addRepeatedField(
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              Object value) {
+            return (Builder) super.addRepeatedField(field, value);
+          }
+          public Builder mergeFrom(com.google.protobuf.Message other) {
+            if (other instanceof com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfo) {
+              return mergeFrom((com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfo)other);
+            } else {
+              super.mergeFrom(other);
+              return this;
+            }
+          }
+
+          public Builder mergeFrom(com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfo other) {
+            if (other == com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfo.getDefaultInstance()) return this;
+            if (!other.getMethodName().isEmpty()) {
+              methodName_ = other.methodName_;
+              onChanged();
+            }
+            if (!other.getClassName().isEmpty()) {
+              className_ = other.className_;
+              onChanged();
+            }
+            if (other.getDuration() != 0L) {
+              setDuration(other.getDuration());
+            }
+            if (other.getStartTime() != 0L) {
+              setStartTime(other.getStartTime());
+            }
+            if (other.getIsStatic() != false) {
+              setIsStatic(other.getIsStatic());
+            }
+            if (parametersBuilder_ == null) {
+              if (!other.parameters_.isEmpty()) {
+                if (parameters_.isEmpty()) {
+                  parameters_ = other.parameters_;
+                  bitField0_ = (bitField0_ & ~0x00000020);
+                } else {
+                  ensureParametersIsMutable();
+                  parameters_.addAll(other.parameters_);
+                }
+                onChanged();
+              }
+            } else {
+              if (!other.parameters_.isEmpty()) {
+                if (parametersBuilder_.isEmpty()) {
+                  parametersBuilder_.dispose();
+                  parametersBuilder_ = null;
+                  parameters_ = other.parameters_;
+                  bitField0_ = (bitField0_ & ~0x00000020);
+                  parametersBuilder_ = 
+                    com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
+                       getParametersFieldBuilder() : null;
+                } else {
+                  parametersBuilder_.addAllMessages(other.parameters_);
+                }
+              }
+            }
+            switch (other.getResultCase()) {
+              case RETURN_VALUE: {
+                mergeReturnValue(other.getReturnValue());
+                break;
+              }
+              case EXCEPTION: {
+                mergeException(other.getException());
+                break;
+              }
+              case RESULT_NOT_SET: {
+                break;
+              }
+            }
+            onChanged();
+            return this;
+          }
+
+          public final boolean isInitialized() {
+            return true;
+          }
+
+          public Builder mergeFrom(
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws java.io.IOException {
+            com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfo parsedMessage = null;
+            try {
+              parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+            } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+              parsedMessage = (com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfo) e.getUnfinishedMessage();
+              throw e.unwrapIOException();
+            } finally {
+              if (parsedMessage != null) {
+                mergeFrom(parsedMessage);
+              }
+            }
+            return this;
+          }
+          private int resultCase_ = 0;
+          private java.lang.Object result_;
+          public ResultCase
+              getResultCase() {
+            return ResultCase.forNumber(
+                resultCase_);
+          }
+
+          public Builder clearResult() {
+            resultCase_ = 0;
+            result_ = null;
+            onChanged();
+            return this;
+          }
+
+          private int bitField0_;
+
+          private java.lang.Object methodName_ = "";
+          /**
+           * <code>string method_name = 1;</code>
+           */
+          public java.lang.String getMethodName() {
+            java.lang.Object ref = methodName_;
+            if (!(ref instanceof java.lang.String)) {
+              com.google.protobuf.ByteString bs =
+                  (com.google.protobuf.ByteString) ref;
+              java.lang.String s = bs.toStringUtf8();
+              methodName_ = s;
+              return s;
+            } else {
+              return (java.lang.String) ref;
+            }
+          }
+          /**
+           * <code>string method_name = 1;</code>
+           */
+          public com.google.protobuf.ByteString
+              getMethodNameBytes() {
+            java.lang.Object ref = methodName_;
+            if (ref instanceof String) {
+              com.google.protobuf.ByteString b = 
+                  com.google.protobuf.ByteString.copyFromUtf8(
+                      (java.lang.String) ref);
+              methodName_ = b;
+              return b;
+            } else {
+              return (com.google.protobuf.ByteString) ref;
+            }
+          }
+          /**
+           * <code>string method_name = 1;</code>
+           */
+          public Builder setMethodName(
+              java.lang.String value) {
+            if (value == null) {
+    throw new NullPointerException();
+  }
+  
+            methodName_ = value;
+            onChanged();
+            return this;
+          }
+          /**
+           * <code>string method_name = 1;</code>
+           */
+          public Builder clearMethodName() {
+            
+            methodName_ = getDefaultInstance().getMethodName();
+            onChanged();
+            return this;
+          }
+          /**
+           * <code>string method_name = 1;</code>
+           */
+          public Builder setMethodNameBytes(
+              com.google.protobuf.ByteString value) {
+            if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+            
+            methodName_ = value;
+            onChanged();
+            return this;
+          }
+
+          private java.lang.Object className_ = "";
+          /**
+           * <code>string class_name = 2;</code>
+           */
+          public java.lang.String getClassName() {
+            java.lang.Object ref = className_;
+            if (!(ref instanceof java.lang.String)) {
+              com.google.protobuf.ByteString bs =
+                  (com.google.protobuf.ByteString) ref;
+              java.lang.String s = bs.toStringUtf8();
+              className_ = s;
+              return s;
+            } else {
+              return (java.lang.String) ref;
+            }
+          }
+          /**
+           * <code>string class_name = 2;</code>
+           */
+          public com.google.protobuf.ByteString
+              getClassNameBytes() {
+            java.lang.Object ref = className_;
+            if (ref instanceof String) {
+              com.google.protobuf.ByteString b = 
+                  com.google.protobuf.ByteString.copyFromUtf8(
+                      (java.lang.String) ref);
+              className_ = b;
+              return b;
+            } else {
+              return (com.google.protobuf.ByteString) ref;
+            }
+          }
+          /**
+           * <code>string class_name = 2;</code>
+           */
+          public Builder setClassName(
+              java.lang.String value) {
+            if (value == null) {
+    throw new NullPointerException();
+  }
+  
+            className_ = value;
+            onChanged();
+            return this;
+          }
+          /**
+           * <code>string class_name = 2;</code>
+           */
+          public Builder clearClassName() {
+            
+            className_ = getDefaultInstance().getClassName();
+            onChanged();
+            return this;
+          }
+          /**
+           * <code>string class_name = 2;</code>
+           */
+          public Builder setClassNameBytes(
+              com.google.protobuf.ByteString value) {
+            if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+            
+            className_ = value;
+            onChanged();
+            return this;
+          }
+
+          private long duration_ ;
+          /**
+           * <code>int64 duration = 3;</code>
+           */
+          public long getDuration() {
+            return duration_;
+          }
+          /**
+           * <code>int64 duration = 3;</code>
+           */
+          public Builder setDuration(long value) {
+            
+            duration_ = value;
+            onChanged();
+            return this;
+          }
+          /**
+           * <code>int64 duration = 3;</code>
+           */
+          public Builder clearDuration() {
+            
+            duration_ = 0L;
+            onChanged();
+            return this;
+          }
+
+          private long startTime_ ;
+          /**
+           * <pre>
+           * only for trees which save original call structure
+           * </pre>
+           *
+           * <code>int64 start_time = 4;</code>
+           */
+          public long getStartTime() {
+            return startTime_;
+          }
+          /**
+           * <pre>
+           * only for trees which save original call structure
+           * </pre>
+           *
+           * <code>int64 start_time = 4;</code>
+           */
+          public Builder setStartTime(long value) {
+            
+            startTime_ = value;
+            onChanged();
+            return this;
+          }
+          /**
+           * <pre>
+           * only for trees which save original call structure
+           * </pre>
+           *
+           * <code>int64 start_time = 4;</code>
+           */
+          public Builder clearStartTime() {
+            
+            startTime_ = 0L;
+            onChanged();
+            return this;
+          }
+
+          private boolean isStatic_ ;
+          /**
+           * <code>bool is_static = 5;</code>
+           */
+          public boolean getIsStatic() {
+            return isStatic_;
+          }
+          /**
+           * <code>bool is_static = 5;</code>
+           */
+          public Builder setIsStatic(boolean value) {
+            
+            isStatic_ = value;
+            onChanged();
+            return this;
+          }
+          /**
+           * <code>bool is_static = 5;</code>
+           */
+          public Builder clearIsStatic() {
+            
+            isStatic_ = false;
+            onChanged();
+            return this;
+          }
+
+          private java.util.List<com.github.kornilova_l.protos.EventProtos.Event.Var> parameters_ =
+            java.util.Collections.emptyList();
+          private void ensureParametersIsMutable() {
+            if (!((bitField0_ & 0x00000020) == 0x00000020)) {
+              parameters_ = new java.util.ArrayList<com.github.kornilova_l.protos.EventProtos.Event.Var>(parameters_);
+              bitField0_ |= 0x00000020;
+             }
+          }
+
+          private com.google.protobuf.RepeatedFieldBuilderV3<
+              com.github.kornilova_l.protos.EventProtos.Event.Var, com.github.kornilova_l.protos.EventProtos.Event.Var.Builder, com.github.kornilova_l.protos.EventProtos.Event.VarOrBuilder> parametersBuilder_;
+
+          /**
+           * <pre>
+           * only for trees which save original call structure
+           * </pre>
+           *
+           * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 6;</code>
+           */
+          public java.util.List<com.github.kornilova_l.protos.EventProtos.Event.Var> getParametersList() {
+            if (parametersBuilder_ == null) {
+              return java.util.Collections.unmodifiableList(parameters_);
+            } else {
+              return parametersBuilder_.getMessageList();
+            }
+          }
+          /**
+           * <pre>
+           * only for trees which save original call structure
+           * </pre>
+           *
+           * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 6;</code>
+           */
+          public int getParametersCount() {
+            if (parametersBuilder_ == null) {
+              return parameters_.size();
+            } else {
+              return parametersBuilder_.getCount();
+            }
+          }
+          /**
+           * <pre>
+           * only for trees which save original call structure
+           * </pre>
+           *
+           * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 6;</code>
+           */
+          public com.github.kornilova_l.protos.EventProtos.Event.Var getParameters(int index) {
+            if (parametersBuilder_ == null) {
+              return parameters_.get(index);
+            } else {
+              return parametersBuilder_.getMessage(index);
+            }
+          }
+          /**
+           * <pre>
+           * only for trees which save original call structure
+           * </pre>
+           *
+           * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 6;</code>
+           */
+          public Builder setParameters(
+              int index, com.github.kornilova_l.protos.EventProtos.Event.Var value) {
+            if (parametersBuilder_ == null) {
+              if (value == null) {
+                throw new NullPointerException();
+              }
+              ensureParametersIsMutable();
+              parameters_.set(index, value);
+              onChanged();
+            } else {
+              parametersBuilder_.setMessage(index, value);
+            }
+            return this;
+          }
+          /**
+           * <pre>
+           * only for trees which save original call structure
+           * </pre>
+           *
+           * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 6;</code>
+           */
+          public Builder setParameters(
+              int index, com.github.kornilova_l.protos.EventProtos.Event.Var.Builder builderForValue) {
+            if (parametersBuilder_ == null) {
+              ensureParametersIsMutable();
+              parameters_.set(index, builderForValue.build());
+              onChanged();
+            } else {
+              parametersBuilder_.setMessage(index, builderForValue.build());
+            }
+            return this;
+          }
+          /**
+           * <pre>
+           * only for trees which save original call structure
+           * </pre>
+           *
+           * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 6;</code>
+           */
+          public Builder addParameters(com.github.kornilova_l.protos.EventProtos.Event.Var value) {
+            if (parametersBuilder_ == null) {
+              if (value == null) {
+                throw new NullPointerException();
+              }
+              ensureParametersIsMutable();
+              parameters_.add(value);
+              onChanged();
+            } else {
+              parametersBuilder_.addMessage(value);
+            }
+            return this;
+          }
+          /**
+           * <pre>
+           * only for trees which save original call structure
+           * </pre>
+           *
+           * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 6;</code>
+           */
+          public Builder addParameters(
+              int index, com.github.kornilova_l.protos.EventProtos.Event.Var value) {
+            if (parametersBuilder_ == null) {
+              if (value == null) {
+                throw new NullPointerException();
+              }
+              ensureParametersIsMutable();
+              parameters_.add(index, value);
+              onChanged();
+            } else {
+              parametersBuilder_.addMessage(index, value);
+            }
+            return this;
+          }
+          /**
+           * <pre>
+           * only for trees which save original call structure
+           * </pre>
+           *
+           * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 6;</code>
+           */
+          public Builder addParameters(
+              com.github.kornilova_l.protos.EventProtos.Event.Var.Builder builderForValue) {
+            if (parametersBuilder_ == null) {
+              ensureParametersIsMutable();
+              parameters_.add(builderForValue.build());
+              onChanged();
+            } else {
+              parametersBuilder_.addMessage(builderForValue.build());
+            }
+            return this;
+          }
+          /**
+           * <pre>
+           * only for trees which save original call structure
+           * </pre>
+           *
+           * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 6;</code>
+           */
+          public Builder addParameters(
+              int index, com.github.kornilova_l.protos.EventProtos.Event.Var.Builder builderForValue) {
+            if (parametersBuilder_ == null) {
+              ensureParametersIsMutable();
+              parameters_.add(index, builderForValue.build());
+              onChanged();
+            } else {
+              parametersBuilder_.addMessage(index, builderForValue.build());
+            }
+            return this;
+          }
+          /**
+           * <pre>
+           * only for trees which save original call structure
+           * </pre>
+           *
+           * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 6;</code>
+           */
+          public Builder addAllParameters(
+              java.lang.Iterable<? extends com.github.kornilova_l.protos.EventProtos.Event.Var> values) {
+            if (parametersBuilder_ == null) {
+              ensureParametersIsMutable();
+              com.google.protobuf.AbstractMessageLite.Builder.addAll(
+                  values, parameters_);
+              onChanged();
+            } else {
+              parametersBuilder_.addAllMessages(values);
+            }
+            return this;
+          }
+          /**
+           * <pre>
+           * only for trees which save original call structure
+           * </pre>
+           *
+           * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 6;</code>
+           */
+          public Builder clearParameters() {
+            if (parametersBuilder_ == null) {
+              parameters_ = java.util.Collections.emptyList();
+              bitField0_ = (bitField0_ & ~0x00000020);
+              onChanged();
+            } else {
+              parametersBuilder_.clear();
+            }
+            return this;
+          }
+          /**
+           * <pre>
+           * only for trees which save original call structure
+           * </pre>
+           *
+           * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 6;</code>
+           */
+          public Builder removeParameters(int index) {
+            if (parametersBuilder_ == null) {
+              ensureParametersIsMutable();
+              parameters_.remove(index);
+              onChanged();
+            } else {
+              parametersBuilder_.remove(index);
+            }
+            return this;
+          }
+          /**
+           * <pre>
+           * only for trees which save original call structure
+           * </pre>
+           *
+           * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 6;</code>
+           */
+          public com.github.kornilova_l.protos.EventProtos.Event.Var.Builder getParametersBuilder(
+              int index) {
+            return getParametersFieldBuilder().getBuilder(index);
+          }
+          /**
+           * <pre>
+           * only for trees which save original call structure
+           * </pre>
+           *
+           * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 6;</code>
+           */
+          public com.github.kornilova_l.protos.EventProtos.Event.VarOrBuilder getParametersOrBuilder(
+              int index) {
+            if (parametersBuilder_ == null) {
+              return parameters_.get(index);  } else {
+              return parametersBuilder_.getMessageOrBuilder(index);
+            }
+          }
+          /**
+           * <pre>
+           * only for trees which save original call structure
+           * </pre>
+           *
+           * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 6;</code>
+           */
+          public java.util.List<? extends com.github.kornilova_l.protos.EventProtos.Event.VarOrBuilder> 
+               getParametersOrBuilderList() {
+            if (parametersBuilder_ != null) {
+              return parametersBuilder_.getMessageOrBuilderList();
+            } else {
+              return java.util.Collections.unmodifiableList(parameters_);
+            }
+          }
+          /**
+           * <pre>
+           * only for trees which save original call structure
+           * </pre>
+           *
+           * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 6;</code>
+           */
+          public com.github.kornilova_l.protos.EventProtos.Event.Var.Builder addParametersBuilder() {
+            return getParametersFieldBuilder().addBuilder(
+                com.github.kornilova_l.protos.EventProtos.Event.Var.getDefaultInstance());
+          }
+          /**
+           * <pre>
+           * only for trees which save original call structure
+           * </pre>
+           *
+           * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 6;</code>
+           */
+          public com.github.kornilova_l.protos.EventProtos.Event.Var.Builder addParametersBuilder(
+              int index) {
+            return getParametersFieldBuilder().addBuilder(
+                index, com.github.kornilova_l.protos.EventProtos.Event.Var.getDefaultInstance());
+          }
+          /**
+           * <pre>
+           * only for trees which save original call structure
+           * </pre>
+           *
+           * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 6;</code>
+           */
+          public java.util.List<com.github.kornilova_l.protos.EventProtos.Event.Var.Builder> 
+               getParametersBuilderList() {
+            return getParametersFieldBuilder().getBuilderList();
+          }
+          private com.google.protobuf.RepeatedFieldBuilderV3<
+              com.github.kornilova_l.protos.EventProtos.Event.Var, com.github.kornilova_l.protos.EventProtos.Event.Var.Builder, com.github.kornilova_l.protos.EventProtos.Event.VarOrBuilder> 
+              getParametersFieldBuilder() {
+            if (parametersBuilder_ == null) {
+              parametersBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
+                  com.github.kornilova_l.protos.EventProtos.Event.Var, com.github.kornilova_l.protos.EventProtos.Event.Var.Builder, com.github.kornilova_l.protos.EventProtos.Event.VarOrBuilder>(
+                      parameters_,
+                      ((bitField0_ & 0x00000020) == 0x00000020),
+                      getParentForChildren(),
+                      isClean());
+              parameters_ = null;
+            }
+            return parametersBuilder_;
+          }
+
+          private com.google.protobuf.SingleFieldBuilderV3<
+              com.github.kornilova_l.protos.EventProtos.Event.Var, com.github.kornilova_l.protos.EventProtos.Event.Var.Builder, com.github.kornilova_l.protos.EventProtos.Event.VarOrBuilder> returnValueBuilder_;
+          /**
+           * <code>.com.github.kornilova_l.protos.Event.Var return_value = 7;</code>
+           */
+          public com.github.kornilova_l.protos.EventProtos.Event.Var getReturnValue() {
+            if (returnValueBuilder_ == null) {
+              if (resultCase_ == 7) {
+                return (com.github.kornilova_l.protos.EventProtos.Event.Var) result_;
+              }
+              return com.github.kornilova_l.protos.EventProtos.Event.Var.getDefaultInstance();
+            } else {
+              if (resultCase_ == 7) {
+                return returnValueBuilder_.getMessage();
+              }
+              return com.github.kornilova_l.protos.EventProtos.Event.Var.getDefaultInstance();
+            }
+          }
+          /**
+           * <code>.com.github.kornilova_l.protos.Event.Var return_value = 7;</code>
+           */
+          public Builder setReturnValue(com.github.kornilova_l.protos.EventProtos.Event.Var value) {
+            if (returnValueBuilder_ == null) {
+              if (value == null) {
+                throw new NullPointerException();
+              }
+              result_ = value;
+              onChanged();
+            } else {
+              returnValueBuilder_.setMessage(value);
+            }
+            resultCase_ = 7;
+            return this;
+          }
+          /**
+           * <code>.com.github.kornilova_l.protos.Event.Var return_value = 7;</code>
+           */
+          public Builder setReturnValue(
+              com.github.kornilova_l.protos.EventProtos.Event.Var.Builder builderForValue) {
+            if (returnValueBuilder_ == null) {
+              result_ = builderForValue.build();
+              onChanged();
+            } else {
+              returnValueBuilder_.setMessage(builderForValue.build());
+            }
+            resultCase_ = 7;
+            return this;
+          }
+          /**
+           * <code>.com.github.kornilova_l.protos.Event.Var return_value = 7;</code>
+           */
+          public Builder mergeReturnValue(com.github.kornilova_l.protos.EventProtos.Event.Var value) {
+            if (returnValueBuilder_ == null) {
+              if (resultCase_ == 7 &&
+                  result_ != com.github.kornilova_l.protos.EventProtos.Event.Var.getDefaultInstance()) {
+                result_ = com.github.kornilova_l.protos.EventProtos.Event.Var.newBuilder((com.github.kornilova_l.protos.EventProtos.Event.Var) result_)
+                    .mergeFrom(value).buildPartial();
+              } else {
+                result_ = value;
+              }
+              onChanged();
+            } else {
+              if (resultCase_ == 7) {
+                returnValueBuilder_.mergeFrom(value);
+              }
+              returnValueBuilder_.setMessage(value);
+            }
+            resultCase_ = 7;
+            return this;
+          }
+          /**
+           * <code>.com.github.kornilova_l.protos.Event.Var return_value = 7;</code>
+           */
+          public Builder clearReturnValue() {
+            if (returnValueBuilder_ == null) {
+              if (resultCase_ == 7) {
+                resultCase_ = 0;
+                result_ = null;
+                onChanged();
+              }
+            } else {
+              if (resultCase_ == 7) {
+                resultCase_ = 0;
+                result_ = null;
+              }
+              returnValueBuilder_.clear();
+            }
+            return this;
+          }
+          /**
+           * <code>.com.github.kornilova_l.protos.Event.Var return_value = 7;</code>
+           */
+          public com.github.kornilova_l.protos.EventProtos.Event.Var.Builder getReturnValueBuilder() {
+            return getReturnValueFieldBuilder().getBuilder();
+          }
+          /**
+           * <code>.com.github.kornilova_l.protos.Event.Var return_value = 7;</code>
+           */
+          public com.github.kornilova_l.protos.EventProtos.Event.VarOrBuilder getReturnValueOrBuilder() {
+            if ((resultCase_ == 7) && (returnValueBuilder_ != null)) {
+              return returnValueBuilder_.getMessageOrBuilder();
+            } else {
+              if (resultCase_ == 7) {
+                return (com.github.kornilova_l.protos.EventProtos.Event.Var) result_;
+              }
+              return com.github.kornilova_l.protos.EventProtos.Event.Var.getDefaultInstance();
+            }
+          }
+          /**
+           * <code>.com.github.kornilova_l.protos.Event.Var return_value = 7;</code>
+           */
+          private com.google.protobuf.SingleFieldBuilderV3<
+              com.github.kornilova_l.protos.EventProtos.Event.Var, com.github.kornilova_l.protos.EventProtos.Event.Var.Builder, com.github.kornilova_l.protos.EventProtos.Event.VarOrBuilder> 
+              getReturnValueFieldBuilder() {
+            if (returnValueBuilder_ == null) {
+              if (!(resultCase_ == 7)) {
+                result_ = com.github.kornilova_l.protos.EventProtos.Event.Var.getDefaultInstance();
+              }
+              returnValueBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+                  com.github.kornilova_l.protos.EventProtos.Event.Var, com.github.kornilova_l.protos.EventProtos.Event.Var.Builder, com.github.kornilova_l.protos.EventProtos.Event.VarOrBuilder>(
+                      (com.github.kornilova_l.protos.EventProtos.Event.Var) result_,
+                      getParentForChildren(),
+                      isClean());
+              result_ = null;
+            }
+            resultCase_ = 7;
+            onChanged();;
+            return returnValueBuilder_;
+          }
+
+          private com.google.protobuf.SingleFieldBuilderV3<
+              com.github.kornilova_l.protos.EventProtos.Event.Exception, com.github.kornilova_l.protos.EventProtos.Event.Exception.Builder, com.github.kornilova_l.protos.EventProtos.Event.ExceptionOrBuilder> exceptionBuilder_;
+          /**
+           * <code>.com.github.kornilova_l.protos.Event.Exception exception = 8;</code>
+           */
+          public com.github.kornilova_l.protos.EventProtos.Event.Exception getException() {
+            if (exceptionBuilder_ == null) {
+              if (resultCase_ == 8) {
+                return (com.github.kornilova_l.protos.EventProtos.Event.Exception) result_;
+              }
+              return com.github.kornilova_l.protos.EventProtos.Event.Exception.getDefaultInstance();
+            } else {
+              if (resultCase_ == 8) {
+                return exceptionBuilder_.getMessage();
+              }
+              return com.github.kornilova_l.protos.EventProtos.Event.Exception.getDefaultInstance();
+            }
+          }
+          /**
+           * <code>.com.github.kornilova_l.protos.Event.Exception exception = 8;</code>
+           */
+          public Builder setException(com.github.kornilova_l.protos.EventProtos.Event.Exception value) {
+            if (exceptionBuilder_ == null) {
+              if (value == null) {
+                throw new NullPointerException();
+              }
+              result_ = value;
+              onChanged();
+            } else {
+              exceptionBuilder_.setMessage(value);
+            }
+            resultCase_ = 8;
+            return this;
+          }
+          /**
+           * <code>.com.github.kornilova_l.protos.Event.Exception exception = 8;</code>
+           */
+          public Builder setException(
+              com.github.kornilova_l.protos.EventProtos.Event.Exception.Builder builderForValue) {
+            if (exceptionBuilder_ == null) {
+              result_ = builderForValue.build();
+              onChanged();
+            } else {
+              exceptionBuilder_.setMessage(builderForValue.build());
+            }
+            resultCase_ = 8;
+            return this;
+          }
+          /**
+           * <code>.com.github.kornilova_l.protos.Event.Exception exception = 8;</code>
+           */
+          public Builder mergeException(com.github.kornilova_l.protos.EventProtos.Event.Exception value) {
+            if (exceptionBuilder_ == null) {
+              if (resultCase_ == 8 &&
+                  result_ != com.github.kornilova_l.protos.EventProtos.Event.Exception.getDefaultInstance()) {
+                result_ = com.github.kornilova_l.protos.EventProtos.Event.Exception.newBuilder((com.github.kornilova_l.protos.EventProtos.Event.Exception) result_)
+                    .mergeFrom(value).buildPartial();
+              } else {
+                result_ = value;
+              }
+              onChanged();
+            } else {
+              if (resultCase_ == 8) {
+                exceptionBuilder_.mergeFrom(value);
+              }
+              exceptionBuilder_.setMessage(value);
+            }
+            resultCase_ = 8;
+            return this;
+          }
+          /**
+           * <code>.com.github.kornilova_l.protos.Event.Exception exception = 8;</code>
+           */
+          public Builder clearException() {
+            if (exceptionBuilder_ == null) {
+              if (resultCase_ == 8) {
+                resultCase_ = 0;
+                result_ = null;
+                onChanged();
+              }
+            } else {
+              if (resultCase_ == 8) {
+                resultCase_ = 0;
+                result_ = null;
+              }
+              exceptionBuilder_.clear();
+            }
+            return this;
+          }
+          /**
+           * <code>.com.github.kornilova_l.protos.Event.Exception exception = 8;</code>
+           */
+          public com.github.kornilova_l.protos.EventProtos.Event.Exception.Builder getExceptionBuilder() {
+            return getExceptionFieldBuilder().getBuilder();
+          }
+          /**
+           * <code>.com.github.kornilova_l.protos.Event.Exception exception = 8;</code>
+           */
+          public com.github.kornilova_l.protos.EventProtos.Event.ExceptionOrBuilder getExceptionOrBuilder() {
+            if ((resultCase_ == 8) && (exceptionBuilder_ != null)) {
+              return exceptionBuilder_.getMessageOrBuilder();
+            } else {
+              if (resultCase_ == 8) {
+                return (com.github.kornilova_l.protos.EventProtos.Event.Exception) result_;
+              }
+              return com.github.kornilova_l.protos.EventProtos.Event.Exception.getDefaultInstance();
+            }
+          }
+          /**
+           * <code>.com.github.kornilova_l.protos.Event.Exception exception = 8;</code>
+           */
+          private com.google.protobuf.SingleFieldBuilderV3<
+              com.github.kornilova_l.protos.EventProtos.Event.Exception, com.github.kornilova_l.protos.EventProtos.Event.Exception.Builder, com.github.kornilova_l.protos.EventProtos.Event.ExceptionOrBuilder> 
+              getExceptionFieldBuilder() {
+            if (exceptionBuilder_ == null) {
+              if (!(resultCase_ == 8)) {
+                result_ = com.github.kornilova_l.protos.EventProtos.Event.Exception.getDefaultInstance();
+              }
+              exceptionBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+                  com.github.kornilova_l.protos.EventProtos.Event.Exception, com.github.kornilova_l.protos.EventProtos.Event.Exception.Builder, com.github.kornilova_l.protos.EventProtos.Event.ExceptionOrBuilder>(
+                      (com.github.kornilova_l.protos.EventProtos.Event.Exception) result_,
+                      getParentForChildren(),
+                      isClean());
+              result_ = null;
+            }
+            resultCase_ = 8;
+            onChanged();;
+            return exceptionBuilder_;
+          }
+          public final Builder setUnknownFields(
+              final com.google.protobuf.UnknownFieldSet unknownFields) {
+            return this;
+          }
+
+          public final Builder mergeUnknownFields(
+              final com.google.protobuf.UnknownFieldSet unknownFields) {
+            return this;
+          }
+
+
+          // @@protoc_insertion_point(builder_scope:com.github.kornilova_l.protos.Tree.Node.NodeInfo)
+        }
+
+        // @@protoc_insertion_point(class_scope:com.github.kornilova_l.protos.Tree.Node.NodeInfo)
+        private static final com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfo DEFAULT_INSTANCE;
+        static {
+          DEFAULT_INSTANCE = new com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfo();
+        }
+
+        public static com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfo getDefaultInstance() {
+          return DEFAULT_INSTANCE;
+        }
+
+        private static final com.google.protobuf.Parser<NodeInfo>
+            PARSER = new com.google.protobuf.AbstractParser<NodeInfo>() {
+          public NodeInfo parsePartialFrom(
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws com.google.protobuf.InvalidProtocolBufferException {
+              return new NodeInfo(input, extensionRegistry);
+          }
+        };
+
+        public static com.google.protobuf.Parser<NodeInfo> parser() {
+          return PARSER;
+        }
+
+        @java.lang.Override
+        public com.google.protobuf.Parser<NodeInfo> getParserForType() {
+          return PARSER;
+        }
+
+        public com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfo getDefaultInstanceForType() {
+          return DEFAULT_INSTANCE;
+        }
+
       }
 
       private int bitField0_;
-      private int exitInfoCase_ = 0;
-      private java.lang.Object exitInfo_;
-      public enum ExitInfoCase
-          implements com.google.protobuf.Internal.EnumLite {
-        EXIT(3),
-        EXCEPTION(4),
-        EXITINFO_NOT_SET(0);
-        private final int value;
-        private ExitInfoCase(int value) {
-          this.value = value;
-        }
-        /**
-         * @deprecated Use {@link #forNumber(int)} instead.
-         */
-        @java.lang.Deprecated
-        public static ExitInfoCase valueOf(int value) {
-          return forNumber(value);
-        }
-
-        public static ExitInfoCase forNumber(int value) {
-          switch (value) {
-            case 3: return EXIT;
-            case 4: return EXCEPTION;
-            case 0: return EXITINFO_NOT_SET;
-            default: return null;
-          }
-        }
-        public int getNumber() {
-          return this.value;
-        }
-      };
-
-      public ExitInfoCase
-      getExitInfoCase() {
-        return ExitInfoCase.forNumber(
-            exitInfoCase_);
+      public static final int OFFSET_FIELD_NUMBER = 1;
+      private double offset_;
+      /**
+       * <code>double offset = 1;</code>
+       */
+      public double getOffset() {
+        return offset_;
       }
 
-      public static final int DURATION_FIELD_NUMBER = 1;
-      private long duration_;
+      public static final int WIDTH_FIELD_NUMBER = 2;
+      private double width_;
       /**
-       * <code>int64 duration = 1;</code>
+       * <code>double width = 2;</code>
        */
-      public long getDuration() {
-        return duration_;
+      public double getWidth() {
+        return width_;
       }
 
-      public static final int ENTER_FIELD_NUMBER = 2;
-      private com.github.kornilova_l.protos.EventProtos.Event.Enter enter_;
+      public static final int NODE_INFO_FIELD_NUMBER = 3;
+      private com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfo nodeInfo_;
       /**
-       * <code>.com.github.kornilova_l.protos.Event.Enter enter = 2;</code>
+       * <code>.com.github.kornilova_l.protos.Tree.Node.NodeInfo node_info = 3;</code>
        */
-      public boolean hasEnter() {
-        return enter_ != null;
+      public boolean hasNodeInfo() {
+        return nodeInfo_ != null;
       }
       /**
-       * <code>.com.github.kornilova_l.protos.Event.Enter enter = 2;</code>
+       * <code>.com.github.kornilova_l.protos.Tree.Node.NodeInfo node_info = 3;</code>
        */
-      public com.github.kornilova_l.protos.EventProtos.Event.Enter getEnter() {
-        return enter_ == null ? com.github.kornilova_l.protos.EventProtos.Event.Enter.getDefaultInstance() : enter_;
+      public com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfo getNodeInfo() {
+        return nodeInfo_ == null ? com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfo.getDefaultInstance() : nodeInfo_;
       }
       /**
-       * <code>.com.github.kornilova_l.protos.Event.Enter enter = 2;</code>
+       * <code>.com.github.kornilova_l.protos.Tree.Node.NodeInfo node_info = 3;</code>
        */
-      public com.github.kornilova_l.protos.EventProtos.Event.EnterOrBuilder getEnterOrBuilder() {
-        return getEnter();
-      }
-
-      public static final int EXIT_FIELD_NUMBER = 3;
-      /**
-       * <code>.com.github.kornilova_l.protos.Event.Exit exit = 3;</code>
-       */
-      public com.github.kornilova_l.protos.EventProtos.Event.Exit getExit() {
-        if (exitInfoCase_ == 3) {
-           return (com.github.kornilova_l.protos.EventProtos.Event.Exit) exitInfo_;
-        }
-        return com.github.kornilova_l.protos.EventProtos.Event.Exit.getDefaultInstance();
-      }
-      /**
-       * <code>.com.github.kornilova_l.protos.Event.Exit exit = 3;</code>
-       */
-      public com.github.kornilova_l.protos.EventProtos.Event.ExitOrBuilder getExitOrBuilder() {
-        if (exitInfoCase_ == 3) {
-           return (com.github.kornilova_l.protos.EventProtos.Event.Exit) exitInfo_;
-        }
-        return com.github.kornilova_l.protos.EventProtos.Event.Exit.getDefaultInstance();
+      public com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfoOrBuilder getNodeInfoOrBuilder() {
+        return getNodeInfo();
       }
 
-      public static final int EXCEPTION_FIELD_NUMBER = 4;
+      public static final int NODES_FIELD_NUMBER = 4;
+      private java.util.List<com.github.kornilova_l.protos.TreeProtos.Tree.Node> nodes_;
       /**
-       * <code>.com.github.kornilova_l.protos.Event.Exception exception = 4;</code>
+       * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 4;</code>
        */
-      public com.github.kornilova_l.protos.EventProtos.Event.Exception getException() {
-        if (exitInfoCase_ == 4) {
-           return (com.github.kornilova_l.protos.EventProtos.Event.Exception) exitInfo_;
-        }
-        return com.github.kornilova_l.protos.EventProtos.Event.Exception.getDefaultInstance();
+      public java.util.List<com.github.kornilova_l.protos.TreeProtos.Tree.Node> getNodesList() {
+        return nodes_;
       }
       /**
-       * <code>.com.github.kornilova_l.protos.Event.Exception exception = 4;</code>
+       * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 4;</code>
        */
-      public com.github.kornilova_l.protos.EventProtos.Event.ExceptionOrBuilder getExceptionOrBuilder() {
-        if (exitInfoCase_ == 4) {
-           return (com.github.kornilova_l.protos.EventProtos.Event.Exception) exitInfo_;
-        }
-        return com.github.kornilova_l.protos.EventProtos.Event.Exception.getDefaultInstance();
-      }
-
-      public static final int STARTTIME_FIELD_NUMBER = 5;
-      private long startTime_;
-      /**
-       * <pre>
-       * only for trees which save original call structure
-       * </pre>
-       *
-       * <code>int64 startTime = 5;</code>
-       */
-      public long getStartTime() {
-        return startTime_;
-      }
-
-      public static final int CALLS_FIELD_NUMBER = 6;
-      private java.util.List<com.github.kornilova_l.protos.TreeProtos.Tree.Call> calls_;
-      /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 6;</code>
-       */
-      public java.util.List<com.github.kornilova_l.protos.TreeProtos.Tree.Call> getCallsList() {
-        return calls_;
+      public java.util.List<? extends com.github.kornilova_l.protos.TreeProtos.Tree.NodeOrBuilder> 
+          getNodesOrBuilderList() {
+        return nodes_;
       }
       /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 6;</code>
+       * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 4;</code>
        */
-      public java.util.List<? extends com.github.kornilova_l.protos.TreeProtos.Tree.CallOrBuilder> 
-          getCallsOrBuilderList() {
-        return calls_;
+      public int getNodesCount() {
+        return nodes_.size();
       }
       /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 6;</code>
+       * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 4;</code>
        */
-      public int getCallsCount() {
-        return calls_.size();
+      public com.github.kornilova_l.protos.TreeProtos.Tree.Node getNodes(int index) {
+        return nodes_.get(index);
       }
       /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 6;</code>
+       * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 4;</code>
        */
-      public com.github.kornilova_l.protos.TreeProtos.Tree.Call getCalls(int index) {
-        return calls_.get(index);
-      }
-      /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 6;</code>
-       */
-      public com.github.kornilova_l.protos.TreeProtos.Tree.CallOrBuilder getCallsOrBuilder(
+      public com.github.kornilova_l.protos.TreeProtos.Tree.NodeOrBuilder getNodesOrBuilder(
           int index) {
-        return calls_.get(index);
+        return nodes_.get(index);
       }
 
       private byte memoizedIsInitialized = -1;
@@ -541,23 +2211,17 @@ public final class TreeProtos {
 
       public void writeTo(com.google.protobuf.CodedOutputStream output)
                           throws java.io.IOException {
-        if (duration_ != 0L) {
-          output.writeInt64(1, duration_);
+        if (offset_ != 0D) {
+          output.writeDouble(1, offset_);
         }
-        if (enter_ != null) {
-          output.writeMessage(2, getEnter());
+        if (width_ != 0D) {
+          output.writeDouble(2, width_);
         }
-        if (exitInfoCase_ == 3) {
-          output.writeMessage(3, (com.github.kornilova_l.protos.EventProtos.Event.Exit) exitInfo_);
+        if (nodeInfo_ != null) {
+          output.writeMessage(3, getNodeInfo());
         }
-        if (exitInfoCase_ == 4) {
-          output.writeMessage(4, (com.github.kornilova_l.protos.EventProtos.Event.Exception) exitInfo_);
-        }
-        if (startTime_ != 0L) {
-          output.writeInt64(5, startTime_);
-        }
-        for (int i = 0; i < calls_.size(); i++) {
-          output.writeMessage(6, calls_.get(i));
+        for (int i = 0; i < nodes_.size(); i++) {
+          output.writeMessage(4, nodes_.get(i));
         }
       }
 
@@ -566,29 +2230,21 @@ public final class TreeProtos {
         if (size != -1) return size;
 
         size = 0;
-        if (duration_ != 0L) {
+        if (offset_ != 0D) {
           size += com.google.protobuf.CodedOutputStream
-            .computeInt64Size(1, duration_);
+            .computeDoubleSize(1, offset_);
         }
-        if (enter_ != null) {
+        if (width_ != 0D) {
           size += com.google.protobuf.CodedOutputStream
-            .computeMessageSize(2, getEnter());
+            .computeDoubleSize(2, width_);
         }
-        if (exitInfoCase_ == 3) {
+        if (nodeInfo_ != null) {
           size += com.google.protobuf.CodedOutputStream
-            .computeMessageSize(3, (com.github.kornilova_l.protos.EventProtos.Event.Exit) exitInfo_);
+            .computeMessageSize(3, getNodeInfo());
         }
-        if (exitInfoCase_ == 4) {
+        for (int i = 0; i < nodes_.size(); i++) {
           size += com.google.protobuf.CodedOutputStream
-            .computeMessageSize(4, (com.github.kornilova_l.protos.EventProtos.Event.Exception) exitInfo_);
-        }
-        if (startTime_ != 0L) {
-          size += com.google.protobuf.CodedOutputStream
-            .computeInt64Size(5, startTime_);
-        }
-        for (int i = 0; i < calls_.size(); i++) {
-          size += com.google.protobuf.CodedOutputStream
-            .computeMessageSize(6, calls_.get(i));
+            .computeMessageSize(4, nodes_.get(i));
         }
         memoizedSize = size;
         return size;
@@ -600,38 +2256,27 @@ public final class TreeProtos {
         if (obj == this) {
          return true;
         }
-        if (!(obj instanceof com.github.kornilova_l.protos.TreeProtos.Tree.Call)) {
+        if (!(obj instanceof com.github.kornilova_l.protos.TreeProtos.Tree.Node)) {
           return super.equals(obj);
         }
-        com.github.kornilova_l.protos.TreeProtos.Tree.Call other = (com.github.kornilova_l.protos.TreeProtos.Tree.Call) obj;
+        com.github.kornilova_l.protos.TreeProtos.Tree.Node other = (com.github.kornilova_l.protos.TreeProtos.Tree.Node) obj;
 
         boolean result = true;
-        result = result && (getDuration()
-            == other.getDuration());
-        result = result && (hasEnter() == other.hasEnter());
-        if (hasEnter()) {
-          result = result && getEnter()
-              .equals(other.getEnter());
+        result = result && (
+            java.lang.Double.doubleToLongBits(getOffset())
+            == java.lang.Double.doubleToLongBits(
+                other.getOffset()));
+        result = result && (
+            java.lang.Double.doubleToLongBits(getWidth())
+            == java.lang.Double.doubleToLongBits(
+                other.getWidth()));
+        result = result && (hasNodeInfo() == other.hasNodeInfo());
+        if (hasNodeInfo()) {
+          result = result && getNodeInfo()
+              .equals(other.getNodeInfo());
         }
-        result = result && (getStartTime()
-            == other.getStartTime());
-        result = result && getCallsList()
-            .equals(other.getCallsList());
-        result = result && getExitInfoCase().equals(
-            other.getExitInfoCase());
-        if (!result) return false;
-        switch (exitInfoCase_) {
-          case 3:
-            result = result && getExit()
-                .equals(other.getExit());
-            break;
-          case 4:
-            result = result && getException()
-                .equals(other.getException());
-            break;
-          case 0:
-          default:
-        }
+        result = result && getNodesList()
+            .equals(other.getNodesList());
         return result;
       }
 
@@ -642,100 +2287,88 @@ public final class TreeProtos {
         }
         int hash = 41;
         hash = (19 * hash) + getDescriptor().hashCode();
-        hash = (37 * hash) + DURATION_FIELD_NUMBER;
+        hash = (37 * hash) + OFFSET_FIELD_NUMBER;
         hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-            getDuration());
-        if (hasEnter()) {
-          hash = (37 * hash) + ENTER_FIELD_NUMBER;
-          hash = (53 * hash) + getEnter().hashCode();
-        }
-        hash = (37 * hash) + STARTTIME_FIELD_NUMBER;
+            java.lang.Double.doubleToLongBits(getOffset()));
+        hash = (37 * hash) + WIDTH_FIELD_NUMBER;
         hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-            getStartTime());
-        if (getCallsCount() > 0) {
-          hash = (37 * hash) + CALLS_FIELD_NUMBER;
-          hash = (53 * hash) + getCallsList().hashCode();
+            java.lang.Double.doubleToLongBits(getWidth()));
+        if (hasNodeInfo()) {
+          hash = (37 * hash) + NODE_INFO_FIELD_NUMBER;
+          hash = (53 * hash) + getNodeInfo().hashCode();
         }
-        switch (exitInfoCase_) {
-          case 3:
-            hash = (37 * hash) + EXIT_FIELD_NUMBER;
-            hash = (53 * hash) + getExit().hashCode();
-            break;
-          case 4:
-            hash = (37 * hash) + EXCEPTION_FIELD_NUMBER;
-            hash = (53 * hash) + getException().hashCode();
-            break;
-          case 0:
-          default:
+        if (getNodesCount() > 0) {
+          hash = (37 * hash) + NODES_FIELD_NUMBER;
+          hash = (53 * hash) + getNodesList().hashCode();
         }
         hash = (29 * hash) + unknownFields.hashCode();
         memoizedHashCode = hash;
         return hash;
       }
 
-      public static com.github.kornilova_l.protos.TreeProtos.Tree.Call parseFrom(
+      public static com.github.kornilova_l.protos.TreeProtos.Tree.Node parseFrom(
           java.nio.ByteBuffer data)
           throws com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data);
       }
-      public static com.github.kornilova_l.protos.TreeProtos.Tree.Call parseFrom(
+      public static com.github.kornilova_l.protos.TreeProtos.Tree.Node parseFrom(
           java.nio.ByteBuffer data,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data, extensionRegistry);
       }
-      public static com.github.kornilova_l.protos.TreeProtos.Tree.Call parseFrom(
+      public static com.github.kornilova_l.protos.TreeProtos.Tree.Node parseFrom(
           com.google.protobuf.ByteString data)
           throws com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data);
       }
-      public static com.github.kornilova_l.protos.TreeProtos.Tree.Call parseFrom(
+      public static com.github.kornilova_l.protos.TreeProtos.Tree.Node parseFrom(
           com.google.protobuf.ByteString data,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data, extensionRegistry);
       }
-      public static com.github.kornilova_l.protos.TreeProtos.Tree.Call parseFrom(byte[] data)
+      public static com.github.kornilova_l.protos.TreeProtos.Tree.Node parseFrom(byte[] data)
           throws com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data);
       }
-      public static com.github.kornilova_l.protos.TreeProtos.Tree.Call parseFrom(
+      public static com.github.kornilova_l.protos.TreeProtos.Tree.Node parseFrom(
           byte[] data,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data, extensionRegistry);
       }
-      public static com.github.kornilova_l.protos.TreeProtos.Tree.Call parseFrom(java.io.InputStream input)
+      public static com.github.kornilova_l.protos.TreeProtos.Tree.Node parseFrom(java.io.InputStream input)
           throws java.io.IOException {
         return com.google.protobuf.GeneratedMessageV3
             .parseWithIOException(PARSER, input);
       }
-      public static com.github.kornilova_l.protos.TreeProtos.Tree.Call parseFrom(
+      public static com.github.kornilova_l.protos.TreeProtos.Tree.Node parseFrom(
           java.io.InputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
         return com.google.protobuf.GeneratedMessageV3
             .parseWithIOException(PARSER, input, extensionRegistry);
       }
-      public static com.github.kornilova_l.protos.TreeProtos.Tree.Call parseDelimitedFrom(java.io.InputStream input)
+      public static com.github.kornilova_l.protos.TreeProtos.Tree.Node parseDelimitedFrom(java.io.InputStream input)
           throws java.io.IOException {
         return com.google.protobuf.GeneratedMessageV3
             .parseDelimitedWithIOException(PARSER, input);
       }
-      public static com.github.kornilova_l.protos.TreeProtos.Tree.Call parseDelimitedFrom(
+      public static com.github.kornilova_l.protos.TreeProtos.Tree.Node parseDelimitedFrom(
           java.io.InputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
         return com.google.protobuf.GeneratedMessageV3
             .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
       }
-      public static com.github.kornilova_l.protos.TreeProtos.Tree.Call parseFrom(
+      public static com.github.kornilova_l.protos.TreeProtos.Tree.Node parseFrom(
           com.google.protobuf.CodedInputStream input)
           throws java.io.IOException {
         return com.google.protobuf.GeneratedMessageV3
             .parseWithIOException(PARSER, input);
       }
-      public static com.github.kornilova_l.protos.TreeProtos.Tree.Call parseFrom(
+      public static com.github.kornilova_l.protos.TreeProtos.Tree.Node parseFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
@@ -747,7 +2380,7 @@ public final class TreeProtos {
       public static Builder newBuilder() {
         return DEFAULT_INSTANCE.toBuilder();
       }
-      public static Builder newBuilder(com.github.kornilova_l.protos.TreeProtos.Tree.Call prototype) {
+      public static Builder newBuilder(com.github.kornilova_l.protos.TreeProtos.Tree.Node prototype) {
         return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
       }
       public Builder toBuilder() {
@@ -762,25 +2395,25 @@ public final class TreeProtos {
         return builder;
       }
       /**
-       * Protobuf type {@code com.github.kornilova_l.protos.Tree.Call}
+       * Protobuf type {@code com.github.kornilova_l.protos.Tree.Node}
        */
       public static final class Builder extends
           com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-          // @@protoc_insertion_point(builder_implements:com.github.kornilova_l.protos.Tree.Call)
-          com.github.kornilova_l.protos.TreeProtos.Tree.CallOrBuilder {
+          // @@protoc_insertion_point(builder_implements:com.github.kornilova_l.protos.Tree.Node)
+          com.github.kornilova_l.protos.TreeProtos.Tree.NodeOrBuilder {
         public static final com.google.protobuf.Descriptors.Descriptor
             getDescriptor() {
-          return com.github.kornilova_l.protos.TreeProtos.internal_static_com_github_kornilova_l_protos_Tree_Call_descriptor;
+          return com.github.kornilova_l.protos.TreeProtos.internal_static_com_github_kornilova_l_protos_Tree_Node_descriptor;
         }
 
         protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
             internalGetFieldAccessorTable() {
-          return com.github.kornilova_l.protos.TreeProtos.internal_static_com_github_kornilova_l_protos_Tree_Call_fieldAccessorTable
+          return com.github.kornilova_l.protos.TreeProtos.internal_static_com_github_kornilova_l_protos_Tree_Node_fieldAccessorTable
               .ensureFieldAccessorsInitialized(
-                  com.github.kornilova_l.protos.TreeProtos.Tree.Call.class, com.github.kornilova_l.protos.TreeProtos.Tree.Call.Builder.class);
+                  com.github.kornilova_l.protos.TreeProtos.Tree.Node.class, com.github.kornilova_l.protos.TreeProtos.Tree.Node.Builder.class);
         }
 
-        // Construct using com.github.kornilova_l.protos.TreeProtos.Tree.Call.newBuilder()
+        // Construct using com.github.kornilova_l.protos.TreeProtos.Tree.Node.newBuilder()
         private Builder() {
           maybeForceBuilderInitialization();
         }
@@ -793,85 +2426,68 @@ public final class TreeProtos {
         private void maybeForceBuilderInitialization() {
           if (com.google.protobuf.GeneratedMessageV3
                   .alwaysUseFieldBuilders) {
-            getCallsFieldBuilder();
+            getNodesFieldBuilder();
           }
         }
         public Builder clear() {
           super.clear();
-          duration_ = 0L;
+          offset_ = 0D;
 
-          if (enterBuilder_ == null) {
-            enter_ = null;
-          } else {
-            enter_ = null;
-            enterBuilder_ = null;
-          }
-          startTime_ = 0L;
+          width_ = 0D;
 
-          if (callsBuilder_ == null) {
-            calls_ = java.util.Collections.emptyList();
-            bitField0_ = (bitField0_ & ~0x00000020);
+          if (nodeInfoBuilder_ == null) {
+            nodeInfo_ = null;
           } else {
-            callsBuilder_.clear();
+            nodeInfo_ = null;
+            nodeInfoBuilder_ = null;
           }
-          exitInfoCase_ = 0;
-          exitInfo_ = null;
+          if (nodesBuilder_ == null) {
+            nodes_ = java.util.Collections.emptyList();
+            bitField0_ = (bitField0_ & ~0x00000008);
+          } else {
+            nodesBuilder_.clear();
+          }
           return this;
         }
 
         public com.google.protobuf.Descriptors.Descriptor
             getDescriptorForType() {
-          return com.github.kornilova_l.protos.TreeProtos.internal_static_com_github_kornilova_l_protos_Tree_Call_descriptor;
+          return com.github.kornilova_l.protos.TreeProtos.internal_static_com_github_kornilova_l_protos_Tree_Node_descriptor;
         }
 
-        public com.github.kornilova_l.protos.TreeProtos.Tree.Call getDefaultInstanceForType() {
-          return com.github.kornilova_l.protos.TreeProtos.Tree.Call.getDefaultInstance();
+        public com.github.kornilova_l.protos.TreeProtos.Tree.Node getDefaultInstanceForType() {
+          return com.github.kornilova_l.protos.TreeProtos.Tree.Node.getDefaultInstance();
         }
 
-        public com.github.kornilova_l.protos.TreeProtos.Tree.Call build() {
-          com.github.kornilova_l.protos.TreeProtos.Tree.Call result = buildPartial();
+        public com.github.kornilova_l.protos.TreeProtos.Tree.Node build() {
+          com.github.kornilova_l.protos.TreeProtos.Tree.Node result = buildPartial();
           if (!result.isInitialized()) {
             throw newUninitializedMessageException(result);
           }
           return result;
         }
 
-        public com.github.kornilova_l.protos.TreeProtos.Tree.Call buildPartial() {
-          com.github.kornilova_l.protos.TreeProtos.Tree.Call result = new com.github.kornilova_l.protos.TreeProtos.Tree.Call(this);
+        public com.github.kornilova_l.protos.TreeProtos.Tree.Node buildPartial() {
+          com.github.kornilova_l.protos.TreeProtos.Tree.Node result = new com.github.kornilova_l.protos.TreeProtos.Tree.Node(this);
           int from_bitField0_ = bitField0_;
           int to_bitField0_ = 0;
-          result.duration_ = duration_;
-          if (enterBuilder_ == null) {
-            result.enter_ = enter_;
+          result.offset_ = offset_;
+          result.width_ = width_;
+          if (nodeInfoBuilder_ == null) {
+            result.nodeInfo_ = nodeInfo_;
           } else {
-            result.enter_ = enterBuilder_.build();
+            result.nodeInfo_ = nodeInfoBuilder_.build();
           }
-          if (exitInfoCase_ == 3) {
-            if (exitBuilder_ == null) {
-              result.exitInfo_ = exitInfo_;
-            } else {
-              result.exitInfo_ = exitBuilder_.build();
+          if (nodesBuilder_ == null) {
+            if (((bitField0_ & 0x00000008) == 0x00000008)) {
+              nodes_ = java.util.Collections.unmodifiableList(nodes_);
+              bitField0_ = (bitField0_ & ~0x00000008);
             }
-          }
-          if (exitInfoCase_ == 4) {
-            if (exceptionBuilder_ == null) {
-              result.exitInfo_ = exitInfo_;
-            } else {
-              result.exitInfo_ = exceptionBuilder_.build();
-            }
-          }
-          result.startTime_ = startTime_;
-          if (callsBuilder_ == null) {
-            if (((bitField0_ & 0x00000020) == 0x00000020)) {
-              calls_ = java.util.Collections.unmodifiableList(calls_);
-              bitField0_ = (bitField0_ & ~0x00000020);
-            }
-            result.calls_ = calls_;
+            result.nodes_ = nodes_;
           } else {
-            result.calls_ = callsBuilder_.build();
+            result.nodes_ = nodesBuilder_.build();
           }
           result.bitField0_ = to_bitField0_;
-          result.exitInfoCase_ = exitInfoCase_;
           onBuilt();
           return result;
         }
@@ -903,62 +2519,49 @@ public final class TreeProtos {
           return (Builder) super.addRepeatedField(field, value);
         }
         public Builder mergeFrom(com.google.protobuf.Message other) {
-          if (other instanceof com.github.kornilova_l.protos.TreeProtos.Tree.Call) {
-            return mergeFrom((com.github.kornilova_l.protos.TreeProtos.Tree.Call)other);
+          if (other instanceof com.github.kornilova_l.protos.TreeProtos.Tree.Node) {
+            return mergeFrom((com.github.kornilova_l.protos.TreeProtos.Tree.Node)other);
           } else {
             super.mergeFrom(other);
             return this;
           }
         }
 
-        public Builder mergeFrom(com.github.kornilova_l.protos.TreeProtos.Tree.Call other) {
-          if (other == com.github.kornilova_l.protos.TreeProtos.Tree.Call.getDefaultInstance()) return this;
-          if (other.getDuration() != 0L) {
-            setDuration(other.getDuration());
+        public Builder mergeFrom(com.github.kornilova_l.protos.TreeProtos.Tree.Node other) {
+          if (other == com.github.kornilova_l.protos.TreeProtos.Tree.Node.getDefaultInstance()) return this;
+          if (other.getOffset() != 0D) {
+            setOffset(other.getOffset());
           }
-          if (other.hasEnter()) {
-            mergeEnter(other.getEnter());
+          if (other.getWidth() != 0D) {
+            setWidth(other.getWidth());
           }
-          if (other.getStartTime() != 0L) {
-            setStartTime(other.getStartTime());
+          if (other.hasNodeInfo()) {
+            mergeNodeInfo(other.getNodeInfo());
           }
-          if (callsBuilder_ == null) {
-            if (!other.calls_.isEmpty()) {
-              if (calls_.isEmpty()) {
-                calls_ = other.calls_;
-                bitField0_ = (bitField0_ & ~0x00000020);
+          if (nodesBuilder_ == null) {
+            if (!other.nodes_.isEmpty()) {
+              if (nodes_.isEmpty()) {
+                nodes_ = other.nodes_;
+                bitField0_ = (bitField0_ & ~0x00000008);
               } else {
-                ensureCallsIsMutable();
-                calls_.addAll(other.calls_);
+                ensureNodesIsMutable();
+                nodes_.addAll(other.nodes_);
               }
               onChanged();
             }
           } else {
-            if (!other.calls_.isEmpty()) {
-              if (callsBuilder_.isEmpty()) {
-                callsBuilder_.dispose();
-                callsBuilder_ = null;
-                calls_ = other.calls_;
-                bitField0_ = (bitField0_ & ~0x00000020);
-                callsBuilder_ = 
+            if (!other.nodes_.isEmpty()) {
+              if (nodesBuilder_.isEmpty()) {
+                nodesBuilder_.dispose();
+                nodesBuilder_ = null;
+                nodes_ = other.nodes_;
+                bitField0_ = (bitField0_ & ~0x00000008);
+                nodesBuilder_ = 
                   com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
-                     getCallsFieldBuilder() : null;
+                     getNodesFieldBuilder() : null;
               } else {
-                callsBuilder_.addAllMessages(other.calls_);
+                nodesBuilder_.addAllMessages(other.nodes_);
               }
-            }
-          }
-          switch (other.getExitInfoCase()) {
-            case EXIT: {
-              mergeExit(other.getExit());
-              break;
-            }
-            case EXCEPTION: {
-              mergeException(other.getException());
-              break;
-            }
-            case EXITINFO_NOT_SET: {
-              break;
             }
           }
           onChanged();
@@ -973,11 +2576,11 @@ public final class TreeProtos {
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws java.io.IOException {
-          com.github.kornilova_l.protos.TreeProtos.Tree.Call parsedMessage = null;
+          com.github.kornilova_l.protos.TreeProtos.Tree.Node parsedMessage = null;
           try {
             parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
           } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-            parsedMessage = (com.github.kornilova_l.protos.TreeProtos.Tree.Call) e.getUnfinishedMessage();
+            parsedMessage = (com.github.kornilova_l.protos.TreeProtos.Tree.Node) e.getUnfinishedMessage();
             throw e.unwrapIOException();
           } finally {
             if (parsedMessage != null) {
@@ -986,22 +2589,923 @@ public final class TreeProtos {
           }
           return this;
         }
-        private int exitInfoCase_ = 0;
-        private java.lang.Object exitInfo_;
-        public ExitInfoCase
-            getExitInfoCase() {
-          return ExitInfoCase.forNumber(
-              exitInfoCase_);
-        }
+        private int bitField0_;
 
-        public Builder clearExitInfo() {
-          exitInfoCase_ = 0;
-          exitInfo_ = null;
+        private double offset_ ;
+        /**
+         * <code>double offset = 1;</code>
+         */
+        public double getOffset() {
+          return offset_;
+        }
+        /**
+         * <code>double offset = 1;</code>
+         */
+        public Builder setOffset(double value) {
+          
+          offset_ = value;
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>double offset = 1;</code>
+         */
+        public Builder clearOffset() {
+          
+          offset_ = 0D;
           onChanged();
           return this;
         }
 
-        private int bitField0_;
+        private double width_ ;
+        /**
+         * <code>double width = 2;</code>
+         */
+        public double getWidth() {
+          return width_;
+        }
+        /**
+         * <code>double width = 2;</code>
+         */
+        public Builder setWidth(double value) {
+          
+          width_ = value;
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>double width = 2;</code>
+         */
+        public Builder clearWidth() {
+          
+          width_ = 0D;
+          onChanged();
+          return this;
+        }
+
+        private com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfo nodeInfo_ = null;
+        private com.google.protobuf.SingleFieldBuilderV3<
+            com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfo, com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfo.Builder, com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfoOrBuilder> nodeInfoBuilder_;
+        /**
+         * <code>.com.github.kornilova_l.protos.Tree.Node.NodeInfo node_info = 3;</code>
+         */
+        public boolean hasNodeInfo() {
+          return nodeInfoBuilder_ != null || nodeInfo_ != null;
+        }
+        /**
+         * <code>.com.github.kornilova_l.protos.Tree.Node.NodeInfo node_info = 3;</code>
+         */
+        public com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfo getNodeInfo() {
+          if (nodeInfoBuilder_ == null) {
+            return nodeInfo_ == null ? com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfo.getDefaultInstance() : nodeInfo_;
+          } else {
+            return nodeInfoBuilder_.getMessage();
+          }
+        }
+        /**
+         * <code>.com.github.kornilova_l.protos.Tree.Node.NodeInfo node_info = 3;</code>
+         */
+        public Builder setNodeInfo(com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfo value) {
+          if (nodeInfoBuilder_ == null) {
+            if (value == null) {
+              throw new NullPointerException();
+            }
+            nodeInfo_ = value;
+            onChanged();
+          } else {
+            nodeInfoBuilder_.setMessage(value);
+          }
+
+          return this;
+        }
+        /**
+         * <code>.com.github.kornilova_l.protos.Tree.Node.NodeInfo node_info = 3;</code>
+         */
+        public Builder setNodeInfo(
+            com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfo.Builder builderForValue) {
+          if (nodeInfoBuilder_ == null) {
+            nodeInfo_ = builderForValue.build();
+            onChanged();
+          } else {
+            nodeInfoBuilder_.setMessage(builderForValue.build());
+          }
+
+          return this;
+        }
+        /**
+         * <code>.com.github.kornilova_l.protos.Tree.Node.NodeInfo node_info = 3;</code>
+         */
+        public Builder mergeNodeInfo(com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfo value) {
+          if (nodeInfoBuilder_ == null) {
+            if (nodeInfo_ != null) {
+              nodeInfo_ =
+                com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfo.newBuilder(nodeInfo_).mergeFrom(value).buildPartial();
+            } else {
+              nodeInfo_ = value;
+            }
+            onChanged();
+          } else {
+            nodeInfoBuilder_.mergeFrom(value);
+          }
+
+          return this;
+        }
+        /**
+         * <code>.com.github.kornilova_l.protos.Tree.Node.NodeInfo node_info = 3;</code>
+         */
+        public Builder clearNodeInfo() {
+          if (nodeInfoBuilder_ == null) {
+            nodeInfo_ = null;
+            onChanged();
+          } else {
+            nodeInfo_ = null;
+            nodeInfoBuilder_ = null;
+          }
+
+          return this;
+        }
+        /**
+         * <code>.com.github.kornilova_l.protos.Tree.Node.NodeInfo node_info = 3;</code>
+         */
+        public com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfo.Builder getNodeInfoBuilder() {
+          
+          onChanged();
+          return getNodeInfoFieldBuilder().getBuilder();
+        }
+        /**
+         * <code>.com.github.kornilova_l.protos.Tree.Node.NodeInfo node_info = 3;</code>
+         */
+        public com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfoOrBuilder getNodeInfoOrBuilder() {
+          if (nodeInfoBuilder_ != null) {
+            return nodeInfoBuilder_.getMessageOrBuilder();
+          } else {
+            return nodeInfo_ == null ?
+                com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfo.getDefaultInstance() : nodeInfo_;
+          }
+        }
+        /**
+         * <code>.com.github.kornilova_l.protos.Tree.Node.NodeInfo node_info = 3;</code>
+         */
+        private com.google.protobuf.SingleFieldBuilderV3<
+            com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfo, com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfo.Builder, com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfoOrBuilder> 
+            getNodeInfoFieldBuilder() {
+          if (nodeInfoBuilder_ == null) {
+            nodeInfoBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+                com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfo, com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfo.Builder, com.github.kornilova_l.protos.TreeProtos.Tree.Node.NodeInfoOrBuilder>(
+                    getNodeInfo(),
+                    getParentForChildren(),
+                    isClean());
+            nodeInfo_ = null;
+          }
+          return nodeInfoBuilder_;
+        }
+
+        private java.util.List<com.github.kornilova_l.protos.TreeProtos.Tree.Node> nodes_ =
+          java.util.Collections.emptyList();
+        private void ensureNodesIsMutable() {
+          if (!((bitField0_ & 0x00000008) == 0x00000008)) {
+            nodes_ = new java.util.ArrayList<com.github.kornilova_l.protos.TreeProtos.Tree.Node>(nodes_);
+            bitField0_ |= 0x00000008;
+           }
+        }
+
+        private com.google.protobuf.RepeatedFieldBuilderV3<
+            com.github.kornilova_l.protos.TreeProtos.Tree.Node, com.github.kornilova_l.protos.TreeProtos.Tree.Node.Builder, com.github.kornilova_l.protos.TreeProtos.Tree.NodeOrBuilder> nodesBuilder_;
+
+        /**
+         * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 4;</code>
+         */
+        public java.util.List<com.github.kornilova_l.protos.TreeProtos.Tree.Node> getNodesList() {
+          if (nodesBuilder_ == null) {
+            return java.util.Collections.unmodifiableList(nodes_);
+          } else {
+            return nodesBuilder_.getMessageList();
+          }
+        }
+        /**
+         * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 4;</code>
+         */
+        public int getNodesCount() {
+          if (nodesBuilder_ == null) {
+            return nodes_.size();
+          } else {
+            return nodesBuilder_.getCount();
+          }
+        }
+        /**
+         * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 4;</code>
+         */
+        public com.github.kornilova_l.protos.TreeProtos.Tree.Node getNodes(int index) {
+          if (nodesBuilder_ == null) {
+            return nodes_.get(index);
+          } else {
+            return nodesBuilder_.getMessage(index);
+          }
+        }
+        /**
+         * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 4;</code>
+         */
+        public Builder setNodes(
+            int index, com.github.kornilova_l.protos.TreeProtos.Tree.Node value) {
+          if (nodesBuilder_ == null) {
+            if (value == null) {
+              throw new NullPointerException();
+            }
+            ensureNodesIsMutable();
+            nodes_.set(index, value);
+            onChanged();
+          } else {
+            nodesBuilder_.setMessage(index, value);
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 4;</code>
+         */
+        public Builder setNodes(
+            int index, com.github.kornilova_l.protos.TreeProtos.Tree.Node.Builder builderForValue) {
+          if (nodesBuilder_ == null) {
+            ensureNodesIsMutable();
+            nodes_.set(index, builderForValue.build());
+            onChanged();
+          } else {
+            nodesBuilder_.setMessage(index, builderForValue.build());
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 4;</code>
+         */
+        public Builder addNodes(com.github.kornilova_l.protos.TreeProtos.Tree.Node value) {
+          if (nodesBuilder_ == null) {
+            if (value == null) {
+              throw new NullPointerException();
+            }
+            ensureNodesIsMutable();
+            nodes_.add(value);
+            onChanged();
+          } else {
+            nodesBuilder_.addMessage(value);
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 4;</code>
+         */
+        public Builder addNodes(
+            int index, com.github.kornilova_l.protos.TreeProtos.Tree.Node value) {
+          if (nodesBuilder_ == null) {
+            if (value == null) {
+              throw new NullPointerException();
+            }
+            ensureNodesIsMutable();
+            nodes_.add(index, value);
+            onChanged();
+          } else {
+            nodesBuilder_.addMessage(index, value);
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 4;</code>
+         */
+        public Builder addNodes(
+            com.github.kornilova_l.protos.TreeProtos.Tree.Node.Builder builderForValue) {
+          if (nodesBuilder_ == null) {
+            ensureNodesIsMutable();
+            nodes_.add(builderForValue.build());
+            onChanged();
+          } else {
+            nodesBuilder_.addMessage(builderForValue.build());
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 4;</code>
+         */
+        public Builder addNodes(
+            int index, com.github.kornilova_l.protos.TreeProtos.Tree.Node.Builder builderForValue) {
+          if (nodesBuilder_ == null) {
+            ensureNodesIsMutable();
+            nodes_.add(index, builderForValue.build());
+            onChanged();
+          } else {
+            nodesBuilder_.addMessage(index, builderForValue.build());
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 4;</code>
+         */
+        public Builder addAllNodes(
+            java.lang.Iterable<? extends com.github.kornilova_l.protos.TreeProtos.Tree.Node> values) {
+          if (nodesBuilder_ == null) {
+            ensureNodesIsMutable();
+            com.google.protobuf.AbstractMessageLite.Builder.addAll(
+                values, nodes_);
+            onChanged();
+          } else {
+            nodesBuilder_.addAllMessages(values);
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 4;</code>
+         */
+        public Builder clearNodes() {
+          if (nodesBuilder_ == null) {
+            nodes_ = java.util.Collections.emptyList();
+            bitField0_ = (bitField0_ & ~0x00000008);
+            onChanged();
+          } else {
+            nodesBuilder_.clear();
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 4;</code>
+         */
+        public Builder removeNodes(int index) {
+          if (nodesBuilder_ == null) {
+            ensureNodesIsMutable();
+            nodes_.remove(index);
+            onChanged();
+          } else {
+            nodesBuilder_.remove(index);
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 4;</code>
+         */
+        public com.github.kornilova_l.protos.TreeProtos.Tree.Node.Builder getNodesBuilder(
+            int index) {
+          return getNodesFieldBuilder().getBuilder(index);
+        }
+        /**
+         * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 4;</code>
+         */
+        public com.github.kornilova_l.protos.TreeProtos.Tree.NodeOrBuilder getNodesOrBuilder(
+            int index) {
+          if (nodesBuilder_ == null) {
+            return nodes_.get(index);  } else {
+            return nodesBuilder_.getMessageOrBuilder(index);
+          }
+        }
+        /**
+         * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 4;</code>
+         */
+        public java.util.List<? extends com.github.kornilova_l.protos.TreeProtos.Tree.NodeOrBuilder> 
+             getNodesOrBuilderList() {
+          if (nodesBuilder_ != null) {
+            return nodesBuilder_.getMessageOrBuilderList();
+          } else {
+            return java.util.Collections.unmodifiableList(nodes_);
+          }
+        }
+        /**
+         * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 4;</code>
+         */
+        public com.github.kornilova_l.protos.TreeProtos.Tree.Node.Builder addNodesBuilder() {
+          return getNodesFieldBuilder().addBuilder(
+              com.github.kornilova_l.protos.TreeProtos.Tree.Node.getDefaultInstance());
+        }
+        /**
+         * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 4;</code>
+         */
+        public com.github.kornilova_l.protos.TreeProtos.Tree.Node.Builder addNodesBuilder(
+            int index) {
+          return getNodesFieldBuilder().addBuilder(
+              index, com.github.kornilova_l.protos.TreeProtos.Tree.Node.getDefaultInstance());
+        }
+        /**
+         * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 4;</code>
+         */
+        public java.util.List<com.github.kornilova_l.protos.TreeProtos.Tree.Node.Builder> 
+             getNodesBuilderList() {
+          return getNodesFieldBuilder().getBuilderList();
+        }
+        private com.google.protobuf.RepeatedFieldBuilderV3<
+            com.github.kornilova_l.protos.TreeProtos.Tree.Node, com.github.kornilova_l.protos.TreeProtos.Tree.Node.Builder, com.github.kornilova_l.protos.TreeProtos.Tree.NodeOrBuilder> 
+            getNodesFieldBuilder() {
+          if (nodesBuilder_ == null) {
+            nodesBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
+                com.github.kornilova_l.protos.TreeProtos.Tree.Node, com.github.kornilova_l.protos.TreeProtos.Tree.Node.Builder, com.github.kornilova_l.protos.TreeProtos.Tree.NodeOrBuilder>(
+                    nodes_,
+                    ((bitField0_ & 0x00000008) == 0x00000008),
+                    getParentForChildren(),
+                    isClean());
+            nodes_ = null;
+          }
+          return nodesBuilder_;
+        }
+        public final Builder setUnknownFields(
+            final com.google.protobuf.UnknownFieldSet unknownFields) {
+          return this;
+        }
+
+        public final Builder mergeUnknownFields(
+            final com.google.protobuf.UnknownFieldSet unknownFields) {
+          return this;
+        }
+
+
+        // @@protoc_insertion_point(builder_scope:com.github.kornilova_l.protos.Tree.Node)
+      }
+
+      // @@protoc_insertion_point(class_scope:com.github.kornilova_l.protos.Tree.Node)
+      private static final com.github.kornilova_l.protos.TreeProtos.Tree.Node DEFAULT_INSTANCE;
+      static {
+        DEFAULT_INSTANCE = new com.github.kornilova_l.protos.TreeProtos.Tree.Node();
+      }
+
+      public static com.github.kornilova_l.protos.TreeProtos.Tree.Node getDefaultInstance() {
+        return DEFAULT_INSTANCE;
+      }
+
+      private static final com.google.protobuf.Parser<Node>
+          PARSER = new com.google.protobuf.AbstractParser<Node>() {
+        public Node parsePartialFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+            return new Node(input, extensionRegistry);
+        }
+      };
+
+      public static com.google.protobuf.Parser<Node> parser() {
+        return PARSER;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Parser<Node> getParserForType() {
+        return PARSER;
+      }
+
+      public com.github.kornilova_l.protos.TreeProtos.Tree.Node getDefaultInstanceForType() {
+        return DEFAULT_INSTANCE;
+      }
+
+    }
+
+    public interface TreeInfoOrBuilder extends
+        // @@protoc_insertion_point(interface_extends:com.github.kornilova_l.protos.Tree.TreeInfo)
+        com.google.protobuf.MessageOrBuilder {
+
+      /**
+       * <code>int64 duration = 1;</code>
+       */
+      long getDuration();
+
+      /**
+       * <pre>
+       * only for trees which save original call structure
+       * </pre>
+       *
+       * <code>int64 start_time = 2;</code>
+       */
+      long getStartTime();
+
+      /**
+       * <pre>
+       * only for trees which save original call structure
+       * </pre>
+       *
+       * <code>int64 thread_id = 3;</code>
+       */
+      long getThreadId();
+    }
+    /**
+     * Protobuf type {@code com.github.kornilova_l.protos.Tree.TreeInfo}
+     */
+    public  static final class TreeInfo extends
+        com.google.protobuf.GeneratedMessageV3 implements
+        // @@protoc_insertion_point(message_implements:com.github.kornilova_l.protos.Tree.TreeInfo)
+        TreeInfoOrBuilder {
+      // Use TreeInfo.newBuilder() to construct.
+      private TreeInfo(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+        super(builder);
+      }
+      private TreeInfo() {
+        duration_ = 0L;
+        startTime_ = 0L;
+        threadId_ = 0L;
+      }
+
+      @java.lang.Override
+      public final com.google.protobuf.UnknownFieldSet
+      getUnknownFields() {
+        return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
+      }
+      private TreeInfo(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        this();
+        int mutable_bitField0_ = 0;
+        try {
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              default: {
+                if (!input.skipField(tag)) {
+                  done = true;
+                }
+                break;
+              }
+              case 8: {
+
+                duration_ = input.readInt64();
+                break;
+              }
+              case 16: {
+
+                startTime_ = input.readInt64();
+                break;
+              }
+              case 24: {
+
+                threadId_ = input.readInt64();
+                break;
+              }
+            }
+          }
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(this);
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(
+              e).setUnfinishedMessage(this);
+        } finally {
+          makeExtensionsImmutable();
+        }
+      }
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.github.kornilova_l.protos.TreeProtos.internal_static_com_github_kornilova_l_protos_Tree_TreeInfo_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.github.kornilova_l.protos.TreeProtos.internal_static_com_github_kornilova_l_protos_Tree_TreeInfo_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo.class, com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo.Builder.class);
+      }
+
+      public static final int DURATION_FIELD_NUMBER = 1;
+      private long duration_;
+      /**
+       * <code>int64 duration = 1;</code>
+       */
+      public long getDuration() {
+        return duration_;
+      }
+
+      public static final int START_TIME_FIELD_NUMBER = 2;
+      private long startTime_;
+      /**
+       * <pre>
+       * only for trees which save original call structure
+       * </pre>
+       *
+       * <code>int64 start_time = 2;</code>
+       */
+      public long getStartTime() {
+        return startTime_;
+      }
+
+      public static final int THREAD_ID_FIELD_NUMBER = 3;
+      private long threadId_;
+      /**
+       * <pre>
+       * only for trees which save original call structure
+       * </pre>
+       *
+       * <code>int64 thread_id = 3;</code>
+       */
+      public long getThreadId() {
+        return threadId_;
+      }
+
+      private byte memoizedIsInitialized = -1;
+      public final boolean isInitialized() {
+        byte isInitialized = memoizedIsInitialized;
+        if (isInitialized == 1) return true;
+        if (isInitialized == 0) return false;
+
+        memoizedIsInitialized = 1;
+        return true;
+      }
+
+      public void writeTo(com.google.protobuf.CodedOutputStream output)
+                          throws java.io.IOException {
+        if (duration_ != 0L) {
+          output.writeInt64(1, duration_);
+        }
+        if (startTime_ != 0L) {
+          output.writeInt64(2, startTime_);
+        }
+        if (threadId_ != 0L) {
+          output.writeInt64(3, threadId_);
+        }
+      }
+
+      public int getSerializedSize() {
+        int size = memoizedSize;
+        if (size != -1) return size;
+
+        size = 0;
+        if (duration_ != 0L) {
+          size += com.google.protobuf.CodedOutputStream
+            .computeInt64Size(1, duration_);
+        }
+        if (startTime_ != 0L) {
+          size += com.google.protobuf.CodedOutputStream
+            .computeInt64Size(2, startTime_);
+        }
+        if (threadId_ != 0L) {
+          size += com.google.protobuf.CodedOutputStream
+            .computeInt64Size(3, threadId_);
+        }
+        memoizedSize = size;
+        return size;
+      }
+
+      private static final long serialVersionUID = 0L;
+      @java.lang.Override
+      public boolean equals(final java.lang.Object obj) {
+        if (obj == this) {
+         return true;
+        }
+        if (!(obj instanceof com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo)) {
+          return super.equals(obj);
+        }
+        com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo other = (com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo) obj;
+
+        boolean result = true;
+        result = result && (getDuration()
+            == other.getDuration());
+        result = result && (getStartTime()
+            == other.getStartTime());
+        result = result && (getThreadId()
+            == other.getThreadId());
+        return result;
+      }
+
+      @java.lang.Override
+      public int hashCode() {
+        if (memoizedHashCode != 0) {
+          return memoizedHashCode;
+        }
+        int hash = 41;
+        hash = (19 * hash) + getDescriptor().hashCode();
+        hash = (37 * hash) + DURATION_FIELD_NUMBER;
+        hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+            getDuration());
+        hash = (37 * hash) + START_TIME_FIELD_NUMBER;
+        hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+            getStartTime());
+        hash = (37 * hash) + THREAD_ID_FIELD_NUMBER;
+        hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+            getThreadId());
+        hash = (29 * hash) + unknownFields.hashCode();
+        memoizedHashCode = hash;
+        return hash;
+      }
+
+      public static com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo parseFrom(
+          java.nio.ByteBuffer data)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data);
+      }
+      public static com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo parseFrom(
+          java.nio.ByteBuffer data,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data, extensionRegistry);
+      }
+      public static com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo parseFrom(
+          com.google.protobuf.ByteString data)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data);
+      }
+      public static com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo parseFrom(
+          com.google.protobuf.ByteString data,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data, extensionRegistry);
+      }
+      public static com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo parseFrom(byte[] data)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data);
+      }
+      public static com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo parseFrom(
+          byte[] data,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data, extensionRegistry);
+      }
+      public static com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo parseFrom(java.io.InputStream input)
+          throws java.io.IOException {
+        return com.google.protobuf.GeneratedMessageV3
+            .parseWithIOException(PARSER, input);
+      }
+      public static com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo parseFrom(
+          java.io.InputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return com.google.protobuf.GeneratedMessageV3
+            .parseWithIOException(PARSER, input, extensionRegistry);
+      }
+      public static com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo parseDelimitedFrom(java.io.InputStream input)
+          throws java.io.IOException {
+        return com.google.protobuf.GeneratedMessageV3
+            .parseDelimitedWithIOException(PARSER, input);
+      }
+      public static com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo parseDelimitedFrom(
+          java.io.InputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return com.google.protobuf.GeneratedMessageV3
+            .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+      }
+      public static com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo parseFrom(
+          com.google.protobuf.CodedInputStream input)
+          throws java.io.IOException {
+        return com.google.protobuf.GeneratedMessageV3
+            .parseWithIOException(PARSER, input);
+      }
+      public static com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo parseFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return com.google.protobuf.GeneratedMessageV3
+            .parseWithIOException(PARSER, input, extensionRegistry);
+      }
+
+      public Builder newBuilderForType() { return newBuilder(); }
+      public static Builder newBuilder() {
+        return DEFAULT_INSTANCE.toBuilder();
+      }
+      public static Builder newBuilder(com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo prototype) {
+        return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+      }
+      public Builder toBuilder() {
+        return this == DEFAULT_INSTANCE
+            ? new Builder() : new Builder().mergeFrom(this);
+      }
+
+      @java.lang.Override
+      protected Builder newBuilderForType(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        Builder builder = new Builder(parent);
+        return builder;
+      }
+      /**
+       * Protobuf type {@code com.github.kornilova_l.protos.Tree.TreeInfo}
+       */
+      public static final class Builder extends
+          com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+          // @@protoc_insertion_point(builder_implements:com.github.kornilova_l.protos.Tree.TreeInfo)
+          com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfoOrBuilder {
+        public static final com.google.protobuf.Descriptors.Descriptor
+            getDescriptor() {
+          return com.github.kornilova_l.protos.TreeProtos.internal_static_com_github_kornilova_l_protos_Tree_TreeInfo_descriptor;
+        }
+
+        protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+            internalGetFieldAccessorTable() {
+          return com.github.kornilova_l.protos.TreeProtos.internal_static_com_github_kornilova_l_protos_Tree_TreeInfo_fieldAccessorTable
+              .ensureFieldAccessorsInitialized(
+                  com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo.class, com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo.Builder.class);
+        }
+
+        // Construct using com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo.newBuilder()
+        private Builder() {
+          maybeForceBuilderInitialization();
+        }
+
+        private Builder(
+            com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+          super(parent);
+          maybeForceBuilderInitialization();
+        }
+        private void maybeForceBuilderInitialization() {
+          if (com.google.protobuf.GeneratedMessageV3
+                  .alwaysUseFieldBuilders) {
+          }
+        }
+        public Builder clear() {
+          super.clear();
+          duration_ = 0L;
+
+          startTime_ = 0L;
+
+          threadId_ = 0L;
+
+          return this;
+        }
+
+        public com.google.protobuf.Descriptors.Descriptor
+            getDescriptorForType() {
+          return com.github.kornilova_l.protos.TreeProtos.internal_static_com_github_kornilova_l_protos_Tree_TreeInfo_descriptor;
+        }
+
+        public com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo getDefaultInstanceForType() {
+          return com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo.getDefaultInstance();
+        }
+
+        public com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo build() {
+          com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo result = buildPartial();
+          if (!result.isInitialized()) {
+            throw newUninitializedMessageException(result);
+          }
+          return result;
+        }
+
+        public com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo buildPartial() {
+          com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo result = new com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo(this);
+          result.duration_ = duration_;
+          result.startTime_ = startTime_;
+          result.threadId_ = threadId_;
+          onBuilt();
+          return result;
+        }
+
+        public Builder clone() {
+          return (Builder) super.clone();
+        }
+        public Builder setField(
+            com.google.protobuf.Descriptors.FieldDescriptor field,
+            Object value) {
+          return (Builder) super.setField(field, value);
+        }
+        public Builder clearField(
+            com.google.protobuf.Descriptors.FieldDescriptor field) {
+          return (Builder) super.clearField(field);
+        }
+        public Builder clearOneof(
+            com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+          return (Builder) super.clearOneof(oneof);
+        }
+        public Builder setRepeatedField(
+            com.google.protobuf.Descriptors.FieldDescriptor field,
+            int index, Object value) {
+          return (Builder) super.setRepeatedField(field, index, value);
+        }
+        public Builder addRepeatedField(
+            com.google.protobuf.Descriptors.FieldDescriptor field,
+            Object value) {
+          return (Builder) super.addRepeatedField(field, value);
+        }
+        public Builder mergeFrom(com.google.protobuf.Message other) {
+          if (other instanceof com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo) {
+            return mergeFrom((com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo)other);
+          } else {
+            super.mergeFrom(other);
+            return this;
+          }
+        }
+
+        public Builder mergeFrom(com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo other) {
+          if (other == com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo.getDefaultInstance()) return this;
+          if (other.getDuration() != 0L) {
+            setDuration(other.getDuration());
+          }
+          if (other.getStartTime() != 0L) {
+            setStartTime(other.getStartTime());
+          }
+          if (other.getThreadId() != 0L) {
+            setThreadId(other.getThreadId());
+          }
+          onChanged();
+          return this;
+        }
+
+        public final boolean isInitialized() {
+          return true;
+        }
+
+        public Builder mergeFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
+          com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo parsedMessage = null;
+          try {
+            parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+          } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+            parsedMessage = (com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo) e.getUnfinishedMessage();
+            throw e.unwrapIOException();
+          } finally {
+            if (parsedMessage != null) {
+              mergeFrom(parsedMessage);
+            }
+          }
+          return this;
+        }
 
         private long duration_ ;
         /**
@@ -1029,390 +3533,13 @@ public final class TreeProtos {
           return this;
         }
 
-        private com.github.kornilova_l.protos.EventProtos.Event.Enter enter_ = null;
-        private com.google.protobuf.SingleFieldBuilderV3<
-            com.github.kornilova_l.protos.EventProtos.Event.Enter, com.github.kornilova_l.protos.EventProtos.Event.Enter.Builder, com.github.kornilova_l.protos.EventProtos.Event.EnterOrBuilder> enterBuilder_;
-        /**
-         * <code>.com.github.kornilova_l.protos.Event.Enter enter = 2;</code>
-         */
-        public boolean hasEnter() {
-          return enterBuilder_ != null || enter_ != null;
-        }
-        /**
-         * <code>.com.github.kornilova_l.protos.Event.Enter enter = 2;</code>
-         */
-        public com.github.kornilova_l.protos.EventProtos.Event.Enter getEnter() {
-          if (enterBuilder_ == null) {
-            return enter_ == null ? com.github.kornilova_l.protos.EventProtos.Event.Enter.getDefaultInstance() : enter_;
-          } else {
-            return enterBuilder_.getMessage();
-          }
-        }
-        /**
-         * <code>.com.github.kornilova_l.protos.Event.Enter enter = 2;</code>
-         */
-        public Builder setEnter(com.github.kornilova_l.protos.EventProtos.Event.Enter value) {
-          if (enterBuilder_ == null) {
-            if (value == null) {
-              throw new NullPointerException();
-            }
-            enter_ = value;
-            onChanged();
-          } else {
-            enterBuilder_.setMessage(value);
-          }
-
-          return this;
-        }
-        /**
-         * <code>.com.github.kornilova_l.protos.Event.Enter enter = 2;</code>
-         */
-        public Builder setEnter(
-            com.github.kornilova_l.protos.EventProtos.Event.Enter.Builder builderForValue) {
-          if (enterBuilder_ == null) {
-            enter_ = builderForValue.build();
-            onChanged();
-          } else {
-            enterBuilder_.setMessage(builderForValue.build());
-          }
-
-          return this;
-        }
-        /**
-         * <code>.com.github.kornilova_l.protos.Event.Enter enter = 2;</code>
-         */
-        public Builder mergeEnter(com.github.kornilova_l.protos.EventProtos.Event.Enter value) {
-          if (enterBuilder_ == null) {
-            if (enter_ != null) {
-              enter_ =
-                com.github.kornilova_l.protos.EventProtos.Event.Enter.newBuilder(enter_).mergeFrom(value).buildPartial();
-            } else {
-              enter_ = value;
-            }
-            onChanged();
-          } else {
-            enterBuilder_.mergeFrom(value);
-          }
-
-          return this;
-        }
-        /**
-         * <code>.com.github.kornilova_l.protos.Event.Enter enter = 2;</code>
-         */
-        public Builder clearEnter() {
-          if (enterBuilder_ == null) {
-            enter_ = null;
-            onChanged();
-          } else {
-            enter_ = null;
-            enterBuilder_ = null;
-          }
-
-          return this;
-        }
-        /**
-         * <code>.com.github.kornilova_l.protos.Event.Enter enter = 2;</code>
-         */
-        public com.github.kornilova_l.protos.EventProtos.Event.Enter.Builder getEnterBuilder() {
-          
-          onChanged();
-          return getEnterFieldBuilder().getBuilder();
-        }
-        /**
-         * <code>.com.github.kornilova_l.protos.Event.Enter enter = 2;</code>
-         */
-        public com.github.kornilova_l.protos.EventProtos.Event.EnterOrBuilder getEnterOrBuilder() {
-          if (enterBuilder_ != null) {
-            return enterBuilder_.getMessageOrBuilder();
-          } else {
-            return enter_ == null ?
-                com.github.kornilova_l.protos.EventProtos.Event.Enter.getDefaultInstance() : enter_;
-          }
-        }
-        /**
-         * <code>.com.github.kornilova_l.protos.Event.Enter enter = 2;</code>
-         */
-        private com.google.protobuf.SingleFieldBuilderV3<
-            com.github.kornilova_l.protos.EventProtos.Event.Enter, com.github.kornilova_l.protos.EventProtos.Event.Enter.Builder, com.github.kornilova_l.protos.EventProtos.Event.EnterOrBuilder> 
-            getEnterFieldBuilder() {
-          if (enterBuilder_ == null) {
-            enterBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-                com.github.kornilova_l.protos.EventProtos.Event.Enter, com.github.kornilova_l.protos.EventProtos.Event.Enter.Builder, com.github.kornilova_l.protos.EventProtos.Event.EnterOrBuilder>(
-                    getEnter(),
-                    getParentForChildren(),
-                    isClean());
-            enter_ = null;
-          }
-          return enterBuilder_;
-        }
-
-        private com.google.protobuf.SingleFieldBuilderV3<
-            com.github.kornilova_l.protos.EventProtos.Event.Exit, com.github.kornilova_l.protos.EventProtos.Event.Exit.Builder, com.github.kornilova_l.protos.EventProtos.Event.ExitOrBuilder> exitBuilder_;
-        /**
-         * <code>.com.github.kornilova_l.protos.Event.Exit exit = 3;</code>
-         */
-        public com.github.kornilova_l.protos.EventProtos.Event.Exit getExit() {
-          if (exitBuilder_ == null) {
-            if (exitInfoCase_ == 3) {
-              return (com.github.kornilova_l.protos.EventProtos.Event.Exit) exitInfo_;
-            }
-            return com.github.kornilova_l.protos.EventProtos.Event.Exit.getDefaultInstance();
-          } else {
-            if (exitInfoCase_ == 3) {
-              return exitBuilder_.getMessage();
-            }
-            return com.github.kornilova_l.protos.EventProtos.Event.Exit.getDefaultInstance();
-          }
-        }
-        /**
-         * <code>.com.github.kornilova_l.protos.Event.Exit exit = 3;</code>
-         */
-        public Builder setExit(com.github.kornilova_l.protos.EventProtos.Event.Exit value) {
-          if (exitBuilder_ == null) {
-            if (value == null) {
-              throw new NullPointerException();
-            }
-            exitInfo_ = value;
-            onChanged();
-          } else {
-            exitBuilder_.setMessage(value);
-          }
-          exitInfoCase_ = 3;
-          return this;
-        }
-        /**
-         * <code>.com.github.kornilova_l.protos.Event.Exit exit = 3;</code>
-         */
-        public Builder setExit(
-            com.github.kornilova_l.protos.EventProtos.Event.Exit.Builder builderForValue) {
-          if (exitBuilder_ == null) {
-            exitInfo_ = builderForValue.build();
-            onChanged();
-          } else {
-            exitBuilder_.setMessage(builderForValue.build());
-          }
-          exitInfoCase_ = 3;
-          return this;
-        }
-        /**
-         * <code>.com.github.kornilova_l.protos.Event.Exit exit = 3;</code>
-         */
-        public Builder mergeExit(com.github.kornilova_l.protos.EventProtos.Event.Exit value) {
-          if (exitBuilder_ == null) {
-            if (exitInfoCase_ == 3 &&
-                exitInfo_ != com.github.kornilova_l.protos.EventProtos.Event.Exit.getDefaultInstance()) {
-              exitInfo_ = com.github.kornilova_l.protos.EventProtos.Event.Exit.newBuilder((com.github.kornilova_l.protos.EventProtos.Event.Exit) exitInfo_)
-                  .mergeFrom(value).buildPartial();
-            } else {
-              exitInfo_ = value;
-            }
-            onChanged();
-          } else {
-            if (exitInfoCase_ == 3) {
-              exitBuilder_.mergeFrom(value);
-            }
-            exitBuilder_.setMessage(value);
-          }
-          exitInfoCase_ = 3;
-          return this;
-        }
-        /**
-         * <code>.com.github.kornilova_l.protos.Event.Exit exit = 3;</code>
-         */
-        public Builder clearExit() {
-          if (exitBuilder_ == null) {
-            if (exitInfoCase_ == 3) {
-              exitInfoCase_ = 0;
-              exitInfo_ = null;
-              onChanged();
-            }
-          } else {
-            if (exitInfoCase_ == 3) {
-              exitInfoCase_ = 0;
-              exitInfo_ = null;
-            }
-            exitBuilder_.clear();
-          }
-          return this;
-        }
-        /**
-         * <code>.com.github.kornilova_l.protos.Event.Exit exit = 3;</code>
-         */
-        public com.github.kornilova_l.protos.EventProtos.Event.Exit.Builder getExitBuilder() {
-          return getExitFieldBuilder().getBuilder();
-        }
-        /**
-         * <code>.com.github.kornilova_l.protos.Event.Exit exit = 3;</code>
-         */
-        public com.github.kornilova_l.protos.EventProtos.Event.ExitOrBuilder getExitOrBuilder() {
-          if ((exitInfoCase_ == 3) && (exitBuilder_ != null)) {
-            return exitBuilder_.getMessageOrBuilder();
-          } else {
-            if (exitInfoCase_ == 3) {
-              return (com.github.kornilova_l.protos.EventProtos.Event.Exit) exitInfo_;
-            }
-            return com.github.kornilova_l.protos.EventProtos.Event.Exit.getDefaultInstance();
-          }
-        }
-        /**
-         * <code>.com.github.kornilova_l.protos.Event.Exit exit = 3;</code>
-         */
-        private com.google.protobuf.SingleFieldBuilderV3<
-            com.github.kornilova_l.protos.EventProtos.Event.Exit, com.github.kornilova_l.protos.EventProtos.Event.Exit.Builder, com.github.kornilova_l.protos.EventProtos.Event.ExitOrBuilder> 
-            getExitFieldBuilder() {
-          if (exitBuilder_ == null) {
-            if (!(exitInfoCase_ == 3)) {
-              exitInfo_ = com.github.kornilova_l.protos.EventProtos.Event.Exit.getDefaultInstance();
-            }
-            exitBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-                com.github.kornilova_l.protos.EventProtos.Event.Exit, com.github.kornilova_l.protos.EventProtos.Event.Exit.Builder, com.github.kornilova_l.protos.EventProtos.Event.ExitOrBuilder>(
-                    (com.github.kornilova_l.protos.EventProtos.Event.Exit) exitInfo_,
-                    getParentForChildren(),
-                    isClean());
-            exitInfo_ = null;
-          }
-          exitInfoCase_ = 3;
-          onChanged();;
-          return exitBuilder_;
-        }
-
-        private com.google.protobuf.SingleFieldBuilderV3<
-            com.github.kornilova_l.protos.EventProtos.Event.Exception, com.github.kornilova_l.protos.EventProtos.Event.Exception.Builder, com.github.kornilova_l.protos.EventProtos.Event.ExceptionOrBuilder> exceptionBuilder_;
-        /**
-         * <code>.com.github.kornilova_l.protos.Event.Exception exception = 4;</code>
-         */
-        public com.github.kornilova_l.protos.EventProtos.Event.Exception getException() {
-          if (exceptionBuilder_ == null) {
-            if (exitInfoCase_ == 4) {
-              return (com.github.kornilova_l.protos.EventProtos.Event.Exception) exitInfo_;
-            }
-            return com.github.kornilova_l.protos.EventProtos.Event.Exception.getDefaultInstance();
-          } else {
-            if (exitInfoCase_ == 4) {
-              return exceptionBuilder_.getMessage();
-            }
-            return com.github.kornilova_l.protos.EventProtos.Event.Exception.getDefaultInstance();
-          }
-        }
-        /**
-         * <code>.com.github.kornilova_l.protos.Event.Exception exception = 4;</code>
-         */
-        public Builder setException(com.github.kornilova_l.protos.EventProtos.Event.Exception value) {
-          if (exceptionBuilder_ == null) {
-            if (value == null) {
-              throw new NullPointerException();
-            }
-            exitInfo_ = value;
-            onChanged();
-          } else {
-            exceptionBuilder_.setMessage(value);
-          }
-          exitInfoCase_ = 4;
-          return this;
-        }
-        /**
-         * <code>.com.github.kornilova_l.protos.Event.Exception exception = 4;</code>
-         */
-        public Builder setException(
-            com.github.kornilova_l.protos.EventProtos.Event.Exception.Builder builderForValue) {
-          if (exceptionBuilder_ == null) {
-            exitInfo_ = builderForValue.build();
-            onChanged();
-          } else {
-            exceptionBuilder_.setMessage(builderForValue.build());
-          }
-          exitInfoCase_ = 4;
-          return this;
-        }
-        /**
-         * <code>.com.github.kornilova_l.protos.Event.Exception exception = 4;</code>
-         */
-        public Builder mergeException(com.github.kornilova_l.protos.EventProtos.Event.Exception value) {
-          if (exceptionBuilder_ == null) {
-            if (exitInfoCase_ == 4 &&
-                exitInfo_ != com.github.kornilova_l.protos.EventProtos.Event.Exception.getDefaultInstance()) {
-              exitInfo_ = com.github.kornilova_l.protos.EventProtos.Event.Exception.newBuilder((com.github.kornilova_l.protos.EventProtos.Event.Exception) exitInfo_)
-                  .mergeFrom(value).buildPartial();
-            } else {
-              exitInfo_ = value;
-            }
-            onChanged();
-          } else {
-            if (exitInfoCase_ == 4) {
-              exceptionBuilder_.mergeFrom(value);
-            }
-            exceptionBuilder_.setMessage(value);
-          }
-          exitInfoCase_ = 4;
-          return this;
-        }
-        /**
-         * <code>.com.github.kornilova_l.protos.Event.Exception exception = 4;</code>
-         */
-        public Builder clearException() {
-          if (exceptionBuilder_ == null) {
-            if (exitInfoCase_ == 4) {
-              exitInfoCase_ = 0;
-              exitInfo_ = null;
-              onChanged();
-            }
-          } else {
-            if (exitInfoCase_ == 4) {
-              exitInfoCase_ = 0;
-              exitInfo_ = null;
-            }
-            exceptionBuilder_.clear();
-          }
-          return this;
-        }
-        /**
-         * <code>.com.github.kornilova_l.protos.Event.Exception exception = 4;</code>
-         */
-        public com.github.kornilova_l.protos.EventProtos.Event.Exception.Builder getExceptionBuilder() {
-          return getExceptionFieldBuilder().getBuilder();
-        }
-        /**
-         * <code>.com.github.kornilova_l.protos.Event.Exception exception = 4;</code>
-         */
-        public com.github.kornilova_l.protos.EventProtos.Event.ExceptionOrBuilder getExceptionOrBuilder() {
-          if ((exitInfoCase_ == 4) && (exceptionBuilder_ != null)) {
-            return exceptionBuilder_.getMessageOrBuilder();
-          } else {
-            if (exitInfoCase_ == 4) {
-              return (com.github.kornilova_l.protos.EventProtos.Event.Exception) exitInfo_;
-            }
-            return com.github.kornilova_l.protos.EventProtos.Event.Exception.getDefaultInstance();
-          }
-        }
-        /**
-         * <code>.com.github.kornilova_l.protos.Event.Exception exception = 4;</code>
-         */
-        private com.google.protobuf.SingleFieldBuilderV3<
-            com.github.kornilova_l.protos.EventProtos.Event.Exception, com.github.kornilova_l.protos.EventProtos.Event.Exception.Builder, com.github.kornilova_l.protos.EventProtos.Event.ExceptionOrBuilder> 
-            getExceptionFieldBuilder() {
-          if (exceptionBuilder_ == null) {
-            if (!(exitInfoCase_ == 4)) {
-              exitInfo_ = com.github.kornilova_l.protos.EventProtos.Event.Exception.getDefaultInstance();
-            }
-            exceptionBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-                com.github.kornilova_l.protos.EventProtos.Event.Exception, com.github.kornilova_l.protos.EventProtos.Event.Exception.Builder, com.github.kornilova_l.protos.EventProtos.Event.ExceptionOrBuilder>(
-                    (com.github.kornilova_l.protos.EventProtos.Event.Exception) exitInfo_,
-                    getParentForChildren(),
-                    isClean());
-            exitInfo_ = null;
-          }
-          exitInfoCase_ = 4;
-          onChanged();;
-          return exceptionBuilder_;
-        }
-
         private long startTime_ ;
         /**
          * <pre>
          * only for trees which save original call structure
          * </pre>
          *
-         * <code>int64 startTime = 5;</code>
+         * <code>int64 start_time = 2;</code>
          */
         public long getStartTime() {
           return startTime_;
@@ -1422,7 +3549,7 @@ public final class TreeProtos {
          * only for trees which save original call structure
          * </pre>
          *
-         * <code>int64 startTime = 5;</code>
+         * <code>int64 start_time = 2;</code>
          */
         public Builder setStartTime(long value) {
           
@@ -1435,7 +3562,7 @@ public final class TreeProtos {
          * only for trees which save original call structure
          * </pre>
          *
-         * <code>int64 startTime = 5;</code>
+         * <code>int64 start_time = 2;</code>
          */
         public Builder clearStartTime() {
           
@@ -1444,244 +3571,42 @@ public final class TreeProtos {
           return this;
         }
 
-        private java.util.List<com.github.kornilova_l.protos.TreeProtos.Tree.Call> calls_ =
-          java.util.Collections.emptyList();
-        private void ensureCallsIsMutable() {
-          if (!((bitField0_ & 0x00000020) == 0x00000020)) {
-            calls_ = new java.util.ArrayList<com.github.kornilova_l.protos.TreeProtos.Tree.Call>(calls_);
-            bitField0_ |= 0x00000020;
-           }
-        }
-
-        private com.google.protobuf.RepeatedFieldBuilderV3<
-            com.github.kornilova_l.protos.TreeProtos.Tree.Call, com.github.kornilova_l.protos.TreeProtos.Tree.Call.Builder, com.github.kornilova_l.protos.TreeProtos.Tree.CallOrBuilder> callsBuilder_;
-
+        private long threadId_ ;
         /**
-         * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 6;</code>
+         * <pre>
+         * only for trees which save original call structure
+         * </pre>
+         *
+         * <code>int64 thread_id = 3;</code>
          */
-        public java.util.List<com.github.kornilova_l.protos.TreeProtos.Tree.Call> getCallsList() {
-          if (callsBuilder_ == null) {
-            return java.util.Collections.unmodifiableList(calls_);
-          } else {
-            return callsBuilder_.getMessageList();
-          }
+        public long getThreadId() {
+          return threadId_;
         }
         /**
-         * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 6;</code>
+         * <pre>
+         * only for trees which save original call structure
+         * </pre>
+         *
+         * <code>int64 thread_id = 3;</code>
          */
-        public int getCallsCount() {
-          if (callsBuilder_ == null) {
-            return calls_.size();
-          } else {
-            return callsBuilder_.getCount();
-          }
-        }
-        /**
-         * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 6;</code>
-         */
-        public com.github.kornilova_l.protos.TreeProtos.Tree.Call getCalls(int index) {
-          if (callsBuilder_ == null) {
-            return calls_.get(index);
-          } else {
-            return callsBuilder_.getMessage(index);
-          }
-        }
-        /**
-         * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 6;</code>
-         */
-        public Builder setCalls(
-            int index, com.github.kornilova_l.protos.TreeProtos.Tree.Call value) {
-          if (callsBuilder_ == null) {
-            if (value == null) {
-              throw new NullPointerException();
-            }
-            ensureCallsIsMutable();
-            calls_.set(index, value);
-            onChanged();
-          } else {
-            callsBuilder_.setMessage(index, value);
-          }
+        public Builder setThreadId(long value) {
+          
+          threadId_ = value;
+          onChanged();
           return this;
         }
         /**
-         * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 6;</code>
+         * <pre>
+         * only for trees which save original call structure
+         * </pre>
+         *
+         * <code>int64 thread_id = 3;</code>
          */
-        public Builder setCalls(
-            int index, com.github.kornilova_l.protos.TreeProtos.Tree.Call.Builder builderForValue) {
-          if (callsBuilder_ == null) {
-            ensureCallsIsMutable();
-            calls_.set(index, builderForValue.build());
-            onChanged();
-          } else {
-            callsBuilder_.setMessage(index, builderForValue.build());
-          }
+        public Builder clearThreadId() {
+          
+          threadId_ = 0L;
+          onChanged();
           return this;
-        }
-        /**
-         * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 6;</code>
-         */
-        public Builder addCalls(com.github.kornilova_l.protos.TreeProtos.Tree.Call value) {
-          if (callsBuilder_ == null) {
-            if (value == null) {
-              throw new NullPointerException();
-            }
-            ensureCallsIsMutable();
-            calls_.add(value);
-            onChanged();
-          } else {
-            callsBuilder_.addMessage(value);
-          }
-          return this;
-        }
-        /**
-         * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 6;</code>
-         */
-        public Builder addCalls(
-            int index, com.github.kornilova_l.protos.TreeProtos.Tree.Call value) {
-          if (callsBuilder_ == null) {
-            if (value == null) {
-              throw new NullPointerException();
-            }
-            ensureCallsIsMutable();
-            calls_.add(index, value);
-            onChanged();
-          } else {
-            callsBuilder_.addMessage(index, value);
-          }
-          return this;
-        }
-        /**
-         * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 6;</code>
-         */
-        public Builder addCalls(
-            com.github.kornilova_l.protos.TreeProtos.Tree.Call.Builder builderForValue) {
-          if (callsBuilder_ == null) {
-            ensureCallsIsMutable();
-            calls_.add(builderForValue.build());
-            onChanged();
-          } else {
-            callsBuilder_.addMessage(builderForValue.build());
-          }
-          return this;
-        }
-        /**
-         * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 6;</code>
-         */
-        public Builder addCalls(
-            int index, com.github.kornilova_l.protos.TreeProtos.Tree.Call.Builder builderForValue) {
-          if (callsBuilder_ == null) {
-            ensureCallsIsMutable();
-            calls_.add(index, builderForValue.build());
-            onChanged();
-          } else {
-            callsBuilder_.addMessage(index, builderForValue.build());
-          }
-          return this;
-        }
-        /**
-         * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 6;</code>
-         */
-        public Builder addAllCalls(
-            java.lang.Iterable<? extends com.github.kornilova_l.protos.TreeProtos.Tree.Call> values) {
-          if (callsBuilder_ == null) {
-            ensureCallsIsMutable();
-            com.google.protobuf.AbstractMessageLite.Builder.addAll(
-                values, calls_);
-            onChanged();
-          } else {
-            callsBuilder_.addAllMessages(values);
-          }
-          return this;
-        }
-        /**
-         * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 6;</code>
-         */
-        public Builder clearCalls() {
-          if (callsBuilder_ == null) {
-            calls_ = java.util.Collections.emptyList();
-            bitField0_ = (bitField0_ & ~0x00000020);
-            onChanged();
-          } else {
-            callsBuilder_.clear();
-          }
-          return this;
-        }
-        /**
-         * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 6;</code>
-         */
-        public Builder removeCalls(int index) {
-          if (callsBuilder_ == null) {
-            ensureCallsIsMutable();
-            calls_.remove(index);
-            onChanged();
-          } else {
-            callsBuilder_.remove(index);
-          }
-          return this;
-        }
-        /**
-         * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 6;</code>
-         */
-        public com.github.kornilova_l.protos.TreeProtos.Tree.Call.Builder getCallsBuilder(
-            int index) {
-          return getCallsFieldBuilder().getBuilder(index);
-        }
-        /**
-         * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 6;</code>
-         */
-        public com.github.kornilova_l.protos.TreeProtos.Tree.CallOrBuilder getCallsOrBuilder(
-            int index) {
-          if (callsBuilder_ == null) {
-            return calls_.get(index);  } else {
-            return callsBuilder_.getMessageOrBuilder(index);
-          }
-        }
-        /**
-         * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 6;</code>
-         */
-        public java.util.List<? extends com.github.kornilova_l.protos.TreeProtos.Tree.CallOrBuilder> 
-             getCallsOrBuilderList() {
-          if (callsBuilder_ != null) {
-            return callsBuilder_.getMessageOrBuilderList();
-          } else {
-            return java.util.Collections.unmodifiableList(calls_);
-          }
-        }
-        /**
-         * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 6;</code>
-         */
-        public com.github.kornilova_l.protos.TreeProtos.Tree.Call.Builder addCallsBuilder() {
-          return getCallsFieldBuilder().addBuilder(
-              com.github.kornilova_l.protos.TreeProtos.Tree.Call.getDefaultInstance());
-        }
-        /**
-         * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 6;</code>
-         */
-        public com.github.kornilova_l.protos.TreeProtos.Tree.Call.Builder addCallsBuilder(
-            int index) {
-          return getCallsFieldBuilder().addBuilder(
-              index, com.github.kornilova_l.protos.TreeProtos.Tree.Call.getDefaultInstance());
-        }
-        /**
-         * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 6;</code>
-         */
-        public java.util.List<com.github.kornilova_l.protos.TreeProtos.Tree.Call.Builder> 
-             getCallsBuilderList() {
-          return getCallsFieldBuilder().getBuilderList();
-        }
-        private com.google.protobuf.RepeatedFieldBuilderV3<
-            com.github.kornilova_l.protos.TreeProtos.Tree.Call, com.github.kornilova_l.protos.TreeProtos.Tree.Call.Builder, com.github.kornilova_l.protos.TreeProtos.Tree.CallOrBuilder> 
-            getCallsFieldBuilder() {
-          if (callsBuilder_ == null) {
-            callsBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
-                com.github.kornilova_l.protos.TreeProtos.Tree.Call, com.github.kornilova_l.protos.TreeProtos.Tree.Call.Builder, com.github.kornilova_l.protos.TreeProtos.Tree.CallOrBuilder>(
-                    calls_,
-                    ((bitField0_ & 0x00000020) == 0x00000020),
-                    getParentForChildren(),
-                    isClean());
-            calls_ = null;
-          }
-          return callsBuilder_;
         }
         public final Builder setUnknownFields(
             final com.google.protobuf.UnknownFieldSet unknownFields) {
@@ -1694,119 +3619,105 @@ public final class TreeProtos {
         }
 
 
-        // @@protoc_insertion_point(builder_scope:com.github.kornilova_l.protos.Tree.Call)
+        // @@protoc_insertion_point(builder_scope:com.github.kornilova_l.protos.Tree.TreeInfo)
       }
 
-      // @@protoc_insertion_point(class_scope:com.github.kornilova_l.protos.Tree.Call)
-      private static final com.github.kornilova_l.protos.TreeProtos.Tree.Call DEFAULT_INSTANCE;
+      // @@protoc_insertion_point(class_scope:com.github.kornilova_l.protos.Tree.TreeInfo)
+      private static final com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo DEFAULT_INSTANCE;
       static {
-        DEFAULT_INSTANCE = new com.github.kornilova_l.protos.TreeProtos.Tree.Call();
+        DEFAULT_INSTANCE = new com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo();
       }
 
-      public static com.github.kornilova_l.protos.TreeProtos.Tree.Call getDefaultInstance() {
+      public static com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo getDefaultInstance() {
         return DEFAULT_INSTANCE;
       }
 
-      private static final com.google.protobuf.Parser<Call>
-          PARSER = new com.google.protobuf.AbstractParser<Call>() {
-        public Call parsePartialFrom(
+      private static final com.google.protobuf.Parser<TreeInfo>
+          PARSER = new com.google.protobuf.AbstractParser<TreeInfo>() {
+        public TreeInfo parsePartialFrom(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
-            return new Call(input, extensionRegistry);
+            return new TreeInfo(input, extensionRegistry);
         }
       };
 
-      public static com.google.protobuf.Parser<Call> parser() {
+      public static com.google.protobuf.Parser<TreeInfo> parser() {
         return PARSER;
       }
 
       @java.lang.Override
-      public com.google.protobuf.Parser<Call> getParserForType() {
+      public com.google.protobuf.Parser<TreeInfo> getParserForType() {
         return PARSER;
       }
 
-      public com.github.kornilova_l.protos.TreeProtos.Tree.Call getDefaultInstanceForType() {
+      public com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo getDefaultInstanceForType() {
         return DEFAULT_INSTANCE;
       }
 
     }
 
     private int bitField0_;
-    public static final int DURATION_FIELD_NUMBER = 1;
-    private long duration_;
+    public static final int TREE_INFO_FIELD_NUMBER = 1;
+    private com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo treeInfo_;
     /**
-     * <code>int64 duration = 1;</code>
+     * <code>.com.github.kornilova_l.protos.Tree.TreeInfo tree_info = 1;</code>
      */
-    public long getDuration() {
-      return duration_;
+    public boolean hasTreeInfo() {
+      return treeInfo_ != null;
+    }
+    /**
+     * <code>.com.github.kornilova_l.protos.Tree.TreeInfo tree_info = 1;</code>
+     */
+    public com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo getTreeInfo() {
+      return treeInfo_ == null ? com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo.getDefaultInstance() : treeInfo_;
+    }
+    /**
+     * <code>.com.github.kornilova_l.protos.Tree.TreeInfo tree_info = 1;</code>
+     */
+    public com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfoOrBuilder getTreeInfoOrBuilder() {
+      return getTreeInfo();
     }
 
-    public static final int STARTTIME_FIELD_NUMBER = 2;
-    private long startTime_;
+    public static final int NODES_FIELD_NUMBER = 2;
+    private java.util.List<com.github.kornilova_l.protos.TreeProtos.Tree.Node> nodes_;
     /**
-     * <pre>
-     * only for trees which save original call structure
-     * </pre>
-     *
-     * <code>int64 startTime = 2;</code>
+     * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 2;</code>
      */
-    public long getStartTime() {
-      return startTime_;
-    }
-
-    public static final int THREADID_FIELD_NUMBER = 3;
-    private long threadId_;
-    /**
-     * <pre>
-     * only for trees which save original call structure
-     * </pre>
-     *
-     * <code>int64 threadId = 3;</code>
-     */
-    public long getThreadId() {
-      return threadId_;
-    }
-
-    public static final int CALLS_FIELD_NUMBER = 4;
-    private java.util.List<com.github.kornilova_l.protos.TreeProtos.Tree.Call> calls_;
-    /**
-     * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 4;</code>
-     */
-    public java.util.List<com.github.kornilova_l.protos.TreeProtos.Tree.Call> getCallsList() {
-      return calls_;
+    public java.util.List<com.github.kornilova_l.protos.TreeProtos.Tree.Node> getNodesList() {
+      return nodes_;
     }
     /**
-     * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 4;</code>
+     * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 2;</code>
      */
-    public java.util.List<? extends com.github.kornilova_l.protos.TreeProtos.Tree.CallOrBuilder> 
-        getCallsOrBuilderList() {
-      return calls_;
+    public java.util.List<? extends com.github.kornilova_l.protos.TreeProtos.Tree.NodeOrBuilder> 
+        getNodesOrBuilderList() {
+      return nodes_;
     }
     /**
-     * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 4;</code>
+     * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 2;</code>
      */
-    public int getCallsCount() {
-      return calls_.size();
+    public int getNodesCount() {
+      return nodes_.size();
     }
     /**
-     * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 4;</code>
+     * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 2;</code>
      */
-    public com.github.kornilova_l.protos.TreeProtos.Tree.Call getCalls(int index) {
-      return calls_.get(index);
+    public com.github.kornilova_l.protos.TreeProtos.Tree.Node getNodes(int index) {
+      return nodes_.get(index);
     }
     /**
-     * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 4;</code>
+     * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 2;</code>
      */
-    public com.github.kornilova_l.protos.TreeProtos.Tree.CallOrBuilder getCallsOrBuilder(
+    public com.github.kornilova_l.protos.TreeProtos.Tree.NodeOrBuilder getNodesOrBuilder(
         int index) {
-      return calls_.get(index);
+      return nodes_.get(index);
     }
 
-    public static final int DEPTH_FIELD_NUMBER = 5;
+    public static final int DEPTH_FIELD_NUMBER = 3;
     private int depth_;
     /**
-     * <code>uint32 depth = 5;</code>
+     * <code>uint32 depth = 3;</code>
      */
     public int getDepth() {
       return depth_;
@@ -1824,20 +3735,14 @@ public final class TreeProtos {
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (duration_ != 0L) {
-        output.writeInt64(1, duration_);
+      if (treeInfo_ != null) {
+        output.writeMessage(1, getTreeInfo());
       }
-      if (startTime_ != 0L) {
-        output.writeInt64(2, startTime_);
-      }
-      if (threadId_ != 0L) {
-        output.writeInt64(3, threadId_);
-      }
-      for (int i = 0; i < calls_.size(); i++) {
-        output.writeMessage(4, calls_.get(i));
+      for (int i = 0; i < nodes_.size(); i++) {
+        output.writeMessage(2, nodes_.get(i));
       }
       if (depth_ != 0) {
-        output.writeUInt32(5, depth_);
+        output.writeUInt32(3, depth_);
       }
     }
 
@@ -1846,25 +3751,17 @@ public final class TreeProtos {
       if (size != -1) return size;
 
       size = 0;
-      if (duration_ != 0L) {
+      if (treeInfo_ != null) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt64Size(1, duration_);
+          .computeMessageSize(1, getTreeInfo());
       }
-      if (startTime_ != 0L) {
+      for (int i = 0; i < nodes_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt64Size(2, startTime_);
-      }
-      if (threadId_ != 0L) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt64Size(3, threadId_);
-      }
-      for (int i = 0; i < calls_.size(); i++) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(4, calls_.get(i));
+          .computeMessageSize(2, nodes_.get(i));
       }
       if (depth_ != 0) {
         size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(5, depth_);
+          .computeUInt32Size(3, depth_);
       }
       memoizedSize = size;
       return size;
@@ -1882,14 +3779,13 @@ public final class TreeProtos {
       com.github.kornilova_l.protos.TreeProtos.Tree other = (com.github.kornilova_l.protos.TreeProtos.Tree) obj;
 
       boolean result = true;
-      result = result && (getDuration()
-          == other.getDuration());
-      result = result && (getStartTime()
-          == other.getStartTime());
-      result = result && (getThreadId()
-          == other.getThreadId());
-      result = result && getCallsList()
-          .equals(other.getCallsList());
+      result = result && (hasTreeInfo() == other.hasTreeInfo());
+      if (hasTreeInfo()) {
+        result = result && getTreeInfo()
+            .equals(other.getTreeInfo());
+      }
+      result = result && getNodesList()
+          .equals(other.getNodesList());
       result = result && (getDepth()
           == other.getDepth());
       return result;
@@ -1902,18 +3798,13 @@ public final class TreeProtos {
       }
       int hash = 41;
       hash = (19 * hash) + getDescriptor().hashCode();
-      hash = (37 * hash) + DURATION_FIELD_NUMBER;
-      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-          getDuration());
-      hash = (37 * hash) + STARTTIME_FIELD_NUMBER;
-      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-          getStartTime());
-      hash = (37 * hash) + THREADID_FIELD_NUMBER;
-      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-          getThreadId());
-      if (getCallsCount() > 0) {
-        hash = (37 * hash) + CALLS_FIELD_NUMBER;
-        hash = (53 * hash) + getCallsList().hashCode();
+      if (hasTreeInfo()) {
+        hash = (37 * hash) + TREE_INFO_FIELD_NUMBER;
+        hash = (53 * hash) + getTreeInfo().hashCode();
+      }
+      if (getNodesCount() > 0) {
+        hash = (37 * hash) + NODES_FIELD_NUMBER;
+        hash = (53 * hash) + getNodesList().hashCode();
       }
       hash = (37 * hash) + DEPTH_FIELD_NUMBER;
       hash = (53 * hash) + getDepth();
@@ -2042,22 +3933,22 @@ public final class TreeProtos {
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3
                 .alwaysUseFieldBuilders) {
-          getCallsFieldBuilder();
+          getNodesFieldBuilder();
         }
       }
       public Builder clear() {
         super.clear();
-        duration_ = 0L;
-
-        startTime_ = 0L;
-
-        threadId_ = 0L;
-
-        if (callsBuilder_ == null) {
-          calls_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000008);
+        if (treeInfoBuilder_ == null) {
+          treeInfo_ = null;
         } else {
-          callsBuilder_.clear();
+          treeInfo_ = null;
+          treeInfoBuilder_ = null;
+        }
+        if (nodesBuilder_ == null) {
+          nodes_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000002);
+        } else {
+          nodesBuilder_.clear();
         }
         depth_ = 0;
 
@@ -2085,17 +3976,19 @@ public final class TreeProtos {
         com.github.kornilova_l.protos.TreeProtos.Tree result = new com.github.kornilova_l.protos.TreeProtos.Tree(this);
         int from_bitField0_ = bitField0_;
         int to_bitField0_ = 0;
-        result.duration_ = duration_;
-        result.startTime_ = startTime_;
-        result.threadId_ = threadId_;
-        if (callsBuilder_ == null) {
-          if (((bitField0_ & 0x00000008) == 0x00000008)) {
-            calls_ = java.util.Collections.unmodifiableList(calls_);
-            bitField0_ = (bitField0_ & ~0x00000008);
-          }
-          result.calls_ = calls_;
+        if (treeInfoBuilder_ == null) {
+          result.treeInfo_ = treeInfo_;
         } else {
-          result.calls_ = callsBuilder_.build();
+          result.treeInfo_ = treeInfoBuilder_.build();
+        }
+        if (nodesBuilder_ == null) {
+          if (((bitField0_ & 0x00000002) == 0x00000002)) {
+            nodes_ = java.util.Collections.unmodifiableList(nodes_);
+            bitField0_ = (bitField0_ & ~0x00000002);
+          }
+          result.nodes_ = nodes_;
+        } else {
+          result.nodes_ = nodesBuilder_.build();
         }
         result.depth_ = depth_;
         result.bitField0_ = to_bitField0_;
@@ -2140,38 +4033,32 @@ public final class TreeProtos {
 
       public Builder mergeFrom(com.github.kornilova_l.protos.TreeProtos.Tree other) {
         if (other == com.github.kornilova_l.protos.TreeProtos.Tree.getDefaultInstance()) return this;
-        if (other.getDuration() != 0L) {
-          setDuration(other.getDuration());
+        if (other.hasTreeInfo()) {
+          mergeTreeInfo(other.getTreeInfo());
         }
-        if (other.getStartTime() != 0L) {
-          setStartTime(other.getStartTime());
-        }
-        if (other.getThreadId() != 0L) {
-          setThreadId(other.getThreadId());
-        }
-        if (callsBuilder_ == null) {
-          if (!other.calls_.isEmpty()) {
-            if (calls_.isEmpty()) {
-              calls_ = other.calls_;
-              bitField0_ = (bitField0_ & ~0x00000008);
+        if (nodesBuilder_ == null) {
+          if (!other.nodes_.isEmpty()) {
+            if (nodes_.isEmpty()) {
+              nodes_ = other.nodes_;
+              bitField0_ = (bitField0_ & ~0x00000002);
             } else {
-              ensureCallsIsMutable();
-              calls_.addAll(other.calls_);
+              ensureNodesIsMutable();
+              nodes_.addAll(other.nodes_);
             }
             onChanged();
           }
         } else {
-          if (!other.calls_.isEmpty()) {
-            if (callsBuilder_.isEmpty()) {
-              callsBuilder_.dispose();
-              callsBuilder_ = null;
-              calls_ = other.calls_;
-              bitField0_ = (bitField0_ & ~0x00000008);
-              callsBuilder_ = 
+          if (!other.nodes_.isEmpty()) {
+            if (nodesBuilder_.isEmpty()) {
+              nodesBuilder_.dispose();
+              nodesBuilder_ = null;
+              nodes_ = other.nodes_;
+              bitField0_ = (bitField0_ & ~0x00000002);
+              nodesBuilder_ = 
                 com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
-                   getCallsFieldBuilder() : null;
+                   getNodesFieldBuilder() : null;
             } else {
-              callsBuilder_.addAllMessages(other.calls_);
+              nodesBuilder_.addAllMessages(other.nodes_);
             }
           }
         }
@@ -2205,357 +4092,372 @@ public final class TreeProtos {
       }
       private int bitField0_;
 
-      private long duration_ ;
+      private com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo treeInfo_ = null;
+      private com.google.protobuf.SingleFieldBuilderV3<
+          com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo, com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo.Builder, com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfoOrBuilder> treeInfoBuilder_;
       /**
-       * <code>int64 duration = 1;</code>
+       * <code>.com.github.kornilova_l.protos.Tree.TreeInfo tree_info = 1;</code>
        */
-      public long getDuration() {
-        return duration_;
+      public boolean hasTreeInfo() {
+        return treeInfoBuilder_ != null || treeInfo_ != null;
       }
       /**
-       * <code>int64 duration = 1;</code>
+       * <code>.com.github.kornilova_l.protos.Tree.TreeInfo tree_info = 1;</code>
        */
-      public Builder setDuration(long value) {
-        
-        duration_ = value;
-        onChanged();
+      public com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo getTreeInfo() {
+        if (treeInfoBuilder_ == null) {
+          return treeInfo_ == null ? com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo.getDefaultInstance() : treeInfo_;
+        } else {
+          return treeInfoBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>.com.github.kornilova_l.protos.Tree.TreeInfo tree_info = 1;</code>
+       */
+      public Builder setTreeInfo(com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo value) {
+        if (treeInfoBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          treeInfo_ = value;
+          onChanged();
+        } else {
+          treeInfoBuilder_.setMessage(value);
+        }
+
         return this;
       }
       /**
-       * <code>int64 duration = 1;</code>
+       * <code>.com.github.kornilova_l.protos.Tree.TreeInfo tree_info = 1;</code>
        */
-      public Builder clearDuration() {
-        
-        duration_ = 0L;
-        onChanged();
+      public Builder setTreeInfo(
+          com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo.Builder builderForValue) {
+        if (treeInfoBuilder_ == null) {
+          treeInfo_ = builderForValue.build();
+          onChanged();
+        } else {
+          treeInfoBuilder_.setMessage(builderForValue.build());
+        }
+
         return this;
+      }
+      /**
+       * <code>.com.github.kornilova_l.protos.Tree.TreeInfo tree_info = 1;</code>
+       */
+      public Builder mergeTreeInfo(com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo value) {
+        if (treeInfoBuilder_ == null) {
+          if (treeInfo_ != null) {
+            treeInfo_ =
+              com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo.newBuilder(treeInfo_).mergeFrom(value).buildPartial();
+          } else {
+            treeInfo_ = value;
+          }
+          onChanged();
+        } else {
+          treeInfoBuilder_.mergeFrom(value);
+        }
+
+        return this;
+      }
+      /**
+       * <code>.com.github.kornilova_l.protos.Tree.TreeInfo tree_info = 1;</code>
+       */
+      public Builder clearTreeInfo() {
+        if (treeInfoBuilder_ == null) {
+          treeInfo_ = null;
+          onChanged();
+        } else {
+          treeInfo_ = null;
+          treeInfoBuilder_ = null;
+        }
+
+        return this;
+      }
+      /**
+       * <code>.com.github.kornilova_l.protos.Tree.TreeInfo tree_info = 1;</code>
+       */
+      public com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo.Builder getTreeInfoBuilder() {
+        
+        onChanged();
+        return getTreeInfoFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>.com.github.kornilova_l.protos.Tree.TreeInfo tree_info = 1;</code>
+       */
+      public com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfoOrBuilder getTreeInfoOrBuilder() {
+        if (treeInfoBuilder_ != null) {
+          return treeInfoBuilder_.getMessageOrBuilder();
+        } else {
+          return treeInfo_ == null ?
+              com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo.getDefaultInstance() : treeInfo_;
+        }
+      }
+      /**
+       * <code>.com.github.kornilova_l.protos.Tree.TreeInfo tree_info = 1;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilderV3<
+          com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo, com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo.Builder, com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfoOrBuilder> 
+          getTreeInfoFieldBuilder() {
+        if (treeInfoBuilder_ == null) {
+          treeInfoBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+              com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo, com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo.Builder, com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfoOrBuilder>(
+                  getTreeInfo(),
+                  getParentForChildren(),
+                  isClean());
+          treeInfo_ = null;
+        }
+        return treeInfoBuilder_;
       }
 
-      private long startTime_ ;
-      /**
-       * <pre>
-       * only for trees which save original call structure
-       * </pre>
-       *
-       * <code>int64 startTime = 2;</code>
-       */
-      public long getStartTime() {
-        return startTime_;
-      }
-      /**
-       * <pre>
-       * only for trees which save original call structure
-       * </pre>
-       *
-       * <code>int64 startTime = 2;</code>
-       */
-      public Builder setStartTime(long value) {
-        
-        startTime_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <pre>
-       * only for trees which save original call structure
-       * </pre>
-       *
-       * <code>int64 startTime = 2;</code>
-       */
-      public Builder clearStartTime() {
-        
-        startTime_ = 0L;
-        onChanged();
-        return this;
-      }
-
-      private long threadId_ ;
-      /**
-       * <pre>
-       * only for trees which save original call structure
-       * </pre>
-       *
-       * <code>int64 threadId = 3;</code>
-       */
-      public long getThreadId() {
-        return threadId_;
-      }
-      /**
-       * <pre>
-       * only for trees which save original call structure
-       * </pre>
-       *
-       * <code>int64 threadId = 3;</code>
-       */
-      public Builder setThreadId(long value) {
-        
-        threadId_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <pre>
-       * only for trees which save original call structure
-       * </pre>
-       *
-       * <code>int64 threadId = 3;</code>
-       */
-      public Builder clearThreadId() {
-        
-        threadId_ = 0L;
-        onChanged();
-        return this;
-      }
-
-      private java.util.List<com.github.kornilova_l.protos.TreeProtos.Tree.Call> calls_ =
+      private java.util.List<com.github.kornilova_l.protos.TreeProtos.Tree.Node> nodes_ =
         java.util.Collections.emptyList();
-      private void ensureCallsIsMutable() {
-        if (!((bitField0_ & 0x00000008) == 0x00000008)) {
-          calls_ = new java.util.ArrayList<com.github.kornilova_l.protos.TreeProtos.Tree.Call>(calls_);
-          bitField0_ |= 0x00000008;
+      private void ensureNodesIsMutable() {
+        if (!((bitField0_ & 0x00000002) == 0x00000002)) {
+          nodes_ = new java.util.ArrayList<com.github.kornilova_l.protos.TreeProtos.Tree.Node>(nodes_);
+          bitField0_ |= 0x00000002;
          }
       }
 
       private com.google.protobuf.RepeatedFieldBuilderV3<
-          com.github.kornilova_l.protos.TreeProtos.Tree.Call, com.github.kornilova_l.protos.TreeProtos.Tree.Call.Builder, com.github.kornilova_l.protos.TreeProtos.Tree.CallOrBuilder> callsBuilder_;
+          com.github.kornilova_l.protos.TreeProtos.Tree.Node, com.github.kornilova_l.protos.TreeProtos.Tree.Node.Builder, com.github.kornilova_l.protos.TreeProtos.Tree.NodeOrBuilder> nodesBuilder_;
 
       /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 4;</code>
+       * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 2;</code>
        */
-      public java.util.List<com.github.kornilova_l.protos.TreeProtos.Tree.Call> getCallsList() {
-        if (callsBuilder_ == null) {
-          return java.util.Collections.unmodifiableList(calls_);
+      public java.util.List<com.github.kornilova_l.protos.TreeProtos.Tree.Node> getNodesList() {
+        if (nodesBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(nodes_);
         } else {
-          return callsBuilder_.getMessageList();
+          return nodesBuilder_.getMessageList();
         }
       }
       /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 4;</code>
+       * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 2;</code>
        */
-      public int getCallsCount() {
-        if (callsBuilder_ == null) {
-          return calls_.size();
+      public int getNodesCount() {
+        if (nodesBuilder_ == null) {
+          return nodes_.size();
         } else {
-          return callsBuilder_.getCount();
+          return nodesBuilder_.getCount();
         }
       }
       /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 4;</code>
+       * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 2;</code>
        */
-      public com.github.kornilova_l.protos.TreeProtos.Tree.Call getCalls(int index) {
-        if (callsBuilder_ == null) {
-          return calls_.get(index);
+      public com.github.kornilova_l.protos.TreeProtos.Tree.Node getNodes(int index) {
+        if (nodesBuilder_ == null) {
+          return nodes_.get(index);
         } else {
-          return callsBuilder_.getMessage(index);
+          return nodesBuilder_.getMessage(index);
         }
       }
       /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 4;</code>
+       * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 2;</code>
        */
-      public Builder setCalls(
-          int index, com.github.kornilova_l.protos.TreeProtos.Tree.Call value) {
-        if (callsBuilder_ == null) {
+      public Builder setNodes(
+          int index, com.github.kornilova_l.protos.TreeProtos.Tree.Node value) {
+        if (nodesBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
           }
-          ensureCallsIsMutable();
-          calls_.set(index, value);
+          ensureNodesIsMutable();
+          nodes_.set(index, value);
           onChanged();
         } else {
-          callsBuilder_.setMessage(index, value);
+          nodesBuilder_.setMessage(index, value);
         }
         return this;
       }
       /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 4;</code>
+       * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 2;</code>
        */
-      public Builder setCalls(
-          int index, com.github.kornilova_l.protos.TreeProtos.Tree.Call.Builder builderForValue) {
-        if (callsBuilder_ == null) {
-          ensureCallsIsMutable();
-          calls_.set(index, builderForValue.build());
+      public Builder setNodes(
+          int index, com.github.kornilova_l.protos.TreeProtos.Tree.Node.Builder builderForValue) {
+        if (nodesBuilder_ == null) {
+          ensureNodesIsMutable();
+          nodes_.set(index, builderForValue.build());
           onChanged();
         } else {
-          callsBuilder_.setMessage(index, builderForValue.build());
+          nodesBuilder_.setMessage(index, builderForValue.build());
         }
         return this;
       }
       /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 4;</code>
+       * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 2;</code>
        */
-      public Builder addCalls(com.github.kornilova_l.protos.TreeProtos.Tree.Call value) {
-        if (callsBuilder_ == null) {
+      public Builder addNodes(com.github.kornilova_l.protos.TreeProtos.Tree.Node value) {
+        if (nodesBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
           }
-          ensureCallsIsMutable();
-          calls_.add(value);
+          ensureNodesIsMutable();
+          nodes_.add(value);
           onChanged();
         } else {
-          callsBuilder_.addMessage(value);
+          nodesBuilder_.addMessage(value);
         }
         return this;
       }
       /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 4;</code>
+       * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 2;</code>
        */
-      public Builder addCalls(
-          int index, com.github.kornilova_l.protos.TreeProtos.Tree.Call value) {
-        if (callsBuilder_ == null) {
+      public Builder addNodes(
+          int index, com.github.kornilova_l.protos.TreeProtos.Tree.Node value) {
+        if (nodesBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
           }
-          ensureCallsIsMutable();
-          calls_.add(index, value);
+          ensureNodesIsMutable();
+          nodes_.add(index, value);
           onChanged();
         } else {
-          callsBuilder_.addMessage(index, value);
+          nodesBuilder_.addMessage(index, value);
         }
         return this;
       }
       /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 4;</code>
+       * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 2;</code>
        */
-      public Builder addCalls(
-          com.github.kornilova_l.protos.TreeProtos.Tree.Call.Builder builderForValue) {
-        if (callsBuilder_ == null) {
-          ensureCallsIsMutable();
-          calls_.add(builderForValue.build());
+      public Builder addNodes(
+          com.github.kornilova_l.protos.TreeProtos.Tree.Node.Builder builderForValue) {
+        if (nodesBuilder_ == null) {
+          ensureNodesIsMutable();
+          nodes_.add(builderForValue.build());
           onChanged();
         } else {
-          callsBuilder_.addMessage(builderForValue.build());
+          nodesBuilder_.addMessage(builderForValue.build());
         }
         return this;
       }
       /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 4;</code>
+       * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 2;</code>
        */
-      public Builder addCalls(
-          int index, com.github.kornilova_l.protos.TreeProtos.Tree.Call.Builder builderForValue) {
-        if (callsBuilder_ == null) {
-          ensureCallsIsMutable();
-          calls_.add(index, builderForValue.build());
+      public Builder addNodes(
+          int index, com.github.kornilova_l.protos.TreeProtos.Tree.Node.Builder builderForValue) {
+        if (nodesBuilder_ == null) {
+          ensureNodesIsMutable();
+          nodes_.add(index, builderForValue.build());
           onChanged();
         } else {
-          callsBuilder_.addMessage(index, builderForValue.build());
+          nodesBuilder_.addMessage(index, builderForValue.build());
         }
         return this;
       }
       /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 4;</code>
+       * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 2;</code>
        */
-      public Builder addAllCalls(
-          java.lang.Iterable<? extends com.github.kornilova_l.protos.TreeProtos.Tree.Call> values) {
-        if (callsBuilder_ == null) {
-          ensureCallsIsMutable();
+      public Builder addAllNodes(
+          java.lang.Iterable<? extends com.github.kornilova_l.protos.TreeProtos.Tree.Node> values) {
+        if (nodesBuilder_ == null) {
+          ensureNodesIsMutable();
           com.google.protobuf.AbstractMessageLite.Builder.addAll(
-              values, calls_);
+              values, nodes_);
           onChanged();
         } else {
-          callsBuilder_.addAllMessages(values);
+          nodesBuilder_.addAllMessages(values);
         }
         return this;
       }
       /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 4;</code>
+       * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 2;</code>
        */
-      public Builder clearCalls() {
-        if (callsBuilder_ == null) {
-          calls_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000008);
+      public Builder clearNodes() {
+        if (nodesBuilder_ == null) {
+          nodes_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000002);
           onChanged();
         } else {
-          callsBuilder_.clear();
+          nodesBuilder_.clear();
         }
         return this;
       }
       /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 4;</code>
+       * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 2;</code>
        */
-      public Builder removeCalls(int index) {
-        if (callsBuilder_ == null) {
-          ensureCallsIsMutable();
-          calls_.remove(index);
+      public Builder removeNodes(int index) {
+        if (nodesBuilder_ == null) {
+          ensureNodesIsMutable();
+          nodes_.remove(index);
           onChanged();
         } else {
-          callsBuilder_.remove(index);
+          nodesBuilder_.remove(index);
         }
         return this;
       }
       /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 4;</code>
+       * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 2;</code>
        */
-      public com.github.kornilova_l.protos.TreeProtos.Tree.Call.Builder getCallsBuilder(
+      public com.github.kornilova_l.protos.TreeProtos.Tree.Node.Builder getNodesBuilder(
           int index) {
-        return getCallsFieldBuilder().getBuilder(index);
+        return getNodesFieldBuilder().getBuilder(index);
       }
       /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 4;</code>
+       * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 2;</code>
        */
-      public com.github.kornilova_l.protos.TreeProtos.Tree.CallOrBuilder getCallsOrBuilder(
+      public com.github.kornilova_l.protos.TreeProtos.Tree.NodeOrBuilder getNodesOrBuilder(
           int index) {
-        if (callsBuilder_ == null) {
-          return calls_.get(index);  } else {
-          return callsBuilder_.getMessageOrBuilder(index);
+        if (nodesBuilder_ == null) {
+          return nodes_.get(index);  } else {
+          return nodesBuilder_.getMessageOrBuilder(index);
         }
       }
       /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 4;</code>
+       * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 2;</code>
        */
-      public java.util.List<? extends com.github.kornilova_l.protos.TreeProtos.Tree.CallOrBuilder> 
-           getCallsOrBuilderList() {
-        if (callsBuilder_ != null) {
-          return callsBuilder_.getMessageOrBuilderList();
+      public java.util.List<? extends com.github.kornilova_l.protos.TreeProtos.Tree.NodeOrBuilder> 
+           getNodesOrBuilderList() {
+        if (nodesBuilder_ != null) {
+          return nodesBuilder_.getMessageOrBuilderList();
         } else {
-          return java.util.Collections.unmodifiableList(calls_);
+          return java.util.Collections.unmodifiableList(nodes_);
         }
       }
       /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 4;</code>
+       * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 2;</code>
        */
-      public com.github.kornilova_l.protos.TreeProtos.Tree.Call.Builder addCallsBuilder() {
-        return getCallsFieldBuilder().addBuilder(
-            com.github.kornilova_l.protos.TreeProtos.Tree.Call.getDefaultInstance());
+      public com.github.kornilova_l.protos.TreeProtos.Tree.Node.Builder addNodesBuilder() {
+        return getNodesFieldBuilder().addBuilder(
+            com.github.kornilova_l.protos.TreeProtos.Tree.Node.getDefaultInstance());
       }
       /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 4;</code>
+       * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 2;</code>
        */
-      public com.github.kornilova_l.protos.TreeProtos.Tree.Call.Builder addCallsBuilder(
+      public com.github.kornilova_l.protos.TreeProtos.Tree.Node.Builder addNodesBuilder(
           int index) {
-        return getCallsFieldBuilder().addBuilder(
-            index, com.github.kornilova_l.protos.TreeProtos.Tree.Call.getDefaultInstance());
+        return getNodesFieldBuilder().addBuilder(
+            index, com.github.kornilova_l.protos.TreeProtos.Tree.Node.getDefaultInstance());
       }
       /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Call calls = 4;</code>
+       * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 2;</code>
        */
-      public java.util.List<com.github.kornilova_l.protos.TreeProtos.Tree.Call.Builder> 
-           getCallsBuilderList() {
-        return getCallsFieldBuilder().getBuilderList();
+      public java.util.List<com.github.kornilova_l.protos.TreeProtos.Tree.Node.Builder> 
+           getNodesBuilderList() {
+        return getNodesFieldBuilder().getBuilderList();
       }
       private com.google.protobuf.RepeatedFieldBuilderV3<
-          com.github.kornilova_l.protos.TreeProtos.Tree.Call, com.github.kornilova_l.protos.TreeProtos.Tree.Call.Builder, com.github.kornilova_l.protos.TreeProtos.Tree.CallOrBuilder> 
-          getCallsFieldBuilder() {
-        if (callsBuilder_ == null) {
-          callsBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
-              com.github.kornilova_l.protos.TreeProtos.Tree.Call, com.github.kornilova_l.protos.TreeProtos.Tree.Call.Builder, com.github.kornilova_l.protos.TreeProtos.Tree.CallOrBuilder>(
-                  calls_,
-                  ((bitField0_ & 0x00000008) == 0x00000008),
+          com.github.kornilova_l.protos.TreeProtos.Tree.Node, com.github.kornilova_l.protos.TreeProtos.Tree.Node.Builder, com.github.kornilova_l.protos.TreeProtos.Tree.NodeOrBuilder> 
+          getNodesFieldBuilder() {
+        if (nodesBuilder_ == null) {
+          nodesBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
+              com.github.kornilova_l.protos.TreeProtos.Tree.Node, com.github.kornilova_l.protos.TreeProtos.Tree.Node.Builder, com.github.kornilova_l.protos.TreeProtos.Tree.NodeOrBuilder>(
+                  nodes_,
+                  ((bitField0_ & 0x00000002) == 0x00000002),
                   getParentForChildren(),
                   isClean());
-          calls_ = null;
+          nodes_ = null;
         }
-        return callsBuilder_;
+        return nodesBuilder_;
       }
 
       private int depth_ ;
       /**
-       * <code>uint32 depth = 5;</code>
+       * <code>uint32 depth = 3;</code>
        */
       public int getDepth() {
         return depth_;
       }
       /**
-       * <code>uint32 depth = 5;</code>
+       * <code>uint32 depth = 3;</code>
        */
       public Builder setDepth(int value) {
         
@@ -2564,7 +4466,7 @@ public final class TreeProtos {
         return this;
       }
       /**
-       * <code>uint32 depth = 5;</code>
+       * <code>uint32 depth = 3;</code>
        */
       public Builder clearDepth() {
         
@@ -2627,10 +4529,20 @@ public final class TreeProtos {
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_com_github_kornilova_l_protos_Tree_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_com_github_kornilova_l_protos_Tree_Call_descriptor;
+    internal_static_com_github_kornilova_l_protos_Tree_Node_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_com_github_kornilova_l_protos_Tree_Call_fieldAccessorTable;
+      internal_static_com_github_kornilova_l_protos_Tree_Node_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_com_github_kornilova_l_protos_Tree_Node_NodeInfo_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_com_github_kornilova_l_protos_Tree_Node_NodeInfo_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_com_github_kornilova_l_protos_Tree_TreeInfo_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_com_github_kornilova_l_protos_Tree_TreeInfo_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -2642,19 +4554,25 @@ public final class TreeProtos {
     java.lang.String[] descriptorData = {
       "\n(com/github/kornilova_l/protos/tree.pro" +
       "to\022\035com.github.kornilova_l.protos\032)com/g" +
-      "ithub/kornilova_l/protos/event.proto\"\263\003\n" +
-      "\004Tree\022\020\n\010duration\030\001 \001(\003\022\021\n\tstartTime\030\002 \001" +
-      "(\003\022\020\n\010threadId\030\003 \001(\003\0227\n\005calls\030\004 \003(\0132(.co" +
-      "m.github.kornilova_l.protos.Tree.Call\022\r\n" +
-      "\005depth\030\005 \001(\r\032\253\002\n\004Call\022\020\n\010duration\030\001 \001(\003\022" +
-      "9\n\005enter\030\002 \001(\0132*.com.github.kornilova_l." +
-      "protos.Event.Enter\0229\n\004exit\030\003 \001(\0132).com.g" +
-      "ithub.kornilova_l.protos.Event.ExitH\000\022C\n",
-      "\texception\030\004 \001(\0132..com.github.kornilova_" +
-      "l.protos.Event.ExceptionH\000\022\021\n\tstartTime\030" +
-      "\005 \001(\003\0227\n\005calls\030\006 \003(\0132(.com.github.kornil" +
-      "ova_l.protos.Tree.CallB\n\n\010exitInfoB\014B\nTr" +
-      "eeProtosb\006proto3"
+      "ithub/kornilova_l/protos/event.proto\"\271\005\n" +
+      "\004Tree\022?\n\ttree_info\030\001 \001(\0132,.com.github.ko" +
+      "rnilova_l.protos.Tree.TreeInfo\0227\n\005nodes\030" +
+      "\002 \003(\0132(.com.github.kornilova_l.protos.Tr" +
+      "ee.Node\022\r\n\005depth\030\003 \001(\r\032\342\003\n\004Node\022\016\n\006offse" +
+      "t\030\001 \001(\001\022\r\n\005width\030\002 \001(\001\022D\n\tnode_info\030\003 \001(" +
+      "\01321.com.github.kornilova_l.protos.Tree.N" +
+      "ode.NodeInfo\0227\n\005nodes\030\004 \003(\0132(.com.github",
+      ".kornilova_l.protos.Tree.Node\032\273\002\n\010NodeIn" +
+      "fo\022\023\n\013method_name\030\001 \001(\t\022\022\n\nclass_name\030\002 " +
+      "\001(\t\022\020\n\010duration\030\003 \001(\003\022\022\n\nstart_time\030\004 \001(" +
+      "\003\022\021\n\tis_static\030\005 \001(\010\022<\n\nparameters\030\006 \003(\013" +
+      "2(.com.github.kornilova_l.protos.Event.V" +
+      "ar\022@\n\014return_value\030\007 \001(\0132(.com.github.ko" +
+      "rnilova_l.protos.Event.VarH\000\022C\n\texceptio" +
+      "n\030\010 \001(\0132..com.github.kornilova_l.protos." +
+      "Event.ExceptionH\000B\010\n\006result\032C\n\010TreeInfo\022" +
+      "\020\n\010duration\030\001 \001(\003\022\022\n\nstart_time\030\002 \001(\003\022\021\n",
+      "\tthread_id\030\003 \001(\003B\014B\nTreeProtosb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -2674,13 +4592,25 @@ public final class TreeProtos {
     internal_static_com_github_kornilova_l_protos_Tree_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_github_kornilova_l_protos_Tree_descriptor,
-        new java.lang.String[] { "Duration", "StartTime", "ThreadId", "Calls", "Depth", });
-    internal_static_com_github_kornilova_l_protos_Tree_Call_descriptor =
+        new java.lang.String[] { "TreeInfo", "Nodes", "Depth", });
+    internal_static_com_github_kornilova_l_protos_Tree_Node_descriptor =
       internal_static_com_github_kornilova_l_protos_Tree_descriptor.getNestedTypes().get(0);
-    internal_static_com_github_kornilova_l_protos_Tree_Call_fieldAccessorTable = new
+    internal_static_com_github_kornilova_l_protos_Tree_Node_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_com_github_kornilova_l_protos_Tree_Call_descriptor,
-        new java.lang.String[] { "Duration", "Enter", "Exit", "Exception", "StartTime", "Calls", "ExitInfo", });
+        internal_static_com_github_kornilova_l_protos_Tree_Node_descriptor,
+        new java.lang.String[] { "Offset", "Width", "NodeInfo", "Nodes", });
+    internal_static_com_github_kornilova_l_protos_Tree_Node_NodeInfo_descriptor =
+      internal_static_com_github_kornilova_l_protos_Tree_Node_descriptor.getNestedTypes().get(0);
+    internal_static_com_github_kornilova_l_protos_Tree_Node_NodeInfo_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_com_github_kornilova_l_protos_Tree_Node_NodeInfo_descriptor,
+        new java.lang.String[] { "MethodName", "ClassName", "Duration", "StartTime", "IsStatic", "Parameters", "ReturnValue", "Exception", "Result", });
+    internal_static_com_github_kornilova_l_protos_Tree_TreeInfo_descriptor =
+      internal_static_com_github_kornilova_l_protos_Tree_descriptor.getNestedTypes().get(1);
+    internal_static_com_github_kornilova_l_protos_Tree_TreeInfo_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_com_github_kornilova_l_protos_Tree_TreeInfo_descriptor,
+        new java.lang.String[] { "Duration", "StartTime", "ThreadId", });
     com.github.kornilova_l.protos.EventProtos.getDescriptor();
   }
 

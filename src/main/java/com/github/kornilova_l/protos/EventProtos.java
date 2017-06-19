@@ -19,7 +19,7 @@ public final class EventProtos {
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <code>int64 threadId = 1;</code>
+     * <code>int64 thread_id = 1;</code>
      */
     long getThreadId();
 
@@ -178,27 +178,27 @@ public final class EventProtos {
         com.google.protobuf.MessageOrBuilder {
 
       /**
-       * <code>string className = 1;</code>
+       * <code>string class_name = 1;</code>
        */
       java.lang.String getClassName();
       /**
-       * <code>string className = 1;</code>
+       * <code>string class_name = 1;</code>
        */
       com.google.protobuf.ByteString
           getClassNameBytes();
 
       /**
-       * <code>string methodName = 2;</code>
+       * <code>string method_name = 2;</code>
        */
       java.lang.String getMethodName();
       /**
-       * <code>string methodName = 2;</code>
+       * <code>string method_name = 2;</code>
        */
       com.google.protobuf.ByteString
           getMethodNameBytes();
 
       /**
-       * <code>bool isStatic = 3;</code>
+       * <code>bool is_static = 3;</code>
        */
       boolean getIsStatic();
 
@@ -322,10 +322,10 @@ public final class EventProtos {
       }
 
       private int bitField0_;
-      public static final int CLASSNAME_FIELD_NUMBER = 1;
+      public static final int CLASS_NAME_FIELD_NUMBER = 1;
       private volatile java.lang.Object className_;
       /**
-       * <code>string className = 1;</code>
+       * <code>string class_name = 1;</code>
        */
       public java.lang.String getClassName() {
         java.lang.Object ref = className_;
@@ -340,7 +340,7 @@ public final class EventProtos {
         }
       }
       /**
-       * <code>string className = 1;</code>
+       * <code>string class_name = 1;</code>
        */
       public com.google.protobuf.ByteString
           getClassNameBytes() {
@@ -356,10 +356,10 @@ public final class EventProtos {
         }
       }
 
-      public static final int METHODNAME_FIELD_NUMBER = 2;
+      public static final int METHOD_NAME_FIELD_NUMBER = 2;
       private volatile java.lang.Object methodName_;
       /**
-       * <code>string methodName = 2;</code>
+       * <code>string method_name = 2;</code>
        */
       public java.lang.String getMethodName() {
         java.lang.Object ref = methodName_;
@@ -374,7 +374,7 @@ public final class EventProtos {
         }
       }
       /**
-       * <code>string methodName = 2;</code>
+       * <code>string method_name = 2;</code>
        */
       public com.google.protobuf.ByteString
           getMethodNameBytes() {
@@ -390,10 +390,10 @@ public final class EventProtos {
         }
       }
 
-      public static final int ISSTATIC_FIELD_NUMBER = 3;
+      public static final int IS_STATIC_FIELD_NUMBER = 3;
       private boolean isStatic_;
       /**
-       * <code>bool isStatic = 3;</code>
+       * <code>bool is_static = 3;</code>
        */
       public boolean getIsStatic() {
         return isStatic_;
@@ -513,11 +513,11 @@ public final class EventProtos {
         }
         int hash = 41;
         hash = (19 * hash) + getDescriptor().hashCode();
-        hash = (37 * hash) + CLASSNAME_FIELD_NUMBER;
+        hash = (37 * hash) + CLASS_NAME_FIELD_NUMBER;
         hash = (53 * hash) + getClassName().hashCode();
-        hash = (37 * hash) + METHODNAME_FIELD_NUMBER;
+        hash = (37 * hash) + METHOD_NAME_FIELD_NUMBER;
         hash = (53 * hash) + getMethodName().hashCode();
-        hash = (37 * hash) + ISSTATIC_FIELD_NUMBER;
+        hash = (37 * hash) + IS_STATIC_FIELD_NUMBER;
         hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
             getIsStatic());
         if (getParametersCount() > 0) {
@@ -810,7 +810,7 @@ public final class EventProtos {
 
         private java.lang.Object className_ = "";
         /**
-         * <code>string className = 1;</code>
+         * <code>string class_name = 1;</code>
          */
         public java.lang.String getClassName() {
           java.lang.Object ref = className_;
@@ -825,7 +825,7 @@ public final class EventProtos {
           }
         }
         /**
-         * <code>string className = 1;</code>
+         * <code>string class_name = 1;</code>
          */
         public com.google.protobuf.ByteString
             getClassNameBytes() {
@@ -841,7 +841,7 @@ public final class EventProtos {
           }
         }
         /**
-         * <code>string className = 1;</code>
+         * <code>string class_name = 1;</code>
          */
         public Builder setClassName(
             java.lang.String value) {
@@ -854,7 +854,7 @@ public final class EventProtos {
           return this;
         }
         /**
-         * <code>string className = 1;</code>
+         * <code>string class_name = 1;</code>
          */
         public Builder clearClassName() {
           
@@ -863,7 +863,7 @@ public final class EventProtos {
           return this;
         }
         /**
-         * <code>string className = 1;</code>
+         * <code>string class_name = 1;</code>
          */
         public Builder setClassNameBytes(
             com.google.protobuf.ByteString value) {
@@ -879,7 +879,7 @@ public final class EventProtos {
 
         private java.lang.Object methodName_ = "";
         /**
-         * <code>string methodName = 2;</code>
+         * <code>string method_name = 2;</code>
          */
         public java.lang.String getMethodName() {
           java.lang.Object ref = methodName_;
@@ -894,7 +894,7 @@ public final class EventProtos {
           }
         }
         /**
-         * <code>string methodName = 2;</code>
+         * <code>string method_name = 2;</code>
          */
         public com.google.protobuf.ByteString
             getMethodNameBytes() {
@@ -910,7 +910,7 @@ public final class EventProtos {
           }
         }
         /**
-         * <code>string methodName = 2;</code>
+         * <code>string method_name = 2;</code>
          */
         public Builder setMethodName(
             java.lang.String value) {
@@ -923,7 +923,7 @@ public final class EventProtos {
           return this;
         }
         /**
-         * <code>string methodName = 2;</code>
+         * <code>string method_name = 2;</code>
          */
         public Builder clearMethodName() {
           
@@ -932,7 +932,7 @@ public final class EventProtos {
           return this;
         }
         /**
-         * <code>string methodName = 2;</code>
+         * <code>string method_name = 2;</code>
          */
         public Builder setMethodNameBytes(
             com.google.protobuf.ByteString value) {
@@ -948,13 +948,13 @@ public final class EventProtos {
 
         private boolean isStatic_ ;
         /**
-         * <code>bool isStatic = 3;</code>
+         * <code>bool is_static = 3;</code>
          */
         public boolean getIsStatic() {
           return isStatic_;
         }
         /**
-         * <code>bool isStatic = 3;</code>
+         * <code>bool is_static = 3;</code>
          */
         public Builder setIsStatic(boolean value) {
           
@@ -963,7 +963,7 @@ public final class EventProtos {
           return this;
         }
         /**
-         * <code>bool isStatic = 3;</code>
+         * <code>bool is_static = 3;</code>
          */
         public Builder clearIsStatic() {
           
@@ -1265,15 +1265,15 @@ public final class EventProtos {
         com.google.protobuf.MessageOrBuilder {
 
       /**
-       * <code>.com.github.kornilova_l.protos.Event.Var returnValue = 1;</code>
+       * <code>.com.github.kornilova_l.protos.Event.Var return_value = 1;</code>
        */
       boolean hasReturnValue();
       /**
-       * <code>.com.github.kornilova_l.protos.Event.Var returnValue = 1;</code>
+       * <code>.com.github.kornilova_l.protos.Event.Var return_value = 1;</code>
        */
       com.github.kornilova_l.protos.EventProtos.Event.Var getReturnValue();
       /**
-       * <code>.com.github.kornilova_l.protos.Event.Var returnValue = 1;</code>
+       * <code>.com.github.kornilova_l.protos.Event.Var return_value = 1;</code>
        */
       com.github.kornilova_l.protos.EventProtos.Event.VarOrBuilder getReturnValueOrBuilder();
     }
@@ -1352,22 +1352,22 @@ public final class EventProtos {
                 com.github.kornilova_l.protos.EventProtos.Event.Exit.class, com.github.kornilova_l.protos.EventProtos.Event.Exit.Builder.class);
       }
 
-      public static final int RETURNVALUE_FIELD_NUMBER = 1;
+      public static final int RETURN_VALUE_FIELD_NUMBER = 1;
       private com.github.kornilova_l.protos.EventProtos.Event.Var returnValue_;
       /**
-       * <code>.com.github.kornilova_l.protos.Event.Var returnValue = 1;</code>
+       * <code>.com.github.kornilova_l.protos.Event.Var return_value = 1;</code>
        */
       public boolean hasReturnValue() {
         return returnValue_ != null;
       }
       /**
-       * <code>.com.github.kornilova_l.protos.Event.Var returnValue = 1;</code>
+       * <code>.com.github.kornilova_l.protos.Event.Var return_value = 1;</code>
        */
       public com.github.kornilova_l.protos.EventProtos.Event.Var getReturnValue() {
         return returnValue_ == null ? com.github.kornilova_l.protos.EventProtos.Event.Var.getDefaultInstance() : returnValue_;
       }
       /**
-       * <code>.com.github.kornilova_l.protos.Event.Var returnValue = 1;</code>
+       * <code>.com.github.kornilova_l.protos.Event.Var return_value = 1;</code>
        */
       public com.github.kornilova_l.protos.EventProtos.Event.VarOrBuilder getReturnValueOrBuilder() {
         return getReturnValue();
@@ -1431,7 +1431,7 @@ public final class EventProtos {
         int hash = 41;
         hash = (19 * hash) + getDescriptor().hashCode();
         if (hasReturnValue()) {
-          hash = (37 * hash) + RETURNVALUE_FIELD_NUMBER;
+          hash = (37 * hash) + RETURN_VALUE_FIELD_NUMBER;
           hash = (53 * hash) + getReturnValue().hashCode();
         }
         hash = (29 * hash) + unknownFields.hashCode();
@@ -1670,13 +1670,13 @@ public final class EventProtos {
         private com.google.protobuf.SingleFieldBuilderV3<
             com.github.kornilova_l.protos.EventProtos.Event.Var, com.github.kornilova_l.protos.EventProtos.Event.Var.Builder, com.github.kornilova_l.protos.EventProtos.Event.VarOrBuilder> returnValueBuilder_;
         /**
-         * <code>.com.github.kornilova_l.protos.Event.Var returnValue = 1;</code>
+         * <code>.com.github.kornilova_l.protos.Event.Var return_value = 1;</code>
          */
         public boolean hasReturnValue() {
           return returnValueBuilder_ != null || returnValue_ != null;
         }
         /**
-         * <code>.com.github.kornilova_l.protos.Event.Var returnValue = 1;</code>
+         * <code>.com.github.kornilova_l.protos.Event.Var return_value = 1;</code>
          */
         public com.github.kornilova_l.protos.EventProtos.Event.Var getReturnValue() {
           if (returnValueBuilder_ == null) {
@@ -1686,7 +1686,7 @@ public final class EventProtos {
           }
         }
         /**
-         * <code>.com.github.kornilova_l.protos.Event.Var returnValue = 1;</code>
+         * <code>.com.github.kornilova_l.protos.Event.Var return_value = 1;</code>
          */
         public Builder setReturnValue(com.github.kornilova_l.protos.EventProtos.Event.Var value) {
           if (returnValueBuilder_ == null) {
@@ -1702,7 +1702,7 @@ public final class EventProtos {
           return this;
         }
         /**
-         * <code>.com.github.kornilova_l.protos.Event.Var returnValue = 1;</code>
+         * <code>.com.github.kornilova_l.protos.Event.Var return_value = 1;</code>
          */
         public Builder setReturnValue(
             com.github.kornilova_l.protos.EventProtos.Event.Var.Builder builderForValue) {
@@ -1716,7 +1716,7 @@ public final class EventProtos {
           return this;
         }
         /**
-         * <code>.com.github.kornilova_l.protos.Event.Var returnValue = 1;</code>
+         * <code>.com.github.kornilova_l.protos.Event.Var return_value = 1;</code>
          */
         public Builder mergeReturnValue(com.github.kornilova_l.protos.EventProtos.Event.Var value) {
           if (returnValueBuilder_ == null) {
@@ -1734,7 +1734,7 @@ public final class EventProtos {
           return this;
         }
         /**
-         * <code>.com.github.kornilova_l.protos.Event.Var returnValue = 1;</code>
+         * <code>.com.github.kornilova_l.protos.Event.Var return_value = 1;</code>
          */
         public Builder clearReturnValue() {
           if (returnValueBuilder_ == null) {
@@ -1748,7 +1748,7 @@ public final class EventProtos {
           return this;
         }
         /**
-         * <code>.com.github.kornilova_l.protos.Event.Var returnValue = 1;</code>
+         * <code>.com.github.kornilova_l.protos.Event.Var return_value = 1;</code>
          */
         public com.github.kornilova_l.protos.EventProtos.Event.Var.Builder getReturnValueBuilder() {
           
@@ -1756,7 +1756,7 @@ public final class EventProtos {
           return getReturnValueFieldBuilder().getBuilder();
         }
         /**
-         * <code>.com.github.kornilova_l.protos.Event.Var returnValue = 1;</code>
+         * <code>.com.github.kornilova_l.protos.Event.Var return_value = 1;</code>
          */
         public com.github.kornilova_l.protos.EventProtos.Event.VarOrBuilder getReturnValueOrBuilder() {
           if (returnValueBuilder_ != null) {
@@ -1767,7 +1767,7 @@ public final class EventProtos {
           }
         }
         /**
-         * <code>.com.github.kornilova_l.protos.Event.Var returnValue = 1;</code>
+         * <code>.com.github.kornilova_l.protos.Event.Var return_value = 1;</code>
          */
         private com.google.protobuf.SingleFieldBuilderV3<
             com.github.kornilova_l.protos.EventProtos.Event.Var, com.github.kornilova_l.protos.EventProtos.Event.Var.Builder, com.github.kornilova_l.protos.EventProtos.Event.VarOrBuilder> 
@@ -4573,10 +4573,10 @@ public final class EventProtos {
           infoCase_);
     }
 
-    public static final int THREADID_FIELD_NUMBER = 1;
+    public static final int THREAD_ID_FIELD_NUMBER = 1;
     private long threadId_;
     /**
-     * <code>int64 threadId = 1;</code>
+     * <code>int64 thread_id = 1;</code>
      */
     public long getThreadId() {
       return threadId_;
@@ -4754,7 +4754,7 @@ public final class EventProtos {
       }
       int hash = 41;
       hash = (19 * hash) + getDescriptor().hashCode();
-      hash = (37 * hash) + THREADID_FIELD_NUMBER;
+      hash = (37 * hash) + THREAD_ID_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
           getThreadId());
       hash = (37 * hash) + TIME_FIELD_NUMBER;
@@ -5064,13 +5064,13 @@ public final class EventProtos {
 
       private long threadId_ ;
       /**
-       * <code>int64 threadId = 1;</code>
+       * <code>int64 thread_id = 1;</code>
        */
       public long getThreadId() {
         return threadId_;
       }
       /**
-       * <code>int64 threadId = 1;</code>
+       * <code>int64 thread_id = 1;</code>
        */
       public Builder setThreadId(long value) {
         
@@ -5079,7 +5079,7 @@ public final class EventProtos {
         return this;
       }
       /**
-       * <code>int64 threadId = 1;</code>
+       * <code>int64 thread_id = 1;</code>
        */
       public Builder clearThreadId() {
         
@@ -5592,26 +5592,26 @@ public final class EventProtos {
   static {
     java.lang.String[] descriptorData = {
       "\n)com/github/kornilova_l/protos/event.pr" +
-      "oto\022\035com.github.kornilova_l.protos\"\334\005\n\005E" +
-      "vent\022\020\n\010threadId\030\001 \001(\003\022\014\n\004time\030\002 \001(\003\022;\n\005" +
-      "enter\030\003 \001(\0132*.com.github.kornilova_l.pro" +
-      "tos.Event.EnterH\000\0229\n\004exit\030\004 \001(\0132).com.gi" +
-      "thub.kornilova_l.protos.Event.ExitH\000\022C\n\t" +
-      "exception\030\005 \001(\0132..com.github.kornilova_l" +
-      ".protos.Event.ExceptionH\000\032~\n\005Enter\022\021\n\tcl" +
-      "assName\030\001 \001(\t\022\022\n\nmethodName\030\002 \001(\t\022\020\n\010isS" +
-      "tatic\030\003 \001(\010\022<\n\nparameters\030\004 \003(\0132(.com.gi",
-      "thub.kornilova_l.protos.Event.Var\032E\n\004Exi" +
-      "t\022=\n\013returnValue\030\001 \001(\0132(.com.github.korn" +
-      "ilova_l.protos.Event.Var\032H\n\tException\022;\n" +
-      "\006object\030\001 \001(\0132+.com.github.kornilova_l.p" +
-      "rotos.Event.Object\032\265\001\n\003Var\022\013\n\001I\030\001 \001(\021H\000\022" +
-      "\013\n\001J\030\002 \001(\022H\000\022\013\n\001Z\030\003 \001(\010H\000\022\013\n\001C\030\004 \001(\rH\000\022\013" +
-      "\n\001S\030\005 \001(\021H\000\022\013\n\001B\030\006 \001(\021H\000\022\013\n\001F\030\007 \001(\002H\000\022\013\n" +
-      "\001D\030\010 \001(\001H\000\022=\n\006object\030\t \001(\0132+.com.github." +
-      "kornilova_l.protos.Event.ObjectH\000B\007\n\005val" +
-      "ue\032%\n\006Object\022\014\n\004type\030\001 \001(\t\022\r\n\005value\030\002 \001(",
-      "\tB\006\n\004infoB\rB\013EventProtosb\006proto3"
+      "oto\022\035com.github.kornilova_l.protos\"\342\005\n\005E" +
+      "vent\022\021\n\tthread_id\030\001 \001(\003\022\014\n\004time\030\002 \001(\003\022;\n" +
+      "\005enter\030\003 \001(\0132*.com.github.kornilova_l.pr" +
+      "otos.Event.EnterH\000\0229\n\004exit\030\004 \001(\0132).com.g" +
+      "ithub.kornilova_l.protos.Event.ExitH\000\022C\n" +
+      "\texception\030\005 \001(\0132..com.github.kornilova_" +
+      "l.protos.Event.ExceptionH\000\032\201\001\n\005Enter\022\022\n\n" +
+      "class_name\030\001 \001(\t\022\023\n\013method_name\030\002 \001(\t\022\021\n" +
+      "\tis_static\030\003 \001(\010\022<\n\nparameters\030\004 \003(\0132(.c",
+      "om.github.kornilova_l.protos.Event.Var\032F" +
+      "\n\004Exit\022>\n\014return_value\030\001 \001(\0132(.com.githu" +
+      "b.kornilova_l.protos.Event.Var\032H\n\tExcept" +
+      "ion\022;\n\006object\030\001 \001(\0132+.com.github.kornilo" +
+      "va_l.protos.Event.Object\032\265\001\n\003Var\022\013\n\001I\030\001 " +
+      "\001(\021H\000\022\013\n\001J\030\002 \001(\022H\000\022\013\n\001Z\030\003 \001(\010H\000\022\013\n\001C\030\004 \001" +
+      "(\rH\000\022\013\n\001S\030\005 \001(\021H\000\022\013\n\001B\030\006 \001(\021H\000\022\013\n\001F\030\007 \001(" +
+      "\002H\000\022\013\n\001D\030\010 \001(\001H\000\022=\n\006object\030\t \001(\0132+.com.g" +
+      "ithub.kornilova_l.protos.Event.ObjectH\000B" +
+      "\007\n\005value\032%\n\006Object\022\014\n\004type\030\001 \001(\t\022\r\n\005valu",
+      "e\030\002 \001(\tB\006\n\004infoB\rB\013EventProtosb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
