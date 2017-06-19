@@ -9,14 +9,17 @@ class OriginalTree {
     private final LinkedList<TreeProtos.Tree.Node.NodeInfo.Builder> nodeInfoStack = new LinkedList<>();
     private final LinkedList<TreeProtos.Tree.Node.Builder> nodeStack = new LinkedList<>();
     private TreeProtos.Tree.Builder treeBuilder = TreeProtos.Tree.newBuilder();
-    private final TreeProtos.Tree.TreeInfo.Builder treeInfoBuilder = TreeProtos.Tree.TreeInfo.newBuilder();
     private TreeProtos.Tree tree = null;
     private int maxDepth = 0;
     private int currentDepth = 0;
 
     OriginalTree(long startTime, long threadId) {
-        treeInfoBuilder.setThreadId(threadId)
-                .setStartTime(startTime);
+        treeBuilder.setTreeInfo(
+                TreeProtos.Tree.TreeInfo.newBuilder()
+                        .setThreadId(threadId)
+                        .setStartTime(startTime)
+                        .build()
+        );
     }
 
     void addEvent(EventProtos.Event event) {
@@ -92,6 +95,7 @@ class OriginalTree {
                         .setIsStatic(event.getEnter().getIsStatic())
                         .addAllParameters(event.getEnter().getParametersList())
         );
+        System.out.println("tree start time: " + treeBuilder.getTreeInfo().getStartTime());
         long offset = event.getTime() - treeBuilder.getTreeInfo().getStartTime();
         nodeStack.addFirst(
                 TreeProtos.Tree.Node.newBuilder()
@@ -103,11 +107,8 @@ class OriginalTree {
         if (nodeInfoStack.isEmpty()) { // everything is okay
             TreeProtos.Tree.Node lastFinishedNode = treeBuilder.getNodes(treeBuilder.getNodesCount() - 1);
             long treeWidth = lastFinishedNode.getOffset() + lastFinishedNode.getWidth();
-            treeBuilder.setTreeInfo(
-                    treeInfoBuilder.setDuration(treeWidth)
-                            .build()
-            );
-            treeBuilder.setDepth(maxDepth);
+            treeBuilder.setWidth(treeWidth)
+                    .setDepth(maxDepth);
             tree = treeBuilder.build();
             treeBuilder = null;
         } else { // something went wrong

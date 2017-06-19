@@ -59,6 +59,11 @@ public final class TreeProtos {
      * <code>uint32 depth = 3;</code>
      */
     int getDepth();
+
+    /**
+     * <code>int64 width = 4;</code>
+     */
+    long getWidth();
   }
   /**
    * Protobuf type {@code com.github.kornilova_l.protos.Tree}
@@ -74,6 +79,7 @@ public final class TreeProtos {
     private Tree() {
       nodes_ = java.util.Collections.emptyList();
       depth_ = 0;
+      width_ = 0L;
     }
 
     @java.lang.Override
@@ -126,6 +132,11 @@ public final class TreeProtos {
             case 24: {
 
               depth_ = input.readUInt32();
+              break;
+            }
+            case 32: {
+
+              width_ = input.readInt64();
               break;
             }
           }
@@ -338,7 +349,7 @@ public final class TreeProtos {
             getClassNameBytes();
 
         /**
-         * <code>bool is_static = 5;</code>
+         * <code>bool is_static = 3;</code>
          */
         boolean getIsStatic();
 
@@ -347,7 +358,7 @@ public final class TreeProtos {
          * only for trees which save original call structure
          * </pre>
          *
-         * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 6;</code>
+         * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 4;</code>
          */
         java.util.List<com.github.kornilova_l.protos.EventProtos.Event.Var> 
             getParametersList();
@@ -356,7 +367,7 @@ public final class TreeProtos {
          * only for trees which save original call structure
          * </pre>
          *
-         * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 6;</code>
+         * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 4;</code>
          */
         com.github.kornilova_l.protos.EventProtos.Event.Var getParameters(int index);
         /**
@@ -364,7 +375,7 @@ public final class TreeProtos {
          * only for trees which save original call structure
          * </pre>
          *
-         * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 6;</code>
+         * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 4;</code>
          */
         int getParametersCount();
         /**
@@ -372,7 +383,7 @@ public final class TreeProtos {
          * only for trees which save original call structure
          * </pre>
          *
-         * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 6;</code>
+         * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 4;</code>
          */
         java.util.List<? extends com.github.kornilova_l.protos.EventProtos.Event.VarOrBuilder> 
             getParametersOrBuilderList();
@@ -381,26 +392,26 @@ public final class TreeProtos {
          * only for trees which save original call structure
          * </pre>
          *
-         * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 6;</code>
+         * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 4;</code>
          */
         com.github.kornilova_l.protos.EventProtos.Event.VarOrBuilder getParametersOrBuilder(
             int index);
 
         /**
-         * <code>.com.github.kornilova_l.protos.Event.Var return_value = 7;</code>
+         * <code>.com.github.kornilova_l.protos.Event.Var return_value = 5;</code>
          */
         com.github.kornilova_l.protos.EventProtos.Event.Var getReturnValue();
         /**
-         * <code>.com.github.kornilova_l.protos.Event.Var return_value = 7;</code>
+         * <code>.com.github.kornilova_l.protos.Event.Var return_value = 5;</code>
          */
         com.github.kornilova_l.protos.EventProtos.Event.VarOrBuilder getReturnValueOrBuilder();
 
         /**
-         * <code>.com.github.kornilova_l.protos.Event.Exception exception = 8;</code>
+         * <code>.com.github.kornilova_l.protos.Event.Exception exception = 6;</code>
          */
         com.github.kornilova_l.protos.EventProtos.Event.Exception getException();
         /**
-         * <code>.com.github.kornilova_l.protos.Event.Exception exception = 8;</code>
+         * <code>.com.github.kornilova_l.protos.Event.Exception exception = 6;</code>
          */
         com.github.kornilova_l.protos.EventProtos.Event.ExceptionOrBuilder getExceptionOrBuilder();
 
@@ -461,12 +472,12 @@ public final class TreeProtos {
                   className_ = s;
                   break;
                 }
-                case 40: {
+                case 24: {
 
                   isStatic_ = input.readBool();
                   break;
                 }
-                case 50: {
+                case 34: {
                   if (!((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
                     parameters_ = new java.util.ArrayList<com.github.kornilova_l.protos.EventProtos.Event.Var>();
                     mutable_bitField0_ |= 0x00000008;
@@ -475,9 +486,9 @@ public final class TreeProtos {
                       input.readMessage(com.github.kornilova_l.protos.EventProtos.Event.Var.parser(), extensionRegistry));
                   break;
                 }
-                case 58: {
+                case 42: {
                   com.github.kornilova_l.protos.EventProtos.Event.Var.Builder subBuilder = null;
-                  if (resultCase_ == 7) {
+                  if (resultCase_ == 5) {
                     subBuilder = ((com.github.kornilova_l.protos.EventProtos.Event.Var) result_).toBuilder();
                   }
                   result_ =
@@ -486,12 +497,12 @@ public final class TreeProtos {
                     subBuilder.mergeFrom((com.github.kornilova_l.protos.EventProtos.Event.Var) result_);
                     result_ = subBuilder.buildPartial();
                   }
-                  resultCase_ = 7;
+                  resultCase_ = 5;
                   break;
                 }
-                case 66: {
+                case 50: {
                   com.github.kornilova_l.protos.EventProtos.Event.Exception.Builder subBuilder = null;
-                  if (resultCase_ == 8) {
+                  if (resultCase_ == 6) {
                     subBuilder = ((com.github.kornilova_l.protos.EventProtos.Event.Exception) result_).toBuilder();
                   }
                   result_ =
@@ -500,7 +511,7 @@ public final class TreeProtos {
                     subBuilder.mergeFrom((com.github.kornilova_l.protos.EventProtos.Event.Exception) result_);
                     result_ = subBuilder.buildPartial();
                   }
-                  resultCase_ = 8;
+                  resultCase_ = 6;
                   break;
                 }
               }
@@ -534,8 +545,8 @@ public final class TreeProtos {
         private java.lang.Object result_;
         public enum ResultCase
             implements com.google.protobuf.Internal.EnumLite {
-          RETURN_VALUE(7),
-          EXCEPTION(8),
+          RETURN_VALUE(5),
+          EXCEPTION(6),
           RESULT_NOT_SET(0);
           private final int value;
           private ResultCase(int value) {
@@ -551,8 +562,8 @@ public final class TreeProtos {
 
           public static ResultCase forNumber(int value) {
             switch (value) {
-              case 7: return RETURN_VALUE;
-              case 8: return EXCEPTION;
+              case 5: return RETURN_VALUE;
+              case 6: return EXCEPTION;
               case 0: return RESULT_NOT_SET;
               default: return null;
             }
@@ -636,23 +647,23 @@ public final class TreeProtos {
           }
         }
 
-        public static final int IS_STATIC_FIELD_NUMBER = 5;
+        public static final int IS_STATIC_FIELD_NUMBER = 3;
         private boolean isStatic_;
         /**
-         * <code>bool is_static = 5;</code>
+         * <code>bool is_static = 3;</code>
          */
         public boolean getIsStatic() {
           return isStatic_;
         }
 
-        public static final int PARAMETERS_FIELD_NUMBER = 6;
+        public static final int PARAMETERS_FIELD_NUMBER = 4;
         private java.util.List<com.github.kornilova_l.protos.EventProtos.Event.Var> parameters_;
         /**
          * <pre>
          * only for trees which save original call structure
          * </pre>
          *
-         * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 6;</code>
+         * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 4;</code>
          */
         public java.util.List<com.github.kornilova_l.protos.EventProtos.Event.Var> getParametersList() {
           return parameters_;
@@ -662,7 +673,7 @@ public final class TreeProtos {
          * only for trees which save original call structure
          * </pre>
          *
-         * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 6;</code>
+         * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 4;</code>
          */
         public java.util.List<? extends com.github.kornilova_l.protos.EventProtos.Event.VarOrBuilder> 
             getParametersOrBuilderList() {
@@ -673,7 +684,7 @@ public final class TreeProtos {
          * only for trees which save original call structure
          * </pre>
          *
-         * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 6;</code>
+         * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 4;</code>
          */
         public int getParametersCount() {
           return parameters_.size();
@@ -683,7 +694,7 @@ public final class TreeProtos {
          * only for trees which save original call structure
          * </pre>
          *
-         * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 6;</code>
+         * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 4;</code>
          */
         public com.github.kornilova_l.protos.EventProtos.Event.Var getParameters(int index) {
           return parameters_.get(index);
@@ -693,48 +704,48 @@ public final class TreeProtos {
          * only for trees which save original call structure
          * </pre>
          *
-         * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 6;</code>
+         * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 4;</code>
          */
         public com.github.kornilova_l.protos.EventProtos.Event.VarOrBuilder getParametersOrBuilder(
             int index) {
           return parameters_.get(index);
         }
 
-        public static final int RETURN_VALUE_FIELD_NUMBER = 7;
+        public static final int RETURN_VALUE_FIELD_NUMBER = 5;
         /**
-         * <code>.com.github.kornilova_l.protos.Event.Var return_value = 7;</code>
+         * <code>.com.github.kornilova_l.protos.Event.Var return_value = 5;</code>
          */
         public com.github.kornilova_l.protos.EventProtos.Event.Var getReturnValue() {
-          if (resultCase_ == 7) {
+          if (resultCase_ == 5) {
              return (com.github.kornilova_l.protos.EventProtos.Event.Var) result_;
           }
           return com.github.kornilova_l.protos.EventProtos.Event.Var.getDefaultInstance();
         }
         /**
-         * <code>.com.github.kornilova_l.protos.Event.Var return_value = 7;</code>
+         * <code>.com.github.kornilova_l.protos.Event.Var return_value = 5;</code>
          */
         public com.github.kornilova_l.protos.EventProtos.Event.VarOrBuilder getReturnValueOrBuilder() {
-          if (resultCase_ == 7) {
+          if (resultCase_ == 5) {
              return (com.github.kornilova_l.protos.EventProtos.Event.Var) result_;
           }
           return com.github.kornilova_l.protos.EventProtos.Event.Var.getDefaultInstance();
         }
 
-        public static final int EXCEPTION_FIELD_NUMBER = 8;
+        public static final int EXCEPTION_FIELD_NUMBER = 6;
         /**
-         * <code>.com.github.kornilova_l.protos.Event.Exception exception = 8;</code>
+         * <code>.com.github.kornilova_l.protos.Event.Exception exception = 6;</code>
          */
         public com.github.kornilova_l.protos.EventProtos.Event.Exception getException() {
-          if (resultCase_ == 8) {
+          if (resultCase_ == 6) {
              return (com.github.kornilova_l.protos.EventProtos.Event.Exception) result_;
           }
           return com.github.kornilova_l.protos.EventProtos.Event.Exception.getDefaultInstance();
         }
         /**
-         * <code>.com.github.kornilova_l.protos.Event.Exception exception = 8;</code>
+         * <code>.com.github.kornilova_l.protos.Event.Exception exception = 6;</code>
          */
         public com.github.kornilova_l.protos.EventProtos.Event.ExceptionOrBuilder getExceptionOrBuilder() {
-          if (resultCase_ == 8) {
+          if (resultCase_ == 6) {
              return (com.github.kornilova_l.protos.EventProtos.Event.Exception) result_;
           }
           return com.github.kornilova_l.protos.EventProtos.Event.Exception.getDefaultInstance();
@@ -759,16 +770,16 @@ public final class TreeProtos {
             com.google.protobuf.GeneratedMessageV3.writeString(output, 2, className_);
           }
           if (isStatic_ != false) {
-            output.writeBool(5, isStatic_);
+            output.writeBool(3, isStatic_);
           }
           for (int i = 0; i < parameters_.size(); i++) {
-            output.writeMessage(6, parameters_.get(i));
+            output.writeMessage(4, parameters_.get(i));
           }
-          if (resultCase_ == 7) {
-            output.writeMessage(7, (com.github.kornilova_l.protos.EventProtos.Event.Var) result_);
+          if (resultCase_ == 5) {
+            output.writeMessage(5, (com.github.kornilova_l.protos.EventProtos.Event.Var) result_);
           }
-          if (resultCase_ == 8) {
-            output.writeMessage(8, (com.github.kornilova_l.protos.EventProtos.Event.Exception) result_);
+          if (resultCase_ == 6) {
+            output.writeMessage(6, (com.github.kornilova_l.protos.EventProtos.Event.Exception) result_);
           }
         }
 
@@ -785,19 +796,19 @@ public final class TreeProtos {
           }
           if (isStatic_ != false) {
             size += com.google.protobuf.CodedOutputStream
-              .computeBoolSize(5, isStatic_);
+              .computeBoolSize(3, isStatic_);
           }
           for (int i = 0; i < parameters_.size(); i++) {
             size += com.google.protobuf.CodedOutputStream
-              .computeMessageSize(6, parameters_.get(i));
+              .computeMessageSize(4, parameters_.get(i));
           }
-          if (resultCase_ == 7) {
+          if (resultCase_ == 5) {
             size += com.google.protobuf.CodedOutputStream
-              .computeMessageSize(7, (com.github.kornilova_l.protos.EventProtos.Event.Var) result_);
+              .computeMessageSize(5, (com.github.kornilova_l.protos.EventProtos.Event.Var) result_);
           }
-          if (resultCase_ == 8) {
+          if (resultCase_ == 6) {
             size += com.google.protobuf.CodedOutputStream
-              .computeMessageSize(8, (com.github.kornilova_l.protos.EventProtos.Event.Exception) result_);
+              .computeMessageSize(6, (com.github.kornilova_l.protos.EventProtos.Event.Exception) result_);
           }
           memoizedSize = size;
           return size;
@@ -827,11 +838,11 @@ public final class TreeProtos {
               other.getResultCase());
           if (!result) return false;
           switch (resultCase_) {
-            case 7:
+            case 5:
               result = result && getReturnValue()
                   .equals(other.getReturnValue());
               break;
-            case 8:
+            case 6:
               result = result && getException()
                   .equals(other.getException());
               break;
@@ -860,11 +871,11 @@ public final class TreeProtos {
             hash = (53 * hash) + getParametersList().hashCode();
           }
           switch (resultCase_) {
-            case 7:
+            case 5:
               hash = (37 * hash) + RETURN_VALUE_FIELD_NUMBER;
               hash = (53 * hash) + getReturnValue().hashCode();
               break;
-            case 8:
+            case 6:
               hash = (37 * hash) + EXCEPTION_FIELD_NUMBER;
               hash = (53 * hash) + getException().hashCode();
               break;
@@ -1051,14 +1062,14 @@ public final class TreeProtos {
             } else {
               result.parameters_ = parametersBuilder_.build();
             }
-            if (resultCase_ == 7) {
+            if (resultCase_ == 5) {
               if (returnValueBuilder_ == null) {
                 result.result_ = result_;
               } else {
                 result.result_ = returnValueBuilder_.build();
               }
             }
-            if (resultCase_ == 8) {
+            if (resultCase_ == 6) {
               if (exceptionBuilder_ == null) {
                 result.result_ = result_;
               } else {
@@ -1340,13 +1351,13 @@ public final class TreeProtos {
 
           private boolean isStatic_ ;
           /**
-           * <code>bool is_static = 5;</code>
+           * <code>bool is_static = 3;</code>
            */
           public boolean getIsStatic() {
             return isStatic_;
           }
           /**
-           * <code>bool is_static = 5;</code>
+           * <code>bool is_static = 3;</code>
            */
           public Builder setIsStatic(boolean value) {
             
@@ -1355,7 +1366,7 @@ public final class TreeProtos {
             return this;
           }
           /**
-           * <code>bool is_static = 5;</code>
+           * <code>bool is_static = 3;</code>
            */
           public Builder clearIsStatic() {
             
@@ -1381,7 +1392,7 @@ public final class TreeProtos {
            * only for trees which save original call structure
            * </pre>
            *
-           * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 6;</code>
+           * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 4;</code>
            */
           public java.util.List<com.github.kornilova_l.protos.EventProtos.Event.Var> getParametersList() {
             if (parametersBuilder_ == null) {
@@ -1395,7 +1406,7 @@ public final class TreeProtos {
            * only for trees which save original call structure
            * </pre>
            *
-           * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 6;</code>
+           * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 4;</code>
            */
           public int getParametersCount() {
             if (parametersBuilder_ == null) {
@@ -1409,7 +1420,7 @@ public final class TreeProtos {
            * only for trees which save original call structure
            * </pre>
            *
-           * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 6;</code>
+           * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 4;</code>
            */
           public com.github.kornilova_l.protos.EventProtos.Event.Var getParameters(int index) {
             if (parametersBuilder_ == null) {
@@ -1423,7 +1434,7 @@ public final class TreeProtos {
            * only for trees which save original call structure
            * </pre>
            *
-           * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 6;</code>
+           * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 4;</code>
            */
           public Builder setParameters(
               int index, com.github.kornilova_l.protos.EventProtos.Event.Var value) {
@@ -1444,7 +1455,7 @@ public final class TreeProtos {
            * only for trees which save original call structure
            * </pre>
            *
-           * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 6;</code>
+           * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 4;</code>
            */
           public Builder setParameters(
               int index, com.github.kornilova_l.protos.EventProtos.Event.Var.Builder builderForValue) {
@@ -1462,7 +1473,7 @@ public final class TreeProtos {
            * only for trees which save original call structure
            * </pre>
            *
-           * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 6;</code>
+           * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 4;</code>
            */
           public Builder addParameters(com.github.kornilova_l.protos.EventProtos.Event.Var value) {
             if (parametersBuilder_ == null) {
@@ -1482,7 +1493,7 @@ public final class TreeProtos {
            * only for trees which save original call structure
            * </pre>
            *
-           * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 6;</code>
+           * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 4;</code>
            */
           public Builder addParameters(
               int index, com.github.kornilova_l.protos.EventProtos.Event.Var value) {
@@ -1503,7 +1514,7 @@ public final class TreeProtos {
            * only for trees which save original call structure
            * </pre>
            *
-           * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 6;</code>
+           * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 4;</code>
            */
           public Builder addParameters(
               com.github.kornilova_l.protos.EventProtos.Event.Var.Builder builderForValue) {
@@ -1521,7 +1532,7 @@ public final class TreeProtos {
            * only for trees which save original call structure
            * </pre>
            *
-           * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 6;</code>
+           * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 4;</code>
            */
           public Builder addParameters(
               int index, com.github.kornilova_l.protos.EventProtos.Event.Var.Builder builderForValue) {
@@ -1539,7 +1550,7 @@ public final class TreeProtos {
            * only for trees which save original call structure
            * </pre>
            *
-           * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 6;</code>
+           * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 4;</code>
            */
           public Builder addAllParameters(
               java.lang.Iterable<? extends com.github.kornilova_l.protos.EventProtos.Event.Var> values) {
@@ -1558,7 +1569,7 @@ public final class TreeProtos {
            * only for trees which save original call structure
            * </pre>
            *
-           * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 6;</code>
+           * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 4;</code>
            */
           public Builder clearParameters() {
             if (parametersBuilder_ == null) {
@@ -1575,7 +1586,7 @@ public final class TreeProtos {
            * only for trees which save original call structure
            * </pre>
            *
-           * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 6;</code>
+           * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 4;</code>
            */
           public Builder removeParameters(int index) {
             if (parametersBuilder_ == null) {
@@ -1592,7 +1603,7 @@ public final class TreeProtos {
            * only for trees which save original call structure
            * </pre>
            *
-           * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 6;</code>
+           * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 4;</code>
            */
           public com.github.kornilova_l.protos.EventProtos.Event.Var.Builder getParametersBuilder(
               int index) {
@@ -1603,7 +1614,7 @@ public final class TreeProtos {
            * only for trees which save original call structure
            * </pre>
            *
-           * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 6;</code>
+           * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 4;</code>
            */
           public com.github.kornilova_l.protos.EventProtos.Event.VarOrBuilder getParametersOrBuilder(
               int index) {
@@ -1617,7 +1628,7 @@ public final class TreeProtos {
            * only for trees which save original call structure
            * </pre>
            *
-           * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 6;</code>
+           * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 4;</code>
            */
           public java.util.List<? extends com.github.kornilova_l.protos.EventProtos.Event.VarOrBuilder> 
                getParametersOrBuilderList() {
@@ -1632,7 +1643,7 @@ public final class TreeProtos {
            * only for trees which save original call structure
            * </pre>
            *
-           * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 6;</code>
+           * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 4;</code>
            */
           public com.github.kornilova_l.protos.EventProtos.Event.Var.Builder addParametersBuilder() {
             return getParametersFieldBuilder().addBuilder(
@@ -1643,7 +1654,7 @@ public final class TreeProtos {
            * only for trees which save original call structure
            * </pre>
            *
-           * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 6;</code>
+           * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 4;</code>
            */
           public com.github.kornilova_l.protos.EventProtos.Event.Var.Builder addParametersBuilder(
               int index) {
@@ -1655,7 +1666,7 @@ public final class TreeProtos {
            * only for trees which save original call structure
            * </pre>
            *
-           * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 6;</code>
+           * <code>repeated .com.github.kornilova_l.protos.Event.Var parameters = 4;</code>
            */
           public java.util.List<com.github.kornilova_l.protos.EventProtos.Event.Var.Builder> 
                getParametersBuilderList() {
@@ -1679,23 +1690,23 @@ public final class TreeProtos {
           private com.google.protobuf.SingleFieldBuilderV3<
               com.github.kornilova_l.protos.EventProtos.Event.Var, com.github.kornilova_l.protos.EventProtos.Event.Var.Builder, com.github.kornilova_l.protos.EventProtos.Event.VarOrBuilder> returnValueBuilder_;
           /**
-           * <code>.com.github.kornilova_l.protos.Event.Var return_value = 7;</code>
+           * <code>.com.github.kornilova_l.protos.Event.Var return_value = 5;</code>
            */
           public com.github.kornilova_l.protos.EventProtos.Event.Var getReturnValue() {
             if (returnValueBuilder_ == null) {
-              if (resultCase_ == 7) {
+              if (resultCase_ == 5) {
                 return (com.github.kornilova_l.protos.EventProtos.Event.Var) result_;
               }
               return com.github.kornilova_l.protos.EventProtos.Event.Var.getDefaultInstance();
             } else {
-              if (resultCase_ == 7) {
+              if (resultCase_ == 5) {
                 return returnValueBuilder_.getMessage();
               }
               return com.github.kornilova_l.protos.EventProtos.Event.Var.getDefaultInstance();
             }
           }
           /**
-           * <code>.com.github.kornilova_l.protos.Event.Var return_value = 7;</code>
+           * <code>.com.github.kornilova_l.protos.Event.Var return_value = 5;</code>
            */
           public Builder setReturnValue(com.github.kornilova_l.protos.EventProtos.Event.Var value) {
             if (returnValueBuilder_ == null) {
@@ -1707,11 +1718,11 @@ public final class TreeProtos {
             } else {
               returnValueBuilder_.setMessage(value);
             }
-            resultCase_ = 7;
+            resultCase_ = 5;
             return this;
           }
           /**
-           * <code>.com.github.kornilova_l.protos.Event.Var return_value = 7;</code>
+           * <code>.com.github.kornilova_l.protos.Event.Var return_value = 5;</code>
            */
           public Builder setReturnValue(
               com.github.kornilova_l.protos.EventProtos.Event.Var.Builder builderForValue) {
@@ -1721,15 +1732,15 @@ public final class TreeProtos {
             } else {
               returnValueBuilder_.setMessage(builderForValue.build());
             }
-            resultCase_ = 7;
+            resultCase_ = 5;
             return this;
           }
           /**
-           * <code>.com.github.kornilova_l.protos.Event.Var return_value = 7;</code>
+           * <code>.com.github.kornilova_l.protos.Event.Var return_value = 5;</code>
            */
           public Builder mergeReturnValue(com.github.kornilova_l.protos.EventProtos.Event.Var value) {
             if (returnValueBuilder_ == null) {
-              if (resultCase_ == 7 &&
+              if (resultCase_ == 5 &&
                   result_ != com.github.kornilova_l.protos.EventProtos.Event.Var.getDefaultInstance()) {
                 result_ = com.github.kornilova_l.protos.EventProtos.Event.Var.newBuilder((com.github.kornilova_l.protos.EventProtos.Event.Var) result_)
                     .mergeFrom(value).buildPartial();
@@ -1738,26 +1749,26 @@ public final class TreeProtos {
               }
               onChanged();
             } else {
-              if (resultCase_ == 7) {
+              if (resultCase_ == 5) {
                 returnValueBuilder_.mergeFrom(value);
               }
               returnValueBuilder_.setMessage(value);
             }
-            resultCase_ = 7;
+            resultCase_ = 5;
             return this;
           }
           /**
-           * <code>.com.github.kornilova_l.protos.Event.Var return_value = 7;</code>
+           * <code>.com.github.kornilova_l.protos.Event.Var return_value = 5;</code>
            */
           public Builder clearReturnValue() {
             if (returnValueBuilder_ == null) {
-              if (resultCase_ == 7) {
+              if (resultCase_ == 5) {
                 resultCase_ = 0;
                 result_ = null;
                 onChanged();
               }
             } else {
-              if (resultCase_ == 7) {
+              if (resultCase_ == 5) {
                 resultCase_ = 0;
                 result_ = null;
               }
@@ -1766,32 +1777,32 @@ public final class TreeProtos {
             return this;
           }
           /**
-           * <code>.com.github.kornilova_l.protos.Event.Var return_value = 7;</code>
+           * <code>.com.github.kornilova_l.protos.Event.Var return_value = 5;</code>
            */
           public com.github.kornilova_l.protos.EventProtos.Event.Var.Builder getReturnValueBuilder() {
             return getReturnValueFieldBuilder().getBuilder();
           }
           /**
-           * <code>.com.github.kornilova_l.protos.Event.Var return_value = 7;</code>
+           * <code>.com.github.kornilova_l.protos.Event.Var return_value = 5;</code>
            */
           public com.github.kornilova_l.protos.EventProtos.Event.VarOrBuilder getReturnValueOrBuilder() {
-            if ((resultCase_ == 7) && (returnValueBuilder_ != null)) {
+            if ((resultCase_ == 5) && (returnValueBuilder_ != null)) {
               return returnValueBuilder_.getMessageOrBuilder();
             } else {
-              if (resultCase_ == 7) {
+              if (resultCase_ == 5) {
                 return (com.github.kornilova_l.protos.EventProtos.Event.Var) result_;
               }
               return com.github.kornilova_l.protos.EventProtos.Event.Var.getDefaultInstance();
             }
           }
           /**
-           * <code>.com.github.kornilova_l.protos.Event.Var return_value = 7;</code>
+           * <code>.com.github.kornilova_l.protos.Event.Var return_value = 5;</code>
            */
           private com.google.protobuf.SingleFieldBuilderV3<
               com.github.kornilova_l.protos.EventProtos.Event.Var, com.github.kornilova_l.protos.EventProtos.Event.Var.Builder, com.github.kornilova_l.protos.EventProtos.Event.VarOrBuilder> 
               getReturnValueFieldBuilder() {
             if (returnValueBuilder_ == null) {
-              if (!(resultCase_ == 7)) {
+              if (!(resultCase_ == 5)) {
                 result_ = com.github.kornilova_l.protos.EventProtos.Event.Var.getDefaultInstance();
               }
               returnValueBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
@@ -1801,7 +1812,7 @@ public final class TreeProtos {
                       isClean());
               result_ = null;
             }
-            resultCase_ = 7;
+            resultCase_ = 5;
             onChanged();;
             return returnValueBuilder_;
           }
@@ -1809,23 +1820,23 @@ public final class TreeProtos {
           private com.google.protobuf.SingleFieldBuilderV3<
               com.github.kornilova_l.protos.EventProtos.Event.Exception, com.github.kornilova_l.protos.EventProtos.Event.Exception.Builder, com.github.kornilova_l.protos.EventProtos.Event.ExceptionOrBuilder> exceptionBuilder_;
           /**
-           * <code>.com.github.kornilova_l.protos.Event.Exception exception = 8;</code>
+           * <code>.com.github.kornilova_l.protos.Event.Exception exception = 6;</code>
            */
           public com.github.kornilova_l.protos.EventProtos.Event.Exception getException() {
             if (exceptionBuilder_ == null) {
-              if (resultCase_ == 8) {
+              if (resultCase_ == 6) {
                 return (com.github.kornilova_l.protos.EventProtos.Event.Exception) result_;
               }
               return com.github.kornilova_l.protos.EventProtos.Event.Exception.getDefaultInstance();
             } else {
-              if (resultCase_ == 8) {
+              if (resultCase_ == 6) {
                 return exceptionBuilder_.getMessage();
               }
               return com.github.kornilova_l.protos.EventProtos.Event.Exception.getDefaultInstance();
             }
           }
           /**
-           * <code>.com.github.kornilova_l.protos.Event.Exception exception = 8;</code>
+           * <code>.com.github.kornilova_l.protos.Event.Exception exception = 6;</code>
            */
           public Builder setException(com.github.kornilova_l.protos.EventProtos.Event.Exception value) {
             if (exceptionBuilder_ == null) {
@@ -1837,11 +1848,11 @@ public final class TreeProtos {
             } else {
               exceptionBuilder_.setMessage(value);
             }
-            resultCase_ = 8;
+            resultCase_ = 6;
             return this;
           }
           /**
-           * <code>.com.github.kornilova_l.protos.Event.Exception exception = 8;</code>
+           * <code>.com.github.kornilova_l.protos.Event.Exception exception = 6;</code>
            */
           public Builder setException(
               com.github.kornilova_l.protos.EventProtos.Event.Exception.Builder builderForValue) {
@@ -1851,15 +1862,15 @@ public final class TreeProtos {
             } else {
               exceptionBuilder_.setMessage(builderForValue.build());
             }
-            resultCase_ = 8;
+            resultCase_ = 6;
             return this;
           }
           /**
-           * <code>.com.github.kornilova_l.protos.Event.Exception exception = 8;</code>
+           * <code>.com.github.kornilova_l.protos.Event.Exception exception = 6;</code>
            */
           public Builder mergeException(com.github.kornilova_l.protos.EventProtos.Event.Exception value) {
             if (exceptionBuilder_ == null) {
-              if (resultCase_ == 8 &&
+              if (resultCase_ == 6 &&
                   result_ != com.github.kornilova_l.protos.EventProtos.Event.Exception.getDefaultInstance()) {
                 result_ = com.github.kornilova_l.protos.EventProtos.Event.Exception.newBuilder((com.github.kornilova_l.protos.EventProtos.Event.Exception) result_)
                     .mergeFrom(value).buildPartial();
@@ -1868,26 +1879,26 @@ public final class TreeProtos {
               }
               onChanged();
             } else {
-              if (resultCase_ == 8) {
+              if (resultCase_ == 6) {
                 exceptionBuilder_.mergeFrom(value);
               }
               exceptionBuilder_.setMessage(value);
             }
-            resultCase_ = 8;
+            resultCase_ = 6;
             return this;
           }
           /**
-           * <code>.com.github.kornilova_l.protos.Event.Exception exception = 8;</code>
+           * <code>.com.github.kornilova_l.protos.Event.Exception exception = 6;</code>
            */
           public Builder clearException() {
             if (exceptionBuilder_ == null) {
-              if (resultCase_ == 8) {
+              if (resultCase_ == 6) {
                 resultCase_ = 0;
                 result_ = null;
                 onChanged();
               }
             } else {
-              if (resultCase_ == 8) {
+              if (resultCase_ == 6) {
                 resultCase_ = 0;
                 result_ = null;
               }
@@ -1896,32 +1907,32 @@ public final class TreeProtos {
             return this;
           }
           /**
-           * <code>.com.github.kornilova_l.protos.Event.Exception exception = 8;</code>
+           * <code>.com.github.kornilova_l.protos.Event.Exception exception = 6;</code>
            */
           public com.github.kornilova_l.protos.EventProtos.Event.Exception.Builder getExceptionBuilder() {
             return getExceptionFieldBuilder().getBuilder();
           }
           /**
-           * <code>.com.github.kornilova_l.protos.Event.Exception exception = 8;</code>
+           * <code>.com.github.kornilova_l.protos.Event.Exception exception = 6;</code>
            */
           public com.github.kornilova_l.protos.EventProtos.Event.ExceptionOrBuilder getExceptionOrBuilder() {
-            if ((resultCase_ == 8) && (exceptionBuilder_ != null)) {
+            if ((resultCase_ == 6) && (exceptionBuilder_ != null)) {
               return exceptionBuilder_.getMessageOrBuilder();
             } else {
-              if (resultCase_ == 8) {
+              if (resultCase_ == 6) {
                 return (com.github.kornilova_l.protos.EventProtos.Event.Exception) result_;
               }
               return com.github.kornilova_l.protos.EventProtos.Event.Exception.getDefaultInstance();
             }
           }
           /**
-           * <code>.com.github.kornilova_l.protos.Event.Exception exception = 8;</code>
+           * <code>.com.github.kornilova_l.protos.Event.Exception exception = 6;</code>
            */
           private com.google.protobuf.SingleFieldBuilderV3<
               com.github.kornilova_l.protos.EventProtos.Event.Exception, com.github.kornilova_l.protos.EventProtos.Event.Exception.Builder, com.github.kornilova_l.protos.EventProtos.Event.ExceptionOrBuilder> 
               getExceptionFieldBuilder() {
             if (exceptionBuilder_ == null) {
-              if (!(resultCase_ == 8)) {
+              if (!(resultCase_ == 6)) {
                 result_ = com.github.kornilova_l.protos.EventProtos.Event.Exception.getDefaultInstance();
               }
               exceptionBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
@@ -1931,7 +1942,7 @@ public final class TreeProtos {
                       isClean());
               result_ = null;
             }
-            resultCase_ = 8;
+            resultCase_ = 6;
             onChanged();;
             return exceptionBuilder_;
           }
@@ -2941,11 +2952,6 @@ public final class TreeProtos {
         com.google.protobuf.MessageOrBuilder {
 
       /**
-       * <code>int64 duration = 1;</code>
-       */
-      long getDuration();
-
-      /**
        * <pre>
        * only for trees which save original call structure
        * </pre>
@@ -2975,7 +2981,6 @@ public final class TreeProtos {
         super(builder);
       }
       private TreeInfo() {
-        duration_ = 0L;
         startTime_ = 0L;
         threadId_ = 0L;
       }
@@ -3003,11 +3008,6 @@ public final class TreeProtos {
                 if (!input.skipField(tag)) {
                   done = true;
                 }
-                break;
-              }
-              case 8: {
-
-                duration_ = input.readInt64();
                 break;
               }
               case 16: {
@@ -3041,15 +3041,6 @@ public final class TreeProtos {
         return com.github.kornilova_l.protos.TreeProtos.internal_static_com_github_kornilova_l_protos_Tree_TreeInfo_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
                 com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo.class, com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo.Builder.class);
-      }
-
-      public static final int DURATION_FIELD_NUMBER = 1;
-      private long duration_;
-      /**
-       * <code>int64 duration = 1;</code>
-       */
-      public long getDuration() {
-        return duration_;
       }
 
       public static final int START_TIME_FIELD_NUMBER = 2;
@@ -3090,9 +3081,6 @@ public final class TreeProtos {
 
       public void writeTo(com.google.protobuf.CodedOutputStream output)
                           throws java.io.IOException {
-        if (duration_ != 0L) {
-          output.writeInt64(1, duration_);
-        }
         if (startTime_ != 0L) {
           output.writeInt64(2, startTime_);
         }
@@ -3106,10 +3094,6 @@ public final class TreeProtos {
         if (size != -1) return size;
 
         size = 0;
-        if (duration_ != 0L) {
-          size += com.google.protobuf.CodedOutputStream
-            .computeInt64Size(1, duration_);
-        }
         if (startTime_ != 0L) {
           size += com.google.protobuf.CodedOutputStream
             .computeInt64Size(2, startTime_);
@@ -3134,8 +3118,6 @@ public final class TreeProtos {
         com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo other = (com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo) obj;
 
         boolean result = true;
-        result = result && (getDuration()
-            == other.getDuration());
         result = result && (getStartTime()
             == other.getStartTime());
         result = result && (getThreadId()
@@ -3150,9 +3132,6 @@ public final class TreeProtos {
         }
         int hash = 41;
         hash = (19 * hash) + getDescriptor().hashCode();
-        hash = (37 * hash) + DURATION_FIELD_NUMBER;
-        hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-            getDuration());
         hash = (37 * hash) + START_TIME_FIELD_NUMBER;
         hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
             getStartTime());
@@ -3288,8 +3267,6 @@ public final class TreeProtos {
         }
         public Builder clear() {
           super.clear();
-          duration_ = 0L;
-
           startTime_ = 0L;
 
           threadId_ = 0L;
@@ -3316,7 +3293,6 @@ public final class TreeProtos {
 
         public com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo buildPartial() {
           com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo result = new com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo(this);
-          result.duration_ = duration_;
           result.startTime_ = startTime_;
           result.threadId_ = threadId_;
           onBuilt();
@@ -3360,9 +3336,6 @@ public final class TreeProtos {
 
         public Builder mergeFrom(com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo other) {
           if (other == com.github.kornilova_l.protos.TreeProtos.Tree.TreeInfo.getDefaultInstance()) return this;
-          if (other.getDuration() != 0L) {
-            setDuration(other.getDuration());
-          }
           if (other.getStartTime() != 0L) {
             setStartTime(other.getStartTime());
           }
@@ -3392,32 +3365,6 @@ public final class TreeProtos {
               mergeFrom(parsedMessage);
             }
           }
-          return this;
-        }
-
-        private long duration_ ;
-        /**
-         * <code>int64 duration = 1;</code>
-         */
-        public long getDuration() {
-          return duration_;
-        }
-        /**
-         * <code>int64 duration = 1;</code>
-         */
-        public Builder setDuration(long value) {
-          
-          duration_ = value;
-          onChanged();
-          return this;
-        }
-        /**
-         * <code>int64 duration = 1;</code>
-         */
-        public Builder clearDuration() {
-          
-          duration_ = 0L;
-          onChanged();
           return this;
         }
 
@@ -3611,6 +3558,15 @@ public final class TreeProtos {
       return depth_;
     }
 
+    public static final int WIDTH_FIELD_NUMBER = 4;
+    private long width_;
+    /**
+     * <code>int64 width = 4;</code>
+     */
+    public long getWidth() {
+      return width_;
+    }
+
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -3632,6 +3588,9 @@ public final class TreeProtos {
       if (depth_ != 0) {
         output.writeUInt32(3, depth_);
       }
+      if (width_ != 0L) {
+        output.writeInt64(4, width_);
+      }
     }
 
     public int getSerializedSize() {
@@ -3650,6 +3609,10 @@ public final class TreeProtos {
       if (depth_ != 0) {
         size += com.google.protobuf.CodedOutputStream
           .computeUInt32Size(3, depth_);
+      }
+      if (width_ != 0L) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(4, width_);
       }
       memoizedSize = size;
       return size;
@@ -3676,6 +3639,8 @@ public final class TreeProtos {
           .equals(other.getNodesList());
       result = result && (getDepth()
           == other.getDepth());
+      result = result && (getWidth()
+          == other.getWidth());
       return result;
     }
 
@@ -3696,6 +3661,9 @@ public final class TreeProtos {
       }
       hash = (37 * hash) + DEPTH_FIELD_NUMBER;
       hash = (53 * hash) + getDepth();
+      hash = (37 * hash) + WIDTH_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getWidth());
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -3840,6 +3808,8 @@ public final class TreeProtos {
         }
         depth_ = 0;
 
+        width_ = 0L;
+
         return this;
       }
 
@@ -3879,6 +3849,7 @@ public final class TreeProtos {
           result.nodes_ = nodesBuilder_.build();
         }
         result.depth_ = depth_;
+        result.width_ = width_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -3952,6 +3923,9 @@ public final class TreeProtos {
         }
         if (other.getDepth() != 0) {
           setDepth(other.getDepth());
+        }
+        if (other.getWidth() != 0L) {
+          setWidth(other.getWidth());
         }
         onChanged();
         return this;
@@ -4362,6 +4336,32 @@ public final class TreeProtos {
         onChanged();
         return this;
       }
+
+      private long width_ ;
+      /**
+       * <code>int64 width = 4;</code>
+       */
+      public long getWidth() {
+        return width_;
+      }
+      /**
+       * <code>int64 width = 4;</code>
+       */
+      public Builder setWidth(long value) {
+        
+        width_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int64 width = 4;</code>
+       */
+      public Builder clearWidth() {
+        
+        width_ = 0L;
+        onChanged();
+        return this;
+      }
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
@@ -4442,24 +4442,24 @@ public final class TreeProtos {
     java.lang.String[] descriptorData = {
       "\n(com/github/kornilova_l/protos/tree.pro" +
       "to\022\035com.github.kornilova_l.protos\032)com/g" +
-      "ithub/kornilova_l/protos/event.proto\"\223\005\n" +
+      "ithub/kornilova_l/protos/event.proto\"\220\005\n" +
       "\004Tree\022?\n\ttree_info\030\001 \001(\0132,.com.github.ko" +
       "rnilova_l.protos.Tree.TreeInfo\0227\n\005nodes\030" +
       "\002 \003(\0132(.com.github.kornilova_l.protos.Tr" +
-      "ee.Node\022\r\n\005depth\030\003 \001(\r\032\274\003\n\004Node\022\016\n\006offse" +
-      "t\030\001 \001(\003\022\r\n\005width\030\002 \001(\003\022D\n\tnode_info\030\003 \001(" +
-      "\01321.com.github.kornilova_l.protos.Tree.N" +
-      "ode.NodeInfo\0227\n\005nodes\030\004 \003(\0132(.com.github",
-      ".kornilova_l.protos.Tree.Node\032\225\002\n\010NodeIn" +
-      "fo\022\023\n\013method_name\030\001 \001(\t\022\022\n\nclass_name\030\002 " +
-      "\001(\t\022\021\n\tis_static\030\005 \001(\010\022<\n\nparameters\030\006 \003" +
-      "(\0132(.com.github.kornilova_l.protos.Event" +
-      ".Var\022@\n\014return_value\030\007 \001(\0132(.com.github." +
-      "kornilova_l.protos.Event.VarH\000\022C\n\texcept" +
-      "ion\030\010 \001(\0132..com.github.kornilova_l.proto" +
-      "s.Event.ExceptionH\000B\010\n\006result\032C\n\010TreeInf" +
-      "o\022\020\n\010duration\030\001 \001(\003\022\022\n\nstart_time\030\002 \001(\003\022" +
-      "\021\n\tthread_id\030\003 \001(\003B\014B\nTreeProtosb\006proto3"
+      "ee.Node\022\r\n\005depth\030\003 \001(\r\022\r\n\005width\030\004 \001(\003\032\274\003" +
+      "\n\004Node\022\016\n\006offset\030\001 \001(\003\022\r\n\005width\030\002 \001(\003\022D\n" +
+      "\tnode_info\030\003 \001(\01321.com.github.kornilova_" +
+      "l.protos.Tree.Node.NodeInfo\0227\n\005nodes\030\004 \003",
+      "(\0132(.com.github.kornilova_l.protos.Tree." +
+      "Node\032\225\002\n\010NodeInfo\022\023\n\013method_name\030\001 \001(\t\022\022" +
+      "\n\nclass_name\030\002 \001(\t\022\021\n\tis_static\030\003 \001(\010\022<\n" +
+      "\nparameters\030\004 \003(\0132(.com.github.kornilova" +
+      "_l.protos.Event.Var\022@\n\014return_value\030\005 \001(" +
+      "\0132(.com.github.kornilova_l.protos.Event." +
+      "VarH\000\022C\n\texception\030\006 \001(\0132..com.github.ko" +
+      "rnilova_l.protos.Event.ExceptionH\000B\010\n\006re" +
+      "sult\0321\n\010TreeInfo\022\022\n\nstart_time\030\002 \001(\003\022\021\n\t" +
+      "thread_id\030\003 \001(\003B\014B\nTreeProtosb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -4479,7 +4479,7 @@ public final class TreeProtos {
     internal_static_com_github_kornilova_l_protos_Tree_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_github_kornilova_l_protos_Tree_descriptor,
-        new java.lang.String[] { "TreeInfo", "Nodes", "Depth", });
+        new java.lang.String[] { "TreeInfo", "Nodes", "Depth", "Width", });
     internal_static_com_github_kornilova_l_protos_Tree_Node_descriptor =
       internal_static_com_github_kornilova_l_protos_Tree_descriptor.getNestedTypes().get(0);
     internal_static_com_github_kornilova_l_protos_Tree_Node_fieldAccessorTable = new
@@ -4497,7 +4497,7 @@ public final class TreeProtos {
     internal_static_com_github_kornilova_l_protos_Tree_TreeInfo_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_github_kornilova_l_protos_Tree_TreeInfo_descriptor,
-        new java.lang.String[] { "Duration", "StartTime", "ThreadId", });
+        new java.lang.String[] { "StartTime", "ThreadId", });
     com.github.kornilova_l.protos.EventProtos.getDescriptor();
   }
 

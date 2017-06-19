@@ -9,7 +9,7 @@ var jspb = require('google-protobuf');
 var goog = jspb;
 var global = Function('return this')();
 
-var src_main_java_com_github_kornilova_l_protos_event_pb = require('./event_pb.js');
+var src_main_java_com_github_kornilova_l_protos_event_pb = require('../../../../../../../src/main/java/com/github/kornilova_l/protos/event_pb.js');
 goog.exportSymbol('proto.com.github.kornilova_l.protos.Tree', null, global);
 goog.exportSymbol('proto.com.github.kornilova_l.protos.Tree.Node', null, global);
 goog.exportSymbol('proto.com.github.kornilova_l.protos.Tree.Node.NodeInfo', null, global);
@@ -70,7 +70,8 @@ proto.com.github.kornilova_l.protos.Tree.toObject = function(includeInstance, ms
     treeInfo: (f = msg.getTreeInfo()) && proto.com.github.kornilova_l.protos.Tree.TreeInfo.toObject(includeInstance, f),
     nodesList: jspb.Message.toObjectList(msg.getNodesList(),
     proto.com.github.kornilova_l.protos.Tree.Node.toObject, includeInstance),
-    depth: jspb.Message.getFieldWithDefault(msg, 3, 0)
+    depth: jspb.Message.getFieldWithDefault(msg, 3, 0),
+    width: jspb.Message.getFieldWithDefault(msg, 4, 0)
   };
 
   if (includeInstance) {
@@ -121,6 +122,10 @@ proto.com.github.kornilova_l.protos.Tree.deserializeBinaryFromReader = function(
       var value = /** @type {number} */ (reader.readUint32());
       msg.setDepth(value);
       break;
+    case 4:
+      var value = /** @type {number} */ (reader.readInt64());
+      msg.setWidth(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -169,6 +174,13 @@ proto.com.github.kornilova_l.protos.Tree.serializeBinaryToWriter = function(mess
   if (f !== 0) {
     writer.writeUint32(
       3,
+      f
+    );
+  }
+  f = message.getWidth();
+  if (f !== 0) {
+    writer.writeInt64(
+      4,
       f
     );
   }
@@ -371,7 +383,7 @@ if (goog.DEBUG && !COMPILED) {
  * @private {!Array<number>}
  * @const
  */
-proto.com.github.kornilova_l.protos.Tree.Node.NodeInfo.repeatedFields_ = [6];
+proto.com.github.kornilova_l.protos.Tree.Node.NodeInfo.repeatedFields_ = [4];
 
 /**
  * Oneof group definitions for this message. Each group defines the field
@@ -381,15 +393,15 @@ proto.com.github.kornilova_l.protos.Tree.Node.NodeInfo.repeatedFields_ = [6];
  * @private {!Array<!Array<number>>}
  * @const
  */
-proto.com.github.kornilova_l.protos.Tree.Node.NodeInfo.oneofGroups_ = [[7,8]];
+proto.com.github.kornilova_l.protos.Tree.Node.NodeInfo.oneofGroups_ = [[5,6]];
 
 /**
  * @enum {number}
  */
 proto.com.github.kornilova_l.protos.Tree.Node.NodeInfo.ResultCase = {
   RESULT_NOT_SET: 0,
-  RETURN_VALUE: 7,
-  EXCEPTION: 8
+  RETURN_VALUE: 5,
+  EXCEPTION: 6
 };
 
 /**
@@ -429,7 +441,7 @@ proto.com.github.kornilova_l.protos.Tree.Node.NodeInfo.toObject = function(inclu
   var f, obj = {
     methodName: jspb.Message.getFieldWithDefault(msg, 1, ""),
     className: jspb.Message.getFieldWithDefault(msg, 2, ""),
-    isStatic: jspb.Message.getFieldWithDefault(msg, 5, false),
+    isStatic: jspb.Message.getFieldWithDefault(msg, 3, false),
     parametersList: jspb.Message.toObjectList(msg.getParametersList(),
     src_main_java_com_github_kornilova_l_protos_event_pb.Event.Var.toObject, includeInstance),
     returnValue: (f = msg.getReturnValue()) && src_main_java_com_github_kornilova_l_protos_event_pb.Event.Var.toObject(includeInstance, f),
@@ -478,21 +490,21 @@ proto.com.github.kornilova_l.protos.Tree.Node.NodeInfo.deserializeBinaryFromRead
       var value = /** @type {string} */ (reader.readString());
       msg.setClassName(value);
       break;
-    case 5:
+    case 3:
       var value = /** @type {boolean} */ (reader.readBool());
       msg.setIsStatic(value);
       break;
-    case 6:
+    case 4:
       var value = new src_main_java_com_github_kornilova_l_protos_event_pb.Event.Var;
       reader.readMessage(value,src_main_java_com_github_kornilova_l_protos_event_pb.Event.Var.deserializeBinaryFromReader);
       msg.addParameters(value);
       break;
-    case 7:
+    case 5:
       var value = new src_main_java_com_github_kornilova_l_protos_event_pb.Event.Var;
       reader.readMessage(value,src_main_java_com_github_kornilova_l_protos_event_pb.Event.Var.deserializeBinaryFromReader);
       msg.setReturnValue(value);
       break;
-    case 8:
+    case 6:
       var value = new src_main_java_com_github_kornilova_l_protos_event_pb.Event.Exception;
       reader.readMessage(value,src_main_java_com_github_kornilova_l_protos_event_pb.Event.Exception.deserializeBinaryFromReader);
       msg.setException(value);
@@ -542,14 +554,14 @@ proto.com.github.kornilova_l.protos.Tree.Node.NodeInfo.serializeBinaryToWriter =
   f = message.getIsStatic();
   if (f) {
     writer.writeBool(
-      5,
+      3,
       f
     );
   }
   f = message.getParametersList();
   if (f.length > 0) {
     writer.writeRepeatedMessage(
-      6,
+      4,
       f,
       src_main_java_com_github_kornilova_l_protos_event_pb.Event.Var.serializeBinaryToWriter
     );
@@ -557,7 +569,7 @@ proto.com.github.kornilova_l.protos.Tree.Node.NodeInfo.serializeBinaryToWriter =
   f = message.getReturnValue();
   if (f != null) {
     writer.writeMessage(
-      7,
+      5,
       f,
       src_main_java_com_github_kornilova_l_protos_event_pb.Event.Var.serializeBinaryToWriter
     );
@@ -565,7 +577,7 @@ proto.com.github.kornilova_l.protos.Tree.Node.NodeInfo.serializeBinaryToWriter =
   f = message.getException();
   if (f != null) {
     writer.writeMessage(
-      8,
+      6,
       f,
       src_main_java_com_github_kornilova_l_protos_event_pb.Event.Exception.serializeBinaryToWriter
     );
@@ -604,37 +616,37 @@ proto.com.github.kornilova_l.protos.Tree.Node.NodeInfo.prototype.setClassName = 
 
 
 /**
- * optional bool is_static = 5;
+ * optional bool is_static = 3;
  * Note that Boolean fields may be set to 0/1 when serialized from a Java server.
  * You should avoid comparisons like {@code val === true/false} in those cases.
  * @return {boolean}
  */
 proto.com.github.kornilova_l.protos.Tree.Node.NodeInfo.prototype.getIsStatic = function() {
-  return /** @type {boolean} */ (jspb.Message.getFieldWithDefault(this, 5, false));
+  return /** @type {boolean} */ (jspb.Message.getFieldWithDefault(this, 3, false));
 };
 
 
 /** @param {boolean} value */
 proto.com.github.kornilova_l.protos.Tree.Node.NodeInfo.prototype.setIsStatic = function(value) {
-  jspb.Message.setField(this, 5, value);
+  jspb.Message.setField(this, 3, value);
 };
 
 
 /**
- * repeated Event.Var parameters = 6;
+ * repeated Event.Var parameters = 4;
  * If you change this array by adding, removing or replacing elements, or if you
  * replace the array itself, then you must call the setter to update it.
  * @return {!Array.<!proto.com.github.kornilova_l.protos.Event.Var>}
  */
 proto.com.github.kornilova_l.protos.Tree.Node.NodeInfo.prototype.getParametersList = function() {
   return /** @type{!Array.<!proto.com.github.kornilova_l.protos.Event.Var>} */ (
-    jspb.Message.getRepeatedWrapperField(this, src_main_java_com_github_kornilova_l_protos_event_pb.Event.Var, 6));
+    jspb.Message.getRepeatedWrapperField(this, src_main_java_com_github_kornilova_l_protos_event_pb.Event.Var, 4));
 };
 
 
 /** @param {!Array.<!proto.com.github.kornilova_l.protos.Event.Var>} value */
 proto.com.github.kornilova_l.protos.Tree.Node.NodeInfo.prototype.setParametersList = function(value) {
-  jspb.Message.setRepeatedWrapperField(this, 6, value);
+  jspb.Message.setRepeatedWrapperField(this, 4, value);
 };
 
 
@@ -644,7 +656,7 @@ proto.com.github.kornilova_l.protos.Tree.Node.NodeInfo.prototype.setParametersLi
  * @return {!proto.com.github.kornilova_l.protos.Event.Var}
  */
 proto.com.github.kornilova_l.protos.Tree.Node.NodeInfo.prototype.addParameters = function(opt_value, opt_index) {
-  return jspb.Message.addToRepeatedWrapperField(this, 6, opt_value, proto.com.github.kornilova_l.protos.Event.Var, opt_index);
+  return jspb.Message.addToRepeatedWrapperField(this, 4, opt_value, proto.com.github.kornilova_l.protos.Event.Var, opt_index);
 };
 
 
@@ -654,18 +666,18 @@ proto.com.github.kornilova_l.protos.Tree.Node.NodeInfo.prototype.clearParameters
 
 
 /**
- * optional Event.Var return_value = 7;
+ * optional Event.Var return_value = 5;
  * @return {?proto.com.github.kornilova_l.protos.Event.Var}
  */
 proto.com.github.kornilova_l.protos.Tree.Node.NodeInfo.prototype.getReturnValue = function() {
   return /** @type{?proto.com.github.kornilova_l.protos.Event.Var} */ (
-    jspb.Message.getWrapperField(this, src_main_java_com_github_kornilova_l_protos_event_pb.Event.Var, 7));
+    jspb.Message.getWrapperField(this, src_main_java_com_github_kornilova_l_protos_event_pb.Event.Var, 5));
 };
 
 
 /** @param {?proto.com.github.kornilova_l.protos.Event.Var|undefined} value */
 proto.com.github.kornilova_l.protos.Tree.Node.NodeInfo.prototype.setReturnValue = function(value) {
-  jspb.Message.setOneofWrapperField(this, 7, proto.com.github.kornilova_l.protos.Tree.Node.NodeInfo.oneofGroups_[0], value);
+  jspb.Message.setOneofWrapperField(this, 5, proto.com.github.kornilova_l.protos.Tree.Node.NodeInfo.oneofGroups_[0], value);
 };
 
 
@@ -679,23 +691,23 @@ proto.com.github.kornilova_l.protos.Tree.Node.NodeInfo.prototype.clearReturnValu
  * @return {!boolean}
  */
 proto.com.github.kornilova_l.protos.Tree.Node.NodeInfo.prototype.hasReturnValue = function() {
-  return jspb.Message.getField(this, 7) != null;
+  return jspb.Message.getField(this, 5) != null;
 };
 
 
 /**
- * optional Event.Exception exception = 8;
+ * optional Event.Exception exception = 6;
  * @return {?proto.com.github.kornilova_l.protos.Event.Exception}
  */
 proto.com.github.kornilova_l.protos.Tree.Node.NodeInfo.prototype.getException = function() {
   return /** @type{?proto.com.github.kornilova_l.protos.Event.Exception} */ (
-    jspb.Message.getWrapperField(this, src_main_java_com_github_kornilova_l_protos_event_pb.Event.Exception, 8));
+    jspb.Message.getWrapperField(this, src_main_java_com_github_kornilova_l_protos_event_pb.Event.Exception, 6));
 };
 
 
 /** @param {?proto.com.github.kornilova_l.protos.Event.Exception|undefined} value */
 proto.com.github.kornilova_l.protos.Tree.Node.NodeInfo.prototype.setException = function(value) {
-  jspb.Message.setOneofWrapperField(this, 8, proto.com.github.kornilova_l.protos.Tree.Node.NodeInfo.oneofGroups_[0], value);
+  jspb.Message.setOneofWrapperField(this, 6, proto.com.github.kornilova_l.protos.Tree.Node.NodeInfo.oneofGroups_[0], value);
 };
 
 
@@ -709,7 +721,7 @@ proto.com.github.kornilova_l.protos.Tree.Node.NodeInfo.prototype.clearException 
  * @return {!boolean}
  */
 proto.com.github.kornilova_l.protos.Tree.Node.NodeInfo.prototype.hasException = function() {
-  return jspb.Message.getField(this, 8) != null;
+  return jspb.Message.getField(this, 6) != null;
 };
 
 
@@ -852,7 +864,6 @@ proto.com.github.kornilova_l.protos.Tree.TreeInfo.prototype.toObject = function(
  */
 proto.com.github.kornilova_l.protos.Tree.TreeInfo.toObject = function(includeInstance, msg) {
   var f, obj = {
-    duration: jspb.Message.getFieldWithDefault(msg, 1, 0),
     startTime: jspb.Message.getFieldWithDefault(msg, 2, 0),
     threadId: jspb.Message.getFieldWithDefault(msg, 3, 0)
   };
@@ -891,10 +902,6 @@ proto.com.github.kornilova_l.protos.Tree.TreeInfo.deserializeBinaryFromReader = 
     }
     var field = reader.getFieldNumber();
     switch (field) {
-    case 1:
-      var value = /** @type {number} */ (reader.readInt64());
-      msg.setDuration(value);
-      break;
     case 2:
       var value = /** @type {number} */ (reader.readInt64());
       msg.setStartTime(value);
@@ -931,13 +938,6 @@ proto.com.github.kornilova_l.protos.Tree.TreeInfo.prototype.serializeBinary = fu
  */
 proto.com.github.kornilova_l.protos.Tree.TreeInfo.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getDuration();
-  if (f !== 0) {
-    writer.writeInt64(
-      1,
-      f
-    );
-  }
   f = message.getStartTime();
   if (f !== 0) {
     writer.writeInt64(
@@ -952,21 +952,6 @@ proto.com.github.kornilova_l.protos.Tree.TreeInfo.serializeBinaryToWriter = func
       f
     );
   }
-};
-
-
-/**
- * optional int64 duration = 1;
- * @return {number}
- */
-proto.com.github.kornilova_l.protos.Tree.TreeInfo.prototype.getDuration = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
-};
-
-
-/** @param {number} value */
-proto.com.github.kornilova_l.protos.Tree.TreeInfo.prototype.setDuration = function(value) {
-  jspb.Message.setField(this, 1, value);
 };
 
 
@@ -1075,6 +1060,21 @@ proto.com.github.kornilova_l.protos.Tree.prototype.getDepth = function() {
 /** @param {number} value */
 proto.com.github.kornilova_l.protos.Tree.prototype.setDepth = function(value) {
   jspb.Message.setField(this, 3, value);
+};
+
+
+/**
+ * optional int64 width = 4;
+ * @return {number}
+ */
+proto.com.github.kornilova_l.protos.Tree.prototype.getWidth = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 4, 0));
+};
+
+
+/** @param {number} value */
+proto.com.github.kornilova_l.protos.Tree.prototype.setWidth = function(value) {
+  jspb.Message.setField(this, 4, value);
 };
 
 
