@@ -30,7 +30,7 @@ public class TreeConstructor {
 
     public static void main(String[] args) throws IOException {
         TreeConstructor treeConstructor = new TreeConstructor(
-                new File("/home/lk/JetBrains/profiler/out/events13.ser")
+                new File("out/events64.ser")
         );
         OutputStream outputStream = new FileOutputStream("out/original-tree2.ser");
         TreeProtos.Tree tree = treeConstructor.constructOriginalTree();
