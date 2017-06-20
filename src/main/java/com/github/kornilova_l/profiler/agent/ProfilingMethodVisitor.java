@@ -26,7 +26,9 @@ class ProfilingMethodVisitor extends AdviceAdapter {
 
     @Override
     protected void onMethodEnter() {
-        logMethodName();
+        printMessage("execute method: " + className + "." + methodName);
+        printInstanceOfLogger();
+        getLogger();
         createEventData("Enter");
         getThreadId();
         getTime();
@@ -37,16 +39,29 @@ class ProfilingMethodVisitor extends AdviceAdapter {
         addToQueue();
     }
 
-    private void logMethodName() {
+    private void printInstanceOfLogger() {
+        printMessage("print result of Logger.getInstance()");
+        visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
+        getLogger();
+        visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "println",
+                "(Ljava/lang/Object;)V", false);
+    }
+
+    private void getLogger() {
+        visitMethodInsn(INVOKESTATIC, LOGGER_PACKAGE_NAME + "Logger",
+                "getInstance", "()Lcom/github/kornilova_l/profiler/logger/Logger;", false);
+    }
+
+    private void printMessage(String message) {
         mv.visitFieldInsn(GETSTATIC, "java/lang/System", "out",
                 "Ljava/io/PrintStream;");
-        mv.visitLdcInsn("execute method: " + className + "." + methodName);
+        mv.visitLdcInsn(message);
         mv.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream",
                 "println", "(Ljava/lang/String;)V", false);
     }
 
     private void addToQueue() {
-        mv.visitMethodInsn(INVOKESTATIC, LOGGER_PACKAGE_NAME + "Logger", "addToQueue",
+        mv.visitMethodInsn(INVOKEVIRTUAL, LOGGER_PACKAGE_NAME + "Logger", "addToQueue",
                 "(Lcom/github/kornilova_l/profiler/logger/EventData;)V", false);
     }
 
@@ -267,6 +282,8 @@ class ProfilingMethodVisitor extends AdviceAdapter {
     protected void onMethodExit(int opcode) {
         if (opcode == ATHROW) {
             dup();
+            getLogger();
+            swapRetValAndLogger(1);
             createEventData("Exception");
             swapRetValAndEvent(1);
             getThreadId();
@@ -276,10 +293,13 @@ class ProfilingMethodVisitor extends AdviceAdapter {
             return;
         }
         if (opcode == RETURN) {
+            getLogger();
             createEventData("Exit");
         } else { // return some value
             int sizeOfRetVal = getSizeOfRetVal(opcode);
             dupRetVal(sizeOfRetVal);
+            getLogger();
+            swapRetValAndLogger(sizeOfRetVal);
             createEventData("Exit");
             swapRetValAndEvent(sizeOfRetVal);
         }
@@ -288,6 +308,15 @@ class ProfilingMethodVisitor extends AdviceAdapter {
         getTime();
         initExitEventData();
         addToQueue();
+    }
+
+    private void swapRetValAndLogger(int sizeOfRetVal) {
+        if (sizeOfRetVal == 1) {
+            swap();
+        } else {
+            dupX2();
+            pop();
+        }
     }
 
     private void retValToObj() {
