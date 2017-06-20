@@ -24,10 +24,9 @@ class ProfilingMethodVisitor extends AdviceAdapter {
         this.methodName = methodName;
     }
 
-
     @Override
     protected void onMethodEnter() {
-        getQueue();
+        logMethodName();
         createEventData("Enter");
         getThreadId();
         getTime();
@@ -38,10 +37,17 @@ class ProfilingMethodVisitor extends AdviceAdapter {
         addToQueue();
     }
 
+    private void logMethodName() {
+        mv.visitFieldInsn(GETSTATIC, "java/lang/System", "out",
+                "Ljava/io/PrintStream;");
+        mv.visitLdcInsn("execute method: " + className + "." + methodName);
+        mv.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream",
+                "println", "(Ljava/lang/String;)V", false);
+    }
+
     private void addToQueue() {
-        mv.visitMethodInsn(INVOKEVIRTUAL, "java/util/concurrent/LinkedBlockingDeque", "add",
-                "(Ljava/lang/Object;)Z", false);
-        mv.visitInsn(POP); // ignore return value
+        mv.visitMethodInsn(INVOKESTATIC, LOGGER_PACKAGE_NAME + "Logger", "addToQueue",
+                "(Lcom/github/kornilova_l/profiler/logger/EventData;)V", false);
     }
 
     private void initEnterEventData() {
@@ -218,12 +224,8 @@ class ProfilingMethodVisitor extends AdviceAdapter {
     }
 
     private void getTime() {
-        mv.visitMethodInsn(INVOKESTATIC, "java/lang/System", "currentTimeMillis", "()J", false);
-    }
-
-    private void getQueue() {
-        mv.visitFieldInsn(GETSTATIC, LOGGER_PACKAGE_NAME + "Logger", "queue",
-                "Ljava/util/concurrent/LinkedBlockingDeque;");
+        mv.visitMethodInsn(INVOKESTATIC, "java/lang/System",
+                "currentTimeMillis", "()J", false);
     }
 
     private void getThreadId() {
@@ -263,16 +265,23 @@ class ProfilingMethodVisitor extends AdviceAdapter {
 
     @Override
     protected void onMethodExit(int opcode) {
-        if (opcode != RETURN) {
+        if (opcode == ATHROW) {
+            dup();
+            createEventData("Exception");
+            swapRetValAndEvent(1);
+            getThreadId();
+            getTime();
+            initExceptionEventData();
+            addToQueue();
+            return;
+        }
+        if (opcode == RETURN) {
+            createEventData("Exit");
+        } else { // return some value
             int sizeOfRetVal = getSizeOfRetVal(opcode);
             dupRetVal(sizeOfRetVal);
-            getQueue();
-            swapRetValAndQueue(sizeOfRetVal);
             createEventData("Exit");
             swapRetValAndEvent(sizeOfRetVal);
-        } else {
-            getQueue();
-            createEventData("Exit");
         }
         retValToObj();
         getThreadId();
@@ -328,6 +337,11 @@ class ProfilingMethodVisitor extends AdviceAdapter {
                 "(Ljava/lang/Object;JJ)V", false);
     }
 
+    private void initExceptionEventData() {
+        mv.visitMethodInsn(INVOKESPECIAL, LOGGER_PACKAGE_NAME + "ExceptionEventData", "<init>",
+                "(Ljava/lang/Throwable;JJ)V", false);
+    }
+
     private void swapRetValAndEvent(int sizeOfRetVal) {
         if (sizeOfRetVal == 1) {
             dup2X1();
@@ -336,16 +350,6 @@ class ProfilingMethodVisitor extends AdviceAdapter {
         }
         pop2();
     }
-
-    private void swapRetValAndQueue(int sizeOfRetVal) {
-        if (sizeOfRetVal == 1) {
-            swap();
-        } else {
-            dupX2();
-            pop();
-        }
-    }
-
 
     private void dupRetVal(int sizeOfRetVal) {
         if (sizeOfRetVal == 1) {
@@ -363,35 +367,4 @@ class ProfilingMethodVisitor extends AdviceAdapter {
         }
         return 1;
     }
-
-//    private void convertReturnValToString(int opcode) {
-//        if (opcode == RETURN) {
-//            mv.visitVarInsn(ALOAD, state);
-//            mv.visitLdcInsn(""); // no return param
-//            return;
-//        }
-//        if (opcode == IRETURN) {
-//            insertStateBeforeSmallRetVal();
-//            invokeStringValueOf("I");
-//        } else if (opcode == LRETURN) {
-//            insertStateBeforeLargeRetVal();
-//            invokeStringValueOf("J");
-//        } else if (opcode == FRETURN) {
-//            insertStateBeforeSmallRetVal();
-//            invokeStringValueOf("F");
-//        } else if (opcode == DRETURN) {
-//            insertStateBeforeLargeRetVal();
-//            invokeStringValueOf("D");
-//        } else if (opcode == ARETURN) { // object or array
-//            insertStateBeforeSmallRetVal();
-//            aReturnToString();
-//        } else { // ATHROW
-//            dup();
-//            mv.visitVarInsn(ALOAD, state);
-//            mv.visitInsn(SWAP);
-//            invokeToString();
-//        }
-//    }
-
-
 }
