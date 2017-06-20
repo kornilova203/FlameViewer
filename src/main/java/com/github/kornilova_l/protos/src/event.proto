@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package com.github.kornilova_l.protos;
+package com.github.kornilova_l.protos.src;
 
 option java_outer_classname = "EventProtos";
 
