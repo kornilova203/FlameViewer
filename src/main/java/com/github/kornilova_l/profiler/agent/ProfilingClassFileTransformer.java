@@ -39,8 +39,8 @@ class ProfilingClassFileTransformer implements ClassFileTransformer {
                             Class<?> classBeingRedefined,
                             ProtectionDomain protectionDomain,
                             byte[] classfileBuffer) throws IllegalClassFormatException {
-        System.out.println(className);
         if (!className.startsWith("java") &&
+                !className.startsWith("sun") &&
                 Configuration.matchesAnyPattern(className, Configuration.classNamePatterns)) {
             ClassReader cr = new ClassReader(classfileBuffer);
             ClassWriter cw = new ClassWriter(cr, ClassWriter.COMPUTE_FRAMES);
