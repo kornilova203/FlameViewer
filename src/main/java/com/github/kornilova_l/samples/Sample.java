@@ -1,7 +1,11 @@
 package com.github.kornilova_l.samples;
 
+import com.github.kornilova_l.profiler.logger.EnterEventData;
+import com.github.kornilova_l.profiler.logger.Logger;
+
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Random;
 import java.util.regex.Pattern;
 
 @SuppressWarnings({"UnnecessaryLocalVariable", "UnusedReturnValue", "SameParameterValue", "unchecked", "MethodMayBeStatic"})
@@ -25,6 +29,10 @@ public class Sample implements Runnable {
     }
 
     public void run() {
+        System.out.println(Logger.getInstance());
+//        Logger.getInstance()
+//                .addToQueue(new EnterEventData(123, 123, "class",
+//                "method", true, null));
         TestClass tc = new TestClass();
         tc.doSmth();
         getsParameters(5, "hello", 12345678);
@@ -37,6 +45,12 @@ public class Sample implements Runnable {
 
         double D = returnD();
         Blackhole.consume(D);
+//        Random random = new Random(System.currentTimeMillis());
+//        System.out.println("hello");
+//        if (random.nextBoolean()) {
+//            queue.add(new ExceptionEventData(new AssertionError("hello"), 123, 123));
+//            throw new AssertionError("Something is wrong");
+//        }
 
         Pattern[] patterns = new Pattern[2];
         patterns[0] = Pattern.compile("1.*");
