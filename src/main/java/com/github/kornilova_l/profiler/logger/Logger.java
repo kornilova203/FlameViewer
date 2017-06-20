@@ -12,14 +12,17 @@ import java.util.regex.Pattern;
  * Thread which writes all events from loggingQueue to file
  */
 public class Logger implements Runnable {
-    public static final LinkedBlockingDeque<EventData> queue = new LinkedBlockingDeque<>();
-    private static final File outDir = new File("/home/lk/java-profiling-plugin/out");
-    private static final File file = createOutFile();
-    // stream is package-private because it will be closed by WaitingLoggingToFinish thread
-    static final OutputStream outputStream;
-    static boolean isWriting = false;
+    private static Logger logger;
 
-    static {
+    private final LinkedBlockingDeque<EventData> queue = new LinkedBlockingDeque<>();
+    private final File outDir = new File("/home/lk/java-profiling-plugin/out");
+    private final File file = createOutFile();
+    private final OutputStream outputStream;
+    private boolean isWriting = false;
+
+    private Logger() {
+        System.out.println("I am a Logger");
+        logger = this;
         OutputStream temp = null;
         try {
             temp = new FileOutputStream(file);
@@ -30,7 +33,29 @@ public class Logger implements Runnable {
         createDirIfNotExist(outDir);
     }
 
-    private static int getLargestFileNum() {
+    public static Logger getInstance() {
+        if (logger == null) {
+            logger = new Logger();
+            Thread loggerThread = new Thread(logger, "logging thread");
+            loggerThread.setDaemon(true);
+            loggerThread.start();
+
+            Runtime.getRuntime().addShutdownHook( new WaitingLoggingToFinish("shutdown-hook"));
+        }
+        return logger;
+    }
+
+    @SuppressWarnings("unused")
+    public void addToQueue(EventData eventData) {
+        System.out.println("addToQueue()");
+        queue.add(eventData);
+    }
+
+    public boolean isDone() {
+        return queue.isEmpty() && !isWriting;
+    }
+
+    private int getLargestFileNum() {
         File[] files = outDir.listFiles();
         int max = 0;
         if (files != null) {
@@ -54,7 +79,7 @@ public class Logger implements Runnable {
         return max;
     }
 
-    private static File createOutFile() {
+    private File createOutFile() {
         int max = getLargestFileNum();
         return new File(outDir.getAbsolutePath() + "/events" + ++max + ".ser");
     }
@@ -65,7 +90,7 @@ public class Logger implements Runnable {
                 //noinspection ResultOfMethodCallIgnored
                 outDir.mkdir();
             } catch (SecurityException se) {
-                //handle it
+                se.printStackTrace();
             }
         }
     }
@@ -82,7 +107,8 @@ public class Logger implements Runnable {
         }
     }
 
-    private static void logEvent(EventData eventData) {
+    private void logEvent(EventData eventData) {
+        System.out.println("Logger: logEvent" + eventData);
         isWriting = true;
         EventProtos.Event.Builder eventBuilder = EventProtos.Event.newBuilder()
                 .setTime(eventData.time)
@@ -91,13 +117,28 @@ public class Logger implements Runnable {
             eventBuilder.setEnter(
                     formEnterMessage((EnterEventData) eventData)
             );
-        } else {
+        } else if (eventData.getClass() == ExitEventData.class) {
             eventBuilder.setExit(
                     formExitMessage((ExitEventData) eventData)
+            );
+        } else {
+            eventBuilder.setException(
+                    formExceptionEventData((ExceptionEventData) eventData)
             );
         }
         writeToFile(eventBuilder.build());
         isWriting = false;
+    }
+
+    private static EventProtos.Event.Exception formExceptionEventData(ExceptionEventData eventData) {
+        return EventProtos.Event.Exception.newBuilder()
+                .setObject(
+                        EventProtos.Event.Object.newBuilder()
+                                .setType(eventData.throwable.getClass().toString())
+                                .setValue(eventData.throwable.getMessage())
+                                .build()
+                )
+                .build();
     }
 
     private static EventProtos.Event.Exit formExitMessage(ExitEventData exitEventData) {
@@ -121,7 +162,7 @@ public class Logger implements Runnable {
         return enterBuilder.build();
     }
 
-    private static void writeToFile(EventProtos.Event event) {
+    private void writeToFile(EventProtos.Event event) {
         try {
             event.writeDelimitedTo(outputStream);
         } catch (IOException e) {
@@ -159,13 +200,21 @@ public class Logger implements Runnable {
         return varBuilder.build();
     }
 
-    static void printDataForHuman() {
+    void printDataForHuman() {
         try (InputStream inputStream = new FileInputStream(file)) {
             EventProtos.Event event = EventProtos.Event.parseDelimitedFrom(inputStream);
             while (event != null) {
                 System.out.println(event.toString());
                 event = EventProtos.Event.parseDelimitedFrom(inputStream);
             }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    void closeOutputStream() {
+        try {
+            outputStream.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
