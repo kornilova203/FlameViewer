@@ -13,18 +13,17 @@ public class WaitingLoggingToFinish extends Thread {
     public void run() {
         Logger logger = Logger.getInstance();
         while (!logger.isDone()) { // wait for logger to log all events
-            try {
-                Thread.sleep(100); // Logger may dequeue queue but did not have time to update isWriting
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            if (!logger.isDone()) { // if still writing
-                Thread.yield();
-            } else { // queue is empty and logger is not writing
-                logger.closeOutputStream();
-                logger.printDataForHuman();
-                return;
-            }
+            Thread.yield();
         }
+        try {
+            Thread.sleep(100); // Logger may dequeue queue but did not have time to update isWriting
+            while (!logger.isDone()) {
+                Thread.yield();
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        logger.closeOutputStream();
+        logger.printDataForHuman();
     }
 }
