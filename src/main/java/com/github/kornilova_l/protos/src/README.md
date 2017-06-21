@@ -2,6 +2,7 @@
 # Java
 protoc -I=src/main/java --java_out=src/main/java src/main/java/com/github/kornilova_l/protos/src/event.proto
 protoc -I=src/main/java --java_out=src/main/java src/main/java/com/github/kornilova_l/protos/src/tree.proto
+protoc -I=src/main/java --java_out=src/main/java src/main/java/com/github/kornilova_l/protos/src/trees.proto
 
 # JavaScript
 protoc --js_out=import_style=commonjs,binary:. src/main/java/com/github/kornilova_l/protos/src/event.proto
