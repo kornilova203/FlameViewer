@@ -6,12 +6,16 @@ import com.github.kornilova_l.protos.TreeProtos;
 import java.util.LinkedList;
 
 class OriginalTree {
-    private final LinkedList<TreeProtos.Tree.Node.NodeInfo.Builder> nodeInfoStack = new LinkedList<>();
-    private final LinkedList<TreeProtos.Tree.Node.Builder> nodeStack = new LinkedList<>();
+    private final LinkedList<UnfinishedNode> unfinishedNodesStack = new LinkedList<>();
     private TreeProtos.Tree.Builder treeBuilder = TreeProtos.Tree.newBuilder();
     private TreeProtos.Tree tree = null;
     private int maxDepth = 0;
     private int currentDepth = 0;
+
+    private final class UnfinishedNode {
+        final TreeProtos.Tree.Node.NodeInfo.Builder nodeInfoBuilder = TreeProtos.Tree.Node.NodeInfo.newBuilder();
+        final TreeProtos.Tree.Node.Builder nodeBuilder = TreeProtos.Tree.Node.newBuilder();
+    }
 
     OriginalTree(long startTime, long threadId) {
         treeBuilder.setTreeInfo(
@@ -44,17 +48,18 @@ class OriginalTree {
      */
     private void finishCall(EventProtos.Event event) {
         currentDepth--;
+        UnfinishedNode unfinishedNode = unfinishedNodesStack.removeFirst();
         TreeProtos.Tree.Node.NodeInfo nodeInfo = buildNodeInfo(
-                nodeInfoStack.removeFirst(),
+                unfinishedNode.nodeInfoBuilder,
                 event
         );
         TreeProtos.Tree.Node node = buildNode(
-                nodeStack.removeFirst(),
+                unfinishedNode.nodeBuilder,
                 nodeInfo,
                 event
         );
-        if (!nodeStack.isEmpty()) {
-            nodeStack.getFirst().addNodes(node);
+        if (!unfinishedNodesStack.isEmpty()) {
+            unfinishedNodesStack.getFirst().nodeBuilder.addNodes(node);
         } else {
             treeBuilder.addNodes(node);
         }
@@ -88,28 +93,24 @@ class OriginalTree {
         if (++currentDepth > maxDepth) {
             maxDepth = currentDepth;
         }
-        nodeInfoStack.addFirst(
-                TreeProtos.Tree.Node.NodeInfo.newBuilder()
-                        .setClassName(event.getEnter().getClassName())
-                        .setMethodName(event.getEnter().getMethodName())
-                        .setIsStatic(event.getEnter().getIsStatic())
-                        .addAllParameters(event.getEnter().getParametersList())
-        );
+        UnfinishedNode unfinishedNode = new UnfinishedNode();
+        unfinishedNode.nodeInfoBuilder
+                .setClassName(event.getEnter().getClassName())
+                .setMethodName(event.getEnter().getMethodName())
+                .setIsStatic(event.getEnter().getIsStatic())
+                .addAllParameters(event.getEnter().getParametersList());
         long offset = event.getTime() - treeBuilder.getTreeInfo().getStartTime();
-        nodeStack.addFirst(
-                TreeProtos.Tree.Node.newBuilder()
-                        .setOffset(offset)
-        );
+        unfinishedNode.nodeBuilder
+                .setOffset(offset);
+        unfinishedNodesStack.addFirst(unfinishedNode);
     }
 
     void buildTree(long timeOfLastEvent) {
-        if (nodeInfoStack.isEmpty()) { // everything is okay
+        if (unfinishedNodesStack.isEmpty()) { // everything is okay
             TreeProtos.Tree.Node lastFinishedNode = treeBuilder.getNodes(treeBuilder.getNodesCount() - 1);
             long treeWidth = lastFinishedNode.getOffset() + lastFinishedNode.getWidth();
             treeBuilder.setWidth(treeWidth)
                     .setDepth(maxDepth);
-//            System.out.println("treeBuilder: " + treeBuilder);
-//            System.out.println("built tree: " + tree);
         } else { // something went wrong
             finishAllCallsInStack(timeOfLastEvent);
         }
@@ -128,36 +129,23 @@ class OriginalTree {
     */
     private void finishAllCallsInStack(long timeOfLastEvent) {
         long treeWidth = timeOfLastEvent - treeBuilder.getTreeInfo().getStartTime();
-        while (!nodeInfoStack.isEmpty()) {
-            TreeProtos.Tree.Node.Builder nodeBuilder = nodeStack.removeFirst();
+        while (!unfinishedNodesStack.isEmpty()) {
+            UnfinishedNode unfinishedNode = unfinishedNodesStack.removeFirst();
+            TreeProtos.Tree.Node.Builder nodeBuilder = unfinishedNode.nodeBuilder;
             TreeProtos.Tree.Node node = nodeBuilder
                     .setNodeInfo(
-                            nodeInfoStack.removeFirst()
+                            unfinishedNode.nodeInfoBuilder
                     )
                     .setWidth(treeWidth - nodeBuilder.getOffset())
                     .build();
-            if (!nodeStack.isEmpty()) {
-                nodeStack.getFirst().addNodes(node);
+            if (!unfinishedNodesStack.isEmpty()) {
+                unfinishedNodesStack.getFirst().nodeBuilder.addNodes(node);
             } else {
                 treeBuilder.addNodes(node);
             }
         }
         treeBuilder.setWidth(treeWidth)
                 .setDepth(maxDepth);
-    }
-
-    /**
-     * This method should only be called from {@link #finishAllCallsInStack(long) finishAllCallsInStack()}
-     *
-     * @return width of tree
-     */
-    private long getTreeWidth() {
-        TreeProtos.Tree.Node.Builder latestNodeBuilder = nodeStack.getFirst();
-        if (latestNodeBuilder.getNodesCount() == 0) {
-            return latestNodeBuilder.getOffset();
-        } else {
-            return latestNodeBuilder.getOffset() + latestNodeBuilder.getWidth();
-        }
     }
 
     /**
