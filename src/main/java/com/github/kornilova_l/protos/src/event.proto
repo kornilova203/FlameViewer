@@ -25,21 +25,21 @@ message Event {
     }
 
     message Exception {
-        Object object = 1;
+        Var.Object object = 1;
     }
+}
 
-    message Var {
-        oneof value {
-            sint32 I = 1; // int
-            sint64 J = 2; // long
-            bool Z = 3; // boolean
-            uint32 C = 4; // char
-            sint32 S = 5; // short
-            sint32 B = 6; // byte
-            float F = 7; // float
-            double D = 8; // double
-            Object object = 9; // object
-        }
+message Var {
+    oneof value {
+        sint32 I = 1; // int
+        sint64 J = 2; // long
+        bool Z = 3; // boolean
+        uint32 C = 4; // char
+        sint32 S = 5; // short
+        sint32 B = 6; // byte
+        float F = 7; // float
+        double D = 8; // double
+        Object object = 9; // object
     }
 
     message Object {

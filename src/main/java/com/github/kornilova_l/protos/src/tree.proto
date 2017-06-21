@@ -22,10 +22,10 @@ message Tree {
             string method_name = 1;
             string class_name = 2;
             bool is_static = 3;
-            repeated com.github.kornilova_l.protos.src.Event.Var parameters = 4; // only for trees which save original call structure
+            repeated com.github.kornilova_l.protos.src.Var parameters = 4; // only for trees which save original call structure
             oneof result { // only for trees which save original call structure
-                com.github.kornilova_l.protos.src.Event.Var return_value = 5;
-                com.github.kornilova_l.protos.src.Event.Exception exception = 6;
+                com.github.kornilova_l.protos.src.Var return_value = 5;
+                com.github.kornilova_l.protos.src.Var.Object exception = 6;
             }
         }
     }

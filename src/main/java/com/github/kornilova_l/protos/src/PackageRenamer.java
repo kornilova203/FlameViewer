@@ -3,13 +3,11 @@ package com.github.kornilova_l.protos.src;
 import java.io.*;
 
 public class PackageRenamer {
-    private static final String outputDirPath = "/home/lk/java-profiling-plugin/src/main/java/com/github/kornilova_l/libs/protobuf/";
-    private static final String oldPackageName = "com.google.protobuf";
-    private static final String newPackageName = "com.github.kornilova_l.libs.protobuf";
+    private static final String srcDirPath = "src/main/java/com/github/kornilova_l/protos/src";
+    private static final String outputDirPath = "src/main/java/com/github/kornilova_l/protos/";
 
 
     public static void main(String[] args) throws FileNotFoundException {
-        String srcDirPath = "/home/lk/.gradle/caches/modules-2/files-2.1/com.google.protobuf/protobuf-java/3.3.1/733c81a020b1eaf0c09ee8c2cb8fa166bd8a2f2d/com/google/protobuf";
 
         File srcDir = new File(srcDirPath);
         if (!srcDir.exists() || !srcDir.isDirectory()) {
@@ -23,7 +21,8 @@ public class PackageRenamer {
             throw new IllegalArgumentException("Directory is empty");
         }
         for (File file : files) {
-            if (!file.getName().endsWith(".java")) {
+            if (!file.getName().endsWith(".java") ||
+                    file.getName().startsWith("PackageRenamer")) {
                 continue;
             }
             try (
@@ -43,7 +42,8 @@ public class PackageRenamer {
                 String line = reader.readLine();
                 while (line != null) {
                     writer.write(line
-                            .replace(oldPackageName, newPackageName) +
+                            .replace("com.github.kornilova_l.protos.src", "com.github.kornilova_l.protos")
+                            .replace("com.google.protobuf", "com.github.kornilova_l.libs.com.google.protobuf") +
                             "\n");
                     line = reader.readLine();
                 }

@@ -133,7 +133,7 @@ public class Logger implements Runnable {
     private static EventProtos.Event.Exception formExceptionEventData(ExceptionEventData eventData) {
         return EventProtos.Event.Exception.newBuilder()
                 .setObject(
-                        EventProtos.Event.Object.newBuilder()
+                        EventProtos.Var.Object.newBuilder()
                                 .setType(eventData.throwable.getClass().toString())
                                 .setValue(eventData.throwable.getMessage())
                                 .build()
@@ -170,8 +170,8 @@ public class Logger implements Runnable {
         }
     }
 
-    private static EventProtos.Event.Var objectToVar(Object o) {
-        EventProtos.Event.Var.Builder varBuilder = EventProtos.Event.Var.newBuilder();
+    private static EventProtos.Var objectToVar(Object o) {
+        EventProtos.Var.Builder varBuilder = EventProtos.Var.newBuilder();
         // TODO: https://stackoverflow.com/questions/29570767/switch-over-type-in-java
         if (o instanceof Integer) {
             varBuilder.setI((Integer) o);
@@ -191,7 +191,7 @@ public class Logger implements Runnable {
             varBuilder.setD((Double) o);
         } else { // object
             varBuilder.setObject(
-                    EventProtos.Event.Object.newBuilder()
+                    EventProtos.Var.Object.newBuilder()
                             .setType(o.getClass().toString())
                             .setValue(o.toString())
                             .build()

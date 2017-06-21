@@ -77,7 +77,7 @@ class OriginalTree {
             );
         } else { // exception
             nodeInfoBuilder.setException(
-                    event.getException()
+                    event.getException().getObject()
             );
         }
         return nodeInfoBuilder.build();
