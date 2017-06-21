@@ -16,7 +16,7 @@ public class WaitingLoggingToFinish extends Thread {
             Thread.yield();
         }
         try {
-            Thread.sleep(100); // Logger may dequeue queue but did not have time to update isWriting
+            Thread.sleep(1000); // Logger may dequeue queue but did not have time to update isWriting
             while (!logger.isDone()) {
                 Thread.yield();
             }
