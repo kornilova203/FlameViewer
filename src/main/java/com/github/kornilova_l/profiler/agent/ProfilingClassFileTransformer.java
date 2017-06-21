@@ -24,8 +24,11 @@ class ProfilingClassFileTransformer implements ClassFileTransformer {
             String line = reader.readLine();
             while (line != null) {
                 System.out.println("Config: " + line);
-                Configuration.addFullNamePattern(line);
-                Configuration.addClassNamePattern(line);
+                if (line.startsWith("!")) {
+                    Configuration.addExcludePattern(line.substring(1));
+                } else {
+                    Configuration.addIncludePattern(line);
+                }
                 line = reader.readLine();
             }
         } catch (IOException e) {
@@ -41,13 +44,16 @@ class ProfilingClassFileTransformer implements ClassFileTransformer {
                             byte[] classfileBuffer) throws IllegalClassFormatException {
         if (!className.startsWith("java") &&
                 !className.startsWith("sun") &&
-                Configuration.matchesAnyPattern(className, Configuration.classNamePatterns)) {
+                !className.startsWith("com/github/kornilova_l") &&
+                !className.startsWith("jdk") &&
+                !className.startsWith("com/sun") &&
+                Configuration.isClassIncluded(className)) {
             ClassReader cr = new ClassReader(classfileBuffer);
             ClassWriter cw = new ClassWriter(cr, ClassWriter.COMPUTE_FRAMES);
             // uncomment for debugging
-            TraceClassVisitor cv = new TraceClassVisitor(cw, new PrintWriter(System.out));
+//            TraceClassVisitor cv = new TraceClassVisitor(cw, new PrintWriter(System.out));
             // SKIP_FRAMES avoids visiting frames that will be ignored and recomputed from scratch in the class writer.
-            cr.accept(new ProfilingClassVisitor(cv, className), ClassReader.SKIP_FRAMES);
+            cr.accept(new ProfilingClassVisitor(cw, className), ClassReader.SKIP_FRAMES);
 
             return cw.toByteArray();
         }

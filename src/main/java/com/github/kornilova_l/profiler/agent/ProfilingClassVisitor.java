@@ -15,13 +15,16 @@ class ProfilingClassVisitor extends ClassVisitor {
     @Override
     public MethodVisitor visitMethod(int access, String methodName, String desc, String signature, String[] exceptions) {
         MethodVisitor mv = cv.visitMethod(access, methodName, desc, signature, exceptions);
+        System.out.println("visit method: " + className + "." + methodName +
+                " included? " + Configuration.isMethodIncluded(className + "." + methodName) +
+                " excluded? " + Configuration.isMethodExcluded(className + "." + methodName));
         if (mv != null &&
                 !methodName.equals("<init>") &&
                 !methodName.equals("toString") &&
+                !methodName.contains("ClassLoader") &&
                 (access & Opcodes.ACC_SYNTHETIC) == 0 &&  // exclude synthetic methods
-                Configuration.matchesAnyPattern(
-                        className + "." + methodName,
-                        Configuration.fullNamePatterns)) {
+                Configuration.isMethodIncluded(className + "." + methodName) &&
+                !Configuration.isMethodExcluded(className + "." + methodName)) {
             return new ProfilingMethodVisitor(access, methodName, desc, mv, className);
         }
         return mv;

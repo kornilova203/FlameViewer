@@ -4,29 +4,44 @@ import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 class Configuration {
-    static final ArrayList<Pattern> fullNamePatterns = new ArrayList<>();
-    static final ArrayList<Pattern> classNamePatterns = new ArrayList<>();
 
-    static void addClassNamePattern(String line) {
-        String className = line.split("\\.")[0];
-        classNamePatterns.add(
-                Pattern.compile(
-                        className.replaceAll("\\*", ".*")
-                )
-        );
+    private static final ArrayList<Pattern> fullNamePatterns = new ArrayList<>();
+    private static final ArrayList<Pattern> classNamePatterns = new ArrayList<>();
+    private static final ArrayList<Pattern> excludePatterns = new ArrayList<>();
+
+    static void addIncludePattern(String line) {
+        String[] parts = line.split("\\.");
+        addPattern(parts[0], classNamePatterns);
+        addPattern(line.replace(".", "\\."), fullNamePatterns);
     }
 
-    static void addFullNamePattern(String line) {
-        fullNamePatterns.add(
+    static void addExcludePattern(String line) {
+        addPattern(line, excludePatterns);
+    }
+
+    private static void addPattern(String line, ArrayList<Pattern> patterns) {
+        patterns.add(
                 Pattern.compile(
                         line.replaceAll("\\*", ".*")
                 )
         );
     }
 
-    static boolean matchesAnyPattern(String string, ArrayList<Pattern> patterns) {
-        for (Pattern classNamePattern : patterns) {
-            if (classNamePattern.matcher(string).matches()) {
+    static boolean isClassIncluded(String className) {
+        return matchesAnyPattern(className, classNamePatterns);
+    }
+
+    static boolean isMethodIncluded(String fullName) {
+        return matchesAnyPattern(fullName, fullNamePatterns);
+    }
+
+    static boolean isMethodExcluded(String fullName) {
+        return matchesAnyPattern(fullName, excludePatterns);
+    }
+
+    private static boolean matchesAnyPattern(String line, ArrayList<Pattern> patterns) {
+        for (Pattern pattern : patterns) {
+            if (pattern.matcher(line).matches()) {
                 return true;
             }
         }
