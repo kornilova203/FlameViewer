@@ -50,10 +50,10 @@ public class TreeConstructor {
 
     public static void main(String[] args) throws IOException {
         TreeConstructor treeConstructor = new TreeConstructor(
-                new File("out/events187.ser")
+                new File("out/events194.ser")
         );
         TreesProtos.Trees trees = treeConstructor.constructOriginalTrees();
-        try (OutputStream outputStream = new FileOutputStream("out/trees04.ser")) {
+        try (OutputStream outputStream = new FileOutputStream("out/trees08.ser")) {
             trees.writeTo(outputStream);
         }
     }

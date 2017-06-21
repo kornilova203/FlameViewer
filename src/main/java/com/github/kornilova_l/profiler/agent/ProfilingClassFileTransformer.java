@@ -47,6 +47,7 @@ class ProfilingClassFileTransformer implements ClassFileTransformer {
                 !className.startsWith("com/github/kornilova_l") &&
                 !className.startsWith("jdk") &&
                 !className.startsWith("com/sun") &&
+                !className.contains("ClassLoader") &&
                 Configuration.isClassIncluded(className)) {
             ClassReader cr = new ClassReader(classfileBuffer);
             ClassWriter cw = new ClassWriter(cr, ClassWriter.COMPUTE_FRAMES);
