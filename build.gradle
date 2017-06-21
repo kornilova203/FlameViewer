@@ -21,7 +21,6 @@ buildscript {
     }
     dependencies {
         classpath "gradle.plugin.org.jetbrains:gradle-intellij-plugin:0.1.10"
-        classpath 'eu.appsatori:gradle-fatjar-plugin:0.3'
     }
 }
 
@@ -34,25 +33,14 @@ dependencies {
     agentLibs "org.ow2.asm:asm:5.2"
     agentLibs "org.ow2.asm:asm-util:5.2" // TraceClassVisitor (for debugging)
     agentLibs group: 'org.ow2.asm', name: 'asm-commons', version: '5.0.3' // AdviceAdapter
-    agentLibs group: 'com.google.protobuf', name: 'protobuf-java', version: '3.3.1'
+    agentLibs fileTree(dir: 'libs', include: ['protobuf-java-kornilova-l-3.3.0.jar'])
     configurations.compile.extendsFrom(configurations.agentLibs)
 }
 
 apply plugin: "me.champeau.gradle.jmh"
 apply plugin: 'org.jetbrains.intellij'
-apply plugin: 'eu.appsatori.fatjar'
 
 mainClassName = 'com.github.kornilova_l.samples.Sample'
-
-task packAgent (type: Jar, dependsOn: classes) {
-    manifest {
-        attributes "Premain-Class": "com.github.kornilova_l.profiler.agent.Agent"
-    }
-    archiveName = 'javaagent.jar'
-    from sourceSets.main.output
-    include '**/profiler/**'
-    includeEmptyDirs = false
-}
 
 jar {
     from {
@@ -62,17 +50,6 @@ jar {
         attributes "Premain-Class": "com.github.kornilova_l.profiler.agent.Agent"
     }
     archiveName = 'javaagent.jar'
-}
-
-fatJar {
-    manifest {
-        attributes "Premain-Class": "com.github.kornilova_l.profiler.agent.Agent"
-    }
-    archiveName = 'fatjavaagent.jar'
-    include '**/kornilova_l/profiler/**'
-    include '**/kornilova_l/protos/**'
-    include '**/org/objectweb/asm/**'
-    include '**/com/google/protobuf/**'
     includeEmptyDirs = false
 }
 
@@ -81,15 +58,15 @@ task copyStatic(type: Copy) {
     into 'build/classes/main/flamegraph-profiler'
 }
 
-task profileClass(type: JavaExec, dependsOn: [build, packAgent]) {
+task profileClass(type: JavaExec, dependsOn: [build, jar]) {
     classpath = sourceSets.main.runtimeClasspath
     main = "com.github.kornilova_l.samples.Sample"
-    print "${packAgent.getArchivePath()}"
-    jvmArgs += ["-javaagent:${packAgent.getArchivePath()}=/home/lk/java-profiling-plugin/agent-config/agent01.config"]
+    print "${jar.getArchivePath()}"
+    jvmArgs += ["-javaagent:${jar.getArchivePath()}=/home/lk/java-profiling-plugin/agent-config/agent01.config"]
 }
 
 jmh {
-    packAgent.execute()
+    jar.execute()
     warmupIterations = 5
     iterations = 10
     fork = 2
