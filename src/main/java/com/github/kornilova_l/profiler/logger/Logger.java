@@ -173,6 +173,15 @@ public class Logger implements Runnable {
 
     private static EventProtos.Var objectToVar(Object o) {
         EventProtos.Var.Builder varBuilder = EventProtos.Var.newBuilder();
+        if (o == null) {
+            varBuilder.setObject(
+                    EventProtos.Var.Object.newBuilder()
+                    .setValue("")
+                    .setType("null")
+                    .build()
+            );
+            return varBuilder.build();
+        }
         // TODO: https://stackoverflow.com/questions/29570767/switch-over-type-in-java
         if (o instanceof Integer) {
             varBuilder.setI((Integer) o);
