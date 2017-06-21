@@ -58,6 +58,13 @@ class OriginalTree {
                 nodeInfo,
                 event
         );
+        addBuiltNode(node);
+    }
+
+    private void addBuiltNode(TreeProtos.Tree.Node node) {
+        if (node.getWidth() == 0) { // if this node took <1ms
+            return;
+        }
         if (!unfinishedNodesStack.isEmpty()) {
             unfinishedNodesStack.getFirst().nodeBuilder.addNodes(node);
         } else {
@@ -138,11 +145,7 @@ class OriginalTree {
                     )
                     .setWidth(treeWidth - nodeBuilder.getOffset())
                     .build();
-            if (!unfinishedNodesStack.isEmpty()) {
-                unfinishedNodesStack.getFirst().nodeBuilder.addNodes(node);
-            } else {
-                treeBuilder.addNodes(node);
-            }
+            addBuiltNode(node);
         }
         treeBuilder.setWidth(treeWidth)
                 .setDepth(maxDepth);
@@ -150,11 +153,14 @@ class OriginalTree {
 
     /**
      * @param timeOfLastEvent time of last event is needed if tree has any unfinished methods
-     * @return built Tree
+     * @return built Tree of null if tree is empty
      */
     TreeProtos.Tree getBuiltTree(long timeOfLastEvent) {
         if (tree == null) {
             buildTree(timeOfLastEvent);
+        }
+        if (tree.getNodesCount() == 0) { // if all methods took <1ms
+            return null;
         }
         return tree;
     }
