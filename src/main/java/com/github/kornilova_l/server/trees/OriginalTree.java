@@ -102,17 +102,19 @@ class OriginalTree {
         );
     }
 
-    void buildTree() {
+    void buildTree(long timeOfLastEvent) {
         if (nodeInfoStack.isEmpty()) { // everything is okay
             TreeProtos.Tree.Node lastFinishedNode = treeBuilder.getNodes(treeBuilder.getNodesCount() - 1);
             long treeWidth = lastFinishedNode.getOffset() + lastFinishedNode.getWidth();
             treeBuilder.setWidth(treeWidth)
                     .setDepth(maxDepth);
-            tree = treeBuilder.build();
-            treeBuilder = null;
+//            System.out.println("treeBuilder: " + treeBuilder);
+//            System.out.println("built tree: " + tree);
         } else { // something went wrong
-            finishAllCallsInStack();
+            finishAllCallsInStack(timeOfLastEvent);
         }
+        tree = treeBuilder.build();
+        treeBuilder = null;
     }
 
     /*
@@ -124,10 +126,8 @@ class OriginalTree {
     - set width
     - build and add it to calls of top of stack
     */
-    private void finishAllCallsInStack() {
-        TreeProtos.Tree.Node lastFinishedNode = treeBuilder.getNodes(treeBuilder.getNodesCount() - 1);
-        long treeWidth = lastFinishedNode.getOffset() + lastFinishedNode.getWidth();
-
+    private void finishAllCallsInStack(long timeOfLastEvent) {
+        long treeWidth = timeOfLastEvent - treeBuilder.getTreeInfo().getStartTime();
         while (!nodeInfoStack.isEmpty()) {
             TreeProtos.Tree.Node.Builder nodeBuilder = nodeStack.removeFirst();
             TreeProtos.Tree.Node node = nodeBuilder
@@ -142,11 +142,31 @@ class OriginalTree {
                 treeBuilder.addNodes(node);
             }
         }
+        treeBuilder.setWidth(treeWidth)
+                .setDepth(maxDepth);
     }
 
-    TreeProtos.Tree getBuiltTree() {
+    /**
+     * This method should only be called from {@link #finishAllCallsInStack(long) finishAllCallsInStack()}
+     *
+     * @return width of tree
+     */
+    private long getTreeWidth() {
+        TreeProtos.Tree.Node.Builder latestNodeBuilder = nodeStack.getFirst();
+        if (latestNodeBuilder.getNodesCount() == 0) {
+            return latestNodeBuilder.getOffset();
+        } else {
+            return latestNodeBuilder.getOffset() + latestNodeBuilder.getWidth();
+        }
+    }
+
+    /**
+     * @param timeOfLastEvent time of last event is needed if tree has any unfinished methods
+     * @return built Tree
+     */
+    TreeProtos.Tree getBuiltTree(long timeOfLastEvent) {
         if (tree == null) {
-            throw new AssertionError("Tree was not built");
+            buildTree(timeOfLastEvent);
         }
         return tree;
     }
