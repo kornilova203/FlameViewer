@@ -1,4 +1,4 @@
-package com.github.kornilova_l.libs;
+package com.github.kornilova_l.protos.src;
 
 import java.io.*;
 
@@ -9,7 +9,7 @@ public class PackageRenamer {
 
 
     public static void main(String[] args) throws FileNotFoundException {
-        String srcDirPath = "/home/lk/resources/protobuf/java/core/src/main/java/com/google/protobuf";
+        String srcDirPath = "/home/lk/.gradle/caches/modules-2/files-2.1/com.google.protobuf/protobuf-java/3.3.1/733c81a020b1eaf0c09ee8c2cb8fa166bd8a2f2d/com/google/protobuf";
 
         File srcDir = new File(srcDirPath);
         if (!srcDir.exists() || !srcDir.isDirectory()) {
@@ -23,6 +23,9 @@ public class PackageRenamer {
             throw new IllegalArgumentException("Directory is empty");
         }
         for (File file : files) {
+            if (!file.getName().endsWith(".java")) {
+                continue;
+            }
             try (
                     BufferedReader reader = new BufferedReader(
                             new InputStreamReader(
@@ -39,7 +42,9 @@ public class PackageRenamer {
             ) {
                 String line = reader.readLine();
                 while (line != null) {
-                    writer.write(line.replace(oldPackageName, newPackageName) + "\n");
+                    writer.write(line
+                            .replace(oldPackageName, newPackageName) +
+                            "\n");
                     line = reader.readLine();
                 }
             } catch (IOException e) {
