@@ -1,6 +1,6 @@
 package com.github.kornilova_l.server;
 
-import com.github.kornilova_l.protos.TreeProtos;
+import com.github.kornilova_l.protos.TreesProtos;
 import com.github.kornilova_l.server.trees.TreeConstructor;
 import com.intellij.openapi.util.io.BufferExposingByteArrayOutputStream;
 import com.intellij.openapi.util.io.StreamUtil;
@@ -14,7 +14,6 @@ import org.jetbrains.io.Responses;
 
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Set;
 
 public class ProfilerRestService extends RestService {
 
@@ -51,7 +50,7 @@ public class ProfilerRestService extends RestService {
                 sendStatic(request, context, ServerNames.MAIN_NAME + "/index.html", "text/html");
                 break;
             case ServerNames.ORIGINAL_TREE:
-                Set<TreeProtos.Tree> trees = constructTimeTrees();
+                TreesProtos.Trees trees = constructTimeTrees();
                 sendTrees(request, context, trees);
                 break;
             default:
@@ -70,24 +69,21 @@ public class ProfilerRestService extends RestService {
 
     private static void sendTrees(FullHttpRequest request,
                                   ChannelHandlerContext context,
-                                  Set<TreeProtos.Tree> trees) {
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        for (TreeProtos.Tree tree : trees) {
-            try {
-                tree.writeDelimitedTo(outputStream);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+                                  TreesProtos.Trees trees) {
+        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+            trees.writeTo(outputStream);
+            HttpResponse response = Responses.response(
+                    "application/octet-stream",
+                    Unpooled.wrappedBuffer(outputStream.toByteArray())
+            );
+            Responses.addNoCache(response);
+            Responses.send(response, context.channel(), request);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        HttpResponse response = Responses.response(
-                "application/octet-stream",
-                Unpooled.wrappedBuffer(outputStream.toByteArray())
-        );
-        Responses.addNoCache(response);
-        Responses.send(response, context.channel(), request);
     }
 
-    private static Set<TreeProtos.Tree> constructTimeTrees() {
+    private static TreesProtos.Trees constructTimeTrees() {
         TreeConstructor treeConstructor = new TreeConstructor(
                 new File("/home/lk/java-profiling-plugin/out/events64.ser")
         );

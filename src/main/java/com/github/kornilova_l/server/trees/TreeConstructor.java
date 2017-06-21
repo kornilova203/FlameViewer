@@ -1,7 +1,7 @@
 package com.github.kornilova_l.server.trees;
 
 import com.github.kornilova_l.protos.EventProtos;
-import com.github.kornilova_l.protos.TreeProtos;
+import com.github.kornilova_l.protos.TreesProtos;
 
 import java.io.*;
 import java.util.HashMap;
@@ -15,7 +15,7 @@ public class TreeConstructor {
         this.file = file;
     }
 
-    public Set<TreeProtos.Tree> constructOriginalTrees() {
+    public TreesProtos.Trees constructOriginalTrees() {
         try (InputStream inputStream = new FileInputStream(file)) {
             HashMap<Long, OriginalTree> trees = new HashMap<>();
             EventProtos.Event event = EventProtos.Event.parseDelimitedFrom(inputStream);
@@ -27,26 +27,31 @@ public class TreeConstructor {
                 ).addEvent(event);
                 event = EventProtos.Event.parseDelimitedFrom(inputStream);
             }
-            return trees.values().stream()
-                    .peek(OriginalTree::buildTree)
-                    .map(OriginalTree::getBuiltTree)
-                    .collect(Collectors.toSet());
+            return HashMapToTrees(trees);
         } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
     }
 
+    private static TreesProtos.Trees HashMapToTrees(HashMap<Long, OriginalTree> trees) {
+        return TreesProtos.Trees.newBuilder()
+                .addAllTrees(
+                        trees.values().stream()
+                                .peek(OriginalTree::buildTree)
+                                .map(OriginalTree::getBuiltTree)
+                                .collect(Collectors.toSet())
+                )
+                .build();
+    }
+
     public static void main(String[] args) throws IOException {
         TreeConstructor treeConstructor = new TreeConstructor(
-                new File("out/events81.ser")
+                new File("out/events173.ser")
         );
-        Set<TreeProtos.Tree> trees = treeConstructor.constructOriginalTrees();
-        int i = 0;
-        for (TreeProtos.Tree tree : trees) {
-            OutputStream outputStream = new FileOutputStream("out/original-tree-multithread" + i++ + ".ser");
-            tree.writeTo(outputStream);
-            System.out.println(tree.toString());
+        TreesProtos.Trees trees = treeConstructor.constructOriginalTrees();
+        try (OutputStream outputStream = new FileOutputStream("out/trees01.ser")) {
+            trees.writeTo(outputStream);
         }
     }
 }
