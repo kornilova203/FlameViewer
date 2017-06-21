@@ -12,6 +12,7 @@ public class WaitingLoggingToFinish extends Thread {
     @Override
     public void run() {
         Logger logger = Logger.getInstance();
+        logger.printStatus();
         while (!logger.isDone()) { // wait for logger to log all events
             Thread.yield();
         }
@@ -24,6 +25,6 @@ public class WaitingLoggingToFinish extends Thread {
             e.printStackTrace();
         }
         logger.closeOutputStream();
-        logger.printDataForHuman();
+//        logger.printDataForHuman();
     }
 }

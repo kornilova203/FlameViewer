@@ -18,10 +18,11 @@ public class Logger implements Runnable {
     private final File outDir = new File("/home/lk/java-profiling-plugin/out");
     private final File file = createOutFile();
     private final OutputStream outputStream;
+    private int countEventsAdded = 0;
+    private int countEventsLogged = 0;
     private boolean isWriting = false;
 
     private Logger() {
-        System.out.println("I am a Logger");
         logger = this;
         OutputStream temp = null;
         try {
@@ -47,7 +48,7 @@ public class Logger implements Runnable {
 
     @SuppressWarnings("unused")
     public void addToQueue(EventData eventData) {
-        System.out.println("addToQueue()");
+        countEventsAdded++;
         queue.add(eventData);
     }
 
@@ -108,7 +109,6 @@ public class Logger implements Runnable {
     }
 
     private void logEvent(EventData eventData) {
-        System.out.println("Logger: logEvent" + eventData);
         isWriting = true;
         EventProtos.Event.Builder eventBuilder = EventProtos.Event.newBuilder()
                 .setTime(eventData.time)
@@ -127,6 +127,7 @@ public class Logger implements Runnable {
             );
         }
         writeToFile(eventBuilder.build());
+        countEventsLogged++;
         isWriting = false;
     }
 
@@ -218,5 +219,11 @@ public class Logger implements Runnable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    void printStatus() {
+        System.out.println("Events added: " + countEventsAdded +
+                " Events logged: " + countEventsLogged +
+                " Queue size: " + queue.size());
     }
 }

@@ -26,8 +26,8 @@ class ProfilingMethodVisitor extends AdviceAdapter {
 
     @Override
     protected void onMethodEnter() {
-        printMessage("execute method: " + className + "." + methodName);
-        printInstanceOfLogger();
+//        printMessage("execute method: " + className + "." + methodName);
+//        printInstanceOfLogger();
         getLogger();
         createEventData("Enter");
         getThreadId();
