@@ -72,12 +72,7 @@ public class ProfilerRestService extends RestService {
                                   TreesProtos.Trees trees) {
         try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
             trees.writeTo(outputStream);
-            HttpResponse response = Responses.response(
-                    "application/octet-stream",
-                    Unpooled.wrappedBuffer(outputStream.toByteArray())
-            );
-            Responses.addNoCache(response);
-            Responses.send(response, context.channel(), request);
+            sendBytes(request, context, "application/octet-stream", outputStream.toByteArray());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -99,12 +94,19 @@ public class ProfilerRestService extends RestService {
                 InputStream pageStream = getClass().getResourceAsStream(fileName)
         ) {
             byteOut.write(StreamUtil.loadFromStream(pageStream));
-            HttpResponse response = Responses.response(
-                    contentType,
-                    Unpooled.wrappedBuffer(byteOut.getInternalBuffer())
-            );
-            Responses.addNoCache(response);
-            Responses.send(response, context.channel(), request);
+            sendBytes(request, context, contentType, byteOut.getInternalBuffer());
         }
+    }
+
+    private static void sendBytes(FullHttpRequest request,
+                                  ChannelHandlerContext context,
+                                  String contentType,
+                                  byte[] bytes) {
+        HttpResponse response = Responses.response(
+                contentType,
+                Unpooled.wrappedBuffer(bytes)
+        );
+        Responses.addNoCache(response);
+        Responses.send(response, context.channel(), request);
     }
 }
