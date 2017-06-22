@@ -56,10 +56,10 @@ jar {
 
 task copyStatic(type: Copy) {
     from 'visualization'
-    into 'build/classes/main/flamegraph-profiler'
+    into System.getProperty("user.home") + '/.flamegraph-profiler/static'
 }
 
-task('copyStaicAndRunIde', dependsOn: copyStatic) {
+task('prepareAndRunIde', dependsOn: [copyStatic, build]) {
     doLast {
         runIdea.execute()
     }
@@ -68,7 +68,6 @@ task('copyStaicAndRunIde', dependsOn: copyStatic) {
 task profileClass(type: JavaExec, dependsOn: [build, jar]) {
     classpath = sourceSets.main.runtimeClasspath
     main = "com.github.kornilova_l.samples.Sample"
-    print "${jar.getArchivePath()}"
     jvmArgs += ["-javaagent:${jar.getArchivePath()}=/home/lk/java-profiling-plugin/agent-config/agent01.config"]
 }
 
