@@ -29,10 +29,6 @@ public class Sample implements Runnable {
     }
 
     public void run() {
-        System.out.println(Logger.getInstance());
-//        Logger.getInstance()
-//                .addToQueue(new EnterEventData(123, 123, "class",
-//                "method", true, null));
         TestClass tc = new TestClass();
         tc.doSmth();
         getsParameters(5, "hello", 12345678);

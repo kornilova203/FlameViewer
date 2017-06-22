@@ -44,7 +44,7 @@ class ProfilingClassFileTransformer implements ClassFileTransformer {
                             byte[] classfileBuffer) throws IllegalClassFormatException {
         if (!className.startsWith("java") &&
                 !className.startsWith("sun") &&
-                !className.startsWith("com/github/kornilova_l") &&
+                (className.startsWith("com/github/kornilova_l/samples") || !className.startsWith("com/github/kornilova_l")) &&
                 !className.startsWith("jdk") &&
                 !className.startsWith("com/sun") &&
                 !className.contains("ClassLoader") &&
