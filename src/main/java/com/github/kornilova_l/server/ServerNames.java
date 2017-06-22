@@ -1,11 +1,8 @@
 package com.github.kornilova_l.server;
 
-import com.intellij.openapi.diagnostic.Logger;
-
 import java.util.regex.Pattern;
 
 class ServerNames {
-    static final Logger LOG = Logger.getInstance(ProfilerRestService.class.getName());
     static final String NAME = "flamegraph-profiler";
     static final String MAIN_NAME = "/" + NAME;
     static final String RESULTS = MAIN_NAME + "/results";
