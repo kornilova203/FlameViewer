@@ -59,6 +59,12 @@ task copyStatic(type: Copy) {
     into 'build/classes/main/flamegraph-profiler'
 }
 
+task('copyStaicAndRunIde', dependsOn: copyStatic) {
+    doLast {
+        runIdea.execute()
+    }
+}
+
 task profileClass(type: JavaExec, dependsOn: [build, jar]) {
     classpath = sourceSets.main.runtimeClasspath
     main = "com.github.kornilova_l.samples.Sample"
