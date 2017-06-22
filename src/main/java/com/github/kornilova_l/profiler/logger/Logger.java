@@ -22,7 +22,7 @@ public class Logger implements Runnable {
     private final OutputStream outputStream;
     private int countEventsAdded = 0;
     private int countEventsLogged = 0;
-    private boolean isWriting = false;
+    boolean isDone = false;
 
     private Logger() {
         logger = this;
@@ -57,9 +57,6 @@ public class Logger implements Runnable {
         queue.add(eventData);
     }
 
-    public boolean isDone() {
-        return queue.isEmpty() && !isWriting;
-    }
 
     private int getLargestFileNum() {
         File[] files = outDir.listFiles();
@@ -121,7 +118,7 @@ public class Logger implements Runnable {
     }
 
     private void logEvent(EventData eventData) {
-        isWriting = true;
+        isDone = false;
         EventProtos.Event.Builder eventBuilder = EventProtos.Event.newBuilder()
                 .setTime(eventData.time)
                 .setThreadId(eventData.threadId);
@@ -140,7 +137,9 @@ public class Logger implements Runnable {
         }
         writeToFile(eventBuilder.build());
         countEventsLogged++;
-        isWriting = false;
+        if (queue.size() == 0) {
+            isDone = true;
+        }
     }
 
     private static EventProtos.Event.Exception formExceptionEventData(ExceptionEventData eventData) {
