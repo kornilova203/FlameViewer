@@ -1,12 +1,10 @@
 package com.github.kornilova_l.profiler.logger;
 
+import com.github.kornilova_l.profiler.ProfilerFileManager;
 import com.github.kornilova_l.protos.EventProtos;
 
 import java.io.*;
-import java.util.*;
 import java.util.concurrent.LinkedBlockingDeque;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Thread which writes all events from loggingQueue to file
@@ -14,21 +12,17 @@ import java.util.regex.Pattern;
 public class Logger implements Runnable {
     private static Logger logger;
 
-    private static final String PROFILER_DIR_PATH = System.getProperty("user.home") + "/.flamegraph-profiler";
-    private static final String EVENTS_DIR_NAME = "events";
     private final LinkedBlockingDeque<EventData> queue = new LinkedBlockingDeque<>();
-    private final File outDir;
     private final File file;
     private final OutputStream outputStream;
     private int countEventsAdded = 0;
     private int countEventsLogged = 0;
-    boolean isDone = false;
+    boolean isDone = true; // changes to false when queue is enqueued
 
     private Logger() {
         logger = this;
 
-        outDir = getDir(EVENTS_DIR_NAME);
-        file = createOutFile();
+        file = ProfilerFileManager.createLogFile();
         System.out.println("Output file: " + file);
         OutputStream temp = null;
         try {
@@ -55,54 +49,6 @@ public class Logger implements Runnable {
     public void addToQueue(EventData eventData) {
         countEventsAdded++;
         queue.add(eventData);
-    }
-
-
-    private int getLargestFileNum() {
-        File[] files = outDir.listFiles();
-        int max = 0;
-        if (files != null) {
-            Pattern getNumPattern = Pattern.compile("[0-9]+");
-            OptionalInt optionalMax = Arrays.stream(files)
-                    .map(File::getName) // get names of files
-                    .map((name) -> {
-                        Matcher m = getNumPattern.matcher(name);
-                        if (m.find()) {
-                            return m.group(); // get numbers from fileNames
-                        }
-                        return "0";
-                    })
-                    .mapToInt(Integer::parseInt)
-                    .max();
-
-            if (optionalMax.isPresent()) {
-                max = optionalMax.getAsInt();
-            }
-        }
-        return max;
-    }
-
-    private File createOutFile() {
-        int max = getLargestFileNum();
-        return new File(outDir.getAbsolutePath() + "/events" + ++max + ".ser");
-    }
-
-    private static File getDir(String dirName) {
-        createIfNotExist(PROFILER_DIR_PATH);
-        return createIfNotExist(PROFILER_DIR_PATH + "/" + dirName);
-    }
-
-    private static File createIfNotExist(String dirPath) {
-        File dir = new File(dirPath);
-        if (!dir.exists()) {
-            try {
-                //noinspection ResultOfMethodCallIgnored
-                dir.mkdir();
-            } catch (SecurityException se) {
-                se.printStackTrace();
-            }
-        }
-        return dir;
     }
 
     @Override
