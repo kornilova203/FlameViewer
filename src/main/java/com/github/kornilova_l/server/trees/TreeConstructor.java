@@ -3,11 +3,13 @@ package com.github.kornilova_l.server.trees;
 import com.github.kornilova_l.protos.EventProtos;
 import com.github.kornilova_l.protos.TreeProtos;
 import com.github.kornilova_l.protos.TreesProtos;
+import com.intellij.openapi.diagnostic.Logger;
 
 import java.io.*;
 import java.util.HashMap;
 
 public class TreeConstructor {
+    static final Logger LOG = Logger.getInstance(TreeConstructor.class);
     private final File file;
 
     public TreeConstructor(File file) {
@@ -15,6 +17,7 @@ public class TreeConstructor {
     }
 
     public TreesProtos.Trees constructOriginalTrees() {
+        LOG.info("I will process this file: " + file.getAbsolutePath());
         try (InputStream inputStream = new FileInputStream(file)) {
             HashMap<Long, OriginalTree> trees = new HashMap<>();
             EventProtos.Event event = EventProtos.Event.parseDelimitedFrom(inputStream);
@@ -50,10 +53,10 @@ public class TreeConstructor {
 
     public static void main(String[] args) throws IOException {
         TreeConstructor treeConstructor = new TreeConstructor(
-                new File("out/events194.ser")
+                new File("out/events196.ser")
         );
         TreesProtos.Trees trees = treeConstructor.constructOriginalTrees();
-        try (OutputStream outputStream = new FileOutputStream("out/trees08.ser")) {
+        try (OutputStream outputStream = new FileOutputStream("out/trees12.ser")) {
             trees.writeTo(outputStream);
         }
     }
