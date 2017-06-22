@@ -33,7 +33,8 @@ public class ProfilerFileManager {
      */
     private static String intToString(int num) {
         StringBuilder string = new StringBuilder(String.valueOf(num));
-        for (int i = 0; i < FILE_NAME_LENGTH + 1 - string.length(); i++) {
+        int addZeros = FILE_NAME_LENGTH - string.length();
+        for (int i = 0; i < addZeros; i++) {
             string.insert(0, "0");
         }
         return string.toString();
