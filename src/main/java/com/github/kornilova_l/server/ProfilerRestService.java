@@ -47,7 +47,7 @@ public class ProfilerRestService extends RestService {
     public String execute(@NotNull QueryStringDecoder urlDecoder,
                           @NotNull FullHttpRequest request,
                           @NotNull ChannelHandlerContext context) throws IOException {
-        String uri = urlDecoder.uri();
+        String uri = urlDecoder.path(); // without parameters
         LOG.info("Lucinda. Request: " + uri);
         switch (uri) {
             case ServerNames.RESULTS:
