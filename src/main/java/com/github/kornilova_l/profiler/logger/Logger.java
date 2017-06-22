@@ -14,9 +14,11 @@ import java.util.regex.Pattern;
 public class Logger implements Runnable {
     private static Logger logger;
 
+    private static final String PROFILER_DIR_PATH = System.getProperty("user.home") + "/.flamegraph-profiler";
+    private static final String EVENTS_DIR_NAME = "events";
     private final LinkedBlockingDeque<EventData> queue = new LinkedBlockingDeque<>();
-    private final File outDir = new File("/home/lk/java-profiling-plugin/out");
-    private final File file = createOutFile();
+    private final File outDir;
+    private final File file;
     private final OutputStream outputStream;
     private int countEventsAdded = 0;
     private int countEventsLogged = 0;
@@ -24,6 +26,10 @@ public class Logger implements Runnable {
 
     private Logger() {
         logger = this;
+
+        outDir = getDir(EVENTS_DIR_NAME);
+        file = createOutFile();
+        System.out.println("Output file: " + file);
         OutputStream temp = null;
         try {
             temp = new FileOutputStream(file);
@@ -31,7 +37,6 @@ public class Logger implements Runnable {
             e.printStackTrace();
         }
         outputStream = temp;
-        createDirIfNotExist(outDir);
     }
 
     public static Logger getInstance() {
@@ -85,15 +90,22 @@ public class Logger implements Runnable {
         return new File(outDir.getAbsolutePath() + "/events" + ++max + ".ser");
     }
 
-    private static void createDirIfNotExist(File outDir) {
-        if (!outDir.exists()) {
+    private static File getDir(String dirName) {
+        createIfNotExist(PROFILER_DIR_PATH);
+        return createIfNotExist(PROFILER_DIR_PATH + "/" + dirName);
+    }
+
+    private static File createIfNotExist(String dirPath) {
+        File dir = new File(dirPath);
+        if (!dir.exists()) {
             try {
                 //noinspection ResultOfMethodCallIgnored
-                outDir.mkdir();
+                dir.mkdir();
             } catch (SecurityException se) {
                 se.printStackTrace();
             }
         }
+        return dir;
     }
 
     @Override
