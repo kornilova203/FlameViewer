@@ -104,6 +104,7 @@ class OriginalTree {
         unfinishedNode.nodeInfoBuilder
                 .setClassName(event.getEnter().getClassName())
                 .setMethodName(event.getEnter().getMethodName())
+                .setDescription(event.getEnter().getDescription())
                 .setIsStatic(event.getEnter().getIsStatic())
                 .addAllParameters(event.getEnter().getParametersList());
         long offset = event.getTime() - treeBuilder.getTreeInfo().getStartTime();

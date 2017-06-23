@@ -349,6 +349,16 @@ public final class TreeProtos {
             getClassNameBytes();
 
         /**
+         * <code>string description = 7;</code>
+         */
+        java.lang.String getDescription();
+        /**
+         * <code>string description = 7;</code>
+         */
+        com.google.protobuf.ByteString
+            getDescriptionBytes();
+
+        /**
          * <code>bool is_static = 3;</code>
          */
         boolean getIsStatic();
@@ -431,6 +441,7 @@ public final class TreeProtos {
         private NodeInfo() {
           methodName_ = "";
           className_ = "";
+          description_ = "";
           isStatic_ = false;
           parameters_ = java.util.Collections.emptyList();
         }
@@ -478,9 +489,9 @@ public final class TreeProtos {
                   break;
                 }
                 case 34: {
-                  if (!((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
+                  if (!((mutable_bitField0_ & 0x00000010) == 0x00000010)) {
                     parameters_ = new java.util.ArrayList<com.github.kornilova_l.protos.src.EventProtos.Var>();
-                    mutable_bitField0_ |= 0x00000008;
+                    mutable_bitField0_ |= 0x00000010;
                   }
                   parameters_.add(
                       input.readMessage(com.github.kornilova_l.protos.src.EventProtos.Var.parser(), extensionRegistry));
@@ -514,6 +525,12 @@ public final class TreeProtos {
                   resultCase_ = 6;
                   break;
                 }
+                case 58: {
+                  java.lang.String s = input.readStringRequireUtf8();
+
+                  description_ = s;
+                  break;
+                }
               }
             }
           } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -522,7 +539,7 @@ public final class TreeProtos {
             throw new com.google.protobuf.InvalidProtocolBufferException(
                 e).setUnfinishedMessage(this);
           } finally {
-            if (((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
+            if (((mutable_bitField0_ & 0x00000010) == 0x00000010)) {
               parameters_ = java.util.Collections.unmodifiableList(parameters_);
             }
             makeExtensionsImmutable();
@@ -641,6 +658,40 @@ public final class TreeProtos {
                 com.google.protobuf.ByteString.copyFromUtf8(
                     (java.lang.String) ref);
             className_ = b;
+            return b;
+          } else {
+            return (com.google.protobuf.ByteString) ref;
+          }
+        }
+
+        public static final int DESCRIPTION_FIELD_NUMBER = 7;
+        private volatile java.lang.Object description_;
+        /**
+         * <code>string description = 7;</code>
+         */
+        public java.lang.String getDescription() {
+          java.lang.Object ref = description_;
+          if (ref instanceof java.lang.String) {
+            return (java.lang.String) ref;
+          } else {
+            com.google.protobuf.ByteString bs = 
+                (com.google.protobuf.ByteString) ref;
+            java.lang.String s = bs.toStringUtf8();
+            description_ = s;
+            return s;
+          }
+        }
+        /**
+         * <code>string description = 7;</code>
+         */
+        public com.google.protobuf.ByteString
+            getDescriptionBytes() {
+          java.lang.Object ref = description_;
+          if (ref instanceof java.lang.String) {
+            com.google.protobuf.ByteString b = 
+                com.google.protobuf.ByteString.copyFromUtf8(
+                    (java.lang.String) ref);
+            description_ = b;
             return b;
           } else {
             return (com.google.protobuf.ByteString) ref;
@@ -781,6 +832,9 @@ public final class TreeProtos {
           if (resultCase_ == 6) {
             output.writeMessage(6, (com.github.kornilova_l.protos.src.EventProtos.Var.Object) result_);
           }
+          if (!getDescriptionBytes().isEmpty()) {
+            com.google.protobuf.GeneratedMessageV3.writeString(output, 7, description_);
+          }
         }
 
         public int getSerializedSize() {
@@ -810,6 +864,9 @@ public final class TreeProtos {
             size += com.google.protobuf.CodedOutputStream
               .computeMessageSize(6, (com.github.kornilova_l.protos.src.EventProtos.Var.Object) result_);
           }
+          if (!getDescriptionBytes().isEmpty()) {
+            size += com.google.protobuf.GeneratedMessageV3.computeStringSize(7, description_);
+          }
           memoizedSize = size;
           return size;
         }
@@ -830,6 +887,8 @@ public final class TreeProtos {
               .equals(other.getMethodName());
           result = result && getClassName()
               .equals(other.getClassName());
+          result = result && getDescription()
+              .equals(other.getDescription());
           result = result && (getIsStatic()
               == other.getIsStatic());
           result = result && getParametersList()
@@ -863,6 +922,8 @@ public final class TreeProtos {
           hash = (53 * hash) + getMethodName().hashCode();
           hash = (37 * hash) + CLASS_NAME_FIELD_NUMBER;
           hash = (53 * hash) + getClassName().hashCode();
+          hash = (37 * hash) + DESCRIPTION_FIELD_NUMBER;
+          hash = (53 * hash) + getDescription().hashCode();
           hash = (37 * hash) + IS_STATIC_FIELD_NUMBER;
           hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
               getIsStatic());
@@ -1016,11 +1077,13 @@ public final class TreeProtos {
 
             className_ = "";
 
+            description_ = "";
+
             isStatic_ = false;
 
             if (parametersBuilder_ == null) {
               parameters_ = java.util.Collections.emptyList();
-              bitField0_ = (bitField0_ & ~0x00000008);
+              bitField0_ = (bitField0_ & ~0x00000010);
             } else {
               parametersBuilder_.clear();
             }
@@ -1052,11 +1115,12 @@ public final class TreeProtos {
             int to_bitField0_ = 0;
             result.methodName_ = methodName_;
             result.className_ = className_;
+            result.description_ = description_;
             result.isStatic_ = isStatic_;
             if (parametersBuilder_ == null) {
-              if (((bitField0_ & 0x00000008) == 0x00000008)) {
+              if (((bitField0_ & 0x00000010) == 0x00000010)) {
                 parameters_ = java.util.Collections.unmodifiableList(parameters_);
-                bitField0_ = (bitField0_ & ~0x00000008);
+                bitField0_ = (bitField0_ & ~0x00000010);
               }
               result.parameters_ = parameters_;
             } else {
@@ -1127,6 +1191,10 @@ public final class TreeProtos {
               className_ = other.className_;
               onChanged();
             }
+            if (!other.getDescription().isEmpty()) {
+              description_ = other.description_;
+              onChanged();
+            }
             if (other.getIsStatic() != false) {
               setIsStatic(other.getIsStatic());
             }
@@ -1134,7 +1202,7 @@ public final class TreeProtos {
               if (!other.parameters_.isEmpty()) {
                 if (parameters_.isEmpty()) {
                   parameters_ = other.parameters_;
-                  bitField0_ = (bitField0_ & ~0x00000008);
+                  bitField0_ = (bitField0_ & ~0x00000010);
                 } else {
                   ensureParametersIsMutable();
                   parameters_.addAll(other.parameters_);
@@ -1147,7 +1215,7 @@ public final class TreeProtos {
                   parametersBuilder_.dispose();
                   parametersBuilder_ = null;
                   parameters_ = other.parameters_;
-                  bitField0_ = (bitField0_ & ~0x00000008);
+                  bitField0_ = (bitField0_ & ~0x00000010);
                   parametersBuilder_ = 
                     com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
                        getParametersFieldBuilder() : null;
@@ -1349,6 +1417,75 @@ public final class TreeProtos {
             return this;
           }
 
+          private java.lang.Object description_ = "";
+          /**
+           * <code>string description = 7;</code>
+           */
+          public java.lang.String getDescription() {
+            java.lang.Object ref = description_;
+            if (!(ref instanceof java.lang.String)) {
+              com.google.protobuf.ByteString bs =
+                  (com.google.protobuf.ByteString) ref;
+              java.lang.String s = bs.toStringUtf8();
+              description_ = s;
+              return s;
+            } else {
+              return (java.lang.String) ref;
+            }
+          }
+          /**
+           * <code>string description = 7;</code>
+           */
+          public com.google.protobuf.ByteString
+              getDescriptionBytes() {
+            java.lang.Object ref = description_;
+            if (ref instanceof String) {
+              com.google.protobuf.ByteString b = 
+                  com.google.protobuf.ByteString.copyFromUtf8(
+                      (java.lang.String) ref);
+              description_ = b;
+              return b;
+            } else {
+              return (com.google.protobuf.ByteString) ref;
+            }
+          }
+          /**
+           * <code>string description = 7;</code>
+           */
+          public Builder setDescription(
+              java.lang.String value) {
+            if (value == null) {
+    throw new NullPointerException();
+  }
+  
+            description_ = value;
+            onChanged();
+            return this;
+          }
+          /**
+           * <code>string description = 7;</code>
+           */
+          public Builder clearDescription() {
+            
+            description_ = getDefaultInstance().getDescription();
+            onChanged();
+            return this;
+          }
+          /**
+           * <code>string description = 7;</code>
+           */
+          public Builder setDescriptionBytes(
+              com.google.protobuf.ByteString value) {
+            if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+            
+            description_ = value;
+            onChanged();
+            return this;
+          }
+
           private boolean isStatic_ ;
           /**
            * <code>bool is_static = 3;</code>
@@ -1378,9 +1515,9 @@ public final class TreeProtos {
           private java.util.List<com.github.kornilova_l.protos.src.EventProtos.Var> parameters_ =
             java.util.Collections.emptyList();
           private void ensureParametersIsMutable() {
-            if (!((bitField0_ & 0x00000008) == 0x00000008)) {
+            if (!((bitField0_ & 0x00000010) == 0x00000010)) {
               parameters_ = new java.util.ArrayList<com.github.kornilova_l.protos.src.EventProtos.Var>(parameters_);
-              bitField0_ |= 0x00000008;
+              bitField0_ |= 0x00000010;
              }
           }
 
@@ -1574,7 +1711,7 @@ public final class TreeProtos {
           public Builder clearParameters() {
             if (parametersBuilder_ == null) {
               parameters_ = java.util.Collections.emptyList();
-              bitField0_ = (bitField0_ & ~0x00000008);
+              bitField0_ = (bitField0_ & ~0x00000010);
               onChanged();
             } else {
               parametersBuilder_.clear();
@@ -1679,7 +1816,7 @@ public final class TreeProtos {
               parametersBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
                   com.github.kornilova_l.protos.src.EventProtos.Var, com.github.kornilova_l.protos.src.EventProtos.Var.Builder, com.github.kornilova_l.protos.src.EventProtos.VarOrBuilder>(
                       parameters_,
-                      ((bitField0_ & 0x00000008) == 0x00000008),
+                      ((bitField0_ & 0x00000010) == 0x00000010),
                       getParentForChildren(),
                       isClean());
               parameters_ = null;
@@ -4443,24 +4580,25 @@ public final class TreeProtos {
       "\n,com/github/kornilova_l/protos/src/tree" +
       ".proto\022!com.github.kornilova_l.protos.sr" +
       "c\032-com/github/kornilova_l/protos/src/eve" +
-      "nt.proto\"\233\005\n\004Tree\022C\n\ttree_info\030\001 \001(\01320.c" +
+      "nt.proto\"\260\005\n\004Tree\022C\n\ttree_info\030\001 \001(\01320.c" +
       "om.github.kornilova_l.protos.src.Tree.Tr" +
       "eeInfo\022;\n\005nodes\030\002 \003(\0132,.com.github.korni" +
       "lova_l.protos.src.Tree.Node\022\r\n\005depth\030\003 \001" +
-      "(\r\022\r\n\005width\030\004 \001(\003\032\277\003\n\004Node\022\016\n\006offset\030\001 \001" +
+      "(\r\022\r\n\005width\030\004 \001(\003\032\324\003\n\004Node\022\016\n\006offset\030\001 \001" +
       "(\003\022\r\n\005width\030\002 \001(\003\022H\n\tnode_info\030\003 \001(\01325.c" +
       "om.github.kornilova_l.protos.src.Tree.No",
       "de.NodeInfo\022;\n\005nodes\030\004 \003(\0132,.com.github." +
-      "kornilova_l.protos.src.Tree.Node\032\220\002\n\010Nod" +
+      "kornilova_l.protos.src.Tree.Node\032\245\002\n\010Nod" +
       "eInfo\022\023\n\013method_name\030\001 \001(\t\022\022\n\nclass_name" +
-      "\030\002 \001(\t\022\021\n\tis_static\030\003 \001(\010\022:\n\nparameters\030" +
-      "\004 \003(\0132&.com.github.kornilova_l.protos.sr" +
-      "c.Var\022>\n\014return_value\030\005 \001(\0132&.com.github" +
-      ".kornilova_l.protos.src.VarH\000\022B\n\texcepti" +
-      "on\030\006 \001(\0132-.com.github.kornilova_l.protos" +
-      ".src.Var.ObjectH\000B\010\n\006result\0321\n\010TreeInfo\022" +
-      "\022\n\nstart_time\030\002 \001(\003\022\021\n\tthread_id\030\003 \001(\003B\014",
-      "B\nTreeProtosb\006proto3"
+      "\030\002 \001(\t\022\023\n\013description\030\007 \001(\t\022\021\n\tis_static" +
+      "\030\003 \001(\010\022:\n\nparameters\030\004 \003(\0132&.com.github." +
+      "kornilova_l.protos.src.Var\022>\n\014return_val" +
+      "ue\030\005 \001(\0132&.com.github.kornilova_l.protos" +
+      ".src.VarH\000\022B\n\texception\030\006 \001(\0132-.com.gith" +
+      "ub.kornilova_l.protos.src.Var.ObjectH\000B\010" +
+      "\n\006result\0321\n\010TreeInfo\022\022\n\nstart_time\030\002 \001(\003",
+      "\022\021\n\tthread_id\030\003 \001(\003B\014B\nTreeProtosb\006proto" +
+      "3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -4492,7 +4630,7 @@ public final class TreeProtos {
     internal_static_com_github_kornilova_l_protos_src_Tree_Node_NodeInfo_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_github_kornilova_l_protos_src_Tree_Node_NodeInfo_descriptor,
-        new java.lang.String[] { "MethodName", "ClassName", "IsStatic", "Parameters", "ReturnValue", "Exception", "Result", });
+        new java.lang.String[] { "MethodName", "ClassName", "Description", "IsStatic", "Parameters", "ReturnValue", "Exception", "Result", });
     internal_static_com_github_kornilova_l_protos_src_Tree_TreeInfo_descriptor =
       internal_static_com_github_kornilova_l_protos_src_Tree_descriptor.getNestedTypes().get(1);
     internal_static_com_github_kornilova_l_protos_src_Tree_TreeInfo_fieldAccessorTable = new
