@@ -225,6 +225,16 @@ public final class EventProtos {
        */
       com.github.kornilova_l.protos.src.EventProtos.VarOrBuilder getParametersOrBuilder(
           int index);
+
+      /**
+       * <code>string description = 5;</code>
+       */
+      java.lang.String getDescription();
+      /**
+       * <code>string description = 5;</code>
+       */
+      com.google.protobuf.ByteString
+          getDescriptionBytes();
     }
     /**
      * Protobuf type {@code com.github.kornilova_l.protos.src.Event.Enter}
@@ -242,6 +252,7 @@ public final class EventProtos {
         methodName_ = "";
         isStatic_ = false;
         parameters_ = java.util.Collections.emptyList();
+        description_ = "";
       }
 
       @java.lang.Override
@@ -293,6 +304,12 @@ public final class EventProtos {
                 }
                 parameters_.add(
                     input.readMessage(com.github.kornilova_l.protos.src.EventProtos.Var.parser(), extensionRegistry));
+                break;
+              }
+              case 42: {
+                java.lang.String s = input.readStringRequireUtf8();
+
+                description_ = s;
                 break;
               }
             }
@@ -434,6 +451,40 @@ public final class EventProtos {
         return parameters_.get(index);
       }
 
+      public static final int DESCRIPTION_FIELD_NUMBER = 5;
+      private volatile java.lang.Object description_;
+      /**
+       * <code>string description = 5;</code>
+       */
+      public java.lang.String getDescription() {
+        java.lang.Object ref = description_;
+        if (ref instanceof java.lang.String) {
+          return (java.lang.String) ref;
+        } else {
+          com.google.protobuf.ByteString bs = 
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          description_ = s;
+          return s;
+        }
+      }
+      /**
+       * <code>string description = 5;</code>
+       */
+      public com.google.protobuf.ByteString
+          getDescriptionBytes() {
+        java.lang.Object ref = description_;
+        if (ref instanceof java.lang.String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          description_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+
       private byte memoizedIsInitialized = -1;
       public final boolean isInitialized() {
         byte isInitialized = memoizedIsInitialized;
@@ -458,6 +509,9 @@ public final class EventProtos {
         for (int i = 0; i < parameters_.size(); i++) {
           output.writeMessage(4, parameters_.get(i));
         }
+        if (!getDescriptionBytes().isEmpty()) {
+          com.google.protobuf.GeneratedMessageV3.writeString(output, 5, description_);
+        }
       }
 
       public int getSerializedSize() {
@@ -478,6 +532,9 @@ public final class EventProtos {
         for (int i = 0; i < parameters_.size(); i++) {
           size += com.google.protobuf.CodedOutputStream
             .computeMessageSize(4, parameters_.get(i));
+        }
+        if (!getDescriptionBytes().isEmpty()) {
+          size += com.google.protobuf.GeneratedMessageV3.computeStringSize(5, description_);
         }
         memoizedSize = size;
         return size;
@@ -503,6 +560,8 @@ public final class EventProtos {
             == other.getIsStatic());
         result = result && getParametersList()
             .equals(other.getParametersList());
+        result = result && getDescription()
+            .equals(other.getDescription());
         return result;
       }
 
@@ -524,6 +583,8 @@ public final class EventProtos {
           hash = (37 * hash) + PARAMETERS_FIELD_NUMBER;
           hash = (53 * hash) + getParametersList().hashCode();
         }
+        hash = (37 * hash) + DESCRIPTION_FIELD_NUMBER;
+        hash = (53 * hash) + getDescription().hashCode();
         hash = (29 * hash) + unknownFields.hashCode();
         memoizedHashCode = hash;
         return hash;
@@ -666,6 +727,8 @@ public final class EventProtos {
           } else {
             parametersBuilder_.clear();
           }
+          description_ = "";
+
           return this;
         }
 
@@ -702,6 +765,7 @@ public final class EventProtos {
           } else {
             result.parameters_ = parametersBuilder_.build();
           }
+          result.description_ = description_;
           result.bitField0_ = to_bitField0_;
           onBuilt();
           return result;
@@ -780,6 +844,10 @@ public final class EventProtos {
                 parametersBuilder_.addAllMessages(other.parameters_);
               }
             }
+          }
+          if (!other.getDescription().isEmpty()) {
+            description_ = other.description_;
+            onChanged();
           }
           onChanged();
           return this;
@@ -1210,6 +1278,75 @@ public final class EventProtos {
             parameters_ = null;
           }
           return parametersBuilder_;
+        }
+
+        private java.lang.Object description_ = "";
+        /**
+         * <code>string description = 5;</code>
+         */
+        public java.lang.String getDescription() {
+          java.lang.Object ref = description_;
+          if (!(ref instanceof java.lang.String)) {
+            com.google.protobuf.ByteString bs =
+                (com.google.protobuf.ByteString) ref;
+            java.lang.String s = bs.toStringUtf8();
+            description_ = s;
+            return s;
+          } else {
+            return (java.lang.String) ref;
+          }
+        }
+        /**
+         * <code>string description = 5;</code>
+         */
+        public com.google.protobuf.ByteString
+            getDescriptionBytes() {
+          java.lang.Object ref = description_;
+          if (ref instanceof String) {
+            com.google.protobuf.ByteString b = 
+                com.google.protobuf.ByteString.copyFromUtf8(
+                    (java.lang.String) ref);
+            description_ = b;
+            return b;
+          } else {
+            return (com.google.protobuf.ByteString) ref;
+          }
+        }
+        /**
+         * <code>string description = 5;</code>
+         */
+        public Builder setDescription(
+            java.lang.String value) {
+          if (value == null) {
+    throw new NullPointerException();
+  }
+  
+          description_ = value;
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>string description = 5;</code>
+         */
+        public Builder clearDescription() {
+          
+          description_ = getDefaultInstance().getDescription();
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>string description = 5;</code>
+         */
+        public Builder setDescriptionBytes(
+            com.google.protobuf.ByteString value) {
+          if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+          
+          description_ = value;
+          onChanged();
+          return this;
         }
         public final Builder setUnknownFields(
             final com.google.protobuf.UnknownFieldSet unknownFields) {
@@ -5593,26 +5730,26 @@ public final class EventProtos {
     java.lang.String[] descriptorData = {
       "\n-com/github/kornilova_l/protos/src/even" +
       "t.proto\022!com.github.kornilova_l.protos.s" +
-      "rc\"\214\004\n\005Event\022\021\n\tthread_id\030\001 \001(\003\022\014\n\004time\030" +
+      "rc\"\242\004\n\005Event\022\021\n\tthread_id\030\001 \001(\003\022\014\n\004time\030" +
       "\002 \001(\003\022?\n\005enter\030\003 \001(\0132..com.github.kornil" +
       "ova_l.protos.src.Event.EnterH\000\022=\n\004exit\030\004" +
       " \001(\0132-.com.github.kornilova_l.protos.src" +
       ".Event.ExitH\000\022G\n\texception\030\005 \001(\01322.com.g" +
       "ithub.kornilova_l.protos.src.Event.Excep" +
-      "tionH\000\032\177\n\005Enter\022\022\n\nclass_name\030\001 \001(\t\022\023\n\013m" +
-      "ethod_name\030\002 \001(\t\022\021\n\tis_static\030\003 \001(\010\022:\n\np",
-      "arameters\030\004 \003(\0132&.com.github.kornilova_l" +
-      ".protos.src.Var\032D\n\004Exit\022<\n\014return_value\030" +
-      "\001 \001(\0132&.com.github.kornilova_l.protos.sr" +
-      "c.Var\032J\n\tException\022=\n\006object\030\001 \001(\0132-.com" +
-      ".github.kornilova_l.protos.src.Var.Objec" +
-      "tB\006\n\004info\"\336\001\n\003Var\022\013\n\001I\030\001 \001(\021H\000\022\013\n\001J\030\002 \001(" +
-      "\022H\000\022\013\n\001Z\030\003 \001(\010H\000\022\013\n\001C\030\004 \001(\rH\000\022\013\n\001S\030\005 \001(\021" +
-      "H\000\022\013\n\001B\030\006 \001(\021H\000\022\013\n\001F\030\007 \001(\002H\000\022\013\n\001D\030\010 \001(\001H" +
-      "\000\022?\n\006object\030\t \001(\0132-.com.github.kornilova" +
-      "_l.protos.src.Var.ObjectH\000\032%\n\006Object\022\014\n\004",
-      "type\030\001 \001(\t\022\r\n\005value\030\002 \001(\tB\007\n\005valueB\rB\013Ev" +
-      "entProtosb\006proto3"
+      "tionH\000\032\224\001\n\005Enter\022\022\n\nclass_name\030\001 \001(\t\022\023\n\013" +
+      "method_name\030\002 \001(\t\022\021\n\tis_static\030\003 \001(\010\022:\n\n",
+      "parameters\030\004 \003(\0132&.com.github.kornilova_" +
+      "l.protos.src.Var\022\023\n\013description\030\005 \001(\t\032D\n" +
+      "\004Exit\022<\n\014return_value\030\001 \001(\0132&.com.github" +
+      ".kornilova_l.protos.src.Var\032J\n\tException" +
+      "\022=\n\006object\030\001 \001(\0132-.com.github.kornilova_" +
+      "l.protos.src.Var.ObjectB\006\n\004info\"\336\001\n\003Var\022" +
+      "\013\n\001I\030\001 \001(\021H\000\022\013\n\001J\030\002 \001(\022H\000\022\013\n\001Z\030\003 \001(\010H\000\022\013" +
+      "\n\001C\030\004 \001(\rH\000\022\013\n\001S\030\005 \001(\021H\000\022\013\n\001B\030\006 \001(\021H\000\022\013\n" +
+      "\001F\030\007 \001(\002H\000\022\013\n\001D\030\010 \001(\001H\000\022?\n\006object\030\t \001(\0132" +
+      "-.com.github.kornilova_l.protos.src.Var.",
+      "ObjectH\000\032%\n\006Object\022\014\n\004type\030\001 \001(\t\022\r\n\005valu" +
+      "e\030\002 \001(\tB\007\n\005valueB\rB\013EventProtosb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -5637,7 +5774,7 @@ public final class EventProtos {
     internal_static_com_github_kornilova_l_protos_src_Event_Enter_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_github_kornilova_l_protos_src_Event_Enter_descriptor,
-        new java.lang.String[] { "ClassName", "MethodName", "IsStatic", "Parameters", });
+        new java.lang.String[] { "ClassName", "MethodName", "IsStatic", "Parameters", "Description", });
     internal_static_com_github_kornilova_l_protos_src_Event_Exit_descriptor =
       internal_static_com_github_kornilova_l_protos_src_Event_descriptor.getNestedTypes().get(1);
     internal_static_com_github_kornilova_l_protos_src_Event_Exit_fieldAccessorTable = new

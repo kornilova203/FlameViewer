@@ -33,6 +33,7 @@ class ProfilingMethodVisitor extends AdviceAdapter {
         getThreadId();
         getTime();
         getClassNameAndMethodName();
+        mv.visitLdcInsn(methodDesc);
         getIsStatic();
         getArrayWithParameters();
         initEnterEventData();
@@ -67,7 +68,7 @@ class ProfilingMethodVisitor extends AdviceAdapter {
 
     private void initEnterEventData() {
         mv.visitMethodInsn(INVOKESPECIAL, LOGGER_PACKAGE_NAME + "EnterEventData", "<init>",
-                "(JJLjava/lang/String;Ljava/lang/String;Z[Ljava/lang/Object;)V", false);
+                "(JJLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Z[Ljava/lang/Object;)V", false);
     }
 
     private void createEventData(String type) {

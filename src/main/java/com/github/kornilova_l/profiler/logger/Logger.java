@@ -111,6 +111,7 @@ public class Logger implements Runnable {
         EventProtos.Event.Enter.Builder enterBuilder = EventProtos.Event.Enter.newBuilder()
                 .setMethodName(enterEventData.methodName)
                 .setClassName(enterEventData.className)
+                .setDescription(enterEventData.description)
                 .setIsStatic(enterEventData.isStatic);
         if (enterEventData.parameters != null) {
             for (int i = 0; i < enterEventData.parameters.length; i++) {
