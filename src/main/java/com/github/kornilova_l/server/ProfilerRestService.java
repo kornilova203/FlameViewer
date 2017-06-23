@@ -1,9 +1,8 @@
 package com.github.kornilova_l.server;
 
 import com.github.kornilova_l.profiler.ProfilerFileManager;
-import com.github.kornilova_l.protos.TreeProtos;
 import com.github.kornilova_l.protos.TreesProtos;
-import com.github.kornilova_l.server.trees.TreeConstructor;
+import com.github.kornilova_l.server.trees.TreeBuilder;
 import com.intellij.openapi.util.io.BufferExposingByteArrayOutputStream;
 import com.intellij.openapi.util.io.StreamUtil;
 import io.netty.buffer.Unpooled;
@@ -16,16 +15,12 @@ import org.jetbrains.io.Responses;
 
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Objects;
 
 public class ProfilerRestService extends RestService {
 
     private static final com.intellij.openapi.diagnostic.Logger LOG =
             com.intellij.openapi.diagnostic.Logger.getInstance(ProfilerRestService.class);
-    private File logFile;
-    private TreesProtos.Trees originalTrees;
-    private TreeProtos.Tree fullTree;
-    private TreeProtos.Tree fullBackwardTree;
+    private final TreeBuilder treeBuilder = new TreeBuilder();
 
     @NotNull
     @Override
@@ -55,7 +50,7 @@ public class ProfilerRestService extends RestService {
                           @NotNull ChannelHandlerContext context) throws IOException {
         String uri = urlDecoder.path(); // without parameters
         LOG.info("Lucinda. Request: " + uri);
-        updateLogFile();
+        treeBuilder.updateLogFile();
         switch (uri) {
             case ServerNames.RESULTS:
                 sendStatic(request, context, ServerNames.MAIN_NAME + "/index.html", "text/html");
@@ -77,28 +72,9 @@ public class ProfilerRestService extends RestService {
         return null;
     }
 
-    private void updateLogFile() {
-        File newFile = ProfilerFileManager.getLatestFile();
-        if (newFile == null) {
-            throw new AssertionError("No log file found");
-        }
-        if (logFile == null || !Objects.equals(newFile.getAbsolutePath(), logFile.getAbsolutePath())) {
-            logFile = newFile;
-            removeTrees();
-        }
-    }
-
-    private void removeTrees() {
-        originalTrees = null;
-        fullTree = null;
-        fullBackwardTree = null;
-    }
-
     private void createAndSendTrees(FullHttpRequest request, ChannelHandlerContext context) {
-        if (originalTrees == null) {
-            originalTrees = constructOriginalTrees();
-        }
-        sendTrees(request, context, originalTrees);
+        TreesProtos.Trees trees = treeBuilder.getOriginalTrees();
+        sendTrees(request, context, trees);
     }
 
     private static void sendTrees(FullHttpRequest request,
@@ -110,12 +86,6 @@ public class ProfilerRestService extends RestService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    private TreesProtos.Trees constructOriginalTrees() {
-        LOG.info("Open file: " + logFile.getAbsolutePath());
-        TreeConstructor treeConstructor = new TreeConstructor(logFile);
-        return treeConstructor.constructOriginalTrees();
     }
 
     private static void sendStatic(FullHttpRequest request,

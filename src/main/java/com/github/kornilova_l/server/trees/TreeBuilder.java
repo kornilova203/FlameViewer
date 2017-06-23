@@ -1,5 +1,6 @@
 package com.github.kornilova_l.server.trees;
 
+import com.github.kornilova_l.profiler.ProfilerFileManager;
 import com.github.kornilova_l.protos.EventProtos;
 import com.github.kornilova_l.protos.TreeProtos;
 import com.github.kornilova_l.protos.TreesProtos;
@@ -7,18 +8,49 @@ import com.intellij.openapi.diagnostic.Logger;
 
 import java.io.*;
 import java.util.HashMap;
+import java.util.Objects;
 
-public class TreeConstructor {
-    static final Logger LOG = Logger.getInstance(TreeConstructor.class);
-    private final File file;
+public class TreeBuilder {
+    static final Logger LOG = Logger.getInstance(TreeBuilder.class);
+    private File logFile;
+    private TreesProtos.Trees originalTrees;
+    private TreeProtos.Tree fullTree;
+    private TreeProtos.Tree fullBackwardTree;
 
-    public TreeConstructor(File file) {
-        this.file = file;
+    public void updateLogFile() {
+        File newFile = ProfilerFileManager.getLatestFile();
+        if (newFile == null) {
+            throw new AssertionError("No log file found");
+        }
+        if (logFile == null || !Objects.equals(newFile.getAbsolutePath(), logFile.getAbsolutePath())) {
+            logFile = newFile;
+            removeTrees();
+        }
     }
 
-    public TreesProtos.Trees constructOriginalTrees() {
-        LOG.info("I will process this file: " + file.getAbsolutePath());
-        try (InputStream inputStream = new FileInputStream(file)) {
+    private void removeTrees() {
+        originalTrees = null;
+        fullTree = null;
+        fullBackwardTree = null;
+    }
+
+    /**
+     * Get original tree.
+     * @return TreesProtos.Trees. Returning Trees object may not hove any Tree objects inside.
+     */
+    public TreesProtos.Trees getOriginalTrees() {
+        if (logFile == null) {
+            throw new AssertionError("Log file was not added");
+        }
+        if (originalTrees == null) {
+            originalTrees = constructOriginalTrees();
+        }
+        return originalTrees;
+    }
+
+    private TreesProtos.Trees constructOriginalTrees() {
+        LOG.info("Original tree will be built from this file: " + logFile.getAbsolutePath());
+        try (InputStream inputStream = new FileInputStream(logFile)) {
             HashMap<Long, OriginalTree> trees = new HashMap<>();
             EventProtos.Event event = EventProtos.Event.parseDelimitedFrom(inputStream);
             long timeOfLastEvent = event.getTime();
@@ -52,10 +84,9 @@ public class TreeConstructor {
     }
 
     public static void main(String[] args) throws IOException {
-        TreeConstructor treeConstructor = new TreeConstructor(
-                new File("out/events196.ser")
-        );
-        TreesProtos.Trees trees = treeConstructor.constructOriginalTrees();
+        TreeBuilder treeBuilder = new TreeBuilder();
+        treeBuilder.updateLogFile();
+        TreesProtos.Trees trees = treeBuilder.getOriginalTrees();
         try (OutputStream outputStream = new FileOutputStream("out/trees12.ser")) {
             trees.writeTo(outputStream);
         }
