@@ -5,7 +5,7 @@ import com.github.kornilova_l.protos.TreeProtos;
 
 import java.util.LinkedList;
 
-class OriginalTree {
+class OriginalTreeBuilder {
     private final LinkedList<UnfinishedNode> unfinishedNodesStack = new LinkedList<>();
     private TreeProtos.Tree.Builder treeBuilder = TreeProtos.Tree.newBuilder();
     private TreeProtos.Tree tree = null;
@@ -17,7 +17,7 @@ class OriginalTree {
         final TreeProtos.Tree.Node.Builder nodeBuilder = TreeProtos.Tree.Node.newBuilder();
     }
 
-    OriginalTree(long startTime, long threadId) {
+    OriginalTreeBuilder(long startTime, long threadId) {
         treeBuilder.setTreeInfo(
                 TreeProtos.Tree.TreeInfo.newBuilder()
                         .setThreadId(threadId)
