@@ -1,13 +1,11 @@
 package com.github.kornilova_l.server.trees;
 
 import com.github.kornilova_l.profiler.ProfilerFileManager;
-import com.github.kornilova_l.protos.EventProtos;
 import com.github.kornilova_l.protos.TreeProtos;
 import com.github.kornilova_l.protos.TreesProtos;
 import com.intellij.openapi.diagnostic.Logger;
 
 import java.io.*;
-import java.util.HashMap;
 import java.util.Objects;
 
 public class TreeBuilder {
@@ -42,7 +40,7 @@ public class TreeBuilder {
     public TreesProtos.Trees getOriginalTrees() {
         updateLogFile();
         if (originalTrees == null) {
-            originalTrees = buildOriginalTrees();
+            originalTrees = OriginalTreesBuilder.buildOriginalTrees(logFile);
         }
         return originalTrees;
     }
@@ -52,51 +50,19 @@ public class TreeBuilder {
      * @return TreeProtos.Tree object. Tree may not have any nodes inside (if all methods took <1ms)
      */
     public TreeProtos.Tree getOutgoingCallsTree() {
+        updateLogFile();
         if (outgoingCallsTree == null) {
             outgoingCallsTree = OutgoingCallsTreeBuilder.buildOutgoingCallsTree(getOriginalTrees());
         }
         return outgoingCallsTree;
     }
 
-    private TreesProtos.Trees buildOriginalTrees() {
-        LOG.info("Original tree will be built from this file: " + logFile.getAbsolutePath());
-        try (InputStream inputStream = new FileInputStream(logFile)) {
-            HashMap<Long, OriginalTreeBuilder> trees = new HashMap<>();
-            EventProtos.Event event = EventProtos.Event.parseDelimitedFrom(inputStream);
-            long timeOfLastEvent = event.getTime();
-            while (event != null) {
-                EventProtos.Event finalEvent = event;
-                trees.computeIfAbsent(
-                        event.getThreadId(),
-                        k -> new OriginalTreeBuilder(finalEvent.getTime(), finalEvent.getThreadId())
-                ).addEvent(event);
-                timeOfLastEvent = event.getTime();
-                event = EventProtos.Event.parseDelimitedFrom(inputStream);
-            }
-            return HashMapToTrees(trees, timeOfLastEvent);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    private static TreesProtos.Trees HashMapToTrees(HashMap<Long, OriginalTreeBuilder> trees, long timeOfLastEvent) {
-        TreesProtos.Trees.Builder treesBuilder = TreesProtos.Trees.newBuilder();
-        for (OriginalTreeBuilder originalTreeBuilder : trees.values()) {
-            TreeProtos.Tree tree = originalTreeBuilder.getBuiltTree(timeOfLastEvent);
-            if (tree != null) {
-                treesBuilder.addTrees(
-                        tree
-                );
-            }
-        }
-        return treesBuilder.build();
-    }
-
     public static void main(String[] args) throws IOException {
         TreeBuilder treeBuilder = new TreeBuilder();
-        TreeProtos.Tree fullTree = treeBuilder.getOutgoingCallsTree();
-        System.out.println(fullTree.toString());
+//        TreeProtos.Tree fullTree = treeBuilder.getOutgoingCallsTree();
+//        System.out.println(fullTree.toString());
+        TreesProtos.Trees originalTrees = treeBuilder.getOriginalTrees();
+        System.out.println(originalTrees.toString());
     }
 }
 
