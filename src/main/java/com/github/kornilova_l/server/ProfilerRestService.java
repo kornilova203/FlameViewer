@@ -50,7 +50,6 @@ public class ProfilerRestService extends RestService {
                           @NotNull ChannelHandlerContext context) throws IOException {
         String uri = urlDecoder.path(); // without parameters
         LOG.info("Lucinda. Request: " + uri);
-        treeBuilder.updateLogFile();
         switch (uri) {
             case ServerNames.RESULTS:
                 sendStatic(request, context, ServerNames.MAIN_NAME + "/index.html", "text/html");

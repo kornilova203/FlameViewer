@@ -14,7 +14,7 @@ public class TreeBuilder {
     static final Logger LOG = Logger.getInstance(TreeBuilder.class);
     private File logFile;
     private TreesProtos.Trees originalTrees;
-    private TreeProtos.Tree fullTree;
+    private TreeProtos.Tree outgoingCallsTree;
     private TreeProtos.Tree fullBackwardTree;
 
     public void updateLogFile() {
@@ -30,35 +30,45 @@ public class TreeBuilder {
 
     private void removeTrees() {
         originalTrees = null;
-        fullTree = null;
+        outgoingCallsTree = null;
         fullBackwardTree = null;
     }
 
     /**
      * Get original tree.
+     *
      * @return TreesProtos.Trees. Returning Trees object may not hove any Tree objects inside.
      */
     public TreesProtos.Trees getOriginalTrees() {
-        if (logFile == null) {
-            throw new AssertionError("Log file was not added");
-        }
+        updateLogFile();
         if (originalTrees == null) {
-            originalTrees = constructOriginalTrees();
+            originalTrees = buildOriginalTrees();
         }
         return originalTrees;
     }
 
-    private TreesProtos.Trees constructOriginalTrees() {
+    /**
+     * Get full tree
+     * @return TreeProtos.Tree object. Tree may not have any nodes inside (if all methods took <1ms)
+     */
+    public TreeProtos.Tree getOutgoingCallsTree() {
+        if (outgoingCallsTree == null) {
+            outgoingCallsTree = OutgoingCallsTreeBuilder.buildOutgoingCallsTree(getOriginalTrees());
+        }
+        return outgoingCallsTree;
+    }
+
+    private TreesProtos.Trees buildOriginalTrees() {
         LOG.info("Original tree will be built from this file: " + logFile.getAbsolutePath());
         try (InputStream inputStream = new FileInputStream(logFile)) {
-            HashMap<Long, OriginalTree> trees = new HashMap<>();
+            HashMap<Long, OriginalTreeBuilder> trees = new HashMap<>();
             EventProtos.Event event = EventProtos.Event.parseDelimitedFrom(inputStream);
             long timeOfLastEvent = event.getTime();
             while (event != null) {
                 EventProtos.Event finalEvent = event;
                 trees.computeIfAbsent(
                         event.getThreadId(),
-                        k -> new OriginalTree(finalEvent.getTime(), finalEvent.getThreadId())
+                        k -> new OriginalTreeBuilder(finalEvent.getTime(), finalEvent.getThreadId())
                 ).addEvent(event);
                 timeOfLastEvent = event.getTime();
                 event = EventProtos.Event.parseDelimitedFrom(inputStream);
@@ -70,10 +80,10 @@ public class TreeBuilder {
         return null;
     }
 
-    private static TreesProtos.Trees HashMapToTrees(HashMap<Long, OriginalTree> trees, long timeOfLastEvent) {
+    private static TreesProtos.Trees HashMapToTrees(HashMap<Long, OriginalTreeBuilder> trees, long timeOfLastEvent) {
         TreesProtos.Trees.Builder treesBuilder = TreesProtos.Trees.newBuilder();
-        for (OriginalTree originalTree : trees.values()) {
-            TreeProtos.Tree tree = originalTree.getBuiltTree(timeOfLastEvent);
+        for (OriginalTreeBuilder originalTreeBuilder : trees.values()) {
+            TreeProtos.Tree tree = originalTreeBuilder.getBuiltTree(timeOfLastEvent);
             if (tree != null) {
                 treesBuilder.addTrees(
                         tree
@@ -85,11 +95,8 @@ public class TreeBuilder {
 
     public static void main(String[] args) throws IOException {
         TreeBuilder treeBuilder = new TreeBuilder();
-        treeBuilder.updateLogFile();
-        TreesProtos.Trees trees = treeBuilder.getOriginalTrees();
-        try (OutputStream outputStream = new FileOutputStream("out/trees12.ser")) {
-            trees.writeTo(outputStream);
-        }
+        TreeProtos.Tree fullTree = treeBuilder.getOutgoingCallsTree();
+        System.out.println(fullTree.toString());
     }
 }
 
