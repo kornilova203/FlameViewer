@@ -8,7 +8,7 @@ import "com/github/kornilova_l/protos/src/event.proto";
 
 message Tree {
     TreeInfo tree_info = 1;
-    repeated Node nodes = 2;
+    Node base_node = 2;
     uint32 depth = 3;
     int64 width = 4;
 

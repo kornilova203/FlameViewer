@@ -32,28 +32,17 @@ public final class TreeProtos {
     TreeProtos.Tree.TreeInfoOrBuilder getTreeInfoOrBuilder();
 
     /**
-     * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 2;</code>
+     * <code>.com.github.kornilova_l.protos.Tree.Node base_node = 2;</code>
      */
-    java.util.List<TreeProtos.Tree.Node> 
-        getNodesList();
+    boolean hasBaseNode();
     /**
-     * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 2;</code>
+     * <code>.com.github.kornilova_l.protos.Tree.Node base_node = 2;</code>
      */
-    TreeProtos.Tree.Node getNodes(int index);
+    TreeProtos.Tree.Node getBaseNode();
     /**
-     * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 2;</code>
+     * <code>.com.github.kornilova_l.protos.Tree.Node base_node = 2;</code>
      */
-    int getNodesCount();
-    /**
-     * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 2;</code>
-     */
-    java.util.List<? extends TreeProtos.Tree.NodeOrBuilder> 
-        getNodesOrBuilderList();
-    /**
-     * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 2;</code>
-     */
-    TreeProtos.Tree.NodeOrBuilder getNodesOrBuilder(
-            int index);
+    TreeProtos.Tree.NodeOrBuilder getBaseNodeOrBuilder();
 
     /**
      * <code>uint32 depth = 3;</code>
@@ -77,7 +66,6 @@ public final class TreeProtos {
       super(builder);
     }
     private Tree() {
-      nodes_ = java.util.Collections.emptyList();
       depth_ = 0;
       width_ = 0L;
     }
@@ -121,12 +109,16 @@ public final class TreeProtos {
               break;
             }
             case 18: {
-              if (!((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
-                nodes_ = new java.util.ArrayList<TreeProtos.Tree.Node>();
-                mutable_bitField0_ |= 0x00000002;
+              TreeProtos.Tree.Node.Builder subBuilder = null;
+              if (baseNode_ != null) {
+                subBuilder = baseNode_.toBuilder();
               }
-              nodes_.add(
-                  input.readMessage(TreeProtos.Tree.Node.parser(), extensionRegistry));
+              baseNode_ = input.readMessage(TreeProtos.Tree.Node.parser(), extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(baseNode_);
+                baseNode_ = subBuilder.buildPartial();
+              }
+
               break;
             }
             case 24: {
@@ -147,9 +139,6 @@ public final class TreeProtos {
         throw new com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
-        if (((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
-          nodes_ = java.util.Collections.unmodifiableList(nodes_);
-        }
         makeExtensionsImmutable();
       }
     }
@@ -3629,7 +3618,6 @@ public final class TreeProtos {
 
     }
 
-    private int bitField0_;
     public static final int TREE_INFO_FIELD_NUMBER = 1;
     private TreeProtos.Tree.TreeInfo treeInfo_;
     /**
@@ -3651,39 +3639,25 @@ public final class TreeProtos {
       return getTreeInfo();
     }
 
-    public static final int NODES_FIELD_NUMBER = 2;
-    private java.util.List<TreeProtos.Tree.Node> nodes_;
+    public static final int BASE_NODE_FIELD_NUMBER = 2;
+    private TreeProtos.Tree.Node baseNode_;
     /**
-     * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 2;</code>
+     * <code>.com.github.kornilova_l.protos.Tree.Node base_node = 2;</code>
      */
-    public java.util.List<TreeProtos.Tree.Node> getNodesList() {
-      return nodes_;
+    public boolean hasBaseNode() {
+      return baseNode_ != null;
     }
     /**
-     * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 2;</code>
+     * <code>.com.github.kornilova_l.protos.Tree.Node base_node = 2;</code>
      */
-    public java.util.List<? extends TreeProtos.Tree.NodeOrBuilder> 
-        getNodesOrBuilderList() {
-      return nodes_;
+    public TreeProtos.Tree.Node getBaseNode() {
+      return baseNode_ == null ? TreeProtos.Tree.Node.getDefaultInstance() : baseNode_;
     }
     /**
-     * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 2;</code>
+     * <code>.com.github.kornilova_l.protos.Tree.Node base_node = 2;</code>
      */
-    public int getNodesCount() {
-      return nodes_.size();
-    }
-    /**
-     * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 2;</code>
-     */
-    public TreeProtos.Tree.Node getNodes(int index) {
-      return nodes_.get(index);
-    }
-    /**
-     * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 2;</code>
-     */
-    public TreeProtos.Tree.NodeOrBuilder getNodesOrBuilder(
-        int index) {
-      return nodes_.get(index);
+    public TreeProtos.Tree.NodeOrBuilder getBaseNodeOrBuilder() {
+      return getBaseNode();
     }
 
     public static final int DEPTH_FIELD_NUMBER = 3;
@@ -3719,8 +3693,8 @@ public final class TreeProtos {
       if (treeInfo_ != null) {
         output.writeMessage(1, getTreeInfo());
       }
-      for (int i = 0; i < nodes_.size(); i++) {
-        output.writeMessage(2, nodes_.get(i));
+      if (baseNode_ != null) {
+        output.writeMessage(2, getBaseNode());
       }
       if (depth_ != 0) {
         output.writeUInt32(3, depth_);
@@ -3739,9 +3713,9 @@ public final class TreeProtos {
         size += com.github.kornilova_l.libs.com.google.protobuf.CodedOutputStream
           .computeMessageSize(1, getTreeInfo());
       }
-      for (int i = 0; i < nodes_.size(); i++) {
+      if (baseNode_ != null) {
         size += com.github.kornilova_l.libs.com.google.protobuf.CodedOutputStream
-          .computeMessageSize(2, nodes_.get(i));
+          .computeMessageSize(2, getBaseNode());
       }
       if (depth_ != 0) {
         size += com.github.kornilova_l.libs.com.google.protobuf.CodedOutputStream
@@ -3772,8 +3746,11 @@ public final class TreeProtos {
         result = result && getTreeInfo()
             .equals(other.getTreeInfo());
       }
-      result = result && getNodesList()
-          .equals(other.getNodesList());
+      result = result && (hasBaseNode() == other.hasBaseNode());
+      if (hasBaseNode()) {
+        result = result && getBaseNode()
+            .equals(other.getBaseNode());
+      }
       result = result && (getDepth()
           == other.getDepth());
       result = result && (getWidth()
@@ -3792,9 +3769,9 @@ public final class TreeProtos {
         hash = (37 * hash) + TREE_INFO_FIELD_NUMBER;
         hash = (53 * hash) + getTreeInfo().hashCode();
       }
-      if (getNodesCount() > 0) {
-        hash = (37 * hash) + NODES_FIELD_NUMBER;
-        hash = (53 * hash) + getNodesList().hashCode();
+      if (hasBaseNode()) {
+        hash = (37 * hash) + BASE_NODE_FIELD_NUMBER;
+        hash = (53 * hash) + getBaseNode().hashCode();
       }
       hash = (37 * hash) + DEPTH_FIELD_NUMBER;
       hash = (53 * hash) + getDepth();
@@ -3926,7 +3903,6 @@ public final class TreeProtos {
       private void maybeForceBuilderInitialization() {
         if (com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
                 .alwaysUseFieldBuilders) {
-          getNodesFieldBuilder();
         }
       }
       public Builder clear() {
@@ -3937,11 +3913,11 @@ public final class TreeProtos {
           treeInfo_ = null;
           treeInfoBuilder_ = null;
         }
-        if (nodesBuilder_ == null) {
-          nodes_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000002);
+        if (baseNodeBuilder_ == null) {
+          baseNode_ = null;
         } else {
-          nodesBuilder_.clear();
+          baseNode_ = null;
+          baseNodeBuilder_ = null;
         }
         depth_ = 0;
 
@@ -3969,25 +3945,18 @@ public final class TreeProtos {
 
       public TreeProtos.Tree buildPartial() {
         TreeProtos.Tree result = new TreeProtos.Tree(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
         if (treeInfoBuilder_ == null) {
           result.treeInfo_ = treeInfo_;
         } else {
           result.treeInfo_ = treeInfoBuilder_.build();
         }
-        if (nodesBuilder_ == null) {
-          if (((bitField0_ & 0x00000002) == 0x00000002)) {
-            nodes_ = java.util.Collections.unmodifiableList(nodes_);
-            bitField0_ = (bitField0_ & ~0x00000002);
-          }
-          result.nodes_ = nodes_;
+        if (baseNodeBuilder_ == null) {
+          result.baseNode_ = baseNode_;
         } else {
-          result.nodes_ = nodesBuilder_.build();
+          result.baseNode_ = baseNodeBuilder_.build();
         }
         result.depth_ = depth_;
         result.width_ = width_;
-        result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
       }
@@ -4032,31 +4001,8 @@ public final class TreeProtos {
         if (other.hasTreeInfo()) {
           mergeTreeInfo(other.getTreeInfo());
         }
-        if (nodesBuilder_ == null) {
-          if (!other.nodes_.isEmpty()) {
-            if (nodes_.isEmpty()) {
-              nodes_ = other.nodes_;
-              bitField0_ = (bitField0_ & ~0x00000002);
-            } else {
-              ensureNodesIsMutable();
-              nodes_.addAll(other.nodes_);
-            }
-            onChanged();
-          }
-        } else {
-          if (!other.nodes_.isEmpty()) {
-            if (nodesBuilder_.isEmpty()) {
-              nodesBuilder_.dispose();
-              nodesBuilder_ = null;
-              nodes_ = other.nodes_;
-              bitField0_ = (bitField0_ & ~0x00000002);
-              nodesBuilder_ = 
-                com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
-                   getNodesFieldBuilder() : null;
-            } else {
-              nodesBuilder_.addAllMessages(other.nodes_);
-            }
-          }
+        if (other.hasBaseNode()) {
+          mergeBaseNode(other.getBaseNode());
         }
         if (other.getDepth() != 0) {
           setDepth(other.getDepth());
@@ -4089,7 +4035,6 @@ public final class TreeProtos {
         }
         return this;
       }
-      private int bitField0_;
 
       private TreeProtos.Tree.TreeInfo treeInfo_ = null;
       private com.github.kornilova_l.libs.com.google.protobuf.SingleFieldBuilderV3<
@@ -4208,244 +4153,121 @@ public final class TreeProtos {
         return treeInfoBuilder_;
       }
 
-      private java.util.List<TreeProtos.Tree.Node> nodes_ =
-        java.util.Collections.emptyList();
-      private void ensureNodesIsMutable() {
-        if (!((bitField0_ & 0x00000002) == 0x00000002)) {
-          nodes_ = new java.util.ArrayList<TreeProtos.Tree.Node>(nodes_);
-          bitField0_ |= 0x00000002;
-         }
+      private TreeProtos.Tree.Node baseNode_ = null;
+      private com.github.kornilova_l.libs.com.google.protobuf.SingleFieldBuilderV3<
+          TreeProtos.Tree.Node, TreeProtos.Tree.Node.Builder, TreeProtos.Tree.NodeOrBuilder> baseNodeBuilder_;
+      /**
+       * <code>.com.github.kornilova_l.protos.Tree.Node base_node = 2;</code>
+       */
+      public boolean hasBaseNode() {
+        return baseNodeBuilder_ != null || baseNode_ != null;
       }
+      /**
+       * <code>.com.github.kornilova_l.protos.Tree.Node base_node = 2;</code>
+       */
+      public TreeProtos.Tree.Node getBaseNode() {
+        if (baseNodeBuilder_ == null) {
+          return baseNode_ == null ? TreeProtos.Tree.Node.getDefaultInstance() : baseNode_;
+        } else {
+          return baseNodeBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>.com.github.kornilova_l.protos.Tree.Node base_node = 2;</code>
+       */
+      public Builder setBaseNode(TreeProtos.Tree.Node value) {
+        if (baseNodeBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          baseNode_ = value;
+          onChanged();
+        } else {
+          baseNodeBuilder_.setMessage(value);
+        }
 
-      private com.github.kornilova_l.libs.com.google.protobuf.RepeatedFieldBuilderV3<
-          TreeProtos.Tree.Node, TreeProtos.Tree.Node.Builder, TreeProtos.Tree.NodeOrBuilder> nodesBuilder_;
-
-      /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 2;</code>
-       */
-      public java.util.List<TreeProtos.Tree.Node> getNodesList() {
-        if (nodesBuilder_ == null) {
-          return java.util.Collections.unmodifiableList(nodes_);
-        } else {
-          return nodesBuilder_.getMessageList();
-        }
-      }
-      /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 2;</code>
-       */
-      public int getNodesCount() {
-        if (nodesBuilder_ == null) {
-          return nodes_.size();
-        } else {
-          return nodesBuilder_.getCount();
-        }
-      }
-      /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 2;</code>
-       */
-      public TreeProtos.Tree.Node getNodes(int index) {
-        if (nodesBuilder_ == null) {
-          return nodes_.get(index);
-        } else {
-          return nodesBuilder_.getMessage(index);
-        }
-      }
-      /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 2;</code>
-       */
-      public Builder setNodes(
-          int index, TreeProtos.Tree.Node value) {
-        if (nodesBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureNodesIsMutable();
-          nodes_.set(index, value);
-          onChanged();
-        } else {
-          nodesBuilder_.setMessage(index, value);
-        }
         return this;
       }
       /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 2;</code>
+       * <code>.com.github.kornilova_l.protos.Tree.Node base_node = 2;</code>
        */
-      public Builder setNodes(
-          int index, TreeProtos.Tree.Node.Builder builderForValue) {
-        if (nodesBuilder_ == null) {
-          ensureNodesIsMutable();
-          nodes_.set(index, builderForValue.build());
-          onChanged();
-        } else {
-          nodesBuilder_.setMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 2;</code>
-       */
-      public Builder addNodes(TreeProtos.Tree.Node value) {
-        if (nodesBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureNodesIsMutable();
-          nodes_.add(value);
-          onChanged();
-        } else {
-          nodesBuilder_.addMessage(value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 2;</code>
-       */
-      public Builder addNodes(
-          int index, TreeProtos.Tree.Node value) {
-        if (nodesBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureNodesIsMutable();
-          nodes_.add(index, value);
-          onChanged();
-        } else {
-          nodesBuilder_.addMessage(index, value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 2;</code>
-       */
-      public Builder addNodes(
+      public Builder setBaseNode(
           TreeProtos.Tree.Node.Builder builderForValue) {
-        if (nodesBuilder_ == null) {
-          ensureNodesIsMutable();
-          nodes_.add(builderForValue.build());
+        if (baseNodeBuilder_ == null) {
+          baseNode_ = builderForValue.build();
           onChanged();
         } else {
-          nodesBuilder_.addMessage(builderForValue.build());
+          baseNodeBuilder_.setMessage(builderForValue.build());
         }
+
         return this;
       }
       /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 2;</code>
+       * <code>.com.github.kornilova_l.protos.Tree.Node base_node = 2;</code>
        */
-      public Builder addNodes(
-          int index, TreeProtos.Tree.Node.Builder builderForValue) {
-        if (nodesBuilder_ == null) {
-          ensureNodesIsMutable();
-          nodes_.add(index, builderForValue.build());
+      public Builder mergeBaseNode(TreeProtos.Tree.Node value) {
+        if (baseNodeBuilder_ == null) {
+          if (baseNode_ != null) {
+            baseNode_ =
+              TreeProtos.Tree.Node.newBuilder(baseNode_).mergeFrom(value).buildPartial();
+          } else {
+            baseNode_ = value;
+          }
           onChanged();
         } else {
-          nodesBuilder_.addMessage(index, builderForValue.build());
+          baseNodeBuilder_.mergeFrom(value);
         }
+
         return this;
       }
       /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 2;</code>
+       * <code>.com.github.kornilova_l.protos.Tree.Node base_node = 2;</code>
        */
-      public Builder addAllNodes(
-          Iterable<? extends TreeProtos.Tree.Node> values) {
-        if (nodesBuilder_ == null) {
-          ensureNodesIsMutable();
-          com.github.kornilova_l.libs.com.google.protobuf.AbstractMessageLite.Builder.addAll(
-              values, nodes_);
+      public Builder clearBaseNode() {
+        if (baseNodeBuilder_ == null) {
+          baseNode_ = null;
           onChanged();
         } else {
-          nodesBuilder_.addAllMessages(values);
+          baseNode_ = null;
+          baseNodeBuilder_ = null;
         }
+
         return this;
       }
       /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 2;</code>
+       * <code>.com.github.kornilova_l.protos.Tree.Node base_node = 2;</code>
        */
-      public Builder clearNodes() {
-        if (nodesBuilder_ == null) {
-          nodes_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000002);
-          onChanged();
+      public TreeProtos.Tree.Node.Builder getBaseNodeBuilder() {
+        
+        onChanged();
+        return getBaseNodeFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>.com.github.kornilova_l.protos.Tree.Node base_node = 2;</code>
+       */
+      public TreeProtos.Tree.NodeOrBuilder getBaseNodeOrBuilder() {
+        if (baseNodeBuilder_ != null) {
+          return baseNodeBuilder_.getMessageOrBuilder();
         } else {
-          nodesBuilder_.clear();
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 2;</code>
-       */
-      public Builder removeNodes(int index) {
-        if (nodesBuilder_ == null) {
-          ensureNodesIsMutable();
-          nodes_.remove(index);
-          onChanged();
-        } else {
-          nodesBuilder_.remove(index);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 2;</code>
-       */
-      public TreeProtos.Tree.Node.Builder getNodesBuilder(
-          int index) {
-        return getNodesFieldBuilder().getBuilder(index);
-      }
-      /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 2;</code>
-       */
-      public TreeProtos.Tree.NodeOrBuilder getNodesOrBuilder(
-          int index) {
-        if (nodesBuilder_ == null) {
-          return nodes_.get(index);  } else {
-          return nodesBuilder_.getMessageOrBuilder(index);
+          return baseNode_ == null ?
+              TreeProtos.Tree.Node.getDefaultInstance() : baseNode_;
         }
       }
       /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 2;</code>
+       * <code>.com.github.kornilova_l.protos.Tree.Node base_node = 2;</code>
        */
-      public java.util.List<? extends TreeProtos.Tree.NodeOrBuilder> 
-           getNodesOrBuilderList() {
-        if (nodesBuilder_ != null) {
-          return nodesBuilder_.getMessageOrBuilderList();
-        } else {
-          return java.util.Collections.unmodifiableList(nodes_);
-        }
-      }
-      /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 2;</code>
-       */
-      public TreeProtos.Tree.Node.Builder addNodesBuilder() {
-        return getNodesFieldBuilder().addBuilder(
-            TreeProtos.Tree.Node.getDefaultInstance());
-      }
-      /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 2;</code>
-       */
-      public TreeProtos.Tree.Node.Builder addNodesBuilder(
-          int index) {
-        return getNodesFieldBuilder().addBuilder(
-            index, TreeProtos.Tree.Node.getDefaultInstance());
-      }
-      /**
-       * <code>repeated .com.github.kornilova_l.protos.Tree.Node nodes = 2;</code>
-       */
-      public java.util.List<TreeProtos.Tree.Node.Builder> 
-           getNodesBuilderList() {
-        return getNodesFieldBuilder().getBuilderList();
-      }
-      private com.github.kornilova_l.libs.com.google.protobuf.RepeatedFieldBuilderV3<
+      private com.github.kornilova_l.libs.com.google.protobuf.SingleFieldBuilderV3<
           TreeProtos.Tree.Node, TreeProtos.Tree.Node.Builder, TreeProtos.Tree.NodeOrBuilder> 
-          getNodesFieldBuilder() {
-        if (nodesBuilder_ == null) {
-          nodesBuilder_ = new com.github.kornilova_l.libs.com.google.protobuf.RepeatedFieldBuilderV3<
+          getBaseNodeFieldBuilder() {
+        if (baseNodeBuilder_ == null) {
+          baseNodeBuilder_ = new com.github.kornilova_l.libs.com.google.protobuf.SingleFieldBuilderV3<
               TreeProtos.Tree.Node, TreeProtos.Tree.Node.Builder, TreeProtos.Tree.NodeOrBuilder>(
-                  nodes_,
-                  ((bitField0_ & 0x00000002) == 0x00000002),
+                  getBaseNode(),
                   getParentForChildren(),
                   isClean());
-          nodes_ = null;
+          baseNode_ = null;
         }
-        return nodesBuilder_;
+        return baseNodeBuilder_;
       }
 
       private int depth_ ;
@@ -4580,25 +4402,25 @@ public final class TreeProtos {
       "\n,com/github/kornilova_l/protos/src/tree" +
       ".proto\022!com.github.kornilova_l.protos.sr" +
       "c\032-com/github/kornilova_l/protos/src/eve" +
-      "nt.proto\"\260\005\n\004Tree\022C\n\ttree_info\030\001 \001(\01320.c" +
+      "nt.proto\"\264\005\n\004Tree\022C\n\ttree_info\030\001 \001(\01320.c" +
       "om.github.kornilova_l.protos.src.Tree.Tr" +
-      "eeInfo\022;\n\005nodes\030\002 \003(\0132,.com.github.korni" +
-      "lova_l.protos.src.Tree.Node\022\r\n\005depth\030\003 \001" +
-      "(\r\022\r\n\005width\030\004 \001(\003\032\324\003\n\004Node\022\016\n\006offset\030\001 \001" +
-      "(\003\022\r\n\005width\030\002 \001(\003\022H\n\tnode_info\030\003 \001(\01325.c" +
-      "om.github.kornilova_l.protos.src.Tree.No",
-      "de.NodeInfo\022;\n\005nodes\030\004 \003(\0132,.com.github." +
-      "kornilova_l.protos.src.Tree.Node\032\245\002\n\010Nod" +
-      "eInfo\022\023\n\013method_name\030\001 \001(\t\022\022\n\nclass_name" +
-      "\030\002 \001(\t\022\023\n\013description\030\007 \001(\t\022\021\n\tis_static" +
-      "\030\003 \001(\010\022:\n\nparameters\030\004 \003(\0132&.com.github." +
-      "kornilova_l.protos.src.Var\022>\n\014return_val" +
-      "ue\030\005 \001(\0132&.com.github.kornilova_l.protos" +
-      ".src.VarH\000\022B\n\texception\030\006 \001(\0132-.com.gith" +
-      "ub.kornilova_l.protos.src.Var.ObjectH\000B\010" +
-      "\n\006result\0321\n\010TreeInfo\022\022\n\nstart_time\030\002 \001(\003",
-      "\022\021\n\tthread_id\030\003 \001(\003B\014B\nTreeProtosb\006proto" +
-      "3"
+      "eeInfo\022?\n\tbase_node\030\002 \001(\0132,.com.github.k" +
+      "ornilova_l.protos.src.Tree.Node\022\r\n\005depth" +
+      "\030\003 \001(\r\022\r\n\005width\030\004 \001(\003\032\324\003\n\004Node\022\016\n\006offset" +
+      "\030\001 \001(\003\022\r\n\005width\030\002 \001(\003\022H\n\tnode_info\030\003 \001(\013" +
+      "25.com.github.kornilova_l.protos.Tre",
+      "e.Node.NodeInfo\022;\n\005nodes\030\004 \003(\0132,.com.git" +
+      "hub.kornilova_l.protos.src.Tree.Node\032\245\002\n" +
+      "\010NodeInfo\022\023\n\013method_name\030\001 \001(\t\022\022\n\nclass_" +
+      "name\030\002 \001(\t\022\023\n\013description\030\007 \001(\t\022\021\n\tis_st" +
+      "atic\030\003 \001(\010\022:\n\nparameters\030\004 \003(\0132&.com.git" +
+      "hub.kornilova_l.protos.src.Var\022>\n\014return" +
+      "_value\030\005 \001(\0132&.com.github.kornilova_l.pr" +
+      "otos.src.VarH\000\022B\n\texception\030\006 \001(\0132-.com." +
+      "github.kornilova_l.protos.src.Var.Object" +
+      "H\000B\010\n\006result\0321\n\010TreeInfo\022\022\n\nstart_time\030\002",
+      " \001(\003\022\021\n\tthread_id\030\003 \001(\003B\014B\nTreeProtosb\006p" +
+      "roto3"
     };
     com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -4618,7 +4440,7 @@ public final class TreeProtos {
     internal_static_com_github_kornilova_l_protos_src_Tree_fieldAccessorTable = new
       com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_github_kornilova_l_protos_src_Tree_descriptor,
-        new String[] { "TreeInfo", "Nodes", "Depth", "Width", });
+        new String[] { "TreeInfo", "BaseNode", "Depth", "Width", });
     internal_static_com_github_kornilova_l_protos_src_Tree_Node_descriptor =
       internal_static_com_github_kornilova_l_protos_src_Tree_descriptor.getNestedTypes().get(0);
     internal_static_com_github_kornilova_l_protos_src_Tree_Node_fieldAccessorTable = new
