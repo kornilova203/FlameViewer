@@ -11,7 +11,7 @@ import java.io.InputStream;
 import java.util.HashMap;
 
 class OriginalTreesBuilder {
-    public static TreesProtos.Trees buildOriginalTrees(File logFile) {
+    static TreesProtos.Trees buildOriginalTrees(File logFile) {
         try (InputStream inputStream = new FileInputStream(logFile)) {
             HashMap<Long, OTBuilder> trees = new HashMap<>();
             EventProtos.Event event = EventProtos.Event.parseDelimitedFrom(inputStream);

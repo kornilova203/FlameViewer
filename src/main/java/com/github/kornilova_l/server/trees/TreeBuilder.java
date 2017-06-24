@@ -15,7 +15,7 @@ public class TreeBuilder {
     private TreeProtos.Tree outgoingCallsTree;
     private TreeProtos.Tree fullBackwardTree;
 
-    public void updateLogFile() {
+    private void updateLogFile() {
         File newFile = ProfilerFileManager.getLatestFile();
         if (newFile == null) {
             throw new AssertionError("No log file found");

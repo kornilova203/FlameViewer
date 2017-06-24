@@ -5,7 +5,7 @@ import com.github.kornilova_l.protos.TreesProtos;
 
 import java.util.Objects;
 
-public class OutgoingCallsTreeBuilder {
+class OutgoingCallsTreeBuilder {
     private static TreeProtos.Tree.Builder treeBuilder;
 
     static TreeProtos.Tree buildOutgoingCallsTree(TreesProtos.Trees originalTrees) {

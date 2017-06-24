@@ -5,7 +5,7 @@ import com.github.kornilova_l.protos.TreeProtos;
 
 import java.util.LinkedList;
 
-public class OTBuilder {
+class OTBuilder {
     private LinkedList<TreeProtos.Tree.Node.Builder> callStack;
     private TreeProtos.Tree.Builder treeBuilder = TreeProtos.Tree.newBuilder();
     private TreeProtos.Tree tree = null;
@@ -93,7 +93,7 @@ public class OTBuilder {
         );
     }
 
-    void buildTree(long timeOfLastEvent) {
+    private void buildTree(long timeOfLastEvent) {
         if (callStack.size() == 1) { // if call stack has only one base node (everything is okay)
             finishTreeBuilding(timeOfLastEvent);
         } else { // something went wrong
