@@ -19,7 +19,7 @@ public class Benchmarks {
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void test() {
-        sample.start();
+        sample.run();
     }
 
     @Benchmark
@@ -27,6 +27,6 @@ public class Benchmarks {
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     @Fork(jvmArgs = "-javaagent:/home/lk/java-profiling-plugin/build/libs/javaagent.jar")
     public void testProfiled() {
-        sample.start();
+        sample.run();
     }
 }

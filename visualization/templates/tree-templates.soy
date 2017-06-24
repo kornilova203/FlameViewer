@@ -4,11 +4,18 @@
  * Get section template for tree of particular thread
  * @param threadId Thread id
  * @param canvasHeight Height of canvas
+ * @param canvasWidth
+ * @param canvasOffset
  */
 {template .getSectionForThread}
-<section id="section-{$threadId}">
-<h2>{$threadId}</h2>
-<canvas id="canvas-{$threadId}" width="700" height="{$canvasHeight}"></canvas>
+<section>
+    <h2>{$threadId}</h2>
+        <canvas
+            id="canvas-{$threadId}"
+            width="{$canvasWidth}"
+            height="{$canvasHeight}"
+            style="margin-left:{$canvasOffset}px">
+        </canvas>
 </section>
 {/template}
 
@@ -18,10 +25,9 @@
  * @param startTime
  * @param methodName
  * @param className
- * @param callId
  */
 {template .popupInOriginalTree}
-<div class="detail" id="detail-{$callId}">
+<div class="detail">
     <h3>{$className}.<b>{$methodName}</b></h3>
     <p>Start time: {$startTime}ms</p>
     <p>Duration: {$duration}ms</p>

@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+package com.github.kornilova_l.protos.src;
+
+option java_outer_classname = "EventProtos";
+
+message Event {
+    int64 thread_id = 1;
+    int64 time = 2;
+    oneof info {
+        Enter enter = 3;
+        Exit exit = 4;
+        Exception exception = 5;
+    }
+
+    message Enter {
+        string class_name = 1;
+        string method_name = 2;
+        bool is_static = 3;
+        repeated Var parameters = 4;
+        string description = 5;
+    }
+
+    message Exit {
+        Var return_value = 1;
+    }
+
+    message Exception {
+        Var.Object object = 1;
+    }
+}
+
+message Var {
+    oneof value {
+        sint32 I = 1; // int
+        sint64 J = 2; // long
+        bool Z = 3; // boolean
+        uint32 C = 4; // char
+        sint32 S = 5; // short
+        sint32 B = 6; // byte
+        float F = 7; // float
+        double D = 8; // double
+        Object object = 9; // object
+    }
+
+    message Object {
+        string type = 1;
+        string value = 2;
+    }
+}

@@ -10,9 +10,7 @@
   "license": "ISC",
   "repository": "https://github.com/kornilova-l/java-profiling-plugin",
   "dependencies": {
-    "jquery": "3.2.1",
     "google-protobuf": "3.3.0",
-    "createjs-easeljs": "0.8.2",
     "google-closure-templates": "20150410.0.0"
   },
   "devDependencies": {

@@ -1,7 +1,8 @@
 package com.github.kornilova_l.server;
 
-import com.github.kornilova_l.protos.TreeProtos;
-import com.github.kornilova_l.server.trees.TreeConstructor;
+import com.github.kornilova_l.profiler.ProfilerFileManager;
+import com.github.kornilova_l.protos.TreesProtos;
+import com.github.kornilova_l.server.trees.TreeBuilder;
 import com.intellij.openapi.util.io.BufferExposingByteArrayOutputStream;
 import com.intellij.openapi.util.io.StreamUtil;
 import io.netty.buffer.Unpooled;
@@ -12,12 +13,14 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.ide.RestService;
 import org.jetbrains.io.Responses;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 
 public class ProfilerRestService extends RestService {
+
+    private static final com.intellij.openapi.diagnostic.Logger LOG =
+            com.intellij.openapi.diagnostic.Logger.getInstance(ProfilerRestService.class);
+    private final TreeBuilder treeBuilder = new TreeBuilder();
 
     @NotNull
     @Override
@@ -45,15 +48,14 @@ public class ProfilerRestService extends RestService {
     public String execute(@NotNull QueryStringDecoder urlDecoder,
                           @NotNull FullHttpRequest request,
                           @NotNull ChannelHandlerContext context) throws IOException {
-        String uri = urlDecoder.uri();
-        LOG.info("Request: " + uri);
+        String uri = urlDecoder.path(); // without parameters
+        LOG.info("Lucinda. Request: " + uri);
         switch (uri) {
             case ServerNames.RESULTS:
                 sendStatic(request, context, ServerNames.MAIN_NAME + "/index.html", "text/html");
                 break;
             case ServerNames.ORIGINAL_TREE:
-                TreeProtos.Tree tree = constructTimeTree();
-                sendTree(request, context, tree);
+                createAndSendTrees(request, context);
                 break;
             default:
                 if (ServerNames.CSS_PATTERN.matcher(uri).matches()) {
@@ -69,39 +71,49 @@ public class ProfilerRestService extends RestService {
         return null;
     }
 
-    private void sendTree(FullHttpRequest request,
-                          ChannelHandlerContext context,
-                          TreeProtos.Tree tree) {
+    private void createAndSendTrees(FullHttpRequest request, ChannelHandlerContext context) {
+        TreesProtos.Trees trees = treeBuilder.getOriginalTrees();
+        sendTrees(request, context, trees);
+    }
+
+    private static void sendTrees(FullHttpRequest request,
+                                  ChannelHandlerContext context,
+                                  TreesProtos.Trees trees) {
+        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+            trees.writeTo(outputStream);
+            sendBytes(request, context, "application/octet-stream", outputStream.toByteArray());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void sendStatic(FullHttpRequest request,
+                                   ChannelHandlerContext context,
+                                   String fileName,
+                                   String contentType) throws IOException {
+        LOG.info("Lucinda. Got filename: " + fileName);
+        String filePath = fileName.replaceFirst("/[^/]+/", ProfilerFileManager.getStaticDir().getAbsolutePath() + "/");
+        LOG.info("Lucinda. I will send this file: " + filePath);
+        try (
+                BufferExposingByteArrayOutputStream byteOut = new BufferExposingByteArrayOutputStream();
+                InputStream stream = new FileInputStream(
+                        new File(filePath)
+                )
+        ) {
+            byteOut.write(StreamUtil.loadFromStream(stream));
+            sendBytes(request, context, contentType, byteOut.getInternalBuffer());
+        }
+    }
+
+    private static void sendBytes(FullHttpRequest request,
+                                  ChannelHandlerContext context,
+                                  String contentType,
+                                  byte[] bytes) {
         HttpResponse response = Responses.response(
-                "application/octet-stream",
-                Unpooled.wrappedBuffer(tree.toByteArray())
+                contentType,
+                Unpooled.wrappedBuffer(bytes)
         );
         Responses.addNoCache(response);
         Responses.send(response, context.channel(), request);
-    }
-
-    private TreeProtos.Tree constructTimeTree() {
-        TreeConstructor treeConstructor = new TreeConstructor(
-                new File("/home/lk/java-profiling-plugin/out/events64.ser")
-        );
-        return treeConstructor.constructOriginalTree();
-    }
-
-    private void sendStatic(FullHttpRequest request,
-                            ChannelHandlerContext context,
-                            String fileName,
-                            String contentType) throws IOException {
-        try (
-                BufferExposingByteArrayOutputStream byteOut = new BufferExposingByteArrayOutputStream();
-                InputStream pageStream = getClass().getResourceAsStream(fileName)
-        ) {
-            byteOut.write(StreamUtil.loadFromStream(pageStream));
-            HttpResponse response = Responses.response(
-                    contentType,
-                    Unpooled.wrappedBuffer(byteOut.getInternalBuffer())
-            );
-            Responses.addNoCache(response);
-            Responses.send(response, context.channel(), request);
-        }
     }
 }

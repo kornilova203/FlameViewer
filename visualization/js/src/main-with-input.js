@@ -21,15 +21,18 @@ function drawTrees(trees) {
 }
 
 $(window).on("load", function () {
-    const request = new XMLHttpRequest();
-    request.open("GET", "http://localhost:63343/flamegraph-profiler/trees/original-tree", true);
-    request.responseType = "arraybuffer";
-
-    request.onload = function () {
-        const arrayBuffer = request.response;
-        const byteArray = new Uint8Array(arrayBuffer);
-        const trees = TreesProto.Trees.deserializeBinary(byteArray).getTreesList();
-        drawTrees(trees);
-    };
-    request.send();
+    $('#file').on('change', function (e) {
+        const file = e.target.files[0]; // FileList object
+        const reader = new FileReader();
+        //noinspection JSUnfilteredForInLoop
+        reader.onload = (function (theFile) {
+            reader.readAsArrayBuffer(theFile);
+            reader.addEventListener("load", function () {
+                const arrayBuffer = reader.result;
+                const byteArray = new Uint8Array(arrayBuffer);
+                const trees = TreesProto.Trees.deserializeBinary(byteArray).getTreesList();
+                drawTrees(trees);
+            });
+        })(file);
+    });
 });

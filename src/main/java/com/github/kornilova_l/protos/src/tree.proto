@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package com.github.kornilova_l.protos.src;
+
+option java_outer_classname = "TreeProtos";
+
+import "com/github/kornilova_l/protos/src/event.proto";
+
+message Tree {
+    TreeInfo tree_info = 1;
+    Node base_node = 2;
+    uint32 depth = 3;
+    int64 width = 4;
+
+    message Node {
+        int64 offset = 1; // how much time passed since start of tree
+        int64 width = 2; // how much time did node take
+        NodeInfo node_info = 3;
+        repeated Node nodes = 4;
+
+        message NodeInfo {
+            string method_name = 1;
+            string class_name = 2;
+            string description = 7;
+            bool is_static = 3;
+            repeated com.github.kornilova_l.protos.src.Var parameters = 4; // only for trees which save original call structure
+            oneof result { // only for trees which save original call structure
+                com.github.kornilova_l.protos.src.Var return_value = 5;
+                com.github.kornilova_l.protos.src.Var.Object exception = 6;
+            }
+        }
+    }
+
+    message TreeInfo {
+        int64 start_time = 2; // only for trees which save original call structure
+        int64 thread_id = 3; // only for trees which save original call structure
+    }
+}

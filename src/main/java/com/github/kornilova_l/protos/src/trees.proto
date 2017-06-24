@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package com.github.kornilova_l.protos.src;
+
+option java_outer_classname = "TreesProtos";
+
+import "com/github/kornilova_l/protos/src/tree.proto";
+
+message Trees {
+    repeated com.github.kornilova_l.protos.src.Tree trees = 1;
+}
