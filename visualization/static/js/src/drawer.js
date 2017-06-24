@@ -13,8 +13,8 @@ class Drawer {
         this.canvasHeight = (LAYER_HEIGHT + LAYER_GAP) * this.tree.getDepth() + 70;
         this.threadId = this.tree.getTreeInfo().getThreadId();
 
-        const canvasOffset = (this.tree.getTreeInfo().getStartTime() - minStartTime) / fullDuration * MAIN_WIDTH;
-        this.section = this._createSection(canvasOffset);
+        this.canvasOffset = (this.tree.getTreeInfo().getStartTime() - minStartTime) / fullDuration * MAIN_WIDTH;
+        this.section = this._createSection(this.canvasOffset);
         this._drawTree();
     }
 
@@ -22,7 +22,7 @@ class Drawer {
         this.stage = new createjs.Stage("canvas-" + this.threadId);
         this.stage.enableMouseOver(20);
 
-        this._drawRecursively(this.tree, 0);
+        this._drawRecursively(this.tree.getBaseNode(), 0);
 
         this.stage.update();
     };
@@ -93,6 +93,7 @@ class Drawer {
             }
         ).content;
         const popup = $(popupContent).appendTo(this.section);
+        this._setPopupPosition(popup);
         shape.addEventListener("mouseover", () => {
             popup.show();
         });
@@ -115,5 +116,9 @@ class Drawer {
         this.stage.setChildIndex(text, this.stage.getNumChildren() - 1);
 
         this.stage.addChild(text);
+    }
+
+    _setPopupPosition(popup) {
+        popup.css("left", this.canvasOffset + this._getOffsetXForNode(node));
     }
 }
