@@ -4,16 +4,16 @@
   "description": "flamegraph",
   "main": "index.html",
   "scripts": {
-    "watch-js": "mkdir -p js/out && watchify js/src/main.js -o js/out/main.js -dv"
+    "watch-js": "mkdir -p static/js/out && watchify static/js/src/main.js -o static/js/out/main.js -dv"
   },
   "author": "Liudmila Kornilova",
   "license": "ISC",
   "repository": "https://github.com/kornilova-l/java-profiling-plugin",
   "dependencies": {
-    "google-protobuf": "3.3.0",
-    "google-closure-templates": "20150410.0.0"
+    "google-protobuf": "3.3.0"
   },
   "devDependencies": {
-    "watchify": "latest"
+    "watchify": "latest",
+    "google-closure-templates": "20150410.0.0"
   }
 }

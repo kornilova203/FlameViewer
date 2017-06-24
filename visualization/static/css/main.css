@@ -39,6 +39,7 @@ section {
     background-color: white;
     padding: 0;
     margin-bottom: 30px;
+    position: relative;
 }
 .call-tree {
     position: relative;
@@ -65,7 +66,7 @@ li {
 }
 .call-tree .method-name {
     margin: 0;
-    white-space: nowrap;
+    white-spacerelative: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     font-family: Menlo, sans-serif;
@@ -73,7 +74,7 @@ li {
     color: white;
     padding: 0 0 0 2px;
 }
-.detail {
+.popup {
     background-color: #222;
     font-family: "Menlo", "Gotham Pro", sans-serif;
     font-weight: normal;
@@ -85,15 +86,15 @@ li {
     padding: 10px 15px 15px;
 }
 
-.detail h3 {
+.popup h3 {
     font-size: 14px;
     margin-top: 0;
     margin-bottom: 5px;
 }
-.detail b {
+.popup b {
     font-size: 18px;
 }
-.detail p {
+.popup p {
     margin: 0;
     font-size: 12px;
 }
