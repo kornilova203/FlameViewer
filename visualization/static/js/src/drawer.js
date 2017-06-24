@@ -1,6 +1,7 @@
 const MAIN_WIDTH = 700;
 const LAYER_HEIGHT = 19;
 const LAYER_GAP = 1;
+const POPUP_MARGIN = 4; // have no idea why there is a gap between popup and canvas
 const COLORS = ["#18A3FA", "#0887d7"];
 
 class Drawer {
@@ -71,10 +72,11 @@ class Drawer {
             .beginFill(COLORS[colorId])
             .drawRect(0, 0, this.canvasWidth, LAYER_HEIGHT);
         const offsetX = this._getOffsetXForNode(node);
+        const offsetY = this._flipY(Drawer._calcNormaOffsetY(depth));
         const scaleX = node.getWidth() / this.width;
-        shape.setTransform(offsetX, this._flipY(depth * (LAYER_GAP + LAYER_HEIGHT)), scaleX);
+        shape.setTransform(offsetX, offsetY, scaleX);
         console.log(`draw: ${depth}\t${scaleX}\t${node.getNodeInfo().getMethodName()}`);
-        this._createPopup(node, shape);
+        this._createPopup(node, shape, depth);
         this.stage.addChild(shape);
         return shape;
     }
@@ -83,7 +85,7 @@ class Drawer {
         return (node.getOffset() / this.width) * this.canvasWidth;
     }
 
-    _createPopup(node, shape) {
+    _createPopup(node, shape, depth) {
         const popupContent = templates.tree.popupInOriginalTree(
             {
                 methodName: node.getNodeInfo().getMethodName(),
@@ -93,7 +95,7 @@ class Drawer {
             }
         ).content;
         const popup = $(popupContent).appendTo(this.section);
-        this._setPopupPosition(popup);
+        this._setPopupPosition(popup, node, depth);
         shape.addEventListener("mouseover", () => {
             popup.show();
         });
@@ -118,7 +120,13 @@ class Drawer {
         this.stage.addChild(text);
     }
 
-    _setPopupPosition(popup) {
-        popup.css("left", this.canvasOffset + this._getOffsetXForNode(node));
+    _setPopupPosition(popup, node, depth) {
+        popup
+            .css("left", this.canvasOffset + this._getOffsetXForNode(node))
+            .css("margin-top", - Drawer._calcNormaOffsetY(depth) - POPUP_MARGIN)
+    }
+
+    static _calcNormaOffsetY(depth) {
+        return depth * (LAYER_GAP + LAYER_HEIGHT);
     }
 }
