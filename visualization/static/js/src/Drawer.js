@@ -96,12 +96,7 @@ class Drawer {
         ).content;
         const popup = $(popupContent).appendTo(this.section);
         this._setPopupPosition(popup, node, depth);
-        shape.addEventListener("mouseover", () => {
-            popup.show();
-        });
-        shape.addEventListener("mouseout", () => {
-            popup.hide();
-        });
+        Drawer._addMouseEvents(shape, popup);
     }
 
     _drawLabel(node, depth, shape) {
@@ -128,5 +123,30 @@ class Drawer {
 
     static _calcNormaOffsetY(depth) {
         return depth * (LAYER_GAP + LAYER_HEIGHT);
+    }
+
+    static _addMouseEvents(shape, popup) {
+        let isPopupHovered = false;
+        let isMethodHovered = false;
+        popup.hover(
+            () => {
+                isPopupHovered = true;
+            },
+            () => {
+                isPopupHovered = false;
+                if (!isMethodHovered) {
+                    popup.hide();
+                }
+            });
+        shape.addEventListener("mouseover", () => {
+            isMethodHovered = true;
+            popup.show();
+        });
+        shape.addEventListener("mouseout", () => {
+            isMethodHovered = false;
+            if (!isPopupHovered) {
+                popup.hide();
+            }
+        });
     }
 }

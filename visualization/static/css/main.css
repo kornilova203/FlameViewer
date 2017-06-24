@@ -66,7 +66,6 @@ li {
 }
 .call-tree .method-name {
     margin: 0;
-    white-spacerelative: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     font-family: Menlo, sans-serif;
@@ -81,7 +80,6 @@ li {
     color: white;
     display: none;
     position: absolute;
-    pointer-events: none;
     z-index: 100;
     padding: 10px 15px 15px;
 }
