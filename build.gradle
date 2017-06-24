@@ -68,7 +68,7 @@ task('prepareAndRunIde', dependsOn: [copyStatic, build]) {
 task profileClass(type: JavaExec, dependsOn: [jar]) {
     classpath = sourceSets.main.runtimeClasspath
     main = "com.github.kornilova_l.samples.Sample"
-    jvmArgs += ["-javaagent:${jar.getArchivePath()}=/home/lk/java-profiling-plugin/agent-config/agent01.config"]
+    jvmArgs += ["-javaagent:${jar.getArchivePath()}=agent-config/agent01.config"]
 }
 
 jmh {

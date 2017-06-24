@@ -1,8 +1,8 @@
 ```bash
 # Java
-protoc -I=src/main/java --java_out=src/main/java src/main/java/com/github/kornilova_l/protos/src/event.proto
-protoc -I=src/main/java --java_out=src/main/java src/main/java/com/github/kornilova_l/protos/src/tree.proto
-protoc -I=src/main/java --java_out=src/main/java src/main/java/com/github/kornilova_l/protos/src/trees.proto
+protoc -I=src/main/java --java_out=src/main/java src/main/java/com/github/kornilova_l/protos/event.proto
+protoc -I=src/main/java --java_out=src/main/java src/main/java/com/github/kornilova_l/protos/tree.proto
+protoc -I=src/main/java --java_out=src/main/java src/main/java/com/github/kornilova_l/protos/trees.proto
 
 # JavaScript
 cd src/main/java

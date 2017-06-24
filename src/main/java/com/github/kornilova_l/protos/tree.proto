@@ -1,10 +1,10 @@
 syntax = "proto3";
 
-package com.github.kornilova_l.protos.src;
+package com.github.kornilova_l.protos;
 
 option java_outer_classname = "TreeProtos";
 
-import "com/github/kornilova_l/protos/src/event.proto";
+import "com/github/kornilova_l/protos/event.proto";
 
 message Tree {
     TreeInfo tree_info = 1;
@@ -23,10 +23,10 @@ message Tree {
             string class_name = 2;
             string description = 7;
             bool is_static = 3;
-            repeated com.github.kornilova_l.protos.src.Var parameters = 4; // only for trees which save original call structure
+            repeated com.github.kornilova_l.protos.Var parameters = 4; // only for trees which save original call structure
             oneof result { // only for trees which save original call structure
-                com.github.kornilova_l.protos.src.Var return_value = 5;
-                com.github.kornilova_l.protos.src.Var.Object exception = 6;
+                com.github.kornilova_l.protos.Var return_value = 5;
+                com.github.kornilova_l.protos.Var.Object exception = 6;
             }
         }
     }
