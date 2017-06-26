@@ -8,7 +8,7 @@ npm run watch-js
 
 # if template was changed
 java -jar node_modules/google-closure-templates/javascript/SoyToJsSrcCompiler.jar \
-    --outputPathFormat js/generated/tree-templates.js \
+    --outputPathFormat static/js/generated/tree-templates.js \
     --srcs templates/tree-templates.soy 
     
 cp -r static/* /home/lk/.flamegraph-profiler/static

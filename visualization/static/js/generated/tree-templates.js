@@ -19,7 +19,7 @@ if (goog.DEBUG) {
 
 
 templates.tree.getBaseSection = function(opt_data, opt_ignored) {
-  return soydata.VERY_UNSAFE.ordainSanitizedHtml('<section><canvas>id="canvas" width="' + soy.$$escapeHtml(opt_data.canvasWidth) + '" height="' + soy.$$escapeHtml(opt_data.canvasHeight) + '"</canvas></section>');
+  return soydata.VERY_UNSAFE.ordainSanitizedHtml('<section><canvas id="canvas">width="' + soy.$$escapeHtml(opt_data.canvasWidth) + '" height="' + soy.$$escapeHtml(opt_data.canvasHeight) + '"</canvas></section>');
 };
 if (goog.DEBUG) {
   templates.tree.getBaseSection.soyTemplateName = 'templates.tree.getBaseSection';
@@ -27,7 +27,7 @@ if (goog.DEBUG) {
 
 
 templates.tree.callTreePopup = function(opt_data, opt_ignored) {
-  return soydata.VERY_UNSAFE.ordainSanitizedHtml('<div class="popup popupOT"><h3>' + soy.$$escapeHtml(opt_data.className) + '.<b>' + soy.$$escapeHtml(opt_data.methodName) + '</b></h3><p>Start time: ' + soy.$$escapeHtml(opt_data.startTime) + 'ms</p><p>Duration: ' + soy.$$escapeHtml(opt_data.duration) + 'ms</p></div>');
+  return soydata.VERY_UNSAFE.ordainSanitizedHtml('<div class="popup"><h3>' + soy.$$escapeHtml(opt_data.className) + '.<b>' + soy.$$escapeHtml(opt_data.methodName) + '</b></h3><p>Start time: ' + soy.$$escapeHtml(opt_data.startTime) + 'ms</p><p>Duration: ' + soy.$$escapeHtml(opt_data.duration) + 'ms</p></div>');
 };
 if (goog.DEBUG) {
   templates.tree.callTreePopup.soyTemplateName = 'templates.tree.callTreePopup';
@@ -35,7 +35,7 @@ if (goog.DEBUG) {
 
 
 templates.tree.basePopup = function(opt_data, opt_ignored) {
-  return soydata.VERY_UNSAFE.ordainSanitizedHtml('<div class="popup popupOT"><h3>' + soy.$$escapeHtml(opt_data.className) + '.<b>' + soy.$$escapeHtml(opt_data.methodName) + '</b></h3><p>Duration: ' + soy.$$escapeHtml(opt_data.duration) + 'ms</p></div>');
+  return soydata.VERY_UNSAFE.ordainSanitizedHtml('<div class="popup"><h3>' + soy.$$escapeHtml(opt_data.className) + '.<b>' + soy.$$escapeHtml(opt_data.methodName) + '</b></h3><p>Duration: ' + soy.$$escapeHtml(opt_data.duration) + 'ms</p></div>');
 };
 if (goog.DEBUG) {
   templates.tree.basePopup.soyTemplateName = 'templates.tree.basePopup';

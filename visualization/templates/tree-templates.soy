@@ -26,8 +26,7 @@
  */
 {template .getBaseSection}
 <section>
-        <canvas>
-            id="canvas"
+        <canvas id="canvas">
             width="{$canvasWidth}"
             height="{$canvasHeight}"
         </canvas>
@@ -42,7 +41,7 @@
  * @param className
  */
 {template .callTreePopup}
-<div class="popup popupOT">
+<div class="popup">
     <h3>{$className}.<b>{$methodName}</b></h3>
     <p>Start time: {$startTime}ms</p>
     <p>Duration: {$duration}ms</p>
@@ -56,7 +55,7 @@
  * @param className
  */
 {template .basePopup}
-<div class="popup popupOT">
+<div class="popup">
     <h3>{$className}.<b>{$methodName}</b></h3>
     <p>Duration: {$duration}ms</p>
 </div>
