@@ -12,7 +12,7 @@ public class TreeBuilder {
     static final Logger LOG = Logger.getInstance(TreeBuilder.class);
     private File logFile;
     private TreesProtos.Trees originalTrees;
-    private TreeProtos.Tree outgoingCallsTree;
+    private TreeProtos.Tree outgoingCalls;
     private TreeProtos.Tree fullBackwardTree;
 
     private void updateLogFile() {
@@ -28,7 +28,7 @@ public class TreeBuilder {
 
     private void removeTrees() {
         originalTrees = null;
-        outgoingCallsTree = null;
+        outgoingCalls = null;
         fullBackwardTree = null;
     }
 
@@ -37,10 +37,10 @@ public class TreeBuilder {
      *
      * @return TreesProtos.Trees. Returning Trees object may not hove any Tree objects inside.
      */
-    public TreesProtos.Trees getOriginalTrees() {
+    public TreesProtos.Trees getCallTree() {
         updateLogFile();
         if (originalTrees == null) {
-            originalTrees = OriginalTreesBuilder.buildOriginalTrees(logFile);
+            originalTrees = CallTreesBuilder.buildOriginalTrees(logFile);
         }
         return originalTrees;
     }
@@ -49,20 +49,21 @@ public class TreeBuilder {
      * Get full tree
      * @return TreeProtos.Tree object. Tree may not have any nodes inside (if all methods took <1ms)
      */
-    public TreeProtos.Tree getOutgoingCallsTree() {
+    public TreeProtos.Tree getOutgoingCalls() {
         updateLogFile();
-        if (outgoingCallsTree == null) {
-            outgoingCallsTree = OutgoingCallsTreeBuilder.buildOutgoingCallsTree(getOriginalTrees());
+        if (outgoingCalls == null) {
+            outgoingCalls = OutgoingCallsBuilder.buildOutgoingCalls(getCallTree());
         }
-        return outgoingCallsTree;
+        System.out.println("outgoing calls: " + outgoingCalls);
+        return outgoingCalls;
     }
 
     public static void main(String[] args) throws IOException {
         TreeBuilder treeBuilder = new TreeBuilder();
-//        TreeProtos.Tree fullTree = treeBuilder.getOutgoingCallsTree();
-//        System.out.println(fullTree.toString());
-        TreesProtos.Trees originalTrees = treeBuilder.getOriginalTrees();
-        System.out.println(originalTrees.toString());
+        TreeProtos.Tree outgoingCalls = treeBuilder.getOutgoingCalls();
+//        System.out.println(outgoingCalls.toString());
+//        TreesProtos.Trees originalTrees = treeBuilder.getCallTree();
+//        System.out.println(originalTrees.toString());
     }
 }
 

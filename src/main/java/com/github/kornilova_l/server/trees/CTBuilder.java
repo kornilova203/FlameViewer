@@ -5,14 +5,14 @@ import com.github.kornilova_l.protos.TreeProtos;
 
 import java.util.LinkedList;
 
-class OTBuilder {
+class CTBuilder {
     private LinkedList<TreeProtos.Tree.Node.Builder> callStack;
     private TreeProtos.Tree.Builder treeBuilder = TreeProtos.Tree.newBuilder();
     private TreeProtos.Tree tree = null;
     private int maxDepth = 0;
     private int currentDepth = 0;
 
-    OTBuilder(long startTime, long threadId) {
+    CTBuilder(long startTime, long threadId) {
         treeBuilder.setTreeInfo(
                 TreeProtos.Tree.TreeInfo.newBuilder()
                         .setThreadId(threadId)
@@ -99,9 +99,7 @@ class OTBuilder {
         } else { // something went wrong
             finishAllCallsInStack(timeOfLastEvent);
         }
-//        System.out.println("treeBuilder: " + treeBuilder);
         tree = treeBuilder.build();
-        System.out.println("tree: " + tree);
         treeBuilder = null;
     }
 

@@ -1,6 +1,7 @@
 package com.github.kornilova_l.server;
 
 import com.github.kornilova_l.profiler.ProfilerFileManager;
+import com.github.kornilova_l.protos.TreeProtos;
 import com.github.kornilova_l.protos.TreesProtos;
 import com.github.kornilova_l.server.trees.TreeBuilder;
 import com.intellij.openapi.util.io.BufferExposingByteArrayOutputStream;
@@ -52,18 +53,27 @@ public class ProfilerRestService extends RestService {
         LOG.info("Lucinda. Request: " + uri);
         switch (uri) {
             case ServerNames.CALL_TREE:
+                LOG.info("call-tree.html");
                 sendStatic(request, context, ServerNames.MAIN_NAME + "/call-tree.html", "text/html");
                 break;
             case ServerNames.OUTGOING_CALLS:
+                LOG.info("outgoing-calls.html");
                 sendStatic(request, context, ServerNames.MAIN_NAME + "/outgoing-calls.html", "text/html");
                 break;
             case ServerNames.CALL_TREE_JS_REQUEST:
-                createAndSendTrees(request, context);
+                LOG.info("CALL_TREE_JS_REQUEST");
+                sendTrees(request, context, treeBuilder.getCallTree());
+                break;
+            case ServerNames.OUTGOING_CALLS_JS_REQUEST:
+                LOG.info("OUTGOING_CALLS_JS_REQUEST");
+                sendTree(request, context, treeBuilder.getOutgoingCalls());
                 break;
             default:
                 if (ServerNames.CSS_PATTERN.matcher(uri).matches()) {
+                    LOG.info("CSS");
                     sendStatic(request, context, uri, "text/css");
                 } else if (ServerNames.JS_PATTERN.matcher(uri).matches()) {
+                    LOG.info("JS");
                     sendStatic(request, context, uri, "text/javascript");
                 } else if (ServerNames.FONT_PATTERN.matcher(uri).matches()) {
                     sendStatic(request, context, uri, "application/octet-stream");
@@ -74,16 +84,24 @@ public class ProfilerRestService extends RestService {
         return null;
     }
 
-    private void createAndSendTrees(FullHttpRequest request, ChannelHandlerContext context) {
-        TreesProtos.Trees trees = treeBuilder.getOriginalTrees();
-        sendTrees(request, context, trees);
-    }
-
     private static void sendTrees(FullHttpRequest request,
                                   ChannelHandlerContext context,
                                   TreesProtos.Trees trees) {
-        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        try {
             trees.writeTo(outputStream);
+            sendBytes(request, context, "application/octet-stream", outputStream.toByteArray());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void sendTree(FullHttpRequest request,
+                                 ChannelHandlerContext context,
+                                 TreeProtos.Tree tree) {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        try {
+            tree.writeTo(outputStream);
             sendBytes(request, context, "application/octet-stream", outputStream.toByteArray());
         } catch (IOException e) {
             e.printStackTrace();
