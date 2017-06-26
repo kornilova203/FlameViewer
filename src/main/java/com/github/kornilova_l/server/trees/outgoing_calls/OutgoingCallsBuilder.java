@@ -1,15 +1,15 @@
-package com.github.kornilova_l.server.trees;
+package com.github.kornilova_l.server.trees.outgoing_calls;
 
 import com.github.kornilova_l.protos.TreeProtos;
 import com.github.kornilova_l.protos.TreesProtos;
 
 import java.util.Objects;
 
-class OutgoingCallsBuilder {
+public class OutgoingCallsBuilder {
     private static TreeProtos.Tree.Builder treeBuilder;
     private static int maxDepth = 0;
 
-    static TreeProtos.Tree buildOutgoingCalls(TreesProtos.Trees callTrees) {
+    public static TreeProtos.Tree buildOutgoingCalls(TreesProtos.Trees callTrees) {
         initTreeBuilder();
         for (TreeProtos.Tree callTree : callTrees.getTreesList()) {
             addTree(treeBuilder.getBaseNodeBuilder(), callTree.getBaseNode());
@@ -119,5 +119,9 @@ class OutgoingCallsBuilder {
             treeWidth += node.getWidth();
         }
         treeBuilder.setWidth(treeWidth);
+    }
+
+    public static TreeProtos.Tree buildOutgoingCalls(TreeProtos.Tree outgoingCalls, String methodName) {
+        return null;
     }
 }

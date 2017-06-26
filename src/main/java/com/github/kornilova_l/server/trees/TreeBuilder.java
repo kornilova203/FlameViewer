@@ -3,9 +3,13 @@ package com.github.kornilova_l.server.trees;
 import com.github.kornilova_l.profiler.ProfilerFileManager;
 import com.github.kornilova_l.protos.TreeProtos;
 import com.github.kornilova_l.protos.TreesProtos;
+import com.github.kornilova_l.server.trees.call_tree.CallTreesBuilder;
+import com.github.kornilova_l.server.trees.outgoing_calls.OutgoingCallsBuilder;
 import com.intellij.openapi.diagnostic.Logger;
 
 import java.io.*;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 
 public class TreeBuilder {
@@ -13,6 +17,7 @@ public class TreeBuilder {
     private File logFile;
     private TreesProtos.Trees originalTrees;
     private TreeProtos.Tree outgoingCalls;
+    private HashMap<String, TreeProtos.Tree> methodOutgoingCalls = new HashMap<>();
     private TreeProtos.Tree fullBackwardTree;
 
     private void updateLogFile() {
@@ -56,6 +61,17 @@ public class TreeBuilder {
         }
         System.out.println("outgoing calls: " + outgoingCalls);
         return outgoingCalls;
+    }
+
+    public TreeProtos.Tree getOutgoingCalls(List<String> getValues) {
+        if (getValues.size() != 1) {
+            LOG.error("Size of get parameter != 1");
+        }
+        String methodName = getValues.get(0);
+        return methodOutgoingCalls.computeIfAbsent(
+                methodName,
+                n -> OutgoingCallsBuilder.buildOutgoingCalls(getOutgoingCalls(), n)
+        );
     }
 
     public static void main(String[] args) throws IOException {

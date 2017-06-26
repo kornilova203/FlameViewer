@@ -41,7 +41,11 @@ public class ProfilerRestService extends HttpRequestHandler {
                 break;
             case ServerNames.OUTGOING_CALLS_JS_REQUEST:
                 LOG.info("OUTGOING_CALLS_JS_REQUEST");
-                sendTree(context, treeBuilder.getOutgoingCalls());
+                if (urlDecoder.parameters().containsKey("method")) {
+                    sendTree(context, treeBuilder.getOutgoingCalls(urlDecoder.parameters().get("method")));
+                } else {
+                    sendTree(context, treeBuilder.getOutgoingCalls());
+                }
                 break;
             default:
                 if (ServerNames.CSS_PATTERN.matcher(uri).matches()) {

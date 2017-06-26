@@ -1,4 +1,4 @@
-package com.github.kornilova_l.server.trees;
+package com.github.kornilova_l.server.trees.call_tree;
 
 import com.github.kornilova_l.protos.EventProtos;
 import com.github.kornilova_l.protos.TreeProtos;
