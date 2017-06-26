@@ -92,7 +92,8 @@ class BaseDrawer {
                 className: node.getNodeInfo().getClassName(),
                 desc: node.getNodeInfo().getDescription(),
                 isStatic: node.getNodeInfo().getIsStatic(),
-                duration: node.getWidth()
+                duration: node.getWidth(),
+                count: node.getNodeInfo().getCount()
             }
         ).content;
         const popup = $(popupContent).appendTo(this.section);

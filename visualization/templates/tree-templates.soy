@@ -55,6 +55,7 @@
  * @param className
  * @param isStatic
  * @param desc
+ * @param count
  */
 {template .basePopup}
 <div class="popup">
@@ -63,5 +64,6 @@
     </a>
     <h3>{$className}.{$methodName}</h3>
     <p>Duration: {$duration}ms</p>
+    <p>{$count} call{if $count > 1}s{/if}</p>
 </div>
 {/template}
