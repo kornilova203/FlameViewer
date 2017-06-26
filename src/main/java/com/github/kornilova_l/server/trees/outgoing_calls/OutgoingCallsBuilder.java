@@ -70,12 +70,12 @@ public class OutgoingCallsBuilder {
         TreeProtos.Tree.Node.NodeInfo CTNodeInfo = nodeInCT.getNodeInfo();
         return TreeProtos.Tree.Node.newBuilder()
                 .setNodeInfo(
-                        TreeProtos.Tree.Node.NodeInfo.newBuilder()
-                                .setClassName(CTNodeInfo.getClassName())
-                                .setMethodName(CTNodeInfo.getMethodName())
-                                .setDescription(CTNodeInfo.getDescription())
-                                .setIsStatic(CTNodeInfo.getIsStatic())
-                                .build()
+                        OutgoingCallsHelper.createNodeInfo(
+                                CTNodeInfo.getClassName(),
+                                CTNodeInfo.getMethodName(),
+                                CTNodeInfo.getDescription(),
+                                CTNodeInfo.getIsStatic()
+                        )
                 )
                 .setWidth(nodeInCT.getWidth());
     }

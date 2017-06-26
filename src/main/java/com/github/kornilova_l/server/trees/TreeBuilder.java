@@ -69,12 +69,20 @@ public class TreeBuilder {
         String className = getParamForKey(parameters, "class");
         String methodName = getParamForKey(parameters, "method");
         String desc = getParamForKey(parameters, "desc");
-        if (methodName == null || className == null || desc == null) {
+        String isStaticString = getParamForKey(parameters, "isStatic");
+        if (methodName == null || className == null || desc == null || isStaticString == null) {
             return null;
         }
+        boolean isStatic = Objects.equals(isStaticString, "true");
         return methodOutgoingCalls.computeIfAbsent(
                 className + methodName + desc,
-                n -> MethodOutgoingCallsBuilder.buildMethodOutgoingCalls(getOutgoingCalls(), className, methodName, desc)
+                n -> MethodOutgoingCallsBuilder.buildMethodOutgoingCalls(
+                        getOutgoingCalls(),
+                        className,
+                        methodName,
+                        desc,
+                        isStatic
+                )
         );
     }
 
