@@ -1,11 +1,10 @@
-package com.github.kornilova_l.server.trees.outgoing_calls;
+package com.github.kornilova_l.server.trees.accumulative_trees.outgoing_calls;
 
 import com.github.kornilova_l.protos.TreeProtos;
 import com.github.kornilova_l.server.trees.TreeBuilder;
+import com.github.kornilova_l.server.trees.accumulative_trees.AccumulativeTreesHelper;
 
-import static com.github.kornilova_l.server.trees.outgoing_calls.OutgoingCallsHelper.setNodesOffsetRecursively;
-import static com.github.kornilova_l.server.trees.outgoing_calls.OutgoingCallsHelper.setTreeWidth;
-import static com.github.kornilova_l.server.trees.outgoing_calls.OutgoingCallsHelper.updateNodeList;
+import static com.github.kornilova_l.server.trees.accumulative_trees.AccumulativeTreesHelper.*;
 
 public class MethodOutgoingCallsBuilder {
     private static TreeProtos.Tree.Builder treeBuilder;
@@ -35,7 +34,7 @@ public class MethodOutgoingCallsBuilder {
 
     private static void traverseTreeAndFind(TreeProtos.Tree.Node node) {
 
-        if (OutgoingCallsHelper.isSameMethod(wantedMethodNode, node)) {
+        if (AccumulativeTreesHelper.isSameMethod(wantedMethodNode, node)) {
             addNodesRecursively(treeBuilder.getBaseNodeBuilder(), node, 0);
         }
         for (TreeProtos.Tree.Node childNode : node.getNodesList()) {
@@ -60,7 +59,7 @@ public class MethodOutgoingCallsBuilder {
         TreeProtos.Tree.Node.Builder baseNode = TreeProtos.Tree.Node.newBuilder()
                 .addNodes(TreeProtos.Tree.Node.newBuilder()
                         .setNodeInfo(
-                                OutgoingCallsHelper.createNodeInfo(
+                                createNodeInfo(
                                         className,
                                         methodName,
                                         desc,

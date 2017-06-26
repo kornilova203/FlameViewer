@@ -4,9 +4,9 @@ import com.github.kornilova_l.profiler.ProfilerFileManager;
 import com.github.kornilova_l.protos.TreeProtos;
 import com.github.kornilova_l.protos.TreesProtos;
 import com.github.kornilova_l.server.trees.call_tree.CallTreesBuilder;
-import com.github.kornilova_l.server.trees.callers.CallersBuilder;
-import com.github.kornilova_l.server.trees.outgoing_calls.MethodOutgoingCallsBuilder;
-import com.github.kornilova_l.server.trees.outgoing_calls.OutgoingCallsBuilder;
+import com.github.kornilova_l.server.trees.accumulative_trees.callers.CallersBuilder;
+import com.github.kornilova_l.server.trees.accumulative_trees.outgoing_calls.MethodOutgoingCallsBuilder;
+import com.github.kornilova_l.server.trees.accumulative_trees.outgoing_calls.OutgoingCallsBuilder;
 import com.intellij.openapi.diagnostic.Logger;
 
 import java.io.*;

@@ -1,11 +1,11 @@
-package com.github.kornilova_l.server.trees.outgoing_calls;
+package com.github.kornilova_l.server.trees.accumulative_trees.outgoing_calls;
 
 import com.github.kornilova_l.protos.TreeProtos;
 import com.github.kornilova_l.protos.TreesProtos;
 
-import static com.github.kornilova_l.server.trees.outgoing_calls.OutgoingCallsHelper.setNodesOffsetRecursively;
-import static com.github.kornilova_l.server.trees.outgoing_calls.OutgoingCallsHelper.setTreeWidth;
-import static com.github.kornilova_l.server.trees.outgoing_calls.OutgoingCallsHelper.updateNodeList;
+import static com.github.kornilova_l.server.trees.accumulative_trees.AccumulativeTreesHelper.setNodesOffsetRecursively;
+import static com.github.kornilova_l.server.trees.accumulative_trees.AccumulativeTreesHelper.setTreeWidth;
+import static com.github.kornilova_l.server.trees.accumulative_trees.AccumulativeTreesHelper.updateNodeList;
 
 public class OutgoingCallsBuilder {
     private static TreeProtos.Tree.Builder treeBuilder;
