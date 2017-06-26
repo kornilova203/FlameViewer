@@ -89,7 +89,7 @@ class BaseDrawer {
         const popupContent = templates.tree.basePopup(
             {
                 methodName: node.getNodeInfo().getMethodName(),
-                className: node.getNodeInfo().getClassName(),
+                className: node.getNodeInfo().getClassName().split("/").join("."),
                 desc: node.getNodeInfo().getDescription(),
                 isStatic: node.getNodeInfo().getIsStatic(),
                 duration: node.getWidth()

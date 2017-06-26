@@ -8,6 +8,7 @@ function drawTree(tree) {
 }
 
 $(window).on("load", function () {
+    console.log(window.location.href);
     const request = new XMLHttpRequest();
     request.open("GET", "/flamegraph-profiler/trees/outgoing-calls", true);
     request.responseType = "arraybuffer";

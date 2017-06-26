@@ -104,17 +104,17 @@ main li {
 
 .popup h3 {
     font-size: 14px;
-    margin-top: 0;
+    margin-top: 10px;
     margin-bottom: 5px;
 }
 
-.popup b {
-    font-size: 18px;
-}
-
-.popup p {
+.popup p, .popup a {
     margin: 0;
     font-size: 12px;
+}
+
+.popup a {
+    color: rgb(209, 253, 255);
 }
 
 .inputfile {
