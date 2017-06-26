@@ -86,7 +86,7 @@ class Drawer {
     }
 
     _createPopup(node, shape, depth) {
-        const popupContent = templates.tree.popupInOriginalTree(
+        const popupContent = templates.tree.callTreePopup(
             {
                 methodName: node.getNodeInfo().getMethodName(),
                 className: node.getNodeInfo().getClassName(),
