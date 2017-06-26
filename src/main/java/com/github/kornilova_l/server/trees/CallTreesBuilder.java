@@ -11,6 +11,9 @@ import java.io.InputStream;
 import java.util.HashMap;
 
 class CallTreesBuilder {
+    private static final com.intellij.openapi.diagnostic.Logger LOG =
+            com.intellij.openapi.diagnostic.Logger.getInstance(CallTreesBuilder.class);
+
     static TreesProtos.Trees buildOriginalTrees(File logFile) {
         try (InputStream inputStream = new FileInputStream(logFile)) {
             HashMap<Long, CTBuilder> trees = new HashMap<>();
@@ -27,7 +30,7 @@ class CallTreesBuilder {
             }
             return HashMapToTrees(trees, timeOfLastEvent);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.error(e);
         }
         return null;
     }

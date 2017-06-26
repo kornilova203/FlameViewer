@@ -4,15 +4,15 @@ import com.github.kornilova_l.profiler.ProfilerFileManager;
 import com.github.kornilova_l.protos.TreeProtos;
 import com.github.kornilova_l.protos.TreesProtos;
 import com.github.kornilova_l.server.trees.TreeBuilder;
-import com.intellij.openapi.util.io.BufferExposingByteArrayOutputStream;
-import com.intellij.openapi.util.io.StreamUtil;
 import io.netty.buffer.Unpooled;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.*;
+import org.apache.commons.compress.utils.IOUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.ide.RestService;
-import org.jetbrains.io.Responses;
 
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
@@ -50,7 +50,7 @@ public class ProfilerRestService extends RestService {
                           @NotNull FullHttpRequest request,
                           @NotNull ChannelHandlerContext context) throws IOException {
         String uri = urlDecoder.path(); // without parameters
-        LOG.info("Lucinda. Request: " + uri);
+        LOG.info("Request: " + uri);
         switch (uri) {
             case ServerNames.CALL_TREE:
                 LOG.info("call-tree.html");
@@ -92,7 +92,7 @@ public class ProfilerRestService extends RestService {
             trees.writeTo(outputStream);
             sendBytes(request, context, "application/octet-stream", outputStream.toByteArray());
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.error(e);
         }
     }
 
@@ -104,7 +104,7 @@ public class ProfilerRestService extends RestService {
             tree.writeTo(outputStream);
             sendBytes(request, context, "application/octet-stream", outputStream.toByteArray());
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.error(e);
         }
     }
 
@@ -112,17 +112,15 @@ public class ProfilerRestService extends RestService {
                                    ChannelHandlerContext context,
                                    String fileName,
                                    String contentType) throws IOException {
-        LOG.info("Lucinda. Got filename: " + fileName);
+        LOG.info("Got filename: " + fileName);
         String filePath = fileName.replaceFirst("/[^/]+/", ProfilerFileManager.getStaticDir().getAbsolutePath() + "/");
-        LOG.info("Lucinda. I will send this file: " + filePath);
+        LOG.info("This file will be sent: " + filePath);
         try (
-                BufferExposingByteArrayOutputStream byteOut = new BufferExposingByteArrayOutputStream();
-                InputStream stream = new FileInputStream(
+                InputStream inputStream = new FileInputStream(
                         new File(filePath)
                 )
         ) {
-            byteOut.write(StreamUtil.loadFromStream(stream));
-            sendBytes(request, context, contentType, byteOut.getInternalBuffer());
+            sendBytes(request, context, contentType, IOUtils.toByteArray(inputStream));
         }
     }
 
@@ -130,11 +128,13 @@ public class ProfilerRestService extends RestService {
                                   ChannelHandlerContext context,
                                   String contentType,
                                   byte[] bytes) {
-        HttpResponse response = Responses.response(
-                contentType,
+        FullHttpResponse response = new DefaultFullHttpResponse(
+                HttpVersion.HTTP_1_1,
+                HttpResponseStatus.OK,
                 Unpooled.wrappedBuffer(bytes)
         );
-        Responses.addNoCache(response);
-        Responses.send(response, context.channel(), request);
+        response.headers().set("Content-Type", contentType);
+        ChannelFuture f = context.channel().writeAndFlush(response);
+        f.addListener(ChannelFutureListener.CLOSE);
     }
 }
