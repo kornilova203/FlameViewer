@@ -61,7 +61,7 @@ public class TreeBuilder {
         if (outgoingCalls == null) {
             outgoingCalls = OutgoingCallsBuilder.buildOutgoingCalls(getCallTree());
         }
-        System.out.println("outgoing calls: " + outgoingCalls);
+//        System.out.println("outgoing calls: " + outgoingCalls);
         return outgoingCalls;
     }
 
@@ -74,7 +74,7 @@ public class TreeBuilder {
             return null;
         }
         boolean isStatic = Objects.equals(isStaticString, "true");
-        return methodOutgoingCalls.computeIfAbsent(
+        TreeProtos.Tree tree = methodOutgoingCalls.computeIfAbsent(
                 className + methodName + desc,
                 n -> MethodOutgoingCallsBuilder.buildMethodOutgoingCalls(
                         getOutgoingCalls(),
@@ -84,6 +84,8 @@ public class TreeBuilder {
                         isStatic
                 )
         );
+        System.out.println("getOutgoingCalls\n" + tree);
+        return tree;
     }
 
     private static String getParamForKey(Map<String, List<String>> parameters, String key) {

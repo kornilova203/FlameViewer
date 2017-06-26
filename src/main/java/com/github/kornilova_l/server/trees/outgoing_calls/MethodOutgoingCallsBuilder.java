@@ -1,6 +1,7 @@
 package com.github.kornilova_l.server.trees.outgoing_calls;
 
 import com.github.kornilova_l.protos.TreeProtos;
+import com.github.kornilova_l.server.trees.TreeBuilder;
 
 import static com.github.kornilova_l.server.trees.outgoing_calls.OutgoingCallsHelper.setNodesOffsetRecursively;
 import static com.github.kornilova_l.server.trees.outgoing_calls.OutgoingCallsHelper.setTreeWidth;
@@ -69,5 +70,14 @@ public class MethodOutgoingCallsBuilder {
         wantedMethodNode = baseNode.getNodesBuilder(0);
         treeBuilder = TreeProtos.Tree.newBuilder()
                 .setBaseNode(baseNode);
+    }
+
+    public static void main(String[] args) {
+        TreeProtos.Tree tree = buildMethodOutgoingCalls(new TreeBuilder().getOutgoingCalls(),
+                "samples/Sample",
+                "run",
+                "()V",
+                false);
+        System.out.println("method: " + tree);
     }
 }
