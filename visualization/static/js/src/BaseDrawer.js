@@ -90,6 +90,8 @@ class BaseDrawer {
             {
                 methodName: node.getNodeInfo().getMethodName(),
                 className: node.getNodeInfo().getClassName(),
+                desc: node.getNodeInfo().getDescription(),
+                isStatic: node.getNodeInfo().getIsStatic(),
                 duration: node.getWidth()
             }
         ).content;
