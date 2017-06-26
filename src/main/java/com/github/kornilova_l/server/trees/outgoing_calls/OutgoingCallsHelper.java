@@ -5,7 +5,7 @@ import com.github.kornilova_l.protos.TreeProtos;
 import java.util.Objects;
 
 class OutgoingCallsHelper {
-    static TreeProtos.Tree.Node.NodeInfo createNodeInfo(String className,
+    static TreeProtos.Tree.Node.NodeInfo.Builder createNodeInfo(String className,
                                                         String methodName,
                                                         String desc,
                                                         boolean isStatic) {
@@ -14,7 +14,7 @@ class OutgoingCallsHelper {
                 .setMethodName(methodName)
                 .setDescription(desc)
                 .setIsStatic(isStatic)
-                .build();
+                .setCount(1);
     }
 
     /**
@@ -50,6 +50,9 @@ class OutgoingCallsHelper {
                                       TreeProtos.Tree.Node nodeInCT) {
         nodeInOC.setWidth(
                 nodeInOC.getWidth() + nodeInCT.getWidth()
+        );
+        nodeInOC.getNodeInfoBuilder().setCount(
+                nodeInOC.getNodeInfoBuilder().getCount() + 1
         );
     }
 
