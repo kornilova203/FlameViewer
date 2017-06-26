@@ -18,6 +18,14 @@ if (goog.DEBUG) {
 }
 
 
+templates.tree.getBaseSection = function(opt_data, opt_ignored) {
+  return soydata.VERY_UNSAFE.ordainSanitizedHtml('<section><canvas>id="canvas" width="' + soy.$$escapeHtml(opt_data.canvasWidth) + '" height="' + soy.$$escapeHtml(opt_data.canvasHeight) + '"</canvas></section>');
+};
+if (goog.DEBUG) {
+  templates.tree.getBaseSection.soyTemplateName = 'templates.tree.getBaseSection';
+}
+
+
 templates.tree.callTreePopup = function(opt_data, opt_ignored) {
   return soydata.VERY_UNSAFE.ordainSanitizedHtml('<div class="popup popupOT"><h3>' + soy.$$escapeHtml(opt_data.className) + '.<b>' + soy.$$escapeHtml(opt_data.methodName) + '</b></h3><p>Start time: ' + soy.$$escapeHtml(opt_data.startTime) + 'ms</p><p>Duration: ' + soy.$$escapeHtml(opt_data.duration) + 'ms</p></div>');
 };

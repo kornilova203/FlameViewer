@@ -20,7 +20,22 @@
 {/template}
 
 /**
- * Generate popup for method in original tree
+ * Get section template for base tree
+ * @param canvasHeight Height of canvas
+ * @param canvasWidth
+ */
+{template .getBaseSection}
+<section>
+        <canvas>
+            id="canvas"
+            width="{$canvasWidth}"
+            height="{$canvasHeight}"
+        </canvas>
+</section>
+{/template}
+
+/**
+ * Generate popup for method in call tree
  * @param duration
  * @param startTime
  * @param methodName
@@ -35,7 +50,7 @@
 {/template}
 
 /**
- * Generate popup for method in original tree
+ * Generate popup for method in base tree
  * @param duration
  * @param methodName
  * @param className
