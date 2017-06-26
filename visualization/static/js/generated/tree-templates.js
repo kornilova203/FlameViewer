@@ -19,7 +19,7 @@ if (goog.DEBUG) {
 
 
 templates.tree.getBaseSection = function(opt_data, opt_ignored) {
-  return soydata.VERY_UNSAFE.ordainSanitizedHtml('<section><canvas id="canvas">width="' + soy.$$escapeHtml(opt_data.canvasWidth) + '" height="' + soy.$$escapeHtml(opt_data.canvasHeight) + '"</canvas></section>');
+  return soydata.VERY_UNSAFE.ordainSanitizedHtml('<section><canvas id="canvas" width="' + soy.$$escapeHtmlAttribute(opt_data.canvasWidth) + '" height="' + soy.$$escapeHtmlAttribute(opt_data.canvasHeight) + '"></canvas></section>');
 };
 if (goog.DEBUG) {
   templates.tree.getBaseSection.soyTemplateName = 'templates.tree.getBaseSection';
