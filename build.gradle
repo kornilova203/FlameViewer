@@ -59,7 +59,7 @@ task copyStatic(type: Copy) {
     into System.getProperty("user.home") + '/.flamegraph-profiler/static'
 }
 
-task('prepareAndRunIde', dependsOn: [copyStatic, build]) {
+task('prepareAndRunIde', dependsOn: [copyStatic, build, jar]) {
     doLast {
         runIdea.execute()
     }

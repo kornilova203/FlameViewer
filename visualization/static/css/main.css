@@ -5,47 +5,62 @@
 }
 
 @font-face {
+    font-family: "Gotham Pro";
+    font-weight: normal;
+    src: url(../font/GothamProRegular.ttf);
+}
+
+@font-face {
     font-family: "Menlo";
     font-weight: normal;
     src: url(../font/Menlo-Regular.ttf);
 }
 
 body {
+    margin: 0;
+    padding: 0;
     font-family: "Gotham Pro", sans-serif;
     font-weight: normal;
 }
+
 main {
     width: 700px;
     display: block;
     margin: 0 auto 100px;
 }
+
 h1 {
     width: 100%;
     text-align: center;
     font-family: "Gotham Pro", sans-serif;
     font-weight: bold;
 }
+
 h2 {
-    padding-bottom: 10px;
-    border-bottom: solid;
+    padding-top: 20px;
+    border-top: 2px solid #ddd;
     margin-bottom: 40px;
 }
+
 form {
     width: 100%;
     text-align: center;
     margin-bottom: 20px;
 }
+
 section {
     background-color: white;
     padding: 0;
     margin-bottom: 30px;
     position: relative;
 }
+
 .call-tree {
     position: relative;
     height: 800px;
 }
-ol {
+
+main ol {
     margin: 0;
     padding: 0;
     position: absolute;
@@ -53,7 +68,8 @@ ol {
     bottom: 0;
     width: 100%;
 }
-li {
+
+main li {
     display: inline-block;
     position: absolute;
     list-style: none;
@@ -64,6 +80,7 @@ li {
     box-sizing: border-box;
     border-top: solid white 1px;
 }
+
 .call-tree .method-name {
     margin: 0;
     overflow: hidden;
@@ -73,6 +90,7 @@ li {
     color: white;
     padding: 0 0 0 2px;
 }
+
 .popup {
     background-color: #222;
     font-family: "Menlo", "Gotham Pro", sans-serif;
@@ -89,13 +107,16 @@ li {
     margin-top: 0;
     margin-bottom: 5px;
 }
+
 .popup b {
     font-size: 18px;
 }
+
 .popup p {
     margin: 0;
     font-size: 12px;
 }
+
 .inputfile {
     width: 0;
     height: 0;
@@ -126,4 +147,31 @@ li {
 
 .inputfile + label * {
     pointer-events: none;
+}
+
+nav {
+    margin: 0;
+    padding: 0;
+}
+
+nav ul {
+    display: flex;
+    justify-content: center;
+}
+
+nav ul li {
+    list-style: none;
+    margin: 10px 20px;
+}
+
+nav ul li a {
+    text-transform: capitalize;
+    color: black;
+    text-decoration: none;
+    font-family: "Gotham Pro", sans-serif;
+    font-weight: normal;
+}
+
+nav ul li a:hover, .current-link {
+    color: #0887D7;
 }
