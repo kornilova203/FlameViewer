@@ -10,46 +10,21 @@ import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.*;
 import org.apache.commons.compress.utils.IOUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.ide.RestService;
+import org.jetbrains.ide.HttpRequestHandler;
 
 import java.io.*;
-import java.lang.reflect.InvocationTargetException;
 
-public class ProfilerRestService extends RestService {
+public class ProfilerRestService extends HttpRequestHandler {
 
     private static final com.intellij.openapi.diagnostic.Logger LOG =
             com.intellij.openapi.diagnostic.Logger.getInstance(ProfilerRestService.class);
     private final TreeBuilder treeBuilder = new TreeBuilder();
 
-    @NotNull
     @Override
-    protected String getServiceName() {
-        return ServerNames.NAME;
-    }
-
-    @Override
-    protected boolean isMethodSupported(@NotNull HttpMethod method) {
-        return method == HttpMethod.GET;
-    }
-
-    @Override
-    protected boolean isPrefixlessAllowed() {
-        return true;
-    }
-
-    @Override
-    protected boolean isHostTrusted(@NotNull FullHttpRequest request) throws InterruptedException, InvocationTargetException {
-        return true;
-    }
-
-    @Nullable
-    @Override
-    public String execute(@NotNull QueryStringDecoder urlDecoder,
-                          @NotNull FullHttpRequest request,
-                          @NotNull ChannelHandlerContext context) throws IOException {
-        String uri = urlDecoder.path(); // without parameters
+    public boolean process(QueryStringDecoder urlDecoder,
+                           FullHttpRequest fullHttpRequest,
+                           ChannelHandlerContext context) throws IOException {
+        String uri = urlDecoder.path(); // without get parameters
         LOG.info("Request: " + uri);
         switch (uri) {
             case ServerNames.CALL_TREE:
@@ -78,10 +53,10 @@ public class ProfilerRestService extends RestService {
                 } else if (ServerNames.FONT_PATTERN.matcher(uri).matches()) {
                     sendStatic(context, uri, "application/octet-stream");
                 } else {
-                    return "Not Found";
+                    return false;
                 }
         }
-        return null;
+        return true;
     }
 
     private static void sendTrees(ChannelHandlerContext context,
