@@ -4,7 +4,8 @@
   "description": "flamegraph",
   "main": "index.html",
   "scripts": {
-    "watch-js": "mkdir -p static/js/out && watchify static/js/src/call-tree.js -o static/js/out/call-tree.js -dv"
+    "watch-call-tree": "mkdir -p static/js/out && watchify static/js/src/call-tree.js -o static/js/out/call-tree.js -dv",
+    "watch-outgoing-calls": "mkdir -p static/js/out && watchify static/js/src/outgoing-calls.js -o static/js/out/outgoing-calls.js -dv"
   },
   "author": "Liudmila Kornilova",
   "license": "ISC",
