@@ -67,6 +67,7 @@ public class TreeBuilder {
     }
 
     public TreeProtos.Tree getOutgoingCalls(Map<String, List<String>> parameters) {
+        updateLogFile();
         String className = getParamForKey(parameters, "class");
         String methodName = getParamForKey(parameters, "method");
         String desc = getParamForKey(parameters, "desc");
@@ -98,6 +99,7 @@ public class TreeBuilder {
     }
 
     public TreeProtos.Tree getCallers(Map<String, List<String>> parameters) {
+        updateLogFile();
         String className = getParamForKey(parameters, "class");
         String methodName = getParamForKey(parameters, "method");
         String desc = getParamForKey(parameters, "desc");
