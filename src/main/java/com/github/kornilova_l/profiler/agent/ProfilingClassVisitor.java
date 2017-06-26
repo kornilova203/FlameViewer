@@ -19,7 +19,7 @@ class ProfilingClassVisitor extends ClassVisitor {
 //                " included? " + Configuration.isMethodIncluded(className + "." + methodName) +
 //                " excluded? " + Configuration.isMethodExcluded(className + "." + methodName));
         if (mv != null &&
-//                !methodName.equals("<init>") &&
+                !methodName.equals("<init>") &&
                 !methodName.equals("toString") &&
                 !methodName.contains("ClassLoader") &&
                 (access & Opcodes.ACC_SYNTHETIC) == 0 &&  // exclude synthetic methods
