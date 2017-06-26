@@ -10,6 +10,6 @@ protoc --js_out=import_style=commonjs,binary:. \
  com/github/kornilova_l/protos/event.proto \
  com/github/kornilova_l/protos/tree.proto \
  com/github/kornilova_l/protos/trees.proto
-mv com/github/kornilova_l/protos/*.js ../../../visualization/js/generated
+mv com/github/kornilova_l/protos/*.js ../../../visualization/static/js/generated
 # fix import in tree_pb.js and trees_pb.js
 ```

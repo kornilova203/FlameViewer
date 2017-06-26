@@ -435,6 +435,7 @@ proto.com.github.kornilova_l.protos.Tree.Node.NodeInfo.toObject = function(inclu
     className: jspb.Message.getFieldWithDefault(msg, 2, ""),
     description: jspb.Message.getFieldWithDefault(msg, 7, ""),
     isStatic: jspb.Message.getFieldWithDefault(msg, 3, false),
+    count: jspb.Message.getFieldWithDefault(msg, 8, 0),
     parametersList: jspb.Message.toObjectList(msg.getParametersList(),
     com_github_kornilova_l_protos_event_pb.Var.toObject, includeInstance),
     returnValue: (f = msg.getReturnValue()) && com_github_kornilova_l_protos_event_pb.Var.toObject(includeInstance, f),
@@ -490,6 +491,10 @@ proto.com.github.kornilova_l.protos.Tree.Node.NodeInfo.deserializeBinaryFromRead
     case 3:
       var value = /** @type {boolean} */ (reader.readBool());
       msg.setIsStatic(value);
+      break;
+    case 8:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setCount(value);
       break;
     case 4:
       var value = new com_github_kornilova_l_protos_event_pb.Var;
@@ -559,6 +564,13 @@ proto.com.github.kornilova_l.protos.Tree.Node.NodeInfo.serializeBinaryToWriter =
   if (f) {
     writer.writeBool(
       3,
+      f
+    );
+  }
+  f = message.getCount();
+  if (f !== 0) {
+    writer.writeInt32(
+      8,
       f
     );
   }
@@ -648,6 +660,21 @@ proto.com.github.kornilova_l.protos.Tree.Node.NodeInfo.prototype.getIsStatic = f
 /** @param {boolean} value */
 proto.com.github.kornilova_l.protos.Tree.Node.NodeInfo.prototype.setIsStatic = function(value) {
   jspb.Message.setField(this, 3, value);
+};
+
+
+/**
+ * optional int32 count = 8;
+ * @return {number}
+ */
+proto.com.github.kornilova_l.protos.Tree.Node.NodeInfo.prototype.getCount = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 8, 0));
+};
+
+
+/** @param {number} value */
+proto.com.github.kornilova_l.protos.Tree.Node.NodeInfo.prototype.setCount = function(value) {
+  jspb.Message.setField(this, 8, value);
 };
 
 
