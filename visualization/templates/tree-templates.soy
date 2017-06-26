@@ -53,10 +53,15 @@
  * @param duration
  * @param methodName
  * @param className
+ * @param isStatic
+ * @param desc
  */
 {template .basePopup}
 <div class="popup">
-    <h3>{$className}.<b>{$methodName}</b></h3>
+    <a href="/flamegraph-profiler/outgoing-calls?class={$className}&amp;method={$methodName}&amp;desc={$desc}&amp;isStatic={$isStatic}">
+        Outgoing Calls
+    </a>
+    <h3>{$className}.{$methodName}</h3>
     <p>Duration: {$duration}ms</p>
 </div>
 {/template}
