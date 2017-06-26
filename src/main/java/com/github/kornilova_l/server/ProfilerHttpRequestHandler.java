@@ -14,10 +14,10 @@ import org.jetbrains.ide.HttpRequestHandler;
 
 import java.io.*;
 
-public class ProfilerRestService extends HttpRequestHandler {
+public class ProfilerHttpRequestHandler extends HttpRequestHandler {
 
     private static final com.intellij.openapi.diagnostic.Logger LOG =
-            com.intellij.openapi.diagnostic.Logger.getInstance(ProfilerRestService.class);
+            com.intellij.openapi.diagnostic.Logger.getInstance(ProfilerHttpRequestHandler.class);
     private final TreeBuilder treeBuilder = new TreeBuilder();
 
     @Override

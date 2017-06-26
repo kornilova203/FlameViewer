@@ -22,7 +22,7 @@
     -->
 
     <extensions defaultExtensionNs="com.intellij">
-        <httpRequestHandler implementation="com.github.kornilova_l.server.ProfilerRestService"/>
+        <httpRequestHandler implementation="com.github.kornilova_l.server.ProfilerHttpRequestHandler"/>
     </extensions>
 
     <actions>
