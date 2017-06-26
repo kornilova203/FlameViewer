@@ -120,8 +120,4 @@ public class OutgoingCallsBuilder {
         }
         treeBuilder.setWidth(treeWidth);
     }
-
-    public static TreeProtos.Tree buildOutgoingCalls(TreeProtos.Tree outgoingCalls, String methodName) {
-        return null;
-    }
 }

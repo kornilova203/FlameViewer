@@ -4,12 +4,14 @@ import com.github.kornilova_l.profiler.ProfilerFileManager;
 import com.github.kornilova_l.protos.TreeProtos;
 import com.github.kornilova_l.protos.TreesProtos;
 import com.github.kornilova_l.server.trees.call_tree.CallTreesBuilder;
+import com.github.kornilova_l.server.trees.outgoing_calls.MethodOutgoingCallsBuilder;
 import com.github.kornilova_l.server.trees.outgoing_calls.OutgoingCallsBuilder;
 import com.intellij.openapi.diagnostic.Logger;
 
 import java.io.*;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class TreeBuilder {
@@ -17,7 +19,7 @@ public class TreeBuilder {
     private File logFile;
     private TreesProtos.Trees originalTrees;
     private TreeProtos.Tree outgoingCalls;
-    private HashMap<String, TreeProtos.Tree> methodOutgoingCalls = new HashMap<>();
+    private final HashMap<String, TreeProtos.Tree> methodOutgoingCalls = new HashMap<>();
     private TreeProtos.Tree fullBackwardTree;
 
     private void updateLogFile() {
@@ -63,20 +65,31 @@ public class TreeBuilder {
         return outgoingCalls;
     }
 
-    public TreeProtos.Tree getOutgoingCalls(List<String> getValues) {
-        if (getValues.size() != 1) {
-            LOG.error("Size of get parameter != 1");
+    public TreeProtos.Tree getOutgoingCalls(Map<String, List<String>> parameters) {
+        String className = getParamForKey(parameters, "class");
+        String methodName = getParamForKey(parameters, "method");
+        String desc = getParamForKey(parameters, "desc");
+        if (methodName == null || className == null || desc == null) {
+            return null;
         }
-        String methodName = getValues.get(0);
         return methodOutgoingCalls.computeIfAbsent(
-                methodName,
-                n -> OutgoingCallsBuilder.buildOutgoingCalls(getOutgoingCalls(), n)
+                className + methodName + desc,
+                n -> MethodOutgoingCallsBuilder.buildMethodOutgoingCalls(getOutgoingCalls(), className, methodName, desc)
         );
     }
 
+    private static String getParamForKey(Map<String, List<String>> parameters, String key) {
+        List<String> classNameParams = parameters.get(key);
+        if (classNameParams == null) {
+            LOG.error(key + " key not specified");
+            return null;
+        }
+        return classNameParams.get(0);
+    }
+
     public static void main(String[] args) throws IOException {
-        TreeBuilder treeBuilder = new TreeBuilder();
-        TreeProtos.Tree outgoingCalls = treeBuilder.getOutgoingCalls();
+//        TreeBuilder treeBuilder = new TreeBuilder();
+//        TreeProtos.Tree outgoingCalls = treeBuilder.getOutgoingCalls();
 //        System.out.println(outgoingCalls.toString());
 //        TreesProtos.Trees originalTrees = treeBuilder.getCallTree();
 //        System.out.println(originalTrees.toString());
