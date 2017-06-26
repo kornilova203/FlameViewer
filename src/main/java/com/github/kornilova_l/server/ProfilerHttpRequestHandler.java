@@ -35,6 +35,10 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
                 LOG.info("outgoing-calls.html");
                 sendStatic(context, ServerNames.MAIN_NAME + "/outgoing-calls.html", "text/html");
                 break;
+            case ServerNames.CALLERS:
+                LOG.info("callers.html");
+                sendStatic(context, ServerNames.MAIN_NAME + "/callers.html", "text/html");
+                break;
             case ServerNames.CALL_TREE_JS_REQUEST:
                 LOG.info("CALL_TREE_JS_REQUEST");
                 sendTrees(context, treeBuilder.getCallTree());
@@ -45,6 +49,14 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
                     sendTree(context, treeBuilder.getOutgoingCalls(urlDecoder.parameters()));
                 } else {
                     sendTree(context, treeBuilder.getOutgoingCalls());
+                }
+                break;
+            case ServerNames.CALLERS_JS_REQUEST:
+                LOG.info("CALLERS_JS_REQUEST");
+                if (urlDecoder.parameters().containsKey("method")) {
+                    sendTree(context, treeBuilder.getCallers(urlDecoder.parameters()));
+                } else {
+                    sendTree(context, treeBuilder.getCallers());
                 }
                 break;
             default:

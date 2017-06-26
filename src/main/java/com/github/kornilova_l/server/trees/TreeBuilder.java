@@ -4,6 +4,7 @@ import com.github.kornilova_l.profiler.ProfilerFileManager;
 import com.github.kornilova_l.protos.TreeProtos;
 import com.github.kornilova_l.protos.TreesProtos;
 import com.github.kornilova_l.server.trees.call_tree.CallTreesBuilder;
+import com.github.kornilova_l.server.trees.callers.CallersBuilder;
 import com.github.kornilova_l.server.trees.outgoing_calls.MethodOutgoingCallsBuilder;
 import com.github.kornilova_l.server.trees.outgoing_calls.OutgoingCallsBuilder;
 import com.intellij.openapi.diagnostic.Logger;
@@ -20,7 +21,8 @@ public class TreeBuilder {
     private TreesProtos.Trees originalTrees;
     private TreeProtos.Tree outgoingCalls;
     private final HashMap<String, TreeProtos.Tree> methodOutgoingCalls = new HashMap<>();
-    private TreeProtos.Tree fullBackwardTree;
+    private TreeProtos.Tree callers;
+    private final HashMap<String, TreeProtos.Tree> methodCallers = new HashMap<>();
 
     private void updateLogFile() {
         File newFile = ProfilerFileManager.getLatestFile();
@@ -36,7 +38,7 @@ public class TreeBuilder {
     private void removeTrees() {
         originalTrees = null;
         outgoingCalls = null;
-        fullBackwardTree = null;
+        callers = null;
     }
 
     /**
@@ -61,7 +63,6 @@ public class TreeBuilder {
         if (outgoingCalls == null) {
             outgoingCalls = OutgoingCallsBuilder.buildOutgoingCalls(getCallTree());
         }
-//        System.out.println("outgoing calls: " + outgoingCalls);
         return outgoingCalls;
     }
 
@@ -77,6 +78,37 @@ public class TreeBuilder {
         TreeProtos.Tree tree = methodOutgoingCalls.computeIfAbsent(
                 className + methodName + desc,
                 n -> MethodOutgoingCallsBuilder.buildMethodOutgoingCalls(
+                        getOutgoingCalls(),
+                        className,
+                        methodName,
+                        desc,
+                        isStatic
+                )
+        );
+        System.out.println("getOutgoingCalls\n" + tree);
+        return tree;
+    }
+
+    public TreeProtos.Tree getCallers() {
+        updateLogFile();
+        if (callers == null) {
+            callers = CallersBuilder.buildCallers(getOutgoingCalls());
+        }
+        return callers;
+    }
+
+    public TreeProtos.Tree getCallers(Map<String, List<String>> parameters) {
+        String className = getParamForKey(parameters, "class");
+        String methodName = getParamForKey(parameters, "method");
+        String desc = getParamForKey(parameters, "desc");
+        String isStaticString = getParamForKey(parameters, "isStatic");
+        if (methodName == null || className == null || desc == null || isStaticString == null) {
+            return null;
+        }
+        boolean isStatic = Objects.equals(isStaticString, "true");
+        TreeProtos.Tree tree = methodCallers.computeIfAbsent(
+                className + methodName + desc,
+                n -> CallersBuilder.buildCallers(
                         getOutgoingCalls(),
                         className,
                         methodName,
