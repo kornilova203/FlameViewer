@@ -51,10 +51,13 @@ public class ProfilerRestService extends RestService {
         String uri = urlDecoder.path(); // without parameters
         LOG.info("Lucinda. Request: " + uri);
         switch (uri) {
-            case ServerNames.RESULTS:
-                sendStatic(request, context, ServerNames.MAIN_NAME + "/index.html", "text/html");
+            case ServerNames.CALL_TREE:
+                sendStatic(request, context, ServerNames.MAIN_NAME + "/call-tree.html", "text/html");
                 break;
-            case ServerNames.ORIGINAL_TREE:
+            case ServerNames.OUTGOING_CALLS:
+                sendStatic(request, context, ServerNames.MAIN_NAME + "/outgoing-calls.html", "text/html");
+                break;
+            case ServerNames.CALL_TREE_JS_REQUEST:
                 createAndSendTrees(request, context);
                 break;
             default:
