@@ -18,6 +18,7 @@ class AccumulativeTreeDrawer {
         this.section = null;
         this.stage = null;
         this.header = null;
+        this._enableSearch();
     }
 
     setHeader(newHeader) {
@@ -127,7 +128,7 @@ class AccumulativeTreeDrawer {
     _setPopupPosition(popup, node, depth) {
         popup
             .css("left", this._getOffsetXForNode(node))
-            .css("margin-top", - AccumulativeTreeDrawer._calcNormaOffsetY(depth) - POPUP_MARGIN)
+            .css("margin-top", -AccumulativeTreeDrawer._calcNormaOffsetY(depth) - POPUP_MARGIN)
     }
 
     static _calcNormaOffsetY(depth) {
@@ -157,5 +158,12 @@ class AccumulativeTreeDrawer {
                 popup.hide();
             }
         });
+    }
+
+    _enableSearch() {
+        const input = $("#search").find("input");
+        input.keyup(() => {
+            console.log(input.val());
+        })
     }
 }
