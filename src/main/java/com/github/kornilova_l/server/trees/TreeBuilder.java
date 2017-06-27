@@ -21,8 +21,8 @@ public class TreeBuilder {
     private TreesProtos.Trees originalTrees;
     private TreeProtos.Tree outgoingCalls;
     private final HashMap<String, TreeProtos.Tree> methodOutgoingCalls = new HashMap<>();
-    private TreeProtos.Tree callers;
-    private final HashMap<String, TreeProtos.Tree> methodCallers = new HashMap<>();
+    private TreeProtos.Tree incomingCalls;
+    private final HashMap<String, TreeProtos.Tree> methodIncomingCalls = new HashMap<>();
 
     private void updateLogFile() {
         File newFile = ProfilerFileManager.getLatestFile();
@@ -38,7 +38,7 @@ public class TreeBuilder {
     private void removeTrees() {
         originalTrees = null;
         outgoingCalls = null;
-        callers = null;
+        incomingCalls = null;
     }
 
     /**
@@ -90,15 +90,15 @@ public class TreeBuilder {
         return tree;
     }
 
-    public TreeProtos.Tree getCallers() {
+    public TreeProtos.Tree getIncomingCalls() {
         updateLogFile();
-        if (callers == null) {
-            callers = IncomingCallsBuilder.buildCallers(getOutgoingCalls());
+        if (incomingCalls == null) {
+            incomingCalls = IncomingCallsBuilder.buildCallers(getOutgoingCalls());
         }
-        return callers;
+        return incomingCalls;
     }
 
-    public TreeProtos.Tree getCallers(Map<String, List<String>> parameters) {
+    public TreeProtos.Tree getIncomingCalls(Map<String, List<String>> parameters) {
         updateLogFile();
         String className = getParamForKey(parameters, "class");
         String methodName = getParamForKey(parameters, "method");
@@ -108,7 +108,7 @@ public class TreeBuilder {
             return null;
         }
         boolean isStatic = Objects.equals(isStaticString, "true");
-        TreeProtos.Tree tree = methodCallers.computeIfAbsent(
+        TreeProtos.Tree tree = methodIncomingCalls.computeIfAbsent(
                 className + methodName + desc,
                 n -> IncomingCallsBuilder.buildCallers(
                         getOutgoingCalls(),
@@ -132,6 +132,8 @@ public class TreeBuilder {
     }
 
     public static void main(String[] args) throws IOException {
+        TreeBuilder treeBuilder = new TreeBuilder();
+        System.out.println(treeBuilder.getIncomingCalls());
 //        TreeBuilder treeBuilder = new TreeBuilder();
 //        TreeProtos.Tree outgoingCalls = treeBuilder.getOutgoingCalls();
 //        System.out.println(outgoingCalls.toString());

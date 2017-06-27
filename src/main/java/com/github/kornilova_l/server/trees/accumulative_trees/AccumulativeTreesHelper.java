@@ -18,40 +18,62 @@ public class AccumulativeTreesHelper {
     }
 
     /**
-     * @return Node.Builder from OC which was created or updated
+     * @param nodeBuilder node in building tree. Child of this node will be updated or created
+     * @param node node in source tree. Information of this node will be added to building tree
+     * @return Node.Builder from building tree which was created or updated
      */
-    public static TreeProtos.Tree.Node.Builder updateNodeList(TreeProtos.Tree.Node.Builder nodeInOC,
-                                                              TreeProtos.Tree.Node nodeInCT) {
-        for (TreeProtos.Tree.Node.Builder childNodeInOC : nodeInOC.getNodesBuilderList()) {
-            if (isSameMethod(childNodeInOC, nodeInCT)) {
-                addTimeToNode(childNodeInOC, nodeInCT);
+    public static TreeProtos.Tree.Node.Builder updateNodeList(TreeProtos.Tree.Node.Builder nodeBuilder,
+                                                              TreeProtos.Tree.Node node) {
+        for (TreeProtos.Tree.Node.Builder childNodeInOC : nodeBuilder.getNodesBuilderList()) {
+            if (isSameMethod(childNodeInOC, node)) {
+                addTimeToNode(childNodeInOC, node.getWidth());
                 return childNodeInOC;
             }
         }
-        return addNodeToList(nodeInOC, nodeInCT);
+        return addNodeToList(nodeBuilder, node, node.getWidth());
+    }
+
+    /**
+     * @param nodeBuilder node in building tree. Child of this node will be updated or created
+     * @param node node in source tree. Information of this node will be added to building tree
+     * @param time time which will be set (or added) to created or updated node
+     * @return Node.Builder from building tree which was created or updated
+     */
+    public static TreeProtos.Tree.Node.Builder updateNodeList(TreeProtos.Tree.Node.Builder nodeBuilder,
+                                                              TreeProtos.Tree.Node node,
+                                                              long time) {
+        for (TreeProtos.Tree.Node.Builder childNodeInOC : nodeBuilder.getNodesBuilderList()) {
+            if (isSameMethod(childNodeInOC, node)) {
+                addTimeToNode(childNodeInOC, time);
+                return childNodeInOC;
+            }
+        }
+        return addNodeToList(nodeBuilder, node, time);
     }
 
     /**
      * Update time in node of full tree
      */
-    private static void addTimeToNode(TreeProtos.Tree.Node.Builder nodeInOC,
-                                      TreeProtos.Tree.Node nodeInCT) {
-        nodeInOC.setWidth(
-                nodeInOC.getWidth() + nodeInCT.getWidth()
+    private static void addTimeToNode(TreeProtos.Tree.Node.Builder nodeBuilder,
+                                      long time) {
+        nodeBuilder.setWidth(
+                nodeBuilder.getWidth() + time
         );
-        nodeInOC.getNodeInfoBuilder().setCount(
-                nodeInOC.getNodeInfoBuilder().getCount() + 1
+        nodeBuilder.getNodeInfoBuilder().setCount(
+                nodeBuilder.getNodeInfoBuilder().getCount() + 1
         );
     }
 
     private static TreeProtos.Tree.Node.Builder addNodeToList(TreeProtos.Tree.Node.Builder nodeInOC,
-                                                              TreeProtos.Tree.Node nodeInCT) {
-        TreeProtos.Tree.Node.Builder newNodeBuilder = createNodeBuilder(nodeInCT);
+                                                              TreeProtos.Tree.Node nodeInCT,
+                                                              long time) {
+        TreeProtos.Tree.Node.Builder newNodeBuilder = createNodeBuilder(nodeInCT, time);
         nodeInOC.addNodes(newNodeBuilder); // addNodes copies newNodeBuilder
         return nodeInOC.getNodesBuilder(nodeInOC.getNodesCount() - 1);
     }
 
-    private static TreeProtos.Tree.Node.Builder createNodeBuilder(TreeProtos.Tree.Node nodeInCT) {
+    private static TreeProtos.Tree.Node.Builder createNodeBuilder(TreeProtos.Tree.Node nodeInCT,
+                                                                  long time) {
         TreeProtos.Tree.Node.NodeInfo CTNodeInfo = nodeInCT.getNodeInfo();
         return TreeProtos.Tree.Node.newBuilder()
                 .setNodeInfo(
@@ -62,7 +84,7 @@ public class AccumulativeTreesHelper {
                                 CTNodeInfo.getIsStatic()
                         )
                 )
-                .setWidth(nodeInCT.getWidth());
+                .setWidth(time);
     }
 
     /**

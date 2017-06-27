@@ -54,9 +54,9 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
             case ServerNames.INCOMING_CALLS_JS_REQUEST:
                 LOG.info("INCOMING_CALLS_JS_REQUEST");
                 if (urlDecoder.parameters().containsKey("method")) {
-                    sendTree(context, treeBuilder.getCallers(urlDecoder.parameters()));
+                    sendTree(context, treeBuilder.getIncomingCalls(urlDecoder.parameters()));
                 } else {
-                    sendTree(context, treeBuilder.getCallers());
+                    sendTree(context, treeBuilder.getIncomingCalls());
                 }
                 break;
             default:
