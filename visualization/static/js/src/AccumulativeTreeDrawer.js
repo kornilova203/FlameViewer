@@ -18,6 +18,7 @@ class AccumulativeTreeDrawer {
         this.section = null;
         this.stage = null;
         this.header = null;
+        this.searchList = [];
         this._enableSearch();
     }
 
@@ -76,9 +77,9 @@ class AccumulativeTreeDrawer {
 
     _drawRectangle(node, depth, colorId) {
         const shape = new createjs.Shape();
-        shape.graphics
-            .beginFill(COLORS[colorId])
-            .drawRect(0, 0, this.canvasWidth, LAYER_HEIGHT);
+        const fillCommand = shape.graphics.beginFill(COLORS[colorId]).command;
+        this.searchList.push(new SearchElem(node.getNodeInfo().getMethodName(), fillCommand));
+        shape.graphics.drawRect(0, 0, this.canvasWidth, LAYER_HEIGHT);
         const offsetX = this._getOffsetXForNode(node);
         const offsetY = this.flipY(AccumulativeTreeDrawer._calcNormaOffsetY(depth));
         const scaleX = node.getWidth() / this.width;
@@ -162,8 +163,48 @@ class AccumulativeTreeDrawer {
 
     _enableSearch() {
         const input = $("#search").find("input");
-        input.keyup(() => {
-            console.log(input.val());
+        input.on('change keyup copy paste cut', () => {
+            const val = input.val();
+            if (!val) {
+                this._resetHighlight();
+                return;
+            }
+            for (let i in this.searchList) {
+                if (this.searchList[i].matches(val)) {
+                    this.searchList[i].reset();
+                } else {
+                    this.searchList[i].dim();
+                }
+            }
+            this.stage.update();
         })
+    }
+
+    _resetHighlight() {
+        for (let i in this.searchList) {
+            this.searchList[i].reset();
+        }
+        this.stage.update();
+    }
+}
+
+class SearchElem {
+    constructor(name, fillCommand) {
+        this.name = name;
+        this.fillCommand = fillCommand;
+        this.originalColor = fillCommand.style;
+    }
+
+    matches(val) {
+        return this.name.startsWith(val);
+    }
+
+    dim() {
+        this.fillCommand.style = "#bbb";
+    }
+
+    reset() {
+        console.log("reset to " + this.originalColor);
+        this.fillCommand.style = this.originalColor;
     }
 }
