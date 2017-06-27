@@ -93,7 +93,7 @@ public class TreeBuilder {
     public TreeProtos.Tree getIncomingCalls() {
         updateLogFile();
         if (incomingCalls == null) {
-            incomingCalls = IncomingCallsBuilder.buildCallers(getOutgoingCalls());
+            incomingCalls = IncomingCallsBuilder.buildIncomingCalls(getOutgoingCalls());
         }
         return incomingCalls;
     }
@@ -110,7 +110,7 @@ public class TreeBuilder {
         boolean isStatic = Objects.equals(isStaticString, "true");
         TreeProtos.Tree tree = methodIncomingCalls.computeIfAbsent(
                 className + methodName + desc,
-                n -> IncomingCallsBuilder.buildCallers(
+                n -> IncomingCallsBuilder.buildIncomingCalls(
                         getOutgoingCalls(),
                         className,
                         methodName,
@@ -133,7 +133,7 @@ public class TreeBuilder {
 
     public static void main(String[] args) throws IOException {
         TreeBuilder treeBuilder = new TreeBuilder();
-        System.out.println(treeBuilder.getIncomingCalls());
+        treeBuilder.getIncomingCalls();
 //        TreeBuilder treeBuilder = new TreeBuilder();
 //        TreeProtos.Tree outgoingCalls = treeBuilder.getOutgoingCalls();
 //        System.out.println(outgoingCalls.toString());
