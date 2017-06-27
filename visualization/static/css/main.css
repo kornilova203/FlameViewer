@@ -76,18 +76,6 @@ main ol {
     width: 100%;
 }
 
-main li {
-    display: inline-block;
-    position: absolute;
-    list-style: none;
-    height: 25px;
-    z-index: 1;
-    background-size: cover;
-    background: #5457FF linear-gradient(#5EDAFF, #5457FF) fixed center;
-    box-sizing: border-box;
-    border-top: solid white 1px;
-}
-
 .call-tree .method-name {
     margin: 0;
     overflow: hidden;
@@ -183,4 +171,10 @@ nav ul li a {
 
 nav ul li a:hover, .current-link {
     color: #0887D7;
+}
+
+.popup ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0 0;
 }

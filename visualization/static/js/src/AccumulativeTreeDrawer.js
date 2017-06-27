@@ -93,7 +93,7 @@ class AccumulativeTreeDrawer {
     }
 
     _createPopup(node, shape, depth) {
-        const popupContent = templates.tree.basePopup(
+        const popupContent = templates.tree.accumulativeTreePopup(
             {
                 methodName: node.getNodeInfo().getMethodName(),
                 className: node.getNodeInfo().getClassName(),
