@@ -68,6 +68,8 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
                     sendStatic(context, uri, "text/javascript");
                 } else if (ServerNames.FONT_PATTERN.matcher(uri).matches()) {
                     sendStatic(context, uri, "application/octet-stream");
+                } else if (ServerNames.PNG_PATTERN.matcher(uri).matches()) {
+                    sendStatic(context, uri, "image/png");
                 } else {
                     return false;
                 }

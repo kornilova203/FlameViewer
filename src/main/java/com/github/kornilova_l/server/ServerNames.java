@@ -14,4 +14,5 @@ class ServerNames {
     static final Pattern CSS_PATTERN = Pattern.compile(MAIN_NAME + "/css.+css$");
     static final Pattern JS_PATTERN = Pattern.compile(MAIN_NAME + "/js.+js$");
     static final Pattern FONT_PATTERN = Pattern.compile(MAIN_NAME + "/.+ttf$");
+    static final Pattern PNG_PATTERN = Pattern.compile(MAIN_NAME + "/.+png$");
 }

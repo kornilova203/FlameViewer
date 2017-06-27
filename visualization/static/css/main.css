@@ -178,3 +178,36 @@ nav ul li a:hover, .current-link {
     padding-left: 0;
     margin: 0 0;
 }
+
+#search {
+    position: fixed;
+    margin-left: calc(700px / 2 + 150px / 2 + 50px);
+    margin-top: 5px;
+    pointer-events: none;
+}
+
+#search input[type="text"] {
+    background: url(../img/search-white.png) no-repeat 10px 7px #fcfcfc;
+    border: 1px solid #d1d1d1;
+    font-size: 14px;
+    color: #6a6a6a;
+    width: 150px;
+    padding: 6px 15px 6px 35px;
+    border-radius: 20px;
+    text-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15) inset;
+    pointer-events: initial;
+}
+
+#search input[type="text"]:focus {
+    outline: none;
+}
+
+#search input[type="text"]::placeholder {
+    transition: all 0.7s ease 0s;
+    color: #888;
+}
+
+#search input[type="text"]:focus::placeholder {
+    color: #bbb;
+}
