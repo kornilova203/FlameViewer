@@ -17,6 +17,11 @@ class AccumulativeTreeDrawer {
         this.canvasHeight = (LAYER_HEIGHT + LAYER_GAP) * this.tree.getDepth() + 70;
         this.section = null;
         this.stage = null;
+        this.header = null;
+    }
+
+    setHeader(newHeader) {
+        this.header = "for method " + newHeader;
     }
 
     draw() {
@@ -51,10 +56,11 @@ class AccumulativeTreeDrawer {
     };
 
     _createSectionWithCanvas() {
-        const sectionContent = templates.tree.getBaseSection(
+        const sectionContent = templates.tree.getAccumulativeTreeSection(
             {
                 canvasHeight: this.canvasHeight,
                 canvasWidth: this.canvasWidth,
+                header: this.header
             }
         ).content;
         return $(sectionContent).appendTo($("main"));
@@ -62,7 +68,9 @@ class AccumulativeTreeDrawer {
 
     _drawNode(node, depth, colorId) {
         const shape = this._drawRectangle(node, depth, colorId);
-        this._drawLabel(node, depth, shape);
+        if (node.getWidth() > 5) {
+            this._drawLabel(node, depth, shape);
+        }
     }
 
     _drawRectangle(node, depth, colorId) {

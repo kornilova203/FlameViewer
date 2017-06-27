@@ -36,10 +36,17 @@ h1 {
     font-weight: bold;
 }
 
-h2 {
+.call-tree-header {
     padding-top: 20px;
     border-top: 2px solid #ddd;
     margin-bottom: 40px;
+}
+
+.accumulative-tree-header {
+    color: #222;
+    font-size: 16px;
+    font-weight: normal;
+    text-align: center;
 }
 
 form {

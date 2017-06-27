@@ -29,7 +29,7 @@ public class AccumulativeTreesHelper {
             if (isSameMethod(childNodeBuilder, node)) {
                 addTimeToNode(childNodeBuilder, node.getWidth());
                 int count = node.getNodeInfo().getCount();
-                if (count == 0) {
+                if (count == 0) { // if build outgoing calls from call tree
                     count = 1;
                 }
                 addCountToNode(childNodeBuilder, count);

@@ -18,7 +18,7 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
     };
 
     _createSection(canvasOffset) {
-        const sectionContent = templates.tree.getSectionForThread(
+        const sectionContent = templates.tree.getCallTreeSection(
             {
                 threadId: this.threadId,
                 canvasHeight: this.canvasHeight,

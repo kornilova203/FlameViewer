@@ -7,15 +7,15 @@
  * @param canvasWidth
  * @param canvasOffset
  */
-{template .getSectionForThread}
+{template .getCallTreeSection}
 <section>
-    <h2>{$threadId}</h2>
-        <canvas
-            id="canvas-{$threadId}"
-            width="{$canvasWidth}"
-            height="{$canvasHeight}"
-            style="margin-left:{$canvasOffset}px">
-        </canvas>
+    <h2 class="call-tree-header">{$threadId}</h2>
+    <canvas
+        id="canvas-{$threadId}"
+        width="{$canvasWidth}"
+        height="{$canvasHeight}"
+        style="margin-left:{$canvasOffset}px">
+    </canvas>
 </section>
 {/template}
 
@@ -23,13 +23,17 @@
  * Get section template for base tree
  * @param canvasHeight Height of canvas
  * @param canvasWidth
+ * @param header
  */
-{template .getBaseSection}
+{template .getAccumulativeTreeSection}
 <section>
-        <canvas id="canvas"
-            width="{$canvasWidth}"
-            height="{$canvasHeight}">
-        </canvas>
+    {if $header}
+    <h2 class="accumulative-tree-header">{$header}</h2>
+    {/if}
+    <canvas id="canvas"
+        width="{$canvasWidth}"
+        height="{$canvasHeight}">
+    </canvas>
 </section>
 {/template}
 
