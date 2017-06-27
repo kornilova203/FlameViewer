@@ -75,7 +75,7 @@ class BaseDrawer {
         const offsetY = this._flipY(BaseDrawer._calcNormaOffsetY(depth));
         const scaleX = node.getWidth() / this.width;
         shape.setTransform(offsetX, offsetY, scaleX);
-        console.log(`draw: ${depth}\t${scaleX}\t${node.getNodeInfo().getMethodName()}`);
+        // console.log(`draw: ${depth}\t${scaleX}\t${node.getNodeInfo().getMethodName()}`);
         this._createPopup(node, shape, depth);
         this.stage.addChild(shape);
         return shape;

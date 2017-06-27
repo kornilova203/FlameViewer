@@ -4,7 +4,7 @@ import com.github.kornilova_l.profiler.ProfilerFileManager;
 import com.github.kornilova_l.protos.TreeProtos;
 import com.github.kornilova_l.protos.TreesProtos;
 import com.github.kornilova_l.server.trees.call_tree.CallTreesBuilder;
-import com.github.kornilova_l.server.trees.accumulative_trees.callers.CallersBuilder;
+import com.github.kornilova_l.server.trees.accumulative_trees.incoming_calls.IncomingCallsBuilder;
 import com.github.kornilova_l.server.trees.accumulative_trees.outgoing_calls.MethodOutgoingCallsBuilder;
 import com.github.kornilova_l.server.trees.accumulative_trees.outgoing_calls.OutgoingCallsBuilder;
 import com.intellij.openapi.diagnostic.Logger;
@@ -93,7 +93,7 @@ public class TreeBuilder {
     public TreeProtos.Tree getCallers() {
         updateLogFile();
         if (callers == null) {
-            callers = CallersBuilder.buildCallers(getOutgoingCalls());
+            callers = IncomingCallsBuilder.buildCallers(getOutgoingCalls());
         }
         return callers;
     }
@@ -110,7 +110,7 @@ public class TreeBuilder {
         boolean isStatic = Objects.equals(isStaticString, "true");
         TreeProtos.Tree tree = methodCallers.computeIfAbsent(
                 className + methodName + desc,
-                n -> CallersBuilder.buildCallers(
+                n -> IncomingCallsBuilder.buildCallers(
                         getOutgoingCalls(),
                         className,
                         methodName,

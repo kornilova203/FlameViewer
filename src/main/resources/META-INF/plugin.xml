@@ -29,7 +29,7 @@
         <group id="java-profiling-plugin.Menu" text="Profiler" description="">
             <add-to-group group-id="MainMenu" anchor="last"/>
             <action id="java-profiling-plugin.server" class="com.github.kornilova_l.server.ShowProfilingResultsAction"
-                    text="Show profiling results" description=""/>
+                    text="Show Results" description=""/>
             <action id="flamegraph-profiler.run" class="com.github.kornilova_l.plugin.ProfileAction"
                     text="Profile" description=""/>
         </group>

@@ -4,7 +4,10 @@ sudo apt-get install npm
 
 cd visualization
 npm install # couple of warnings is ok
-npm run watch-js
+npm run watch-accumulative-trees
+# ctrl + c
+npm run watch-call-tree
+# ctrl + c
 
 # if template was changed
 java -jar node_modules/google-closure-templates/javascript/SoyToJsSrcCompiler.jar \

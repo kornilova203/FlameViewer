@@ -1,4 +1,4 @@
-package com.github.kornilova_l.server.trees.accumulative_trees.callers;
+package com.github.kornilova_l.server.trees.accumulative_trees.incoming_calls;
 
 import com.github.kornilova_l.protos.TreeProtos;
 
@@ -8,7 +8,7 @@ import java.util.List;
 import static com.github.kornilova_l.server.trees.accumulative_trees.AccumulativeTreesHelper.setTreeWidth;
 import static com.github.kornilova_l.server.trees.accumulative_trees.AccumulativeTreesHelper.updateNodeList;
 
-public class CallersBuilder {
+public class IncomingCallsBuilder {
     private static TreeProtos.Tree.Builder treeBuilder;
     private static int maxDepth = 200;
 
