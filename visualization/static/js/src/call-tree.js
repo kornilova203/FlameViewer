@@ -16,7 +16,8 @@ function drawTrees(trees) {
         }
     }
     for (let i = 0; i < trees.length; i++) {
-        new Drawer(trees[i], minStartTime, maxFinishTime);
+        const drawer = new CallTreeDrawer(trees[i], minStartTime, maxFinishTime);
+        drawer.draw();
     }
 }
 

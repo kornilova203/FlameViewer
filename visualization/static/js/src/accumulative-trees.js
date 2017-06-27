@@ -4,12 +4,12 @@
 const TreeProto = require('../generated/tree_pb');
 
 function drawTree(tree) {
-    new BaseDrawer(tree);
+    const drawer = new AccumulativeTreeDrawer(tree);
+    drawer.draw();
 }
 
 $(window).on("load", function () {
     const request = new XMLHttpRequest();
-    console.log(window.location.href);
     const parameters = window.location.href.split("?")[1];
     const urlParts = window.location.href.split("?")[0].split("/");
     const treeType = urlParts[urlParts.length - 1];

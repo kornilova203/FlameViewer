@@ -4,23 +4,24 @@ const LAYER_GAP = 1;
 const POPUP_MARGIN = 4; // have no idea why there is a gap between popup and canvas
 const COLORS = ["#18A3FA", "#0887d7"];
 
-class Drawer {
-    constructor(tree, minStartTime, maxFinishTime) {
+/**
+ * Draws tree without:
+ * - parameters
+ * - start time
+ */
+class AccumulativeTreeDrawer {
+    constructor(tree) {
         this.tree = tree;
-        this.stage = null;
         this.width = this.tree.getWidth();
-        const fullDuration = maxFinishTime - minStartTime;
-        this.canvasWidth = this.width / fullDuration * MAIN_WIDTH;
+        this.canvasWidth = MAIN_WIDTH;
         this.canvasHeight = (LAYER_HEIGHT + LAYER_GAP) * this.tree.getDepth() + 70;
-        this.threadId = this.tree.getTreeInfo().getThreadId();
-
-        this.canvasOffset = (this.tree.getTreeInfo().getStartTime() - minStartTime) / fullDuration * MAIN_WIDTH;
-        this.section = this._createSection(this.canvasOffset);
-        this._drawTree();
+        this.section = null;
+        this.stage = null;
     }
 
-    _drawTree() {
-        this.stage = new createjs.Stage("canvas-" + this.threadId);
+    draw() {
+        this.section = this._createSectionWithCanvas();
+        this.stage = new createjs.Stage("canvas");
         this.stage.enableMouseOver(20);
 
         this._drawRecursively(this.tree.getBaseNode(), 0);
@@ -43,19 +44,17 @@ class Drawer {
      * Get canvas Y coordinate (it start from top)
      * @param y
      * @returns {number}
-     * @private
+     * @protected
      */
-    _flipY(y) {
+    flipY(y) {
         return this.canvasHeight - y - LAYER_HEIGHT;
     };
 
-    _createSection(canvasOffset) {
-        const sectionContent = templates.tree.getSectionForThread(
+    _createSectionWithCanvas() {
+        const sectionContent = templates.tree.getBaseSection(
             {
-                threadId: this.threadId,
                 canvasHeight: this.canvasHeight,
                 canvasWidth: this.canvasWidth,
-                canvasOffset: canvasOffset
             }
         ).content;
         return $(sectionContent).appendTo($("main"));
@@ -72,10 +71,10 @@ class Drawer {
             .beginFill(COLORS[colorId])
             .drawRect(0, 0, this.canvasWidth, LAYER_HEIGHT);
         const offsetX = this._getOffsetXForNode(node);
-        const offsetY = this._flipY(Drawer._calcNormaOffsetY(depth));
+        const offsetY = this.flipY(AccumulativeTreeDrawer._calcNormaOffsetY(depth));
         const scaleX = node.getWidth() / this.width;
         shape.setTransform(offsetX, offsetY, scaleX);
-        console.log(`draw: ${depth}\t${scaleX}\t${node.getNodeInfo().getMethodName()}`);
+        // console.log(`draw: ${depth}\t${scaleX}\t${node.getNodeInfo().getMethodName()}`);
         this._createPopup(node, shape, depth);
         this.stage.addChild(shape);
         return shape;
@@ -86,17 +85,19 @@ class Drawer {
     }
 
     _createPopup(node, shape, depth) {
-        const popupContent = templates.tree.callTreePopup(
+        const popupContent = templates.tree.basePopup(
             {
                 methodName: node.getNodeInfo().getMethodName(),
                 className: node.getNodeInfo().getClassName(),
+                desc: node.getNodeInfo().getDescription(),
+                isStatic: node.getNodeInfo().getIsStatic(),
                 duration: node.getWidth(),
-                startTime: node.getOffset()
+                count: node.getNodeInfo().getCount()
             }
         ).content;
         const popup = $(popupContent).appendTo(this.section);
         this._setPopupPosition(popup, node, depth);
-        Drawer._addMouseEvents(shape, popup);
+        AccumulativeTreeDrawer._addMouseEvents(shape, popup);
     }
 
     _drawLabel(node, depth, shape) {
@@ -106,7 +107,7 @@ class Drawer {
             "#fff"
         );
         text.x = this._getOffsetXForNode(node) + 2;
-        text.y = this._flipY(depth * (LAYER_GAP + LAYER_HEIGHT));
+        text.y = this.flipY(depth * (LAYER_GAP + LAYER_HEIGHT));
         const newShape = shape.clone();
         newShape.scaleX = shape.scaleX * 0.9;
         text.mask = newShape;
@@ -117,8 +118,8 @@ class Drawer {
 
     _setPopupPosition(popup, node, depth) {
         popup
-            .css("left", this.canvasOffset + this._getOffsetXForNode(node))
-            .css("margin-top", - Drawer._calcNormaOffsetY(depth) - POPUP_MARGIN)
+            .css("left", this._getOffsetXForNode(node))
+            .css("margin-top", - AccumulativeTreeDrawer._calcNormaOffsetY(depth) - POPUP_MARGIN)
     }
 
     static _calcNormaOffsetY(depth) {
