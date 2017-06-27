@@ -1,6 +1,7 @@
 package com.github.kornilova_l.server.trees.accumulative_trees.incoming_calls;
 
 import com.github.kornilova_l.protos.TreeProtos;
+import com.github.kornilova_l.server.trees.TreeBuilderInterface;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,11 +10,12 @@ import static com.github.kornilova_l.server.trees.accumulative_trees.Accumulativ
 import static com.github.kornilova_l.server.trees.accumulative_trees.AccumulativeTreesHelper.setTreeWidth;
 import static com.github.kornilova_l.server.trees.accumulative_trees.AccumulativeTreesHelper.updateNodeList;
 
-public class IncomingCallsBuilder {
-    private static TreeProtos.Tree.Builder treeBuilder;
-    private static int maxDepth = 0;
+public final class IncomingCallsBuilder implements TreeBuilderInterface {
+    private TreeProtos.Tree.Builder treeBuilder;
+    private TreeProtos.Tree tree;
+    private int maxDepth = 0;
 
-    public static TreeProtos.Tree buildIncomingCalls(TreeProtos.Tree outgoingCalls) {
+    public IncomingCallsBuilder(TreeProtos.Tree outgoingCalls) {
         initTreeBuilder();
         for (TreeProtos.Tree.Node node : outgoingCalls.getBaseNode().getNodesList()) {
             traverseTree(node, 0);
@@ -21,15 +23,14 @@ public class IncomingCallsBuilder {
         setNodesOffsetRecursively(treeBuilder.getBaseNodeBuilder(), 0);
         setTreeWidth(treeBuilder);
         treeBuilder.setDepth(maxDepth);
-        TreeProtos.Tree builtTree = treeBuilder.build();
-        System.out.println("incomingCalls: \n" + builtTree);
-        System.out.println("count children of sleep() " +
-                builtTree.getBaseNode().getNodes(1).getNodeInfo().getMethodName() +
-                " " + builtTree.getBaseNode().getNodes(1).getNodesCount());
-        return treeBuilder.build();
+        tree = treeBuilder.build();
     }
 
-    private static void initTreeBuilder() {
+    public TreeProtos.Tree getTree() {
+        return tree;
+    }
+
+    private void initTreeBuilder() {
         treeBuilder = TreeProtos.Tree.newBuilder()
                 .setBaseNode(TreeProtos.Tree.Node.newBuilder());
     }
@@ -45,7 +46,7 @@ public class IncomingCallsBuilder {
         }
     }
 
-    private static List<NodeBuilderAndTime> traverseTree(TreeProtos.Tree.Node node, int depth) {
+    private List<NodeBuilderAndTime> traverseTree(TreeProtos.Tree.Node node, int depth) {
         depth++;
         if (depth > maxDepth) {
             maxDepth = depth;
@@ -70,7 +71,7 @@ public class IncomingCallsBuilder {
         }
     }
 
-    private static List<NodeBuilderAndTime> addLeafToBaseNodeChildren(TreeProtos.Tree.Node node) {
+    private List<NodeBuilderAndTime> addLeafToBaseNodeChildren(TreeProtos.Tree.Node node) {
         ArrayList<NodeBuilderAndTime> arrayList = new ArrayList<>();
         TreeProtos.Tree.Node.Builder newNode = updateNodeList(treeBuilder.getBaseNodeBuilder(), node);
         arrayList.add(
@@ -80,13 +81,5 @@ public class IncomingCallsBuilder {
                 )
         );
         return arrayList;
-    }
-
-    public static TreeProtos.Tree buildIncomingCalls(TreeProtos.Tree outgoingCalls,
-                                                     String className,
-                                                     String methodName,
-                                                     String desc,
-                                                     boolean isStatic) {
-        return null;
     }
 }

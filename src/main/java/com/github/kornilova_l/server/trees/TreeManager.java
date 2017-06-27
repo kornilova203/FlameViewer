@@ -3,6 +3,7 @@ package com.github.kornilova_l.server.trees;
 import com.github.kornilova_l.profiler.ProfilerFileManager;
 import com.github.kornilova_l.protos.TreeProtos;
 import com.github.kornilova_l.protos.TreesProtos;
+import com.github.kornilova_l.server.trees.accumulative_trees.incoming_calls.MethodIncomingCallsBuilder;
 import com.github.kornilova_l.server.trees.call_tree.CallTreesBuilder;
 import com.github.kornilova_l.server.trees.accumulative_trees.incoming_calls.IncomingCallsBuilder;
 import com.github.kornilova_l.server.trees.accumulative_trees.outgoing_calls.MethodOutgoingCallsBuilder;
@@ -15,8 +16,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-public class TreeBuilder {
-    static final Logger LOG = Logger.getInstance(TreeBuilder.class);
+public class TreeManager {
+    private static final Logger LOG = Logger.getInstance(TreeManager.class);
     private File logFile;
     private TreesProtos.Trees originalTrees;
     private TreeProtos.Tree outgoingCalls;
@@ -51,7 +52,7 @@ public class TreeBuilder {
     public TreesProtos.Trees getCallTree() {
         updateLogFile();
         if (originalTrees == null) {
-            originalTrees = CallTreesBuilder.buildOriginalTrees(logFile);
+            originalTrees = new CallTreesBuilder(logFile).getTrees();
         }
         return originalTrees;
     }
@@ -63,12 +64,17 @@ public class TreeBuilder {
     public TreeProtos.Tree getOutgoingCalls() {
         updateLogFile();
         if (outgoingCalls == null) {
-            outgoingCalls = OutgoingCallsBuilder.buildOutgoingCalls(getCallTree());
+            outgoingCalls = new OutgoingCallsBuilder(getCallTree()).getTree();
         }
         return outgoingCalls;
     }
 
     public TreeProtos.Tree getOutgoingCalls(Map<String, List<String>> parameters) {
+        return getTreeForMethod(parameters, MethodOutgoingCallsBuilder.class);
+    }
+
+    private TreeProtos.Tree getTreeForMethod(Map<String, List<String>> parameters,
+                                             Class<?> methodCallsBuilder) {
         updateLogFile();
         String className = getParamForKey(parameters, "class");
         String methodName = getParamForKey(parameters, "method");
@@ -78,50 +84,43 @@ public class TreeBuilder {
             return null;
         }
         boolean isStatic = Objects.equals(isStaticString, "true");
-        TreeProtos.Tree tree = methodOutgoingCalls.computeIfAbsent(
-                className + methodName + desc,
-                n -> MethodOutgoingCallsBuilder.buildMethodOutgoingCalls(
-                        getOutgoingCalls(),
-                        className,
-                        methodName,
-                        desc,
-                        isStatic
-                )
-        );
-        System.out.println("getOutgoingCalls\n" + tree);
+        TreeProtos.Tree tree = null;
+        if (methodCallsBuilder == MethodIncomingCallsBuilder.class) {
+            tree = methodIncomingCalls.computeIfAbsent(
+                    className + methodName + desc,
+                    n -> new MethodIncomingCallsBuilder(
+                            getOutgoingCalls(),
+                            className,
+                            methodName,
+                            desc,
+                            isStatic
+                    ).getTree()
+            );
+        } else if (methodCallsBuilder == MethodOutgoingCallsBuilder.class) {
+            tree = methodOutgoingCalls.computeIfAbsent(
+                    className + methodName + desc,
+                    n -> new MethodOutgoingCallsBuilder(
+                            getOutgoingCalls(),
+                            className,
+                            methodName,
+                            desc,
+                            isStatic
+                    ).getTree()
+            );
+        }
         return tree;
     }
 
     public TreeProtos.Tree getIncomingCalls() {
         updateLogFile();
         if (incomingCalls == null) {
-            incomingCalls = IncomingCallsBuilder.buildIncomingCalls(getOutgoingCalls());
+            incomingCalls = new IncomingCallsBuilder(getOutgoingCalls()).getTree();
         }
         return incomingCalls;
     }
 
     public TreeProtos.Tree getIncomingCalls(Map<String, List<String>> parameters) {
-        updateLogFile();
-        String className = getParamForKey(parameters, "class");
-        String methodName = getParamForKey(parameters, "method");
-        String desc = getParamForKey(parameters, "desc");
-        String isStaticString = getParamForKey(parameters, "isStatic");
-        if (methodName == null || className == null || desc == null || isStaticString == null) {
-            return null;
-        }
-        boolean isStatic = Objects.equals(isStaticString, "true");
-        TreeProtos.Tree tree = methodIncomingCalls.computeIfAbsent(
-                className + methodName + desc,
-                n -> IncomingCallsBuilder.buildIncomingCalls(
-                        getOutgoingCalls(),
-                        className,
-                        methodName,
-                        desc,
-                        isStatic
-                )
-        );
-        System.out.println("getOutgoingCalls\n" + tree);
-        return tree;
+        return getTreeForMethod(parameters, IncomingCallsBuilder.class);
     }
 
     private static String getParamForKey(Map<String, List<String>> parameters, String key) {
@@ -134,12 +133,12 @@ public class TreeBuilder {
     }
 
     public static void main(String[] args) throws IOException {
-        TreeBuilder treeBuilder = new TreeBuilder();
-        treeBuilder.getIncomingCalls();
-//        TreeBuilder treeBuilder = new TreeBuilder();
-//        TreeProtos.Tree outgoingCalls = treeBuilder.getOutgoingCalls();
+        TreeManager treeManager = new TreeManager();
+        treeManager.getIncomingCalls();
+//        TreeManager treeManager = new TreeManager();
+//        TreeProtos.Tree outgoingCalls = treeManager.getOutgoingCalls();
 //        System.out.println(outgoingCalls.toString());
-//        TreesProtos.Trees originalTrees = treeBuilder.getCallTree();
+//        TreesProtos.Trees originalTrees = treeManager.getCallTree();
 //        System.out.println(originalTrees.toString());
     }
 }

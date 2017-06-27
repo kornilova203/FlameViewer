@@ -1,38 +1,43 @@
 package com.github.kornilova_l.server.trees.accumulative_trees.outgoing_calls;
 
 import com.github.kornilova_l.protos.TreeProtos;
-import com.github.kornilova_l.server.trees.TreeBuilder;
+import com.github.kornilova_l.server.trees.TreeBuilderInterface;
 import com.github.kornilova_l.server.trees.accumulative_trees.AccumulativeTreesHelper;
 
 import static com.github.kornilova_l.server.trees.accumulative_trees.AccumulativeTreesHelper.*;
 
-public class MethodOutgoingCallsBuilder {
-    private static TreeProtos.Tree.Builder treeBuilder;
-    private static TreeProtos.Tree.Node.Builder wantedMethodNode;
-    private static int maxDepth = 0;
-    private static String className;
-    private static String methodName;
-    private static String desc;
-    private static boolean isStatic;
+public final class MethodOutgoingCallsBuilder implements TreeBuilderInterface {
+    private TreeProtos.Tree.Builder treeBuilder;
+    private TreeProtos.Tree tree;
+    private TreeProtos.Tree.Node.Builder wantedMethodNode;
+    private int maxDepth = 0;
+    private String className;
+    private String methodName;
+    private String desc;
+    private boolean isStatic;
 
-    public static TreeProtos.Tree buildMethodOutgoingCalls(TreeProtos.Tree outgoingCalls,
+    public MethodOutgoingCallsBuilder(TreeProtos.Tree outgoingCalls,
                                                            String className,
                                                            String methodName,
                                                            String desc,
                                                            boolean isStatic) {
-        MethodOutgoingCallsBuilder.className = className;
-        MethodOutgoingCallsBuilder.methodName = methodName;
-        MethodOutgoingCallsBuilder.desc = desc;
-        MethodOutgoingCallsBuilder.isStatic = isStatic;
+        this.className = className;
+        this.methodName = methodName;
+        this.desc = desc;
+        this.isStatic = isStatic;
         initTreeBuilder();
         traverseTreeAndFind(outgoingCalls.getBaseNode());
         setNodesOffsetRecursively(treeBuilder.getBaseNodeBuilder(), 0);
         setTreeWidth(treeBuilder);
         treeBuilder.setDepth(maxDepth);
-        return treeBuilder.build();
+        tree = treeBuilder.build();
     }
 
-    private static void traverseTreeAndFind(TreeProtos.Tree.Node node) {
+    public TreeProtos.Tree getTree() {
+        return tree;
+    }
+
+    private void traverseTreeAndFind(TreeProtos.Tree.Node node) {
 
         if (AccumulativeTreesHelper.isSameMethod(wantedMethodNode, node)) {
             addNodesRecursively(treeBuilder.getBaseNodeBuilder(), node, 0);
@@ -42,20 +47,20 @@ public class MethodOutgoingCallsBuilder {
         }
     }
 
-    private static void addNodesRecursively(TreeProtos.Tree.Node.Builder nodeInOC, // where to append child
-                                            TreeProtos.Tree.Node nodeInCT, // from where get method and it's width
+    private void addNodesRecursively(TreeProtos.Tree.Node.Builder nodeBuilder, // where to append child
+                                            TreeProtos.Tree.Node node, // from where get method and it's width
                                             int depth) {
         depth++;
         if (depth > maxDepth) {
             maxDepth = depth;
         }
-        nodeInOC = updateNodeList(nodeInOC, nodeInCT);
-        for (TreeProtos.Tree.Node childNode : nodeInCT.getNodesList()) {
-            addNodesRecursively(nodeInOC, childNode, depth);
+        nodeBuilder = updateNodeList(nodeBuilder, node);
+        for (TreeProtos.Tree.Node childNode : node.getNodesList()) {
+            addNodesRecursively(nodeBuilder, childNode, depth);
         }
     }
 
-    private static void initTreeBuilder() {
+    private void initTreeBuilder() {
         TreeProtos.Tree.Node.Builder baseNode = TreeProtos.Tree.Node.newBuilder()
                 .addNodes(TreeProtos.Tree.Node.newBuilder()
                         .setNodeInfo(
@@ -72,12 +77,12 @@ public class MethodOutgoingCallsBuilder {
                 .setBaseNode(baseNode);
     }
 
-    public static void main(String[] args) {
-        TreeProtos.Tree tree = buildMethodOutgoingCalls(new TreeBuilder().getOutgoingCalls(),
-                "samples/Sample",
-                "run",
-                "()V",
-                false);
-        System.out.println("method: " + tree);
+    public void main(String[] args) {
+//        TreeProtos.Tree tree = buildMethodOutgoingCalls(new TreeManager().getOutgoingCalls(),
+//                "samples/Sample",
+//                "run",
+//                "()V",
+//                false);
+//        System.out.println("method: " + tree);
     }
 }

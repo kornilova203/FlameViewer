@@ -3,7 +3,7 @@ package com.github.kornilova_l.server;
 import com.github.kornilova_l.profiler.ProfilerFileManager;
 import com.github.kornilova_l.protos.TreeProtos;
 import com.github.kornilova_l.protos.TreesProtos;
-import com.github.kornilova_l.server.trees.TreeBuilder;
+import com.github.kornilova_l.server.trees.TreeManager;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
@@ -18,7 +18,7 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
 
     private static final com.intellij.openapi.diagnostic.Logger LOG =
             com.intellij.openapi.diagnostic.Logger.getInstance(ProfilerHttpRequestHandler.class);
-    private final TreeBuilder treeBuilder = new TreeBuilder();
+    private final TreeManager treeManager = new TreeManager();
 
     @Override
     public boolean process(QueryStringDecoder urlDecoder,
@@ -41,22 +41,22 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
                 break;
             case ServerNames.CALL_TREE_JS_REQUEST:
                 LOG.info("CALL_TREE_JS_REQUEST");
-                sendTrees(context, treeBuilder.getCallTree());
+                sendTrees(context, treeManager.getCallTree());
                 break;
             case ServerNames.OUTGOING_CALLS_JS_REQUEST:
                 LOG.info("OUTGOING_CALLS_JS_REQUEST");
                 if (urlDecoder.parameters().containsKey("method")) {
-                    sendTree(context, treeBuilder.getOutgoingCalls(urlDecoder.parameters()));
+                    sendTree(context, treeManager.getOutgoingCalls(urlDecoder.parameters()));
                 } else {
-                    sendTree(context, treeBuilder.getOutgoingCalls());
+                    sendTree(context, treeManager.getOutgoingCalls());
                 }
                 break;
             case ServerNames.INCOMING_CALLS_JS_REQUEST:
                 LOG.info("INCOMING_CALLS_JS_REQUEST");
                 if (urlDecoder.parameters().containsKey("method")) {
-                    sendTree(context, treeBuilder.getIncomingCalls(urlDecoder.parameters()));
+                    sendTree(context, treeManager.getIncomingCalls(urlDecoder.parameters()));
                 } else {
-                    sendTree(context, treeBuilder.getIncomingCalls());
+                    sendTree(context, treeManager.getIncomingCalls());
                 }
                 break;
             default:
