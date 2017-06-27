@@ -1,12 +1,11 @@
-package com.github.kornilova_l.server.trees.accumulative_trees.outgoing_calls;
+package com.github.kornilova_l.server.trees.accumulative_trees;
 
 import com.github.kornilova_l.protos.TreeProtos;
 import com.github.kornilova_l.server.trees.TreeBuilderInterface;
-import com.github.kornilova_l.server.trees.accumulative_trees.AccumulativeTreesHelper;
 
 import static com.github.kornilova_l.server.trees.accumulative_trees.AccumulativeTreesHelper.*;
 
-public final class MethodOutgoingCallsBuilder implements TreeBuilderInterface {
+public class MethodAccumulativeTreeBuilder implements TreeBuilderInterface {
     private TreeProtos.Tree.Builder treeBuilder;
     private TreeProtos.Tree tree;
     private TreeProtos.Tree.Node.Builder wantedMethodNode;
@@ -16,17 +15,17 @@ public final class MethodOutgoingCallsBuilder implements TreeBuilderInterface {
     private String desc;
     private boolean isStatic;
 
-    public MethodOutgoingCallsBuilder(TreeProtos.Tree outgoingCalls,
-                                                           String className,
-                                                           String methodName,
-                                                           String desc,
-                                                           boolean isStatic) {
+    public MethodAccumulativeTreeBuilder(TreeProtos.Tree sourceTree,
+                                      String className,
+                                      String methodName,
+                                      String desc,
+                                      boolean isStatic) {
         this.className = className;
         this.methodName = methodName;
         this.desc = desc;
         this.isStatic = isStatic;
         initTreeBuilder();
-        traverseTreeAndFind(outgoingCalls.getBaseNode());
+        traverseTreeAndFind(sourceTree.getBaseNode());
         setNodesOffsetRecursively(treeBuilder.getBaseNodeBuilder(), 0);
         setTreeWidth(treeBuilder);
         treeBuilder.setDepth(maxDepth);
@@ -48,8 +47,8 @@ public final class MethodOutgoingCallsBuilder implements TreeBuilderInterface {
     }
 
     private void addNodesRecursively(TreeProtos.Tree.Node.Builder nodeBuilder, // where to append child
-                                            TreeProtos.Tree.Node node, // from where get method and it's width
-                                            int depth) {
+                                     TreeProtos.Tree.Node node, // from where get method and it's width
+                                     int depth) {
         depth++;
         if (depth > maxDepth) {
             maxDepth = depth;
@@ -75,14 +74,5 @@ public final class MethodOutgoingCallsBuilder implements TreeBuilderInterface {
         wantedMethodNode = baseNode.getNodesBuilder(0);
         treeBuilder = TreeProtos.Tree.newBuilder()
                 .setBaseNode(baseNode);
-    }
-
-    public void main(String[] args) {
-//        TreeProtos.Tree tree = buildMethodOutgoingCalls(new TreeManager().getOutgoingCalls(),
-//                "samples/Sample",
-//                "run",
-//                "()V",
-//                false);
-//        System.out.println("method: " + tree);
     }
 }

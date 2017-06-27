@@ -3,10 +3,9 @@ package com.github.kornilova_l.server.trees;
 import com.github.kornilova_l.profiler.ProfilerFileManager;
 import com.github.kornilova_l.protos.TreeProtos;
 import com.github.kornilova_l.protos.TreesProtos;
-import com.github.kornilova_l.server.trees.accumulative_trees.incoming_calls.MethodIncomingCallsBuilder;
+import com.github.kornilova_l.server.trees.accumulative_trees.MethodAccumulativeTreeBuilder;
 import com.github.kornilova_l.server.trees.call_tree.CallTreesBuilder;
 import com.github.kornilova_l.server.trees.accumulative_trees.incoming_calls.IncomingCallsBuilder;
-import com.github.kornilova_l.server.trees.accumulative_trees.outgoing_calls.MethodOutgoingCallsBuilder;
 import com.github.kornilova_l.server.trees.accumulative_trees.outgoing_calls.OutgoingCallsBuilder;
 import com.intellij.openapi.diagnostic.Logger;
 
@@ -59,6 +58,7 @@ public class TreeManager {
 
     /**
      * Get full tree
+     *
      * @return TreeProtos.Tree object. Tree may not have any nodes inside (if all methods took <1ms)
      */
     public TreeProtos.Tree getOutgoingCalls() {
@@ -70,12 +70,12 @@ public class TreeManager {
     }
 
     public TreeProtos.Tree getOutgoingCalls(Map<String, List<String>> parameters) {
-        return getTreeForMethod(parameters, MethodOutgoingCallsBuilder.class);
+        return getTreeForMethod(parameters, getOutgoingCalls(), methodOutgoingCalls);
     }
 
     private TreeProtos.Tree getTreeForMethod(Map<String, List<String>> parameters,
-                                             Class<?> methodCallsBuilder) {
-        updateLogFile();
+                                             TreeProtos.Tree sourceTree,
+                                             HashMap<String, TreeProtos.Tree> map) {
         String className = getParamForKey(parameters, "class");
         String methodName = getParamForKey(parameters, "method");
         String desc = getParamForKey(parameters, "desc");
@@ -84,31 +84,16 @@ public class TreeManager {
             return null;
         }
         boolean isStatic = Objects.equals(isStaticString, "true");
-        TreeProtos.Tree tree = null;
-        if (methodCallsBuilder == MethodIncomingCallsBuilder.class) {
-            tree = methodIncomingCalls.computeIfAbsent(
-                    className + methodName + desc,
-                    n -> new MethodIncomingCallsBuilder(
-                            getOutgoingCalls(),
-                            className,
-                            methodName,
-                            desc,
-                            isStatic
-                    ).getTree()
-            );
-        } else if (methodCallsBuilder == MethodOutgoingCallsBuilder.class) {
-            tree = methodOutgoingCalls.computeIfAbsent(
-                    className + methodName + desc,
-                    n -> new MethodOutgoingCallsBuilder(
-                            getOutgoingCalls(),
-                            className,
-                            methodName,
-                            desc,
-                            isStatic
-                    ).getTree()
-            );
-        }
-        return tree;
+        return map.computeIfAbsent(
+                className + methodName + desc,
+                n -> new MethodAccumulativeTreeBuilder(
+                        sourceTree,
+                        className,
+                        methodName,
+                        desc,
+                        isStatic
+                ).getTree()
+        );
     }
 
     public TreeProtos.Tree getIncomingCalls() {
@@ -120,7 +105,7 @@ public class TreeManager {
     }
 
     public TreeProtos.Tree getIncomingCalls(Map<String, List<String>> parameters) {
-        return getTreeForMethod(parameters, IncomingCallsBuilder.class);
+        return getTreeForMethod(parameters, getIncomingCalls(), methodIncomingCalls);
     }
 
     private static String getParamForKey(Map<String, List<String>> parameters, String key) {
