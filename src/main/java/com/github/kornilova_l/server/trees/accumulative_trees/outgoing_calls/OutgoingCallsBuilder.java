@@ -34,16 +34,16 @@ public class OutgoingCallsBuilder {
         }
     }
 
-    private static void addNodesRecursively(TreeProtos.Tree.Node.Builder nodeInOC, // where to append child
-                                            TreeProtos.Tree.Node nodeInCT, // from where get method and it's width
+    private static void addNodesRecursively(TreeProtos.Tree.Node.Builder nodeBuilder, // where to append child
+                                            TreeProtos.Tree.Node node, // from where get method and it's width
                                             int depth) {
         depth++;
         if (depth > maxDepth) {
             maxDepth = depth;
         }
-        nodeInOC = updateNodeList(nodeInOC, nodeInCT);
-        for (TreeProtos.Tree.Node childNode : nodeInCT.getNodesList()) {
-            addNodesRecursively(nodeInOC, childNode, depth);
+        nodeBuilder = updateNodeList(nodeBuilder, node);
+        for (TreeProtos.Tree.Node childNode : node.getNodesList()) {
+            addNodesRecursively(nodeBuilder, childNode, depth);
         }
     }
 }

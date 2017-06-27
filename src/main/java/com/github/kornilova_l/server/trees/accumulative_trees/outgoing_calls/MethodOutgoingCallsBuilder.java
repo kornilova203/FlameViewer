@@ -63,7 +63,8 @@ public class MethodOutgoingCallsBuilder {
                                         className,
                                         methodName,
                                         desc,
-                                        isStatic
+                                        isStatic,
+                                        0
                                 )
                         ));
         wantedMethodNode = baseNode.getNodesBuilder(0);

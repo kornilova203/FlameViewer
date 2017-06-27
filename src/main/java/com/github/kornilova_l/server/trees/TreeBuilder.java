@@ -39,6 +39,8 @@ public class TreeBuilder {
         originalTrees = null;
         outgoingCalls = null;
         incomingCalls = null;
+        methodIncomingCalls.clear();
+        methodOutgoingCalls.clear();
     }
 
     /**
