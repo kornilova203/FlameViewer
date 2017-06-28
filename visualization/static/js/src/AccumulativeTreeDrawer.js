@@ -200,7 +200,7 @@ class SearchElem {
     }
 
     dim() {
-        this.fillCommand.style = "#bbb";
+        this.fillCommand.style = "#ccc";
     }
 
     reset() {
