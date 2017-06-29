@@ -23,6 +23,7 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <httpRequestHandler implementation="com.github.kornilova_l.server.ProfilerHttpRequestHandler"/>
+        <runConfigurationExtension implementation="com.github.kornilova_l.plugin.ProfilerRunConfigurationExtension"/>
     </extensions>
 
     <actions>
