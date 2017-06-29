@@ -34,7 +34,10 @@ public class ProfilerRunConfigurationExtension extends RunConfigurationExtension
     public <T extends RunConfigurationBase> void updateJavaParameters(T configuration,
                                                                       JavaParameters params,
                                                                       RunnerSettings runnerSettings) throws ExecutionException {
-
+        params.getVMParametersList().add(
+                "-javaagent:/home/lk/java-profiling-plugin/build/libs/javaagent.jar=/home/lk/java-profiling-plugin/agent-config/agent11-samples.config"
+        );
+        System.out.println(params.getVMParametersList());
     }
 
     @Override
