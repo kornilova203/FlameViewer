@@ -48,9 +48,12 @@ class ProfilingMethodVisitor extends AdviceAdapter {
                 "(Ljava/lang/Object;)V", false);
     }
 
+    /*
+    INVOKESTATIC com/github/kornilova_l/profiler/logger/Proxy.getLogger ()Lcom/github/kornilova_l/profiler/logger/Logger;
+     */
     private void getLogger() {
-        visitMethodInsn(INVOKESTATIC, LOGGER_PACKAGE_NAME + "Logger",
-                "getInstance", "()Lcom/github/kornilova_l/profiler/logger/Logger;", false);
+        visitMethodInsn(INVOKESTATIC, LOGGER_PACKAGE_NAME + "Proxy",
+                "getLogger", "()Lcom/github/kornilova_l/profiler/logger/Logger;", false);
     }
 
     private void printMessage(String message) {

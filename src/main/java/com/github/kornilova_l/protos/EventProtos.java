@@ -6,17 +6,17 @@ package com.github.kornilova_l.protos;
 public final class EventProtos {
   private EventProtos() {}
   public static void registerAllExtensions(
-      com.google.protobuf.ExtensionRegistryLite registry) {
+      com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite registry) {
   }
 
   public static void registerAllExtensions(
-      com.google.protobuf.ExtensionRegistry registry) {
+      com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistry registry) {
     registerAllExtensions(
-        (com.google.protobuf.ExtensionRegistryLite) registry);
+        (com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite) registry);
   }
   public interface EventOrBuilder extends
       // @@protoc_insertion_point(interface_extends:com.github.kornilova_l.protos.Event)
-      com.google.protobuf.MessageOrBuilder {
+      com.github.kornilova_l.libs.com.google.protobuf.MessageOrBuilder {
 
     /**
      * <code>int64 thread_id = 1;</code>
@@ -61,11 +61,11 @@ public final class EventProtos {
    * Protobuf type {@code com.github.kornilova_l.protos.Event}
    */
   public  static final class Event extends
-      com.google.protobuf.GeneratedMessageV3 implements
+      com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:com.github.kornilova_l.protos.Event)
       EventOrBuilder {
     // Use Event.newBuilder() to construct.
-    private Event(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+    private Event(com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
     private Event() {
@@ -74,14 +74,14 @@ public final class EventProtos {
     }
 
     @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
+    public final com.github.kornilova_l.libs.com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
-      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
+      return com.github.kornilova_l.libs.com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
     private Event(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+        com.github.kornilova_l.libs.com.google.protobuf.CodedInputStream input,
+        com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
       this();
       int mutable_bitField0_ = 0;
       try {
@@ -152,21 +152,21 @@ public final class EventProtos {
             }
           }
         }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+      } catch (com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException e) {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
+        throw new com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
         makeExtensionsImmutable();
       }
     }
-    public static final com.google.protobuf.Descriptors.Descriptor
+    public static final com.github.kornilova_l.libs.com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return com.github.kornilova_l.protos.EventProtos.internal_static_com_github_kornilova_l_protos_Event_descriptor;
     }
 
-    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+    protected com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
       return com.github.kornilova_l.protos.EventProtos.internal_static_com_github_kornilova_l_protos_Event_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
@@ -175,7 +175,7 @@ public final class EventProtos {
 
     public interface EnterOrBuilder extends
         // @@protoc_insertion_point(interface_extends:com.github.kornilova_l.protos.Event.Enter)
-        com.google.protobuf.MessageOrBuilder {
+        com.github.kornilova_l.libs.com.google.protobuf.MessageOrBuilder {
 
       /**
        * <code>string class_name = 1;</code>
@@ -184,7 +184,7 @@ public final class EventProtos {
       /**
        * <code>string class_name = 1;</code>
        */
-      com.google.protobuf.ByteString
+      com.github.kornilova_l.libs.com.google.protobuf.ByteString
           getClassNameBytes();
 
       /**
@@ -194,7 +194,7 @@ public final class EventProtos {
       /**
        * <code>string method_name = 2;</code>
        */
-      com.google.protobuf.ByteString
+      com.github.kornilova_l.libs.com.google.protobuf.ByteString
           getMethodNameBytes();
 
       /**
@@ -233,18 +233,18 @@ public final class EventProtos {
       /**
        * <code>string description = 5;</code>
        */
-      com.google.protobuf.ByteString
+      com.github.kornilova_l.libs.com.google.protobuf.ByteString
           getDescriptionBytes();
     }
     /**
      * Protobuf type {@code com.github.kornilova_l.protos.Event.Enter}
      */
     public  static final class Enter extends
-        com.google.protobuf.GeneratedMessageV3 implements
+        com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3 implements
         // @@protoc_insertion_point(message_implements:com.github.kornilova_l.protos.Event.Enter)
         EnterOrBuilder {
       // Use Enter.newBuilder() to construct.
-      private Enter(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      private Enter(com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
         super(builder);
       }
       private Enter() {
@@ -256,14 +256,14 @@ public final class EventProtos {
       }
 
       @java.lang.Override
-      public final com.google.protobuf.UnknownFieldSet
+      public final com.github.kornilova_l.libs.com.google.protobuf.UnknownFieldSet
       getUnknownFields() {
-        return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
+        return com.github.kornilova_l.libs.com.google.protobuf.UnknownFieldSet.getDefaultInstance();
       }
       private Enter(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+          com.github.kornilova_l.libs.com.google.protobuf.CodedInputStream input,
+          com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
         this();
         int mutable_bitField0_ = 0;
         try {
@@ -314,10 +314,10 @@ public final class EventProtos {
               }
             }
           }
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        } catch (com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException e) {
           throw e.setUnfinishedMessage(this);
         } catch (java.io.IOException e) {
-          throw new com.google.protobuf.InvalidProtocolBufferException(
+          throw new com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException(
               e).setUnfinishedMessage(this);
         } finally {
           if (((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
@@ -326,12 +326,12 @@ public final class EventProtos {
           makeExtensionsImmutable();
         }
       }
-      public static final com.google.protobuf.Descriptors.Descriptor
+      public static final com.github.kornilova_l.libs.com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.github.kornilova_l.protos.EventProtos.internal_static_com_github_kornilova_l_protos_Event_Enter_descriptor;
       }
 
-      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      protected com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
         return com.github.kornilova_l.protos.EventProtos.internal_static_com_github_kornilova_l_protos_Event_Enter_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
@@ -349,8 +349,8 @@ public final class EventProtos {
         if (ref instanceof java.lang.String) {
           return (java.lang.String) ref;
         } else {
-          com.google.protobuf.ByteString bs = 
-              (com.google.protobuf.ByteString) ref;
+          com.github.kornilova_l.libs.com.google.protobuf.ByteString bs =
+              (com.github.kornilova_l.libs.com.google.protobuf.ByteString) ref;
           java.lang.String s = bs.toStringUtf8();
           className_ = s;
           return s;
@@ -359,17 +359,17 @@ public final class EventProtos {
       /**
        * <code>string class_name = 1;</code>
        */
-      public com.google.protobuf.ByteString
+      public com.github.kornilova_l.libs.com.google.protobuf.ByteString
           getClassNameBytes() {
         java.lang.Object ref = className_;
         if (ref instanceof java.lang.String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
+          com.github.kornilova_l.libs.com.google.protobuf.ByteString b =
+              com.github.kornilova_l.libs.com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           className_ = b;
           return b;
         } else {
-          return (com.google.protobuf.ByteString) ref;
+          return (com.github.kornilova_l.libs.com.google.protobuf.ByteString) ref;
         }
       }
 
@@ -383,8 +383,8 @@ public final class EventProtos {
         if (ref instanceof java.lang.String) {
           return (java.lang.String) ref;
         } else {
-          com.google.protobuf.ByteString bs = 
-              (com.google.protobuf.ByteString) ref;
+          com.github.kornilova_l.libs.com.google.protobuf.ByteString bs =
+              (com.github.kornilova_l.libs.com.google.protobuf.ByteString) ref;
           java.lang.String s = bs.toStringUtf8();
           methodName_ = s;
           return s;
@@ -393,17 +393,17 @@ public final class EventProtos {
       /**
        * <code>string method_name = 2;</code>
        */
-      public com.google.protobuf.ByteString
+      public com.github.kornilova_l.libs.com.google.protobuf.ByteString
           getMethodNameBytes() {
         java.lang.Object ref = methodName_;
         if (ref instanceof java.lang.String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
+          com.github.kornilova_l.libs.com.google.protobuf.ByteString b =
+              com.github.kornilova_l.libs.com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           methodName_ = b;
           return b;
         } else {
-          return (com.google.protobuf.ByteString) ref;
+          return (com.github.kornilova_l.libs.com.google.protobuf.ByteString) ref;
         }
       }
 
@@ -461,8 +461,8 @@ public final class EventProtos {
         if (ref instanceof java.lang.String) {
           return (java.lang.String) ref;
         } else {
-          com.google.protobuf.ByteString bs = 
-              (com.google.protobuf.ByteString) ref;
+          com.github.kornilova_l.libs.com.google.protobuf.ByteString bs =
+              (com.github.kornilova_l.libs.com.google.protobuf.ByteString) ref;
           java.lang.String s = bs.toStringUtf8();
           description_ = s;
           return s;
@@ -471,17 +471,17 @@ public final class EventProtos {
       /**
        * <code>string description = 5;</code>
        */
-      public com.google.protobuf.ByteString
+      public com.github.kornilova_l.libs.com.google.protobuf.ByteString
           getDescriptionBytes() {
         java.lang.Object ref = description_;
         if (ref instanceof java.lang.String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
+          com.github.kornilova_l.libs.com.google.protobuf.ByteString b =
+              com.github.kornilova_l.libs.com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           description_ = b;
           return b;
         } else {
-          return (com.google.protobuf.ByteString) ref;
+          return (com.github.kornilova_l.libs.com.google.protobuf.ByteString) ref;
         }
       }
 
@@ -495,13 +495,13 @@ public final class EventProtos {
         return true;
       }
 
-      public void writeTo(com.google.protobuf.CodedOutputStream output)
+      public void writeTo(com.github.kornilova_l.libs.com.google.protobuf.CodedOutputStream output)
                           throws java.io.IOException {
         if (!getClassNameBytes().isEmpty()) {
-          com.google.protobuf.GeneratedMessageV3.writeString(output, 1, className_);
+          com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.writeString(output, 1, className_);
         }
         if (!getMethodNameBytes().isEmpty()) {
-          com.google.protobuf.GeneratedMessageV3.writeString(output, 2, methodName_);
+          com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.writeString(output, 2, methodName_);
         }
         if (isStatic_ != false) {
           output.writeBool(3, isStatic_);
@@ -510,7 +510,7 @@ public final class EventProtos {
           output.writeMessage(4, parameters_.get(i));
         }
         if (!getDescriptionBytes().isEmpty()) {
-          com.google.protobuf.GeneratedMessageV3.writeString(output, 5, description_);
+          com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.writeString(output, 5, description_);
         }
       }
 
@@ -520,21 +520,21 @@ public final class EventProtos {
 
         size = 0;
         if (!getClassNameBytes().isEmpty()) {
-          size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, className_);
+          size += com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.computeStringSize(1, className_);
         }
         if (!getMethodNameBytes().isEmpty()) {
-          size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, methodName_);
+          size += com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.computeStringSize(2, methodName_);
         }
         if (isStatic_ != false) {
-          size += com.google.protobuf.CodedOutputStream
+          size += com.github.kornilova_l.libs.com.google.protobuf.CodedOutputStream
             .computeBoolSize(3, isStatic_);
         }
         for (int i = 0; i < parameters_.size(); i++) {
-          size += com.google.protobuf.CodedOutputStream
+          size += com.github.kornilova_l.libs.com.google.protobuf.CodedOutputStream
             .computeMessageSize(4, parameters_.get(i));
         }
         if (!getDescriptionBytes().isEmpty()) {
-          size += com.google.protobuf.GeneratedMessageV3.computeStringSize(5, description_);
+          size += com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.computeStringSize(5, description_);
         }
         memoizedSize = size;
         return size;
@@ -577,7 +577,7 @@ public final class EventProtos {
         hash = (37 * hash) + METHOD_NAME_FIELD_NUMBER;
         hash = (53 * hash) + getMethodName().hashCode();
         hash = (37 * hash) + IS_STATIC_FIELD_NUMBER;
-        hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+        hash = (53 * hash) + com.github.kornilova_l.libs.com.google.protobuf.Internal.hashBoolean(
             getIsStatic());
         if (getParametersCount() > 0) {
           hash = (37 * hash) + PARAMETERS_FIELD_NUMBER;
@@ -592,71 +592,71 @@ public final class EventProtos {
 
       public static com.github.kornilova_l.protos.EventProtos.Event.Enter parseFrom(
           java.nio.ByteBuffer data)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+          throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data);
       }
       public static com.github.kornilova_l.protos.EventProtos.Event.Enter parseFrom(
           java.nio.ByteBuffer data,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+          com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data, extensionRegistry);
       }
       public static com.github.kornilova_l.protos.EventProtos.Event.Enter parseFrom(
-          com.google.protobuf.ByteString data)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+          com.github.kornilova_l.libs.com.google.protobuf.ByteString data)
+          throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data);
       }
       public static com.github.kornilova_l.protos.EventProtos.Event.Enter parseFrom(
-          com.google.protobuf.ByteString data,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+          com.github.kornilova_l.libs.com.google.protobuf.ByteString data,
+          com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data, extensionRegistry);
       }
       public static com.github.kornilova_l.protos.EventProtos.Event.Enter parseFrom(byte[] data)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+          throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data);
       }
       public static com.github.kornilova_l.protos.EventProtos.Event.Enter parseFrom(
           byte[] data,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+          com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data, extensionRegistry);
       }
       public static com.github.kornilova_l.protos.EventProtos.Event.Enter parseFrom(java.io.InputStream input)
           throws java.io.IOException {
-        return com.google.protobuf.GeneratedMessageV3
+        return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
             .parseWithIOException(PARSER, input);
       }
       public static com.github.kornilova_l.protos.EventProtos.Event.Enter parseFrom(
           java.io.InputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        return com.google.protobuf.GeneratedMessageV3
+        return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
             .parseWithIOException(PARSER, input, extensionRegistry);
       }
       public static com.github.kornilova_l.protos.EventProtos.Event.Enter parseDelimitedFrom(java.io.InputStream input)
           throws java.io.IOException {
-        return com.google.protobuf.GeneratedMessageV3
+        return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
             .parseDelimitedWithIOException(PARSER, input);
       }
       public static com.github.kornilova_l.protos.EventProtos.Event.Enter parseDelimitedFrom(
           java.io.InputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        return com.google.protobuf.GeneratedMessageV3
+        return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
             .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
       }
       public static com.github.kornilova_l.protos.EventProtos.Event.Enter parseFrom(
-          com.google.protobuf.CodedInputStream input)
+          com.github.kornilova_l.libs.com.google.protobuf.CodedInputStream input)
           throws java.io.IOException {
-        return com.google.protobuf.GeneratedMessageV3
+        return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
             .parseWithIOException(PARSER, input);
       }
       public static com.github.kornilova_l.protos.EventProtos.Event.Enter parseFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          com.github.kornilova_l.libs.com.google.protobuf.CodedInputStream input,
+          com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        return com.google.protobuf.GeneratedMessageV3
+        return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
             .parseWithIOException(PARSER, input, extensionRegistry);
       }
 
@@ -674,7 +674,7 @@ public final class EventProtos {
 
       @java.lang.Override
       protected Builder newBuilderForType(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+          com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         Builder builder = new Builder(parent);
         return builder;
       }
@@ -682,15 +682,15 @@ public final class EventProtos {
        * Protobuf type {@code com.github.kornilova_l.protos.Event.Enter}
        */
       public static final class Builder extends
-          com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+          com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
           // @@protoc_insertion_point(builder_implements:com.github.kornilova_l.protos.Event.Enter)
           com.github.kornilova_l.protos.EventProtos.Event.EnterOrBuilder {
-        public static final com.google.protobuf.Descriptors.Descriptor
+        public static final com.github.kornilova_l.libs.com.google.protobuf.Descriptors.Descriptor
             getDescriptor() {
           return com.github.kornilova_l.protos.EventProtos.internal_static_com_github_kornilova_l_protos_Event_Enter_descriptor;
         }
 
-        protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        protected com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
             internalGetFieldAccessorTable() {
           return com.github.kornilova_l.protos.EventProtos.internal_static_com_github_kornilova_l_protos_Event_Enter_fieldAccessorTable
               .ensureFieldAccessorsInitialized(
@@ -703,12 +703,12 @@ public final class EventProtos {
         }
 
         private Builder(
-            com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+            com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
           super(parent);
           maybeForceBuilderInitialization();
         }
         private void maybeForceBuilderInitialization() {
-          if (com.google.protobuf.GeneratedMessageV3
+          if (com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
                   .alwaysUseFieldBuilders) {
             getParametersFieldBuilder();
           }
@@ -732,7 +732,7 @@ public final class EventProtos {
           return this;
         }
 
-        public com.google.protobuf.Descriptors.Descriptor
+        public com.github.kornilova_l.libs.com.google.protobuf.Descriptors.Descriptor
             getDescriptorForType() {
           return com.github.kornilova_l.protos.EventProtos.internal_static_com_github_kornilova_l_protos_Event_Enter_descriptor;
         }
@@ -775,29 +775,29 @@ public final class EventProtos {
           return (Builder) super.clone();
         }
         public Builder setField(
-            com.google.protobuf.Descriptors.FieldDescriptor field,
+            com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FieldDescriptor field,
             Object value) {
           return (Builder) super.setField(field, value);
         }
         public Builder clearField(
-            com.google.protobuf.Descriptors.FieldDescriptor field) {
+            com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FieldDescriptor field) {
           return (Builder) super.clearField(field);
         }
         public Builder clearOneof(
-            com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+            com.github.kornilova_l.libs.com.google.protobuf.Descriptors.OneofDescriptor oneof) {
           return (Builder) super.clearOneof(oneof);
         }
         public Builder setRepeatedField(
-            com.google.protobuf.Descriptors.FieldDescriptor field,
+            com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FieldDescriptor field,
             int index, Object value) {
           return (Builder) super.setRepeatedField(field, index, value);
         }
         public Builder addRepeatedField(
-            com.google.protobuf.Descriptors.FieldDescriptor field,
+            com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FieldDescriptor field,
             Object value) {
           return (Builder) super.addRepeatedField(field, value);
         }
-        public Builder mergeFrom(com.google.protobuf.Message other) {
+        public Builder mergeFrom(com.github.kornilova_l.libs.com.google.protobuf.Message other) {
           if (other instanceof com.github.kornilova_l.protos.EventProtos.Event.Enter) {
             return mergeFrom((com.github.kornilova_l.protos.EventProtos.Event.Enter)other);
           } else {
@@ -838,7 +838,7 @@ public final class EventProtos {
                 parameters_ = other.parameters_;
                 bitField0_ = (bitField0_ & ~0x00000008);
                 parametersBuilder_ = 
-                  com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
+                  com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
                      getParametersFieldBuilder() : null;
               } else {
                 parametersBuilder_.addAllMessages(other.parameters_);
@@ -858,13 +858,13 @@ public final class EventProtos {
         }
 
         public Builder mergeFrom(
-            com.google.protobuf.CodedInputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            com.github.kornilova_l.libs.com.google.protobuf.CodedInputStream input,
+            com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws java.io.IOException {
           com.github.kornilova_l.protos.EventProtos.Event.Enter parsedMessage = null;
           try {
             parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-          } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          } catch (com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException e) {
             parsedMessage = (com.github.kornilova_l.protos.EventProtos.Event.Enter) e.getUnfinishedMessage();
             throw e.unwrapIOException();
           } finally {
@@ -883,8 +883,8 @@ public final class EventProtos {
         public java.lang.String getClassName() {
           java.lang.Object ref = className_;
           if (!(ref instanceof java.lang.String)) {
-            com.google.protobuf.ByteString bs =
-                (com.google.protobuf.ByteString) ref;
+            com.github.kornilova_l.libs.com.google.protobuf.ByteString bs =
+                (com.github.kornilova_l.libs.com.google.protobuf.ByteString) ref;
             java.lang.String s = bs.toStringUtf8();
             className_ = s;
             return s;
@@ -895,17 +895,17 @@ public final class EventProtos {
         /**
          * <code>string class_name = 1;</code>
          */
-        public com.google.protobuf.ByteString
+        public com.github.kornilova_l.libs.com.google.protobuf.ByteString
             getClassNameBytes() {
           java.lang.Object ref = className_;
           if (ref instanceof String) {
-            com.google.protobuf.ByteString b = 
-                com.google.protobuf.ByteString.copyFromUtf8(
+            com.github.kornilova_l.libs.com.google.protobuf.ByteString b =
+                com.github.kornilova_l.libs.com.google.protobuf.ByteString.copyFromUtf8(
                     (java.lang.String) ref);
             className_ = b;
             return b;
           } else {
-            return (com.google.protobuf.ByteString) ref;
+            return (com.github.kornilova_l.libs.com.google.protobuf.ByteString) ref;
           }
         }
         /**
@@ -934,7 +934,7 @@ public final class EventProtos {
          * <code>string class_name = 1;</code>
          */
         public Builder setClassNameBytes(
-            com.google.protobuf.ByteString value) {
+            com.github.kornilova_l.libs.com.google.protobuf.ByteString value) {
           if (value == null) {
     throw new NullPointerException();
   }
@@ -952,8 +952,8 @@ public final class EventProtos {
         public java.lang.String getMethodName() {
           java.lang.Object ref = methodName_;
           if (!(ref instanceof java.lang.String)) {
-            com.google.protobuf.ByteString bs =
-                (com.google.protobuf.ByteString) ref;
+            com.github.kornilova_l.libs.com.google.protobuf.ByteString bs =
+                (com.github.kornilova_l.libs.com.google.protobuf.ByteString) ref;
             java.lang.String s = bs.toStringUtf8();
             methodName_ = s;
             return s;
@@ -964,17 +964,17 @@ public final class EventProtos {
         /**
          * <code>string method_name = 2;</code>
          */
-        public com.google.protobuf.ByteString
+        public com.github.kornilova_l.libs.com.google.protobuf.ByteString
             getMethodNameBytes() {
           java.lang.Object ref = methodName_;
           if (ref instanceof String) {
-            com.google.protobuf.ByteString b = 
-                com.google.protobuf.ByteString.copyFromUtf8(
+            com.github.kornilova_l.libs.com.google.protobuf.ByteString b =
+                com.github.kornilova_l.libs.com.google.protobuf.ByteString.copyFromUtf8(
                     (java.lang.String) ref);
             methodName_ = b;
             return b;
           } else {
-            return (com.google.protobuf.ByteString) ref;
+            return (com.github.kornilova_l.libs.com.google.protobuf.ByteString) ref;
           }
         }
         /**
@@ -1003,7 +1003,7 @@ public final class EventProtos {
          * <code>string method_name = 2;</code>
          */
         public Builder setMethodNameBytes(
-            com.google.protobuf.ByteString value) {
+            com.github.kornilova_l.libs.com.google.protobuf.ByteString value) {
           if (value == null) {
     throw new NullPointerException();
   }
@@ -1049,7 +1049,7 @@ public final class EventProtos {
            }
         }
 
-        private com.google.protobuf.RepeatedFieldBuilderV3<
+        private com.github.kornilova_l.libs.com.google.protobuf.RepeatedFieldBuilderV3<
             com.github.kornilova_l.protos.EventProtos.Var, com.github.kornilova_l.protos.EventProtos.Var.Builder, com.github.kornilova_l.protos.EventProtos.VarOrBuilder> parametersBuilder_;
 
         /**
@@ -1181,7 +1181,7 @@ public final class EventProtos {
             java.lang.Iterable<? extends com.github.kornilova_l.protos.EventProtos.Var> values) {
           if (parametersBuilder_ == null) {
             ensureParametersIsMutable();
-            com.google.protobuf.AbstractMessageLite.Builder.addAll(
+            com.github.kornilova_l.libs.com.google.protobuf.AbstractMessageLite.Builder.addAll(
                 values, parameters_);
             onChanged();
           } else {
@@ -1265,11 +1265,11 @@ public final class EventProtos {
              getParametersBuilderList() {
           return getParametersFieldBuilder().getBuilderList();
         }
-        private com.google.protobuf.RepeatedFieldBuilderV3<
+        private com.github.kornilova_l.libs.com.google.protobuf.RepeatedFieldBuilderV3<
             com.github.kornilova_l.protos.EventProtos.Var, com.github.kornilova_l.protos.EventProtos.Var.Builder, com.github.kornilova_l.protos.EventProtos.VarOrBuilder> 
             getParametersFieldBuilder() {
           if (parametersBuilder_ == null) {
-            parametersBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
+            parametersBuilder_ = new com.github.kornilova_l.libs.com.google.protobuf.RepeatedFieldBuilderV3<
                 com.github.kornilova_l.protos.EventProtos.Var, com.github.kornilova_l.protos.EventProtos.Var.Builder, com.github.kornilova_l.protos.EventProtos.VarOrBuilder>(
                     parameters_,
                     ((bitField0_ & 0x00000008) == 0x00000008),
@@ -1287,8 +1287,8 @@ public final class EventProtos {
         public java.lang.String getDescription() {
           java.lang.Object ref = description_;
           if (!(ref instanceof java.lang.String)) {
-            com.google.protobuf.ByteString bs =
-                (com.google.protobuf.ByteString) ref;
+            com.github.kornilova_l.libs.com.google.protobuf.ByteString bs =
+                (com.github.kornilova_l.libs.com.google.protobuf.ByteString) ref;
             java.lang.String s = bs.toStringUtf8();
             description_ = s;
             return s;
@@ -1299,17 +1299,17 @@ public final class EventProtos {
         /**
          * <code>string description = 5;</code>
          */
-        public com.google.protobuf.ByteString
+        public com.github.kornilova_l.libs.com.google.protobuf.ByteString
             getDescriptionBytes() {
           java.lang.Object ref = description_;
           if (ref instanceof String) {
-            com.google.protobuf.ByteString b = 
-                com.google.protobuf.ByteString.copyFromUtf8(
+            com.github.kornilova_l.libs.com.google.protobuf.ByteString b =
+                com.github.kornilova_l.libs.com.google.protobuf.ByteString.copyFromUtf8(
                     (java.lang.String) ref);
             description_ = b;
             return b;
           } else {
-            return (com.google.protobuf.ByteString) ref;
+            return (com.github.kornilova_l.libs.com.google.protobuf.ByteString) ref;
           }
         }
         /**
@@ -1338,7 +1338,7 @@ public final class EventProtos {
          * <code>string description = 5;</code>
          */
         public Builder setDescriptionBytes(
-            com.google.protobuf.ByteString value) {
+            com.github.kornilova_l.libs.com.google.protobuf.ByteString value) {
           if (value == null) {
     throw new NullPointerException();
   }
@@ -1349,12 +1349,12 @@ public final class EventProtos {
           return this;
         }
         public final Builder setUnknownFields(
-            final com.google.protobuf.UnknownFieldSet unknownFields) {
+            final com.github.kornilova_l.libs.com.google.protobuf.UnknownFieldSet unknownFields) {
           return this;
         }
 
         public final Builder mergeUnknownFields(
-            final com.google.protobuf.UnknownFieldSet unknownFields) {
+            final com.github.kornilova_l.libs.com.google.protobuf.UnknownFieldSet unknownFields) {
           return this;
         }
 
@@ -1372,22 +1372,22 @@ public final class EventProtos {
         return DEFAULT_INSTANCE;
       }
 
-      private static final com.google.protobuf.Parser<Enter>
-          PARSER = new com.google.protobuf.AbstractParser<Enter>() {
+      private static final com.github.kornilova_l.libs.com.google.protobuf.Parser<Enter>
+          PARSER = new com.github.kornilova_l.libs.com.google.protobuf.AbstractParser<Enter>() {
         public Enter parsePartialFrom(
-            com.google.protobuf.CodedInputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws com.google.protobuf.InvalidProtocolBufferException {
+            com.github.kornilova_l.libs.com.google.protobuf.CodedInputStream input,
+            com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
             return new Enter(input, extensionRegistry);
         }
       };
 
-      public static com.google.protobuf.Parser<Enter> parser() {
+      public static com.github.kornilova_l.libs.com.google.protobuf.Parser<Enter> parser() {
         return PARSER;
       }
 
       @java.lang.Override
-      public com.google.protobuf.Parser<Enter> getParserForType() {
+      public com.github.kornilova_l.libs.com.google.protobuf.Parser<Enter> getParserForType() {
         return PARSER;
       }
 
@@ -1399,7 +1399,7 @@ public final class EventProtos {
 
     public interface ExitOrBuilder extends
         // @@protoc_insertion_point(interface_extends:com.github.kornilova_l.protos.Event.Exit)
-        com.google.protobuf.MessageOrBuilder {
+        com.github.kornilova_l.libs.com.google.protobuf.MessageOrBuilder {
 
       /**
        * <code>.com.github.kornilova_l.protos.Var return_value = 1;</code>
@@ -1418,25 +1418,25 @@ public final class EventProtos {
      * Protobuf type {@code com.github.kornilova_l.protos.Event.Exit}
      */
     public  static final class Exit extends
-        com.google.protobuf.GeneratedMessageV3 implements
+        com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3 implements
         // @@protoc_insertion_point(message_implements:com.github.kornilova_l.protos.Event.Exit)
         ExitOrBuilder {
       // Use Exit.newBuilder() to construct.
-      private Exit(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      private Exit(com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
         super(builder);
       }
       private Exit() {
       }
 
       @java.lang.Override
-      public final com.google.protobuf.UnknownFieldSet
+      public final com.github.kornilova_l.libs.com.google.protobuf.UnknownFieldSet
       getUnknownFields() {
-        return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
+        return com.github.kornilova_l.libs.com.google.protobuf.UnknownFieldSet.getDefaultInstance();
       }
       private Exit(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+          com.github.kornilova_l.libs.com.google.protobuf.CodedInputStream input,
+          com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
         this();
         int mutable_bitField0_ = 0;
         try {
@@ -1468,21 +1468,21 @@ public final class EventProtos {
               }
             }
           }
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        } catch (com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException e) {
           throw e.setUnfinishedMessage(this);
         } catch (java.io.IOException e) {
-          throw new com.google.protobuf.InvalidProtocolBufferException(
+          throw new com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException(
               e).setUnfinishedMessage(this);
         } finally {
           makeExtensionsImmutable();
         }
       }
-      public static final com.google.protobuf.Descriptors.Descriptor
+      public static final com.github.kornilova_l.libs.com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.github.kornilova_l.protos.EventProtos.internal_static_com_github_kornilova_l_protos_Event_Exit_descriptor;
       }
 
-      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      protected com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
         return com.github.kornilova_l.protos.EventProtos.internal_static_com_github_kornilova_l_protos_Event_Exit_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
@@ -1520,7 +1520,7 @@ public final class EventProtos {
         return true;
       }
 
-      public void writeTo(com.google.protobuf.CodedOutputStream output)
+      public void writeTo(com.github.kornilova_l.libs.com.google.protobuf.CodedOutputStream output)
                           throws java.io.IOException {
         if (returnValue_ != null) {
           output.writeMessage(1, getReturnValue());
@@ -1533,7 +1533,7 @@ public final class EventProtos {
 
         size = 0;
         if (returnValue_ != null) {
-          size += com.google.protobuf.CodedOutputStream
+          size += com.github.kornilova_l.libs.com.google.protobuf.CodedOutputStream
             .computeMessageSize(1, getReturnValue());
         }
         memoizedSize = size;
@@ -1578,71 +1578,71 @@ public final class EventProtos {
 
       public static com.github.kornilova_l.protos.EventProtos.Event.Exit parseFrom(
           java.nio.ByteBuffer data)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+          throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data);
       }
       public static com.github.kornilova_l.protos.EventProtos.Event.Exit parseFrom(
           java.nio.ByteBuffer data,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+          com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data, extensionRegistry);
       }
       public static com.github.kornilova_l.protos.EventProtos.Event.Exit parseFrom(
-          com.google.protobuf.ByteString data)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+          com.github.kornilova_l.libs.com.google.protobuf.ByteString data)
+          throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data);
       }
       public static com.github.kornilova_l.protos.EventProtos.Event.Exit parseFrom(
-          com.google.protobuf.ByteString data,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+          com.github.kornilova_l.libs.com.google.protobuf.ByteString data,
+          com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data, extensionRegistry);
       }
       public static com.github.kornilova_l.protos.EventProtos.Event.Exit parseFrom(byte[] data)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+          throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data);
       }
       public static com.github.kornilova_l.protos.EventProtos.Event.Exit parseFrom(
           byte[] data,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+          com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data, extensionRegistry);
       }
       public static com.github.kornilova_l.protos.EventProtos.Event.Exit parseFrom(java.io.InputStream input)
           throws java.io.IOException {
-        return com.google.protobuf.GeneratedMessageV3
+        return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
             .parseWithIOException(PARSER, input);
       }
       public static com.github.kornilova_l.protos.EventProtos.Event.Exit parseFrom(
           java.io.InputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        return com.google.protobuf.GeneratedMessageV3
+        return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
             .parseWithIOException(PARSER, input, extensionRegistry);
       }
       public static com.github.kornilova_l.protos.EventProtos.Event.Exit parseDelimitedFrom(java.io.InputStream input)
           throws java.io.IOException {
-        return com.google.protobuf.GeneratedMessageV3
+        return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
             .parseDelimitedWithIOException(PARSER, input);
       }
       public static com.github.kornilova_l.protos.EventProtos.Event.Exit parseDelimitedFrom(
           java.io.InputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        return com.google.protobuf.GeneratedMessageV3
+        return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
             .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
       }
       public static com.github.kornilova_l.protos.EventProtos.Event.Exit parseFrom(
-          com.google.protobuf.CodedInputStream input)
+          com.github.kornilova_l.libs.com.google.protobuf.CodedInputStream input)
           throws java.io.IOException {
-        return com.google.protobuf.GeneratedMessageV3
+        return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
             .parseWithIOException(PARSER, input);
       }
       public static com.github.kornilova_l.protos.EventProtos.Event.Exit parseFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          com.github.kornilova_l.libs.com.google.protobuf.CodedInputStream input,
+          com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        return com.google.protobuf.GeneratedMessageV3
+        return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
             .parseWithIOException(PARSER, input, extensionRegistry);
       }
 
@@ -1660,7 +1660,7 @@ public final class EventProtos {
 
       @java.lang.Override
       protected Builder newBuilderForType(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+          com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         Builder builder = new Builder(parent);
         return builder;
       }
@@ -1668,15 +1668,15 @@ public final class EventProtos {
        * Protobuf type {@code com.github.kornilova_l.protos.Event.Exit}
        */
       public static final class Builder extends
-          com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+          com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
           // @@protoc_insertion_point(builder_implements:com.github.kornilova_l.protos.Event.Exit)
           com.github.kornilova_l.protos.EventProtos.Event.ExitOrBuilder {
-        public static final com.google.protobuf.Descriptors.Descriptor
+        public static final com.github.kornilova_l.libs.com.google.protobuf.Descriptors.Descriptor
             getDescriptor() {
           return com.github.kornilova_l.protos.EventProtos.internal_static_com_github_kornilova_l_protos_Event_Exit_descriptor;
         }
 
-        protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        protected com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
             internalGetFieldAccessorTable() {
           return com.github.kornilova_l.protos.EventProtos.internal_static_com_github_kornilova_l_protos_Event_Exit_fieldAccessorTable
               .ensureFieldAccessorsInitialized(
@@ -1689,12 +1689,12 @@ public final class EventProtos {
         }
 
         private Builder(
-            com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+            com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
           super(parent);
           maybeForceBuilderInitialization();
         }
         private void maybeForceBuilderInitialization() {
-          if (com.google.protobuf.GeneratedMessageV3
+          if (com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
                   .alwaysUseFieldBuilders) {
           }
         }
@@ -1709,7 +1709,7 @@ public final class EventProtos {
           return this;
         }
 
-        public com.google.protobuf.Descriptors.Descriptor
+        public com.github.kornilova_l.libs.com.google.protobuf.Descriptors.Descriptor
             getDescriptorForType() {
           return com.github.kornilova_l.protos.EventProtos.internal_static_com_github_kornilova_l_protos_Event_Exit_descriptor;
         }
@@ -1741,29 +1741,29 @@ public final class EventProtos {
           return (Builder) super.clone();
         }
         public Builder setField(
-            com.google.protobuf.Descriptors.FieldDescriptor field,
+            com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FieldDescriptor field,
             Object value) {
           return (Builder) super.setField(field, value);
         }
         public Builder clearField(
-            com.google.protobuf.Descriptors.FieldDescriptor field) {
+            com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FieldDescriptor field) {
           return (Builder) super.clearField(field);
         }
         public Builder clearOneof(
-            com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+            com.github.kornilova_l.libs.com.google.protobuf.Descriptors.OneofDescriptor oneof) {
           return (Builder) super.clearOneof(oneof);
         }
         public Builder setRepeatedField(
-            com.google.protobuf.Descriptors.FieldDescriptor field,
+            com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FieldDescriptor field,
             int index, Object value) {
           return (Builder) super.setRepeatedField(field, index, value);
         }
         public Builder addRepeatedField(
-            com.google.protobuf.Descriptors.FieldDescriptor field,
+            com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FieldDescriptor field,
             Object value) {
           return (Builder) super.addRepeatedField(field, value);
         }
-        public Builder mergeFrom(com.google.protobuf.Message other) {
+        public Builder mergeFrom(com.github.kornilova_l.libs.com.google.protobuf.Message other) {
           if (other instanceof com.github.kornilova_l.protos.EventProtos.Event.Exit) {
             return mergeFrom((com.github.kornilova_l.protos.EventProtos.Event.Exit)other);
           } else {
@@ -1786,13 +1786,13 @@ public final class EventProtos {
         }
 
         public Builder mergeFrom(
-            com.google.protobuf.CodedInputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            com.github.kornilova_l.libs.com.google.protobuf.CodedInputStream input,
+            com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws java.io.IOException {
           com.github.kornilova_l.protos.EventProtos.Event.Exit parsedMessage = null;
           try {
             parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-          } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          } catch (com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException e) {
             parsedMessage = (com.github.kornilova_l.protos.EventProtos.Event.Exit) e.getUnfinishedMessage();
             throw e.unwrapIOException();
           } finally {
@@ -1804,7 +1804,7 @@ public final class EventProtos {
         }
 
         private com.github.kornilova_l.protos.EventProtos.Var returnValue_ = null;
-        private com.google.protobuf.SingleFieldBuilderV3<
+        private com.github.kornilova_l.libs.com.google.protobuf.SingleFieldBuilderV3<
             com.github.kornilova_l.protos.EventProtos.Var, com.github.kornilova_l.protos.EventProtos.Var.Builder, com.github.kornilova_l.protos.EventProtos.VarOrBuilder> returnValueBuilder_;
         /**
          * <code>.com.github.kornilova_l.protos.Var return_value = 1;</code>
@@ -1906,11 +1906,11 @@ public final class EventProtos {
         /**
          * <code>.com.github.kornilova_l.protos.Var return_value = 1;</code>
          */
-        private com.google.protobuf.SingleFieldBuilderV3<
+        private com.github.kornilova_l.libs.com.google.protobuf.SingleFieldBuilderV3<
             com.github.kornilova_l.protos.EventProtos.Var, com.github.kornilova_l.protos.EventProtos.Var.Builder, com.github.kornilova_l.protos.EventProtos.VarOrBuilder> 
             getReturnValueFieldBuilder() {
           if (returnValueBuilder_ == null) {
-            returnValueBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            returnValueBuilder_ = new com.github.kornilova_l.libs.com.google.protobuf.SingleFieldBuilderV3<
                 com.github.kornilova_l.protos.EventProtos.Var, com.github.kornilova_l.protos.EventProtos.Var.Builder, com.github.kornilova_l.protos.EventProtos.VarOrBuilder>(
                     getReturnValue(),
                     getParentForChildren(),
@@ -1920,12 +1920,12 @@ public final class EventProtos {
           return returnValueBuilder_;
         }
         public final Builder setUnknownFields(
-            final com.google.protobuf.UnknownFieldSet unknownFields) {
+            final com.github.kornilova_l.libs.com.google.protobuf.UnknownFieldSet unknownFields) {
           return this;
         }
 
         public final Builder mergeUnknownFields(
-            final com.google.protobuf.UnknownFieldSet unknownFields) {
+            final com.github.kornilova_l.libs.com.google.protobuf.UnknownFieldSet unknownFields) {
           return this;
         }
 
@@ -1943,22 +1943,22 @@ public final class EventProtos {
         return DEFAULT_INSTANCE;
       }
 
-      private static final com.google.protobuf.Parser<Exit>
-          PARSER = new com.google.protobuf.AbstractParser<Exit>() {
+      private static final com.github.kornilova_l.libs.com.google.protobuf.Parser<Exit>
+          PARSER = new com.github.kornilova_l.libs.com.google.protobuf.AbstractParser<Exit>() {
         public Exit parsePartialFrom(
-            com.google.protobuf.CodedInputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws com.google.protobuf.InvalidProtocolBufferException {
+            com.github.kornilova_l.libs.com.google.protobuf.CodedInputStream input,
+            com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
             return new Exit(input, extensionRegistry);
         }
       };
 
-      public static com.google.protobuf.Parser<Exit> parser() {
+      public static com.github.kornilova_l.libs.com.google.protobuf.Parser<Exit> parser() {
         return PARSER;
       }
 
       @java.lang.Override
-      public com.google.protobuf.Parser<Exit> getParserForType() {
+      public com.github.kornilova_l.libs.com.google.protobuf.Parser<Exit> getParserForType() {
         return PARSER;
       }
 
@@ -1970,7 +1970,7 @@ public final class EventProtos {
 
     public interface ExceptionOrBuilder extends
         // @@protoc_insertion_point(interface_extends:com.github.kornilova_l.protos.Event.Exception)
-        com.google.protobuf.MessageOrBuilder {
+        com.github.kornilova_l.libs.com.google.protobuf.MessageOrBuilder {
 
       /**
        * <code>.com.github.kornilova_l.protos.Var.Object object = 1;</code>
@@ -1989,25 +1989,25 @@ public final class EventProtos {
      * Protobuf type {@code com.github.kornilova_l.protos.Event.Exception}
      */
     public  static final class Exception extends
-        com.google.protobuf.GeneratedMessageV3 implements
+        com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3 implements
         // @@protoc_insertion_point(message_implements:com.github.kornilova_l.protos.Event.Exception)
         ExceptionOrBuilder {
       // Use Exception.newBuilder() to construct.
-      private Exception(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      private Exception(com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
         super(builder);
       }
       private Exception() {
       }
 
       @java.lang.Override
-      public final com.google.protobuf.UnknownFieldSet
+      public final com.github.kornilova_l.libs.com.google.protobuf.UnknownFieldSet
       getUnknownFields() {
-        return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
+        return com.github.kornilova_l.libs.com.google.protobuf.UnknownFieldSet.getDefaultInstance();
       }
       private Exception(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+          com.github.kornilova_l.libs.com.google.protobuf.CodedInputStream input,
+          com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
         this();
         int mutable_bitField0_ = 0;
         try {
@@ -2039,21 +2039,21 @@ public final class EventProtos {
               }
             }
           }
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        } catch (com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException e) {
           throw e.setUnfinishedMessage(this);
         } catch (java.io.IOException e) {
-          throw new com.google.protobuf.InvalidProtocolBufferException(
+          throw new com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException(
               e).setUnfinishedMessage(this);
         } finally {
           makeExtensionsImmutable();
         }
       }
-      public static final com.google.protobuf.Descriptors.Descriptor
+      public static final com.github.kornilova_l.libs.com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.github.kornilova_l.protos.EventProtos.internal_static_com_github_kornilova_l_protos_Event_Exception_descriptor;
       }
 
-      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      protected com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
         return com.github.kornilova_l.protos.EventProtos.internal_static_com_github_kornilova_l_protos_Event_Exception_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
@@ -2091,7 +2091,7 @@ public final class EventProtos {
         return true;
       }
 
-      public void writeTo(com.google.protobuf.CodedOutputStream output)
+      public void writeTo(com.github.kornilova_l.libs.com.google.protobuf.CodedOutputStream output)
                           throws java.io.IOException {
         if (object_ != null) {
           output.writeMessage(1, getObject());
@@ -2104,7 +2104,7 @@ public final class EventProtos {
 
         size = 0;
         if (object_ != null) {
-          size += com.google.protobuf.CodedOutputStream
+          size += com.github.kornilova_l.libs.com.google.protobuf.CodedOutputStream
             .computeMessageSize(1, getObject());
         }
         memoizedSize = size;
@@ -2149,71 +2149,71 @@ public final class EventProtos {
 
       public static com.github.kornilova_l.protos.EventProtos.Event.Exception parseFrom(
           java.nio.ByteBuffer data)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+          throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data);
       }
       public static com.github.kornilova_l.protos.EventProtos.Event.Exception parseFrom(
           java.nio.ByteBuffer data,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+          com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data, extensionRegistry);
       }
       public static com.github.kornilova_l.protos.EventProtos.Event.Exception parseFrom(
-          com.google.protobuf.ByteString data)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+          com.github.kornilova_l.libs.com.google.protobuf.ByteString data)
+          throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data);
       }
       public static com.github.kornilova_l.protos.EventProtos.Event.Exception parseFrom(
-          com.google.protobuf.ByteString data,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+          com.github.kornilova_l.libs.com.google.protobuf.ByteString data,
+          com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data, extensionRegistry);
       }
       public static com.github.kornilova_l.protos.EventProtos.Event.Exception parseFrom(byte[] data)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+          throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data);
       }
       public static com.github.kornilova_l.protos.EventProtos.Event.Exception parseFrom(
           byte[] data,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+          com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data, extensionRegistry);
       }
       public static com.github.kornilova_l.protos.EventProtos.Event.Exception parseFrom(java.io.InputStream input)
           throws java.io.IOException {
-        return com.google.protobuf.GeneratedMessageV3
+        return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
             .parseWithIOException(PARSER, input);
       }
       public static com.github.kornilova_l.protos.EventProtos.Event.Exception parseFrom(
           java.io.InputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        return com.google.protobuf.GeneratedMessageV3
+        return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
             .parseWithIOException(PARSER, input, extensionRegistry);
       }
       public static com.github.kornilova_l.protos.EventProtos.Event.Exception parseDelimitedFrom(java.io.InputStream input)
           throws java.io.IOException {
-        return com.google.protobuf.GeneratedMessageV3
+        return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
             .parseDelimitedWithIOException(PARSER, input);
       }
       public static com.github.kornilova_l.protos.EventProtos.Event.Exception parseDelimitedFrom(
           java.io.InputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        return com.google.protobuf.GeneratedMessageV3
+        return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
             .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
       }
       public static com.github.kornilova_l.protos.EventProtos.Event.Exception parseFrom(
-          com.google.protobuf.CodedInputStream input)
+          com.github.kornilova_l.libs.com.google.protobuf.CodedInputStream input)
           throws java.io.IOException {
-        return com.google.protobuf.GeneratedMessageV3
+        return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
             .parseWithIOException(PARSER, input);
       }
       public static com.github.kornilova_l.protos.EventProtos.Event.Exception parseFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          com.github.kornilova_l.libs.com.google.protobuf.CodedInputStream input,
+          com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        return com.google.protobuf.GeneratedMessageV3
+        return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
             .parseWithIOException(PARSER, input, extensionRegistry);
       }
 
@@ -2231,7 +2231,7 @@ public final class EventProtos {
 
       @java.lang.Override
       protected Builder newBuilderForType(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+          com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         Builder builder = new Builder(parent);
         return builder;
       }
@@ -2239,15 +2239,15 @@ public final class EventProtos {
        * Protobuf type {@code com.github.kornilova_l.protos.Event.Exception}
        */
       public static final class Builder extends
-          com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+          com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
           // @@protoc_insertion_point(builder_implements:com.github.kornilova_l.protos.Event.Exception)
           com.github.kornilova_l.protos.EventProtos.Event.ExceptionOrBuilder {
-        public static final com.google.protobuf.Descriptors.Descriptor
+        public static final com.github.kornilova_l.libs.com.google.protobuf.Descriptors.Descriptor
             getDescriptor() {
           return com.github.kornilova_l.protos.EventProtos.internal_static_com_github_kornilova_l_protos_Event_Exception_descriptor;
         }
 
-        protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        protected com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
             internalGetFieldAccessorTable() {
           return com.github.kornilova_l.protos.EventProtos.internal_static_com_github_kornilova_l_protos_Event_Exception_fieldAccessorTable
               .ensureFieldAccessorsInitialized(
@@ -2260,12 +2260,12 @@ public final class EventProtos {
         }
 
         private Builder(
-            com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+            com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
           super(parent);
           maybeForceBuilderInitialization();
         }
         private void maybeForceBuilderInitialization() {
-          if (com.google.protobuf.GeneratedMessageV3
+          if (com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
                   .alwaysUseFieldBuilders) {
           }
         }
@@ -2280,7 +2280,7 @@ public final class EventProtos {
           return this;
         }
 
-        public com.google.protobuf.Descriptors.Descriptor
+        public com.github.kornilova_l.libs.com.google.protobuf.Descriptors.Descriptor
             getDescriptorForType() {
           return com.github.kornilova_l.protos.EventProtos.internal_static_com_github_kornilova_l_protos_Event_Exception_descriptor;
         }
@@ -2312,29 +2312,29 @@ public final class EventProtos {
           return (Builder) super.clone();
         }
         public Builder setField(
-            com.google.protobuf.Descriptors.FieldDescriptor field,
+            com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FieldDescriptor field,
             Object value) {
           return (Builder) super.setField(field, value);
         }
         public Builder clearField(
-            com.google.protobuf.Descriptors.FieldDescriptor field) {
+            com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FieldDescriptor field) {
           return (Builder) super.clearField(field);
         }
         public Builder clearOneof(
-            com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+            com.github.kornilova_l.libs.com.google.protobuf.Descriptors.OneofDescriptor oneof) {
           return (Builder) super.clearOneof(oneof);
         }
         public Builder setRepeatedField(
-            com.google.protobuf.Descriptors.FieldDescriptor field,
+            com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FieldDescriptor field,
             int index, Object value) {
           return (Builder) super.setRepeatedField(field, index, value);
         }
         public Builder addRepeatedField(
-            com.google.protobuf.Descriptors.FieldDescriptor field,
+            com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FieldDescriptor field,
             Object value) {
           return (Builder) super.addRepeatedField(field, value);
         }
-        public Builder mergeFrom(com.google.protobuf.Message other) {
+        public Builder mergeFrom(com.github.kornilova_l.libs.com.google.protobuf.Message other) {
           if (other instanceof com.github.kornilova_l.protos.EventProtos.Event.Exception) {
             return mergeFrom((com.github.kornilova_l.protos.EventProtos.Event.Exception)other);
           } else {
@@ -2357,13 +2357,13 @@ public final class EventProtos {
         }
 
         public Builder mergeFrom(
-            com.google.protobuf.CodedInputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            com.github.kornilova_l.libs.com.google.protobuf.CodedInputStream input,
+            com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws java.io.IOException {
           com.github.kornilova_l.protos.EventProtos.Event.Exception parsedMessage = null;
           try {
             parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-          } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          } catch (com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException e) {
             parsedMessage = (com.github.kornilova_l.protos.EventProtos.Event.Exception) e.getUnfinishedMessage();
             throw e.unwrapIOException();
           } finally {
@@ -2375,7 +2375,7 @@ public final class EventProtos {
         }
 
         private com.github.kornilova_l.protos.EventProtos.Var.Object object_ = null;
-        private com.google.protobuf.SingleFieldBuilderV3<
+        private com.github.kornilova_l.libs.com.google.protobuf.SingleFieldBuilderV3<
             com.github.kornilova_l.protos.EventProtos.Var.Object, com.github.kornilova_l.protos.EventProtos.Var.Object.Builder, com.github.kornilova_l.protos.EventProtos.Var.ObjectOrBuilder> objectBuilder_;
         /**
          * <code>.com.github.kornilova_l.protos.Var.Object object = 1;</code>
@@ -2477,11 +2477,11 @@ public final class EventProtos {
         /**
          * <code>.com.github.kornilova_l.protos.Var.Object object = 1;</code>
          */
-        private com.google.protobuf.SingleFieldBuilderV3<
+        private com.github.kornilova_l.libs.com.google.protobuf.SingleFieldBuilderV3<
             com.github.kornilova_l.protos.EventProtos.Var.Object, com.github.kornilova_l.protos.EventProtos.Var.Object.Builder, com.github.kornilova_l.protos.EventProtos.Var.ObjectOrBuilder> 
             getObjectFieldBuilder() {
           if (objectBuilder_ == null) {
-            objectBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            objectBuilder_ = new com.github.kornilova_l.libs.com.google.protobuf.SingleFieldBuilderV3<
                 com.github.kornilova_l.protos.EventProtos.Var.Object, com.github.kornilova_l.protos.EventProtos.Var.Object.Builder, com.github.kornilova_l.protos.EventProtos.Var.ObjectOrBuilder>(
                     getObject(),
                     getParentForChildren(),
@@ -2491,12 +2491,12 @@ public final class EventProtos {
           return objectBuilder_;
         }
         public final Builder setUnknownFields(
-            final com.google.protobuf.UnknownFieldSet unknownFields) {
+            final com.github.kornilova_l.libs.com.google.protobuf.UnknownFieldSet unknownFields) {
           return this;
         }
 
         public final Builder mergeUnknownFields(
-            final com.google.protobuf.UnknownFieldSet unknownFields) {
+            final com.github.kornilova_l.libs.com.google.protobuf.UnknownFieldSet unknownFields) {
           return this;
         }
 
@@ -2514,22 +2514,22 @@ public final class EventProtos {
         return DEFAULT_INSTANCE;
       }
 
-      private static final com.google.protobuf.Parser<Exception>
-          PARSER = new com.google.protobuf.AbstractParser<Exception>() {
+      private static final com.github.kornilova_l.libs.com.google.protobuf.Parser<Exception>
+          PARSER = new com.github.kornilova_l.libs.com.google.protobuf.AbstractParser<Exception>() {
         public Exception parsePartialFrom(
-            com.google.protobuf.CodedInputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws com.google.protobuf.InvalidProtocolBufferException {
+            com.github.kornilova_l.libs.com.google.protobuf.CodedInputStream input,
+            com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
             return new Exception(input, extensionRegistry);
         }
       };
 
-      public static com.google.protobuf.Parser<Exception> parser() {
+      public static com.github.kornilova_l.libs.com.google.protobuf.Parser<Exception> parser() {
         return PARSER;
       }
 
       @java.lang.Override
-      public com.google.protobuf.Parser<Exception> getParserForType() {
+      public com.github.kornilova_l.libs.com.google.protobuf.Parser<Exception> getParserForType() {
         return PARSER;
       }
 
@@ -2542,7 +2542,7 @@ public final class EventProtos {
     private int infoCase_ = 0;
     private java.lang.Object info_;
     public enum InfoCase
-        implements com.google.protobuf.Internal.EnumLite {
+        implements com.github.kornilova_l.libs.com.google.protobuf.Internal.EnumLite {
       ENTER(3),
       EXIT(4),
       EXCEPTION(5),
@@ -2667,7 +2667,7 @@ public final class EventProtos {
       return true;
     }
 
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
+    public void writeTo(com.github.kornilova_l.libs.com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       if (threadId_ != 0L) {
         output.writeInt64(1, threadId_);
@@ -2692,23 +2692,23 @@ public final class EventProtos {
 
       size = 0;
       if (threadId_ != 0L) {
-        size += com.google.protobuf.CodedOutputStream
+        size += com.github.kornilova_l.libs.com.google.protobuf.CodedOutputStream
           .computeInt64Size(1, threadId_);
       }
       if (time_ != 0L) {
-        size += com.google.protobuf.CodedOutputStream
+        size += com.github.kornilova_l.libs.com.google.protobuf.CodedOutputStream
           .computeInt64Size(2, time_);
       }
       if (infoCase_ == 3) {
-        size += com.google.protobuf.CodedOutputStream
+        size += com.github.kornilova_l.libs.com.google.protobuf.CodedOutputStream
           .computeMessageSize(3, (com.github.kornilova_l.protos.EventProtos.Event.Enter) info_);
       }
       if (infoCase_ == 4) {
-        size += com.google.protobuf.CodedOutputStream
+        size += com.github.kornilova_l.libs.com.google.protobuf.CodedOutputStream
           .computeMessageSize(4, (com.github.kornilova_l.protos.EventProtos.Event.Exit) info_);
       }
       if (infoCase_ == 5) {
-        size += com.google.protobuf.CodedOutputStream
+        size += com.github.kornilova_l.libs.com.google.protobuf.CodedOutputStream
           .computeMessageSize(5, (com.github.kornilova_l.protos.EventProtos.Event.Exception) info_);
       }
       memoizedSize = size;
@@ -2761,10 +2761,10 @@ public final class EventProtos {
       int hash = 41;
       hash = (19 * hash) + getDescriptor().hashCode();
       hash = (37 * hash) + THREAD_ID_FIELD_NUMBER;
-      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+      hash = (53 * hash) + com.github.kornilova_l.libs.com.google.protobuf.Internal.hashLong(
           getThreadId());
       hash = (37 * hash) + TIME_FIELD_NUMBER;
-      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+      hash = (53 * hash) + com.github.kornilova_l.libs.com.google.protobuf.Internal.hashLong(
           getTime());
       switch (infoCase_) {
         case 3:
@@ -2789,71 +2789,71 @@ public final class EventProtos {
 
     public static com.github.kornilova_l.protos.EventProtos.Event parseFrom(
         java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+        throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static com.github.kornilova_l.protos.EventProtos.Event parseFrom(
         java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+        com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static com.github.kornilova_l.protos.EventProtos.Event parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+        com.github.kornilova_l.libs.com.google.protobuf.ByteString data)
+        throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static com.github.kornilova_l.protos.EventProtos.Event parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+        com.github.kornilova_l.libs.com.google.protobuf.ByteString data,
+        com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static com.github.kornilova_l.protos.EventProtos.Event parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+        throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static com.github.kornilova_l.protos.EventProtos.Event parseFrom(
         byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+        com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static com.github.kornilova_l.protos.EventProtos.Event parseFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
+      return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
     public static com.github.kornilova_l.protos.EventProtos.Event parseFrom(
         java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
+      return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
     public static com.github.kornilova_l.protos.EventProtos.Event parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
+      return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
     public static com.github.kornilova_l.protos.EventProtos.Event parseDelimitedFrom(
         java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
+      return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
     public static com.github.kornilova_l.protos.EventProtos.Event parseFrom(
-        com.google.protobuf.CodedInputStream input)
+        com.github.kornilova_l.libs.com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
+      return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
     public static com.github.kornilova_l.protos.EventProtos.Event parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        com.github.kornilova_l.libs.com.google.protobuf.CodedInputStream input,
+        com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
+      return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -2871,7 +2871,7 @@ public final class EventProtos {
 
     @java.lang.Override
     protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
@@ -2879,15 +2879,15 @@ public final class EventProtos {
      * Protobuf type {@code com.github.kornilova_l.protos.Event}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:com.github.kornilova_l.protos.Event)
         com.github.kornilova_l.protos.EventProtos.EventOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
+      public static final com.github.kornilova_l.libs.com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.github.kornilova_l.protos.EventProtos.internal_static_com_github_kornilova_l_protos_Event_descriptor;
       }
 
-      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      protected com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
         return com.github.kornilova_l.protos.EventProtos.internal_static_com_github_kornilova_l_protos_Event_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
@@ -2900,12 +2900,12 @@ public final class EventProtos {
       }
 
       private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+          com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
       private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
+        if (com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
                 .alwaysUseFieldBuilders) {
         }
       }
@@ -2920,7 +2920,7 @@ public final class EventProtos {
         return this;
       }
 
-      public com.google.protobuf.Descriptors.Descriptor
+      public com.github.kornilova_l.libs.com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
         return com.github.kornilova_l.protos.EventProtos.internal_static_com_github_kornilova_l_protos_Event_descriptor;
       }
@@ -2971,29 +2971,29 @@ public final class EventProtos {
         return (Builder) super.clone();
       }
       public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
+          com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FieldDescriptor field,
           Object value) {
         return (Builder) super.setField(field, value);
       }
       public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
+          com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
       public Builder clearOneof(
-          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+          com.github.kornilova_l.libs.com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
       public Builder setRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
+          com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FieldDescriptor field,
           int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
       public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
+          com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FieldDescriptor field,
           Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
-      public Builder mergeFrom(com.google.protobuf.Message other) {
+      public Builder mergeFrom(com.github.kornilova_l.libs.com.google.protobuf.Message other) {
         if (other instanceof com.github.kornilova_l.protos.EventProtos.Event) {
           return mergeFrom((com.github.kornilova_l.protos.EventProtos.Event)other);
         } else {
@@ -3036,13 +3036,13 @@ public final class EventProtos {
       }
 
       public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          com.github.kornilova_l.libs.com.google.protobuf.CodedInputStream input,
+          com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
         com.github.kornilova_l.protos.EventProtos.Event parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        } catch (com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException e) {
           parsedMessage = (com.github.kornilova_l.protos.EventProtos.Event) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
@@ -3120,7 +3120,7 @@ public final class EventProtos {
         return this;
       }
 
-      private com.google.protobuf.SingleFieldBuilderV3<
+      private com.github.kornilova_l.libs.com.google.protobuf.SingleFieldBuilderV3<
           com.github.kornilova_l.protos.EventProtos.Event.Enter, com.github.kornilova_l.protos.EventProtos.Event.Enter.Builder, com.github.kornilova_l.protos.EventProtos.Event.EnterOrBuilder> enterBuilder_;
       /**
        * <code>.com.github.kornilova_l.protos.Event.Enter enter = 3;</code>
@@ -3231,14 +3231,14 @@ public final class EventProtos {
       /**
        * <code>.com.github.kornilova_l.protos.Event.Enter enter = 3;</code>
        */
-      private com.google.protobuf.SingleFieldBuilderV3<
+      private com.github.kornilova_l.libs.com.google.protobuf.SingleFieldBuilderV3<
           com.github.kornilova_l.protos.EventProtos.Event.Enter, com.github.kornilova_l.protos.EventProtos.Event.Enter.Builder, com.github.kornilova_l.protos.EventProtos.Event.EnterOrBuilder> 
           getEnterFieldBuilder() {
         if (enterBuilder_ == null) {
           if (!(infoCase_ == 3)) {
             info_ = com.github.kornilova_l.protos.EventProtos.Event.Enter.getDefaultInstance();
           }
-          enterBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+          enterBuilder_ = new com.github.kornilova_l.libs.com.google.protobuf.SingleFieldBuilderV3<
               com.github.kornilova_l.protos.EventProtos.Event.Enter, com.github.kornilova_l.protos.EventProtos.Event.Enter.Builder, com.github.kornilova_l.protos.EventProtos.Event.EnterOrBuilder>(
                   (com.github.kornilova_l.protos.EventProtos.Event.Enter) info_,
                   getParentForChildren(),
@@ -3250,7 +3250,7 @@ public final class EventProtos {
         return enterBuilder_;
       }
 
-      private com.google.protobuf.SingleFieldBuilderV3<
+      private com.github.kornilova_l.libs.com.google.protobuf.SingleFieldBuilderV3<
           com.github.kornilova_l.protos.EventProtos.Event.Exit, com.github.kornilova_l.protos.EventProtos.Event.Exit.Builder, com.github.kornilova_l.protos.EventProtos.Event.ExitOrBuilder> exitBuilder_;
       /**
        * <code>.com.github.kornilova_l.protos.Event.Exit exit = 4;</code>
@@ -3361,14 +3361,14 @@ public final class EventProtos {
       /**
        * <code>.com.github.kornilova_l.protos.Event.Exit exit = 4;</code>
        */
-      private com.google.protobuf.SingleFieldBuilderV3<
+      private com.github.kornilova_l.libs.com.google.protobuf.SingleFieldBuilderV3<
           com.github.kornilova_l.protos.EventProtos.Event.Exit, com.github.kornilova_l.protos.EventProtos.Event.Exit.Builder, com.github.kornilova_l.protos.EventProtos.Event.ExitOrBuilder> 
           getExitFieldBuilder() {
         if (exitBuilder_ == null) {
           if (!(infoCase_ == 4)) {
             info_ = com.github.kornilova_l.protos.EventProtos.Event.Exit.getDefaultInstance();
           }
-          exitBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+          exitBuilder_ = new com.github.kornilova_l.libs.com.google.protobuf.SingleFieldBuilderV3<
               com.github.kornilova_l.protos.EventProtos.Event.Exit, com.github.kornilova_l.protos.EventProtos.Event.Exit.Builder, com.github.kornilova_l.protos.EventProtos.Event.ExitOrBuilder>(
                   (com.github.kornilova_l.protos.EventProtos.Event.Exit) info_,
                   getParentForChildren(),
@@ -3380,7 +3380,7 @@ public final class EventProtos {
         return exitBuilder_;
       }
 
-      private com.google.protobuf.SingleFieldBuilderV3<
+      private com.github.kornilova_l.libs.com.google.protobuf.SingleFieldBuilderV3<
           com.github.kornilova_l.protos.EventProtos.Event.Exception, com.github.kornilova_l.protos.EventProtos.Event.Exception.Builder, com.github.kornilova_l.protos.EventProtos.Event.ExceptionOrBuilder> exceptionBuilder_;
       /**
        * <code>.com.github.kornilova_l.protos.Event.Exception exception = 5;</code>
@@ -3491,14 +3491,14 @@ public final class EventProtos {
       /**
        * <code>.com.github.kornilova_l.protos.Event.Exception exception = 5;</code>
        */
-      private com.google.protobuf.SingleFieldBuilderV3<
+      private com.github.kornilova_l.libs.com.google.protobuf.SingleFieldBuilderV3<
           com.github.kornilova_l.protos.EventProtos.Event.Exception, com.github.kornilova_l.protos.EventProtos.Event.Exception.Builder, com.github.kornilova_l.protos.EventProtos.Event.ExceptionOrBuilder> 
           getExceptionFieldBuilder() {
         if (exceptionBuilder_ == null) {
           if (!(infoCase_ == 5)) {
             info_ = com.github.kornilova_l.protos.EventProtos.Event.Exception.getDefaultInstance();
           }
-          exceptionBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+          exceptionBuilder_ = new com.github.kornilova_l.libs.com.google.protobuf.SingleFieldBuilderV3<
               com.github.kornilova_l.protos.EventProtos.Event.Exception, com.github.kornilova_l.protos.EventProtos.Event.Exception.Builder, com.github.kornilova_l.protos.EventProtos.Event.ExceptionOrBuilder>(
                   (com.github.kornilova_l.protos.EventProtos.Event.Exception) info_,
                   getParentForChildren(),
@@ -3510,12 +3510,12 @@ public final class EventProtos {
         return exceptionBuilder_;
       }
       public final Builder setUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
+          final com.github.kornilova_l.libs.com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
       }
 
       public final Builder mergeUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
+          final com.github.kornilova_l.libs.com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
       }
 
@@ -3533,22 +3533,22 @@ public final class EventProtos {
       return DEFAULT_INSTANCE;
     }
 
-    private static final com.google.protobuf.Parser<Event>
-        PARSER = new com.google.protobuf.AbstractParser<Event>() {
+    private static final com.github.kornilova_l.libs.com.google.protobuf.Parser<Event>
+        PARSER = new com.github.kornilova_l.libs.com.google.protobuf.AbstractParser<Event>() {
       public Event parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+          com.github.kornilova_l.libs.com.google.protobuf.CodedInputStream input,
+          com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
           return new Event(input, extensionRegistry);
       }
     };
 
-    public static com.google.protobuf.Parser<Event> parser() {
+    public static com.github.kornilova_l.libs.com.google.protobuf.Parser<Event> parser() {
       return PARSER;
     }
 
     @java.lang.Override
-    public com.google.protobuf.Parser<Event> getParserForType() {
+    public com.github.kornilova_l.libs.com.google.protobuf.Parser<Event> getParserForType() {
       return PARSER;
     }
 
@@ -3560,7 +3560,7 @@ public final class EventProtos {
 
   public interface VarOrBuilder extends
       // @@protoc_insertion_point(interface_extends:com.github.kornilova_l.protos.Var)
-      com.google.protobuf.MessageOrBuilder {
+      com.github.kornilova_l.libs.com.google.protobuf.MessageOrBuilder {
 
     /**
      * <pre>
@@ -3657,25 +3657,25 @@ public final class EventProtos {
    * Protobuf type {@code com.github.kornilova_l.protos.Var}
    */
   public  static final class Var extends
-      com.google.protobuf.GeneratedMessageV3 implements
+      com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:com.github.kornilova_l.protos.Var)
       VarOrBuilder {
     // Use Var.newBuilder() to construct.
-    private Var(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+    private Var(com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
     private Var() {
     }
 
     @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
+    public final com.github.kornilova_l.libs.com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
-      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
+      return com.github.kornilova_l.libs.com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
     private Var(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+        com.github.kornilova_l.libs.com.google.protobuf.CodedInputStream input,
+        com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
       this();
       int mutable_bitField0_ = 0;
       try {
@@ -3748,21 +3748,21 @@ public final class EventProtos {
             }
           }
         }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+      } catch (com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException e) {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
+        throw new com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
         makeExtensionsImmutable();
       }
     }
-    public static final com.google.protobuf.Descriptors.Descriptor
+    public static final com.github.kornilova_l.libs.com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return com.github.kornilova_l.protos.EventProtos.internal_static_com_github_kornilova_l_protos_Var_descriptor;
     }
 
-    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+    protected com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
       return com.github.kornilova_l.protos.EventProtos.internal_static_com_github_kornilova_l_protos_Var_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
@@ -3771,7 +3771,7 @@ public final class EventProtos {
 
     public interface ObjectOrBuilder extends
         // @@protoc_insertion_point(interface_extends:com.github.kornilova_l.protos.Var.Object)
-        com.google.protobuf.MessageOrBuilder {
+        com.github.kornilova_l.libs.com.google.protobuf.MessageOrBuilder {
 
       /**
        * <code>string type = 1;</code>
@@ -3780,7 +3780,7 @@ public final class EventProtos {
       /**
        * <code>string type = 1;</code>
        */
-      com.google.protobuf.ByteString
+      com.github.kornilova_l.libs.com.google.protobuf.ByteString
           getTypeBytes();
 
       /**
@@ -3790,18 +3790,18 @@ public final class EventProtos {
       /**
        * <code>string value = 2;</code>
        */
-      com.google.protobuf.ByteString
+      com.github.kornilova_l.libs.com.google.protobuf.ByteString
           getValueBytes();
     }
     /**
      * Protobuf type {@code com.github.kornilova_l.protos.Var.Object}
      */
     public  static final class Object extends
-        com.google.protobuf.GeneratedMessageV3 implements
+        com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3 implements
         // @@protoc_insertion_point(message_implements:com.github.kornilova_l.protos.Var.Object)
         ObjectOrBuilder {
       // Use Object.newBuilder() to construct.
-      private Object(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      private Object(com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
         super(builder);
       }
       private Object() {
@@ -3810,14 +3810,14 @@ public final class EventProtos {
       }
 
       @java.lang.Override
-      public final com.google.protobuf.UnknownFieldSet
+      public final com.github.kornilova_l.libs.com.google.protobuf.UnknownFieldSet
       getUnknownFields() {
-        return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
+        return com.github.kornilova_l.libs.com.google.protobuf.UnknownFieldSet.getDefaultInstance();
       }
       private Object(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+          com.github.kornilova_l.libs.com.google.protobuf.CodedInputStream input,
+          com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
         this();
         int mutable_bitField0_ = 0;
         try {
@@ -3848,21 +3848,21 @@ public final class EventProtos {
               }
             }
           }
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        } catch (com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException e) {
           throw e.setUnfinishedMessage(this);
         } catch (java.io.IOException e) {
-          throw new com.google.protobuf.InvalidProtocolBufferException(
+          throw new com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException(
               e).setUnfinishedMessage(this);
         } finally {
           makeExtensionsImmutable();
         }
       }
-      public static final com.google.protobuf.Descriptors.Descriptor
+      public static final com.github.kornilova_l.libs.com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.github.kornilova_l.protos.EventProtos.internal_static_com_github_kornilova_l_protos_Var_Object_descriptor;
       }
 
-      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      protected com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
         return com.github.kornilova_l.protos.EventProtos.internal_static_com_github_kornilova_l_protos_Var_Object_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
@@ -3879,8 +3879,8 @@ public final class EventProtos {
         if (ref instanceof java.lang.String) {
           return (java.lang.String) ref;
         } else {
-          com.google.protobuf.ByteString bs = 
-              (com.google.protobuf.ByteString) ref;
+          com.github.kornilova_l.libs.com.google.protobuf.ByteString bs =
+              (com.github.kornilova_l.libs.com.google.protobuf.ByteString) ref;
           java.lang.String s = bs.toStringUtf8();
           type_ = s;
           return s;
@@ -3889,17 +3889,17 @@ public final class EventProtos {
       /**
        * <code>string type = 1;</code>
        */
-      public com.google.protobuf.ByteString
+      public com.github.kornilova_l.libs.com.google.protobuf.ByteString
           getTypeBytes() {
         java.lang.Object ref = type_;
         if (ref instanceof java.lang.String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
+          com.github.kornilova_l.libs.com.google.protobuf.ByteString b =
+              com.github.kornilova_l.libs.com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           type_ = b;
           return b;
         } else {
-          return (com.google.protobuf.ByteString) ref;
+          return (com.github.kornilova_l.libs.com.google.protobuf.ByteString) ref;
         }
       }
 
@@ -3913,8 +3913,8 @@ public final class EventProtos {
         if (ref instanceof java.lang.String) {
           return (java.lang.String) ref;
         } else {
-          com.google.protobuf.ByteString bs = 
-              (com.google.protobuf.ByteString) ref;
+          com.github.kornilova_l.libs.com.google.protobuf.ByteString bs =
+              (com.github.kornilova_l.libs.com.google.protobuf.ByteString) ref;
           java.lang.String s = bs.toStringUtf8();
           value_ = s;
           return s;
@@ -3923,17 +3923,17 @@ public final class EventProtos {
       /**
        * <code>string value = 2;</code>
        */
-      public com.google.protobuf.ByteString
+      public com.github.kornilova_l.libs.com.google.protobuf.ByteString
           getValueBytes() {
         java.lang.Object ref = value_;
         if (ref instanceof java.lang.String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
+          com.github.kornilova_l.libs.com.google.protobuf.ByteString b =
+              com.github.kornilova_l.libs.com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           value_ = b;
           return b;
         } else {
-          return (com.google.protobuf.ByteString) ref;
+          return (com.github.kornilova_l.libs.com.google.protobuf.ByteString) ref;
         }
       }
 
@@ -3947,13 +3947,13 @@ public final class EventProtos {
         return true;
       }
 
-      public void writeTo(com.google.protobuf.CodedOutputStream output)
+      public void writeTo(com.github.kornilova_l.libs.com.google.protobuf.CodedOutputStream output)
                           throws java.io.IOException {
         if (!getTypeBytes().isEmpty()) {
-          com.google.protobuf.GeneratedMessageV3.writeString(output, 1, type_);
+          com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.writeString(output, 1, type_);
         }
         if (!getValueBytes().isEmpty()) {
-          com.google.protobuf.GeneratedMessageV3.writeString(output, 2, value_);
+          com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.writeString(output, 2, value_);
         }
       }
 
@@ -3963,10 +3963,10 @@ public final class EventProtos {
 
         size = 0;
         if (!getTypeBytes().isEmpty()) {
-          size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, type_);
+          size += com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.computeStringSize(1, type_);
         }
         if (!getValueBytes().isEmpty()) {
-          size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, value_);
+          size += com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.computeStringSize(2, value_);
         }
         memoizedSize = size;
         return size;
@@ -4009,71 +4009,71 @@ public final class EventProtos {
 
       public static com.github.kornilova_l.protos.EventProtos.Var.Object parseFrom(
           java.nio.ByteBuffer data)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+          throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data);
       }
       public static com.github.kornilova_l.protos.EventProtos.Var.Object parseFrom(
           java.nio.ByteBuffer data,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+          com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data, extensionRegistry);
       }
       public static com.github.kornilova_l.protos.EventProtos.Var.Object parseFrom(
-          com.google.protobuf.ByteString data)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+          com.github.kornilova_l.libs.com.google.protobuf.ByteString data)
+          throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data);
       }
       public static com.github.kornilova_l.protos.EventProtos.Var.Object parseFrom(
-          com.google.protobuf.ByteString data,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+          com.github.kornilova_l.libs.com.google.protobuf.ByteString data,
+          com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data, extensionRegistry);
       }
       public static com.github.kornilova_l.protos.EventProtos.Var.Object parseFrom(byte[] data)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+          throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data);
       }
       public static com.github.kornilova_l.protos.EventProtos.Var.Object parseFrom(
           byte[] data,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+          com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data, extensionRegistry);
       }
       public static com.github.kornilova_l.protos.EventProtos.Var.Object parseFrom(java.io.InputStream input)
           throws java.io.IOException {
-        return com.google.protobuf.GeneratedMessageV3
+        return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
             .parseWithIOException(PARSER, input);
       }
       public static com.github.kornilova_l.protos.EventProtos.Var.Object parseFrom(
           java.io.InputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        return com.google.protobuf.GeneratedMessageV3
+        return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
             .parseWithIOException(PARSER, input, extensionRegistry);
       }
       public static com.github.kornilova_l.protos.EventProtos.Var.Object parseDelimitedFrom(java.io.InputStream input)
           throws java.io.IOException {
-        return com.google.protobuf.GeneratedMessageV3
+        return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
             .parseDelimitedWithIOException(PARSER, input);
       }
       public static com.github.kornilova_l.protos.EventProtos.Var.Object parseDelimitedFrom(
           java.io.InputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        return com.google.protobuf.GeneratedMessageV3
+        return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
             .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
       }
       public static com.github.kornilova_l.protos.EventProtos.Var.Object parseFrom(
-          com.google.protobuf.CodedInputStream input)
+          com.github.kornilova_l.libs.com.google.protobuf.CodedInputStream input)
           throws java.io.IOException {
-        return com.google.protobuf.GeneratedMessageV3
+        return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
             .parseWithIOException(PARSER, input);
       }
       public static com.github.kornilova_l.protos.EventProtos.Var.Object parseFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          com.github.kornilova_l.libs.com.google.protobuf.CodedInputStream input,
+          com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        return com.google.protobuf.GeneratedMessageV3
+        return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
             .parseWithIOException(PARSER, input, extensionRegistry);
       }
 
@@ -4091,7 +4091,7 @@ public final class EventProtos {
 
       @java.lang.Override
       protected Builder newBuilderForType(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+          com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         Builder builder = new Builder(parent);
         return builder;
       }
@@ -4099,15 +4099,15 @@ public final class EventProtos {
        * Protobuf type {@code com.github.kornilova_l.protos.Var.Object}
        */
       public static final class Builder extends
-          com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+          com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
           // @@protoc_insertion_point(builder_implements:com.github.kornilova_l.protos.Var.Object)
           com.github.kornilova_l.protos.EventProtos.Var.ObjectOrBuilder {
-        public static final com.google.protobuf.Descriptors.Descriptor
+        public static final com.github.kornilova_l.libs.com.google.protobuf.Descriptors.Descriptor
             getDescriptor() {
           return com.github.kornilova_l.protos.EventProtos.internal_static_com_github_kornilova_l_protos_Var_Object_descriptor;
         }
 
-        protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        protected com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
             internalGetFieldAccessorTable() {
           return com.github.kornilova_l.protos.EventProtos.internal_static_com_github_kornilova_l_protos_Var_Object_fieldAccessorTable
               .ensureFieldAccessorsInitialized(
@@ -4120,12 +4120,12 @@ public final class EventProtos {
         }
 
         private Builder(
-            com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+            com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
           super(parent);
           maybeForceBuilderInitialization();
         }
         private void maybeForceBuilderInitialization() {
-          if (com.google.protobuf.GeneratedMessageV3
+          if (com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
                   .alwaysUseFieldBuilders) {
           }
         }
@@ -4138,7 +4138,7 @@ public final class EventProtos {
           return this;
         }
 
-        public com.google.protobuf.Descriptors.Descriptor
+        public com.github.kornilova_l.libs.com.google.protobuf.Descriptors.Descriptor
             getDescriptorForType() {
           return com.github.kornilova_l.protos.EventProtos.internal_static_com_github_kornilova_l_protos_Var_Object_descriptor;
         }
@@ -4167,29 +4167,29 @@ public final class EventProtos {
           return (Builder) super.clone();
         }
         public Builder setField(
-            com.google.protobuf.Descriptors.FieldDescriptor field,
+            com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FieldDescriptor field,
             Object value) {
           return (Builder) super.setField(field, value);
         }
         public Builder clearField(
-            com.google.protobuf.Descriptors.FieldDescriptor field) {
+            com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FieldDescriptor field) {
           return (Builder) super.clearField(field);
         }
         public Builder clearOneof(
-            com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+            com.github.kornilova_l.libs.com.google.protobuf.Descriptors.OneofDescriptor oneof) {
           return (Builder) super.clearOneof(oneof);
         }
         public Builder setRepeatedField(
-            com.google.protobuf.Descriptors.FieldDescriptor field,
+            com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FieldDescriptor field,
             int index, Object value) {
           return (Builder) super.setRepeatedField(field, index, value);
         }
         public Builder addRepeatedField(
-            com.google.protobuf.Descriptors.FieldDescriptor field,
+            com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FieldDescriptor field,
             Object value) {
           return (Builder) super.addRepeatedField(field, value);
         }
-        public Builder mergeFrom(com.google.protobuf.Message other) {
+        public Builder mergeFrom(com.github.kornilova_l.libs.com.google.protobuf.Message other) {
           if (other instanceof com.github.kornilova_l.protos.EventProtos.Var.Object) {
             return mergeFrom((com.github.kornilova_l.protos.EventProtos.Var.Object)other);
           } else {
@@ -4217,13 +4217,13 @@ public final class EventProtos {
         }
 
         public Builder mergeFrom(
-            com.google.protobuf.CodedInputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            com.github.kornilova_l.libs.com.google.protobuf.CodedInputStream input,
+            com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws java.io.IOException {
           com.github.kornilova_l.protos.EventProtos.Var.Object parsedMessage = null;
           try {
             parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-          } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          } catch (com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException e) {
             parsedMessage = (com.github.kornilova_l.protos.EventProtos.Var.Object) e.getUnfinishedMessage();
             throw e.unwrapIOException();
           } finally {
@@ -4241,8 +4241,8 @@ public final class EventProtos {
         public java.lang.String getType() {
           java.lang.Object ref = type_;
           if (!(ref instanceof java.lang.String)) {
-            com.google.protobuf.ByteString bs =
-                (com.google.protobuf.ByteString) ref;
+            com.github.kornilova_l.libs.com.google.protobuf.ByteString bs =
+                (com.github.kornilova_l.libs.com.google.protobuf.ByteString) ref;
             java.lang.String s = bs.toStringUtf8();
             type_ = s;
             return s;
@@ -4253,17 +4253,17 @@ public final class EventProtos {
         /**
          * <code>string type = 1;</code>
          */
-        public com.google.protobuf.ByteString
+        public com.github.kornilova_l.libs.com.google.protobuf.ByteString
             getTypeBytes() {
           java.lang.Object ref = type_;
           if (ref instanceof String) {
-            com.google.protobuf.ByteString b = 
-                com.google.protobuf.ByteString.copyFromUtf8(
+            com.github.kornilova_l.libs.com.google.protobuf.ByteString b =
+                com.github.kornilova_l.libs.com.google.protobuf.ByteString.copyFromUtf8(
                     (java.lang.String) ref);
             type_ = b;
             return b;
           } else {
-            return (com.google.protobuf.ByteString) ref;
+            return (com.github.kornilova_l.libs.com.google.protobuf.ByteString) ref;
           }
         }
         /**
@@ -4292,7 +4292,7 @@ public final class EventProtos {
          * <code>string type = 1;</code>
          */
         public Builder setTypeBytes(
-            com.google.protobuf.ByteString value) {
+            com.github.kornilova_l.libs.com.google.protobuf.ByteString value) {
           if (value == null) {
     throw new NullPointerException();
   }
@@ -4310,8 +4310,8 @@ public final class EventProtos {
         public java.lang.String getValue() {
           java.lang.Object ref = value_;
           if (!(ref instanceof java.lang.String)) {
-            com.google.protobuf.ByteString bs =
-                (com.google.protobuf.ByteString) ref;
+            com.github.kornilova_l.libs.com.google.protobuf.ByteString bs =
+                (com.github.kornilova_l.libs.com.google.protobuf.ByteString) ref;
             java.lang.String s = bs.toStringUtf8();
             value_ = s;
             return s;
@@ -4322,17 +4322,17 @@ public final class EventProtos {
         /**
          * <code>string value = 2;</code>
          */
-        public com.google.protobuf.ByteString
+        public com.github.kornilova_l.libs.com.google.protobuf.ByteString
             getValueBytes() {
           java.lang.Object ref = value_;
           if (ref instanceof String) {
-            com.google.protobuf.ByteString b = 
-                com.google.protobuf.ByteString.copyFromUtf8(
+            com.github.kornilova_l.libs.com.google.protobuf.ByteString b =
+                com.github.kornilova_l.libs.com.google.protobuf.ByteString.copyFromUtf8(
                     (java.lang.String) ref);
             value_ = b;
             return b;
           } else {
-            return (com.google.protobuf.ByteString) ref;
+            return (com.github.kornilova_l.libs.com.google.protobuf.ByteString) ref;
           }
         }
         /**
@@ -4361,7 +4361,7 @@ public final class EventProtos {
          * <code>string value = 2;</code>
          */
         public Builder setValueBytes(
-            com.google.protobuf.ByteString value) {
+            com.github.kornilova_l.libs.com.google.protobuf.ByteString value) {
           if (value == null) {
     throw new NullPointerException();
   }
@@ -4372,12 +4372,12 @@ public final class EventProtos {
           return this;
         }
         public final Builder setUnknownFields(
-            final com.google.protobuf.UnknownFieldSet unknownFields) {
+            final com.github.kornilova_l.libs.com.google.protobuf.UnknownFieldSet unknownFields) {
           return this;
         }
 
         public final Builder mergeUnknownFields(
-            final com.google.protobuf.UnknownFieldSet unknownFields) {
+            final com.github.kornilova_l.libs.com.google.protobuf.UnknownFieldSet unknownFields) {
           return this;
         }
 
@@ -4395,22 +4395,22 @@ public final class EventProtos {
         return DEFAULT_INSTANCE;
       }
 
-      private static final com.google.protobuf.Parser<Object>
-          PARSER = new com.google.protobuf.AbstractParser<Object>() {
+      private static final com.github.kornilova_l.libs.com.google.protobuf.Parser<Object>
+          PARSER = new com.github.kornilova_l.libs.com.google.protobuf.AbstractParser<Object>() {
         public Object parsePartialFrom(
-            com.google.protobuf.CodedInputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws com.google.protobuf.InvalidProtocolBufferException {
+            com.github.kornilova_l.libs.com.google.protobuf.CodedInputStream input,
+            com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
             return new Object(input, extensionRegistry);
         }
       };
 
-      public static com.google.protobuf.Parser<Object> parser() {
+      public static com.github.kornilova_l.libs.com.google.protobuf.Parser<Object> parser() {
         return PARSER;
       }
 
       @java.lang.Override
-      public com.google.protobuf.Parser<Object> getParserForType() {
+      public com.github.kornilova_l.libs.com.google.protobuf.Parser<Object> getParserForType() {
         return PARSER;
       }
 
@@ -4423,7 +4423,7 @@ public final class EventProtos {
     private int valueCase_ = 0;
     private java.lang.Object value_;
     public enum ValueCase
-        implements com.google.protobuf.Internal.EnumLite {
+        implements com.github.kornilova_l.libs.com.google.protobuf.Internal.EnumLite {
       I(1),
       J(2),
       Z(3),
@@ -4630,7 +4630,7 @@ public final class EventProtos {
       return true;
     }
 
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
+    public void writeTo(com.github.kornilova_l.libs.com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       if (valueCase_ == 1) {
         output.writeSInt32(
@@ -4675,47 +4675,47 @@ public final class EventProtos {
 
       size = 0;
       if (valueCase_ == 1) {
-        size += com.google.protobuf.CodedOutputStream
+        size += com.github.kornilova_l.libs.com.google.protobuf.CodedOutputStream
           .computeSInt32Size(
               1, (int)((java.lang.Integer) value_));
       }
       if (valueCase_ == 2) {
-        size += com.google.protobuf.CodedOutputStream
+        size += com.github.kornilova_l.libs.com.google.protobuf.CodedOutputStream
           .computeSInt64Size(
               2, (long)((java.lang.Long) value_));
       }
       if (valueCase_ == 3) {
-        size += com.google.protobuf.CodedOutputStream
+        size += com.github.kornilova_l.libs.com.google.protobuf.CodedOutputStream
           .computeBoolSize(
               3, (boolean)((java.lang.Boolean) value_));
       }
       if (valueCase_ == 4) {
-        size += com.google.protobuf.CodedOutputStream
+        size += com.github.kornilova_l.libs.com.google.protobuf.CodedOutputStream
           .computeUInt32Size(
               4, (int)((java.lang.Integer) value_));
       }
       if (valueCase_ == 5) {
-        size += com.google.protobuf.CodedOutputStream
+        size += com.github.kornilova_l.libs.com.google.protobuf.CodedOutputStream
           .computeSInt32Size(
               5, (int)((java.lang.Integer) value_));
       }
       if (valueCase_ == 6) {
-        size += com.google.protobuf.CodedOutputStream
+        size += com.github.kornilova_l.libs.com.google.protobuf.CodedOutputStream
           .computeSInt32Size(
               6, (int)((java.lang.Integer) value_));
       }
       if (valueCase_ == 7) {
-        size += com.google.protobuf.CodedOutputStream
+        size += com.github.kornilova_l.libs.com.google.protobuf.CodedOutputStream
           .computeFloatSize(
               7, (float)((java.lang.Float) value_));
       }
       if (valueCase_ == 8) {
-        size += com.google.protobuf.CodedOutputStream
+        size += com.github.kornilova_l.libs.com.google.protobuf.CodedOutputStream
           .computeDoubleSize(
               8, (double)((java.lang.Double) value_));
       }
       if (valueCase_ == 9) {
-        size += com.google.protobuf.CodedOutputStream
+        size += com.github.kornilova_l.libs.com.google.protobuf.CodedOutputStream
           .computeMessageSize(9, (com.github.kornilova_l.protos.EventProtos.Var.Object) value_);
       }
       memoizedSize = size;
@@ -4798,12 +4798,12 @@ public final class EventProtos {
           break;
         case 2:
           hash = (37 * hash) + J_FIELD_NUMBER;
-          hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          hash = (53 * hash) + com.github.kornilova_l.libs.com.google.protobuf.Internal.hashLong(
               getJ());
           break;
         case 3:
           hash = (37 * hash) + Z_FIELD_NUMBER;
-          hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+          hash = (53 * hash) + com.github.kornilova_l.libs.com.google.protobuf.Internal.hashBoolean(
               getZ());
           break;
         case 4:
@@ -4825,7 +4825,7 @@ public final class EventProtos {
           break;
         case 8:
           hash = (37 * hash) + D_FIELD_NUMBER;
-          hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          hash = (53 * hash) + com.github.kornilova_l.libs.com.google.protobuf.Internal.hashLong(
               java.lang.Double.doubleToLongBits(getD()));
           break;
         case 9:
@@ -4842,71 +4842,71 @@ public final class EventProtos {
 
     public static com.github.kornilova_l.protos.EventProtos.Var parseFrom(
         java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+        throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static com.github.kornilova_l.protos.EventProtos.Var parseFrom(
         java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+        com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static com.github.kornilova_l.protos.EventProtos.Var parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+        com.github.kornilova_l.libs.com.google.protobuf.ByteString data)
+        throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static com.github.kornilova_l.protos.EventProtos.Var parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+        com.github.kornilova_l.libs.com.google.protobuf.ByteString data,
+        com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static com.github.kornilova_l.protos.EventProtos.Var parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+        throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static com.github.kornilova_l.protos.EventProtos.Var parseFrom(
         byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+        com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static com.github.kornilova_l.protos.EventProtos.Var parseFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
+      return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
     public static com.github.kornilova_l.protos.EventProtos.Var parseFrom(
         java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
+      return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
     public static com.github.kornilova_l.protos.EventProtos.Var parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
+      return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
     public static com.github.kornilova_l.protos.EventProtos.Var parseDelimitedFrom(
         java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
+      return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
     public static com.github.kornilova_l.protos.EventProtos.Var parseFrom(
-        com.google.protobuf.CodedInputStream input)
+        com.github.kornilova_l.libs.com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
+      return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
     public static com.github.kornilova_l.protos.EventProtos.Var parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        com.github.kornilova_l.libs.com.google.protobuf.CodedInputStream input,
+        com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
+      return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -4924,7 +4924,7 @@ public final class EventProtos {
 
     @java.lang.Override
     protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
@@ -4932,15 +4932,15 @@ public final class EventProtos {
      * Protobuf type {@code com.github.kornilova_l.protos.Var}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:com.github.kornilova_l.protos.Var)
         com.github.kornilova_l.protos.EventProtos.VarOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
+      public static final com.github.kornilova_l.libs.com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.github.kornilova_l.protos.EventProtos.internal_static_com_github_kornilova_l_protos_Var_descriptor;
       }
 
-      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      protected com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
         return com.github.kornilova_l.protos.EventProtos.internal_static_com_github_kornilova_l_protos_Var_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
@@ -4953,12 +4953,12 @@ public final class EventProtos {
       }
 
       private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+          com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
       private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
+        if (com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
                 .alwaysUseFieldBuilders) {
         }
       }
@@ -4969,7 +4969,7 @@ public final class EventProtos {
         return this;
       }
 
-      public com.google.protobuf.Descriptors.Descriptor
+      public com.github.kornilova_l.libs.com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
         return com.github.kornilova_l.protos.EventProtos.internal_static_com_github_kornilova_l_protos_Var_descriptor;
       }
@@ -5028,29 +5028,29 @@ public final class EventProtos {
         return (Builder) super.clone();
       }
       public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
+          com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FieldDescriptor field,
           Object value) {
         return (Builder) super.setField(field, value);
       }
       public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
+          com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
       public Builder clearOneof(
-          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+          com.github.kornilova_l.libs.com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
       public Builder setRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
+          com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FieldDescriptor field,
           int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
       public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
+          com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FieldDescriptor field,
           Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
-      public Builder mergeFrom(com.google.protobuf.Message other) {
+      public Builder mergeFrom(com.github.kornilova_l.libs.com.google.protobuf.Message other) {
         if (other instanceof com.github.kornilova_l.protos.EventProtos.Var) {
           return mergeFrom((com.github.kornilova_l.protos.EventProtos.Var)other);
         } else {
@@ -5111,13 +5111,13 @@ public final class EventProtos {
       }
 
       public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          com.github.kornilova_l.libs.com.google.protobuf.CodedInputStream input,
+          com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
         com.github.kornilova_l.protos.EventProtos.Var parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        } catch (com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException e) {
           parsedMessage = (com.github.kornilova_l.protos.EventProtos.Var) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
@@ -5479,7 +5479,7 @@ public final class EventProtos {
         return this;
       }
 
-      private com.google.protobuf.SingleFieldBuilderV3<
+      private com.github.kornilova_l.libs.com.google.protobuf.SingleFieldBuilderV3<
           com.github.kornilova_l.protos.EventProtos.Var.Object, com.github.kornilova_l.protos.EventProtos.Var.Object.Builder, com.github.kornilova_l.protos.EventProtos.Var.ObjectOrBuilder> objectBuilder_;
       /**
        * <pre>
@@ -5622,14 +5622,14 @@ public final class EventProtos {
        *
        * <code>.com.github.kornilova_l.protos.Var.Object object = 9;</code>
        */
-      private com.google.protobuf.SingleFieldBuilderV3<
+      private com.github.kornilova_l.libs.com.google.protobuf.SingleFieldBuilderV3<
           com.github.kornilova_l.protos.EventProtos.Var.Object, com.github.kornilova_l.protos.EventProtos.Var.Object.Builder, com.github.kornilova_l.protos.EventProtos.Var.ObjectOrBuilder> 
           getObjectFieldBuilder() {
         if (objectBuilder_ == null) {
           if (!(valueCase_ == 9)) {
             value_ = com.github.kornilova_l.protos.EventProtos.Var.Object.getDefaultInstance();
           }
-          objectBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+          objectBuilder_ = new com.github.kornilova_l.libs.com.google.protobuf.SingleFieldBuilderV3<
               com.github.kornilova_l.protos.EventProtos.Var.Object, com.github.kornilova_l.protos.EventProtos.Var.Object.Builder, com.github.kornilova_l.protos.EventProtos.Var.ObjectOrBuilder>(
                   (com.github.kornilova_l.protos.EventProtos.Var.Object) value_,
                   getParentForChildren(),
@@ -5641,12 +5641,12 @@ public final class EventProtos {
         return objectBuilder_;
       }
       public final Builder setUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
+          final com.github.kornilova_l.libs.com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
       }
 
       public final Builder mergeUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
+          final com.github.kornilova_l.libs.com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
       }
 
@@ -5664,22 +5664,22 @@ public final class EventProtos {
       return DEFAULT_INSTANCE;
     }
 
-    private static final com.google.protobuf.Parser<Var>
-        PARSER = new com.google.protobuf.AbstractParser<Var>() {
+    private static final com.github.kornilova_l.libs.com.google.protobuf.Parser<Var>
+        PARSER = new com.github.kornilova_l.libs.com.google.protobuf.AbstractParser<Var>() {
       public Var parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+          com.github.kornilova_l.libs.com.google.protobuf.CodedInputStream input,
+          com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
           return new Var(input, extensionRegistry);
       }
     };
 
-    public static com.google.protobuf.Parser<Var> parser() {
+    public static com.github.kornilova_l.libs.com.google.protobuf.Parser<Var> parser() {
       return PARSER;
     }
 
     @java.lang.Override
-    public com.google.protobuf.Parser<Var> getParserForType() {
+    public com.github.kornilova_l.libs.com.google.protobuf.Parser<Var> getParserForType() {
       return PARSER;
     }
 
@@ -5689,42 +5689,42 @@ public final class EventProtos {
 
   }
 
-  private static final com.google.protobuf.Descriptors.Descriptor
+  private static final com.github.kornilova_l.libs.com.google.protobuf.Descriptors.Descriptor
     internal_static_com_github_kornilova_l_protos_Event_descriptor;
   private static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+    com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_com_github_kornilova_l_protos_Event_fieldAccessorTable;
-  private static final com.google.protobuf.Descriptors.Descriptor
+  private static final com.github.kornilova_l.libs.com.google.protobuf.Descriptors.Descriptor
     internal_static_com_github_kornilova_l_protos_Event_Enter_descriptor;
   private static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+    com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_com_github_kornilova_l_protos_Event_Enter_fieldAccessorTable;
-  private static final com.google.protobuf.Descriptors.Descriptor
+  private static final com.github.kornilova_l.libs.com.google.protobuf.Descriptors.Descriptor
     internal_static_com_github_kornilova_l_protos_Event_Exit_descriptor;
   private static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+    com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_com_github_kornilova_l_protos_Event_Exit_fieldAccessorTable;
-  private static final com.google.protobuf.Descriptors.Descriptor
+  private static final com.github.kornilova_l.libs.com.google.protobuf.Descriptors.Descriptor
     internal_static_com_github_kornilova_l_protos_Event_Exception_descriptor;
   private static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+    com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_com_github_kornilova_l_protos_Event_Exception_fieldAccessorTable;
-  private static final com.google.protobuf.Descriptors.Descriptor
+  private static final com.github.kornilova_l.libs.com.google.protobuf.Descriptors.Descriptor
     internal_static_com_github_kornilova_l_protos_Var_descriptor;
   private static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+    com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_com_github_kornilova_l_protos_Var_fieldAccessorTable;
-  private static final com.google.protobuf.Descriptors.Descriptor
+  private static final com.github.kornilova_l.libs.com.google.protobuf.Descriptors.Descriptor
     internal_static_com_github_kornilova_l_protos_Var_Object_descriptor;
   private static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+    com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_com_github_kornilova_l_protos_Var_Object_fieldAccessorTable;
 
-  public static com.google.protobuf.Descriptors.FileDescriptor
+  public static com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
     return descriptor;
   }
-  private static  com.google.protobuf.Descriptors.FileDescriptor
+  private static  com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FileDescriptor
       descriptor;
   static {
     java.lang.String[] descriptorData = {
@@ -5751,52 +5751,52 @@ public final class EventProtos {
       "value\030\002 \001(\tB\007\n\005valueB\rB\013EventProtosb\006pro" +
       "to3"
     };
-    com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
-        new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
-          public com.google.protobuf.ExtensionRegistry assignDescriptors(
-              com.google.protobuf.Descriptors.FileDescriptor root) {
+    com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
+        new com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
+          public com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistry assignDescriptors(
+              com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FileDescriptor root) {
             descriptor = root;
             return null;
           }
         };
-    com.google.protobuf.Descriptors.FileDescriptor
+    com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
-        new com.google.protobuf.Descriptors.FileDescriptor[] {
+        new com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FileDescriptor[] {
         }, assigner);
     internal_static_com_github_kornilova_l_protos_Event_descriptor =
       getDescriptor().getMessageTypes().get(0);
     internal_static_com_github_kornilova_l_protos_Event_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+      com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_github_kornilova_l_protos_Event_descriptor,
         new java.lang.String[] { "ThreadId", "Time", "Enter", "Exit", "Exception", "Info", });
     internal_static_com_github_kornilova_l_protos_Event_Enter_descriptor =
       internal_static_com_github_kornilova_l_protos_Event_descriptor.getNestedTypes().get(0);
     internal_static_com_github_kornilova_l_protos_Event_Enter_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+      com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_github_kornilova_l_protos_Event_Enter_descriptor,
         new java.lang.String[] { "ClassName", "MethodName", "IsStatic", "Parameters", "Description", });
     internal_static_com_github_kornilova_l_protos_Event_Exit_descriptor =
       internal_static_com_github_kornilova_l_protos_Event_descriptor.getNestedTypes().get(1);
     internal_static_com_github_kornilova_l_protos_Event_Exit_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+      com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_github_kornilova_l_protos_Event_Exit_descriptor,
         new java.lang.String[] { "ReturnValue", });
     internal_static_com_github_kornilova_l_protos_Event_Exception_descriptor =
       internal_static_com_github_kornilova_l_protos_Event_descriptor.getNestedTypes().get(2);
     internal_static_com_github_kornilova_l_protos_Event_Exception_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+      com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_github_kornilova_l_protos_Event_Exception_descriptor,
         new java.lang.String[] { "Object", });
     internal_static_com_github_kornilova_l_protos_Var_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_com_github_kornilova_l_protos_Var_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+      com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_github_kornilova_l_protos_Var_descriptor,
         new java.lang.String[] { "I", "J", "Z", "C", "S", "B", "F", "D", "Object", "Value", });
     internal_static_com_github_kornilova_l_protos_Var_Object_descriptor =
       internal_static_com_github_kornilova_l_protos_Var_descriptor.getNestedTypes().get(0);
     internal_static_com_github_kornilova_l_protos_Var_Object_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+      com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_github_kornilova_l_protos_Var_Object_descriptor,
         new java.lang.String[] { "Type", "Value", });
   }

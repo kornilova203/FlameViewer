@@ -1,7 +1,9 @@
 package com.github.kornilova_l.samples;
 
 import com.github.kornilova_l.profiler.logger.EnterEventData;
+import com.github.kornilova_l.profiler.logger.ExitEventData;
 import com.github.kornilova_l.profiler.logger.Logger;
+import com.github.kornilova_l.profiler.logger.Proxy;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -131,6 +133,8 @@ public class Sample implements Runnable {
     }
 
     private static float returnF() {
+        Proxy.getLogger().addToQueue(new ExitEventData(12, 12, 12));
+
         try {
             Thread.sleep(5);
         } catch (InterruptedException e) {
