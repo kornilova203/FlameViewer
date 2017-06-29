@@ -3,19 +3,31 @@ package com.github.kornilova_l.plugin;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.State;
 
-import java.util.HashSet;
+import java.util.HashMap;
+import java.util.Map;
 
 @State(name = "flamegraph-profiler")
 public class ConfigStorage implements PersistentStateComponent<ConfigStorage.State> {
     public static class State {
         public State() {
-            test = 23;
-            includedMethods = new HashSet<>();
-            excludedMethods = new HashSet<>();
+            this(
+                    new HashMap<>(),
+                    new HashMap<>()
+            );
         }
-        public int test;
-        public HashSet<String> includedMethods;
-        public HashSet<String> excludedMethods;
+
+        public State(Map<Integer, String> includedMethodsMap,
+                     Map<Integer, String> excludedMethodsMap) {
+
+            this.includedMethodsMap = includedMethodsMap;
+            this.excludedMethodsMap = excludedMethodsMap;
+        }
+
+        /*
+        map configuration hashCode to profiler config config
+         */
+        public Map<Integer, String> includedMethodsMap;
+        public Map<Integer, String> excludedMethodsMap;
     }
 
     State state;

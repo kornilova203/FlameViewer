@@ -40,12 +40,25 @@ public class ProfilerSettingsEditor extends SettingsEditor<RunConfigurationBase>
     protected JComponent createEditor() {
         JPanel panel = new JPanel(new GridLayout(4, 1));
         panel.add(new Label("Included Methods"));
-        JTextArea textArea = new JTextArea(5, 20);
-        textArea.getDocument().addDocumentListener(new ConfigChangeListener());
-        panel.add(new JScrollPane(textArea));
+        JTextArea textAreaIncluded = new JTextArea(5, 20);
+        assert(configStorage.getState() != null);
+        textAreaIncluded.getDocument().addDocumentListener(
+                new ConfigChangeListener(configuration, configStorage.getState().includedMethodsMap));
+        String text = configStorage.getState().includedMethodsMap.get(configuration.hashCode());
+        if (text != null) {
+            textAreaIncluded.setText(text);
+        }
+
+        panel.add(new JScrollPane(textAreaIncluded));
         panel.add(new Label("Excluded Methods"));
-        JTextArea textArea2 = new JTextArea(5, 20);
-        panel.add(new JScrollPane(textArea2));
+        JTextArea textAreaExcluded = new JTextArea(5, 20);
+        textAreaExcluded.getDocument().addDocumentListener(
+                new ConfigChangeListener(configuration, configStorage.getState().excludedMethodsMap));
+        text = configStorage.getState().includedMethodsMap.get(configuration.hashCode());
+        if (text != null) {
+            textAreaIncluded.setText(text);
+        }
+        panel.add(new JScrollPane(textAreaExcluded));
         return panel;
     }
 }
