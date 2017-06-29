@@ -32,10 +32,13 @@ public class ProfilerSettingsEditor extends SettingsEditor<RunConfigurationBase>
     @Override
     protected JComponent createEditor() {
         System.out.println("JComponent");
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.add(new Button("Okay"), BorderLayout.SOUTH);
-        JTextArea textArea = new JTextArea(6, 20);
-        panel.add(new JScrollPane(textArea), BorderLayout.CENTER);
+        JPanel panel = new JPanel(new GridLayout(4, 1));
+        panel.add(new Label("Included Methods"));
+        JTextArea textArea = new JTextArea(5, 20);
+        panel.add(new JScrollPane(textArea));
+        panel.add(new Label("Excluded Methods"));
+        JTextArea textArea2 = new JTextArea(5, 20);
+        panel.add(new JScrollPane(textArea2));
         return panel;
     }
 }
