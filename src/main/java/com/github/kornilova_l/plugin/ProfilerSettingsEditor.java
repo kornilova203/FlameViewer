@@ -34,6 +34,8 @@ public class ProfilerSettingsEditor extends SettingsEditor<RunConfigurationBase>
         System.out.println("JComponent");
         JPanel panel = new JPanel(new BorderLayout());
         panel.add(new Button("Okay"), BorderLayout.SOUTH);
+        JTextArea textArea = new JTextArea(6, 20);
+        panel.add(new JScrollPane(textArea), BorderLayout.CENTER);
         return panel;
     }
 }
