@@ -2,7 +2,6 @@ package com.github.kornilova_l.profiler.agent;
 
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
-import org.objectweb.asm.util.TraceClassVisitor;
 
 import java.io.*;
 import java.lang.instrument.ClassFileTransformer;
@@ -48,6 +47,7 @@ class ProfilingClassFileTransformer implements ClassFileTransformer {
                 !className.startsWith("jdk") &&
                 !className.startsWith("com/sun") &&
                 !className.contains("ClassLoader") &&
+                hasSystemCLInChain(loader) &&
                 Configuration.isClassIncluded(className)) {
             ClassReader cr = new ClassReader(classfileBuffer);
             ClassWriter cw = new ClassWriter(cr, ClassWriter.COMPUTE_FRAMES);
@@ -59,5 +59,16 @@ class ProfilingClassFileTransformer implements ClassFileTransformer {
             return cw.toByteArray();
         }
         return null;
+    }
+
+    private static boolean hasSystemCLInChain(ClassLoader loader) {
+        ClassLoader chainLoader = loader;
+        while (chainLoader != null) {
+            if (chainLoader == ClassLoader.getSystemClassLoader()) {
+                return true;
+            }
+            chainLoader = chainLoader.getParent();
+        }
+        return false;
     }
 }

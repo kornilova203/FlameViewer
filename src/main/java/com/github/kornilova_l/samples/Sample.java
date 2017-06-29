@@ -1,24 +1,15 @@
 package com.github.kornilova_l.samples;
 
-import com.github.kornilova_l.profiler.logger.EnterEventData;
-import com.github.kornilova_l.profiler.logger.ExitEventData;
-import com.github.kornilova_l.profiler.logger.Logger;
-import com.github.kornilova_l.profiler.logger.Proxy;
-
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Random;
 import java.util.regex.Pattern;
 
 @SuppressWarnings({"UnnecessaryLocalVariable", "UnusedReturnValue", "SameParameterValue", "unchecked", "MethodMayBeStatic"})
 public class Sample implements Runnable {
-    private HashSet<Integer> hashSet = new HashSet<>();
+    private final HashSet<Integer> hashSet = new HashSet<>();
 
     private static class TestClass {
-        private int a = 50;
-//        TestClass() {
-//            a = 50;
-//        }
+        private final int a = 50;
 
         @Override
         public String toString() {
@@ -133,8 +124,6 @@ public class Sample implements Runnable {
     }
 
     private static float returnF() {
-        Proxy.getLogger().addToQueue(new ExitEventData(12, 12, 12));
-
         try {
             Thread.sleep(5);
         } catch (InterruptedException e) {
