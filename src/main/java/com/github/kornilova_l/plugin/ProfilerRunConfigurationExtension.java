@@ -16,17 +16,24 @@ public class ProfilerRunConfigurationExtension extends RunConfigurationExtension
         System.out.println("I am alive!");
     }
 
+    @SuppressWarnings("unchecked")
     @Nullable
     @Override
     protected SettingsEditor createEditor(@NotNull RunConfigurationBase configuration) {
         System.out.println("createEditor");
         return new ProfilerSettingsEditor(configuration);
-//        return new ConfigurationSettingsEditor(configuration);
-//        return super.createEditor(configuration);
+    }
+
+    @Nullable
+    @Override
+    protected String getEditorTitle() {
+        return "Profiler";
     }
 
     @Override
-    public <T extends RunConfigurationBase> void updateJavaParameters(T configuration, JavaParameters params, RunnerSettings runnerSettings) throws ExecutionException {
+    public <T extends RunConfigurationBase> void updateJavaParameters(T configuration,
+                                                                      JavaParameters params,
+                                                                      RunnerSettings runnerSettings) throws ExecutionException {
 
     }
 
