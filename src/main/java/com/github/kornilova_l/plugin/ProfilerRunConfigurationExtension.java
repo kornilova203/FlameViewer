@@ -16,6 +16,13 @@ public class ProfilerRunConfigurationExtension extends RunConfigurationExtension
     ProfilerRunConfigurationExtension() {
     }
 
+    @Override
+    public <T extends RunConfigurationBase> void updateJavaParameters(T configuration,
+                                                                      JavaParameters params,
+                                                                      RunnerSettings runnerSettings) throws ExecutionException {
+
+    }
+
     @SuppressWarnings("unchecked")
     @Nullable
     @Override
@@ -27,15 +34,6 @@ public class ProfilerRunConfigurationExtension extends RunConfigurationExtension
     @Override
     protected String getEditorTitle() {
         return "Profiler";
-    }
-
-    @Override
-    public <T extends RunConfigurationBase> void updateJavaParameters(T configuration,
-                                                                      JavaParameters params,
-                                                                      RunnerSettings runnerSettings) throws ExecutionException {
-        params.getVMParametersList().add(
-                "-javaagent:/home/lk/java-profiling-plugin/build/libs/javaagent.jar=/home/lk/java-profiling-plugin/agent-config/agent11-samples.config"
-        );
     }
 
     @Override

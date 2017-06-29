@@ -24,6 +24,8 @@
     <extensions defaultExtensionNs="com.intellij">
         <httpRequestHandler implementation="com.github.kornilova_l.server.ProfilerHttpRequestHandler"/>
         <runConfigurationExtension implementation="com.github.kornilova_l.plugin.ProfilerRunConfigurationExtension"/>
+        <executor implementation="com.github.kornilova_l.plugin.ProfilerExecutor" />
+        <java.programPatcher implementation="com.github.kornilova_l.plugin.ProfilerProgramPatcher"/>
     </extensions>
 
     <actions>
