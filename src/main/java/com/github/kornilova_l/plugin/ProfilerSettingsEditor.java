@@ -35,6 +35,7 @@ public class ProfilerSettingsEditor extends SettingsEditor<RunConfigurationBase>
         JPanel panel = new JPanel(new GridLayout(4, 1));
         panel.add(new Label("Included Methods"));
         JTextArea textArea = new JTextArea(5, 20);
+        textArea.getDocument().addDocumentListener(new ConfigChangeListener());
         panel.add(new JScrollPane(textArea));
         panel.add(new Label("Excluded Methods"));
         JTextArea textArea2 = new JTextArea(5, 20);
