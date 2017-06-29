@@ -35,5 +35,11 @@
                     text="Profile" description=""/>
         </group>
     </actions>
+    <project-components>
+        <component>
+            <interface-class>com.intellij.openapi.components.PersistentStateComponent</interface-class>
+            <implementation-class>com.github.kornilova_l.plugin.ConfigStorage</implementation-class>
+        </component>
+    </project-components>
 
 </idea-plugin>

@@ -1,4 +1,4 @@
-package com.github.kornilova_l.plugin;
+package com.github.kornilova_l.plugin.gui;
 
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
