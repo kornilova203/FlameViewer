@@ -25,7 +25,7 @@
         <httpRequestHandler implementation="com.github.kornilova_l.server.ProfilerHttpRequestHandler"/>
         <runConfigurationExtension implementation="com.github.kornilova_l.plugin.ProfilerRunConfigurationExtension"/>
         <executor implementation="com.github.kornilova_l.plugin.ProfilerExecutor" />
-        <java.programPatcher implementation="com.github.kornilova_l.plugin.ProfilerProgramPatcher"/>
+        <programRunner implementation="com.github.kornilova_l.plugin.ProfilerProgramRunner"/>
     </extensions>
 
     <actions>

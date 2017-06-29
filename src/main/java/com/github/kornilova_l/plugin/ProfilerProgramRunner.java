@@ -1,24 +1,39 @@
 package com.github.kornilova_l.plugin;
 
-import com.intellij.execution.Executor;
+import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.JavaParameters;
 import com.intellij.execution.configurations.RunProfile;
-import com.intellij.execution.runners.JavaProgramPatcher;
+import com.intellij.execution.configurations.RunnerSettings;
+import com.intellij.execution.runners.JavaPatchableProgramRunner;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-public class ProfilerProgramPatcher extends JavaProgramPatcher {
-    public ProfilerProgramPatcher() {
+
+public class ProfilerProgramRunner extends JavaPatchableProgramRunner {
+    private final String RUNNER_ID = "ProfileRunnerID";
+
+    public ProfilerProgramRunner() {
         System.out.println("Patcher created");
     }
 
     @Override
-    public void patchJavaParameters(Executor executor, RunProfile configuration, JavaParameters javaParameters) {
-        if (!Objects.equals(executor.getId(), ProfilerExecutor.EXECUTOR_ID)) {
-            System.out.println("I don't like this executor");
-            return;
-        }
-        System.out.println("patchJavaParameters");
+    public void patch(JavaParameters javaParameters,
+                      RunnerSettings settings,
+                      RunProfile runProfile,
+                      boolean beforeExecution) throws ExecutionException {
+        System.out.println("patch");
+    }
+
+    @NotNull
+    @Override
+    public String getRunnerId() {
+        return RUNNER_ID;
+    }
+
+    @Override
+    public boolean canRun(@NotNull String executorId, @NotNull RunProfile profile) {
+        return Objects.equals(executorId, ProfilerExecutor.EXECUTOR_ID);
     }
 
     /*
