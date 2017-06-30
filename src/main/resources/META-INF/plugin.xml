@@ -23,9 +23,8 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <httpRequestHandler implementation="com.github.kornilova_l.server.ProfilerHttpRequestHandler"/>
-        <runConfigurationExtension implementation="com.github.kornilova_l.plugin.ProfilerRunConfigurationExtension"/>
-        <executor implementation="com.github.kornilova_l.plugin.ProfilerExecutor" />
-        <programRunner implementation="com.github.kornilova_l.plugin.ProfilerProgramRunner"/>
+        <executor implementation="com.github.kornilova_l.plugin.execution.ProfilerExecutor" />
+        <programRunner implementation="com.github.kornilova_l.plugin.execution.ProfilerProgramRunner"/>
     </extensions>
 
     <actions>
@@ -33,8 +32,6 @@
             <add-to-group group-id="MainMenu" anchor="last"/>
             <action id="java-profiling-plugin.server" class="com.github.kornilova_l.server.ShowProfilingResultsAction"
                     text="Show Results" description=""/>
-            <action id="flamegraph-profiler.run" class="com.github.kornilova_l.plugin.ProfileAction"
-                    text="Profile" description=""/>
             <action class="com.github.kornilova_l.plugin.config.ShowProfilerDialogAction"
                     id="flamegraph-profiler.ShowProfilerDialog" text="Show Dialog"/>
         </group>
@@ -42,7 +39,7 @@
     <project-components>
         <component>
             <interface-class>com.intellij.openapi.components.PersistentStateComponent</interface-class>
-            <implementation-class>com.github.kornilova_l.plugin.ConfigStorage</implementation-class>
+            <implementation-class>com.github.kornilova_l.plugin.config.ConfigStorage</implementation-class>
         </component>
     </project-components>
 

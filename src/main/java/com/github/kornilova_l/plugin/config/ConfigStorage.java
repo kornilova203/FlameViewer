@@ -1,4 +1,4 @@
-package com.github.kornilova_l.plugin;
+package com.github.kornilova_l.plugin.config;
 
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.State;
@@ -10,29 +10,19 @@ import java.util.Map;
 public class ConfigStorage implements PersistentStateComponent<ConfigStorage.State> {
     public static class State {
         public State() {
-            this(
-                    new HashMap<>(),
-                    new HashMap<>()
-            );
+            this(new HashMap<>());
         }
 
-        public State(Map<String, String> includedMethodsMap,
-                     Map<String, String> excludedMethodsMap) {
-
-            this.includedMethodsMap = includedMethodsMap;
-            this.excludedMethodsMap = excludedMethodsMap;
+        public State(Map<String, Map<String, String>> configs) {
+            this.configs = configs;
         }
 
-        /*
-        map profiler-configuration name to profiler config
-         */
+        // <name_of_config> -> (included)|(excluded) -> config_string
         @SuppressWarnings("PublicField")
-        public Map<String, String> includedMethodsMap;
-        @SuppressWarnings("PublicField")
-        public Map<String, String> excludedMethodsMap;
+        public Map<String, Map<String, String>> configs;
     }
 
-    State state;
+    private State state;
 
     public ConfigStorage() {
         state = new State();

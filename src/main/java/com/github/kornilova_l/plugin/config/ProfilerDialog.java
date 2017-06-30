@@ -1,5 +1,7 @@
 package com.github.kornilova_l.plugin.config;
 
+import com.intellij.openapi.components.PersistentStateComponent;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Splitter;
 import com.intellij.util.ui.ListItemsDialogWrapper;
 
@@ -9,6 +11,7 @@ import java.util.LinkedList;
 
 public class ProfilerDialog extends ListItemsDialogWrapper {
     private static int i = 0;
+    private final ConfigStorage.State state;
     private JPanel secondComponent = new JPanel(new GridLayout(1, 1));
     private static final LinkedList<String> message = new LinkedList<>();
 
@@ -19,8 +22,10 @@ public class ProfilerDialog extends ListItemsDialogWrapper {
         message.addFirst("I'm Slim Shady, yes, I'm the real Shady");
     }
 
-    protected ProfilerDialog() {
+    protected ProfilerDialog(Project project) {
         super("MyTitle");
+        ConfigStorage configStorage = (ConfigStorage) project.getComponent(PersistentStateComponent.class);
+        state = configStorage.getState();
         myData = new LinkedList<>();
         myList.addListSelectionListener(e -> {
             int index = myList.getSelectedIndex();
@@ -28,7 +33,6 @@ public class ProfilerDialog extends ListItemsDialogWrapper {
                 return;
             }
             secondComponent.add(new Label("Hello"));
-            System.out.println("selected");
             System.out.println(myList.getSelectedIndex());
         });
     }

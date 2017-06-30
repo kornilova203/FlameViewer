@@ -1,4 +1,4 @@
-package com.github.kornilova_l.plugin;
+package com.github.kornilova_l.plugin.execution;
 
 import com.intellij.execution.Executor;
 import com.intellij.icons.AllIcons;

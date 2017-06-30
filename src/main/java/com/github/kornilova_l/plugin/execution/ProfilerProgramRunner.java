@@ -1,5 +1,6 @@
-package com.github.kornilova_l.plugin;
+package com.github.kornilova_l.plugin.execution;
 
+import com.github.kornilova_l.plugin.config.ConfigStorage;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.*;
 import com.intellij.execution.impl.DefaultJavaProgramRunner;
@@ -32,7 +33,7 @@ public class ProfilerProgramRunner extends DefaultJavaProgramRunner {
                                              @NotNull ExecutionEnvironment env) throws ExecutionException {
         System.out.println("doExecute");
         ConfigStorage configStorage = (ConfigStorage) env.getProject().getComponent(PersistentStateComponent.class);
-        state = configStorage.state;
+        state = configStorage.getState();
         return super.doExecute(runProfileState, env);
     }
 
@@ -43,15 +44,16 @@ public class ProfilerProgramRunner extends DefaultJavaProgramRunner {
                       boolean beforeExecution) throws ExecutionException {
         System.out.println("patch");
         // TODO: check if string contains spaces
-        String included = state.includedMethodsMap.get(12);
-        String excluded = state.includedMethodsMap.get(12);
-        included = included == null ? "" : included;
-        excluded = excluded == null ? "" : excluded;
+//        String included = state.includedMethodsMap.get(12);
+//        String excluded = state.includedMethodsMap.get(12);
+//        included = included == null ? "" : included;
+//        excluded = excluded == null ? "" : excluded;
         javaParameters.getVMParametersList().add(
                 "-javaagent:/home/lk/java-profiling-plugin/build/libs/javaagent.jar=" +
-                PathManager.getSystemPath() + "&" +
-                String.join("&", included.split("\n")) + "&!" +
-                String.join("&!", excluded.split("\n"))
+                PathManager.getSystemPath()
+//                        + "&" +
+//                String.join("&", included.split("\n")) + "&!" +
+//                String.join("&!", excluded.split("\n"))
         );
     }
 
