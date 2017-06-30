@@ -10,10 +10,10 @@ import java.util.Map;
 
 public class ConfigChangeListener implements DocumentListener {
 
-    private final Map<Integer, String> map;
+    private final Map<String, String> map;
     private final Integer key;
 
-    ConfigChangeListener(RunConfigurationBase configuration, Map<Integer, String> map) {
+    ConfigChangeListener(RunConfigurationBase configuration, Map<String, String> map) {
         this.map = map;
         key = configuration.hashCode();
     }
@@ -43,7 +43,6 @@ public class ConfigChangeListener implements DocumentListener {
     }
 
     private synchronized void updateList(String text) {
-        System.out.println(key);
-        map.put(key, text);
+        map.put("hello", text);
     }
 }

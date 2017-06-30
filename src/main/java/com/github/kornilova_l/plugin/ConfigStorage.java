@@ -16,18 +16,20 @@ public class ConfigStorage implements PersistentStateComponent<ConfigStorage.Sta
             );
         }
 
-        public State(Map<Integer, String> includedMethodsMap,
-                     Map<Integer, String> excludedMethodsMap) {
+        public State(Map<String, String> includedMethodsMap,
+                     Map<String, String> excludedMethodsMap) {
 
             this.includedMethodsMap = includedMethodsMap;
             this.excludedMethodsMap = excludedMethodsMap;
         }
 
         /*
-        map configuration hashCode to profiler config config
+        map profiler-configuration name to profiler config
          */
-        public Map<Integer, String> includedMethodsMap;
-        public Map<Integer, String> excludedMethodsMap;
+        @SuppressWarnings("PublicField")
+        public Map<String, String> includedMethodsMap;
+        @SuppressWarnings("PublicField")
+        public Map<String, String> excludedMethodsMap;
     }
 
     State state;
