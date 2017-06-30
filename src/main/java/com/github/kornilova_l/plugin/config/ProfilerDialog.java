@@ -16,24 +16,36 @@ public class ProfilerDialog extends ListItemsDialogWrapper {
 
     protected ProfilerDialog(Project project) {
         super("Edit Profiler Configurations");
-        System.out.println("dialog created");
         state = StateContainer.getState(project);
         assert(state != null);
-//        myData = new LinkedList<>(state.configs.keySet());
         setData(new LinkedList<>(state.configs.keySet()));
-        System.out.println(myData);
         myList.addListSelectionListener(e -> {
             int index = myList.getSelectedIndex();
             if (index == -1) {
+                splitter.setSecondComponent(new JPanel(new GridLayout(1, 1)));
                 return;
             }
             splitter.setSecondComponent(getSecondComponent(index));
         });
+        if (myData.size() > 0) {
+            splitter.setSecondComponent(getSecondComponent(0));
+        }
     }
 
     private JComponent getSecondComponent(int index) {
-        JComponent secondComponent = new JPanel(new GridLayout(1, 2));
-        secondComponent.add(new Label("hello, " + myData.get(index)));
+        JComponent secondComponent = new JPanel(new GridLayout(4, 1));
+        secondComponent.add(new Label("Included methods:"));
+        JTextArea textArea = new JTextArea(state.configs.get(myData.get(index)).included);
+        textArea.getDocument().addDocumentListener(new ConfigChangeListener(state.configs.get(myData.get(index)), true));
+        secondComponent.add(new JScrollPane(
+                textArea
+        ));
+        secondComponent.add(new Label("Excluded methods:"));
+        JTextArea textArea2 = new JTextArea(state.configs.get(myData.get(index)).excluded);
+        textArea2.getDocument().addDocumentListener(new ConfigChangeListener(state.configs.get(myData.get(index)), false));
+        secondComponent.add(new JScrollPane(
+                textArea2
+        ));
         return secondComponent;
     }
 
@@ -54,9 +66,7 @@ public class ProfilerDialog extends ListItemsDialogWrapper {
         panel.add(splitter, BorderLayout.CENTER);
 
         splitter.setFirstComponent(myPanel);
-        JComponent secondComponent = new JPanel(new GridLayout(1, 1));
-        secondComponent.add(new Label("Hello"));
-        splitter.setSecondComponent(secondComponent);
+        splitter.setSecondComponent(new JPanel(new GridLayout(1, 1)));
 
         this.splitter = splitter;
         return panel;
