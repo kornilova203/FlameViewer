@@ -1,6 +1,6 @@
 package com.github.kornilova_l.plugin.config;
 
-import com.intellij.openapi.components.PersistentStateComponent;
+import com.github.kornilova_l.plugin.StateContainer;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.ui.Splitter;
@@ -12,29 +12,39 @@ import java.util.LinkedList;
 
 public class ProfilerDialog extends ListItemsDialogWrapper {
     private final ConfigStorage.State state;
-    private JPanel secondComponent = new JPanel(new GridLayout(1, 1));
+    private Splitter splitter;
 
     protected ProfilerDialog(Project project) {
-        super("MyTitle");
-        ConfigStorage configStorage = (ConfigStorage) project.getComponent(PersistentStateComponent.class);
-        state = configStorage.getState();
-        myData = new LinkedList<>();
+        super("Edit Profiler Configurations");
+        System.out.println("dialog created");
+        state = StateContainer.getState(project);
+        assert(state != null);
+//        myData = new LinkedList<>(state.configs.keySet());
+        setData(new LinkedList<>(state.configs.keySet()));
+        System.out.println(myData);
         myList.addListSelectionListener(e -> {
             int index = myList.getSelectedIndex();
             if (index == -1) {
                 return;
             }
-            secondComponent.add(new Label("Hello"));
-            System.out.println(myList.getSelectedIndex());
+            splitter.setSecondComponent(getSecondComponent(index));
         });
+    }
+
+    private JComponent getSecondComponent(int index) {
+        JComponent secondComponent = new JPanel(new GridLayout(1, 2));
+        secondComponent.add(new Label("hello, " + myData.get(index)));
+        return secondComponent;
     }
 
     @Override
     protected String createAddItemDialog() {
-        return Messages.showInputDialog(
+        String configName = Messages.showInputDialog(
                 "Enter configuration name:",
                 "Create New Configuration",
                 Messages.getQuestionIcon());
+        state.configs.putIfAbsent(configName, new ConfigStorage.State.Config());
+        return configName;
     }
 
     @Override
@@ -44,10 +54,11 @@ public class ProfilerDialog extends ListItemsDialogWrapper {
         panel.add(splitter, BorderLayout.CENTER);
 
         splitter.setFirstComponent(myPanel);
-        secondComponent = new JPanel(new GridLayout(1, 1));
+        JComponent secondComponent = new JPanel(new GridLayout(1, 1));
         secondComponent.add(new Label("Hello"));
         splitter.setSecondComponent(secondComponent);
 
+        this.splitter = splitter;
         return panel;
     }
 }
