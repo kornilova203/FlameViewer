@@ -33,6 +33,7 @@ public class Logger implements Runnable {
         outputStream = temp;
     }
 
+    // TODO: May Logger be created in premain?
     public static Logger getInstance() {
         if (logger == null) {
             logger = new Logger();

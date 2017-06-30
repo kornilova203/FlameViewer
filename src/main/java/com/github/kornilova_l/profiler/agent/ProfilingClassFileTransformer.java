@@ -3,35 +3,26 @@ package com.github.kornilova_l.profiler.agent;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 
-import java.io.*;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.security.ProtectionDomain;
+import java.util.List;
 
 class ProfilingClassFileTransformer implements ClassFileTransformer {
 
-    ProfilingClassFileTransformer(String configFile) {
+    ProfilingClassFileTransformer(List<String> parameters) {
         super();
-        readPatterns(new File(configFile));
+        readPatterns(parameters);
     }
 
-    private static void readPatterns(File configFile) {
-        try (
-                InputStream inputStream = new FileInputStream(configFile);
-                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))
-        ) {
-            String line = reader.readLine();
-            while (line != null) {
-                System.out.println("Config: " + line);
-                if (line.startsWith("!")) {
-                    Configuration.addExcludePattern(line.substring(1));
-                } else {
-                    Configuration.addIncludePattern(line);
-                }
-                line = reader.readLine();
+    private static void readPatterns(List<String> parameters) {
+        System.out.println("Config: " + parameters);
+        for (String parameter : parameters) {
+            if (parameter.startsWith("!")) {
+                Configuration.addExcludePattern(parameter.substring(1));
+            } else {
+                Configuration.addIncludePattern(parameter);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
