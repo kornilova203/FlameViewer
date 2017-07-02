@@ -69,16 +69,7 @@ public class ChooseProfilerConfigurationPopup implements ExecutorProvider {
     }
 
     private void registerActions(final RunListPopup popup) {
-        popup.registerAction("restoreDefaultExecutor", KeyStroke.getKeyStroke("released SHIFT"), new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                myCurrentExecutor = myDefaultExecutor;
-                updatePresentation();
-            }
-        });
-
-
-        popup.registerAction("invokeAction", KeyStroke.getKeyStroke("shift ENTER"), new AbstractAction() {
+         popup.registerAction("invokeAction", KeyStroke.getKeyStroke("shift ENTER"), new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 popup.handleSelect(true);
@@ -92,7 +83,6 @@ public class ChooseProfilerConfigurationPopup implements ExecutorProvider {
                 popup.handleSelect(true);
             }
         });
-
 
         popup.registerAction("deleteConfiguration", KeyStroke.getKeyStroke("DELETE"), new AbstractAction() {
             @Override
@@ -124,10 +114,6 @@ public class ChooseProfilerConfigurationPopup implements ExecutorProvider {
         Action action = createNumberAction(number, popup, myDefaultExecutor);
         popup.registerAction(number + "Action", KeyStroke.getKeyStroke(String.valueOf(number)), action);
         popup.registerAction(number + "Action1", KeyStroke.getKeyStroke("NUMPAD" + number), action);
-    }
-
-    private void updatePresentation() {
-        myPopup.setCaption(getExecutor().getActionName());
     }
 
     static void execute(final ItemWrapper itemWrapper, final Executor executor) {
