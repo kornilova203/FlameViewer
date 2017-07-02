@@ -8,6 +8,11 @@ public class ProfilerSettings implements Comparable<ProfilerSettings> {
         this("");
     }
 
+    @Override
+    public String toString() {
+        return name;
+    }
+
     public ProfilerSettings(String name) {
         this.name = name;
     }
