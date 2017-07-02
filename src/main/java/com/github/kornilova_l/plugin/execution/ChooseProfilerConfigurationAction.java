@@ -14,7 +14,6 @@ public class ChooseProfilerConfigurationAction extends AnAction {
 
         new ChooseProfilerConfigurationPopup(
                 project,
-                "profiler",
                 ExecutorRegistry.getInstance().getExecutorById(ProfilerExecutor.EXECUTOR_ID)
         ).show();
     }

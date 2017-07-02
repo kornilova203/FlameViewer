@@ -18,7 +18,6 @@ import com.intellij.idea.ActionsBundle;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.keymap.KeymapUtil;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
@@ -44,7 +43,6 @@ import java.util.List;
 public class ChooseProfilerConfigurationPopup implements ExecutorProvider {
 
     private final Project myProject;
-    @NotNull private final String myAddKey;
     @NotNull private final Executor myDefaultExecutor;
 
     private Executor myCurrentExecutor;
@@ -52,40 +50,22 @@ public class ChooseProfilerConfigurationPopup implements ExecutorProvider {
     private final RunListPopup myPopup;
 
     public ChooseProfilerConfigurationPopup(@NotNull Project project,
-                                       @NotNull String addKey,
                                        @NotNull Executor defaultExecutor) {
         myProject = project;
-        myAddKey = addKey;
         myDefaultExecutor = defaultExecutor;
 
-        myPopup = new RunListPopup(new ConfigurationListPopupStep(this, myProject, this, myDefaultExecutor.getActionName()));
+        myPopup = new RunListPopup(
+                new ConfigurationListPopupStep(
+                        this,
+                        myProject,
+                        this,
+                        myDefaultExecutor.getActionName()
+                )
+        );
     }
 
     public void show() {
         myPopup.showCenteredInCurrentWindow(myProject);
-    }
-
-    protected static boolean canRun(@NotNull final Executor executor, final RunnerAndConfigurationSettings settings) {
-        return ProgramRunnerUtil.getRunner(executor.getId(), settings) != null;
-    }
-
-    @Nullable
-    protected String getAdText(final Executor alternateExecutor) {
-        final PropertiesComponent properties = PropertiesComponent.getInstance();
-        if (alternateExecutor != null && !properties.isTrueValue(myAddKey)) {
-            return String
-                    .format("Hold %s to %s", KeymapUtil.getKeystrokeText(KeyStroke.getKeyStroke("SHIFT")), alternateExecutor.getActionName());
-        }
-
-        if (!properties.isTrueValue("run.configuration.edit.ad")) {
-            return String.format("Press %s to Edit", KeymapUtil.getKeystrokeText(KeyStroke.getKeyStroke("F4")));
-        }
-
-        if (!properties.isTrueValue("run.configuration.delete.ad")) {
-            return String.format("Press %s to Delete configuration", KeymapUtil.getKeystrokeText(KeyStroke.getKeyStroke("DELETE")));
-        }
-
-        return null;
     }
 
     private void registerActions(final RunListPopup popup) {
@@ -219,10 +199,6 @@ public class ChooseProfilerConfigurationPopup implements ExecutorProvider {
 
         public abstract String getText();
 
-        public boolean canBeDeleted() {
-            return false;
-        }
-
         @Override
         public String toString() {
             return "Wrapper[" + getText() + "]";
@@ -338,11 +314,6 @@ public class ChooseProfilerConfigurationPopup implements ExecutorProvider {
                     return new ConfigurationActionsStep(project, action, getValue(), isDynamic());
                 }
             };
-        }
-
-        @Override
-        public boolean canBeDeleted() {
-            return !isDynamic() && getValue() instanceof RunnerAndConfigurationSettings;
         }
     }
 
@@ -743,7 +714,7 @@ public class ChooseProfilerConfigurationPopup implements ExecutorProvider {
             }
 
             final Object o = getListModel().get(index);
-            if (o != null && o instanceof ItemWrapper && ((ItemWrapper)o).canBeDeleted()) {
+            if (o != null && o instanceof ItemWrapper) {
                 deleteConfiguration(myProject, (RunnerAndConfigurationSettings)((ItemWrapper)o).getValue());
                 getListModel().deleteItem(o);
                 final List<Object> values = getListStep().getValues();
@@ -1029,7 +1000,7 @@ public class ChooseProfilerConfigurationPopup implements ExecutorProvider {
 
                     @Override
                     public boolean available(Executor executor) {
-                        return canRun(executor, configuration);
+                        return true;
                     }
 
                     @Override
