@@ -45,7 +45,6 @@ public class ChooseProfilerConfigurationPopup implements ExecutorProvider {
     private final Project myProject;
     @NotNull private final Executor myDefaultExecutor;
 
-    private Executor myCurrentExecutor;
     private boolean myEditConfiguration;
     private final RunListPopup myPopup;
 
@@ -144,7 +143,7 @@ public class ChooseProfilerConfigurationPopup implements ExecutorProvider {
     @Override
     @NotNull
     public Executor getExecutor() {
-        return myCurrentExecutor == null ? myDefaultExecutor : myCurrentExecutor;
+        return myDefaultExecutor;
     }
 
     private static Action createNumberAction(final int number, final ListPopupImpl listPopup, final Executor executor) {
