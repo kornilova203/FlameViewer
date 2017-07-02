@@ -1,5 +1,6 @@
 package com.github.kornilova_l.plugin.execution;
 
+import com.github.kornilova_l.plugin.config.ProfilerSettings;
 import com.intellij.execution.*;
 import com.intellij.execution.actions.ConfigurationContext;
 import com.intellij.execution.actions.ConfigurationFromContext;
@@ -251,27 +252,26 @@ public class ChooseProfilerConfigurationPopup implements ExecutorProvider {
         }
 
         public static ItemWrapper wrap(@NotNull final Project project, @NotNull final RunnerAndConfigurationSettings settings) {
-            return new ItemWrapper<RunnerAndConfigurationSettings>(settings) {
+            return new ItemWrapper<ProfilerSettings>(new ProfilerSettings("config")) {
                 @Override
                 public void perform(@NotNull Project project, @NotNull Executor executor, @NotNull DataContext context) {
-                    RunnerAndConfigurationSettings config = getValue();
-                    RunManager.getInstance(project).setSelectedConfiguration(config);
-                    ExecutionUtil.runConfiguration(config, executor);
+                    RunManager.getInstance(project).setSelectedConfiguration(settings);
+                    ExecutionUtil.runConfiguration(settings, executor);
                 }
 
                 @Override
                 public ConfigurationType getType() {
-                    return getValue().getType();
+                    return settings.getType();
                 }
 
                 @Override
                 public Icon getIcon() {
-                    return RunManagerEx.getInstanceEx(project).getConfigurationIcon(getValue(), true);
+                    return RunManagerEx.getInstanceEx(project).getConfigurationIcon(settings, true);
                 }
 
                 @Override
                 public String getText() {
-                    return getValue().getName();
+                    return getValue().name;
                 }
 
                 @Override
@@ -281,12 +281,12 @@ public class ChooseProfilerConfigurationPopup implements ExecutorProvider {
 
                 @Override
                 public boolean available(Executor executor) {
-                    return ProgramRunnerUtil.getRunner(executor.getId(), getValue()) != null;
+                    return ProgramRunnerUtil.getRunner(executor.getId(), settings) != null;
                 }
 
                 @Override
                 public PopupStep getNextStep(@NotNull final Project project, @NotNull final ChooseProfilerConfigurationPopup action) {
-                    return new ConfigurationActionsStep(project, action, getValue(), isDynamic());
+                    return new ConfigurationActionsStep(project, action, settings, isDynamic());
                 }
             };
         }
