@@ -10,6 +10,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.LinkedList;
 
+// TODO: reimplement
 public class ProfilerDialog extends ListItemsDialogWrapper {
     private final ConfigStorage.State state;
     private Splitter splitter;

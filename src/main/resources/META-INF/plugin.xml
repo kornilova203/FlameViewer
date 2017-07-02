@@ -34,6 +34,8 @@
                     text="Show Results" description=""/>
             <action class="com.github.kornilova_l.plugin.config.ShowProfilerDialogAction"
                     id="flamegraph-profiler.ShowProfilerDialog" text="Show Dialog"/>
+            <action class="com.github.kornilova_l.plugin.execution.ChooseProfilerConfigurationAction"
+                    id="flamegraph-profiler.chooseProfilerConfigurationAction" text="Profile..." />
         </group>
     </actions>
     <project-components>
