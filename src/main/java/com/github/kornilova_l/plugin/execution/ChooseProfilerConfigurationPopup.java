@@ -23,7 +23,6 @@ import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.popup.ListPopupStep;
-import com.intellij.openapi.ui.popup.ListSeparator;
 import com.intellij.openapi.ui.popup.PopupStep;
 import com.intellij.openapi.ui.popup.util.BaseListPopupStep;
 import com.intellij.ui.popup.WizardPopup;
@@ -220,11 +219,6 @@ public class ChooseProfilerConfigurationPopup implements ExecutorProvider {
 
         public abstract void perform(@NotNull final Project project, @NotNull final Executor executor, @NotNull final DataContext context);
 
-        @Nullable
-        public ConfigurationType getType() {
-            return null;
-        }
-
         public boolean available(Executor executor) {
             return false;
         }
@@ -243,11 +237,6 @@ public class ChooseProfilerConfigurationPopup implements ExecutorProvider {
                 public void perform(@NotNull Project project, @NotNull Executor executor, @NotNull DataContext context) {
                     RunManager.getInstance(project).setSelectedConfiguration(settings);
                     ExecutionUtil.runConfiguration(settings, executor);
-                }
-
-                @Override
-                public ConfigurationType getType() {
-                    return settings.getType();
                 }
 
                 @Override
@@ -287,7 +276,7 @@ public class ChooseProfilerConfigurationPopup implements ExecutorProvider {
                                            @NotNull final Project project,
                                            @NotNull final ExecutorProvider executorProvider,
                                            @NotNull final String title) {
-            super(title, createSettingsList(project, executorProvider, true));
+            super(title, createSettingsList(project, executorProvider));
             myProject = project;
             myAction = action;
 
@@ -311,27 +300,6 @@ public class ChooseProfilerConfigurationPopup implements ExecutorProvider {
         @Override
         public boolean isAutoSelectionEnabled() {
             return false;
-        }
-
-        @Override
-        public ListSeparator getSeparatorAbove(ItemWrapper value) {
-            final List<ItemWrapper> configurations = getValues();
-            final int index = configurations.indexOf(value);
-            if (index > 0 && index <= configurations.size() - 1) {
-                final ItemWrapper aboveConfiguration = configurations.get(index - 1);
-
-                if (aboveConfiguration != null && aboveConfiguration.isDynamic() != value.isDynamic()) {
-                    return new ListSeparator();
-                }
-
-                final ConfigurationType currentType = value.getType();
-                final ConfigurationType aboveType = aboveConfiguration == null ? null : aboveConfiguration.getType();
-                if (aboveType != currentType && currentType != null) {
-                    return new ListSeparator(); // new ListSeparator(currentType.getDisplayName());
-                }
-            }
-
-            return null;
         }
 
         @Override
@@ -439,11 +407,10 @@ public class ChooseProfilerConfigurationPopup implements ExecutorProvider {
                 });
             }
 
-            boolean isFirst = true;
             for (final Executor executor : ExecutorRegistry.getInstance().getRegisteredExecutors()) {
                 final ProgramRunner runner = RunnerRegistry.getInstance().getRunner(executor.getId(), settings.getConfiguration());
                 if (runner != null) {
-                    result.add(new ActionWrapper(executor.getActionName(), executor.getIcon(), isFirst) {
+                    result.add(new ActionWrapper(executor.getActionName(), executor.getIcon()) {
                         @Override
                         public void perform() {
                             final RunManager manager = RunManager.getInstance(project);
@@ -454,11 +421,10 @@ public class ChooseProfilerConfigurationPopup implements ExecutorProvider {
                             ExecutionUtil.runConfiguration(settings, executor);
                         }
                     });
-                    isFirst = false;
                 }
             }
 
-            result.add(new ActionWrapper("Edit...", AllIcons.Actions.EditSource, true) {
+            result.add(new ActionWrapper("Edit...", AllIcons.Actions.EditSource) {
                 @Override
                 public void perform() {
                     if (dynamic) {
@@ -486,7 +452,7 @@ public class ChooseProfilerConfigurationPopup implements ExecutorProvider {
 
         @Override
         public PopupStep onChosen(final ActionWrapper selectedValue, boolean finalChoice) {
-            return doFinalStep(() -> selectedValue.perform());
+            return doFinalStep(selectedValue::perform);
         }
 
         @Override
@@ -506,11 +472,6 @@ public class ChooseProfilerConfigurationPopup implements ExecutorProvider {
         private final Icon myIcon;
 
         private ActionWrapper(String name, Icon icon) {
-            this(name, icon, false);
-        }
-
-        private ActionWrapper(String name, Icon icon, boolean addSeparatorAbove) {
-            super();
             myName = name;
             myIcon = icon;
         }
@@ -780,53 +741,50 @@ public class ChooseProfilerConfigurationPopup implements ExecutorProvider {
         }
     }
 
-    public static ItemWrapper[] createSettingsList(@NotNull Project project, @NotNull ExecutorProvider executorProvider, boolean createEditAction) {
+    public static ItemWrapper[] createSettingsList(@NotNull Project project, @NotNull ExecutorProvider executorProvider) {
         List<ItemWrapper> result = new ArrayList<>();
 
-        if (createEditAction) {
-            ItemWrapper<Void> edit = new ItemWrapper<Void>(null) {
-                @Override
-                public Icon getIcon() {
-                    return AllIcons.Actions.EditSource;
-                }
+        ItemWrapper<Void> edit = new ItemWrapper<Void>(null) {
+            @Override
+            public Icon getIcon() {
+                return AllIcons.Actions.EditSource;
+            }
 
-                @Override
-                public String getText() {
-                    return UIUtil.removeMnemonic(ActionsBundle.message("action.editRunConfigurations.text"));
-                }
+            @Override
+            public String getText() {
+                return UIUtil.removeMnemonic(ActionsBundle.message("action.editRunConfigurations.text"));
+            }
 
-                @Override
-                public void perform(@NotNull final Project project, @NotNull final Executor executor, @NotNull DataContext context) {
-                    if (new EditConfigurationsDialog(project) {
-                        @Override
-                        protected void init() {
-                            setOKButtonText(executor.getStartActionText());
-                            setOKButtonIcon(executor.getIcon());
-                            myExecutor = executor;
-                            super.init();
-                        }
-                    }.showAndGet()) {
-                        ApplicationManager.getApplication().invokeLater(() -> {
-                            RunnerAndConfigurationSettings configuration = RunManager.getInstance(project).getSelectedConfiguration();
-                            if (configuration != null) {
-                                ExecutionUtil.runConfiguration(configuration, executor);
-                            }
-                        }, project.getDisposed());
+            @Override
+            public void perform(@NotNull final Project project, @NotNull final Executor executor, @NotNull DataContext context) {
+                if (new EditConfigurationsDialog(project) {
+                    @Override
+                    protected void init() {
+                        setOKButtonText(executor.getStartActionText());
+                        setOKButtonIcon(executor.getIcon());
+                        myExecutor = executor;
+                        super.init();
                     }
+                }.showAndGet()) {
+                    ApplicationManager.getApplication().invokeLater(() -> {
+                        RunnerAndConfigurationSettings configuration = RunManager.getInstance(project).getSelectedConfiguration();
+                        if (configuration != null) {
+                            ExecutionUtil.runConfiguration(configuration, executor);
+                        }
+                    }, project.getDisposed());
                 }
+            }
 
-                @Override
-                public boolean available(Executor executor) {
-                    return true;
-                }
-            };
-            edit.setMnemonic(0);
-            result.add(edit);
-        }
+            @Override
+            public boolean available(Executor executor) {
+                return true;
+            }
+        };
+        edit.setMnemonic(0);
+        result.add(edit);
 
         final RunnerAndConfigurationSettings selectedConfiguration = RunManager.getInstance(project).getSelectedConfiguration();
         if (selectedConfiguration != null) {
-            boolean isFirst = true;
             final ExecutionTarget activeTarget = ExecutionTargetManager.getActiveTarget(project);
             for (ExecutionTarget eachTarget : ExecutionTargetManager.getTargetsToChooseFor(project, selectedConfiguration)) {
                 result.add(new ItemWrapper<ExecutionTarget>(eachTarget) {
