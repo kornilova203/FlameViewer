@@ -15,7 +15,6 @@ public class StateContainer {
         State state = states.computeIfAbsent(
                 project,
                 k -> ((ConfigStorage) project.getComponent(PersistentStateComponent.class)).getState());
-        System.out.println(state.configs.keySet());
         return state;
     }
 }

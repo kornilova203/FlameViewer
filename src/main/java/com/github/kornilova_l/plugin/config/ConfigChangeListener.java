@@ -7,11 +7,11 @@ import javax.swing.text.Document;
 
 public class ConfigChangeListener implements DocumentListener {
 
-    private final ConfigStorage.State.Config config;
+    private final ProfilerSettings profilerSettings;
     private final boolean isIncluded;
 
-    public ConfigChangeListener(ConfigStorage.State.Config config, boolean b) {
-        this.config = config;
+    public ConfigChangeListener(ProfilerSettings profilerSettings, boolean b) {
+        this.profilerSettings = profilerSettings;
         this.isIncluded = b;
     }
 
@@ -41,9 +41,9 @@ public class ConfigChangeListener implements DocumentListener {
 
     private synchronized void updateList(String text) {
         if (isIncluded) {
-            config.included = text;
+            profilerSettings.included = text;
         } else {
-            config.excluded = text;
+            profilerSettings.excluded = text;
         }
     }
 }

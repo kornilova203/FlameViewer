@@ -3,30 +3,41 @@ package com.github.kornilova_l.plugin.config;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.State;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @State(name = "flamegraph-profiler")
 public class ConfigStorage implements PersistentStateComponent<ConfigStorage.State> {
+    @SuppressWarnings("PublicField")
     public static class State {
-        public static class Config {
-            @SuppressWarnings("PublicField")
-            public String included = "";
-            @SuppressWarnings("PublicField")
-            public String excluded = "";
-        }
-
         public State() {
-            this(new HashMap<>());
+            this(new LinkedList<>());
         }
 
-        public State(Map<String, Config> configs) {
-            this.configs = configs;
+        private State(Collection<ProfilerSettings> profilerSettings) {
+            this.profilerSettings = profilerSettings;
         }
 
-        // <name_of_config> -> (included)|(excluded) -> config_string
-        @SuppressWarnings("PublicField")
-        public Map<String, Config> configs;
+        public Collection<ProfilerSettings> profilerSettings;
+
+        public List<String> getNamesList() {
+            LinkedList<String> list = new LinkedList<>();
+            if (profilerSettings.size() == 0) {
+                return list;
+            }
+            for (ProfilerSettings ps : profilerSettings) {
+                list.add(ps.name);
+            }
+            return list;
+        }
+
+        public ProfilerSettings getSetting(String configName) {
+            for (ProfilerSettings ps : profilerSettings) {
+                if (Objects.equals(ps.name, configName)) {
+                    return ps;
+                }
+            }
+            return null;
+        }
     }
 
     State state;

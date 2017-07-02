@@ -8,7 +8,6 @@ import com.intellij.util.ui.ListItemsDialogWrapper;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.LinkedList;
 
 // TODO: reimplement
 public class ProfilerDialog extends ListItemsDialogWrapper {
@@ -19,7 +18,7 @@ public class ProfilerDialog extends ListItemsDialogWrapper {
         super("Edit Profiler Configurations");
         state = StateContainer.getState(project);
         assert(state != null);
-        setData(new LinkedList<>(state.configs.keySet()));
+        setData(state.getNamesList());
         myList.addListSelectionListener(e -> {
             int index = myList.getSelectedIndex();
             if (index == -1) {
@@ -36,14 +35,16 @@ public class ProfilerDialog extends ListItemsDialogWrapper {
     private JComponent getSecondComponent(int index) {
         JComponent secondComponent = new JPanel(new GridLayout(4, 1));
         secondComponent.add(new Label("Included methods:"));
-        JTextArea textArea = new JTextArea(state.configs.get(myData.get(index)).included);
-        textArea.getDocument().addDocumentListener(new ConfigChangeListener(state.configs.get(myData.get(index)), true));
+        String configName = myData.get(index);
+        ProfilerSettings profilerSettings = state.getSetting(configName);
+        JTextArea textArea = new JTextArea(profilerSettings.included);
+        textArea.getDocument().addDocumentListener(new ConfigChangeListener(profilerSettings, true));
         secondComponent.add(new JScrollPane(
                 textArea
         ));
         secondComponent.add(new Label("Excluded methods:"));
-        JTextArea textArea2 = new JTextArea(state.configs.get(myData.get(index)).excluded);
-        textArea2.getDocument().addDocumentListener(new ConfigChangeListener(state.configs.get(myData.get(index)), false));
+        JTextArea textArea2 = new JTextArea(profilerSettings.excluded);
+        textArea2.getDocument().addDocumentListener(new ConfigChangeListener(profilerSettings, false));
         secondComponent.add(new JScrollPane(
                 textArea2
         ));
@@ -56,7 +57,11 @@ public class ProfilerDialog extends ListItemsDialogWrapper {
                 "Enter configuration name:",
                 "Create New Configuration",
                 Messages.getQuestionIcon());
-        state.configs.putIfAbsent(configName, new ConfigStorage.State.Config());
+        ProfilerSettings ps = state.getSetting(configName);
+        if (ps == null) {
+            ps = new ProfilerSettings(configName);
+            state.profilerSettings.add(ps);
+        }
         return configName;
     }
 

@@ -223,9 +223,7 @@ public class ChooseProfilerConfigurationPopup implements ExecutorProvider {
 
             ItemWrapper that = (ItemWrapper)o;
 
-            if (myValue != null ? !myValue.equals(that.myValue) : that.myValue != null) return false;
-
-            return true;
+            return myValue != null ? myValue.equals(that.myValue) : that.myValue == null;
         }
 
         @Override
@@ -250,14 +248,6 @@ public class ChooseProfilerConfigurationPopup implements ExecutorProvider {
 
         public PopupStep getNextStep(Project project, ChooseProfilerConfigurationPopup action) {
             return PopupStep.FINAL_CHOICE;
-        }
-
-        public static ItemWrapper wrap(@NotNull final Project project,
-                                       @NotNull final RunnerAndConfigurationSettings settings,
-                                       final boolean dynamic) {
-            final ItemWrapper result = wrap(project, settings);
-            result.setDynamic(dynamic);
-            return result;
         }
 
         public static ItemWrapper wrap(@NotNull final Project project, @NotNull final RunnerAndConfigurationSettings settings) {
