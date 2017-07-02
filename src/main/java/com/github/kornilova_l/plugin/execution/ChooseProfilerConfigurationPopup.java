@@ -153,12 +153,7 @@ public class ChooseProfilerConfigurationPopup implements ExecutorProvider {
 
     private abstract static class Wrapper {
         private int myMnemonic = -1;
-        private final boolean myAddSeparatorAbove;
         private boolean myChecked;
-
-        protected Wrapper(boolean addSeparatorAbove) {
-            myAddSeparatorAbove = addSeparatorAbove;
-        }
 
         public int getMnemonic() {
             return myMnemonic;
@@ -174,10 +169,6 @@ public class ChooseProfilerConfigurationPopup implements ExecutorProvider {
 
         public void setMnemonic(int mnemonic) {
             myMnemonic = mnemonic;
-        }
-
-        public boolean addSeparatorAbove() {
-            return myAddSeparatorAbove;
         }
 
         @Nullable
@@ -197,11 +188,6 @@ public class ChooseProfilerConfigurationPopup implements ExecutorProvider {
 
 
         protected ItemWrapper(@Nullable final T value) {
-            this(value, false);
-        }
-
-        protected ItemWrapper(@Nullable final T value, boolean addSeparatorAbove) {
-            super(addSeparatorAbove);
             myValue = value;
         }
 
@@ -329,8 +315,6 @@ public class ChooseProfilerConfigurationPopup implements ExecutorProvider {
 
         @Override
         public ListSeparator getSeparatorAbove(ItemWrapper value) {
-            if (value.addSeparatorAbove()) return new ListSeparator();
-
             final List<ItemWrapper> configurations = getValues();
             final int index = configurations.indexOf(value);
             if (index > 0 && index <= configurations.size() - 1) {
@@ -426,11 +410,6 @@ public class ChooseProfilerConfigurationPopup implements ExecutorProvider {
 
         public Icon getIcon() {
             return RunManagerEx.getInstanceEx(myProject).getConfigurationIcon(mySettings);
-        }
-
-        @Override
-        public ListSeparator getSeparatorAbove(ActionWrapper value) {
-            return value.addSeparatorAbove() ? new ListSeparator() : null;
         }
 
         private static ActionWrapper[] buildActions(@NotNull final Project project,
@@ -531,7 +510,7 @@ public class ChooseProfilerConfigurationPopup implements ExecutorProvider {
         }
 
         private ActionWrapper(String name, Icon icon, boolean addSeparatorAbove) {
-            super(addSeparatorAbove);
+            super();
             myName = name;
             myIcon = icon;
         }
@@ -850,7 +829,7 @@ public class ChooseProfilerConfigurationPopup implements ExecutorProvider {
             boolean isFirst = true;
             final ExecutionTarget activeTarget = ExecutionTargetManager.getActiveTarget(project);
             for (ExecutionTarget eachTarget : ExecutionTargetManager.getTargetsToChooseFor(project, selectedConfiguration)) {
-                result.add(new ItemWrapper<ExecutionTarget>(eachTarget, isFirst) {
+                result.add(new ItemWrapper<ExecutionTarget>(eachTarget) {
                     {
                         setChecked(getValue().equals(activeTarget));
                     }
@@ -876,7 +855,6 @@ public class ChooseProfilerConfigurationPopup implements ExecutorProvider {
                         return true;
                     }
                 });
-                isFirst = false;
             }
         }
 
