@@ -2,14 +2,18 @@ package com.github.kornilova_l.plugin.execution;
 
 import com.github.kornilova_l.plugin.StateContainer;
 import com.github.kornilova_l.plugin.config.ConfigStorage;
+import com.github.kornilova_l.plugin.config.ProfilerSettings;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.*;
 import com.intellij.execution.impl.DefaultJavaProgramRunner;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.ui.RunContentDescriptor;
 import com.intellij.openapi.application.PathManager;
+import com.intellij.openapi.ui.popup.util.BaseListPopupStep;
+import com.intellij.ui.popup.list.ListPopupImpl;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.LinkedList;
 import java.util.Objects;
 
 /**
@@ -33,6 +37,12 @@ public class ProfilerProgramRunner extends DefaultJavaProgramRunner {
                                              @NotNull ExecutionEnvironment env) throws ExecutionException {
         System.out.println("doExecute");
         state = StateContainer.getState(env.getProject());
+        LinkedList<ProfilerSettings> list = new LinkedList<>();
+        list.add(new ProfilerSettings("Slim"));
+        list.add(new ProfilerSettings("Shady"));
+        new ListPopupImpl(
+                new BaseListPopupStep<>("Profiler configuration", list)
+        ).showCenteredInCurrentWindow(env.getProject());
         return super.doExecute(runProfileState, env);
     }
 
