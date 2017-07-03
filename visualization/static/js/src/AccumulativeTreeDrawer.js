@@ -19,6 +19,7 @@ class AccumulativeTreeDrawer {
         this.stage = null;
         this.header = null;
         this.searchList = [];
+        this.shapeAndTextList = [];
         this._enableSearch();
     }
 
@@ -34,6 +35,7 @@ class AccumulativeTreeDrawer {
         this._drawRecursively(this.tree.getBaseNode(), 0);
 
         this.stage.update();
+        this._enableZoom();
     };
 
     _drawRecursively(node, depth) {
@@ -70,9 +72,8 @@ class AccumulativeTreeDrawer {
 
     _drawNode(node, depth, colorId) {
         const shape = this._drawRectangle(node, depth, colorId);
-        if (node.getWidth() > 5) {
-            this._drawLabel(node, depth, shape);
-        }
+        const text = this._drawLabel(node, depth, shape);
+        this.shapeAndTextList.push({shape: shape, text: text});
     }
 
     _drawRectangle(node, depth, colorId) {
@@ -124,6 +125,7 @@ class AccumulativeTreeDrawer {
         this.stage.setChildIndex(text, this.stage.getNumChildren() - 1);
 
         this.stage.addChild(text);
+        return text;
     }
 
     _setPopupPosition(popup, node, depth) {
@@ -185,6 +187,14 @@ class AccumulativeTreeDrawer {
             this.searchList[i].reset();
         }
         this.stage.update();
+    }
+
+    _enableZoom() {
+        for (let i in this.shapeAndTextList) {
+            this.shapeAndTextList[i].shape.addEventListener("click", () => {
+                console.log("clicked");
+            })
+        }
     }
 }
 
