@@ -7,13 +7,14 @@ import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.*;
 import com.intellij.execution.impl.DefaultJavaProgramRunner;
 import com.intellij.execution.runners.ExecutionEnvironment;
-import com.intellij.execution.ui.RunContentDescriptor;
 import com.intellij.openapi.application.PathManager;
+import com.intellij.openapi.ui.popup.PopupStep;
 import com.intellij.openapi.ui.popup.util.BaseListPopupStep;
 import com.intellij.ui.popup.list.ListPopupImpl;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -28,22 +29,28 @@ public class ProfilerProgramRunner extends DefaultJavaProgramRunner {
         System.out.println("Patcher created");
     }
 
-    /*
-    Get state for this project
-     */
-    // TODO: find better way to get project component
     @Override
-    protected RunContentDescriptor doExecute(@NotNull RunProfileState runProfileState,
-                                             @NotNull ExecutionEnvironment env) throws ExecutionException {
-        System.out.println("doExecute");
-        state = StateContainer.getState(env.getProject());
+    public void execute(@NotNull ExecutionEnvironment environment) throws ExecutionException {
+        state = StateContainer.getState(environment.getProject());
         LinkedList<ProfilerSettings> list = new LinkedList<>();
         list.add(new ProfilerSettings("Slim"));
         list.add(new ProfilerSettings("Shady"));
         new ListPopupImpl(
-                new BaseListPopupStep<>("Profiler configuration", list)
-        ).showCenteredInCurrentWindow(env.getProject());
-        return super.doExecute(runProfileState, env);
+                new BaseListPopupStep<ProfilerSettings>(
+                        "Profiler configuration",
+                        new LinkedList<>(state.profilerSettings)
+                ) {
+                    @Override
+                    public PopupStep onChosen(ProfilerSettings selectedValue, boolean finalChoice) {
+                        try {
+                            DefaultJavaProgramRunner.getInstance().execute(environment);
+                        } catch (ExecutionException e) {
+                            e.printStackTrace();
+                        }
+                        return super.onChosen(selectedValue, finalChoice);
+                    }
+                }
+        ).showCenteredInCurrentWindow(environment.getProject());
     }
 
     @Override
