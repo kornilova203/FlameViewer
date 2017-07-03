@@ -62,14 +62,15 @@ public class ProfilerProgramRunner extends DefaultJavaProgramRunner {
                       RunProfile runProfile,
                       boolean beforeExecution) throws ExecutionException {
         System.out.println("patch");
-        assert(chosenSettings != null);
-        // TODO: check if string contains spaces
+        assert (chosenSettings != null);
+        chosenSettings.excluded = chosenSettings.excluded.replaceAll("[ \t]+", "");
+        chosenSettings.included = chosenSettings.included.replaceAll("[ \t]+", "");
         javaParameters.getVMParametersList().add(
                 "-javaagent:/home/lk/java-profiling-plugin/build/libs/javaagent.jar=" +
-                PathManager.getSystemPath()
+                        PathManager.getSystemPath()
                         + "&" +
-                String.join("&", chosenSettings.included.split("\n")) + "&!" +
-                String.join("&!", chosenSettings.excluded.split("\n"))
+                        String.join("&", chosenSettings.included.split("\n")) + "&!" +
+                        String.join("&!", chosenSettings.excluded.split("\n"))
         );
     }
 
