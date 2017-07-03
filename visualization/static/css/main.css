@@ -67,15 +67,6 @@ section {
     height: 800px;
 }
 
-main ol {
-    margin: 0;
-    padding: 0;
-    position: absolute;
-    height: 50px;
-    bottom: 0;
-    width: 100%;
-}
-
 .call-tree .method-name {
     margin: 0;
     overflow: hidden;
@@ -225,4 +216,20 @@ nav ul li a:hover, .current-link {
     color: white;
     margin-right: 10px;
     font-weight: normal;
+}
+
+.file-list {
+    list-style: none;
+    border-top: solid 1px #aaa;
+    padding: 0;
+}
+
+.file-list li {
+    border-bottom: solid 1px #aaa;
+    padding: 12px 0 10px;
+}
+
+.file-list li a {
+    text-decoration: none;
+    color: #0887D7;
 }
