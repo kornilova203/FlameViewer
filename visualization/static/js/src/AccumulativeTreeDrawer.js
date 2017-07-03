@@ -198,16 +198,45 @@ class AccumulativeTreeDrawer {
     }
 
     _enableZoom() {
+        const resetZoomButton = this._createResetZoomButton();
         for (let i in this.shapeAndTextList) {
             let zoomedShape = this.shapeAndTextList[i].shape;
             zoomedShape.addEventListener("click", () => {
                 this._resetZoom();
-                for (let j in this.shapeAndTextList) {
-                    this._setZoom(this.shapeAndTextList[j], zoomedShape);
+                resetZoomButton.scaleX = 0;
+                if (!(zoomedShape.x === 0 && zoomedShape.scaleX === 1)) { // if it is not base node
+                    resetZoomButton.scaleX = 1;
+                    for (let j in this.shapeAndTextList) {
+                        this._setZoom(this.shapeAndTextList[j], zoomedShape);
+                    }
+                    this.stage.update();
                 }
-                this.stage.update();
             })
         }
+    }
+
+    _createResetZoomButton() {
+        const resetZoomButton = new createjs.Text(
+            "Reset Zoom",
+            (LAYER_HEIGHT - 2) + "px Arial",
+            "black"
+        );
+        resetZoomButton.x = 0;
+        resetZoomButton.y = 10;
+        const hit = new createjs.Shape();
+        hit.graphics.beginFill("#000").drawRect(
+            0,
+            0,
+            resetZoomButton.getMeasuredWidth(),
+            resetZoomButton.getMeasuredHeight()
+        );
+        resetZoomButton.hitArea = hit;
+        resetZoomButton.addEventListener("click", () => {
+            resetZoomButton.scaleX = 0;
+            this._resetZoom();
+        });
+        this.stage.addChild(resetZoomButton);
+        return resetZoomButton;
     }
 
     _setZoom(shapeAndText, zoomedShape) {
