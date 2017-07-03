@@ -3,11 +3,10 @@ package com.github.kornilova_l.profiler;
 import com.intellij.openapi.application.PathManager;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Optional;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class ProfilerFileManager {
 
@@ -89,5 +88,29 @@ public class ProfilerFileManager {
 
     public static File getStaticDir() {
         return new File( PathManager.getSystemPath() + PLUGIN_DIR_NAME + "/static");
+    }
+
+    public static List<String> getFileNameList() {
+        List<String> list = new LinkedList<>();
+        logDir = new File(PathManager.getSystemPath() + PLUGIN_DIR_NAME + "/events");
+        if (logDir.exists()) {
+            File[] files = logDir.listFiles();
+            if (files != null) {
+                list = Arrays.stream(files)
+                        .sorted((f1, f2) -> {
+                            if (f1.lastModified() == f2.lastModified()) {
+                                return 0;
+                            }
+                            if (f1.lastModified() < f2.lastModified()) {
+                                return -1;
+                            }
+                            return 1;
+                        })
+                        .map(File::getName)
+                        .collect(Collectors.toList());
+            }
+
+        }
+        return list;
     }
 }

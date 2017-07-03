@@ -6,6 +6,7 @@ class ServerNames {
     private static final String NAME = "flamegraph-profiler";
     static final String MAIN_NAME = "/" + NAME;
     static final String SELECT_FILE = MAIN_NAME + "/select-file";
+    static final String FILE_LIST = MAIN_NAME + "/file-list";
     static final String CALL_TREE = MAIN_NAME + "/call-tree";
     static final String CALL_TREE_JS_REQUEST = MAIN_NAME + "/trees/call-tree";
     static final String OUTGOING_CALLS = MAIN_NAME + "/outgoing-calls";

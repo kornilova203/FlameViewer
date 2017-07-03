@@ -4,6 +4,7 @@ import com.github.kornilova_l.profiler.ProfilerFileManager;
 import com.github.kornilova_l.protos.TreeProtos;
 import com.github.kornilova_l.protos.TreesProtos;
 import com.github.kornilova_l.server.trees.TreeManager;
+import com.google.gson.Gson;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
@@ -13,8 +14,6 @@ import org.apache.commons.compress.utils.IOUtils;
 import org.jetbrains.ide.HttpRequestHandler;
 
 import java.io.*;
-
-import static com.github.kornilova_l.server.ServerNames.SELECT_FILE;
 
 public class ProfilerHttpRequestHandler extends HttpRequestHandler {
 
@@ -36,6 +35,10 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
             case ServerNames.SELECT_FILE:
                 LOG.info("select-file.html");
                 sendStatic(context, ServerNames.MAIN_NAME + "/select-file.html", "text/html");
+                break;
+            case ServerNames.FILE_LIST:
+                LOG.info("file list");
+                sendFileList(context);
                 break;
             case ServerNames.OUTGOING_CALLS:
                 LOG.info("outgoing-calls.html");
@@ -81,6 +84,19 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
                 }
         }
         return true;
+    }
+
+    private static void sendFileList(ChannelHandlerContext context) {
+        String json = new Gson().toJson(
+                ProfilerFileManager.getFileNameList()
+        );
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        try {
+            outputStream.write(json.getBytes());
+            sendBytes(context, "application/json", outputStream.toByteArray());
+        } catch (IOException e) {
+            LOG.error(e);
+        }
     }
 
     private static void sendTrees(ChannelHandlerContext context,
