@@ -101,9 +101,9 @@ public class ProfilerFileManager {
                                 return 0;
                             }
                             if (f1.lastModified() < f2.lastModified()) {
-                                return -1;
+                                return 1;
                             }
-                            return 1;
+                            return -1;
                         })
                         .map(File::getName)
                         .collect(Collectors.toList());
