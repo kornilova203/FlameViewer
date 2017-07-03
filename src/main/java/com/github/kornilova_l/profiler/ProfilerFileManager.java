@@ -112,4 +112,8 @@ public class ProfilerFileManager {
         }
         return list;
     }
+
+    public static String getFilePath(String fileName) {
+        return logDir.getAbsolutePath() + "/" + fileName;
+    }
 }

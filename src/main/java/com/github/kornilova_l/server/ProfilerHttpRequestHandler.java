@@ -72,22 +72,25 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
                 break;
             case ServerNames.CALL_TREE_JS_REQUEST:
                 LOG.info("CALL_TREE_JS_REQUEST");
-                sendTrees(context, treeManager.getCallTree());
+                assert (urlDecoder.parameters().containsKey("file"));
+                sendTrees(context, treeManager.getCallTree(urlDecoder.parameters().get("file").get(0)));
                 break;
             case ServerNames.OUTGOING_CALLS_JS_REQUEST:
                 LOG.info("OUTGOING_CALLS_JS_REQUEST");
+                assert (urlDecoder.parameters().containsKey("file"));
                 if (urlDecoder.parameters().containsKey("method")) {
                     sendTree(context, treeManager.getOutgoingCalls(urlDecoder.parameters()));
                 } else {
-                    sendTree(context, treeManager.getOutgoingCalls());
+                    sendTree(context, treeManager.getOutgoingCalls(urlDecoder.parameters().get("file").get(0)));
                 }
                 break;
             case ServerNames.INCOMING_CALLS_JS_REQUEST:
                 LOG.info("INCOMING_CALLS_JS_REQUEST");
+                assert (urlDecoder.parameters().containsKey("file"));
                 if (urlDecoder.parameters().containsKey("method")) {
                     sendTree(context, treeManager.getIncomingCalls(urlDecoder.parameters()));
                 } else {
-                    sendTree(context, treeManager.getIncomingCalls());
+                    sendTree(context, treeManager.getIncomingCalls(urlDecoder.parameters().get("file").get(0)));
                 }
                 break;
             default:

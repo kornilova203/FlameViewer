@@ -110,7 +110,8 @@ class AccumulativeTreeDrawer {
                 desc: node.getNodeInfo().getDescription(),
                 isStatic: node.getNodeInfo().getIsStatic(),
                 duration: node.getWidth(),
-                count: node.getNodeInfo().getCount()
+                count: node.getNodeInfo().getCount(),
+                file: fileName
             }
         ).content;
         const popup = $(popupContent).appendTo(this.section);

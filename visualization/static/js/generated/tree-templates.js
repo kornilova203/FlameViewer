@@ -35,7 +35,7 @@ if (goog.DEBUG) {
 
 
 templates.tree.accumulativeTreePopup = function(opt_data, opt_ignored) {
-  return soydata.VERY_UNSAFE.ordainSanitizedHtml('<div class="popup"><ul><li><a href="/flamegraph-profiler/outgoing-calls?class=' + soy.$$escapeUri(opt_data.className) + '&amp;method=' + soy.$$escapeUri(opt_data.methodName) + '&amp;desc=' + soy.$$escapeUri(opt_data.desc) + '&amp;isStatic=' + soy.$$escapeUri(opt_data.isStatic) + '">Outgoing Calls</a></li><li><a href="/flamegraph-profiler/incoming-calls?class=' + soy.$$escapeUri(opt_data.className) + '&amp;method=' + soy.$$escapeUri(opt_data.methodName) + '&amp;desc=' + soy.$$escapeUri(opt_data.desc) + '&amp;isStatic=' + soy.$$escapeUri(opt_data.isStatic) + '">Incoming Calls</a></li></ul><h3>' + soy.$$escapeHtml(opt_data.className) + '.' + soy.$$escapeHtml(opt_data.methodName) + '</h3><p>Duration: ' + soy.$$escapeHtml(opt_data.duration) + 'ms</p><p>' + soy.$$escapeHtml(opt_data.count) + ' call' + ((opt_data.count > 1) ? 's' : '') + '</p></div>');
+  return soydata.VERY_UNSAFE.ordainSanitizedHtml('<div class="popup"><ul><li><a href="/flamegraph-profiler/outgoing-calls?file=' + soy.$$escapeUri(opt_data.file) + '&amp;class=' + soy.$$escapeUri(opt_data.className) + '&amp;method=' + soy.$$escapeUri(opt_data.methodName) + '&amp;desc=' + soy.$$escapeUri(opt_data.desc) + '&amp;isStatic=' + soy.$$escapeUri(opt_data.isStatic) + '">Outgoing Calls</a></li><li><a href="/flamegraph-profiler/incoming-calls?file=' + soy.$$escapeUri(opt_data.file) + '&amp;class=' + soy.$$escapeUri(opt_data.className) + '&amp;method=' + soy.$$escapeUri(opt_data.methodName) + '&amp;desc=' + soy.$$escapeUri(opt_data.desc) + '&amp;isStatic=' + soy.$$escapeUri(opt_data.isStatic) + '">Incoming Calls</a></li></ul><h3>' + soy.$$escapeHtml(opt_data.className) + '.' + soy.$$escapeHtml(opt_data.methodName) + '</h3><p>Duration: ' + soy.$$escapeHtml(opt_data.duration) + 'ms</p><p>' + soy.$$escapeHtml(opt_data.count) + ' call' + ((opt_data.count > 1) ? 's' : '') + '</p></div>');
 };
 if (goog.DEBUG) {
   templates.tree.accumulativeTreePopup.soyTemplateName = 'templates.tree.accumulativeTreePopup';
@@ -44,11 +44,11 @@ if (goog.DEBUG) {
 
 templates.tree.listOfFiles = function(opt_data, opt_ignored) {
   var output = '<ol class="file-list">';
-  var fileNameList73 = opt_data.fileNames;
-  var fileNameListLen73 = fileNameList73.length;
-  for (var fileNameIndex73 = 0; fileNameIndex73 < fileNameListLen73; fileNameIndex73++) {
-    var fileNameData73 = fileNameList73[fileNameIndex73];
-    output += '<li><a href="/flamegraph-profiler/call-tree?file=' + soy.$$escapeUri(fileNameData73) + '">' + soy.$$escapeHtml(fileNameData73) + '</a></li>';
+  var fileNameList77 = opt_data.fileNames;
+  var fileNameListLen77 = fileNameList77.length;
+  for (var fileNameIndex77 = 0; fileNameIndex77 < fileNameListLen77; fileNameIndex77++) {
+    var fileNameData77 = fileNameList77[fileNameIndex77];
+    output += '<li><a href="/flamegraph-profiler/call-tree?file=' + soy.$$escapeUri(fileNameData77) + '">' + soy.$$escapeHtml(fileNameData77) + '</a></li>';
   }
   output += '</ol>';
   return soydata.VERY_UNSAFE.ordainSanitizedHtml(output);
