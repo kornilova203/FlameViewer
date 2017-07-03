@@ -3,6 +3,7 @@ const LAYER_HEIGHT = 19;
 const LAYER_GAP = 1;
 const POPUP_MARGIN = 4; // have no idea why there is a gap between popup and canvas
 const COLORS = ["#18A3FA", "#0887d7"];
+const ZOOMED_PARENT_COLOR = "#94bcff";
 
 /**
  * Draws tree without:
@@ -73,12 +74,17 @@ class AccumulativeTreeDrawer {
     _drawNode(node, depth, colorId) {
         const shape = this._drawRectangle(node, depth, colorId);
         const text = this._drawLabel(node, depth, shape);
-        this.shapeAndTextList.push({shape: shape, text: text});
+        this.shapeAndTextList.push({
+            shape: shape,
+            text: text
+        });
     }
 
     _drawRectangle(node, depth, colorId) {
         const shape = new createjs.Shape();
         const fillCommand = shape.graphics.beginFill(COLORS[colorId]).command;
+        shape.fillCommand = fillCommand;
+        shape.originalColor = COLORS[colorId];
         this.searchList.push(new SearchElem(node.getNodeInfo().getMethodName(), fillCommand));
         shape.graphics.drawRect(0, 0, this.canvasWidth, LAYER_HEIGHT);
         const offsetX = this._getOffsetXForNode(node);
@@ -120,6 +126,7 @@ class AccumulativeTreeDrawer {
             "#fff"
         );
         text.x = this._getOffsetXForNode(node) + 2;
+        text.originalX = text.x;
         text.y = this.flipY(depth * (LAYER_GAP + LAYER_HEIGHT));
         const newShape = shape.clone();
         newShape.scaleX = shape.scaleX * 0.9;
@@ -197,21 +204,24 @@ class AccumulativeTreeDrawer {
             zoomedShape.addEventListener("click", () => {
                 this._resetZoom();
                 for (let j in this.shapeAndTextList) {
-                    let shape = this.shapeAndTextList[j].shape;
-                    this._setZoom(shape, zoomedShape);
+                    this._setZoom(this.shapeAndTextList[j], zoomedShape);
                 }
                 this.stage.update();
             })
         }
     }
 
-    _setZoom(shape, zoomedShape) {
+    _setZoom(shapeAndText, zoomedShape) {
+        const shape = shapeAndText.shape;
+        const text = shapeAndText.text;
         if (shape.y > zoomedShape.y) { // shape may be parent
             if (this._isParent(shape, zoomedShape)) { // if it is a parent
                 shape.scaleX = 1;
                 shape.x = 0;
+                shape.fillCommand.style = ZOOMED_PARENT_COLOR;
             } else {
                 shape.scaleX = 0;
+                text.scaleX = 0;
             }
         } else { // shape may be child
             if (this._isParent(zoomedShape, shape)) { // if it is a child
@@ -219,8 +229,13 @@ class AccumulativeTreeDrawer {
                 shape.x = (shape.originalX - zoomedShape.originalX) / zoomedShape.originalScaleX;
             } else {
                 shape.scaleX = 0;
+                text.scaleX = 0;
             }
         }
+        const newShape = shape.clone();
+        newShape.scaleX = shape.scaleX * 0.9;
+        text.mask = newShape;
+        text.x = shape.x + 2;
     }
 
     _isParent(mayBeParent, mayBeChild) {
@@ -232,8 +247,12 @@ class AccumulativeTreeDrawer {
     _resetZoom() {
         for (let i in this.shapeAndTextList) {
             let shape = this.shapeAndTextList[i].shape;
+            let text = this.shapeAndTextList[i].text;
             shape.scaleX = shape.originalScaleX;
             shape.x = shape.originalX;
+            shape.fillCommand.style = shape.originalColor;
+            text.x = text.originalX;
+            text.scaleX = 1;
         }
         this.stage.update();
     }

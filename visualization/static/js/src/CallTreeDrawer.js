@@ -15,6 +15,7 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
         super._drawRecursively(this.tree.getBaseNode(), 0);
 
         this.stage.update();
+        this._enableZoom();
     };
 
     _createSection(canvasOffset) {
