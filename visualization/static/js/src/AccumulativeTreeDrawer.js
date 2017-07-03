@@ -84,7 +84,7 @@ class AccumulativeTreeDrawer {
         const offsetX = this._getOffsetXForNode(node);
         const offsetY = this.flipY(AccumulativeTreeDrawer._calcNormaOffsetY(depth));
         const scaleX = node.getWidth() / this.width;
-        shape.originalOffsetX = offsetX;
+        shape.originalX = offsetX;
         shape.originalScaleX = scaleX;
         shape.setTransform(offsetX, offsetY, scaleX);
         // console.log(`draw: ${depth}\t${scaleX}\t${node.getNodeInfo().getMethodName()}`);
@@ -198,7 +198,6 @@ class AccumulativeTreeDrawer {
                 this._resetZoom();
                 for (let j in this.shapeAndTextList) {
                     let shape = this.shapeAndTextList[j].shape;
-                    console.log(shape);
                     this._setZoom(shape, zoomedShape);
                 }
                 this.stage.update();
@@ -215,12 +214,9 @@ class AccumulativeTreeDrawer {
                 shape.scaleX = 0;
             }
         } else { // shape may be child
-            if (shape.x >= zoomedShape.x &&
-                shape.x / this.canvasWidth + shape.scaleX <= zoomedShape.x / this.canvasWidth + zoomedShape.scaleX) { // if it is a child
-                shape.scaleX = shape.scaleX / zoomedShape.scaleX;
-                shape.x = (shape.x - zoomedShape.x) / zoomedShape.scaleX;
-                console.log("old offset: " + shape.originalOffsetX + " new: " + shape.x);
-                console.log("old scale: " + shape.originalScaleX + " new: " + shape.scaleX);
+            if (this._isParent(zoomedShape, shape)) { // if it is a child
+                shape.scaleX = shape.originalScaleX / zoomedShape.originalScaleX;
+                shape.x = (shape.originalX - zoomedShape.originalX) / zoomedShape.originalScaleX;
             } else {
                 shape.scaleX = 0;
             }
@@ -228,16 +224,16 @@ class AccumulativeTreeDrawer {
     }
 
     _isParent(mayBeParent, mayBeChild) {
-        return (mayBeParent.x <= mayBeChild.x + 0.01 &&
-        mayBeParent.x + (mayBeParent.scaleX * this.canvasWidth) >=
-            (mayBeChild.x + (mayBeChild.scaleX * this.canvasWidth) - 0.01));
+        return (mayBeParent.originalX <= mayBeChild.originalX + 0.01 &&
+        mayBeParent.originalX + (mayBeParent.originalScaleX * this.canvasWidth) >=
+            (mayBeChild.originalX + (mayBeChild.originalScaleX * this.canvasWidth) - 0.01));
     }
 
     _resetZoom() {
         for (let i in this.shapeAndTextList) {
             let shape = this.shapeAndTextList[i].shape;
             shape.scaleX = shape.originalScaleX;
-            shape.x = shape.originalOffsetX;
+            shape.x = shape.originalX;
         }
         this.stage.update();
     }
@@ -260,7 +256,6 @@ class SearchElem {
 
     //noinspection JSUnusedGlobalSymbols
     reset() {
-        console.log("reset to " + this.originalColor);
         this.fillCommand.style = this.originalColor;
     }
 }
