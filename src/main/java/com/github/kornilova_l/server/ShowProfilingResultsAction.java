@@ -10,6 +10,6 @@ public class ShowProfilingResultsAction extends AnAction {
     public void actionPerformed(AnActionEvent event) {
         BrowserUtil.browse("http://localhost:" +
                 BuiltInServerManager.getInstance().getPort() +
-                ServerNames.CALL_TREE);
+                ServerNames.SELECT_FILE);
     }
 }

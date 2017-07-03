@@ -30,7 +30,16 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
         switch (uri) {
             case ServerNames.CALL_TREE:
                 LOG.info("call-tree.html");
-                sendStatic(context, ServerNames.MAIN_NAME + "/call-tree.html", "text/html");
+                assert (urlDecoder.parameters().containsKey("file"));
+                sendBytes(
+                        context,
+                        "text/html",
+                        renderPage(
+                                ServerNames.MAIN_NAME + "/call-tree.html",
+                                urlDecoder.parameters().get("file").get(0)
+                        )
+                );
+//                sendStatic(context, ServerNames.MAIN_NAME + "/call-tree.html", "text/html");
                 break;
             case ServerNames.SELECT_FILE:
                 LOG.info("select-file.html");
@@ -84,6 +93,18 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
                 }
         }
         return true;
+    }
+
+    private static byte[] renderPage(String htmlFile, String logFile) {
+        htmlFile = htmlFile.replaceFirst("/[^/]+/", ProfilerFileManager.getStaticDir().getAbsolutePath() + "/");
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(new File(htmlFile)))) {
+            return String.join("", bufferedReader.lines()
+                    .map((line) -> line.replaceAll("\\{\\{ *fileName *\\}\\}", logFile)) // {{ fileName }}
+                    .toArray(String[]::new)).getBytes();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     private static void sendFileList(ChannelHandlerContext context) {

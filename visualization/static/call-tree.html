@@ -8,6 +8,10 @@
   <script src="js/external/jquery-3.2.1.min.js"></script>
   <script src="js/generated/tree-templates.js"></script>
 
+  <script>
+      const fileName = "{{ fileName }}";
+  </script>
+
   <script src="js/src/AccumulativeTreeDrawer.js"></script>
   <script src="js/src/CallTreeDrawer.js"></script>
   <script src="js/out/call-tree.js"></script>
@@ -35,7 +39,7 @@
   </ul>
 </nav>
 <main>
-  <p class="choose-file-header"><b class="chosen-file">0001.ser</b><!--suppress HtmlUnknownTarget -->
+  <p class="choose-file-header"><b class="chosen-file">{{ fileName }}</b><!--suppress HtmlUnknownTarget -->
       <a href="/flamegraph-profiler/select-file">Select Another File</a></p>
   <h1>Call Tree</h1>
 </main>

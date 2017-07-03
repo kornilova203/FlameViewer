@@ -23,7 +23,7 @@ function drawTrees(trees) {
 
 $(window).on("load", function () {
     const request = new XMLHttpRequest();
-    request.open("GET", "/flamegraph-profiler/trees/call-tree", true);
+    request.open("GET", "/flamegraph-profiler/trees/call-tree?file=" + fileName, true);
     request.responseType = "arraybuffer";
 
     request.onload = function () {
