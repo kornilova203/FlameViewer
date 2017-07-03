@@ -160,10 +160,9 @@ nav ul li {
     margin: 10px 20px;
 }
 
-nav ul li a {
+nav ul li a, .choose-file-header a {
     text-transform: uppercase;
     color: black;
-    text-decoration: none;
     font-family: "Gotham Pro", sans-serif;
     font-weight: normal;
     font-size: 14px;
@@ -210,4 +209,20 @@ nav ul li a:hover, .current-link {
 
 #search input[type="text"]:focus::placeholder {
     color: #bbb;
+}
+
+.choose-file-header {
+    position: absolute;
+    top: 0;
+    left: 20px;
+}
+
+.chosen-file {
+    display: inline-block;
+    background-color: #18A3FA;
+    border-radius: 20px;
+    padding: 10px 15px 6px;
+    color: white;
+    margin-right: 10px;
+    font-weight: normal;
 }
