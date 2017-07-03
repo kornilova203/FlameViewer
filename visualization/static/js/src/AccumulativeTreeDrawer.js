@@ -193,15 +193,44 @@ class AccumulativeTreeDrawer {
 
     _enableZoom() {
         for (let i in this.shapeAndTextList) {
-            let shape = this.shapeAndTextList[i].shape;
-            shape.addEventListener("click", () => {
+            let zoomedShape = this.shapeAndTextList[i].shape;
+            zoomedShape.addEventListener("click", () => {
                 this._resetZoom();
-                console.log(shape);
-                shape.scaleX = 1;
-                shape.x = 0;
+                for (let j in this.shapeAndTextList) {
+                    let shape = this.shapeAndTextList[j].shape;
+                    console.log(shape);
+                    this._setZoom(shape, zoomedShape);
+                }
                 this.stage.update();
             })
         }
+    }
+
+    _setZoom(shape, zoomedShape) {
+        if (shape.y > zoomedShape.y) { // shape may be parent
+            if (this._isParent(shape, zoomedShape)) { // if it is a parent
+                shape.scaleX = 1;
+                shape.x = 0;
+            } else {
+                shape.scaleX = 0;
+            }
+        } else { // shape may be child
+            if (shape.x >= zoomedShape.x &&
+                shape.x / this.canvasWidth + shape.scaleX <= zoomedShape.x / this.canvasWidth + zoomedShape.scaleX) { // if it is a child
+                shape.scaleX = shape.scaleX / zoomedShape.scaleX;
+                shape.x = (shape.x - zoomedShape.x) / zoomedShape.scaleX;
+                console.log("old offset: " + shape.originalOffsetX + " new: " + shape.x);
+                console.log("old scale: " + shape.originalScaleX + " new: " + shape.scaleX);
+            } else {
+                shape.scaleX = 0;
+            }
+        }
+    }
+
+    _isParent(mayBeParent, mayBeChild) {
+        return (mayBeParent.x <= mayBeChild.x + 0.01 &&
+        mayBeParent.x + (mayBeParent.scaleX * this.canvasWidth) >=
+            (mayBeChild.x + (mayBeChild.scaleX * this.canvasWidth) - 0.01));
     }
 
     _resetZoom() {
@@ -229,6 +258,7 @@ class SearchElem {
         this.fillCommand.style = "#ccc";
     }
 
+    //noinspection JSUnusedGlobalSymbols
     reset() {
         console.log("reset to " + this.originalColor);
         this.fillCommand.style = this.originalColor;
