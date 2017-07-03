@@ -7,6 +7,7 @@ import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.security.ProtectionDomain;
 import java.util.List;
+import java.util.Objects;
 
 class ProfilingClassFileTransformer implements ClassFileTransformer {
 
@@ -19,8 +20,10 @@ class ProfilingClassFileTransformer implements ClassFileTransformer {
         System.out.println("ProfilerSettings: " + parameters);
         for (String parameter : parameters) {
             if (parameter.startsWith("!")) {
-                Configuration.addExcludePattern(parameter.substring(1));
-            } else {
+                if (!Objects.equals(parameter, "!")) {
+                    Configuration.addExcludePattern(parameter.substring(1));
+                }
+            } else if (!Objects.equals(parameter, "")) {
                 Configuration.addIncludePattern(parameter);
             }
         }
