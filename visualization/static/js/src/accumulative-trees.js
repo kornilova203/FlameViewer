@@ -21,10 +21,10 @@ $(window).on("load", function () {
     let desc;
     const urlParts = window.location.href.split("?")[0].split("/");
     const treeType = urlParts[urlParts.length - 1];
-    if (parameters === undefined) {
-        request.open("GET", "/flamegraph-profiler/trees/" + treeType, true);
+    if (parameters.indexOf("method=") === -1) {
+        request.open("GET", `/flamegraph-profiler/trees/${treeType}?file=${fileName}`, true);
     } else {
-        request.open("GET", "/flamegraph-profiler/trees/" + treeType + "?" + parameters, true);
+        request.open("GET", `/flamegraph-profiler/trees/${treeType}?${parameters}&file=${fileName}`, true);
         className = /(?:class=)([^&]+)(?:&)/.exec(parameters)[1];
         methodName = /(?:method=)([^&]+)(?:&)/.exec(parameters)[1];
         desc = /(?:desc=)([^&]+)(?:&)/.exec(parameters)[1];

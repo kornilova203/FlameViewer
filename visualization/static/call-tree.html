@@ -22,7 +22,7 @@
 <body>
 <aside>
   <form method="get" id="search">
-    <input name="q" type="text" size="40" placeholder="Type method name..." />
+    <input name="q" type="text" size="40" placeholder="Type method name..."/>
   </form>
 </aside>
 <nav>
@@ -31,16 +31,16 @@
       <a href="" class="current-link">Call Tree</a>
     </li>
     <li><!--suppress HtmlUnknownTarget -->
-      <a href="/flamegraph-profiler/outgoing-calls">Outgoing Calls</a>
+      <a href="/flamegraph-profiler/outgoing-calls?file={{ fileName }}">Outgoing Calls</a>
     </li>
     <li><!--suppress HtmlUnknownTarget -->
-      <a href="/flamegraph-profiler/incoming-calls">Incoming Calls</a>
+      <a href="/flamegraph-profiler/incoming-calls?file={{ fileName }}">Incoming Calls</a>
     </li>
   </ul>
 </nav>
+<p class="choose-file-header"><b class="chosen-file">{{ fileName }}</b><!--suppress HtmlUnknownTarget -->
+  <a href="/flamegraph-profiler/select-file">Select Another File</a></p>
 <main>
-  <p class="choose-file-header"><b class="chosen-file">{{ fileName }}</b><!--suppress HtmlUnknownTarget -->
-      <a href="/flamegraph-profiler/select-file">Select Another File</a></p>
   <h1>Call Tree</h1>
 </main>
 </body>

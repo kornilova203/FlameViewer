@@ -39,7 +39,6 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
                                 urlDecoder.parameters().get("file").get(0)
                         )
                 );
-//                sendStatic(context, ServerNames.MAIN_NAME + "/call-tree.html", "text/html");
                 break;
             case ServerNames.SELECT_FILE:
                 LOG.info("select-file.html");
@@ -51,11 +50,25 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
                 break;
             case ServerNames.OUTGOING_CALLS:
                 LOG.info("outgoing-calls.html");
-                sendStatic(context, ServerNames.MAIN_NAME + "/outgoing-calls.html", "text/html");
+                sendBytes(
+                        context,
+                        "text/html",
+                        renderPage(
+                                ServerNames.MAIN_NAME + "/outgoing-calls.html",
+                                urlDecoder.parameters().get("file").get(0)
+                        )
+                );
                 break;
             case ServerNames.INCOMING_CALLS:
                 LOG.info("incoming-calls.html");
-                sendStatic(context, ServerNames.MAIN_NAME + "/incoming-calls.html", "text/html");
+                sendBytes(
+                        context,
+                        "text/html",
+                        renderPage(
+                                ServerNames.MAIN_NAME + "/incoming-calls.html",
+                                urlDecoder.parameters().get("file").get(0)
+                        )
+                );
                 break;
             case ServerNames.CALL_TREE_JS_REQUEST:
                 LOG.info("CALL_TREE_JS_REQUEST");

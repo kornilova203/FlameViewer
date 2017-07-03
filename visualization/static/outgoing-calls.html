@@ -3,6 +3,10 @@
 <head>
   <meta charset="UTF-8">
 
+  <script>
+      const fileName = "{{ fileName }}";
+  </script>
+
   <script src="js/external/easeljs-0.8.2.min.js"></script>
   <script src="js/external/soyutils.js"></script>
   <script src="js/external/jquery-3.2.1.min.js"></script>
@@ -23,16 +27,18 @@
 <nav>
   <ul>
     <li><!--suppress HtmlUnknownTarget -->
-      <a href="/flamegraph-profiler/call-tree">Call Tree</a>
+      <a href="/flamegraph-profiler/call-tree?file={{ fileName }}">Call Tree</a>
     </li>
     <li><!--suppress HtmlUnknownTarget -->
-      <a class="current-link" href="/flamegraph-profiler/outgoing-calls">Outgoing Calls</a>
+      <a class="current-link" href="/flamegraph-profiler/outgoing-calls?file={{ fileName }}">Outgoing Calls</a>
     </li>
     <li><!--suppress HtmlUnknownTarget -->
-      <a href="/flamegraph-profiler/incoming-calls">Incoming Calls</a>
+      <a href="/flamegraph-profiler/incoming-calls?file={{ fileName }}">Incoming Calls</a>
     </li>
   </ul>
 </nav>
+<p class="choose-file-header"><b class="chosen-file">{{ fileName }}</b><!--suppress HtmlUnknownTarget -->
+  <a href="/flamegraph-profiler/select-file">Select Another File</a></p>
 <main>
   <h1>Outgoing Calls</h1>
 </main>
