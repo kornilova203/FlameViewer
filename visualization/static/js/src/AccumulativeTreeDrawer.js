@@ -78,14 +78,13 @@ class AccumulativeTreeDrawer {
             shape: shape,
             text: text
         });
+        this.searchList.push(new SearchElem(shape, node.getNodeInfo().getMethodName()));
     }
 
     _drawRectangle(node, depth, colorId) {
         const shape = new createjs.Shape();
-        const fillCommand = shape.graphics.beginFill(COLORS[colorId]).command;
-        shape.fillCommand = fillCommand;
+        shape.fillCommand = shape.graphics.beginFill(COLORS[colorId]).command;
         shape.originalColor = COLORS[colorId];
-        this.searchList.push(new SearchElem(node.getNodeInfo().getMethodName(), fillCommand));
         shape.graphics.drawRect(0, 0, this.canvasWidth, LAYER_HEIGHT);
         const offsetX = this._getOffsetXForNode(node);
         const offsetY = this.flipY(AccumulativeTreeDrawer._calcNormaOffsetY(depth));
@@ -259,10 +258,9 @@ class AccumulativeTreeDrawer {
 }
 
 class SearchElem {
-    constructor(name, fillCommand) {
+    constructor(shape, name) {
         this.name = name;
-        this.fillCommand = fillCommand;
-        this.originalColor = fillCommand.style;
+        this.shape = shape;
     }
 
     matches(val) {
@@ -270,11 +268,11 @@ class SearchElem {
     }
 
     dim() {
-        this.fillCommand.style = "#ccc";
+        this.shape.fillCommand.style = "#ccc";
     }
 
     //noinspection JSUnusedGlobalSymbols
     reset() {
-        this.fillCommand.style = this.originalColor;
+        this.shape.fillCommand.style = this.shape.originalColor;
     }
 }
