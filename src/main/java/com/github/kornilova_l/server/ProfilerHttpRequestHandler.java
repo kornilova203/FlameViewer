@@ -14,6 +14,8 @@ import org.jetbrains.ide.HttpRequestHandler;
 
 import java.io.*;
 
+import static com.github.kornilova_l.server.ServerNames.SELECT_FILE;
+
 public class ProfilerHttpRequestHandler extends HttpRequestHandler {
 
     private static final com.intellij.openapi.diagnostic.Logger LOG =
@@ -30,6 +32,10 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
             case ServerNames.CALL_TREE:
                 LOG.info("call-tree.html");
                 sendStatic(context, ServerNames.MAIN_NAME + "/call-tree.html", "text/html");
+                break;
+            case ServerNames.SELECT_FILE:
+                LOG.info("select-file.html");
+                sendStatic(context, ServerNames.MAIN_NAME + "/select-file.html", "text/html");
                 break;
             case ServerNames.OUTGOING_CALLS:
                 LOG.info("outgoing-calls.html");
