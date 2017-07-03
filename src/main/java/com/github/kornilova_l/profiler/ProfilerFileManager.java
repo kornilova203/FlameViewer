@@ -50,7 +50,6 @@ public class ProfilerFileManager {
     }
 
     public static File getLatestFile() {
-        logDir = createIfNotExist(PathManager.getSystemPath() + PLUGIN_DIR_NAME + "/events");
         File[] files = logDir.listFiles();
         if (files != null) {
             Optional<File> fileOptional = Arrays.stream(files)

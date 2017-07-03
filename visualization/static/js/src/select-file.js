@@ -5,11 +5,14 @@ $(window).on("load", function () {
 
     request.onload = function () {
         const fileNames = request.response;
-        console.log(fileNames);
-        const list = templates.tree.listOfFiles({
-            fileNames: fileNames
-        }).content;
-        $(list).appendTo($("main"));
+        if (fileNames.length === 0) {
+            $("<p class='no-file-found'>No file was found</p>").appendTo($("main"));
+        } else {
+            const list = templates.tree.listOfFiles({
+                fileNames: fileNames
+            }).content;
+            $(list).appendTo($("main"));
+        }
     };
     request.send();
 });

@@ -233,3 +233,7 @@ nav ul li a:hover, .current-link {
     text-decoration: none;
     color: #0887D7;
 }
+
+.no-file-found {
+    text-align: center;
+}
