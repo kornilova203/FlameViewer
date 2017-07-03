@@ -219,10 +219,11 @@ class AccumulativeTreeDrawer {
             (LAYER_HEIGHT - 2) + "px Arial",
             "black"
         );
+        resetZoomButton.cursor = "pointer";
         resetZoomButton.x = 0;
         resetZoomButton.y = 10;
         const hit = new createjs.Shape();
-        hit.graphics.beginFill("#000").drawRect(
+        hit.graphics.beginFill("#222").drawRect(
             0,
             0,
             resetZoomButton.getMeasuredWidth(),
