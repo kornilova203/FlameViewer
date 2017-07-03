@@ -207,8 +207,8 @@ class AccumulativeTreeDrawer {
                     for (let j in this.shapeAndTextList) {
                         this._setZoom(this.shapeAndTextList[j], zoomedShape);
                     }
-                    this.stage.update();
                 }
+                this.stage.update();
             })
         }
     }
