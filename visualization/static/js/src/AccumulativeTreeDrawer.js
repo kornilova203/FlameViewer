@@ -84,6 +84,8 @@ class AccumulativeTreeDrawer {
         const offsetX = this._getOffsetXForNode(node);
         const offsetY = this.flipY(AccumulativeTreeDrawer._calcNormaOffsetY(depth));
         const scaleX = node.getWidth() / this.width;
+        shape.originalOffsetX = offsetX;
+        shape.originalScaleX = scaleX;
         shape.setTransform(offsetX, offsetY, scaleX);
         // console.log(`draw: ${depth}\t${scaleX}\t${node.getNodeInfo().getMethodName()}`);
         this._createPopup(node, shape, depth);
@@ -191,10 +193,24 @@ class AccumulativeTreeDrawer {
 
     _enableZoom() {
         for (let i in this.shapeAndTextList) {
-            this.shapeAndTextList[i].shape.addEventListener("click", () => {
-                console.log("clicked");
+            let shape = this.shapeAndTextList[i].shape;
+            shape.addEventListener("click", () => {
+                this._resetZoom();
+                console.log(shape);
+                shape.scaleX = 1;
+                shape.x = 0;
+                this.stage.update();
             })
         }
+    }
+
+    _resetZoom() {
+        for (let i in this.shapeAndTextList) {
+            let shape = this.shapeAndTextList[i].shape;
+            shape.scaleX = shape.originalScaleX;
+            shape.x = shape.originalOffsetX;
+        }
+        this.stage.update();
     }
 }
 
