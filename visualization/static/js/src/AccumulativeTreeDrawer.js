@@ -127,9 +127,7 @@ class AccumulativeTreeDrawer {
         text.x = this._getOffsetXForNode(node) + 2;
         text.originalX = text.x;
         text.y = this.flipY(depth * (LAYER_GAP + LAYER_HEIGHT));
-        const newShape = shape.clone();
-        newShape.scaleX = shape.scaleX * 0.9;
-        text.mask = newShape;
+        AccumulativeTreeDrawer._setTextPosition(text, shape);
         this.stage.setChildIndex(text, this.stage.getNumChildren() - 1);
 
         this.stage.addChild(text);
@@ -260,10 +258,7 @@ class AccumulativeTreeDrawer {
                 text.scaleX = 0;
             }
         }
-        const newShape = shape.clone();
-        newShape.scaleX = shape.scaleX * 0.9;
-        text.mask = newShape;
-        text.x = shape.x + 2;
+        AccumulativeTreeDrawer._setTextPosition(text, shape);
     }
 
     _isParent(mayBeParent, mayBeChild) {
@@ -279,10 +274,17 @@ class AccumulativeTreeDrawer {
             shape.scaleX = shape.originalScaleX;
             shape.x = shape.originalX;
             shape.fillCommand.style = shape.originalColor;
-            text.x = text.originalX;
-            text.scaleX = 1;
+            AccumulativeTreeDrawer._setTextPosition(text, shape);
         }
         this.stage.update();
+    }
+
+    static _setTextPosition(text, shape) {
+        text.scaleX = 1;
+        const newShape = shape.clone();
+        newShape.scaleX = shape.scaleX * 0.9;
+        text.mask = newShape;
+        text.x = shape.x + 2;
     }
 }
 
