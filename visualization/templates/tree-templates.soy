@@ -80,3 +80,15 @@
     <p>{$count} call{if $count > 1}s{/if}</p>
 </div>
 {/template}
+
+/**
+ * Generate list of files
+ * @param fileNames list of files
+ */
+{template .listOfFiles}
+<ol class="file-list">
+  {foreach $fileName in $fileNames}
+    <li><a href="/flamegraph-profiler/call-tree?file={$fileName}">{$fileName}</a></li>
+  {/foreach}
+  </ol>
+{/template}

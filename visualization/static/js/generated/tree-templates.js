@@ -40,3 +40,19 @@ templates.tree.accumulativeTreePopup = function(opt_data, opt_ignored) {
 if (goog.DEBUG) {
   templates.tree.accumulativeTreePopup.soyTemplateName = 'templates.tree.accumulativeTreePopup';
 }
+
+
+templates.tree.listOfFiles = function(opt_data, opt_ignored) {
+  var output = '<ol class="file-list">';
+  var fileNameList73 = opt_data.fileNames;
+  var fileNameListLen73 = fileNameList73.length;
+  for (var fileNameIndex73 = 0; fileNameIndex73 < fileNameListLen73; fileNameIndex73++) {
+    var fileNameData73 = fileNameList73[fileNameIndex73];
+    output += '<li><a href="/flamegraph-profiler/call-tree?file=' + soy.$$escapeUri(fileNameData73) + '">' + soy.$$escapeHtml(fileNameData73) + '</a></li>';
+  }
+  output += '</ol>';
+  return soydata.VERY_UNSAFE.ordainSanitizedHtml(output);
+};
+if (goog.DEBUG) {
+  templates.tree.listOfFiles.soyTemplateName = 'templates.tree.listOfFiles';
+}

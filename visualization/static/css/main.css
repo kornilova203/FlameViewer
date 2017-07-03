@@ -220,12 +220,12 @@ nav ul li a:hover, .current-link {
 
 .file-list {
     list-style: none;
-    border-top: solid 1px #aaa;
+    border-top: solid 1px #ccc;
     padding: 0;
 }
 
 .file-list li {
-    border-bottom: solid 1px #aaa;
+    border-bottom: solid 1px #ccc;
     padding: 12px 0 10px;
 }
 

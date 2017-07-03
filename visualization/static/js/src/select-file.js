@@ -4,8 +4,12 @@ $(window).on("load", function () {
     request.responseType = "json";
 
     request.onload = function () {
-        const json = request.response;
-        console.log(json);
+        const fileNames = request.response;
+        console.log(fileNames);
+        const list = templates.tree.listOfFiles({
+            fileNames: fileNames
+        }).content;
+        $(list).appendTo($("main"));
     };
     request.send();
 });
