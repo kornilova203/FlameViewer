@@ -1,5 +1,7 @@
 package com.github.kornilova_l.profiler;
 
+import com.intellij.openapi.application.PathManager;
+
 import java.io.File;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -13,6 +15,7 @@ public class ProfilerFileManager {
     private static final String EVENTS_DIR_NAME = "events";
     private static File logDir;
     private static final int FILE_NAME_LENGTH = 4;
+    private static final String PLUGIN_DIR_NAME = "/flamegraph-profiler";
 
     private static File getLogDir() {
         assert(LOG_DIR_PATH != null);
@@ -21,7 +24,7 @@ public class ProfilerFileManager {
     }
 
     public static void setPathToLogDir(String logDir) {
-        LOG_DIR_PATH = logDir + "/flamegraph-profiler";
+        LOG_DIR_PATH = logDir + PLUGIN_DIR_NAME;
         System.out.println("Path was set: " + LOG_DIR_PATH);
     }
 
@@ -48,6 +51,7 @@ public class ProfilerFileManager {
     }
 
     public static File getLatestFile() {
+        logDir = createIfNotExist(PathManager.getSystemPath() + PLUGIN_DIR_NAME + "/events");
         File[] files = logDir.listFiles();
         if (files != null) {
             Optional<File> fileOptional = Arrays.stream(files)
@@ -84,6 +88,6 @@ public class ProfilerFileManager {
     }
 
     public static File getStaticDir() {
-        return createIfNotExist(LOG_DIR_PATH + "/" + "static");
+        return new File( PathManager.getSystemPath() + PLUGIN_DIR_NAME + "/static");
     }
 }

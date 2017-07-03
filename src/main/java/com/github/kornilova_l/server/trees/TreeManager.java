@@ -73,9 +73,9 @@ public class TreeManager {
         return getTreeForMethod(parameters, getOutgoingCalls(), methodOutgoingCalls);
     }
 
-    private TreeProtos.Tree getTreeForMethod(Map<String, List<String>> parameters,
-                                             TreeProtos.Tree sourceTree,
-                                             HashMap<String, TreeProtos.Tree> map) {
+    private static TreeProtos.Tree getTreeForMethod(Map<String, List<String>> parameters,
+                                                    TreeProtos.Tree sourceTree,
+                                                    HashMap<String, TreeProtos.Tree> map) {
         String className = getParamForKey(parameters, "class");
         String methodName = getParamForKey(parameters, "method");
         String desc = getParamForKey(parameters, "desc");

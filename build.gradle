@@ -56,7 +56,7 @@ jar {
 
 task copyStatic(type: Copy) {
     from 'visualization/static'
-    into System.getProperty("user.home") + '/.flamegraph-profiler/static'
+    into '/home/lk/java-profiling-plugin/build/idea-sandbox/system/flamegraph-profiler/static'
 }
 
 task('prepareAndRunIde', dependsOn: [copyStatic, build, jar]) {
