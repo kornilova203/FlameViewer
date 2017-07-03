@@ -1,7 +1,6 @@
 package com.github.kornilova_l.profiler.agent;
 
 import com.github.kornilova_l.profiler.ProfilerFileManager;
-import com.github.kornilova_l.profiler.logger.Logger;
 
 import java.io.IOException;
 import java.lang.instrument.Instrumentation;

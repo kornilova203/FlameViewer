@@ -14,7 +14,6 @@ import com.intellij.ui.popup.list.ListPopupImpl;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -22,28 +21,32 @@ import java.util.Objects;
  */
 public class ProfilerProgramRunner extends DefaultJavaProgramRunner {
     private static final String RUNNER_ID = "ProfileRunnerID";
-    private ConfigStorage.State state;
+    private ProfilerSettings chosenSettings;
 
     public ProfilerProgramRunner() {
         super();
-        System.out.println("Patcher created");
     }
 
     @Override
     public void execute(@NotNull ExecutionEnvironment environment) throws ExecutionException {
-        state = StateContainer.getState(environment.getProject());
-        LinkedList<ProfilerSettings> list = new LinkedList<>();
-        list.add(new ProfilerSettings("Slim"));
-        list.add(new ProfilerSettings("Shady"));
+        ConfigStorage.State state = StateContainer.getState(environment.getProject());
         new ListPopupImpl(
                 new BaseListPopupStep<ProfilerSettings>(
                         "Profiler configuration",
                         new LinkedList<>(state.profilerSettings)
                 ) {
+
+                    @NotNull
+                    @Override
+                    public String getTextFor(ProfilerSettings value) {
+                        return value.name != null ? value.name : "";
+                    }
+
                     @Override
                     public PopupStep onChosen(ProfilerSettings selectedValue, boolean finalChoice) {
                         try {
-                            DefaultJavaProgramRunner.getInstance().execute(environment);
+                            chosenSettings = selectedValue;
+                            ProfilerProgramRunner.super.execute(environment);
                         } catch (ExecutionException e) {
                             e.printStackTrace();
                         }
@@ -59,17 +62,14 @@ public class ProfilerProgramRunner extends DefaultJavaProgramRunner {
                       RunProfile runProfile,
                       boolean beforeExecution) throws ExecutionException {
         System.out.println("patch");
+        assert(chosenSettings != null);
         // TODO: check if string contains spaces
-//        String included = state.includedMethodsMap.get(12);
-//        String excluded = state.includedMethodsMap.get(12);
-//        included = included == null ? "" : included;
-//        excluded = excluded == null ? "" : excluded;
         javaParameters.getVMParametersList().add(
                 "-javaagent:/home/lk/java-profiling-plugin/build/libs/javaagent.jar=" +
                 PathManager.getSystemPath()
-//                        + "&" +
-//                String.join("&", included.split("\n")) + "&!" +
-//                String.join("&!", excluded.split("\n"))
+                        + "&" +
+                String.join("&", chosenSettings.included.split("\n")) + "&!" +
+                String.join("&!", chosenSettings.excluded.split("\n"))
         );
     }
 
