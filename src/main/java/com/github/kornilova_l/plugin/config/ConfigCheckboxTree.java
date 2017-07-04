@@ -8,11 +8,13 @@ import com.intellij.ui.SimpleTextAttributes;
 import com.intellij.util.ui.UIUtil;
 import com.intellij.util.ui.tree.TreeUtil;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreePath;
 import java.awt.*;
 import java.util.Set;
 
@@ -84,5 +86,15 @@ public class ConfigCheckboxTree extends CheckboxTree {
         model.nodeStructureChanged(root);
         TreeUtil.expandAll(this);
         setSelectionRow(0);
+    }
+
+    @Nullable
+    public Config getSelectedConfig() {
+        TreePath path = getSelectionModel().getSelectionPath();
+        Object userObject = ((CheckedTreeNode) path.getLastPathComponent()).getUserObject();
+        if (userObject instanceof Config) {
+            return ((Config) userObject);
+        }
+        return null;
     }
 }

@@ -3,7 +3,6 @@ package com.github.kornilova_l.plugin.config;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.ui.*;
-import com.intellij.ui.popup.util.DetailViewImpl;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,6 +16,7 @@ public class ChangeProfilerConfigDialog extends DialogWrapper {
     private final Project project;
 
     private ConfigCheckboxTree checkboxTree;
+    private DetailViewPanel myInnerPostfixDescriptionPanel;
 
     protected ChangeProfilerConfigDialog(@NotNull Project project) {
         super(project);
@@ -37,9 +37,12 @@ public class ChangeProfilerConfigDialog extends DialogWrapper {
     }
 
     private JComponent createDetailView() {
-        DetailViewImpl detailView = new DetailViewImpl(project);
-        detailView.setEmptyLabel("Select configuration");
-        return detailView;
+        System.out.println("Create detail view");
+        myInnerPostfixDescriptionPanel = new DetailViewPanel();
+        JPanel panel = new JPanel(new GridLayout(1, 2));
+        panel.add(myInnerPostfixDescriptionPanel.getComponent());
+        panel.add(new Label("initial detail component"));
+        return panel;
     }
 
     @Nullable
@@ -88,12 +91,17 @@ public class ChangeProfilerConfigDialog extends DialogWrapper {
         checkboxTree = new ConfigCheckboxTree() {
             @Override
             protected void selectionChanged() {
-                resetDescriptionPanel();
+                resetDetailView();
             }
         };
     }
 
-    private void resetDescriptionPanel() {
-
+    private void resetDetailView() {
+        if (null != checkboxTree && null != myInnerPostfixDescriptionPanel) {
+            Config config = checkboxTree.getSelectedConfig();
+            if (config != null) {
+                myInnerPostfixDescriptionPanel.reset(config);
+            }
+        }
     }
 }
