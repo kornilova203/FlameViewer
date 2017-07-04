@@ -63,7 +63,11 @@ public class ChangeProfilerConfigDialog extends DialogWrapper {
     private JComponent createMasterView() {
         System.out.println("create master view");
         createTree();
-        JPanel panel = createPanelWithTree(checkboxTree);
+        ToolbarDecorator decorator = ToolbarDecorator.createDecorator(checkboxTree);
+        decorator.setAddAction(anActionButton -> {
+
+        });
+        JPanel panel = decorator.createPanel();
         Set<ConfigNode> configs = getProjectConfigs();
         checkboxTree.initTree(configs);
         return panel;
@@ -76,13 +80,6 @@ public class ChangeProfilerConfigDialog extends DialogWrapper {
         configs.add(new ConfigNode("method1", ConfigNode.Type.METHOD));
         configs.add(new ConfigNode("method2", ConfigNode.Type.METHOD));
         return configs;
-    }
-
-    private static JPanel createPanelWithTree(ConfigCheckboxTree checkboxTree) {
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.add(ScrollPaneFactory.createScrollPane(checkboxTree));
-
-        return panel;
     }
 
     private void createTree() {
