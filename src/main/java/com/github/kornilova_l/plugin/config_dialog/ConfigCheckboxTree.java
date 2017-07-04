@@ -1,5 +1,6 @@
-package com.github.kornilova_l.plugin.config;
+package com.github.kornilova_l.plugin.config_dialog;
 
+import com.github.kornilova_l.plugin.config.ConfigNode;
 import com.intellij.icons.AllIcons;
 import com.intellij.ui.*;
 import com.intellij.util.ui.tree.TreeUtil;
@@ -16,14 +17,14 @@ import java.util.Set;
 public class ConfigCheckboxTree extends CheckboxTree {
     private static final class ConfigCheckedTreeNode extends CheckedTreeNode {
         @NotNull
-        private final Config config;
+        private final ConfigNode config;
 
         @NotNull
-        public Config getConfig() {
+        public ConfigNode getConfig() {
             return config;
         }
 
-        ConfigCheckedTreeNode(@NotNull Config config) {
+        ConfigCheckedTreeNode(@NotNull ConfigNode config) {
             super(config);
             this.config = config;
         }
@@ -68,12 +69,12 @@ public class ConfigCheckboxTree extends CheckboxTree {
         System.out.println("selection changed");
     }
 
-    public void initTree(@NotNull Set<Config> configs) {
+    public void initTree(@NotNull Set<ConfigNode> configs) {
         root.removeAllChildren();
         int i = 1;
         CheckedTreeNode packageNode = new CheckedTreeNode("some_package");
         root.add(packageNode);
-        for (Config config : configs) {
+        for (ConfigNode config : configs) {
             CheckedTreeNode baseNode = new CheckedTreeNode("SomeClass" + i++);
             packageNode.add(baseNode);
             CheckedTreeNode configNode = new ConfigCheckedTreeNode(config);
@@ -86,12 +87,12 @@ public class ConfigCheckboxTree extends CheckboxTree {
     }
 
     @Nullable
-    public Config getSelectedConfig() {
+    public ConfigNode getSelectedConfig() {
         TreePath path = getSelectionModel().getSelectionPath();
         Object userObject = ((CheckedTreeNode) path.getLastPathComponent()).getUserObject();
         System.out.println(userObject.getClass() + " " + userObject);
-        if (userObject instanceof Config) {
-            return ((Config) userObject);
+        if (userObject instanceof ConfigNode) {
+            return ((ConfigNode) userObject);
         }
         return null;
     }

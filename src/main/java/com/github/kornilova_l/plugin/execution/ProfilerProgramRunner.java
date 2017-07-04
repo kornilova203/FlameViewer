@@ -1,8 +1,8 @@
 package com.github.kornilova_l.plugin.execution;
 
-import com.github.kornilova_l.plugin.StateContainer;
+import com.github.kornilova_l.plugin.ProjectConfigManager;
+import com.github.kornilova_l.plugin.config.ConfigNode;
 import com.github.kornilova_l.plugin.config.ConfigStorage;
-import com.github.kornilova_l.plugin.config.Config;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.*;
 import com.intellij.execution.impl.DefaultJavaProgramRunner;
@@ -21,7 +21,7 @@ import java.util.Objects;
  */
 public class ProfilerProgramRunner extends DefaultJavaProgramRunner {
     private static final String RUNNER_ID = "ProfileRunnerID";
-    private Config chosenSettings;
+    private com.github.kornilova_l.plugin.config.ConfigNode chosenSettings;
 
     public ProfilerProgramRunner() {
         super();
@@ -29,21 +29,21 @@ public class ProfilerProgramRunner extends DefaultJavaProgramRunner {
 
     @Override
     public void execute(@NotNull ExecutionEnvironment environment) throws ExecutionException {
-        ConfigStorage.State state = StateContainer.getState(environment.getProject());
+        ConfigStorage.Config config = ProjectConfigManager.getState(environment.getProject());
         new ListPopupImpl(
-                new BaseListPopupStep<Config>(
+                new BaseListPopupStep<ConfigNode>(
                         "Profiler configuration",
-                        new LinkedList<>(state.profilerSettings)
+                        new LinkedList<>(config.baseNode.children)
                 ) {
 
                     @NotNull
                     @Override
-                    public String getTextFor(Config value) {
+                    public String getTextFor(ConfigNode value) {
                         return value.name != null ? value.name : "";
                     }
 
                     @Override
-                    public PopupStep onChosen(Config selectedValue, boolean finalChoice) {
+                    public PopupStep onChosen(ConfigNode selectedValue, boolean finalChoice) {
                         try {
                             chosenSettings = selectedValue;
                             ProfilerProgramRunner.super.execute(environment);
@@ -63,14 +63,14 @@ public class ProfilerProgramRunner extends DefaultJavaProgramRunner {
                       boolean beforeExecution) throws ExecutionException {
         System.out.println("patch");
         assert (chosenSettings != null);
-        chosenSettings.excluded = chosenSettings.excluded.replaceAll("[ \t]+", "");
-        chosenSettings.included = chosenSettings.included.replaceAll("[ \t]+", "");
+//        chosenSettings.excluded = chosenSettings.excluded.replaceAll("[ \t]+", "");
+//        chosenSettings.included = chosenSettings.included.replaceAll("[ \t]+", "");
         javaParameters.getVMParametersList().add(
                 "-javaagent:/home/lk/java-profiling-plugin/build/libs/javaagent.jar=" +
                         PathManager.getSystemPath()
-                        + "&" +
-                        String.join("&", chosenSettings.included.split("\n")) + "&!" +
-                        String.join("&!", chosenSettings.excluded.split("\n"))
+//                        + "&" +
+//                        String.join("&", chosenSettings.included.split("\n")) + "&!" +
+//                        String.join("&!", chosenSettings.excluded.split("\n"))
         );
     }
 

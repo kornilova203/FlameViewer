@@ -6,51 +6,32 @@ import com.intellij.openapi.components.State;
 import java.util.*;
 
 @State(name = "flamegraph-profiler")
-public class ConfigStorage implements PersistentStateComponent<ConfigStorage.State> {
+public class ConfigStorage implements PersistentStateComponent<ConfigStorage.Config> {
     @SuppressWarnings("PublicField")
-    public static class State {
-        public State() {
-            this(new LinkedList<>());
+    public static class Config {
+
+        public Config() {
+            this(new ConfigNode());
         }
 
-        private State(Collection<Config> profilerSettings) {
-            this.profilerSettings = profilerSettings;
+        private Config(ConfigNode baseNode) {
+            this.baseNode = baseNode;
         }
 
-        public Collection<Config> profilerSettings;
-
-        public List<String> getNamesList() {
-            LinkedList<String> list = new LinkedList<>();
-            if (profilerSettings.size() == 0) {
-                return list;
-            }
-            for (Config ps : profilerSettings) {
-                list.add(ps.name);
-            }
-            return list;
-        }
-
-        public Config getSetting(String configName) {
-            for (Config ps : profilerSettings) {
-                if (Objects.equals(ps.name, configName)) {
-                    return ps;
-                }
-            }
-            return null;
-        }
+        public ConfigNode baseNode;
     }
 
-    State state;
+    Config config;
 
     public ConfigStorage() {
-        state = new State();
+        config = new Config();
     }
 
-    public ConfigStorage.State getState() {
-        return state;
+    public Config getState() {
+        return config;
     }
 
-    public void loadState(ConfigStorage.State state) {
-        this.state = state;
+    public void loadState(Config config) {
+        this.config = config;
     }
 }

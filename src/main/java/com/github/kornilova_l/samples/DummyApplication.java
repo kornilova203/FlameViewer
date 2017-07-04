@@ -37,7 +37,7 @@ public class DummyApplication {
     }
 
     private void abc(String s) {
-//        profiler.State state = methodStart();
+//        profiler.Config state = methodStart();
 
         sleep();
         if (stop()) {
@@ -53,7 +53,7 @@ public class DummyApplication {
     }
 
     private void def(String s) {
-//        profiler.State state = methodStart();
+//        profiler.Config state = methodStart();
 
         sleep();
         if (stop()) {
@@ -69,7 +69,7 @@ public class DummyApplication {
     }
 
     private void xyz(String s) {
-//        profiler.State state = methodStart();
+//        profiler.Config state = methodStart();
 
         sleep();
         if (stop()) {

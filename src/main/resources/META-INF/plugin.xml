@@ -32,7 +32,7 @@
             <add-to-group group-id="MainMenu" anchor="last"/>
             <action id="java-profiling-plugin.server" class="com.github.kornilova_l.server.ShowProfilingResultsAction"
                     text="Show Results" description=""/>
-            <action class="com.github.kornilova_l.plugin.config.ShowProfilerDialogAction"
+            <action class="com.github.kornilova_l.plugin.config_dialog.ShowProfilerDialogAction"
                     id="flamegraph-profiler.ShowProfilerDialog" text="Show Dialog"/>
         </group>
     </actions>
