@@ -1,8 +1,8 @@
 package com.github.kornilova_l.plugin.config;
 
 @SuppressWarnings("PublicField")
-public class ProfilerSettings {
-    public ProfilerSettings() {
+public class Config {
+    public Config() {
 
     }
 
@@ -11,11 +11,15 @@ public class ProfilerSettings {
         return name;
     }
 
-    public ProfilerSettings(String name) {
+    public Config(String name) {
         this.name = name;
     }
 
     public String name;
     public String included = "";
     public String excluded = "";
+
+    public boolean isEnabled() {
+        return true;
+    }
 }

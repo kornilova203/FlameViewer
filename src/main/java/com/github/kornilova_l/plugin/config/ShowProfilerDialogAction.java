@@ -6,6 +6,7 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 public class ShowProfilerDialogAction extends AnAction {
     @Override
     public void actionPerformed(AnActionEvent e) {
+        assert (e.getProject() != null);
         new ChangeProfilerConfigDialog(e.getProject()).show();
     }
 }

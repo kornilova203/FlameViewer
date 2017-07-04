@@ -17,7 +17,7 @@ class ProfilingClassFileTransformer implements ClassFileTransformer {
     }
 
     private static void readPatterns(List<String> parameters) {
-        System.out.println("ProfilerSettings: " + parameters);
+        System.out.println("Config: " + parameters);
         for (String parameter : parameters) {
             if (parameter.startsWith("!")) {
                 if (!Objects.equals(parameter, "!")) {

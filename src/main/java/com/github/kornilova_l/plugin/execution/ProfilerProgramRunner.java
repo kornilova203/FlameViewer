@@ -2,7 +2,7 @@ package com.github.kornilova_l.plugin.execution;
 
 import com.github.kornilova_l.plugin.StateContainer;
 import com.github.kornilova_l.plugin.config.ConfigStorage;
-import com.github.kornilova_l.plugin.config.ProfilerSettings;
+import com.github.kornilova_l.plugin.config.Config;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.*;
 import com.intellij.execution.impl.DefaultJavaProgramRunner;
@@ -21,7 +21,7 @@ import java.util.Objects;
  */
 public class ProfilerProgramRunner extends DefaultJavaProgramRunner {
     private static final String RUNNER_ID = "ProfileRunnerID";
-    private ProfilerSettings chosenSettings;
+    private Config chosenSettings;
 
     public ProfilerProgramRunner() {
         super();
@@ -31,19 +31,19 @@ public class ProfilerProgramRunner extends DefaultJavaProgramRunner {
     public void execute(@NotNull ExecutionEnvironment environment) throws ExecutionException {
         ConfigStorage.State state = StateContainer.getState(environment.getProject());
         new ListPopupImpl(
-                new BaseListPopupStep<ProfilerSettings>(
+                new BaseListPopupStep<Config>(
                         "Profiler configuration",
                         new LinkedList<>(state.profilerSettings)
                 ) {
 
                     @NotNull
                     @Override
-                    public String getTextFor(ProfilerSettings value) {
+                    public String getTextFor(Config value) {
                         return value.name != null ? value.name : "";
                     }
 
                     @Override
-                    public PopupStep onChosen(ProfilerSettings selectedValue, boolean finalChoice) {
+                    public PopupStep onChosen(Config selectedValue, boolean finalChoice) {
                         try {
                             chosenSettings = selectedValue;
                             ProfilerProgramRunner.super.execute(environment);

@@ -13,25 +13,25 @@ public class ConfigStorage implements PersistentStateComponent<ConfigStorage.Sta
             this(new LinkedList<>());
         }
 
-        private State(Collection<ProfilerSettings> profilerSettings) {
+        private State(Collection<Config> profilerSettings) {
             this.profilerSettings = profilerSettings;
         }
 
-        public Collection<ProfilerSettings> profilerSettings;
+        public Collection<Config> profilerSettings;
 
         public List<String> getNamesList() {
             LinkedList<String> list = new LinkedList<>();
             if (profilerSettings.size() == 0) {
                 return list;
             }
-            for (ProfilerSettings ps : profilerSettings) {
+            for (Config ps : profilerSettings) {
                 list.add(ps.name);
             }
             return list;
         }
 
-        public ProfilerSettings getSetting(String configName) {
-            for (ProfilerSettings ps : profilerSettings) {
+        public Config getSetting(String configName) {
+            for (Config ps : profilerSettings) {
                 if (Objects.equals(ps.name, configName)) {
                     return ps;
                 }
