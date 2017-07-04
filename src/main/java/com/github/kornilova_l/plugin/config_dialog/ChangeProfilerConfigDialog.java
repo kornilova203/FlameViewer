@@ -65,7 +65,8 @@ public class ChangeProfilerConfigDialog extends DialogWrapper {
         createTree();
         ToolbarDecorator decorator = ToolbarDecorator.createDecorator(checkboxTree);
         decorator.setAddAction(anActionButton -> {
-
+            final AddMethod dialog = new AddMethod(project);
+            dialog.showAndGet();
         });
         JPanel panel = decorator.createPanel();
         Set<ConfigNode> configs = getProjectConfigs();
