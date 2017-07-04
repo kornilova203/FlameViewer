@@ -16,7 +16,7 @@ public class ChangeProfilerConfigDialog extends DialogWrapper {
     private final Project project;
 
     private ConfigCheckboxTree checkboxTree;
-    private DetailViewPanel myInnerPostfixDescriptionPanel;
+    private JBSplitter splitPane;
 
     protected ChangeProfilerConfigDialog(@NotNull Project project) {
         super(project);
@@ -36,29 +36,26 @@ public class ChangeProfilerConfigDialog extends DialogWrapper {
         return getDimensionServiceKey() + ".splitter";
     }
 
-    private JComponent createDetailView() {
-        System.out.println("Create detail view");
-        myInnerPostfixDescriptionPanel = new DetailViewPanel();
-        JPanel panel = new JPanel(new GridLayout(1, 2));
-        panel.add(myInnerPostfixDescriptionPanel.getComponent());
-        panel.add(new Label("initial detail component"));
-        return panel;
-    }
-
     @Nullable
     @Override
     protected JComponent createCenterPanel() {
         JPanel mainPanel = new JPanel(new BorderLayout());
 
-        JBSplitter splitPane = new JBSplitter(0.3f);
+        splitPane = new JBSplitter(0.3f);
         splitPane.setSplitterProportionKey(getSplitterProportionKey());
 
         splitPane.setFirstComponent(createMasterView());
-        splitPane.setSecondComponent(createDetailView());
+        splitPane.setSecondComponent(getEmptyDetailView());
 
         mainPanel.add(splitPane, BorderLayout.CENTER);
 
         return mainPanel;
+    }
+
+    private static JComponent getEmptyDetailView() {
+        JPanel panel = new JPanel(new GridLayout(1, 1));
+        panel.add(new Label("select config"));
+        return panel;
     }
 
     @NotNull
@@ -97,11 +94,11 @@ public class ChangeProfilerConfigDialog extends DialogWrapper {
     }
 
     private void resetDetailView() {
-        if (null != checkboxTree && null != myInnerPostfixDescriptionPanel) {
-            Config config = checkboxTree.getSelectedConfig();
-            if (config != null) {
-                myInnerPostfixDescriptionPanel.reset(config);
-            }
+        Config config = checkboxTree.getSelectedConfig();
+        if (config == null) {
+            splitPane.setSecondComponent(getEmptyDetailView());
+        } else {
+            splitPane.setSecondComponent(DetailViewManager.getDetailView(config));
         }
     }
 }

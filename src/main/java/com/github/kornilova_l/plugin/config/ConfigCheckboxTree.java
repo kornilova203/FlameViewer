@@ -92,6 +92,7 @@ public class ConfigCheckboxTree extends CheckboxTree {
     public Config getSelectedConfig() {
         TreePath path = getSelectionModel().getSelectionPath();
         Object userObject = ((CheckedTreeNode) path.getLastPathComponent()).getUserObject();
+        System.out.println(userObject.getClass() + " " + userObject);
         if (userObject instanceof Config) {
             return ((Config) userObject);
         }
