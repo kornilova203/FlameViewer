@@ -12,6 +12,7 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.HashSet;
 
 // TODO: reimplement
 public class ChangeProfilerConfigDialog extends DialogWrapper {
@@ -36,6 +37,7 @@ public class ChangeProfilerConfigDialog extends DialogWrapper {
     };
 
     private final DetailController detailController = new DetailController(myMasterController);
+    private ConfigCheckboxTree checkboxTree;
 
     protected ChangeProfilerConfigDialog(@NotNull Project project) {
         super(project);
@@ -160,10 +162,18 @@ public class ChangeProfilerConfigDialog extends DialogWrapper {
 
     private JComponent createMasterView() {
         System.out.println("create master view");
-        JScrollPane treeView = new JScrollPane(tree);
-        JPanel panel = new JPanel(new GridLayout(1, 1));
-        panel.add(treeView);
+        JPanel panel = createTree();
+        HashSet<Config> configs = new HashSet<>();
+        configs.add(new Config("config1"));
+        configs.add(new Config("config2"));
+        checkboxTree.initTree(configs);
+
         return panel;
+
+//        JScrollPane treeView = new JScrollPane(tree);
+//        JPanel panel = new JPanel(new GridLayout(1, 1));
+//        panel.add(treeView);
+//        return panel;
 //        treeController = new ConfigItemsTreeController();
 //        final JTree tree = new ConfigsCheckboxTree(project, treeController);
 //
@@ -192,5 +202,24 @@ public class ChangeProfilerConfigDialog extends DialogWrapper {
 ////        myConfigsPanelProviders.forEach(provider -> provider.addListener(myRebuildAlarm::cancelAndRequest, project, myListenerDisposable));
 //
 //        return decoratedTree;
+    }
+
+    private JPanel createTree() {
+        checkboxTree = new ConfigCheckboxTree() {
+            @Override
+            protected void selectionChanged() {
+                resetDescriptionPanel();
+            }
+        };
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.add(ScrollPaneFactory.createScrollPane(checkboxTree));
+
+        return panel;
+//        myTemplatesTreeContainer.setLayout(new BorderLayout());
+//        myTemplatesTreeContainer.add(panel);
+    }
+
+    private void resetDescriptionPanel() {
+
     }
 }
