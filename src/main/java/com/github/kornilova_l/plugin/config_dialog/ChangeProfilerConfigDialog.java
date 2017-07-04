@@ -64,10 +64,7 @@ public class ChangeProfilerConfigDialog extends DialogWrapper {
         System.out.println("create master view");
         createTree();
         ToolbarDecorator decorator = ToolbarDecorator.createDecorator(checkboxTree);
-        decorator.setAddAction(anActionButton -> {
-            final AddMethod dialog = new AddMethod(project);
-            dialog.showAndGet();
-        });
+        decorator.setAddAction(new AddNodeActionButton(project));
         JPanel panel = decorator.createPanel();
         Set<ConfigNode> configs = getProjectConfigs();
         checkboxTree.initTree(configs);
