@@ -1,5 +1,7 @@
 package com.github.kornilova_l.plugin.config;
 
+import com.intellij.psi.PsiJavaReference;
+
 import java.util.Collection;
 
 public class ConfigNode {
@@ -13,6 +15,7 @@ public class ConfigNode {
     public Type type;
     public Collection<ConfigNode> children; // not for method type
     public Collection<Object> parameters; // for method type
+    private PsiJavaReference reference;
 
     public ConfigNode() {
     }
