@@ -72,8 +72,8 @@ public class ChangeProfilerConfigDialog extends DialogWrapper {
     private Set<Config> getProjectConfigs() {
         // TODO: get configs from project
         Set<Config> configs = new HashSet<>();
-        configs.add(new Config("config1"));
-        configs.add(new Config("config2"));
+        configs.add(new Config("method1"));
+        configs.add(new Config("method2"));
         return configs;
     }
 

@@ -1,11 +1,7 @@
 package com.github.kornilova_l.plugin.config;
 
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.ui.CheckboxTree;
-import com.intellij.ui.CheckedTreeNode;
-import com.intellij.ui.JBColor;
-import com.intellij.ui.SimpleTextAttributes;
-import com.intellij.util.ui.UIUtil;
+import com.intellij.icons.AllIcons;
+import com.intellij.ui.*;
 import com.intellij.util.ui.tree.TreeUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -15,7 +11,6 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
-import java.awt.*;
 import java.util.Set;
 
 public class ConfigCheckboxTree extends CheckboxTree {
@@ -43,16 +38,15 @@ public class ConfigCheckboxTree extends CheckboxTree {
         super(new CheckboxTreeCellRenderer() {
             @Override
             public void customizeRenderer(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
-                if (!(value instanceof CheckedTreeNode)) return;
-                CheckedTreeNode node = (CheckedTreeNode) value;
-
-                final Color background = selected ? UIUtil.getTreeSelectionBackground() : UIUtil.getTreeTextBackground();
-                boolean isPostfixTemplate = node instanceof ConfigCheckedTreeNode;
-                SimpleTextAttributes attributes = isPostfixTemplate
-                        ? SimpleTextAttributes.REGULAR_ATTRIBUTES
-                        : SimpleTextAttributes.REGULAR_BOLD_ATTRIBUTES;
-                getTextRenderer().append(StringUtil.notNullize(value.toString()),
-                        new SimpleTextAttributes(background, attributes.getFgColor(), JBColor.RED, attributes.getStyle()));
+                if (row == 0) {
+                    this.getTextRenderer().setIcon(AllIcons.Nodes.Package);
+                } else if (leaf) {
+                    this.getTextRenderer().setIcon(AllIcons.Nodes.Method);
+                } else {
+                    this.getTextRenderer().setIcon(AllIcons.Nodes.Class);
+                }
+                this.getTextRenderer().append(value.toString(), SimpleTextAttributes.SIMPLE_CELL_ATTRIBUTES);
+                super.customizeRenderer(tree, value, selected, expanded, leaf, row, hasFocus);
             }
         }, new CheckedTreeNode(null));
 
@@ -76,9 +70,12 @@ public class ConfigCheckboxTree extends CheckboxTree {
 
     public void initTree(@NotNull Set<Config> configs) {
         root.removeAllChildren();
+        int i = 1;
+        CheckedTreeNode packageNode = new CheckedTreeNode("some_package");
+        root.add(packageNode);
         for (Config config : configs) {
-            CheckedTreeNode baseNode = new CheckedTreeNode("hello, " + config);
-            root.add(baseNode);
+            CheckedTreeNode baseNode = new CheckedTreeNode("SomeClass" + i++);
+            packageNode.add(baseNode);
             CheckedTreeNode configNode = new ConfigCheckedTreeNode(config);
             baseNode.add(configNode);
         }
