@@ -10,6 +10,7 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 import java.awt.*;
 import java.util.HashSet;
+import java.util.Set;
 
 public class ChangeProfilerConfigDialog extends DialogWrapper {
     @NotNull
@@ -57,28 +58,39 @@ public class ChangeProfilerConfigDialog extends DialogWrapper {
         return mainPanel;
     }
 
+    @NotNull
     private JComponent createMasterView() {
         System.out.println("create master view");
-        JPanel panel = createTree();
-        HashSet<Config> configs = new HashSet<>();
+        createTree();
+        JPanel panel = createPanelWithTree(checkboxTree);
+        Set<Config> configs = getProjectConfigs();
+        checkboxTree.initTree(configs);
+        return panel;
+    }
+
+    @NotNull
+    private Set<Config> getProjectConfigs() {
+        // TODO: get configs from project
+        Set<Config> configs = new HashSet<>();
         configs.add(new Config("config1"));
         configs.add(new Config("config2"));
-        checkboxTree.initTree(configs);
+        return configs;
+    }
+
+    private static JPanel createPanelWithTree(ConfigCheckboxTree checkboxTree) {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.add(ScrollPaneFactory.createScrollPane(checkboxTree));
 
         return panel;
     }
 
-    private JPanel createTree() {
+    private void createTree() {
         checkboxTree = new ConfigCheckboxTree() {
             @Override
             protected void selectionChanged() {
                 resetDescriptionPanel();
             }
         };
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.add(ScrollPaneFactory.createScrollPane(checkboxTree));
-
-        return panel;
     }
 
     private void resetDescriptionPanel() {
