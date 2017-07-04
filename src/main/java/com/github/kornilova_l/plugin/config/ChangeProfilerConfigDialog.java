@@ -7,7 +7,6 @@ import com.intellij.ui.popup.util.DetailController;
 import com.intellij.ui.popup.util.DetailViewImpl;
 import com.intellij.ui.popup.util.ItemWrapper;
 import com.intellij.ui.popup.util.MasterController;
-import com.intellij.util.ui.tree.TreeUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -49,6 +48,7 @@ public class ChangeProfilerConfigDialog extends DialogWrapper {
         tree = new CheckboxTree(new CheckboxTree.CheckboxTreeCellRenderer() {
             @Override
             public void customizeRenderer(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
+                myCheckbox.setText(value.toString());
                 super.customizeRenderer(tree, value, selected, expanded, leaf, row, hasFocus);
             }
         }, top);
