@@ -28,7 +28,13 @@ import com.intellij.xdebugger.ui.DebuggerColors;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashMap;
+
+import static com.github.kornilova_l.plugin.config.ConfigStorage.Config.getQualifiedName;
+
 public class ToggleMethodGutterIconAction extends AnAction {
+    private HashMap<String, RangeHighlighter> rangeHighlighters = new HashMap<>();
+
     @Override
     public void actionPerformed(AnActionEvent event) {
         final Project project = event.getData(CommonDataKeys.PROJECT);
@@ -45,23 +51,21 @@ public class ToggleMethodGutterIconAction extends AnAction {
         }
         assert event.getProject() != null;
         ConfigStorage.Config config = ProjectConfigManager.getConfig(event.getProject());
-        if (!config.maybeRemove(method)) {
+        if (!config.maybeRemove(method)) { // if was not removed
             config.addMethod(method);
+            setIcon(method, project, editor.getDocument());
+        } else { // was removed
+            removeIcon(method, project, editor.getDocument());
         }
-        DaemonCodeAnalyzer.getInstance(project).restart(event.getData(CommonDataKeys.PSI_FILE));
-//        TextEditorHighlightingPass lineMarkersPass = (ServiceManager.getService(project, LineMarkersPassFactory.class)
-//                .createHighlightingPass(
-//                        event.getData(CommonDataKeys.PSI_FILE),
-//                        editor
-//                ));
-//        if (lineMarkersPass instanceof LineMarkersPass) {
-//            lineMarkersPass.doCollectInformation(new EmptyProgressIndicator());
-//            lineMarkersPass.doApplyInformationToEditor();
-//        }
-//        System.out.println(lineMarkersPass.getClass());
     }
 
-    private static void setIcon(PsiMethod method, Project project, Document document) {
+    private void removeIcon(PsiMethod method, Project project, Document document) {
+        RangeHighlighter highlighter = rangeHighlighters.get(getQualifiedName(method));
+        MarkupModelEx markupModel = (MarkupModelEx) DocumentMarkupModel.forDocument(document, project, true);
+        markupModel.removeHighlighter(highlighter);
+    }
+
+    private void setIcon(PsiMethod method, Project project, Document document) {
         MarkupModelEx markupModel = (MarkupModelEx) DocumentMarkupModel.forDocument(document, project, true);
         RangeHighlighter highlighter = markupModel.addRangeHighlighter(
                 method.getTextOffset(),
@@ -70,6 +74,7 @@ public class ToggleMethodGutterIconAction extends AnAction {
                 null,
                 HighlighterTargetArea.EXACT_RANGE);
         highlighter.setGutterIconRenderer(new ProfilerGutterIconRenderer());
+        rangeHighlighters.put(getQualifiedName(method), highlighter);
     }
 
     @Nullable

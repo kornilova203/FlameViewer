@@ -43,7 +43,7 @@ public class ConfigStorage implements PersistentStateComponent<ConfigStorage.Con
         }
 
         @NotNull
-        private static String getQualifiedName(PsiMethod psiMethod) {
+        public static String getQualifiedName(PsiMethod psiMethod) {
             assert psiMethod.getContainingClass() != null;
             String qualifiedName = psiMethod.getContainingClass().getQualifiedName();
             assert qualifiedName != null;
