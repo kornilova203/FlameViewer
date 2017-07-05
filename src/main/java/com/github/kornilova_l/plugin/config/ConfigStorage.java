@@ -11,14 +11,16 @@ public class ConfigStorage implements PersistentStateComponent<ConfigStorage.Con
     public static class Config {
 
         public Config() {
-            this(new ConfigNode());
+            this(new ConfigNode(), new HashSet<>());
         }
 
-        private Config(ConfigNode baseNode) {
+        private Config(ConfigNode baseNode, Collection<String> patterns) {
             this.baseNode = baseNode;
+            this.patterns = patterns;
         }
 
-        public ConfigNode baseNode;
+        public ConfigNode baseNode; // node for tree of methods
+        public Collection<String> patterns;
     }
 
     Config config;

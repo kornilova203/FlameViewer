@@ -1,9 +1,11 @@
 package com.github.kornilova_l.plugin.config;
 
-import com.intellij.psi.PsiJavaReference;
+import com.intellij.openapi.editor.markup.RangeHighlighter;
+import com.intellij.psi.PsiElement;
 
 import java.util.Collection;
 
+@SuppressWarnings("PublicField")
 public class ConfigNode {
     public enum Type {
         METHOD,
@@ -15,7 +17,8 @@ public class ConfigNode {
     public Type type;
     public Collection<ConfigNode> children; // not for method type
     public Collection<Object> parameters; // for method type
-    private PsiJavaReference reference;
+    private PsiElement psiElement;
+    RangeHighlighter rangeHighlighter;
 
     public ConfigNode() {
     }
