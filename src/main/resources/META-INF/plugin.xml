@@ -40,7 +40,7 @@
         </group>
         <group>
             <add-to-group group-id="EditorGutterPopupMenu"/>
-            <action id="ToggleMethodGutterIcon" class="com.github.kornilova_l.plugin.gutter.ToggleMethodGutterIcon"
+            <action id="ToggleMethodGutterIcon" class="com.github.kornilova_l.plugin.gutter.ToggleMethodGutterIconAction"
                     text="Add/Remove method from Profiler Config"/>
         </group>
         <group id="ToggleProfilerGutterAction">
