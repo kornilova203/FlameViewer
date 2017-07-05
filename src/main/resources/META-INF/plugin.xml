@@ -47,6 +47,10 @@
             <interface-class>com.intellij.openapi.components.PersistentStateComponent</interface-class>
             <implementation-class>com.github.kornilova_l.plugin.config.ConfigStorage</implementation-class>
         </component>
+        <component>
+            <interface-class>com.intellij.openapi.components.ProjectComponent</interface-class>
+            <implementation-class>com.github.kornilova_l.plugin.gutter.LineMarkerProjectComponent</implementation-class>
+        </component>
     </project-components>
 
 </idea-plugin>

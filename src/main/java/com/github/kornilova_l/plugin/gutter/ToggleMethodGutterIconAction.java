@@ -2,7 +2,6 @@ package com.github.kornilova_l.plugin.gutter;
 
 import com.github.kornilova_l.plugin.ProjectConfigManager;
 import com.github.kornilova_l.plugin.config.ConfigStorage;
-import com.intellij.codeInsight.daemon.DaemonCodeAnalyzer;
 import com.intellij.debugger.impl.DebuggerUtilsEx;
 import com.intellij.openapi.actionSystem.ActionPlaces;
 import com.intellij.openapi.actionSystem.AnAction;
