@@ -31,10 +31,8 @@ public class ConfigStorage implements PersistentStateComponent<ConfigStorage.Con
          * @return true if method was deleted
          */
         public boolean maybeRemove(@NotNull PsiMethod psiMethod) {
-            assert psiMethod.getContainingClass() != null;
-            String qualifiedName = psiMethod.getContainingClass().getQualifiedName();
-            assert qualifiedName != null;
-            
+            String qualifiedName = getQualifiedName(psiMethod);
+
             for (MethodConfig method : methods) {
                 if (Objects.equals(method.qualifiedName, qualifiedName)) {
                     methods.remove(method);
@@ -44,10 +42,16 @@ public class ConfigStorage implements PersistentStateComponent<ConfigStorage.Con
             return false;
         }
 
-        public boolean contains(@NotNull PsiMethod psiMethod) {
+        @NotNull
+        private static String getQualifiedName(PsiMethod psiMethod) {
             assert psiMethod.getContainingClass() != null;
             String qualifiedName = psiMethod.getContainingClass().getQualifiedName();
             assert qualifiedName != null;
+            return qualifiedName + "." + psiMethod.getName();
+        }
+
+        public boolean contains(@NotNull PsiMethod psiMethod) {
+            String qualifiedName = getQualifiedName(psiMethod);
 
             for (MethodConfig method : methods) {
                 if (Objects.equals(method.qualifiedName, qualifiedName)) {
@@ -66,7 +70,7 @@ public class ConfigStorage implements PersistentStateComponent<ConfigStorage.Con
             String qualifiedName = psiMethod.getContainingClass().getQualifiedName();
             assert qualifiedName != null;
             
-            methods.add(new MethodConfig(qualifiedName));
+            methods.add(new MethodConfig(qualifiedName + "." + psiMethod.getName()));
         }
     }
 

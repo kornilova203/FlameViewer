@@ -2,6 +2,7 @@ package com.github.kornilova_l.plugin.gutter;
 
 import com.github.kornilova_l.plugin.ProjectConfigManager;
 import com.github.kornilova_l.plugin.config.ConfigStorage;
+import com.intellij.codeInsight.daemon.impl.LineMarkersPass;
 import com.intellij.debugger.impl.DebuggerUtilsEx;
 import com.intellij.openapi.actionSystem.ActionPlaces;
 import com.intellij.openapi.actionSystem.AnAction;
@@ -47,6 +48,34 @@ public class ToggleMethodGutterIconAction extends AnAction {
         if (!config.maybeRemove(method)) {
             config.addMethod(method);
         }
+        LineMarkersPass.queryLineMarkers(event.getData(CommonDataKeys.PSI_FILE), editor.getDocument()).clear();
+//        MarkupModelEx markupModel = (MarkupModelEx) DocumentMarkupModel.forDocument(editor.getDocument(), project, true);
+//        RangeHighlighter highlighter = markupModel.addRangeHighlighter(
+//                method.getTextOffset(),
+//                method.getTextOffset() + 1,
+//                DebuggerColors.BREAKPOINT_HIGHLIGHTER_LAYER,
+//                null,
+//                HighlighterTargetArea.EXACT_RANGE);
+//        highlighter.setGutterIconRenderer(new ProfilerGutterIconRenderer());
+//        new ProfilerLineMarkerProvider().collectNavigationMarkers(list, );
+//        if (event.getData(CommonDataKeys.PSI_FILE) != null) {
+//            List<LineMarkerProvider> markerProviders = LineMarkersPass.getMarkerProviders(Language.findLanguageByID("JAVA"), project);
+//            for (LineMarkerProvider markerProvider : markerProviders) {
+//                if (markerProvider instanceof ProfilerLineMarkerProvider) {
+//                    ProfilerLineMarkerProvider myMarkerProvider = ((ProfilerLineMarkerProvider) markerProvider);
+//                    LineMarkerInfo lineMarkerInfo = myMarkerProvider.getLineMarkerInfo(method);
+//                    if (lineMarkerInfo != null) {
+//                        System.out.println("found line marker info");
+//                        lineMarkerInfo.getNavigationHandler();
+//                        lineMarkerInfo.highlighter.setGutterIconRenderer(new ProfilerGutterIconRenderer());
+////                        lineMarkerInfo.createGutterRenderer();
+//                    }
+////                    lineMarkerInfo.
+//                }
+//            }
+//            Collection<LineMarkerInfo> lineMarkerInfos = LineMarkersPass.queryLineMarkers(event.getData(CommonDataKeys.PSI_FILE), editor.getDocument());
+//            lineMarkerInfos.
+//            ContainerUtil.addIfNotNull(markers, RelatedItemLineMarkerProvider relatedItemLineMarkerProvider.getLineMarkerInfo(parent));
     }
 
     private static void setIcon(PsiMethod method, Project project, Document document) {
