@@ -36,6 +36,16 @@
                     text="Show Results" description=""/>
             <action class="com.github.kornilova_l.plugin.config_dialog.ShowProfilerDialogAction"
                     id="flamegraph-profiler.ShowProfilerDialog" text="Show Dialog"/>
+
+        </group>
+        <group>
+            <add-to-group group-id="EditorGutterPopupMenu"/>
+            <action id="ToggleMethodGutterIcon" class="com.github.kornilova_l.plugin.gutter.ToggleMethodGutterIcon"
+                    text="Add/Remove method from Profiler Config"/>
+        </group>
+        <group id="ToggleProfilerGutterAction">
+            <action id="ToggleFieldBreakpoint" class="com.intellij.debugger.actions.ToggleFieldBreakpointAction"/>
+            <add-to-group group-id="DebugMainMenu" anchor="after" relative-to-action="ToggleLineBreakpoint"/>
         </group>
     </actions>
     <project-components>

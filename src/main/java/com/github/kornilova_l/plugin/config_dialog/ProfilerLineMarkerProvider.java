@@ -11,9 +11,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 
 public class ProfilerLineMarkerProvider extends RelatedItemLineMarkerProvider {
+
     @Override
     protected void collectNavigationMarkers(@NotNull PsiElement element,
                                             Collection<? super RelatedItemLineMarkerInfo> result) {
+        super.getLineMarkerInfo(element);
         if (element instanceof PsiLiteralExpression) {
             PsiLiteralExpression literalExpression = (PsiLiteralExpression) element;
             String value = literalExpression.getValue() instanceof String ? (String) literalExpression.getValue() : null;
