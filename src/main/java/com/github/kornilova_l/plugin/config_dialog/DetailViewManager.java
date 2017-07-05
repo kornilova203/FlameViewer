@@ -1,15 +1,15 @@
 package com.github.kornilova_l.plugin.config_dialog;
 
-import com.github.kornilova_l.plugin.config.ConfigNode;
+import com.github.kornilova_l.plugin.config.MethodConfig;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
 
 class DetailViewManager {
-    static JComponent getDetailView(@NotNull ConfigNode config) {
+    static JComponent getDetailView(@NotNull MethodConfig config) {
         JPanel panel = new JPanel(new GridLayout());
-        panel.add(new Label(config.name));
+        panel.add(new Label(config.qualifiedName));
         return panel;
     }
 

@@ -1,6 +1,6 @@
 package com.github.kornilova_l.plugin.config_dialog;
 
-import com.github.kornilova_l.plugin.config.ConfigNode;
+import com.github.kornilova_l.plugin.config.MethodConfig;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.ui.*;
@@ -66,17 +66,17 @@ public class ChangeProfilerConfigDialog extends DialogWrapper {
         ToolbarDecorator decorator = ToolbarDecorator.createDecorator(checkboxTree);
         decorator.setAddAction(new AddNodeActionButton(project));
         JPanel panel = decorator.createPanel();
-        Set<ConfigNode> configs = getProjectConfigs();
+        Set<MethodConfig> configs = getProjectConfigs();
         checkboxTree.initTree(configs);
         return panel;
     }
 
     @NotNull
-    private Set<ConfigNode> getProjectConfigs() {
+    private Set<MethodConfig> getProjectConfigs() {
         // TODO: get configs from project
-        Set<ConfigNode> configs = new HashSet<>();
-        configs.add(new ConfigNode("method1", ConfigNode.Type.METHOD));
-        configs.add(new ConfigNode("method2", ConfigNode.Type.METHOD));
+        Set<MethodConfig> configs = new HashSet<>();
+        configs.add(new MethodConfig("some_package.MyClass.method"));
+        configs.add(new MethodConfig("some_package.MyClass.method2"));
         return configs;
     }
 
@@ -90,7 +90,7 @@ public class ChangeProfilerConfigDialog extends DialogWrapper {
     }
 
     private void resetDetailView() {
-        ConfigNode config = checkboxTree.getSelectedConfig();
+        MethodConfig config = checkboxTree.getSelectedConfig();
         if (config == null) {
             splitPane.setSecondComponent(getEmptyDetailView());
         } else {

@@ -1,5 +1,7 @@
 package com.github.kornilova_l.plugin.gutter;
 
+import com.github.kornilova_l.plugin.ProjectConfigManager;
+import com.github.kornilova_l.plugin.config.ConfigStorage;
 import com.intellij.debugger.impl.DebuggerUtilsEx;
 import com.intellij.openapi.actionSystem.ActionPlaces;
 import com.intellij.openapi.actionSystem.AnAction;
@@ -41,7 +43,10 @@ public class ToggleMethodGutterIconAction extends AnAction {
             return;
         }
         assert event.getProject() != null;
-        setIcon(method, project, editor.getDocument());
+        ConfigStorage.Config config = ProjectConfigManager.getConfig(event.getProject());
+        if (!config.maybeRemove(method)) {
+            config.addMethod(method);
+        }
     }
 
     private static void setIcon(PsiMethod method, Project project, Document document) {

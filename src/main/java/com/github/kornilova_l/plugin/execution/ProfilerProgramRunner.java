@@ -1,7 +1,7 @@
 package com.github.kornilova_l.plugin.execution;
 
 import com.github.kornilova_l.plugin.ProjectConfigManager;
-import com.github.kornilova_l.plugin.config.ConfigNode;
+import com.github.kornilova_l.plugin.config.MethodConfig;
 import com.github.kornilova_l.plugin.config.ConfigStorage;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.*;
@@ -21,7 +21,7 @@ import java.util.Objects;
  */
 public class ProfilerProgramRunner extends DefaultJavaProgramRunner {
     private static final String RUNNER_ID = "ProfileRunnerID";
-    private com.github.kornilova_l.plugin.config.ConfigNode chosenSettings;
+    private MethodConfig chosenSettings;
 
     public ProfilerProgramRunner() {
         super();
@@ -29,31 +29,7 @@ public class ProfilerProgramRunner extends DefaultJavaProgramRunner {
 
     @Override
     public void execute(@NotNull ExecutionEnvironment environment) throws ExecutionException {
-        ConfigStorage.Config config = ProjectConfigManager.getState(environment.getProject());
-        new ListPopupImpl(
-                new BaseListPopupStep<ConfigNode>(
-                        "Profiler configuration",
-                        new LinkedList<>(config.baseNode.children)
-                ) {
-
-                    @NotNull
-                    @Override
-                    public String getTextFor(ConfigNode value) {
-                        return value.name != null ? value.name : "";
-                    }
-
-                    @Override
-                    public PopupStep onChosen(ConfigNode selectedValue, boolean finalChoice) {
-                        try {
-                            chosenSettings = selectedValue;
-                            ProfilerProgramRunner.super.execute(environment);
-                        } catch (ExecutionException e) {
-                            e.printStackTrace();
-                        }
-                        return super.onChosen(selectedValue, finalChoice);
-                    }
-                }
-        ).showCenteredInCurrentWindow(environment.getProject());
+        super.execute(environment);
     }
 
     @Override
