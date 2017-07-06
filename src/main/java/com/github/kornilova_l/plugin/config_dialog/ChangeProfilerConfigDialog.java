@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Set;
+import java.util.Collection;
 
 public class ChangeProfilerConfigDialog extends DialogWrapper {
     @NotNull
@@ -67,7 +67,7 @@ public class ChangeProfilerConfigDialog extends DialogWrapper {
         ToolbarDecorator decorator = ToolbarDecorator.createDecorator(checkboxTree);
         decorator.setAddAction(new AddNodeActionButton(project));
         JPanel panel = decorator.createPanel();
-        Set<MethodConfig> configs = getProjectConfigs();
+        Collection<MethodConfig> configs = getProjectConfigs();
         if (configs == null) {
             // TODO: show that config is empty
             return panel;
@@ -77,12 +77,12 @@ public class ChangeProfilerConfigDialog extends DialogWrapper {
     }
 
     @Nullable
-    private Set<MethodConfig> getProjectConfigs() {
+    private Collection<MethodConfig> getProjectConfigs() {
         ConfigStorage.Config config = ProjectConfigManager.getConfig(project);
         if (config.methods.size() == 0) {
             return null;
         }
-        return config.methods;
+        return config.methods.values();
     }
 
     private void createTree() {

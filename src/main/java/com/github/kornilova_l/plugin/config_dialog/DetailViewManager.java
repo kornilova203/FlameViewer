@@ -9,7 +9,7 @@ import java.awt.*;
 class DetailViewManager {
     static JComponent getDetailView(@NotNull MethodConfig config) {
         JPanel panel = new JPanel(new GridLayout());
-        panel.add(new Label(config.qualifiedName));
+        panel.add(new Label(config.getQualifiedName()));
         return panel;
     }
 

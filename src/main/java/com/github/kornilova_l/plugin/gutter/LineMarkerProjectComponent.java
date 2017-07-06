@@ -2,13 +2,12 @@ package com.github.kornilova_l.plugin.gutter;
 
 import com.intellij.openapi.components.AbstractProjectComponent;
 import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.event.DocumentEvent;
-import com.intellij.openapi.editor.event.DocumentListener;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.fileEditor.FileEditorManagerListener;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
+import com.intellij.psi.impl.PsiManagerImpl;
 import com.intellij.psi.search.FilenameIndex;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.messages.MessageBusConnection;
@@ -29,6 +28,8 @@ public class LineMarkerProjectComponent extends AbstractProjectComponent {
             @Override
             public void fileOpened(@NotNull FileEditorManager source, @NotNull VirtualFile file) {
                 System.out.println(file.getName());
+                PsiManagerImpl.getInstance(myProject)
+                        .addPsiTreeChangeListener(new UpdatingMarkersPsiTreeChangeListener(lineMarkersHolder, myProject));
                 if (Objects.equals(file.getFileType().getDefaultExtension(), "java")) {
                     PsiFile[] psiFiles = FilenameIndex.getFilesByName(
                             myProject,
@@ -41,12 +42,6 @@ public class LineMarkerProjectComponent extends AbstractProjectComponent {
                         return;
                     }
                     lineMarkersHolder.updateFileMarkers(psiFile, document);
-                    document.addDocumentListener(new DocumentListener() {
-                        @Override
-                        public void documentChanged(DocumentEvent event) {
-                            lineMarkersHolder.updateFileMarkers(psiFile, event.getDocument());
-                        }
-                    });
                 }
             }
         });

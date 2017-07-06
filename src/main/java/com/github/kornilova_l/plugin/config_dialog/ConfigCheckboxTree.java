@@ -8,12 +8,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
+import java.util.Collection;
 import java.util.Objects;
-import java.util.Set;
 
 public class ConfigCheckboxTree extends CheckboxTree {
     @NotNull
@@ -47,12 +45,7 @@ public class ConfigCheckboxTree extends CheckboxTree {
         model = (DefaultTreeModel) getModel();
         root = (CheckedTreeNode) model.getRoot();
 
-        getSelectionModel().addTreeSelectionListener(new TreeSelectionListener() {
-            @Override
-            public void valueChanged(@NotNull TreeSelectionEvent event) {
-                selectionChanged();
-            }
-        });
+        getSelectionModel().addTreeSelectionListener(event -> selectionChanged());
         setRootVisible(false);
         setShowsRootHandles(true);
     }
@@ -81,18 +74,12 @@ public class ConfigCheckboxTree extends CheckboxTree {
         return foundOrCreatedNode;
     }
 
-    public void initTree(@NotNull Set<MethodConfig> methods) {
+    public void initTree(@NotNull Collection<MethodConfig> methods) {
         root.removeAllChildren();
         for (MethodConfig methodConfig : methods) {
-            String name = methodConfig.qualifiedName;
-            String methodName = name.substring(name.lastIndexOf(".") + 1, name.length());
-            String rest = name.substring(0, name.lastIndexOf("."));
-            String className = rest.substring(rest.lastIndexOf(".") + 1, rest.length());
-            rest = rest.substring(0, rest.lastIndexOf("."));
-            String packageName = rest;
-            ConfigCheckedTreeNode packageNode = createChildIfNotPresent(root, packageName);
-            ConfigCheckedTreeNode classNode = createChildIfNotPresent(packageNode, className);
-            createChildIfNotPresent(classNode, methodName);
+            ConfigCheckedTreeNode packageNode = createChildIfNotPresent(root, methodConfig.packageName);
+            ConfigCheckedTreeNode classNode = createChildIfNotPresent(packageNode, methodConfig.className);
+            createChildIfNotPresent(classNode, methodConfig.methodName);
         }
         model.nodeStructureChanged(root);
         TreeUtil.expandAll(this);

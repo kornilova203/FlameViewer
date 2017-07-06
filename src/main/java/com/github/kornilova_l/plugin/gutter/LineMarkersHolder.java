@@ -2,6 +2,7 @@ package com.github.kornilova_l.plugin.gutter;
 
 import com.github.kornilova_l.plugin.ProjectConfigManager;
 import com.github.kornilova_l.plugin.config.ConfigStorage;
+import com.github.kornilova_l.plugin.config.MethodConfig;
 import com.intellij.openapi.components.AbstractProjectComponent;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.ex.MarkupModelEx;
@@ -16,6 +17,8 @@ import com.intellij.xdebugger.ui.DebuggerColors;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
+
+import static com.github.kornilova_l.plugin.config.ConfigStorage.Config.getQualifiedName;
 
 public class LineMarkersHolder extends AbstractProjectComponent {
     private final HashMap<PsiMethod, RangeHighlighter> rangeHighlighters = new HashMap<>();
@@ -52,11 +55,26 @@ public class LineMarkersHolder extends AbstractProjectComponent {
     }
 
     public void updateFileMarkers(@NotNull PsiFile psiFile, @NotNull Document document) {
-        new UpdatingPsiElementVisitor(myProject, getMarkupModel(document, myProject), config)
+        new UpdatingPsiElementVisitor(myProject, getMarkupModel(document, myProject))
                 .visitElement(psiFile);
     }
 
     public static MarkupModelEx getMarkupModel(Document document, Project project) {
         return (MarkupModelEx) DocumentMarkupModel.forDocument(document, project, true);
+    }
+
+    public void updateFileMarkers(PsiMethod psiMethod, MarkupModelEx markupModel) {
+        if (config.contains(psiMethod)) {
+            setIcon(psiMethod, markupModel);
+        } else {
+            removeIconIfPresent(psiMethod, markupModel);
+        }
+    }
+
+    public void updateMethodNameIfInConfig(String oldQualifiedName, PsiMethod newMethod) {
+        if (config.methods.containsKey(oldQualifiedName)) {
+            config.methods.remove(oldQualifiedName);
+            config.methods.put(getQualifiedName(newMethod), new MethodConfig(newMethod));
+        }
     }
 }

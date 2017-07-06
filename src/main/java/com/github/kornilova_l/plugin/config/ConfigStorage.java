@@ -13,15 +13,15 @@ public class ConfigStorage implements PersistentStateComponent<ConfigStorage.Con
     public static class Config {
 
         public Config() {
-            this(new HashSet<>(), new HashSet<>());
+            this(new HashMap<>(), new HashSet<>());
         }
 
-        private Config(HashSet<MethodConfig> methods, HashSet<String> patterns) {
+        private Config(HashMap<String, MethodConfig> methods, HashSet<String> patterns) {
             this.methods = methods;
             this.patterns = patterns;
         }
 
-        public HashSet<MethodConfig> methods; // node for tree of methods
+        public HashMap<String, MethodConfig> methods; // node for tree of methods
         public HashSet<String> patterns;
 
         /**
@@ -33,11 +33,9 @@ public class ConfigStorage implements PersistentStateComponent<ConfigStorage.Con
         public boolean maybeRemove(@NotNull PsiMethod psiMethod) {
             String qualifiedName = getQualifiedName(psiMethod);
 
-            for (MethodConfig method : methods) {
-                if (Objects.equals(method.qualifiedName, qualifiedName)) {
-                    methods.remove(method);
-                    return true;
-                }
+            if (methods.containsKey(qualifiedName)) {
+                methods.remove(qualifiedName);
+                return true;
             }
             return false;
         }
@@ -51,14 +49,7 @@ public class ConfigStorage implements PersistentStateComponent<ConfigStorage.Con
         }
 
         public boolean contains(@NotNull PsiMethod psiMethod) {
-            String qualifiedName = getQualifiedName(psiMethod);
-
-            for (MethodConfig method : methods) {
-                if (Objects.equals(method.qualifiedName, qualifiedName)) {
-                    return true;
-                }
-            }
-            return false;
+            return methods.containsKey(getQualifiedName(psiMethod));
         }
 
         /**
@@ -66,11 +57,7 @@ public class ConfigStorage implements PersistentStateComponent<ConfigStorage.Con
          * @param psiMethod which will be added
          */
         public void addMethod(@NotNull PsiMethod psiMethod) {
-            assert psiMethod.getContainingClass() != null;
-            String qualifiedName = psiMethod.getContainingClass().getQualifiedName();
-            assert qualifiedName != null;
-            
-            methods.add(new MethodConfig(qualifiedName + "." + psiMethod.getName()));
+            methods.put(getQualifiedName(psiMethod), new MethodConfig(psiMethod));
         }
     }
 
