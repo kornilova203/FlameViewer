@@ -23,14 +23,18 @@ public class LineMarkersHolder extends AbstractProjectComponent {
 
     public void setIcon(PsiMethod method, Project project, Document document) {
         MarkupModelEx markupModel = (MarkupModelEx) DocumentMarkupModel.forDocument(document, project, true);
-        RangeHighlighter highlighter = markupModel.addRangeHighlighter(
-                method.getTextOffset(),
-                method.getTextOffset() + 1,
-                DebuggerColors.BREAKPOINT_HIGHLIGHTER_LAYER,
-                null,
-                HighlighterTargetArea.EXACT_RANGE);
-        highlighter.setGutterIconRenderer(new ProfilerGutterIconRenderer());
-        rangeHighlighters.put(getQualifiedName(method), highlighter);
+        String qualifiedName = getQualifiedName(method);
+        if (!rangeHighlighters.containsKey(qualifiedName) || // if no highlighter for this method
+                !markupModel.containsHighlighter(rangeHighlighters.get(qualifiedName))) { // or it isn't shown
+            RangeHighlighter highlighter = markupModel.addRangeHighlighter(
+                    method.getTextOffset(),
+                    method.getTextOffset() + 1,
+                    DebuggerColors.BREAKPOINT_HIGHLIGHTER_LAYER,
+                    null,
+                    HighlighterTargetArea.EXACT_RANGE);
+            highlighter.setGutterIconRenderer(new ProfilerGutterIconRenderer());
+            rangeHighlighters.put(getQualifiedName(method), highlighter);
+        }
     }
 
     public void removeIcon(PsiMethod method, Project project, Document document) {
