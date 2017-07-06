@@ -54,7 +54,7 @@ public class LineMarkersHolder extends AbstractProjectComponent {
         }
     }
 
-    public void updateFileMarkers(@NotNull PsiFile psiFile, @NotNull Document document) {
+    public void updateMethodMarker(@NotNull PsiFile psiFile, @NotNull Document document) {
         new UpdatingPsiElementVisitor(myProject, getMarkupModel(document, myProject))
                 .visitElement(psiFile);
     }
@@ -63,7 +63,7 @@ public class LineMarkersHolder extends AbstractProjectComponent {
         return (MarkupModelEx) DocumentMarkupModel.forDocument(document, project, true);
     }
 
-    public void updateFileMarkers(PsiMethod psiMethod, MarkupModelEx markupModel) {
+    public void updateMethodMarker(PsiMethod psiMethod, MarkupModelEx markupModel) {
         if (config.contains(psiMethod)) {
             setIcon(psiMethod, markupModel);
         } else {
@@ -71,7 +71,7 @@ public class LineMarkersHolder extends AbstractProjectComponent {
         }
     }
 
-    public void updateMethodNameIfInConfig(String oldQualifiedName, PsiMethod newMethod) {
+    public void replaceMethodIfInConfig(String oldQualifiedName, PsiMethod newMethod) {
         if (config.methods.containsKey(oldQualifiedName)) {
             config.methods.remove(oldQualifiedName);
             config.methods.put(getQualifiedName(newMethod), new MethodConfig(newMethod));

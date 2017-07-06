@@ -22,7 +22,7 @@ public class UpdatingPsiElementVisitor extends PsiRecursiveElementVisitor {
             element.acceptChildren(this);
         }
         if (element instanceof PsiMethod) {
-            lineMarkersHolder.updateFileMarkers((PsiMethod) element, markupModel);
+            lineMarkersHolder.updateMethodMarker((PsiMethod) element, markupModel);
         }
     }
 }

@@ -24,12 +24,11 @@ public class LineMarkerProjectComponent extends AbstractProjectComponent {
     public void projectOpened() {
         LineMarkersHolder lineMarkersHolder = myProject.getComponent(LineMarkersHolder.class);
         MessageBusConnection connection = myProject.getMessageBus().connect();
+        PsiManagerImpl.getInstance(myProject)
+                .addPsiTreeChangeListener(new UpdatingMarkersPsiTreeChangeListener(lineMarkersHolder, myProject));
         connection.subscribe(FileEditorManagerListener.FILE_EDITOR_MANAGER, new FileEditorManagerListener() {
             @Override
             public void fileOpened(@NotNull FileEditorManager source, @NotNull VirtualFile file) {
-                System.out.println(file.getName());
-                PsiManagerImpl.getInstance(myProject)
-                        .addPsiTreeChangeListener(new UpdatingMarkersPsiTreeChangeListener(lineMarkersHolder, myProject));
                 if (Objects.equals(file.getFileType().getDefaultExtension(), "java")) {
                     PsiFile[] psiFiles = FilenameIndex.getFilesByName(
                             myProject,
@@ -41,7 +40,7 @@ public class LineMarkerProjectComponent extends AbstractProjectComponent {
                     if (document == null) {
                         return;
                     }
-                    lineMarkersHolder.updateFileMarkers(psiFile, document);
+                    lineMarkersHolder.updateMethodMarker(psiFile, document);
                 }
             }
         });
