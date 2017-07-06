@@ -25,7 +25,14 @@ public class ConfigCheckboxTree extends CheckboxTree {
         super(new CheckboxTreeCellRenderer() {
             @Override
             public void customizeRenderer(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
-                if (row == 0) {
+                if (!(value instanceof ConfigCheckedTreeNode)) {
+                    return;
+                }
+                ConfigCheckedTreeNode node = ((ConfigCheckedTreeNode) value);
+                if (node.isRoot()) {
+                    return;
+                }
+                if (((CheckedTreeNode) node.getParent()).isRoot()) {
                     this.getTextRenderer().setIcon(AllIcons.Nodes.Package);
                 } else if (leaf) {
                     this.getTextRenderer().setIcon(AllIcons.Nodes.Method);
@@ -33,7 +40,6 @@ public class ConfigCheckboxTree extends CheckboxTree {
                     this.getTextRenderer().setIcon(AllIcons.Nodes.Class);
                 }
                 this.getTextRenderer().append(value.toString(), SimpleTextAttributes.SIMPLE_CELL_ATTRIBUTES);
-                super.customizeRenderer(tree, value, selected, expanded, leaf, row, hasFocus);
             }
         }, new CheckedTreeNode(null));
 
