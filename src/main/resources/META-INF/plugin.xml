@@ -48,8 +48,12 @@
             <implementation-class>com.github.kornilova_l.plugin.config.ConfigStorage</implementation-class>
         </component>
         <component>
-            <interface-class>com.intellij.openapi.components.ProjectComponent</interface-class>
+            <interface-class>com.github.kornilova_l.plugin.gutter.LineMarkerProjectComponent</interface-class>
             <implementation-class>com.github.kornilova_l.plugin.gutter.LineMarkerProjectComponent</implementation-class>
+        </component>
+        <component>
+            <interface-class>com.github.kornilova_l.plugin.gutter.LineMarkersHolder</interface-class>
+            <implementation-class>com.github.kornilova_l.plugin.gutter.LineMarkersHolder</implementation-class>
         </component>
     </project-components>
 
