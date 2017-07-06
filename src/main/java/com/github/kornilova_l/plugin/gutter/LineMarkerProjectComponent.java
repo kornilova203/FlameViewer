@@ -34,7 +34,9 @@ public class LineMarkerProjectComponent extends AbstractProjectComponent {
                             myProject,
                             file.getName(),
                             GlobalSearchScope.fileScope(myProject, file));
-                    assert psiFiles.length == 1;
+                    if (psiFiles.length != 1) {
+                        return;
+                    }
                     PsiFile psiFile = psiFiles[0];
                     Document document = psiFile.getViewProvider().getDocument();
                     if (document == null) {
