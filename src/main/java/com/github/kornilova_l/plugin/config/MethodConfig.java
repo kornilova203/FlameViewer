@@ -11,6 +11,7 @@ public class MethodConfig implements Comparable<MethodConfig> {
     @Nullable public String packageName;
     public String methodName;
     public String className;
+    public boolean isEnabled = true;
 
     public MethodConfig() {
     }
@@ -29,6 +30,13 @@ public class MethodConfig implements Comparable<MethodConfig> {
             return className + "." + methodName;
         }
         return packageName + "." + className + "." + methodName;
+    }
+
+    public String getQualifiedNameWithSlashes() {
+        if (packageName == null) {
+            return className + "." + methodName;
+        }
+        return packageName.replace(".", "/") + "/" + className + "." + methodName;
     }
 
     @Override

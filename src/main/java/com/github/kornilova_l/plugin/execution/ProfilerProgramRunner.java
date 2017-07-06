@@ -1,6 +1,5 @@
 package com.github.kornilova_l.plugin.execution;
 
-import com.github.kornilova_l.plugin.ProjectConfigManager;
 import com.github.kornilova_l.plugin.config.MethodConfig;
 import com.github.kornilova_l.plugin.config.ConfigStorage;
 import com.intellij.execution.ExecutionException;
@@ -8,12 +7,9 @@ import com.intellij.execution.configurations.*;
 import com.intellij.execution.impl.DefaultJavaProgramRunner;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.openapi.application.PathManager;
-import com.intellij.openapi.ui.popup.PopupStep;
-import com.intellij.openapi.ui.popup.util.BaseListPopupStep;
-import com.intellij.ui.popup.list.ListPopupImpl;
+import com.intellij.openapi.components.PersistentStateComponent;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.LinkedList;
 import java.util.Objects;
 
 /**
@@ -21,7 +17,7 @@ import java.util.Objects;
  */
 public class ProfilerProgramRunner extends DefaultJavaProgramRunner {
     private static final String RUNNER_ID = "ProfileRunnerID";
-    private MethodConfig chosenSettings;
+    ConfigStorage.Config config;
 
     public ProfilerProgramRunner() {
         super();
@@ -29,6 +25,7 @@ public class ProfilerProgramRunner extends DefaultJavaProgramRunner {
 
     @Override
     public void execute(@NotNull ExecutionEnvironment environment) throws ExecutionException {
+        config = ((ConfigStorage) environment.getProject().getComponent(PersistentStateComponent.class)).getState();
         super.execute(environment);
     }
 
@@ -37,16 +34,18 @@ public class ProfilerProgramRunner extends DefaultJavaProgramRunner {
                       RunnerSettings settings,
                       RunProfile runProfile,
                       boolean beforeExecution) throws ExecutionException {
-        System.out.println("patch");
-        assert (chosenSettings != null);
-//        chosenSettings.excluded = chosenSettings.excluded.replaceAll("[ \t]+", "");
-//        chosenSettings.included = chosenSettings.included.replaceAll("[ \t]+", "");
+        assert (config != null);
+        StringBuilder configString = new StringBuilder();
+        for (MethodConfig methodConfig : config.methods.values()) {
+            if (methodConfig.isEnabled) {
+                configString.append("&").append(methodConfig.getQualifiedNameWithSlashes());
+            }
+        }
+        // package_name/ClassName.methodName
         javaParameters.getVMParametersList().add(
                 "-javaagent:/home/lk/java-profiling-plugin/build/libs/javaagent.jar=" +
-                        PathManager.getSystemPath()
-//                        + "&" +
-//                        String.join("&", chosenSettings.included.split("\n")) + "&!" +
-//                        String.join("&!", chosenSettings.excluded.split("\n"))
+                        PathManager.getSystemPath() +
+                        configString.toString()
         );
     }
 
