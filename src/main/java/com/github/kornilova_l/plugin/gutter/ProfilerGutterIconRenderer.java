@@ -20,6 +20,6 @@ public class ProfilerGutterIconRenderer extends GutterIconRenderer {
     @NotNull
     @Override
     public Icon getIcon() {
-        return AllIcons.General.ArrowDown;
+        return AllIcons.Nodes.Jsf.Renderer;
     }
 }
