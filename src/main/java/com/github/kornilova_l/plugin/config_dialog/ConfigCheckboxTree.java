@@ -12,24 +12,10 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
+import java.util.Objects;
 import java.util.Set;
 
 public class ConfigCheckboxTree extends CheckboxTree {
-    private static final class ConfigCheckedTreeNode extends CheckedTreeNode {
-        @NotNull
-        private final MethodConfig config;
-
-        @NotNull
-        public MethodConfig getConfig() {
-            return config;
-        }
-
-        ConfigCheckedTreeNode(@NotNull MethodConfig config) {
-            super(config);
-            this.config = config;
-        }
-    }
-
     @NotNull
     private final CheckedTreeNode root;
     @NotNull
@@ -69,18 +55,39 @@ public class ConfigCheckboxTree extends CheckboxTree {
         System.out.println("selection changed");
     }
 
-    public void initTree(@NotNull Set<MethodConfig> configs) {
-        root.removeAllChildren();
-        int i = 1;
-        CheckedTreeNode packageNode = new CheckedTreeNode("some_package");
-        root.add(packageNode);
-        for (MethodConfig config : configs) {
-            CheckedTreeNode baseNode = new CheckedTreeNode("SomeClass" + i++);
-            packageNode.add(baseNode);
-            CheckedTreeNode configNode = new ConfigCheckedTreeNode(config);
-            baseNode.add(configNode);
+    private static ConfigCheckedTreeNode createChildIfNotPresent(CheckedTreeNode parent, String name) {
+        ConfigCheckedTreeNode foundOrCreatedNode = null;
+        if (parent.getChildCount() == 0) {
+            foundOrCreatedNode = new ConfigCheckedTreeNode(name);
+            parent.add(foundOrCreatedNode);
+        } else {
+            for (int i = 0; i < parent.getChildCount(); i++) {
+                ConfigCheckedTreeNode child = (ConfigCheckedTreeNode) parent.getChildAt(i);
+                if (Objects.equals(child.toString(), name)) {
+                    foundOrCreatedNode = child;
+                }
+            }
         }
+        if (foundOrCreatedNode == null) {
+            foundOrCreatedNode = new ConfigCheckedTreeNode(name);
+            parent.add(foundOrCreatedNode);
+        }
+        return foundOrCreatedNode;
+    }
 
+    public void initTree(@NotNull Set<MethodConfig> methods) {
+        root.removeAllChildren();
+        for (MethodConfig methodConfig : methods) {
+            String name = methodConfig.qualifiedName;
+            String methodName = name.substring(name.lastIndexOf(".") + 1, name.length());
+            String rest = name.substring(0, name.lastIndexOf("."));
+            String className = rest.substring(rest.lastIndexOf(".") + 1, rest.length());
+            rest = rest.substring(0, rest.lastIndexOf("."));
+            String packageName = rest;
+            ConfigCheckedTreeNode packageNode = createChildIfNotPresent(root, packageName);
+            ConfigCheckedTreeNode classNode = createChildIfNotPresent(packageNode, className);
+            createChildIfNotPresent(classNode, methodName);
+        }
         model.nodeStructureChanged(root);
         TreeUtil.expandAll(this);
         setSelectionRow(0);

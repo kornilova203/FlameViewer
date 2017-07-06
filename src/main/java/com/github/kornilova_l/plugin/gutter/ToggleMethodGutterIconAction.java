@@ -9,10 +9,6 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.ex.MarkupModelEx;
-import com.intellij.openapi.editor.impl.DocumentMarkupModel;
-import com.intellij.openapi.editor.markup.HighlighterTargetArea;
-import com.intellij.openapi.editor.markup.RangeHighlighter;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.fileTypes.StdFileTypes;
@@ -23,17 +19,10 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiMethod;
 import com.intellij.util.text.CharArrayUtil;
-import com.intellij.xdebugger.ui.DebuggerColors;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
-
-import static com.github.kornilova_l.plugin.config.ConfigStorage.Config.getQualifiedName;
-
 public class ToggleMethodGutterIconAction extends AnAction {
-    private HashMap<String, RangeHighlighter> rangeHighlighters = new HashMap<>();
-
     @Override
     public void actionPerformed(AnActionEvent event) {
         final Project project = event.getData(CommonDataKeys.PROJECT);
@@ -49,31 +38,14 @@ public class ToggleMethodGutterIconAction extends AnAction {
             return;
         }
         assert event.getProject() != null;
+        LineMarkersHolder lineMarkersHolder = project.getComponent(LineMarkersHolder.class);
         ConfigStorage.Config config = ProjectConfigManager.getConfig(event.getProject());
         if (!config.maybeRemove(method)) { // if was not removed
             config.addMethod(method);
-            setIcon(method, project, editor.getDocument());
+            lineMarkersHolder.setIcon(method, project, editor.getDocument());
         } else { // was removed
-            removeIcon(method, project, editor.getDocument());
+            lineMarkersHolder.removeIcon(method, project, editor.getDocument());
         }
-    }
-
-    private void removeIcon(PsiMethod method, Project project, Document document) {
-        RangeHighlighter highlighter = rangeHighlighters.get(getQualifiedName(method));
-        MarkupModelEx markupModel = (MarkupModelEx) DocumentMarkupModel.forDocument(document, project, true);
-        markupModel.removeHighlighter(highlighter);
-    }
-
-    private void setIcon(PsiMethod method, Project project, Document document) {
-        MarkupModelEx markupModel = (MarkupModelEx) DocumentMarkupModel.forDocument(document, project, true);
-        RangeHighlighter highlighter = markupModel.addRangeHighlighter(
-                method.getTextOffset(),
-                method.getTextOffset() + 1,
-                DebuggerColors.BREAKPOINT_HIGHLIGHTER_LAYER,
-                null,
-                HighlighterTargetArea.EXACT_RANGE);
-        highlighter.setGutterIconRenderer(new ProfilerGutterIconRenderer());
-        rangeHighlighters.put(getQualifiedName(method), highlighter);
     }
 
     @Nullable
