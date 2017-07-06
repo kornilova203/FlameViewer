@@ -1,45 +1,62 @@
 package com.github.kornilova_l.plugin.gutter;
 
+import com.github.kornilova_l.plugin.ProjectConfigManager;
+import com.github.kornilova_l.plugin.config.ConfigStorage;
 import com.intellij.openapi.components.AbstractProjectComponent;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.ex.MarkupModelEx;
 import com.intellij.openapi.editor.impl.DocumentMarkupModel;
 import com.intellij.openapi.editor.markup.HighlighterTargetArea;
 import com.intellij.openapi.editor.markup.RangeHighlighter;
+import com.intellij.openapi.progress.ProcessCanceledException;
 import com.intellij.openapi.project.Project;
+import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiMethod;
 import com.intellij.xdebugger.ui.DebuggerColors;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 
-import static com.github.kornilova_l.plugin.config.ConfigStorage.Config.getQualifiedName;
-
 public class LineMarkersHolder extends AbstractProjectComponent {
-    private final HashMap<String, RangeHighlighter> rangeHighlighters = new HashMap<>();
+    private final HashMap<PsiMethod, RangeHighlighter> rangeHighlighters = new HashMap<>();
+    private final ConfigStorage.Config config;
 
     protected LineMarkersHolder(Project project) {
         super(project);
+        config = ProjectConfigManager.getConfig(myProject);
     }
 
-    public void setIcon(PsiMethod method, Project project, Document document) {
-        MarkupModelEx markupModel = (MarkupModelEx) DocumentMarkupModel.forDocument(document, project, true);
-        String qualifiedName = getQualifiedName(method);
-        if (!rangeHighlighters.containsKey(qualifiedName) || // if no highlighter for this method
-                !markupModel.containsHighlighter(rangeHighlighters.get(qualifiedName))) { // or it isn't shown
-            RangeHighlighter highlighter = markupModel.addRangeHighlighter(
-                    method.getTextOffset(),
-                    method.getTextOffset() + 1,
-                    DebuggerColors.BREAKPOINT_HIGHLIGHTER_LAYER,
-                    null,
-                    HighlighterTargetArea.EXACT_RANGE);
-            highlighter.setGutterIconRenderer(new ProfilerGutterIconRenderer());
-            rangeHighlighters.put(getQualifiedName(method), highlighter);
+    public void setIcon(PsiMethod method, MarkupModelEx markupModel) {
+        if (!rangeHighlighters.containsKey(method) || // if no highlighter for this method
+                !markupModel.containsHighlighter(rangeHighlighters.get(method))) { // or it isn't shown
+            try {
+                RangeHighlighter highlighter = markupModel.addRangeHighlighter(
+                        method.getTextOffset(),
+                        method.getTextOffset() + 1,
+                        DebuggerColors.BREAKPOINT_HIGHLIGHTER_LAYER,
+                        null,
+                        HighlighterTargetArea.EXACT_RANGE);
+                highlighter.setGutterIconRenderer(new ProfilerGutterIconRenderer());
+                rangeHighlighters.put(method, highlighter);
+            } catch (ProcessCanceledException exception) {
+                exception.printStackTrace();
+            }
         }
     }
 
-    public void removeIcon(PsiMethod method, Project project, Document document) {
-            RangeHighlighter highlighter = rangeHighlighters.get(getQualifiedName(method));
-            MarkupModelEx markupModel = (MarkupModelEx) DocumentMarkupModel.forDocument(document, project, true);
+    public void removeIconIfPresent(PsiMethod method, MarkupModelEx markupModel) {
+        RangeHighlighter highlighter = rangeHighlighters.get(method);
+        if (highlighter != null) {
             markupModel.removeHighlighter(highlighter);
+        }
+    }
+
+    public void updateFileMarkers(@NotNull PsiFile psiFile, @NotNull Document document) {
+        new UpdatingPsiElementVisitor(myProject, getMarkupModel(document, myProject), config)
+                .visitElement(psiFile);
+    }
+
+    public static MarkupModelEx getMarkupModel(Document document, Project project) {
+        return (MarkupModelEx) DocumentMarkupModel.forDocument(document, project, true);
     }
 }

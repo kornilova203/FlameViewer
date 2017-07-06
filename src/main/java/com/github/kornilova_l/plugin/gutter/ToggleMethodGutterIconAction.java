@@ -9,6 +9,7 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.editor.ex.MarkupModelEx;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.fileTypes.StdFileTypes;
@@ -40,11 +41,12 @@ public class ToggleMethodGutterIconAction extends AnAction {
         assert event.getProject() != null;
         LineMarkersHolder lineMarkersHolder = project.getComponent(LineMarkersHolder.class);
         ConfigStorage.Config config = ProjectConfigManager.getConfig(event.getProject());
+        MarkupModelEx markupModel = LineMarkersHolder.getMarkupModel(editor.getDocument(), project);
         if (!config.maybeRemove(method)) { // if was not removed
             config.addMethod(method);
-            lineMarkersHolder.setIcon(method, project, editor.getDocument());
+            lineMarkersHolder.setIcon(method, markupModel);
         } else { // was removed
-            lineMarkersHolder.removeIcon(method, project, editor.getDocument());
+            lineMarkersHolder.removeIconIfPresent(method, markupModel);
         }
     }
 

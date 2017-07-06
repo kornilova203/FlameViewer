@@ -1,9 +1,9 @@
 package com.github.kornilova_l.plugin.gutter;
 
-import com.github.kornilova_l.plugin.ProjectConfigManager;
-import com.github.kornilova_l.plugin.config.ConfigStorage;
 import com.intellij.openapi.components.AbstractProjectComponent;
 import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.editor.event.DocumentEvent;
+import com.intellij.openapi.editor.event.DocumentListener;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.fileEditor.FileEditorManagerListener;
 import com.intellij.openapi.project.Project;
@@ -23,7 +23,6 @@ public class LineMarkerProjectComponent extends AbstractProjectComponent {
 
     @Override
     public void projectOpened() {
-        ConfigStorage.Config config = ProjectConfigManager.getConfig(myProject);
         LineMarkersHolder lineMarkersHolder = myProject.getComponent(LineMarkersHolder.class);
         MessageBusConnection connection = myProject.getMessageBus().connect();
         connection.subscribe(FileEditorManagerListener.FILE_EDITOR_MANAGER, new FileEditorManagerListener() {
@@ -37,25 +36,17 @@ public class LineMarkerProjectComponent extends AbstractProjectComponent {
                             GlobalSearchScope.fileScope(myProject, file));
                     assert psiFiles.length == 1;
                     PsiFile psiFile = psiFiles[0];
-                    for (PsiElement child : psiFile.getChildren()) {
-                        if (child instanceof PsiClass) {
-                            processMethods(((PsiClass) child), psiFile.getViewProvider().getDocument());
-                        }
+                    Document document = psiFile.getViewProvider().getDocument();
+                    if (document == null) {
+                        return;
                     }
-                }
-            }
-
-            private void processMethods(PsiClass psiClass, Document document) {
-                for (PsiElement maybeMethod : psiClass.getChildren()) {
-                    if (maybeMethod instanceof PsiMethod) {
-                        if (config.contains(((PsiMethod) maybeMethod))) {
-                            lineMarkersHolder.setIcon(
-                                    (PsiMethod) maybeMethod,
-                                    myProject,
-                                    document
-                            );
+                    lineMarkersHolder.updateFileMarkers(psiFile, document);
+                    document.addDocumentListener(new DocumentListener() {
+                        @Override
+                        public void documentChanged(DocumentEvent event) {
+                            lineMarkersHolder.updateFileMarkers(psiFile, event.getDocument());
                         }
-                    }
+                    });
                 }
             }
         });
