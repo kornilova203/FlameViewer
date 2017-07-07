@@ -41,7 +41,8 @@ class ProfilingMethodVisitor extends AdviceAdapter {
         getClassNameAndMethodName();
         mv.visitLdcInsn(methodDesc);
         getIsStatic();
-        getArrayWithParameters();
+//        getArrayWithParameters();
+        loadNull();
         addToQueue(Type.Enter);
     }
 

@@ -63,6 +63,13 @@ public class Logger implements Runnable {
     }
 
     private static EventProtos.Event.Exception formExceptionEventData(ExceptionEventData eventData) {
+        if (eventData.throwable == null) {
+            return EventProtos.Event.Exception.newBuilder()
+                    .setObject(EventProtos.Var.Object.newBuilder()
+                            .setValue("")
+                            .setType("")
+                            .build()).build();
+        }
         return EventProtos.Event.Exception.newBuilder()
                 .setObject(
                         EventProtos.Var.Object.newBuilder()
