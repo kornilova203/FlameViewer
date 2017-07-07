@@ -18,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 
-import static com.github.kornilova_l.plugin.config.ConfigStorage.Config.getQualifiedName;
+import static com.github.kornilova_l.plugin.config.ConfigStorage.Config.getQualifiedNameWithParams;
 
 public class LineMarkersHolder extends AbstractProjectComponent {
     private final HashMap<PsiMethod, RangeHighlighter> rangeHighlighters = new HashMap<>();
@@ -74,7 +74,7 @@ public class LineMarkersHolder extends AbstractProjectComponent {
     public void replaceMethodIfInConfig(String oldQualifiedName, PsiMethod newMethod) {
         if (config.methods.containsKey(oldQualifiedName)) {
             config.methods.remove(oldQualifiedName);
-            config.methods.put(getQualifiedName(newMethod), new MethodConfig(newMethod));
+            config.methods.put(getQualifiedNameWithParams(newMethod), new MethodConfig(newMethod));
         }
     }
 }

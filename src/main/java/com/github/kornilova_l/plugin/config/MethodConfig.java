@@ -5,24 +5,32 @@ import com.intellij.psi.PsiMethod;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+
+import static com.github.kornilova_l.plugin.config.ConfigStorage.Config.getParametersList;
+
 @SuppressWarnings("PublicField")
 public class MethodConfig implements Comparable<MethodConfig> {
 
-    @Nullable public String packageName;
+    @Nullable
+    public String packageName;
     public String methodName;
     public String className;
+    public List<Parameter> parameters;
     public boolean isEnabled = true;
 
+    @SuppressWarnings("unused")
     public MethodConfig() {
     }
 
     public MethodConfig(@NotNull PsiMethod psiMethod) {
         setNames(psiMethod);
+        System.out.println(this);
     }
 
     @Override
     public String toString() {
-        return getQualifiedName();
+        return getQualifiedName() + ConfigStorage.Config.parametersToString(parameters);
     }
 
     public String getQualifiedName() {
@@ -41,12 +49,13 @@ public class MethodConfig implements Comparable<MethodConfig> {
 
     @Override
     public int compareTo(@NotNull MethodConfig o) {
-        return getQualifiedName().compareTo(o.getQualifiedName());
+        return toString().compareTo(o.toString());
     }
 
     private void setNames(PsiMethod psiMethod) {
         className = null;
         methodName = psiMethod.getName();
+        parameters = getParametersList(psiMethod.getParameterList().getParameters());
         PsiClass psiClass = psiMethod.getContainingClass();
         assert psiClass != null;
 
@@ -60,5 +69,19 @@ public class MethodConfig implements Comparable<MethodConfig> {
         assert fullName != null;
         int beginningOfClassName = fullName.indexOf(className);
         packageName = fullName.substring(0, beginningOfClassName - 1);
+    }
+
+    public static class Parameter {
+        public String type;
+        public String name;
+
+        @SuppressWarnings("unused")
+        Parameter() {
+        }
+
+        Parameter(String type, String name) {
+            this.type = type;
+            this.name = name;
+        }
     }
 }
