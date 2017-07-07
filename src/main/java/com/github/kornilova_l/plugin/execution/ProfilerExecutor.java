@@ -1,7 +1,7 @@
 package com.github.kornilova_l.plugin.execution;
 
 import com.intellij.execution.Executor;
-import com.intellij.icons.AllIcons;
+import com.intellij.openapi.util.IconLoader;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.wm.ToolWindowId;
 import org.jetbrains.annotations.NotNull;
@@ -10,6 +10,7 @@ import javax.swing.*;
 
 public class ProfilerExecutor extends Executor {
     public static final String EXECUTOR_ID = "Flamegraph-Profiler";
+    private static final Icon runIcon = IconLoader.getIcon("/icons/flame-run16.png", ProfilerExecutor.class);
 
     @Override
     public String getToolWindowId() {
@@ -18,13 +19,13 @@ public class ProfilerExecutor extends Executor {
 
     @Override
     public Icon getToolWindowIcon() {
-        return AllIcons.General.Add;
+        return runIcon;
     }
 
     @NotNull
     @Override
     public Icon getIcon() {
-        return AllIcons.General.Add;
+        return runIcon;
     }
 
     @Override

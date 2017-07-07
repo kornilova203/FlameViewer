@@ -60,6 +60,11 @@ task copyStatic(type: Copy) {
     into '/home/lk/java-profiling-plugin/build/idea-sandbox/system/flamegraph-profiler/static'
 }
 
+task copyIcons(type: Copy) {
+    from '/home/lk/java-profiling-plugin/icons'
+    into '/home/lk/java-profiling-plugin/build/idea-sandbox/plugins/java-profiling-plugin/classes/icons'
+}
+
 task('prepareAndRunIde', dependsOn: [copyStatic, build, jar]) {
     doLast {
         runIdea.execute()
