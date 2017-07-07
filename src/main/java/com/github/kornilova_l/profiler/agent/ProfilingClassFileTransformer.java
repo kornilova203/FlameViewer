@@ -41,14 +41,13 @@ class ProfilingClassFileTransformer implements ClassFileTransformer {
                 !className.startsWith("jdk") &&
                 !className.startsWith("com/sun") &&
                 !className.contains("ClassLoader") &&
-                hasSystemCLInChain(loader) &&
                 Configuration.isClassIncluded(className)) {
             ClassReader cr = new ClassReader(classfileBuffer);
             ClassWriter cw = new ClassWriter(cr, ClassWriter.COMPUTE_FRAMES);
             // uncomment for debugging
 //            TraceClassVisitor cv = new TraceClassVisitor(cw, new PrintWriter(System.out));
             // SKIP_FRAMES avoids visiting frames that will be ignored and recomputed from scratch in the class writer.
-            cr.accept(new ProfilingClassVisitor(cw, className), ClassReader.SKIP_FRAMES);
+            cr.accept(new ProfilingClassVisitor(cw, className, hasSystemCLInChain(loader)), ClassReader.SKIP_FRAMES);
 
             return cw.toByteArray();
         }

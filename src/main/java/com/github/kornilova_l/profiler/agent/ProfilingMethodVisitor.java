@@ -16,12 +16,14 @@ class ProfilingMethodVisitor extends AdviceAdapter {
     private final static String LOGGER_PACKAGE_NAME = "com/github/kornilova_l/profiler/logger/";
     private final String methodName;
     private final String className;
+    private final boolean hasSystemCL;
 
     ProfilingMethodVisitor(int access, String methodName, String desc,
-                           MethodVisitor mv, String className) {
+                           MethodVisitor mv, String className, boolean hasSystemCL) {
         super(Opcodes.ASM5, mv, access, methodName, desc);
         this.className = className;
         this.methodName = methodName;
+        this.hasSystemCL = hasSystemCL;
     }
 
     private static int getSizeOfRetVal(int opcode) {
@@ -56,8 +58,13 @@ class ProfilingMethodVisitor extends AdviceAdapter {
                 description = "(Ljava/lang/Throwable;JJ)V";
                 break;
         }
-        mv.visitMethodInsn(INVOKESTATIC, LOGGER_PACKAGE_NAME + "Logger", "addToQueue",
-                description, false);
+        if (hasSystemCL) {
+            mv.visitMethodInsn(INVOKESTATIC, LOGGER_PACKAGE_NAME + "Logger", "addToQueue",
+                    description, false);
+        } else {
+            mv.visitMethodInsn(INVOKESTATIC, LOGGER_PACKAGE_NAME + "Proxy", "addToQueue",
+                    description, false);
+        }
     }
 
     private void getArrayWithParameters() {

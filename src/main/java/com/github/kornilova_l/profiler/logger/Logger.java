@@ -14,9 +14,9 @@ public class Logger implements Runnable {
     private static final LinkedBlockingDeque<EventData> queue = new LinkedBlockingDeque<>();
     private static File file;
     private static OutputStream outputStream;
-    boolean isDone = true; // changes to false when queue is enqueued
     private static int countEventsAdded = 0;
     private static int countEventsLogged = 0;
+    boolean isDone = true; // changes to false when queue is enqueued
 
     public static void init() {
         file = ProfilerFileManager.createLogFile();
@@ -124,14 +124,55 @@ public class Logger implements Runnable {
         } else if (o instanceof Double) {
             varBuilder.setD((Double) o);
         } else { // object
-            varBuilder.setObject(
-                    EventProtos.Var.Object.newBuilder()
-                            .setType(o.getClass().toString())
-                            .setValue(o.toString())
-                            .build()
-            );
+            addObject(varBuilder, o);
+
         }
         return varBuilder.build();
+    }
+
+    private static void addObject(EventProtos.Var.Builder varBuilder, Object o) {
+        EventProtos.Var.Object.Builder objectBuilder = EventProtos.Var.Object.newBuilder();
+        objectBuilder.setType(o.getClass().toString());
+        try {
+            objectBuilder.setValue(o.toString());
+        } catch (Throwable throwable) {
+            objectBuilder.setValue("");
+        }
+        varBuilder.setObject(objectBuilder.build());
+    }
+
+    private static void writeToFile(EventProtos.Event event) {
+        try {
+            event.writeDelimitedTo(outputStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    static void printDataForHuman() {
+        try (InputStream inputStream = new FileInputStream(file)) {
+            EventProtos.Event event = EventProtos.Event.parseDelimitedFrom(inputStream);
+            while (event != null) {
+                System.out.println(event.toString());
+                event = EventProtos.Event.parseDelimitedFrom(inputStream);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    static void closeOutputStream() {
+        try {
+            outputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    static void printStatus() {
+        System.out.println("Events added: " + countEventsAdded +
+                " Events logged: " + countEventsLogged +
+                " Queue size: " + queue.size());
     }
 
     @Override
@@ -169,39 +210,5 @@ public class Logger implements Runnable {
         if (queue.size() == 0) {
             isDone = true;
         }
-    }
-
-    private static void writeToFile(EventProtos.Event event) {
-        try {
-            event.writeDelimitedTo(outputStream);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    static void printDataForHuman() {
-        try (InputStream inputStream = new FileInputStream(file)) {
-            EventProtos.Event event = EventProtos.Event.parseDelimitedFrom(inputStream);
-            while (event != null) {
-                System.out.println(event.toString());
-                event = EventProtos.Event.parseDelimitedFrom(inputStream);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    static void closeOutputStream() {
-        try {
-            outputStream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    static void printStatus() {
-        System.out.println("Events added: " + countEventsAdded +
-                " Events logged: " + countEventsLogged +
-                " Queue size: " + queue.size());
     }
 }

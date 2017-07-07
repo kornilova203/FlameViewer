@@ -6,10 +6,12 @@ import org.objectweb.asm.Opcodes;
 
 class ProfilingClassVisitor extends ClassVisitor {
     private final String className;
+    private final boolean hasSystemCL;
 
-    ProfilingClassVisitor(ClassVisitor cv, String className) {
+    ProfilingClassVisitor(ClassVisitor cv, String className, boolean hasSystemCL) {
         super(Opcodes.ASM5, cv);
         this.className = className;
+        this.hasSystemCL = hasSystemCL;
     }
 
     @Override
@@ -25,7 +27,7 @@ class ProfilingClassVisitor extends ClassVisitor {
                 (access & Opcodes.ACC_SYNTHETIC) == 0 &&  // exclude synthetic methods
                 Configuration.isMethodIncluded(className + "." + methodName) &&
                 !Configuration.isMethodExcluded(className + "." + methodName)) {
-            return new ProfilingMethodVisitor(access, methodName, desc, mv, className);
+            return new ProfilingMethodVisitor(access, methodName, desc, mv, className, hasSystemCL);
         }
         return mv;
     }
