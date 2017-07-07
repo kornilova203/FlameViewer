@@ -99,10 +99,19 @@ public class MethodConfig implements Comparable<MethodConfig> {
         return stringBuilder.toString();
     }
 
+    public String getWhichParamsAreEnabled() {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (Parameter parameter : parameters) {
+            stringBuilder.append(parameter.isEnable ? "y" : "n");
+        }
+        return stringBuilder.toString();
+    }
+
     public static class Parameter {
         public String type;
         public String name;
         public String jvmType;
+        public boolean isEnable = false;
 
         @SuppressWarnings("unused")
         Parameter() {
