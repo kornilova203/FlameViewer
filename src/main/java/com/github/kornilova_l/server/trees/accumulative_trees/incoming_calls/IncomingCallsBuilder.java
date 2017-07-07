@@ -2,6 +2,8 @@ package com.github.kornilova_l.server.trees.accumulative_trees.incoming_calls;
 
 import com.github.kornilova_l.protos.TreeProtos;
 import com.github.kornilova_l.server.trees.TreeBuilderInterface;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,13 +14,17 @@ import static com.github.kornilova_l.server.trees.accumulative_trees.Accumulativ
 
 public final class IncomingCallsBuilder implements TreeBuilderInterface {
     private TreeProtos.Tree.Builder treeBuilder;
-    private TreeProtos.Tree tree;
+    @Nullable private final TreeProtos.Tree tree;
     private int maxDepth = 0;
 
-    public IncomingCallsBuilder(TreeProtos.Tree outgoingCalls) {
+    public IncomingCallsBuilder(@NotNull TreeProtos.Tree outgoingCalls) {
         initTreeBuilder();
         for (TreeProtos.Tree.Node node : outgoingCalls.getBaseNode().getNodesList()) {
             traverseTree(node, 0);
+        }
+        if (treeBuilder.getBaseNode().getNodesCount() == 0) {
+            tree = null;
+            return;
         }
         setNodesOffsetRecursively(treeBuilder.getBaseNodeBuilder(), 0);
         setTreeWidth(treeBuilder);
@@ -26,6 +32,7 @@ public final class IncomingCallsBuilder implements TreeBuilderInterface {
         tree = treeBuilder.build();
     }
 
+    @Nullable
     public TreeProtos.Tree getTree() {
         return tree;
     }

@@ -8,6 +8,8 @@ import com.github.kornilova_l.server.trees.call_tree.CallTreesBuilder;
 import com.github.kornilova_l.server.trees.accumulative_trees.incoming_calls.IncomingCallsBuilder;
 import com.github.kornilova_l.server.trees.accumulative_trees.outgoing_calls.OutgoingCallsBuilder;
 import com.intellij.openapi.diagnostic.Logger;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.*;
 import java.util.HashMap;
@@ -19,14 +21,15 @@ public class TreeManager {
     private static final Logger LOG = Logger.getInstance(TreeManager.class);
     private File logFile;
     private String fileName = "";
-    private TreesProtos.Trees originalTrees;
-    private TreeProtos.Tree outgoingCalls;
+    @Nullable private TreesProtos.Trees originalTrees;
+    @Nullable private TreeProtos.Tree outgoingCalls;
     private final HashMap<String, TreeProtos.Tree> methodOutgoingCalls = new HashMap<>();
-    private TreeProtos.Tree incomingCalls;
+    @Nullable private TreeProtos.Tree incomingCalls;
     private final HashMap<String, TreeProtos.Tree> methodIncomingCalls = new HashMap<>();
 
     private void updateLogFile(String fileName) {
         if (!Objects.equals(this.fileName, fileName)) {
+            this.fileName = fileName;
             removeTrees();
             logFile = new File(ProfilerFileManager.getFilePath(fileName));
         }
@@ -45,6 +48,7 @@ public class TreeManager {
      *
      * @return TreesProtos.Trees. Returning Trees object may not hove any Tree objects inside.
      */
+    @Nullable
     public TreesProtos.Trees getCallTree(String fileName) {
         updateLogFile(fileName);
         if (originalTrees == null) {
@@ -58,20 +62,32 @@ public class TreeManager {
      *
      * @return TreeProtos.Tree object. Tree may not have any nodes inside (if all methods took <1ms)
      */
+    @Nullable
     public TreeProtos.Tree getOutgoingCalls(String fileName) {
         updateLogFile(fileName);
         if (outgoingCalls == null) {
-            outgoingCalls = new OutgoingCallsBuilder(getCallTree(fileName)).getTree();
+            getCallTree(fileName);
+            if (originalTrees == null) {
+                return null;
+            }
+            outgoingCalls = new OutgoingCallsBuilder(originalTrees).getTree();
         }
         return outgoingCalls;
     }
 
+    @Nullable
     public TreeProtos.Tree getOutgoingCalls(Map<String, List<String>> parameters) {
-        return getTreeForMethod(parameters, getOutgoingCalls(parameters.get("file").get(0)), methodOutgoingCalls);
+        updateLogFile(fileName);
+        getOutgoingCalls(parameters.get("file").get(0));
+        if (outgoingCalls == null) {
+            return null;
+        }
+        return getTreeForMethod(parameters, outgoingCalls, methodOutgoingCalls);
     }
 
+    @Nullable
     private static TreeProtos.Tree getTreeForMethod(Map<String, List<String>> parameters,
-                                                    TreeProtos.Tree sourceTree,
+                                                    @NotNull TreeProtos.Tree sourceTree,
                                                     HashMap<String, TreeProtos.Tree> map) {
         String className = getParamForKey(parameters, "class");
         String methodName = getParamForKey(parameters, "method");
@@ -93,16 +109,28 @@ public class TreeManager {
         );
     }
 
+    @Nullable
     public TreeProtos.Tree getIncomingCalls(String fileName) {
         updateLogFile(fileName);
         if (incomingCalls == null) {
-            incomingCalls = new IncomingCallsBuilder(getOutgoingCalls(fileName)).getTree();
+            getOutgoingCalls(fileName);
+            if (outgoingCalls == null) {
+                return null;
+            }
+            incomingCalls = new IncomingCallsBuilder(outgoingCalls).getTree();
         }
         return incomingCalls;
     }
 
+    @Nullable
     public TreeProtos.Tree getIncomingCalls(Map<String, List<String>> parameters) {
-        return getTreeForMethod(parameters, getIncomingCalls(parameters.get("file").get(0)), methodIncomingCalls);
+        String fileName = parameters.get("file").get(0);
+        updateLogFile(fileName);
+        getIncomingCalls(fileName);
+        if (incomingCalls == null) {
+            return null;
+        }
+        return getTreeForMethod(parameters, incomingCalls, methodIncomingCalls);
     }
 
     private static String getParamForKey(Map<String, List<String>> parameters, String key) {

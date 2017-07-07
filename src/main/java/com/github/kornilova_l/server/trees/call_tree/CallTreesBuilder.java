@@ -3,7 +3,7 @@ package com.github.kornilova_l.server.trees.call_tree;
 import com.github.kornilova_l.protos.EventProtos;
 import com.github.kornilova_l.protos.TreeProtos;
 import com.github.kornilova_l.protos.TreesProtos;
-import com.github.kornilova_l.server.trees.TreeBuilderInterface;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -14,7 +14,7 @@ import java.util.HashMap;
 public class CallTreesBuilder {
     private static final com.intellij.openapi.diagnostic.Logger LOG =
             com.intellij.openapi.diagnostic.Logger.getInstance(CallTreesBuilder.class);
-    private TreesProtos.Trees trees = null;
+    @Nullable private TreesProtos.Trees trees = null;
 
     public CallTreesBuilder(File logFile) {
         try (InputStream inputStream = new FileInputStream(logFile)) {
@@ -36,10 +36,12 @@ public class CallTreesBuilder {
         }
     }
 
+    @Nullable
     public TreesProtos.Trees getTrees() {
         return trees;
     }
 
+    @Nullable
     private static TreesProtos.Trees HashMapToTrees(HashMap<Long, CTBuilder> trees, long timeOfLastEvent) {
         TreesProtos.Trees.Builder treesBuilder = TreesProtos.Trees.newBuilder();
         for (CTBuilder oTBuilder : trees.values()) {
@@ -49,6 +51,9 @@ public class CallTreesBuilder {
                         tree
                 );
             }
+        }
+        if (treesBuilder.getTreesCount() == 0) {
+            return null;
         }
         return treesBuilder.build();
     }

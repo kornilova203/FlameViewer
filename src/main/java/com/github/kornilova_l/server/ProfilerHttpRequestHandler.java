@@ -11,6 +11,7 @@ import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.*;
 import org.apache.commons.compress.utils.IOUtils;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.ide.HttpRequestHandler;
 
 import java.io.*;
@@ -20,6 +21,89 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
     private static final com.intellij.openapi.diagnostic.Logger LOG =
             com.intellij.openapi.diagnostic.Logger.getInstance(ProfilerHttpRequestHandler.class);
     private final TreeManager treeManager = new TreeManager();
+
+    private static byte[] renderPage(String htmlFile, String logFile) {
+        htmlFile = htmlFile.replaceFirst("/[^/]+/", ProfilerFileManager.getStaticDir().getAbsolutePath() + "/");
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(new File(htmlFile)))) {
+            return String.join("", bufferedReader.lines()
+                    .map((line) -> line.replaceAll("\\{\\{ *fileName *}}", logFile)) // {{ fileName }}
+                    .toArray(String[]::new)).getBytes();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private static void sendFileList(ChannelHandlerContext context) {
+        String json = new Gson().toJson(
+                ProfilerFileManager.getFileNameList()
+        );
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        try {
+            outputStream.write(json.getBytes());
+            sendBytes(context, "application/json", outputStream.toByteArray());
+        } catch (IOException e) {
+            LOG.error(e);
+        }
+    }
+
+    private static void sendTrees(ChannelHandlerContext context,
+                                  @Nullable TreesProtos.Trees trees) {
+        if (trees == null) {
+            sendBytes(context, "application/octet-stream", new byte[0]);
+            return;
+        }
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        try {
+            trees.writeTo(outputStream);
+            sendBytes(context, "application/octet-stream", outputStream.toByteArray());
+        } catch (IOException e) {
+            LOG.error(e);
+        }
+    }
+
+    private static void sendTree(ChannelHandlerContext context,
+                                 @Nullable TreeProtos.Tree tree) {
+        if (tree == null) {
+            sendBytes(context, "application/octet-stream", new byte[0]);
+            return;
+        }
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        try {
+            tree.writeTo(outputStream);
+            sendBytes(context, "application/octet-stream", outputStream.toByteArray());
+        } catch (IOException e) {
+            LOG.error(e);
+        }
+    }
+
+    private static void sendStatic(ChannelHandlerContext context,
+                                   String fileName,
+                                   String contentType) throws IOException {
+        LOG.info("Got filename: " + fileName);
+        String filePath = fileName.replaceFirst("/[^/]+/", ProfilerFileManager.getStaticDir().getAbsolutePath() + "/");
+        LOG.info("This file will be sent: " + filePath);
+        try (
+                InputStream inputStream = new FileInputStream(
+                        new File(filePath)
+                )
+        ) {
+            sendBytes(context, contentType, IOUtils.toByteArray(inputStream));
+        }
+    }
+
+    private static void sendBytes(ChannelHandlerContext context,
+                                  String contentType,
+                                  byte[] bytes) {
+        FullHttpResponse response = new DefaultFullHttpResponse(
+                HttpVersion.HTTP_1_1,
+                HttpResponseStatus.OK,
+                Unpooled.wrappedBuffer(bytes)
+        );
+        response.headers().set("Content-Type", contentType);
+        ChannelFuture f = context.channel().writeAndFlush(response);
+        f.addListener(ChannelFutureListener.CLOSE);
+    }
 
     @Override
     public boolean process(QueryStringDecoder urlDecoder,
@@ -109,80 +193,5 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
                 }
         }
         return true;
-    }
-
-    private static byte[] renderPage(String htmlFile, String logFile) {
-        htmlFile = htmlFile.replaceFirst("/[^/]+/", ProfilerFileManager.getStaticDir().getAbsolutePath() + "/");
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(new File(htmlFile)))) {
-            return String.join("", bufferedReader.lines()
-                    .map((line) -> line.replaceAll("\\{\\{ *fileName *\\}\\}", logFile)) // {{ fileName }}
-                    .toArray(String[]::new)).getBytes();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    private static void sendFileList(ChannelHandlerContext context) {
-        String json = new Gson().toJson(
-                ProfilerFileManager.getFileNameList()
-        );
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        try {
-            outputStream.write(json.getBytes());
-            sendBytes(context, "application/json", outputStream.toByteArray());
-        } catch (IOException e) {
-            LOG.error(e);
-        }
-    }
-
-    private static void sendTrees(ChannelHandlerContext context,
-                                  TreesProtos.Trees trees) {
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        try {
-            trees.writeTo(outputStream);
-            sendBytes(context, "application/octet-stream", outputStream.toByteArray());
-        } catch (IOException e) {
-            LOG.error(e);
-        }
-    }
-
-    private static void sendTree(ChannelHandlerContext context,
-                                 TreeProtos.Tree tree) {
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        try {
-            tree.writeTo(outputStream);
-            sendBytes(context, "application/octet-stream", outputStream.toByteArray());
-        } catch (IOException e) {
-            LOG.error(e);
-        }
-    }
-
-    private static void sendStatic(ChannelHandlerContext context,
-                                   String fileName,
-                                   String contentType) throws IOException {
-        LOG.info("Got filename: " + fileName);
-        String filePath = fileName.replaceFirst("/[^/]+/", ProfilerFileManager.getStaticDir().getAbsolutePath() + "/");
-        LOG.info("This file will be sent: " + filePath);
-        try (
-                InputStream inputStream = new FileInputStream(
-                        new File(filePath)
-                )
-        ) {
-            sendBytes(context, contentType, IOUtils.toByteArray(inputStream));
-        }
-    }
-
-    private static void sendBytes(ChannelHandlerContext context,
-                                  String contentType,
-                                  byte[] bytes) {
-        FullHttpResponse response = new DefaultFullHttpResponse(
-                HttpVersion.HTTP_1_1,
-                HttpResponseStatus.OK,
-                Unpooled.wrappedBuffer(bytes)
-        );
-        response.headers().set("Content-Type", contentType);
-        ChannelFuture f = context.channel().writeAndFlush(response);
-        f.addListener(ChannelFutureListener.CLOSE);
     }
 }

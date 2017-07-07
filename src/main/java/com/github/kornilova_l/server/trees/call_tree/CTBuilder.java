@@ -2,13 +2,14 @@ package com.github.kornilova_l.server.trees.call_tree;
 
 import com.github.kornilova_l.protos.EventProtos;
 import com.github.kornilova_l.protos.TreeProtos;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedList;
 
 class CTBuilder {
     private LinkedList<TreeProtos.Tree.Node.Builder> callStack;
     private TreeProtos.Tree.Builder treeBuilder = TreeProtos.Tree.newBuilder();
-    private TreeProtos.Tree tree = null;
+    @Nullable private TreeProtos.Tree tree = null;
     private int maxDepth = 0;
     private int currentDepth = 0;
 
@@ -95,7 +96,11 @@ class CTBuilder {
 
     private void buildTree(long timeOfLastEvent) {
         if (callStack.size() == 1) { // if call stack has only one base node (everything is okay)
-            finishTreeBuilding(timeOfLastEvent);
+            if (callStack.getFirst().getNodesCount() == 0) { // if tree is empty
+                tree = null;
+                return;
+            }
+            finishTreeBuilding();
         } else { // something went wrong
             finishAllCallsInStack(timeOfLastEvent);
         }
@@ -103,7 +108,7 @@ class CTBuilder {
         treeBuilder = null;
     }
 
-    private void finishTreeBuilding(long timeOfLastEvent) {
+    private void finishTreeBuilding() {
         TreeProtos.Tree.Node.Builder baseNode = callStack.removeFirst();
         treeBuilder.setBaseNode(baseNode);
         TreeProtos.Tree.Node lastFinishedNode = baseNode.getNodes(baseNode.getNodesCount() - 1);
@@ -128,18 +133,22 @@ class CTBuilder {
             unfinishedNode.setWidth(treeWidth - unfinishedNode.getOffset());
             addNodeToParent(unfinishedNode);
         }
-        finishTreeBuilding(timeOfLastEvent);
+        finishTreeBuilding();
     }
 
     /**
      * @param timeOfLastEvent time of last event is needed if tree has any unfinished methods
      * @return built Tree of null if tree is empty
      */
+    @Nullable
     TreeProtos.Tree getBuiltTree(long timeOfLastEvent) {
         if (tree == null) {
             buildTree(timeOfLastEvent);
         }
-        if (tree.getBaseNode().getNodesCount() == 0) { // if all methods took <1ms
+        if (tree == null ||
+                tree.getBaseNode() == null ||
+                tree.getBaseNode().getNodesList() == null ||
+                tree.getBaseNode().getNodesCount() == 0) {
             return null;
         }
         return tree;

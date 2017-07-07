@@ -3,6 +3,8 @@ package com.github.kornilova_l.server.trees.accumulative_trees.outgoing_calls;
 import com.github.kornilova_l.protos.TreeProtos;
 import com.github.kornilova_l.protos.TreesProtos;
 import com.github.kornilova_l.server.trees.TreeBuilderInterface;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import static com.github.kornilova_l.server.trees.accumulative_trees.AccumulativeTreesHelper.setNodesOffsetRecursively;
 import static com.github.kornilova_l.server.trees.accumulative_trees.AccumulativeTreesHelper.setTreeWidth;
@@ -10,13 +12,17 @@ import static com.github.kornilova_l.server.trees.accumulative_trees.Accumulativ
 
 public final class OutgoingCallsBuilder implements TreeBuilderInterface {
     private TreeProtos.Tree.Builder treeBuilder;
-    private TreeProtos.Tree tree;
+    @Nullable private final TreeProtos.Tree tree;
     private int maxDepth = 0;
 
-    public OutgoingCallsBuilder(TreesProtos.Trees callTrees) {
+    public OutgoingCallsBuilder(@NotNull TreesProtos.Trees callTrees) {
         initTreeBuilder();
         for (TreeProtos.Tree callTree : callTrees.getTreesList()) {
             addTree(treeBuilder.getBaseNodeBuilder(), callTree.getBaseNode());
+        }
+        if (treeBuilder.getBaseNode().getNodesCount() == 0) {
+            tree = null;
+            return;
         }
         setNodesOffsetRecursively(treeBuilder.getBaseNodeBuilder(), 0);
         setTreeWidth(treeBuilder);
@@ -24,6 +30,7 @@ public final class OutgoingCallsBuilder implements TreeBuilderInterface {
         tree = treeBuilder.build();
     }
 
+    @Nullable
     public TreeProtos.Tree getTree() {
         return tree;
     }
