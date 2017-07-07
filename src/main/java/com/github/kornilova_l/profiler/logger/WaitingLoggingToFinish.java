@@ -5,18 +5,19 @@ package com.github.kornilova_l.profiler.logger;
  * it waits for daemon Logger-thread to finish logging
  */
 public class WaitingLoggingToFinish extends Thread {
-    public WaitingLoggingToFinish(String name) {
+    Logger logger;
+    public WaitingLoggingToFinish(String name, Logger logger) {
         super(name);
+        this.logger = logger;
     }
 
     @Override
     public void run() {
-        Logger logger = Logger.getInstance();
-        logger.printStatus();
+        Logger.printStatus();
         while (!logger.isDone) { // wait for logger to log all events
             Thread.yield();
         }
-        logger.closeOutputStream();
-        logger.printDataForHuman();
+        Logger.closeOutputStream();
+        Logger.printDataForHuman();
     }
 }

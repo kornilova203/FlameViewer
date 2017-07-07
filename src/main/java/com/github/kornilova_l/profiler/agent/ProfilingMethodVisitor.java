@@ -10,12 +10,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 class ProfilingMethodVisitor extends AdviceAdapter {
-    private final String methodName;
-    private final String className;
     private final static Pattern allParamsPattern = Pattern.compile("(\\(.*\\))");
     private final static Pattern paramsPattern = Pattern.compile("(\\[?)(C|Z|S|I|J|F|D|B|(:?L[^;]+;))");
     private final static Pattern returnTypePattern = Pattern.compile("(?<=\\)).*"); // (?<=\)).*
     private final static String LOGGER_PACKAGE_NAME = "com/github/kornilova_l/profiler/logger/";
+    private final String methodName;
+    private final String className;
 
     ProfilingMethodVisitor(int access, String methodName, String desc,
                            MethodVisitor mv, String className) {
@@ -24,56 +24,40 @@ class ProfilingMethodVisitor extends AdviceAdapter {
         this.methodName = methodName;
     }
 
+    private static int getSizeOfRetVal(int opcode) {
+        if (opcode == LRETURN || // long
+                opcode == DRETURN) { // double
+            return 2;
+        }
+        return 1;
+    }
+
     @Override
     protected void onMethodEnter() {
-//        printMessage("execute method: " + className + "." + methodName);
-//        printInstanceOfLogger();
-        getLogger();
-        createEventData("Enter");
         getThreadId();
         getTime();
         getClassNameAndMethodName();
         mv.visitLdcInsn(methodDesc);
         getIsStatic();
         getArrayWithParameters();
-        initEnterEventData();
-        addToQueue();
+        addToQueue(Type.Enter);
     }
 
-    private void printInstanceOfLogger() {
-        printMessage("print result of Logger.getInstance()");
-        visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
-        getLogger();
-        visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "println",
-                "(Ljava/lang/Object;)V", false);
-    }
-
-    private void getLogger() {
-        visitMethodInsn(INVOKESTATIC, LOGGER_PACKAGE_NAME + "Logger",
-                "getInstance", "()Lcom/github/kornilova_l/profiler/logger/Logger;", false);
-    }
-
-    private void printMessage(String message) {
-        mv.visitFieldInsn(GETSTATIC, "java/lang/System", "out",
-                "Ljava/io/PrintStream;");
-        mv.visitLdcInsn(message);
-        mv.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream",
-                "println", "(Ljava/lang/String;)V", false);
-    }
-
-    private void addToQueue() {
-        mv.visitMethodInsn(INVOKEVIRTUAL, LOGGER_PACKAGE_NAME + "Logger", "addToQueue",
-                "(Lcom/github/kornilova_l/profiler/logger/EventData;)V", false);
-    }
-
-    private void initEnterEventData() {
-        mv.visitMethodInsn(INVOKESPECIAL, LOGGER_PACKAGE_NAME + "EnterEventData", "<init>",
-                "(JJLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Z[Ljava/lang/Object;)V", false);
-    }
-
-    private void createEventData(String type) {
-        mv.visitTypeInsn(NEW, LOGGER_PACKAGE_NAME + type + "EventData");
-        mv.visitInsn(DUP);
+    private void addToQueue(Type type) {
+        String description = null;
+        switch (type) {
+            case Enter:
+                description = "(JJLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Z[Ljava/lang/Object;)V";
+                break;
+            case Exit:
+                description = "(Ljava/lang/Object;JJ)V";
+                break;
+            case Exception:
+                description = "(Ljava/lang/Throwable;JJ)V";
+                break;
+        }
+        mv.visitMethodInsn(INVOKESTATIC, LOGGER_PACKAGE_NAME + "Logger", "addToQueue",
+                description, false);
     }
 
     private void getArrayWithParameters() {
@@ -283,41 +267,19 @@ class ProfilingMethodVisitor extends AdviceAdapter {
     protected void onMethodExit(int opcode) {
         if (opcode == ATHROW) {
             dup();
-            getLogger();
-            swapRetValAndLogger(1);
-            createEventData("Exception");
-            swapRetValAndEvent(1);
             getThreadId();
             getTime();
-            initExceptionEventData();
-            addToQueue();
+            addToQueue(Type.Exception);
             return;
         }
-        if (opcode == RETURN) {
-            getLogger();
-            createEventData("Exit");
-        } else { // return some value
+        if (opcode != RETURN) { // return some value
             int sizeOfRetVal = getSizeOfRetVal(opcode);
             dupRetVal(sizeOfRetVal);
-            getLogger();
-            swapRetValAndLogger(sizeOfRetVal);
-            createEventData("Exit");
-            swapRetValAndEvent(sizeOfRetVal);
         }
         retValToObj();
         getThreadId();
         getTime();
-        initExitEventData();
-        addToQueue();
-    }
-
-    private void swapRetValAndLogger(int sizeOfRetVal) {
-        if (sizeOfRetVal == 1) {
-            swap();
-        } else {
-            dupX2();
-            pop();
-        }
+        addToQueue(Type.Exit);
     }
 
     private void retValToObj() {
@@ -362,25 +324,6 @@ class ProfilingMethodVisitor extends AdviceAdapter {
         }
     }
 
-    private void initExitEventData() {
-        mv.visitMethodInsn(INVOKESPECIAL, LOGGER_PACKAGE_NAME + "ExitEventData", "<init>",
-                "(Ljava/lang/Object;JJ)V", false);
-    }
-
-    private void initExceptionEventData() {
-        mv.visitMethodInsn(INVOKESPECIAL, LOGGER_PACKAGE_NAME + "ExceptionEventData", "<init>",
-                "(Ljava/lang/Throwable;JJ)V", false);
-    }
-
-    private void swapRetValAndEvent(int sizeOfRetVal) {
-        if (sizeOfRetVal == 1) {
-            dup2X1();
-        } else {
-            dup2X2();
-        }
-        pop2();
-    }
-
     private void dupRetVal(int sizeOfRetVal) {
         if (sizeOfRetVal == 1) {
             dup();
@@ -390,11 +333,9 @@ class ProfilingMethodVisitor extends AdviceAdapter {
 
     }
 
-    private static int getSizeOfRetVal(int opcode) {
-        if (opcode == LRETURN || // long
-                opcode == DRETURN) { // double
-            return 2;
-        }
-        return 1;
+    private enum Type {
+        Exit,
+        Enter,
+        Exception
     }
 }

@@ -52,6 +52,7 @@ jar {
         attributes "Premain-Class": "com.github.kornilova_l.profiler.agent.Agent"
     }
     archiveName = 'javaagent.jar'
+    exclude('com/github/kornilova_l/plugin/**')
     includeEmptyDirs = false
 }
 
