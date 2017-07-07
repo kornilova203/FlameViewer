@@ -6,6 +6,7 @@ import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiParameter;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.*;
 import java.util.*;
 
 @State(name = "flamegraph-profiler")
@@ -89,6 +90,16 @@ public class ConfigStorage implements PersistentStateComponent<ConfigStorage.Con
          */
         public void addMethod(@NotNull PsiMethod psiMethod) {
             methods.put(getQualifiedNameWithParams(psiMethod), new MethodConfig(psiMethod));
+        }
+
+        public void exportConfig(@NotNull File file) {
+            try (OutputStream outputStream = new FileOutputStream(file)) {
+                for (MethodConfig methodConfig : methods.values()) {
+                    outputStream.write((methodConfig.toStringForConfig() + "\n").getBytes());
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

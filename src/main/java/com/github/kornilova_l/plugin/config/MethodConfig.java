@@ -8,6 +8,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 import static com.github.kornilova_l.plugin.config.ConfigStorage.Config.getParametersList;
+import static com.github.kornilova_l.plugin.config.ConfigStorage.Config.parametersToString;
 
 @SuppressWarnings("PublicField")
 public class MethodConfig implements Comparable<MethodConfig> {
@@ -69,6 +70,10 @@ public class MethodConfig implements Comparable<MethodConfig> {
         assert fullName != null;
         int beginningOfClassName = fullName.indexOf(className);
         packageName = fullName.substring(0, beginningOfClassName - 1);
+    }
+
+    public String toStringForConfig() {
+        return getQualifiedNameWithSlashes() + parametersToString(parameters);
     }
 
     public static class Parameter {

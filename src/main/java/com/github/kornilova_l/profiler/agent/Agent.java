@@ -12,7 +12,7 @@ public class Agent {
     public static void premain(String config, Instrumentation inst) throws IOException {
         System.out.println("I am an agent!");
         String[] parameters = config.split("&");
-        ProfilerFileManager.setPathToLogDir(parameters[0]);
+        ProfilerFileManager.setPathToPluginDir(parameters[0]);
         Logger.init();
         inst.addTransformer(
                 new ProfilingClassFileTransformer(

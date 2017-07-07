@@ -10,21 +10,22 @@ import java.util.stream.Collectors;
 
 public class ProfilerFileManager {
 
-    private static String LOG_DIR_PATH = null;
     private static final String EVENTS_DIR_NAME = "events";
-    private static File logDir;
+    private static final String CONFIG_DIR_NAME = "config";
     private static final int FILE_NAME_LENGTH = 4;
     private static final String PLUGIN_DIR_NAME = "/flamegraph-profiler";
+    private static String PLUGIN_DIR_PATH = null;
+    private static File logDir;
 
     private static File getLogDir() {
-        assert(LOG_DIR_PATH != null);
-        createIfNotExist(LOG_DIR_PATH);
-        return createIfNotExist(LOG_DIR_PATH + "/" + EVENTS_DIR_NAME);
+        assert (PLUGIN_DIR_PATH != null);
+        createIfNotExist(PLUGIN_DIR_PATH);
+        return createIfNotExist(PLUGIN_DIR_PATH + "/" + EVENTS_DIR_NAME);
     }
 
-    public static void setPathToLogDir(String logDir) {
-        LOG_DIR_PATH = logDir + PLUGIN_DIR_NAME;
-        System.out.println("Path was set: " + LOG_DIR_PATH);
+    public static void setPathToPluginDir(String systemDir) {
+        PLUGIN_DIR_PATH = systemDir + PLUGIN_DIR_NAME;
+        System.out.println("Path was set: " + PLUGIN_DIR_PATH);
     }
 
     public static File createLogFile() {
@@ -86,7 +87,7 @@ public class ProfilerFileManager {
     }
 
     public static File getStaticDir() {
-        return new File( PathManager.getSystemPath() + PLUGIN_DIR_NAME + "/static");
+        return new File(PathManager.getSystemPath() + PLUGIN_DIR_NAME + "/static");
     }
 
     public static List<String> getFileNameList() {
@@ -115,5 +116,12 @@ public class ProfilerFileManager {
 
     public static String getFilePath(String fileName) {
         return logDir.getAbsolutePath() + "/" + fileName;
+    }
+
+    public static File getConfigFile(String projectName) {
+        assert (PLUGIN_DIR_PATH != null);
+        createIfNotExist(PLUGIN_DIR_PATH);
+        File configDir = createIfNotExist(PLUGIN_DIR_PATH + "/" + CONFIG_DIR_NAME);
+        return new File(configDir.getAbsolutePath() + "/" + projectName + ".config");
     }
 }
