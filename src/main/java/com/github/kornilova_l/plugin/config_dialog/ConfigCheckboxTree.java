@@ -1,6 +1,6 @@
 package com.github.kornilova_l.plugin.config_dialog;
 
-import com.github.kornilova_l.plugin.config.MethodConfig;
+import com.github.kornilova_l.config.MethodConfig;
 import com.intellij.icons.AllIcons;
 import com.intellij.ui.*;
 import com.intellij.util.ui.tree.TreeUtil;

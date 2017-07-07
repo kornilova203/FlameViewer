@@ -1,6 +1,6 @@
 package com.github.kornilova_l.plugin.config_dialog;
 
-import com.github.kornilova_l.plugin.config.MethodConfig;
+import com.github.kornilova_l.config.MethodConfig;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;

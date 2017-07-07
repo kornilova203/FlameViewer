@@ -1,4 +1,4 @@
-package com.github.kornilova_l.plugin.config;
+package com.github.kornilova_l.config;
 
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.State;
@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 
-import static com.github.kornilova_l.plugin.config.MethodConfig.parametersToString;
+import static com.github.kornilova_l.config.MethodConfig.parametersToString;
 
 @State(name = "flamegraph-profiler")
 public class ConfigStorage implements PersistentStateComponent<ConfigStorage.Config> {

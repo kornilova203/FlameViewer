@@ -1,8 +1,8 @@
 package com.github.kornilova_l.plugin.config_dialog;
 
 import com.github.kornilova_l.plugin.ProjectConfigManager;
-import com.github.kornilova_l.plugin.config.ConfigStorage;
-import com.github.kornilova_l.plugin.config.MethodConfig;
+import com.github.kornilova_l.config.ConfigStorage;
+import com.github.kornilova_l.config.MethodConfig;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.ui.*;

@@ -1,7 +1,6 @@
 package com.github.kornilova_l.plugin.execution;
 
-import com.github.kornilova_l.plugin.config.MethodConfig;
-import com.github.kornilova_l.plugin.config.ConfigStorage;
+import com.github.kornilova_l.config.ConfigStorage;
 import com.github.kornilova_l.profiler.ProfilerFileManager;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.*;
@@ -12,6 +11,7 @@ import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
 import java.util.Objects;
 
 /**
@@ -41,18 +41,13 @@ public class ProfilerProgramRunner extends DefaultJavaProgramRunner {
         assert (config != null);
         assert (project != null);
         ProfilerFileManager.setPathToPluginDir(PathManager.getSystemPath());
-        config.exportConfig(ProfilerFileManager.getConfigFile(project.getName()));
-        StringBuilder configString = new StringBuilder();
-        for (MethodConfig methodConfig : config.methods.values()) {
-            if (methodConfig.isEnabled) {
-                configString.append("&").append(methodConfig.getQualifiedNameWithSlashes());
-            }
-        }
-        // package_name/ClassName.methodName
+        File configFile = ProfilerFileManager.getConfigFile(project.getName());
+        config.exportConfig(configFile);
         javaParameters.getVMParametersList().add(
                 "-javaagent:/home/lk/java-profiling-plugin/build/libs/javaagent.jar=" +
                         PathManager.getSystemPath() +
-                        configString.toString()
+                        "&" +
+                        configFile.getAbsolutePath()
         );
     }
 

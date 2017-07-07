@@ -1,29 +1,30 @@
 package com.github.kornilova_l.profiler.agent;
 
+import com.github.kornilova_l.config.MethodConfig;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.commons.AdviceAdapter;
 
-import java.util.ArrayList;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 class ProfilingMethodVisitor extends AdviceAdapter {
     private final static Pattern allParamsPattern = Pattern.compile("(\\(.*\\))");
-    private final static Pattern paramsPattern = Pattern.compile("(\\[?)(C|Z|S|I|J|F|D|B|(:?L[^;]+;))");
     private final static Pattern returnTypePattern = Pattern.compile("(?<=\\)).*"); // (?<=\)).*
     private final static String LOGGER_PACKAGE_NAME = "com/github/kornilova_l/profiler/logger/";
     private final String methodName;
     private final String className;
     private final boolean hasSystemCL;
+    private final MethodConfig methodConfig;
 
     ProfilingMethodVisitor(int access, String methodName, String desc,
-                           MethodVisitor mv, String className, boolean hasSystemCL) {
+                           MethodVisitor mv, String className, boolean hasSystemCL, MethodConfig methodConfig) {
         super(Opcodes.ASM5, mv, access, methodName, desc);
         this.className = className;
         this.methodName = methodName;
         this.hasSystemCL = hasSystemCL;
+        this.methodConfig = methodConfig;
     }
 
     private static int getSizeOfRetVal(int opcode) {
@@ -41,8 +42,12 @@ class ProfilingMethodVisitor extends AdviceAdapter {
         getClassNameAndMethodName();
         mv.visitLdcInsn(methodDesc);
         getIsStatic();
-//        getArrayWithParameters();
-        loadNull();
+        int countEnabledParams = (int) methodConfig.parameters.stream().filter((parameter -> parameter.isEnable)).count();
+        if (countEnabledParams > 0) { // if at least one parameter is enabled
+            getArrayWithParameters(countEnabledParams);
+        } else {
+            loadNull();
+        }
         addToQueue(Type.Enter);
     }
 
@@ -68,45 +73,27 @@ class ProfilingMethodVisitor extends AdviceAdapter {
         }
     }
 
-    private void getArrayWithParameters() {
-        String[] parametersDesc = getParamsDesc();
-        int arraySize = 0;
-        if (parametersDesc != null) {
-            arraySize = parametersDesc.length;
+    private void getArrayWithParameters(int arraySize) {
+        createObjArray(arraySize);
+        int posOfParam = 0;
+        if (!isStatic()) {
+            posOfParam = 1;
         }
-        if (arraySize == 0 && isStatic()) { // null instead of Object[]
-            loadNull();
-        } else {
-            if (!isStatic() && !Objects.equals(methodName, "<init>")) {
-                arraySize++;
+        int index = 0;
+        for (int i = 0; i < methodConfig.parameters.size(); i++) {
+            MethodConfig.Parameter parameter = methodConfig.parameters.get(i);
+            if (parameter.isEnable) {
+                mv.visitInsn(DUP); // array reference
+                getIConst(index++); // index of element
+                paramToObj(parameter.jvmType, posOfParam);
+                visitInsn(AASTORE); // load obj to array
             }
-            createObjArray(arraySize);
-            int index = 0;
-            int posOfFirstParam = 0;
-            if (!isStatic()) { // appendThis
-                if (!Objects.equals(methodName, "<init>")) {
-                    loadThisToArr();
-                }
-                index = 1;
-                posOfFirstParam = 1;
-            }
-            if (parametersDesc != null) {
-                loadParametersToArray(parametersDesc, index, posOfFirstParam);
-            }
+            posOfParam = getObjSize(parameter.jvmType);
         }
     }
 
     private void loadNull() {
         mv.visitInsn(ACONST_NULL);
-    }
-
-    private void loadParametersToArray(String[] parametersDesc, int index, int posOfFirstParam) {
-        for (String pDesc : parametersDesc) {
-            mv.visitInsn(DUP); // array reference
-            getIConst(index++); // index of element
-            posOfFirstParam = paramToObj(pDesc, posOfFirstParam);
-            visitInsn(AASTORE); // load obj to array
-        }
     }
 
     private void createObjArray(int arraySize) {
@@ -121,53 +108,60 @@ class ProfilingMethodVisitor extends AdviceAdapter {
         visitInsn(AASTORE); // load obj to array
     }
 
-    private int paramToObj(String paramDesc, int pos) {
+    private void paramToObj(String paramDesc, int pos) {
         switch (paramDesc) {
             case "I": // int
                 mv.visitVarInsn(ILOAD, pos);
                 intToObj();
-                pos++;
                 break;
             case "J": // long
                 mv.visitVarInsn(LLOAD, pos);
                 longToObj();
-                pos += 2;
                 break;
             case "Z": // boolean
                 mv.visitVarInsn(ILOAD, pos);
                 booleanToObj();
-                pos++;
                 break;
             case "C": // char
                 mv.visitVarInsn(ILOAD, pos);
                 charToObj();
-                pos++;
                 break;
             case "S": // short
                 mv.visitVarInsn(ILOAD, pos);
                 shortToObj();
-                pos++;
                 break;
             case "B": // byte
                 mv.visitVarInsn(ILOAD, pos);
                 byteToObj();
-                pos++;
                 break;
             case "F": // float
                 mv.visitVarInsn(FLOAD, pos);
                 floatToObj();
-                pos++;
                 break;
             case "D": // double
                 mv.visitVarInsn(DLOAD, pos);
                 doubleToObj();
-                pos += 2;
                 break;
             default: // object
                 mv.visitVarInsn(ALOAD, pos);
-                pos++;
         }
-        return pos;
+    }
+
+    private static int getObjSize(String paramDesc) {
+        switch (paramDesc) {
+            case "Z": // boolean
+            case "I": // int
+            case "C": // char
+            case "S": // short
+            case "B": // byte
+            case "F": // float
+                return 1;
+            case "J": // long
+            case "D": // double
+                return 2;
+            default: // object
+                return 1;
+        }
     }
 
     private void doubleToObj() {
@@ -240,22 +234,6 @@ class ProfilingMethodVisitor extends AdviceAdapter {
         mv.visitMethodInsn(INVOKESTATIC, "java/lang/Thread", "currentThread",
                 "()Ljava/lang/Thread;", false);
         mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Thread", "getId", "()J", false);
-    }
-
-
-    private String[] getParamsDesc() {
-        ArrayList<String> paramsDesc = new ArrayList<>();
-        String desc = getPartOfDescWithParam();
-        Matcher m = paramsPattern.matcher(desc);
-        while (m.find()) {
-            paramsDesc.add(m.group());
-        }
-        if (paramsDesc.isEmpty()) {
-            return null;
-        }
-        String[] ret = new String[paramsDesc.size()];
-        paramsDesc.toArray(ret);
-        return ret;
     }
 
     private String getPartOfDescWithParam() {

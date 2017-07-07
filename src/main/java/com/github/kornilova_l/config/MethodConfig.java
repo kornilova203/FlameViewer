@@ -1,22 +1,26 @@
-package com.github.kornilova_l.plugin.config;
+package com.github.kornilova_l.config;
 
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import static com.github.kornilova_l.plugin.config.ConfigStorage.Config.getParametersList;
+import static com.github.kornilova_l.config.ConfigStorage.Config.getParametersList;
 
 @SuppressWarnings("PublicField")
 public class MethodConfig implements Comparable<MethodConfig> {
-
+    private final static Pattern paramsPattern = Pattern.compile("(\\[?)(C|Z|S|I|J|F|D|B|(:?L[^;]+;))");
     @Nullable
     public String packageName;
     public String methodName;
     public String className;
-    public List<Parameter> parameters;
+    public List<Parameter> parameters = new LinkedList<>();
     public boolean isEnabled = true;
 
     @SuppressWarnings("unused")
@@ -26,6 +30,10 @@ public class MethodConfig implements Comparable<MethodConfig> {
     public MethodConfig(@NotNull PsiMethod psiMethod) {
         setNames(psiMethod);
         System.out.println(this);
+    }
+
+    public MethodConfig(String methodConfigLine) {
+        setNames(methodConfigLine);
     }
 
     static String parametersToString(List<MethodConfig.Parameter> parameters) {
@@ -40,6 +48,56 @@ public class MethodConfig implements Comparable<MethodConfig> {
         }
         stringBuilder.append(")");
         return stringBuilder.toString();
+    }
+
+    public static String parametersToStringForJvm(List<Parameter> parameters) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("(");
+        for (Parameter parameter : parameters) {
+            stringBuilder.append(parameter.jvmType);
+        }
+        stringBuilder.append(")");
+        return stringBuilder.toString();
+    }
+
+    @Nullable
+    public static String[] getParamsDesc(String partOfDescWithParams) {
+        ArrayList<String> paramsDesc = new ArrayList<>();
+        Matcher m = paramsPattern.matcher(partOfDescWithParams);
+        while (m.find()) {
+            paramsDesc.add(m.group());
+        }
+        if (paramsDesc.isEmpty()) {
+            return null;
+        }
+        String[] ret = new String[paramsDesc.size()];
+        paramsDesc.toArray(ret);
+        return ret;
+    }
+
+    private void setNames(String methodConfigLine) {
+        String packageAndClass = methodConfigLine.substring(0, methodConfigLine.indexOf("."));
+        packageName = packageAndClass.substring(0, packageAndClass.lastIndexOf("/"));
+        className = packageAndClass.substring(
+                packageAndClass.lastIndexOf("/") + 1, packageAndClass.length());
+        methodName = methodConfigLine.substring(methodConfigLine.indexOf(".") + 1, methodConfigLine.indexOf("("));
+        String[] jvmTypes = getParamsDesc(
+                methodConfigLine.substring(methodConfigLine.indexOf("("), methodConfigLine.indexOf(" "))
+        );
+        if (jvmTypes == null) {
+            return;
+        }
+        for (String jvmType : jvmTypes) {
+            parameters.add(new Parameter(jvmType));
+        }
+        setParametersEnabled(parameters, methodConfigLine.substring(methodConfigLine.indexOf(" ") + 1, methodConfigLine.length()));
+    }
+
+    private static void setParametersEnabled(List<Parameter> parameters, String isEnabledString) {
+        assert parameters.size() == isEnabledString.length();
+        for (int i = 0; i < isEnabledString.length(); i++) {
+            parameters.get(i).isEnable = isEnabledString.charAt(i) == 'y';
+        }
     }
 
     @Override
@@ -89,16 +147,6 @@ public class MethodConfig implements Comparable<MethodConfig> {
         return getQualifiedNameWithSlashes() + parametersToStringForJvm(parameters);
     }
 
-    private static String parametersToStringForJvm(List<Parameter> parameters) {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("(");
-        for (Parameter parameter : parameters) {
-            stringBuilder.append(parameter.jvmType);
-        }
-        stringBuilder.append(")");
-        return stringBuilder.toString();
-    }
-
     public String getWhichParamsAreEnabled() {
         StringBuilder stringBuilder = new StringBuilder();
         for (Parameter parameter : parameters) {
@@ -125,6 +173,10 @@ public class MethodConfig implements Comparable<MethodConfig> {
         Parameter(String type, String name, String jvmType) {
             this.type = type;
             this.name = name;
+            this.jvmType = jvmType;
+        }
+
+        Parameter(String jvmType) {
             this.jvmType = jvmType;
         }
     }

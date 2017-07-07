@@ -1,8 +1,8 @@
 package com.github.kornilova_l.plugin.gutter;
 
 import com.github.kornilova_l.plugin.ProjectConfigManager;
-import com.github.kornilova_l.plugin.config.ConfigStorage;
-import com.github.kornilova_l.plugin.config.MethodConfig;
+import com.github.kornilova_l.config.ConfigStorage;
+import com.github.kornilova_l.config.MethodConfig;
 import com.intellij.openapi.components.AbstractProjectComponent;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.ex.MarkupModelEx;
@@ -18,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 
-import static com.github.kornilova_l.plugin.config.ConfigStorage.Config.getQualifiedNameWithParams;
+import static com.github.kornilova_l.config.ConfigStorage.Config.getQualifiedNameWithParams;
 
 public class LineMarkersHolder extends AbstractProjectComponent {
     private final HashMap<PsiMethod, RangeHighlighter> rangeHighlighters = new HashMap<>();

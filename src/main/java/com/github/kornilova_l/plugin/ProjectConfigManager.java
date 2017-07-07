@@ -1,7 +1,6 @@
 package com.github.kornilova_l.plugin;
 
-import com.github.kornilova_l.plugin.config.ConfigStorage;
-import com.github.kornilova_l.plugin.config.ConfigStorage.Config;
+import com.github.kornilova_l.config.ConfigStorage;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
