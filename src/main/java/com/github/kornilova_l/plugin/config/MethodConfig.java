@@ -8,7 +8,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 import static com.github.kornilova_l.plugin.config.ConfigStorage.Config.getParametersList;
-import static com.github.kornilova_l.plugin.config.ConfigStorage.Config.parametersToString;
 
 @SuppressWarnings("PublicField")
 public class MethodConfig implements Comparable<MethodConfig> {
@@ -29,9 +28,23 @@ public class MethodConfig implements Comparable<MethodConfig> {
         System.out.println(this);
     }
 
+    static String parametersToString(List<MethodConfig.Parameter> parameters) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("(");
+        for (int i = 0; i < parameters.size(); i++) {
+            MethodConfig.Parameter parameter = parameters.get(i);
+            stringBuilder.append(parameter.type).append(" ").append(parameter.name);
+            if (i != parameters.size() - 1) {
+                stringBuilder.append(", ");
+            }
+        }
+        stringBuilder.append(")");
+        return stringBuilder.toString();
+    }
+
     @Override
     public String toString() {
-        return getQualifiedName() + ConfigStorage.Config.parametersToString(parameters);
+        return getQualifiedName() + parametersToString(parameters);
     }
 
     public String getQualifiedName() {
@@ -72,13 +85,24 @@ public class MethodConfig implements Comparable<MethodConfig> {
         packageName = fullName.substring(0, beginningOfClassName - 1);
     }
 
-    public String toStringForConfig() {
-        return getQualifiedNameWithSlashes() + parametersToString(parameters);
+    public String toStringForJvm() {
+        return getQualifiedNameWithSlashes() + parametersToStringForJvm(parameters);
+    }
+
+    private static String parametersToStringForJvm(List<Parameter> parameters) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("(");
+        for (Parameter parameter : parameters) {
+            stringBuilder.append(parameter.jvmType);
+        }
+        stringBuilder.append(")");
+        return stringBuilder.toString();
     }
 
     public static class Parameter {
         public String type;
         public String name;
+        public String jvmType;
 
         @SuppressWarnings("unused")
         Parameter() {
@@ -87,6 +111,12 @@ public class MethodConfig implements Comparable<MethodConfig> {
         Parameter(String type, String name) {
             this.type = type;
             this.name = name;
+        }
+
+        Parameter(String type, String name, String jvmType) {
+            this.type = type;
+            this.name = name;
+            this.jvmType = jvmType;
         }
     }
 }
