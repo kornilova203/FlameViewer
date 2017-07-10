@@ -49,10 +49,14 @@ h1 {
     text-align: center;
 }
 
-form {
+.file-form {
     width: 100%;
-    text-align: center;
     margin-bottom: 20px;
+}
+
+.file-form-header {
+    float: left;
+    margin-right: 10px;
 }
 
 section {
@@ -117,10 +121,11 @@ section {
     color: white;
     background-color: #18A3FA;
     display: inline-block;
-    padding: 15px 25px;
+    padding: 10px 15px 8px;
     border-radius: 30px;
     margin-bottom: 20px;
     font-weight: bold;
+    margin-top: 7px;
 }
 
 .inputfile + label:hover {
@@ -174,6 +179,8 @@ nav ul li a:hover, .current-link {
     margin-left: calc(700px / 2 + 150px / 2 + 50px);
     margin-top: 5px;
     pointer-events: none;
+    width: 100%;
+    text-align: center;
 }
 
 #search input[type="text"] {
@@ -236,4 +243,9 @@ nav ul li a:hover, .current-link {
 
 .no-file-found {
     text-align: center;
+}
+
+.extension-error {
+    float: right;
+    color: rgba(138,18,11,0.84);
 }
