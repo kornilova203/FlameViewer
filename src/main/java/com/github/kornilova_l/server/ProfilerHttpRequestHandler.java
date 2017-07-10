@@ -110,13 +110,13 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
         f.addListener(ChannelFutureListener.CLOSE);
     }
 
-    private static boolean processPostMethod(QueryStringDecoder urlDecoder, FullHttpRequest fullHttpRequest, ChannelHandlerContext context) {
+    private boolean processPostMethod(QueryStringDecoder urlDecoder, FullHttpRequest fullHttpRequest, ChannelHandlerContext context) {
         String uri = urlDecoder.path(); // without get parameters
         if (Objects.equals(uri, ServerNames.UPLOAD_FILE)) {
             String fileName = fullHttpRequest.headers().get("File-Name");
             LOG.info("Got file: " + fileName);
             if (supportedExtension(fileName)) {
-//                ProfilerFileManager.saveFile(fullHttpRequest.content(), fileName);
+                fileManager.saveFile(fullHttpRequest.content(), fileName);
                 sendStatus(HttpResponseStatus.OK, context.channel());
                 return true;
             }

@@ -1,9 +1,10 @@
 package com.github.kornilova_l.profiler;
 
+import io.netty.buffer.ByteBuf;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.File;
+import java.io.*;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -120,5 +121,16 @@ public class ProfilerFileManager {
                     .collect(Collectors.toList());
         }
         return list;
+    }
+
+    public void saveFile(ByteBuf content, String fileName) {
+        File file = new File(logDir.getAbsolutePath() + "/" + fileName);
+        try(OutputStream outputStream = new FileOutputStream(file)) {
+            byte[] bytes = new byte[content.readableBytes()];
+            content.readBytes(bytes);
+            outputStream.write(bytes);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
