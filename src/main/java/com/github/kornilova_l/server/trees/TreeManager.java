@@ -26,12 +26,17 @@ public class TreeManager {
     private final HashMap<String, TreeProtos.Tree> methodOutgoingCalls = new HashMap<>();
     @Nullable private TreeProtos.Tree incomingCalls;
     private final HashMap<String, TreeProtos.Tree> methodIncomingCalls = new HashMap<>();
+    private final ProfilerFileManager fileManager;
+
+    public TreeManager(ProfilerFileManager fileManager) {
+        this.fileManager = fileManager;
+    }
 
     private void updateLogFile(String fileName) {
         if (!Objects.equals(this.fileName, fileName)) {
             this.fileName = fileName;
             removeTrees();
-            logFile = new File(ProfilerFileManager.getFilePath(fileName));
+            logFile = new File(fileManager.getFilePath(fileName));
         }
     }
 

@@ -40,8 +40,8 @@ public class ProfilerProgramRunner extends DefaultJavaProgramRunner {
                       boolean beforeExecution) throws ExecutionException {
         assert (config != null);
         assert (project != null);
-        ProfilerFileManager.setPathToPluginDir(PathManager.getSystemPath());
-        File configFile = ProfilerFileManager.getConfigFile(project.getName());
+        ProfilerFileManager fileManager = new ProfilerFileManager(PathManager.getSystemPath());
+        File configFile = fileManager.getConfigFile(project.getName());
         config.exportConfig(configFile);
         javaParameters.getVMParametersList().add(
                 "-javaagent:/home/lk/java-profiling-plugin/build/libs/javaagent.jar=" +

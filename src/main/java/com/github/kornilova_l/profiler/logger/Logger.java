@@ -18,8 +18,8 @@ public class Logger implements Runnable {
     private static int countEventsLogged = 0;
     boolean isDone = true; // changes to false when queue is enqueued
 
-    public static void init() {
-        file = ProfilerFileManager.createLogFile();
+    public static void init(ProfilerFileManager profilerFileManager) {
+        file = profilerFileManager.createLogFile();
         System.out.println("Output file: " + file);
         OutputStream temp = null;
         try {

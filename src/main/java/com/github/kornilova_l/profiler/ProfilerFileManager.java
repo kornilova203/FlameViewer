@@ -1,6 +1,7 @@
 package com.github.kornilova_l.profiler;
 
-import com.intellij.openapi.application.PathManager;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.*;
@@ -9,29 +10,27 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class ProfilerFileManager {
-
-    private static final String EVENTS_DIR_NAME = "events";
-    private static final String CONFIG_DIR_NAME = "config";
-    private static final int FILE_NAME_LENGTH = 4;
     private static final String PLUGIN_DIR_NAME = "/flamegraph-profiler";
-    private static String PLUGIN_DIR_PATH = null;
-    private static File logDir;
+    private static final String LOG_DIR_NAME = "events";
+    private static final String CONFIG_DIR_NAME = "config";
+    private static final String STATIC_DIR_NAME = "static";
+    private static final int FILE_NAME_LENGTH = 4;
+    @NotNull
+    private final File logDir;
+    @NotNull
+    private final File staticDir;
+    @NotNull
+    private final File configDir;
 
-    private static File getLogDir() {
-        assert (PLUGIN_DIR_PATH != null);
-        createIfNotExist(PLUGIN_DIR_PATH);
-        return createIfNotExist(PLUGIN_DIR_PATH + "/" + EVENTS_DIR_NAME);
-    }
-
-    public static void setPathToPluginDir(String systemDir) {
-        PLUGIN_DIR_PATH = systemDir + PLUGIN_DIR_NAME;
-        System.out.println("Path was set: " + PLUGIN_DIR_PATH);
-    }
-
-    public static File createLogFile() {
-        logDir = getLogDir();
-        int max = getLargestFileNum();
-        return new File(logDir.getAbsolutePath() + "/" + intToString(max + 1) + ".ser");
+    public ProfilerFileManager(String systemDirPath) {
+        String pluginDirPath = systemDirPath + PLUGIN_DIR_NAME;
+        createDirIfNotExist(new File(pluginDirPath));
+        logDir = new File(pluginDirPath + "/" + LOG_DIR_NAME);
+        createDirIfNotExist(logDir);
+        staticDir = new File(pluginDirPath + "/" + STATIC_DIR_NAME);
+        createDirIfNotExist(staticDir);
+        configDir = new File(pluginDirPath + "/" + CONFIG_DIR_NAME);
+        createDirIfNotExist(configDir);
     }
 
     /**
@@ -50,7 +49,32 @@ public class ProfilerFileManager {
         return string.toString();
     }
 
-    public static File getLatestFile() {
+    private static void createDirIfNotExist(@NotNull File dir) {
+        if (!dir.exists()) {
+            try {
+                //noinspection ResultOfMethodCallIgnored
+                dir.mkdir();
+            } catch (SecurityException se) {
+                se.printStackTrace();
+            }
+        }
+    }
+
+    public String getFilePath(String fileName) {
+        return logDir.getAbsolutePath() + "/" + fileName;
+    }
+
+    public File getConfigFile(String projectName) {
+        return new File(configDir.getAbsolutePath() + "/" + projectName + ".config");
+    }
+
+    public File createLogFile() {
+        int max = getLargestFileNum();
+        return new File(logDir.getAbsolutePath() + "/" + intToString(max + 1) + ".ser");
+    }
+
+    @Nullable
+    public File getLatestFile() {
         File[] files = logDir.listFiles();
         if (files != null) {
             Optional<File> fileOptional = Arrays.stream(files)
@@ -62,7 +86,7 @@ public class ProfilerFileManager {
         return null;
     }
 
-    private static int getLargestFileNum() {
+    private int getLargestFileNum() {
         File latestFile = getLatestFile();
         if (latestFile != null) {
             Matcher m = Pattern.compile("[0-9]+").matcher(latestFile.getName());
@@ -73,55 +97,28 @@ public class ProfilerFileManager {
         return 0;
     }
 
-    private static File createIfNotExist(String dirPath) {
-        File dir = new File(dirPath);
-        if (!dir.exists()) {
-            try {
-                //noinspection ResultOfMethodCallIgnored
-                dir.mkdir();
-            } catch (SecurityException se) {
-                se.printStackTrace();
-            }
-        }
-        return dir;
+    @NotNull
+    public File getStaticDir() {
+        return staticDir;
     }
 
-    public static File getStaticDir() {
-        return new File(PathManager.getSystemPath() + PLUGIN_DIR_NAME + "/static");
-    }
-
-    public static List<String> getFileNameList() {
+    public List<String> getFileNameList() {
         List<String> list = new LinkedList<>();
-        logDir = new File(PathManager.getSystemPath() + PLUGIN_DIR_NAME + "/events");
-        if (logDir.exists()) {
-            File[] files = logDir.listFiles();
-            if (files != null) {
-                list = Arrays.stream(files)
-                        .sorted((f1, f2) -> {
-                            if (f1.lastModified() == f2.lastModified()) {
-                                return 0;
-                            }
-                            if (f1.lastModified() < f2.lastModified()) {
-                                return 1;
-                            }
-                            return -1;
-                        })
-                        .map(File::getName)
-                        .collect(Collectors.toList());
-            }
-
+        File[] files = logDir.listFiles();
+        if (files != null) {
+            list = Arrays.stream(files)
+                    .sorted((f1, f2) -> {
+                        if (f1.lastModified() == f2.lastModified()) {
+                            return 0;
+                        }
+                        if (f1.lastModified() < f2.lastModified()) {
+                            return 1;
+                        }
+                        return -1;
+                    })
+                    .map(File::getName)
+                    .collect(Collectors.toList());
         }
         return list;
-    }
-
-    public static String getFilePath(String fileName) {
-        return logDir.getAbsolutePath() + "/" + fileName;
-    }
-
-    public static File getConfigFile(String projectName) {
-        assert (PLUGIN_DIR_PATH != null);
-        createIfNotExist(PLUGIN_DIR_PATH);
-        File configDir = createIfNotExist(PLUGIN_DIR_PATH + "/" + CONFIG_DIR_NAME);
-        return new File(configDir.getAbsolutePath() + "/" + projectName + ".config");
     }
 }

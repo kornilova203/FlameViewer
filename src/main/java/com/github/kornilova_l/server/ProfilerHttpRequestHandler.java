@@ -5,6 +5,7 @@ import com.github.kornilova_l.protos.TreeProtos;
 import com.github.kornilova_l.protos.TreesProtos;
 import com.github.kornilova_l.server.trees.TreeManager;
 import com.google.gson.Gson;
+import com.intellij.openapi.application.PathManager;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -23,10 +24,11 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
 
     private static final com.intellij.openapi.diagnostic.Logger LOG =
             com.intellij.openapi.diagnostic.Logger.getInstance(ProfilerHttpRequestHandler.class);
-    private final TreeManager treeManager = new TreeManager();
+    private final ProfilerFileManager fileManager = new ProfilerFileManager(PathManager.getSystemPath());
+    private final TreeManager treeManager = new TreeManager(fileManager);
 
-    private static byte[] renderPage(String htmlFile, String logFile) {
-        htmlFile = htmlFile.replaceFirst("/[^/]+/", ProfilerFileManager.getStaticDir().getAbsolutePath() + "/");
+    private byte[] renderPage(String htmlFile, String logFile) {
+        htmlFile = htmlFile.replaceFirst("/[^/]+/", fileManager.getStaticDir().getAbsolutePath() + "/");
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(new File(htmlFile)))) {
             return String.join("", bufferedReader.lines()
                     .map((line) -> line.replaceAll("\\{\\{ *fileName *}}", logFile)) // {{ fileName }}
@@ -37,9 +39,9 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
         return null;
     }
 
-    private static void sendFileList(ChannelHandlerContext context) {
+    private void sendFileList(ChannelHandlerContext context) {
         String json = new Gson().toJson(
-                ProfilerFileManager.getFileNameList()
+                fileManager.getFileNameList()
         );
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         try {
@@ -80,11 +82,11 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
         }
     }
 
-    private static void sendStatic(ChannelHandlerContext context,
+    private void sendStatic(ChannelHandlerContext context,
                                    String fileName,
                                    String contentType) throws IOException {
         LOG.info("Got filename: " + fileName);
-        String filePath = fileName.replaceFirst("/[^/]+/", ProfilerFileManager.getStaticDir().getAbsolutePath() + "/");
+        String filePath = fileName.replaceFirst("/[^/]+/", fileManager.getStaticDir().getAbsolutePath() + "/");
         LOG.info("This file will be sent: " + filePath);
         try (
                 InputStream inputStream = new FileInputStream(
@@ -111,8 +113,10 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
     private static boolean processPostMethod(QueryStringDecoder urlDecoder, FullHttpRequest fullHttpRequest, ChannelHandlerContext context) {
         String uri = urlDecoder.path(); // without get parameters
         if (Objects.equals(uri, ServerNames.UPLOAD_FILE)) {
-            LOG.info("Got file: " + fullHttpRequest.headers().get("File-Name"));
-            if (supportedExtension(fullHttpRequest.headers().get("File-Name"))) {
+            String fileName = fullHttpRequest.headers().get("File-Name");
+            LOG.info("Got file: " + fileName);
+            if (supportedExtension(fileName)) {
+//                ProfilerFileManager.saveFile(fullHttpRequest.content(), fileName);
                 sendStatus(HttpResponseStatus.OK, context.channel());
                 return true;
             }
