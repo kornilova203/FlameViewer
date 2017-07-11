@@ -77,7 +77,12 @@ public class MethodConfig implements Comparable<MethodConfig> {
 
     private void setNames(String methodConfigLine) {
         String packageAndClass = methodConfigLine.substring(0, methodConfigLine.indexOf("."));
-        packageName = packageAndClass.substring(0, packageAndClass.lastIndexOf("/"));
+        int slashPos = packageAndClass.lastIndexOf("/");
+        if (slashPos != -1) {
+            packageName = packageAndClass.substring(0, packageAndClass.lastIndexOf("/"));
+        } else {
+            packageName = "";
+        }
         className = packageAndClass.substring(
                 packageAndClass.lastIndexOf("/") + 1, packageAndClass.length());
         methodName = methodConfigLine.substring(methodConfigLine.indexOf(".") + 1, methodConfigLine.indexOf("("));
@@ -140,7 +145,11 @@ public class MethodConfig implements Comparable<MethodConfig> {
         String fullName = psiMethod.getContainingClass().getQualifiedName();
         assert fullName != null;
         int beginningOfClassName = fullName.indexOf(className);
-        packageName = fullName.substring(0, beginningOfClassName - 1);
+        if (beginningOfClassName != 0) {
+            packageName = fullName.substring(0, beginningOfClassName - 1);
+        } else {
+            packageName = "";
+        }
     }
 
     public String toStringForJvm() {
