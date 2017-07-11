@@ -118,7 +118,12 @@ public class ConfigStorage implements PersistentStateComponent<ConfigStorage.Con
                         throw new AssertionError("Not known primitive type");
                 }
             }
-            return "L" +
+            StringBuilder result = new StringBuilder();
+            for (int i = 0; i < typeElement.getType().getArrayDimensions(); i++) {
+                result.append("[");
+            }
+            return  result.toString() +
+                    "L" +
                     typeElement.getInnermostComponentReferenceElement().getQualifiedName().replaceAll("\\.", "/") +
                     ";";
         }
