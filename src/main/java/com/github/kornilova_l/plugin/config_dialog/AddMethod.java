@@ -9,7 +9,7 @@ import javax.swing.*;
 
 public class AddMethod extends DialogWrapper {
     private JPanel panel;
-    private JTextField classPatternTextField;
+    private JTextField classNameTextField;
     private JTextField methodNameTextField;
 
     protected AddMethod(@Nullable Project project) {
@@ -19,7 +19,7 @@ public class AddMethod extends DialogWrapper {
     }
 
     protected void doOKAction() {
-        if (getClassPattern().length() == 0) {
+        if (getClassName().length() == 0) {
             Messages.showErrorDialog(panel, "Class pattern not specified");
             return;
         }
@@ -30,8 +30,8 @@ public class AddMethod extends DialogWrapper {
         super.doOKAction();
     }
 
-    public String getClassPattern() {
-        return classPatternTextField.getText().trim();
+    public String getClassName() {
+        return classNameTextField.getText().trim();
     }
 
     public String getMethodName() {
