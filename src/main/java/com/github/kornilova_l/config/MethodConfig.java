@@ -81,7 +81,7 @@ public class MethodConfig implements Comparable<MethodConfig> {
         if (slashPos != -1) {
             packageName = packageAndClass.substring(0, packageAndClass.lastIndexOf("/"));
         } else {
-            packageName = "";
+            packageName = null;
         }
         className = packageAndClass.substring(
                 packageAndClass.lastIndexOf("/") + 1, packageAndClass.length());
@@ -148,7 +148,7 @@ public class MethodConfig implements Comparable<MethodConfig> {
         if (beginningOfClassName != 0) {
             packageName = fullName.substring(0, beginningOfClassName - 1);
         } else {
-            packageName = "";
+            packageName = null;
         }
     }
 
@@ -162,6 +162,12 @@ public class MethodConfig implements Comparable<MethodConfig> {
             stringBuilder.append(parameter.isEnable ? "y" : "n");
         }
         return stringBuilder.toString();
+    }
+
+    public Object getJvmClassName() {
+        return packageName == null ?
+                className :
+                packageName + "/" + className;
     }
 
     public static class Parameter {

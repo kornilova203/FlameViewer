@@ -56,7 +56,7 @@ class Configuration {
     static List<MethodConfig> findMethodsOfClass(String className) {
         List<MethodConfig> methodsOfClass = new LinkedList<>();
         for (MethodConfig methodConfig : methodConfigs) {
-            if (Objects.equals(methodConfig.packageName + "/" + methodConfig.className, className)) {
+            if (Objects.equals(methodConfig.getJvmClassName(), className)) {
                 methodsOfClass.add(methodConfig);
             }
         }
