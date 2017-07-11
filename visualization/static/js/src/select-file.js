@@ -9,10 +9,6 @@ function appendWrongExtension() {
     }
 }
 
-function removeWrongExtension() {
-    $(".extension-error").remove();
-}
-
 function sendFile(file) {
     const request = new XMLHttpRequest();
     request.onreadystatechange = (e) => {
@@ -21,8 +17,7 @@ function sendFile(file) {
                 appendWrongExtension();
                 break;
             case 200:
-                removeWrongExtension();
-                break;
+                location.reload();
         }
     };
     request.open("POST", "/flamegraph-profiler/upload-file", true);
