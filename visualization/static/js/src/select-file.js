@@ -9,15 +9,22 @@ function appendWrongExtension() {
     }
 }
 
-function sendFile(file) {
+function processStatuses(statuses) {
+    if (statuses.some((v) => v === 200)) { // if at least one file was loaded
+        location.reload();
+    } else {
+        appendWrongExtension();
+    }
+}
+
+function sendFile(file, statuses, fileCount) {
     const request = new XMLHttpRequest();
     request.onreadystatechange = (e) => {
-        switch (e.currentTarget.status) {
-            case 404:
-                appendWrongExtension();
-                break;
-            case 200:
-                location.reload();
+        if (request.readyState === 4) {
+            statuses.push(e.target.status);
+            if (statuses.length === fileCount) { // if all files was loaded
+                processStatuses(statuses);
+            }
         }
     };
     request.open("POST", "/flamegraph-profiler/upload-file", true);
@@ -29,12 +36,17 @@ function sendFile(file) {
 
 function listenInput() {
     $('#file').on('change', function (e) {
-        const file = e.target.files[0]; // FileList object
         const reader = new FileReader();
 
-        reader.onload = (function (theFile) {
-            sendFile(theFile);
-        })(file);
+        const statuses = [];
+
+        const fileCount = e.target.files.length;
+
+        for (let i = 0; i < fileCount; i++) {
+            reader.onload = (function (theFile) {
+                sendFile(theFile, statuses, fileCount);
+            })(e.target.files[i]);
+        }
     });
 }
 
