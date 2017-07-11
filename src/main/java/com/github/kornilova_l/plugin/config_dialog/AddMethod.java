@@ -9,8 +9,12 @@ import javax.swing.*;
 
 public class AddMethod extends DialogWrapper {
     private JPanel panel;
-    private JTextField classNameTextField;
-    private JTextField methodNameTextField;
+    private JTextField classPatternTextField;
+    private JTextField methodPatternTextField;
+    private JTextField parametersPatternTextField;
+    private JTextPane classDescription;
+    private JTextPane methodDescription;
+    private JTextPane parametersDescription;
 
     protected AddMethod(@Nullable Project project) {
         super(project);
@@ -19,28 +23,36 @@ public class AddMethod extends DialogWrapper {
     }
 
     protected void doOKAction() {
-        if (getClassName().length() == 0) {
+        if (getClassPattern().length() == 0) {
             Messages.showErrorDialog(panel, "Class pattern not specified");
             return;
         }
-        if (getMethodName().length() == 0) {
+        if (getMethodPattern().length() == 0) {
             Messages.showErrorDialog(panel, "Method name not specified");
             return;
         }
         super.doOKAction();
     }
 
-    public String getClassName() {
-        return classNameTextField.getText().trim();
+    public String getClassPattern() {
+        return classPatternTextField.getText().trim();
     }
 
-    public String getMethodName() {
-        return methodNameTextField.getText().trim();
+    public String getParametersPattern() {
+        return parametersPatternTextField.getText().trim();
+    }
+
+    public String getMethodPattern() {
+        return methodPatternTextField.getText().trim();
     }
 
     @Nullable
     @Override
     protected JComponent createCenterPanel() {
         return panel;
+    }
+
+    private void createUIComponents() {
+        // TODO: place custom component creation code here
     }
 }
