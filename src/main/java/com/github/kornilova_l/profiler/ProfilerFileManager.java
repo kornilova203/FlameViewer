@@ -11,6 +11,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class ProfilerFileManager {
+    private static final String DELIMITER = System.getProperty("os.name").startsWith("Windows") ? "\\" : "/";
     private static final String PLUGIN_DIR_NAME = "/flamegraph-profiler";
     private static final String LOG_DIR_NAME = "events";
     private static final String CONFIG_DIR_NAME = "config";
@@ -23,7 +24,7 @@ public class ProfilerFileManager {
     public ProfilerFileManager(@NotNull String systemDirPath) {
         PLUGIN_DIR_PATH = systemDirPath + PLUGIN_DIR_NAME;
         createDirIfNotExist(new File(PLUGIN_DIR_PATH));
-        logDir = new File(PLUGIN_DIR_PATH + "/" + LOG_DIR_NAME);
+        logDir = new File(PLUGIN_DIR_PATH + DELIMITER + LOG_DIR_NAME);
         createDirIfNotExist(logDir);
     }
 
@@ -55,18 +56,18 @@ public class ProfilerFileManager {
     }
 
     public String getFilePath(String fileName) {
-        return logDir.getAbsolutePath() + "/" + fileName;
+        return logDir.getAbsolutePath() + DELIMITER + fileName;
     }
 
     public File getConfigFile(String projectName) {
-        File configDir = new File(PLUGIN_DIR_PATH + "/" + CONFIG_DIR_NAME);
+        File configDir = new File(PLUGIN_DIR_PATH + DELIMITER + CONFIG_DIR_NAME);
         createDirIfNotExist(configDir);
-        return new File(configDir.getAbsolutePath() + "/" + projectName + ".config");
+        return new File(configDir.getAbsolutePath() + DELIMITER + projectName + ".config");
     }
 
     public File createLogFile() {
         int max = getLargestFileNum();
-        return new File(logDir.getAbsolutePath() + "/" + intToString(max + 1) + ".ser");
+        return new File(logDir.getAbsolutePath() + DELIMITER + intToString(max + 1) + ".ser");
     }
 
     @Nullable
@@ -94,8 +95,8 @@ public class ProfilerFileManager {
     }
 
     @NotNull
-    public File getStaticDir() {
-        return new File(getClass().getResource("/" + STATIC_DIR_NAME).getPath());
+    private File getStaticDir() {
+        return new File(getClass().getResource(DELIMITER + STATIC_DIR_NAME).getPath());
     }
 
     public List<String> getFileNameList() {
@@ -119,7 +120,7 @@ public class ProfilerFileManager {
     }
 
     public void saveFile(ByteBuf content, String fileName) {
-        File file = new File(logDir.getAbsolutePath() + "/" + fileName);
+        File file = new File(logDir.getAbsolutePath() + DELIMITER + fileName);
         try(OutputStream outputStream = new FileOutputStream(file)) {
             byte[] bytes = new byte[content.readableBytes()];
             content.readBytes(bytes);
@@ -127,5 +128,13 @@ public class ProfilerFileManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public String getStaticFilePath(String staticFileUri) {
+        String staticFilePath = staticFileUri.replaceFirst(
+                "/[^/]+/",
+                getStaticDir().getAbsolutePath() + DELIMITER
+        );
+        return staticFilePath.replaceAll("/", DELIMITER);
     }
 }

@@ -27,9 +27,9 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
     private final ProfilerFileManager fileManager = new ProfilerFileManager(PathManager.getSystemPath());
     private final TreeManager treeManager = new TreeManager(fileManager);
 
-    private byte[] renderPage(String htmlFile, String logFile) {
-        htmlFile = htmlFile.replaceFirst("/[^/]+/", fileManager.getStaticDir().getAbsolutePath() + "/");
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(new File(htmlFile)))) {
+    private byte[] renderPage(String htmlFilePath, String logFile) {
+        htmlFilePath = fileManager.getStaticFilePath(htmlFilePath);
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(new File(htmlFilePath)))) {
             return String.join("", bufferedReader.lines()
                     .map((line) -> line.replaceAll("\\{\\{ *fileName *}}", logFile)) // {{ fileName }}
                     .toArray(String[]::new)).getBytes();
@@ -83,10 +83,10 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
     }
 
     private void sendStatic(ChannelHandlerContext context,
-                                   String fileName,
+                                   String fileUri,
                                    String contentType) throws IOException {
-        LOG.info("Got filename: " + fileName);
-        String filePath = fileName.replaceFirst("/[^/]+/", fileManager.getStaticDir().getAbsolutePath() + "/");
+        LOG.info("Got filename: " + fileUri);
+        String filePath = fileManager.getStaticFilePath(fileUri);
         LOG.info("This file will be sent: " + filePath);
         try (
                 InputStream inputStream = new FileInputStream(
