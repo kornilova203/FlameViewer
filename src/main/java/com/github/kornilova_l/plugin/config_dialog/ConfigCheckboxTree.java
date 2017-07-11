@@ -78,8 +78,8 @@ public class ConfigCheckboxTree extends CheckboxTree {
         root.removeAllChildren();
         for (MethodConfig methodConfig : methods) {
             ConfigCheckedTreeNode packageNode = createChildIfNotPresent(root, methodConfig.packageName);
-            ConfigCheckedTreeNode classNode = createChildIfNotPresent(packageNode, methodConfig.className);
-            createChild(classNode, methodConfig.methodName);
+            ConfigCheckedTreeNode classNode = createChildIfNotPresent(packageNode, methodConfig.classPattern);
+            createChild(classNode, methodConfig.methodPattern);
         }
         model.nodeStructureChanged(root);
         TreeUtil.expandAll(this);

@@ -90,7 +90,7 @@ class Configuration {
     @Nullable
     public static MethodConfig getMethodIfPresent(List<MethodConfig> methodConfigs, String methodName, String desc) {
         for (MethodConfig methodConfig : methodConfigs) {
-            if (Objects.equals(methodConfig.methodName, methodName) &&
+            if (Objects.equals(methodConfig.methodPattern, methodName) &&
                     desc.startsWith(MethodConfig.parametersToStringForJvm(methodConfig.parameters))) {
                 return methodConfig;
             }

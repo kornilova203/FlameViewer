@@ -1,5 +1,6 @@
 package com.github.kornilova_l.plugin.config_dialog;
 
+import com.github.kornilova_l.plugin.ProjectConfigManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.AnActionButton;
 import com.intellij.ui.AnActionButtonRunnable;
@@ -17,5 +18,9 @@ public class AddNodeActionButton implements AnActionButtonRunnable {
         if (!dialog.showAndGet()) {
             return;
         }
+        ProjectConfigManager.getConfig(project).addMethod(
+                dialog.getClassPattern(),
+                dialog.getMethodPattern(),
+                dialog.getParametersPattern());
     }
 }

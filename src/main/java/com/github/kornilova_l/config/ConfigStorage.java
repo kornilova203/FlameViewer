@@ -168,5 +168,9 @@ public class ConfigStorage implements PersistentStateComponent<ConfigStorage.Con
                 e.printStackTrace();
             }
         }
+
+        public void addMethod(String classPattern, String methodPattern, String parametersPattern) {
+            methods.put(classPattern + "." + methodPattern + parametersPattern, new MethodConfig(classPattern, methodPattern, parametersPattern));
+        }
     }
 }

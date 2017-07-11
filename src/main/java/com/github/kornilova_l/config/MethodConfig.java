@@ -16,12 +16,11 @@ import static com.github.kornilova_l.config.ConfigStorage.Config.getParametersLi
 @SuppressWarnings("PublicField")
 public class MethodConfig implements Comparable<MethodConfig> {
     private final static Pattern paramsPattern = Pattern.compile("(\\[?)(C|Z|S|I|J|F|D|B|(:?L[^;]+;))");
-    @Nullable
-    public String packageName;
-    public String methodName;
-    public String className;
-    public List<Parameter> parameters = new LinkedList<>();
+    public String methodPattern;
+    public String classPattern;
+    public LinkedList<Parameter> parameters = new LinkedList<>();
     public boolean isEnabled = true;
+    public boolean saveReturnValue = false;
 
     @SuppressWarnings("unused")
     public MethodConfig() {
@@ -34,6 +33,19 @@ public class MethodConfig implements Comparable<MethodConfig> {
 
     public MethodConfig(String methodConfigLine) {
         setNames(methodConfigLine);
+    }
+
+    public MethodConfig(String classPattern, String methodPattern, String parametersPattern) {
+        this.classPattern = classPattern;
+        this.methodPattern = methodPattern;
+        if (parametersPattern.charAt(parametersPattern.length() - 1) == '+') {
+            saveReturnValue = true;
+        }
+        parametersPattern = parametersPattern.substring(1, parametersPattern.lastIndexOf(")"));
+        String[] stringParameters = parametersPattern.split(" *, *");
+        for (String stringParameter : stringParameters) {
+            parameters.addLast(new Parameter(stringParameter, ""));
+        }
     }
 
     static String parametersToString(List<MethodConfig.Parameter> parameters) {
@@ -83,9 +95,9 @@ public class MethodConfig implements Comparable<MethodConfig> {
         } else {
             packageName = null;
         }
-        className = packageAndClass.substring(
+        classPattern = packageAndClass.substring(
                 packageAndClass.lastIndexOf("/") + 1, packageAndClass.length());
-        methodName = methodConfigLine.substring(methodConfigLine.indexOf(".") + 1, methodConfigLine.indexOf("("));
+        methodPattern = methodConfigLine.substring(methodConfigLine.indexOf(".") + 1, methodConfigLine.indexOf("("));
         String[] jvmTypes = getParamsDesc(
                 methodConfigLine.substring(methodConfigLine.indexOf("("), methodConfigLine.indexOf(" "))
         );
@@ -112,16 +124,16 @@ public class MethodConfig implements Comparable<MethodConfig> {
 
     public String getQualifiedName() {
         if (packageName == null) {
-            return className + "." + methodName;
+            return classPattern + "." + methodPattern;
         }
-        return packageName + "." + className + "." + methodName;
+        return packageName + "." + classPattern + "." + methodPattern;
     }
 
     public String getQualifiedNameWithSlashes() {
         if (packageName == null) {
-            return className + "." + methodName;
+            return classPattern + "." + methodPattern;
         }
-        return packageName.replace(".", "/") + "/" + className + "." + methodName;
+        return packageName.replace(".", "/") + "/" + classPattern + "." + methodPattern;
     }
 
     @Override
@@ -130,21 +142,21 @@ public class MethodConfig implements Comparable<MethodConfig> {
     }
 
     private void setNames(PsiMethod psiMethod) {
-        className = null;
-        methodName = psiMethod.getName();
+        classPattern = null;
+        methodPattern = psiMethod.getName();
         parameters = getParametersList(psiMethod.getParameterList().getParameters());
         PsiClass psiClass = psiMethod.getContainingClass();
         assert psiClass != null;
 
         while (psiClass != null) {
-            className = className == null ?
+            classPattern = classPattern == null ?
                     psiClass.getName() :
-                    psiClass.getName() + "." + className;
+                    psiClass.getName() + "." + classPattern;
             psiClass = psiClass.getContainingClass();
         }
         String fullName = psiMethod.getContainingClass().getQualifiedName();
         assert fullName != null;
-        int beginningOfClassName = fullName.indexOf(className);
+        int beginningOfClassName = fullName.indexOf(classPattern);
         if (beginningOfClassName != 0) {
             packageName = fullName.substring(0, beginningOfClassName - 1);
         } else {
@@ -165,34 +177,21 @@ public class MethodConfig implements Comparable<MethodConfig> {
     }
 
     public Object getJvmClassName() {
-        return packageName == null ?
-                className :
-                packageName + "/" + className;
+        return classPattern.replaceAll("\\.", "/");
     }
 
     public static class Parameter {
         public String type;
         public String name;
-        public String jvmType;
         public boolean isEnable = false;
 
         @SuppressWarnings("unused")
         Parameter() {
         }
 
-        Parameter(String type, String name) {
+        Parameter(@NotNull String type, @NotNull String name) {
             this.type = type;
             this.name = name;
-        }
-
-        Parameter(String type, String name, String jvmType) {
-            this.type = type;
-            this.name = name;
-            this.jvmType = jvmType;
-        }
-
-        Parameter(String jvmType) {
-            this.jvmType = jvmType;
         }
     }
 }

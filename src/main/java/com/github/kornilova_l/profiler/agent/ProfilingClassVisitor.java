@@ -22,9 +22,9 @@ class ProfilingClassVisitor extends ClassVisitor {
     @Override
     public MethodVisitor visitMethod(int access, String methodName, String desc, String signature, String[] exceptions) {
         MethodVisitor mv = cv.visitMethod(access, methodName, desc, signature, exceptions);
-//        System.out.println("visit method: " + className + "." + methodName +
-//                " included? " + Configuration.isMethodIncluded(className + "." + methodName) +
-//                " excluded? " + Configuration.isMethodExcluded(className + "." + methodName));
+//        System.out.println("visit method: " + classPattern + "." + methodPattern +
+//                " included? " + Configuration.isMethodIncluded(classPattern + "." + methodPattern) +
+//                " excluded? " + Configuration.isMethodExcluded(classPattern + "." + methodPattern));
         if (mv != null &&
                 !methodName.equals("<init>") &&
                 !methodName.equals("toString") &&
