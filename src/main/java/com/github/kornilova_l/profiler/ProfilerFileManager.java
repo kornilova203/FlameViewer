@@ -15,22 +15,16 @@ public class ProfilerFileManager {
     private static final String LOG_DIR_NAME = "events";
     private static final String CONFIG_DIR_NAME = "config";
     private static final String STATIC_DIR_NAME = "static";
+    private final String PLUGIN_DIR_PATH;
     private static final int FILE_NAME_LENGTH = 4;
     @NotNull
     private final File logDir;
-    @NotNull
-    private final File staticDir;
-    @NotNull
-    private final File configDir;
 
-    public ProfilerFileManager(String systemDirPath) {
-        String pluginDirPath = systemDirPath + PLUGIN_DIR_NAME;
-        createDirIfNotExist(new File(pluginDirPath));
-        logDir = new File(pluginDirPath + "/" + LOG_DIR_NAME);
+    public ProfilerFileManager(@NotNull String systemDirPath) {
+        PLUGIN_DIR_PATH = systemDirPath + PLUGIN_DIR_NAME;
+        createDirIfNotExist(new File(PLUGIN_DIR_PATH));
+        logDir = new File(PLUGIN_DIR_PATH + "/" + LOG_DIR_NAME);
         createDirIfNotExist(logDir);
-        staticDir = new File(getClass().getResource("/static").getPath());
-        configDir = new File(pluginDirPath + "/" + CONFIG_DIR_NAME);
-        createDirIfNotExist(configDir);
     }
 
     /**
@@ -65,6 +59,8 @@ public class ProfilerFileManager {
     }
 
     public File getConfigFile(String projectName) {
+        File configDir = new File(PLUGIN_DIR_PATH + "/" + CONFIG_DIR_NAME);
+        createDirIfNotExist(configDir);
         return new File(configDir.getAbsolutePath() + "/" + projectName + ".config");
     }
 
@@ -99,7 +95,7 @@ public class ProfilerFileManager {
 
     @NotNull
     public File getStaticDir() {
-        return staticDir;
+        return new File(getClass().getResource("/" + STATIC_DIR_NAME).getPath());
     }
 
     public List<String> getFileNameList() {

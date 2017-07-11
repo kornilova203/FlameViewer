@@ -4,13 +4,16 @@ import com.github.kornilova_l.profiler.ProfilerFileManager;
 import com.github.kornilova_l.profiler.logger.Logger;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.lang.instrument.Instrumentation;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+@SuppressWarnings("unused")
 public class Agent {
 
     public static void premain(String config, Instrumentation inst) throws IOException {
