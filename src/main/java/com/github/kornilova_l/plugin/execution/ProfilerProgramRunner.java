@@ -3,7 +3,9 @@ package com.github.kornilova_l.plugin.execution;
 import com.github.kornilova_l.config.ConfigStorage;
 import com.github.kornilova_l.profiler.ProfilerFileManager;
 import com.intellij.execution.ExecutionException;
-import com.intellij.execution.configurations.*;
+import com.intellij.execution.configurations.JavaParameters;
+import com.intellij.execution.configurations.RunProfile;
+import com.intellij.execution.configurations.RunnerSettings;
 import com.intellij.execution.impl.DefaultJavaProgramRunner;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.openapi.application.PathManager;
@@ -43,8 +45,12 @@ public class ProfilerProgramRunner extends DefaultJavaProgramRunner {
         ProfilerFileManager fileManager = new ProfilerFileManager(PathManager.getSystemPath());
         File configFile = fileManager.getConfigFile(project.getName());
         config.exportConfig(configFile);
+        String pathToAgent = getClass().getResource("/javaagent.jar").getPath();
+        System.out.println(pathToAgent);
         javaParameters.getVMParametersList().add(
-                "-javaagent:/home/lk/java-profiling-plugin/build/libs/javaagent.jar=" +
+                "-javaagent:" +
+                        pathToAgent +
+                        "=" +
                         PathManager.getSystemPath() +
                         "&" +
                         configFile.getAbsolutePath()

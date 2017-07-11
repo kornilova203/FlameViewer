@@ -28,8 +28,7 @@ public class ProfilerFileManager {
         createDirIfNotExist(new File(pluginDirPath));
         logDir = new File(pluginDirPath + "/" + LOG_DIR_NAME);
         createDirIfNotExist(logDir);
-        staticDir = new File(pluginDirPath + "/" + STATIC_DIR_NAME);
-        createDirIfNotExist(staticDir);
+        staticDir = new File(getClass().getResource("/static").getPath());
         configDir = new File(pluginDirPath + "/" + CONFIG_DIR_NAME);
         createDirIfNotExist(configDir);
     }

@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.swing.*;
 
 public class ProfilerExecutor extends Executor {
-    public static final String EXECUTOR_ID = "Flamegraph-Profiler";
+    public static final String EXECUTOR_ID = "Flamegraph-Profiler-Executor";
     private static final Icon runIcon = IconLoader.getIcon("/icons/flame-run16.png", ProfilerExecutor.class);
 
     @Override
@@ -70,7 +70,7 @@ public class ProfilerExecutor extends Executor {
 
     @Override
     public String getContextActionId() {
-        return "RunProfiler";
+        return "ContextActionId." + getClass();
     }
 
     @Override

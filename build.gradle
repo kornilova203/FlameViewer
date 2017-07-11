@@ -1,10 +1,3 @@
-apply plugin: 'java'
-apply plugin: 'application'
-
-repositories {
-    mavenCentral()
-}
-
 buildscript {
     repositories {
         jcenter()
@@ -17,16 +10,24 @@ buildscript {
         dependencies {
             classpath "me.champeau.gradle:jmh-gradle-plugin:0.3.1"
         }
+    }
+}
 
-    }
-    dependencies {
-        classpath "gradle.plugin.org.jetbrains:gradle-intellij-plugin:0.1.10"
-    }
+plugins {
+    id "org.jetbrains.intellij" version "0.1.10"
+}
+
+apply plugin: 'java'
+apply plugin: 'application'
+
+repositories {
+    mavenCentral()
 }
 
 configurations {
     // configuration that holds jars to include in the jar
     agentLibs
+    intellij.updateSinceUntilBuild = false
 }
 
 dependencies {
@@ -44,8 +45,6 @@ dependencies {
 apply plugin: "me.champeau.gradle.jmh"
 apply plugin: 'org.jetbrains.intellij'
 
-mainClassName = 'com.github.kornilova_l.samples.Sample'
-
 jar {
     from {
         configurations.agentLibs.collect { it.isDirectory() ? it : zipTree(it) }
@@ -55,17 +54,26 @@ jar {
     }
     archiveName = 'javaagent.jar'
     exclude('com/github/kornilova_l/plugin/**')
+    exclude('com/github/kornilova_l/flight_recorder/**')
+    exclude('com/github/kornilova_l/samples/**')
+    exclude('com/github/kornilova_l/server/**')
+    exclude('resources/META-INF/plugin.xml')
     includeEmptyDirs = false
 }
 
 task copyStatic(type: Copy) {
     from 'visualization/static'
-    into '/home/lk/java-profiling-plugin/build/idea-sandbox/system/flamegraph-profiler/static'
+    into '/home/lk/java-profiling-plugin/build/idea-sandbox/plugins/java-profiling-plugin/classes/static'
 }
 
 task copyIcons(type: Copy) {
     from '/home/lk/java-profiling-plugin/icons'
     into '/home/lk/java-profiling-plugin/build/idea-sandbox/plugins/java-profiling-plugin/classes/icons'
+}
+
+task copyAgent(type: Copy) {
+    from '/home/lk/java-profiling-plugin/build/libs'
+    into '/home/lk/java-profiling-plugin/build/idea-sandbox/plugins/java-profiling-plugin/classes'
 }
 
 task('prepareAndRunIde', dependsOn: [copyStatic, build, jar]) {
