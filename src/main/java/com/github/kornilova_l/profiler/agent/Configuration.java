@@ -10,7 +10,7 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 
 class Configuration {
-    private static List<MethodConfig> methodConfigs = new LinkedList<>();
+    private static final List<MethodConfig> methodConfigs = new LinkedList<>();
     private static final ArrayList<Pattern> fullNamePatterns = new ArrayList<>();
     private static final ArrayList<Pattern> classNamePatterns = new ArrayList<>();
     private static final ArrayList<Pattern> excludePatterns = new ArrayList<>();

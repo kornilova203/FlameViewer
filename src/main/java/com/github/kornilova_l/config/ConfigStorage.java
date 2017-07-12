@@ -66,17 +66,15 @@ public class ConfigStorage implements PersistentStateComponent<ConfigStorage.Con
         public void exportConfig(@NotNull File file) {
             try (OutputStream outputStream = new FileOutputStream(file)) {
                 for (MethodConfig methodConfig : methodConfigs) {
-                    outputStream.write((
-                            methodConfig.toStringForExport() + "\n")
-                            .getBytes());
+                    if (methodConfig.isEnabled) {
+                        outputStream.write((
+                                methodConfig.toStringForExport() + "\n")
+                                .getBytes());
+                    }
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
-
-        public void addMethod(String classPattern, String methodPattern, String parametersPattern) {
-            methodConfigs.add(new MethodConfig(classPattern, methodPattern, parametersPattern));
         }
 
         public void maybeRemoveExactIncludingConfig(PsiMethod method) {

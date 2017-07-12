@@ -10,10 +10,6 @@ import java.security.ProtectionDomain;
 import java.util.List;
 
 class ProfilingClassFileTransformer implements ClassFileTransformer {
-    ProfilingClassFileTransformer(List<String> methods) {
-        super();
-        Configuration.readMethods(methods);
-    }
 
     private static boolean hasSystemCLInChain(ClassLoader loader) {
         ClassLoader chainLoader = loader;

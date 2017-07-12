@@ -62,6 +62,10 @@ public class MethodConfig implements Comparable<MethodConfig> {
         if (emptyParametersPattern.matcher(parametersPattern).matches()) { // if parameters are empty
             return;
         }
+        setParameters(parametersPattern);
+    }
+
+    private void setParameters(@NotNull String parametersPattern) {
         parametersPattern = parametersPattern.substring(1, parametersPattern.lastIndexOf(")"));
         String[] stringParameters = parametersPattern.split(" *, *");
         for (String stringParameter : stringParameters) {
@@ -166,7 +170,7 @@ public class MethodConfig implements Comparable<MethodConfig> {
         return stringBuilder.toString();
     }
 
-    private String parametersToStringForExport() {
+    public String parametersToStringForExport() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("(");
         for (int i = 0; i < parameters.size(); i++) {
@@ -183,27 +187,21 @@ public class MethodConfig implements Comparable<MethodConfig> {
         return stringBuilder.toString();
     }
 
-    private void setNames(String methodConfigLine) {
-//        String packageAndClass = methodConfigLine.substring(0, methodConfigLine.indexOf("."));
-//        int slashPos = packageAndClass.lastIndexOf("/");
-//        if (slashPos != -1) {
-//            packageName = packageAndClass.substring(0, packageAndClass.lastIndexOf("/"));
-//        } else {
-//            packageName = null;
-//        }
-//        classPatternString = packageAndClass.substring(
-//                packageAndClass.lastIndexOf("/") + 1, packageAndClass.length());
-//        methodPatternString = methodConfigLine.substring(methodConfigLine.indexOf(".") + 1, methodConfigLine.indexOf("("));
-//        String[] jvmTypes = getParamsDesc(
-//                methodConfigLine.substring(methodConfigLine.indexOf("("), methodConfigLine.indexOf(" "))
-//        );
-//        if (jvmTypes == null) {
-//            return;
-//        }
-//        for (String jvmType : jvmTypes) {
-//            parameters.add(new Parameter(jvmType));
-//        }
-//        setParametersEnabled(parameters, methodConfigLine.substring(methodConfigLine.indexOf(" ") + 1, methodConfigLine.length()));
+    private void setNames(@NotNull String methodConfigLine) {
+        isExcluding = methodConfigLine.charAt(0) == '!';
+        if (isExcluding) {
+            methodConfigLine = methodConfigLine.substring(1, methodConfigLine.length());
+        }
+        String classAndMethod = methodConfigLine.substring(0, methodConfigLine.indexOf("("));
+        classPatternString = classAndMethod.substring(0, classAndMethod.lastIndexOf("."));
+        methodPatternString = classAndMethod.substring(classAndMethod.lastIndexOf(".") + 1, classAndMethod.length());
+        setParameters(methodConfigLine.substring(
+                methodConfigLine.indexOf("("),
+                methodConfigLine.indexOf(")") + 1
+                )
+        );
+        saveReturnValue = methodConfigLine.charAt(methodConfigLine.length() - 1) == '+';
+        compilePatterns();
     }
 
     @Override
