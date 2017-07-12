@@ -85,10 +85,10 @@ class ProfilingMethodVisitor extends AdviceAdapter {
             if (parameter.isEnable) {
                 mv.visitInsn(DUP); // array reference
                 getIConst(index++); // index of element
-                paramToObj(parameter.jvmType, posOfParam);
+                paramToObj(parameter.getJvmType(), posOfParam);
                 visitInsn(AASTORE); // load obj to array
             }
-            posOfParam = getObjSize(parameter.jvmType);
+            posOfParam = getObjSize(parameter.getJvmType());
         }
     }
 

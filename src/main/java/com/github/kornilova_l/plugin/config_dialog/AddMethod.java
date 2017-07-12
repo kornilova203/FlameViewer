@@ -6,6 +6,7 @@ import com.intellij.openapi.ui.Messages;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import java.util.Objects;
 
 public class AddMethod extends DialogWrapper {
     private JPanel panel;
@@ -39,7 +40,10 @@ public class AddMethod extends DialogWrapper {
     }
 
     public String getParametersPattern() {
-        return parametersPatternTextField.getText().trim();
+        String parameters = parametersPatternTextField.getText().trim();
+        return Objects.equals(parameters, "") ?
+                "(*)" :
+                parameters;
     }
 
     public String getMethodPattern() {

@@ -1,7 +1,8 @@
-package com.github.kornilova_l.plugin.gutter;
+package com.github.kornilova_l.plugin.gutter.add_remove_actions;
 
-import com.github.kornilova_l.plugin.ProjectConfigManager;
 import com.github.kornilova_l.config.ConfigStorage;
+import com.github.kornilova_l.plugin.ProjectConfigManager;
+import com.github.kornilova_l.plugin.gutter.LineMarkersHolder;
 import com.intellij.debugger.impl.DebuggerUtilsEx;
 import com.intellij.openapi.actionSystem.ActionPlaces;
 import com.intellij.openapi.actionSystem.AnAction;
@@ -23,35 +24,9 @@ import com.intellij.util.text.CharArrayUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class ToggleMethodGutterIconAction extends AnAction {
-    @Override
-    public void actionPerformed(AnActionEvent event) {
-        final Project project = event.getData(CommonDataKeys.PROJECT);
-        if (project == null) {
-            return;
-        }
-        final Editor editor = getEditor(event, project);
-        if (editor == null) {
-            return;
-        }
-        PsiMethod method = getMethod(event, editor, project);
-        if (method == null) {
-            return;
-        }
-        assert event.getProject() != null;
-        LineMarkersHolder lineMarkersHolder = project.getComponent(LineMarkersHolder.class);
-        ConfigStorage.Config config = ProjectConfigManager.getConfig(event.getProject());
-        MarkupModelEx markupModel = LineMarkersHolder.getMarkupModel(editor.getDocument(), project);
-        if (!config.maybeRemove(method)) { // if was not removed
-            config.addMethod(method);
-            lineMarkersHolder.setIcon(method, markupModel);
-        } else { // was removed
-            lineMarkersHolder.removeIconIfPresent(method, markupModel);
-        }
-    }
-
+public class AddMethodToConfigAction extends AnAction {
     @Nullable
-    private static Editor getEditor(@NotNull AnActionEvent event, @NotNull Project project) {
+    protected static Editor getEditor(@NotNull AnActionEvent event, @NotNull Project project) {
         Editor editor = event.getData(CommonDataKeys.EDITOR);
         if (editor == null) {
             return FileEditorManager.getInstance(project).getSelectedTextEditor();
@@ -60,7 +35,7 @@ public class ToggleMethodGutterIconAction extends AnAction {
     }
 
     @Nullable
-    private static PsiMethod getMethod(@NotNull AnActionEvent event,
+    protected static PsiMethod getMethod(@NotNull AnActionEvent event,
                                        @NotNull Editor editor,
                                        @NotNull Project project) {
         PsiMethod method = null;
@@ -91,7 +66,7 @@ public class ToggleMethodGutterIconAction extends AnAction {
     }
 
     @Nullable
-    private static PsiMethod findMethod(Project project, Editor editor) {
+    protected static PsiMethod findMethod(Project project, Editor editor) {
         if (editor == null) {
             return null;
         }
@@ -101,5 +76,29 @@ public class ToggleMethodGutterIconAction extends AnAction {
         }
         final int offset = CharArrayUtil.shiftForward(editor.getDocument().getCharsSequence(), editor.getCaretModel().getOffset(), " \t");
         return DebuggerUtilsEx.findPsiMethod(psiFile, offset);
+    }
+
+    @Override
+    public void actionPerformed(AnActionEvent event) {
+        final Project project = event.getData(CommonDataKeys.PROJECT);
+        if (project == null) {
+            return;
+        }
+        final Editor editor = getEditor(event, project);
+        if (editor == null) {
+            return;
+        }
+        PsiMethod method = getMethod(event, editor, project);
+        if (method == null) {
+            return;
+        }
+        assert event.getProject() != null;
+        LineMarkersHolder lineMarkersHolder = project.getComponent(LineMarkersHolder.class);
+        ConfigStorage.Config config = ProjectConfigManager.getConfig(event.getProject());
+        MarkupModelEx markupModel = LineMarkersHolder.getMarkupModel(editor.getDocument(), project);
+        config.addMethod(method, false);
+        if (config.isMethodInstrumented(method)) {
+            lineMarkersHolder.setIcon(method, markupModel);
+        }
     }
 }

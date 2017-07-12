@@ -38,8 +38,12 @@
         </group>
         <group>
             <add-to-group group-id="EditorPopupMenu" anchor="last"/>
-            <action id="ToggleMethodGutterIcon" class="com.github.kornilova_l.plugin.gutter.ToggleMethodGutterIconAction"
-                    text="Add/Remove method from Profiler Config"/>
+            <action id="flamegraph-profiler.AddMethodToConfigAction"
+                    class="com.github.kornilova_l.plugin.gutter.add_remove_actions.AddMethodToConfigAction"
+                    text="Add method to Profiler Config"/>
+            <action id="flamegraph-profiler.RemoveMethodToConfigAction"
+                    class="com.github.kornilova_l.plugin.gutter.add_remove_actions.RemoveMethodFromConfigAction"
+                    text="Remove method from Profiler Config"/>
         </group>
     </actions>
     <project-components>

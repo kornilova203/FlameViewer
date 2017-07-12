@@ -13,6 +13,7 @@ import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.*;
 import org.apache.commons.compress.utils.IOUtils;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.ide.HttpRequestHandler;
 import org.jetbrains.io.Responses;
@@ -26,6 +27,11 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
             com.intellij.openapi.diagnostic.Logger.getInstance(ProfilerHttpRequestHandler.class);
     private final ProfilerFileManager fileManager = new ProfilerFileManager(PathManager.getSystemPath());
     private final TreeManager treeManager = new TreeManager(fileManager);
+    enum Extension {
+        JFR,
+        SER,
+        UNSUPPORTED
+    }
 
     private byte[] renderPage(String htmlFilePath, String logFile) {
         htmlFilePath = fileManager.getStaticFilePath(htmlFilePath);
@@ -115,7 +121,7 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
         if (Objects.equals(uri, ServerNames.UPLOAD_FILE)) {
             String fileName = fullHttpRequest.headers().get("File-Name");
             LOG.info("Got file: " + fileName);
-            if (supportedExtension(fileName)) {
+            if (getExtension(fileName) != Extension.UNSUPPORTED) {
                 fileManager.saveFile(fullHttpRequest.content(), fileName);
                 sendStatus(HttpResponseStatus.OK, context.channel());
                 return true;
@@ -133,10 +139,17 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
         Responses.send(response, channel, true);
     }
 
-    private static boolean supportedExtension(String fileName) {
+    @NotNull
+    private static Extension getExtension(@NotNull String fileName) {
         String extension = fileName.substring(fileName.indexOf(".") + 1, fileName.length());
-        return Objects.equals(extension, "jfr") ||
-                Objects.equals(extension, "ser");
+        switch (extension) {
+            case "jfr":
+                return Extension.JFR;
+            case "ser":
+                return Extension.SER;
+            default:
+                return Extension.UNSUPPORTED;
+        }
     }
 
     @Override

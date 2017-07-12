@@ -1,8 +1,7 @@
 package com.github.kornilova_l.plugin.gutter;
 
-import com.github.kornilova_l.plugin.ProjectConfigManager;
 import com.github.kornilova_l.config.ConfigStorage;
-import com.github.kornilova_l.config.MethodConfig;
+import com.github.kornilova_l.plugin.ProjectConfigManager;
 import com.intellij.openapi.components.AbstractProjectComponent;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.ex.MarkupModelEx;
@@ -18,8 +17,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 
-import static com.github.kornilova_l.config.ConfigStorage.Config.getQualifiedNameWithParams;
-
 public class LineMarkersHolder extends AbstractProjectComponent {
     private final HashMap<PsiMethod, RangeHighlighter> rangeHighlighters = new HashMap<>();
     private final ConfigStorage.Config config;
@@ -27,6 +24,10 @@ public class LineMarkersHolder extends AbstractProjectComponent {
     protected LineMarkersHolder(Project project) {
         super(project);
         config = ProjectConfigManager.getConfig(myProject);
+    }
+
+    public static MarkupModelEx getMarkupModel(Document document, Project project) {
+        return (MarkupModelEx) DocumentMarkupModel.forDocument(document, project, true);
     }
 
     public void setIcon(PsiMethod method, MarkupModelEx markupModel) {
@@ -59,22 +60,11 @@ public class LineMarkersHolder extends AbstractProjectComponent {
                 .visitElement(psiFile);
     }
 
-    public static MarkupModelEx getMarkupModel(Document document, Project project) {
-        return (MarkupModelEx) DocumentMarkupModel.forDocument(document, project, true);
-    }
-
     public void updateMethodMarker(PsiMethod psiMethod, MarkupModelEx markupModel) {
-        if (config.contains(psiMethod)) {
+        if (config.isMethodInstrumented(psiMethod)) {
             setIcon(psiMethod, markupModel);
         } else {
             removeIconIfPresent(psiMethod, markupModel);
-        }
-    }
-
-    public void replaceMethodIfInConfig(String oldQualifiedName, PsiMethod newMethod) {
-        if (config.methods.containsKey(oldQualifiedName)) {
-            config.methods.remove(oldQualifiedName);
-            config.methods.put(getQualifiedNameWithParams(newMethod), new MethodConfig(newMethod));
         }
     }
 }
