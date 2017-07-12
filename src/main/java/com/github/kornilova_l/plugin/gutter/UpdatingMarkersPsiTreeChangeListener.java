@@ -50,14 +50,23 @@ public class UpdatingMarkersPsiTreeChangeListener implements PsiTreeChangeListen
 
     @Override
     public void childReplaced(@NotNull PsiTreeChangeEvent event) {
-        if (!(event.getParent() instanceof PsiMethod)) {
-            return;
+        if (event.getParent() instanceof PsiParameterList) {
+            if (event.getParent().getParent() instanceof PsiMethod) {
+                PsiMethod psiMethod = (PsiMethod) event.getParent().getParent();
+                if (psiMethod.getContainingClass() == null) {
+                    return;
+                }
+                updateMethodMarker(psiMethod);
+                return;
+            }
         }
-        PsiMethod psiMethod = (PsiMethod) event.getParent();
-        if (psiMethod.getContainingClass() == null) {
-            return;
+        if (event.getParent() instanceof PsiMethod) {
+            PsiMethod psiMethod = (PsiMethod) event.getParent();
+            if (psiMethod.getContainingClass() == null) {
+                return;
+            }
+            updateMethodMarker(psiMethod);
         }
-        updateMethodMarker(psiMethod);
     }
 
     @Override
