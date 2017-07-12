@@ -54,6 +54,14 @@ public class ConfigStorage implements PersistentStateComponent<ConfigStorage.Con
                                 .getBytes());
                     }
                 }
+                for (MethodConfig methodConfig : excludingMethodConfigs) {
+                    if (methodConfig.isEnabled) {
+                        outputStream.write((
+                                "!" +
+                                        methodConfig.toStringForExport() + "\n")
+                                .getBytes());
+                    }
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
