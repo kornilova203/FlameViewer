@@ -67,7 +67,7 @@ public class ConfigStorage implements PersistentStateComponent<ConfigStorage.Con
             try (OutputStream outputStream = new FileOutputStream(file)) {
                 for (MethodConfig methodConfig : methodConfigs) {
                     outputStream.write((
-                            methodConfig.toString() + " " + methodConfig.getWhichParamsAreEnabled() + "\n")
+                            methodConfig.toStringForExport() + "\n")
                             .getBytes());
                 }
             } catch (IOException e) {

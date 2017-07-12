@@ -1,5 +1,6 @@
 package com.github.kornilova_l.config;
 
+import com.intellij.openapi.project.DumbService;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiParameter;
 import com.intellij.psi.PsiTypeElement;
@@ -107,8 +108,14 @@ public class MethodConfig implements Comparable<MethodConfig> {
                 return true;
             }
             PsiTypeElement typeElement = psiParameters[i].getTypeElement();
-            if (typeElement == null ||
-                    !Objects.equals(configParameter.type, psiTypeToString(typeElement))) {
+            if (typeElement == null) {
+                return false;
+            }
+            if (DumbService.isDumb(typeElement.getProject())) { // do dumb compare
+                if (!configParameter.type.endsWith(typeElement.getText())) {
+                    return false;
+                }
+            } else if (!Objects.equals(configParameter.type, psiTypeToString(typeElement))) {
                 return false;
             }
         }
@@ -159,6 +166,23 @@ public class MethodConfig implements Comparable<MethodConfig> {
         return stringBuilder.toString();
     }
 
+    private String parametersToStringForExport() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("(");
+        for (int i = 0; i < parameters.size(); i++) {
+            MethodConfig.Parameter parameter = parameters.get(i);
+            stringBuilder.append(parameter.type);
+            if (parameter.isEnable) {
+                stringBuilder.append("+");
+            }
+            if (i != parameters.size() - 1) {
+                stringBuilder.append(", ");
+            }
+        }
+        stringBuilder.append(")");
+        return stringBuilder.toString();
+    }
+
     private void setNames(String methodConfigLine) {
 //        String packageAndClass = methodConfigLine.substring(0, methodConfigLine.indexOf("."));
 //        int slashPos = packageAndClass.lastIndexOf("/");
@@ -187,6 +211,10 @@ public class MethodConfig implements Comparable<MethodConfig> {
         return (isExcluding ? "!" : "") + getQualifiedName() + parametersToString();
     }
 
+    public String toStringForExport() {
+        return (isExcluding ? "!" : "") + getQualifiedName() + parametersToStringForExport() + (saveReturnValue ? "+" : "");
+    }
+
     public String getQualifiedName() {
         return classPatternString + "." + methodPatternString;
     }
@@ -205,14 +233,6 @@ public class MethodConfig implements Comparable<MethodConfig> {
         }
         methodPatternString = psiMethod.getName();
         parameters = getParametersList(psiMethod.getParameterList().getParameters());
-    }
-
-    public String getWhichParamsAreEnabled() {
-        StringBuilder stringBuilder = new StringBuilder();
-        for (Parameter parameter : parameters) {
-            stringBuilder.append(parameter.isEnable ? "y" : "n");
-        }
-        return stringBuilder.toString();
     }
 
     public Object getJvmClassName() {
