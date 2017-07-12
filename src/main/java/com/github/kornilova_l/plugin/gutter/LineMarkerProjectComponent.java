@@ -1,15 +1,11 @@
 package com.github.kornilova_l.plugin.gutter;
 
 import com.intellij.openapi.components.AbstractProjectComponent;
-import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.fileEditor.FileEditorManagerListener;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.*;
 import com.intellij.psi.impl.PsiManagerImpl;
-import com.intellij.psi.search.FilenameIndex;
-import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.messages.MessageBusConnection;
 import org.jetbrains.annotations.NotNull;
 
@@ -30,19 +26,7 @@ public class LineMarkerProjectComponent extends AbstractProjectComponent {
             @Override
             public void fileOpened(@NotNull FileEditorManager source, @NotNull VirtualFile file) {
                 if (Objects.equals(file.getFileType().getDefaultExtension(), "java")) {
-                    PsiFile[] psiFiles = FilenameIndex.getFilesByName(
-                            myProject,
-                            file.getName(),
-                            GlobalSearchScope.fileScope(myProject, file));
-                    if (psiFiles.length != 1) {
-                        return;
-                    }
-                    PsiFile psiFile = psiFiles[0];
-                    Document document = psiFile.getViewProvider().getDocument();
-                    if (document == null) {
-                        return;
-                    }
-                    lineMarkersHolder.updateMethodMarker(psiFile, document);
+                    lineMarkersHolder.updateMethodMarker(file);
                 }
             }
         });

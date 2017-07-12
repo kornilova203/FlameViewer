@@ -150,7 +150,7 @@ public class MethodConfig implements Comparable<MethodConfig> {
         stringBuilder.append("(");
         for (int i = 0; i < parameters.size(); i++) {
             MethodConfig.Parameter parameter = parameters.get(i);
-            stringBuilder.append(parameter.type).append(" ").append(parameter.name);
+            stringBuilder.append(parameter.type);
             if (i != parameters.size() - 1) {
                 stringBuilder.append(", ");
             }
