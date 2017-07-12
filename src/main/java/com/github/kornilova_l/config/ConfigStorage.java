@@ -10,6 +10,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.TreeSet;
 
 @State(name = "flamegraph-profiler")
@@ -31,41 +33,21 @@ public class ConfigStorage implements PersistentStateComponent<ConfigStorage.Con
     @SuppressWarnings("PublicField")
     public static class Config {
 
-        public Collection<MethodConfig> methodConfigs; // node for tree of methodConfigs
+        public Collection<MethodConfig> includingMethodConfigs; // node for tree of includingMethodConfigs
+        public Collection<MethodConfig> excludingMethodConfigs; // node for tree of includingMethodConfigs
 
         public Config() {
-            this(new TreeSet<>());
+            this(new TreeSet<>(), new TreeSet<>());
         }
 
-        private Config(TreeSet<MethodConfig> methodConfigs) {
-            this.methodConfigs = methodConfigs;
-        }
-
-        /**
-         * Return collection of applicable configs
-         *
-         * @param psiMethod method
-         * @return empty collection if method will not be instrumented
-         */
-        @NotNull
-        public Collection<MethodConfig> getIncludingConfigs(@NotNull PsiMethod psiMethod) {
-            Collection<MethodConfig> includingConfigs = new TreeSet<>();
-            for (MethodConfig methodConfig : methodConfigs) {
-                if (methodConfig.isApplicableTo(psiMethod) &&
-                        !methodConfig.isExcluding) {
-                    includingConfigs.add(methodConfig);
-                }
-            }
-            return includingConfigs;
-        }
-
-        public void addMethod(@NotNull PsiMethod psiMethod, boolean isExcluding) {
-            methodConfigs.add(new MethodConfig(psiMethod, isExcluding));
+        private Config(TreeSet<MethodConfig> includingMethodConfigs, TreeSet<MethodConfig> excludingMethodConfigs) {
+            this.includingMethodConfigs = includingMethodConfigs;
+            this.excludingMethodConfigs = excludingMethodConfigs;
         }
 
         public void exportConfig(@NotNull File file) {
             try (OutputStream outputStream = new FileOutputStream(file)) {
-                for (MethodConfig methodConfig : methodConfigs) {
+                for (MethodConfig methodConfig : includingMethodConfigs) {
                     if (methodConfig.isEnabled) {
                         outputStream.write((
                                 methodConfig.toStringForExport() + "\n")
@@ -77,24 +59,34 @@ public class ConfigStorage implements PersistentStateComponent<ConfigStorage.Con
             }
         }
 
-        public void maybeRemoveExactIncludingConfig(PsiMethod method) {
-            methodConfigs.remove(new MethodConfig(method, false));
-        }
-
-        public boolean isMethodExcluded(PsiMethod psiMethod) {
-            return getExcludingConfigs(psiMethod).size() != 0;
+        @NotNull
+        private Collection<MethodConfig> getExcludingConfigs(@NotNull PsiMethod psiMethod) {
+            Collection<MethodConfig> excludingConfigs = new TreeSet<>();
+            for (MethodConfig methodConfig : excludingMethodConfigs) {
+                if (methodConfig.isApplicableTo(psiMethod)) {
+                    excludingConfigs.add(methodConfig);
+                }
+            }
+            return excludingConfigs;
         }
 
         @NotNull
-        public Collection<MethodConfig> getExcludingConfigs(@NotNull PsiMethod psiMethod) {
+        private Collection<MethodConfig> getIncludingConfigs(@NotNull PsiMethod psiMethod) {
             Collection<MethodConfig> includingConfigs = new TreeSet<>();
-            for (MethodConfig methodConfig : methodConfigs) {
-                if (methodConfig.isApplicableTo(psiMethod) &&
-                        methodConfig.isExcluding) {
+            for (MethodConfig methodConfig : includingMethodConfigs) {
+                if (methodConfig.isApplicableTo(psiMethod)) {
                     includingConfigs.add(methodConfig);
                 }
             }
             return includingConfigs;
+        }
+
+        public void maybeRemoveExactIncludingConfig(PsiMethod method) {
+            includingMethodConfigs.remove(new MethodConfig(method));
+        }
+
+        public boolean isMethodExcluded(PsiMethod psiMethod) {
+            return getExcludingConfigs(psiMethod).size() != 0;
         }
 
         public boolean isMethodInstrumented(PsiMethod method) {
@@ -103,7 +95,50 @@ public class ConfigStorage implements PersistentStateComponent<ConfigStorage.Con
         }
 
         public void maybeRemoveExactExcludingConfig(PsiMethod method) {
-            methodConfigs.remove(new MethodConfig(method, true));
+            excludingMethodConfigs.remove(new MethodConfig(method));
+        }
+
+        public void addMethodConfig(PsiMethod psiMethod, boolean isExcluding) {
+            if (isExcluding) {
+                excludingMethodConfigs.add(new MethodConfig(psiMethod));
+            } else {
+                includingMethodConfigs.add(new MethodConfig(psiMethod));
+            }
+        }
+
+        public void addMethodConfig(String methodConfigLine, boolean isExcluding) {
+            if (isExcluding) {
+                excludingMethodConfigs.add(new MethodConfig(methodConfigLine));
+            } else {
+                includingMethodConfigs.add(new MethodConfig(methodConfigLine));
+            }
+        }
+
+        public MethodConfig addMethodConfig(@NotNull String classPatternString,
+                                    @NotNull String methodPatternString,
+                                    @NotNull String parametersPattern,
+                                    boolean isExcluding) {
+            if (isExcluding) {
+                MethodConfig methodConfig = new MethodConfig(classPatternString, methodPatternString, parametersPattern);
+                excludingMethodConfigs.add(methodConfig);
+                return methodConfig;
+            } else {
+                MethodConfig methodConfig = new MethodConfig(classPatternString, methodPatternString, parametersPattern);
+                includingMethodConfigs.add(new MethodConfig(classPatternString, methodPatternString, parametersPattern));
+                return methodConfig;
+            }
+        }
+
+        @NotNull
+        public List<MethodConfig> findIncludingConfigs(@NotNull String className) {
+            List<MethodConfig> wantedConfigs = new LinkedList<>();
+            className = className.replaceAll("/", ".");
+            for (MethodConfig methodConfig : includingMethodConfigs) {
+                if (methodConfig.isApplicableToClass(className)) {
+                    wantedConfigs.add(methodConfig);
+                }
+            }
+            return wantedConfigs;
         }
     }
 }

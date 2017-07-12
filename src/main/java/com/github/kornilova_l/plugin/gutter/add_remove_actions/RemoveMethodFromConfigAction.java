@@ -34,8 +34,8 @@ public class RemoveMethodFromConfigAction extends AddMethodToConfigAction {
         MarkupModelEx markupModel = LineMarkersHolder.getMarkupModel(editor.getDocument(), project);
         if (config.isMethodInstrumented(method)) { // if method is instrumented
             config.maybeRemoveExactIncludingConfig(method);
-            if (config.getIncludingConfigs(method).size() != 0) { // if method is still included
-                config.addMethod(method, true);
+            if (config.isMethodInstrumented(method)) { // if method is still included
+                config.addMethodConfig(method, true);
             }
             lineMarkersHolder.removeIconIfPresent(method, markupModel);
         }

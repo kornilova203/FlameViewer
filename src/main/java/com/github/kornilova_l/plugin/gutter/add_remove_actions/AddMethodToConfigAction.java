@@ -97,7 +97,7 @@ public class AddMethodToConfigAction extends AnAction {
         ConfigStorage.Config config = ProjectConfigManager.getConfig(event.getProject());
         MarkupModelEx markupModel = LineMarkersHolder.getMarkupModel(editor.getDocument(), project);
         config.maybeRemoveExactExcludingConfig(method);
-        config.addMethod(method, false);
+        config.addMethodConfig(method, false);
         if (config.isMethodInstrumented(method)) {
             lineMarkersHolder.setIcon(method, markupModel);
         }

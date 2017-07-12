@@ -65,7 +65,7 @@ public class TreeManager {
     /**
      * Get full tree
      *
-     * @return TreeProtos.Tree object. Tree may not have any nodes inside (if all methodConfigs took <1ms)
+     * @return TreeProtos.Tree object. Tree may not have any nodes inside (if all methods took <1ms)
      */
     @Nullable
     public TreeProtos.Tree getOutgoingCalls(String fileName) {

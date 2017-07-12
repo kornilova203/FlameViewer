@@ -1,5 +1,6 @@
 package com.github.kornilova_l.profiler.agent;
 
+import com.github.kornilova_l.config.ConfigStorage;
 import com.github.kornilova_l.config.MethodConfig;
 import org.jetbrains.annotations.Nullable;
 
@@ -10,7 +11,7 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 
 class Configuration {
-    private static final List<MethodConfig> methodConfigs = new LinkedList<>();
+    private static final ConfigStorage.Config config = new ConfigStorage.Config();
     private static final ArrayList<Pattern> fullNamePatterns = new ArrayList<>();
     private static final ArrayList<Pattern> classNamePatterns = new ArrayList<>();
     private static final ArrayList<Pattern> excludePatterns = new ArrayList<>();
@@ -36,7 +37,11 @@ class Configuration {
 
     static void readMethods(List<String> methodConfigLines) {
         for (String methodConfigLine : methodConfigLines) {
-            methodConfigs.add(new MethodConfig(methodConfigLine));
+            boolean isExcluding = methodConfigLine.charAt(0) == '!';
+            if (isExcluding) {
+                methodConfigLine = methodConfigLine.substring(1, methodConfigLine.length());
+            }
+            config.addMethodConfig(methodConfigLine, isExcluding);
         }
     }
 
@@ -53,17 +58,8 @@ class Configuration {
     }
 
     @Nullable
-    static List<MethodConfig> findMethodsOfClass(String className) {
-        List<MethodConfig> methodsOfClass = new LinkedList<>();
-        for (MethodConfig methodConfig : methodConfigs) {
-            if (Objects.equals(methodConfig.getJvmClassName(), className)) {
-                methodsOfClass.add(methodConfig);
-            }
-        }
-        if (methodsOfClass.size() == 0) {
-            return null;
-        }
-        return methodsOfClass;
+    static List<MethodConfig> findIncludingConfigs(String className) {
+        return config.findIncludingConfigs(className);
     }
 
     static boolean isClassIncluded(String className) {

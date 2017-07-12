@@ -30,10 +30,11 @@ public class AddNodeActionButton implements AnActionButtonRunnable {
         if (!dialog.showAndGet()) {
             return;
         }
-        MethodConfig methodConfig = new MethodConfig(dialog.getClassPattern(),
+        MethodConfig methodConfig = ProjectConfigManager.getConfig(project).addMethodConfig(
+                dialog.getClassPattern(),
                 dialog.getMethodPattern(),
-                dialog.getParametersPattern());
-        ProjectConfigManager.getConfig(project).methodConfigs.add(methodConfig);
+                dialog.getParametersPattern(),
+                false);
         changeProfilerConfigDialog.addNodeToTree(methodConfig);
         updateOpenedDocuments();
     }

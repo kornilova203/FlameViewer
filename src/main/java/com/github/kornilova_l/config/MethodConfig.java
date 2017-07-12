@@ -28,7 +28,6 @@ public class MethodConfig implements Comparable<MethodConfig> {
     public LinkedList<Parameter> parameters = new LinkedList<>();
     public boolean isEnabled = true;
     public boolean saveReturnValue = false;
-    public boolean isExcluding = false;
     @Nullable
     private Pattern classPattern;
     @Nullable
@@ -40,14 +39,13 @@ public class MethodConfig implements Comparable<MethodConfig> {
         classPatternString = "";
     }
 
-    public MethodConfig(PsiMethod psiMethod, boolean isExcluding) {
-        this.isExcluding = isExcluding;
+    MethodConfig(PsiMethod psiMethod) {
         methodPatternString = "";
         classPatternString = "";
         setNames(psiMethod);
     }
 
-    public MethodConfig(String methodConfigLine) {
+    MethodConfig(String methodConfigLine) {
         methodPatternString = "";
         classPatternString = "";
         setNames(methodConfigLine);
@@ -188,10 +186,6 @@ public class MethodConfig implements Comparable<MethodConfig> {
     }
 
     private void setNames(@NotNull String methodConfigLine) {
-        isExcluding = methodConfigLine.charAt(0) == '!';
-        if (isExcluding) {
-            methodConfigLine = methodConfigLine.substring(1, methodConfigLine.length());
-        }
         String classAndMethod = methodConfigLine.substring(0, methodConfigLine.indexOf("("));
         classPatternString = classAndMethod.substring(0, classAndMethod.lastIndexOf("."));
         methodPatternString = classAndMethod.substring(classAndMethod.lastIndexOf(".") + 1, classAndMethod.length());
@@ -206,11 +200,11 @@ public class MethodConfig implements Comparable<MethodConfig> {
 
     @Override
     public String toString() {
-        return (isExcluding ? "!" : "") + getQualifiedName() + parametersToString();
+        return getQualifiedName() + parametersToString();
     }
 
     public String toStringForExport() {
-        return (isExcluding ? "!" : "") + getQualifiedName() + parametersToStringForExport() + (saveReturnValue ? "+" : "");
+        return getQualifiedName() + parametersToStringForExport() + (saveReturnValue ? "+" : "");
     }
 
     public String getQualifiedName() {
@@ -280,6 +274,11 @@ public class MethodConfig implements Comparable<MethodConfig> {
             return classPatternString;
         }
         return classPatternString.substring(dot + 1, classPatternString.length());
+    }
+
+    public boolean isApplicableToClass(@NotNull String className) {
+        assert classPattern != null;
+        return classPattern.matcher(className).matches();
     }
 
     public static class Parameter {

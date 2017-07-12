@@ -137,7 +137,7 @@ class CTBuilder {
     }
 
     /**
-     * @param timeOfLastEvent time of last event is needed if tree has any unfinished methodConfigs
+     * @param timeOfLastEvent time of last event is needed if tree has any unfinished methods
      * @return built Tree of null if tree is empty
      */
     @Nullable

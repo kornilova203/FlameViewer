@@ -83,10 +83,10 @@ public class ChangeProfilerConfigDialog extends DialogWrapper {
     @Nullable
     private Collection<MethodConfig> getProjectConfigs() {
         ConfigStorage.Config config = ProjectConfigManager.getConfig(project);
-        if (config.methodConfigs.size() == 0) {
+        if (config.includingMethodConfigs.size() == 0) {
             return null;
         }
-        return config.methodConfigs;
+        return config.includingMethodConfigs;
     }
 
     private void createTree() {
