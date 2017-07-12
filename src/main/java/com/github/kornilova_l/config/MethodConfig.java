@@ -16,6 +16,7 @@ import java.util.regex.Pattern;
 @SuppressWarnings("PublicField")
 public class MethodConfig implements Comparable<MethodConfig> {
     private final static Pattern paramsPattern = Pattern.compile("(\\[?)(C|Z|S|I|J|F|D|B|(:?L[^;]+;))");
+    private final static Pattern emptyParametersPattern = Pattern.compile("\\(\\)\\+?");
     @NotNull
     public String methodPatternString;
     @NotNull
@@ -59,6 +60,9 @@ public class MethodConfig implements Comparable<MethodConfig> {
         if (parametersPattern.charAt(parametersPattern.length() - 1) == '+') {
             saveReturnValue = true;
         }
+        if (emptyParametersPattern.matcher(parametersPattern).matches()) { // if parameters are empty
+            return;
+        }
         parametersPattern = parametersPattern.substring(1, parametersPattern.lastIndexOf(")"));
         String[] stringParameters = parametersPattern.split(" *, *");
         for (String stringParameter : stringParameters) {
@@ -66,7 +70,7 @@ public class MethodConfig implements Comparable<MethodConfig> {
         }
     }
 
-    static String parametersToString(List<MethodConfig.Parameter> parameters) {
+    public String parametersToString() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("(");
         for (int i = 0; i < parameters.size(); i++) {
@@ -182,7 +186,7 @@ public class MethodConfig implements Comparable<MethodConfig> {
 
     @Override
     public String toString() {
-        return (isExcluding ? "!" : "") + getQualifiedName() + parametersToString(parameters);
+        return (isExcluding ? "!" : "") + getQualifiedName() + parametersToString();
     }
 
     public String getQualifiedName() {
