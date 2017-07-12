@@ -40,7 +40,6 @@ public class MethodConfig implements Comparable<MethodConfig> {
         classPatternString = "";
     }
 
-    @SuppressWarnings("unused")
     public MethodConfig(PsiMethod psiMethod, boolean isExcluding) {
         this.isExcluding = isExcluding;
         methodPatternString = "";

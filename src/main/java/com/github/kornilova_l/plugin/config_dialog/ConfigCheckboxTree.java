@@ -77,27 +77,45 @@ public class ConfigCheckboxTree extends CheckboxTree {
     public void initTree(@NotNull Collection<MethodConfig> methods) {
         root.removeAllChildren();
         for (MethodConfig methodConfig : methods) {
-            ConfigCheckedTreeNode packageNode = createChildIfNotPresent(root, methodConfig.getPackagePattern());
-            ConfigCheckedTreeNode classNode = createChildIfNotPresent(packageNode, methodConfig.getClassPattern());
-            createChild(classNode, methodConfig.methodPatternString + methodConfig.parametersToString());
+            addMethodNode(methodConfig);
         }
         model.nodeStructureChanged(root);
         TreeUtil.expandAll(this);
         setSelectionRow(0);
     }
 
-    private static void createChild(ConfigCheckedTreeNode parent, String nodeName) {
-        parent.add(new ConfigCheckedTreeNode(nodeName));
+    @NotNull
+    private ConfigCheckedTreeNode addMethodNode(MethodConfig methodConfig) {
+        ConfigCheckedTreeNode packageNode = createChildIfNotPresent(root, methodConfig.getPackagePattern());
+        ConfigCheckedTreeNode classNode = createChildIfNotPresent(packageNode, methodConfig.getClassPattern());
+        return createChild(classNode, methodConfig.methodPatternString + methodConfig.parametersToString());
+    }
+
+    @NotNull
+    private static ConfigCheckedTreeNode createChild(ConfigCheckedTreeNode parent, String nodeName) {
+        ConfigCheckedTreeNode node = new ConfigCheckedTreeNode(nodeName);
+        parent.add(node);
+        return node;
     }
 
     @Nullable
     public MethodConfig getSelectedConfig() {
         TreePath path = getSelectionModel().getSelectionPath();
+        if (path == null) {
+            return null;
+        }
         Object userObject = ((CheckedTreeNode) path.getLastPathComponent()).getUserObject();
         System.out.println(userObject.getClass() + " " + userObject);
         if (userObject instanceof MethodConfig) {
             return ((MethodConfig) userObject);
         }
         return null;
+    }
+
+    public void addNode(MethodConfig methodConfig) {
+        ConfigCheckedTreeNode newNode = addMethodNode(methodConfig);
+        model.nodeStructureChanged(root);
+        TreeUtil.expandAll(this);
+        getSelectionModel().setSelectionPath(new TreePath(newNode.getPath()));
     }
 }

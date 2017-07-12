@@ -65,7 +65,7 @@ public class ChangeProfilerConfigDialog extends DialogWrapper {
         System.out.println("create master view");
         createTree();
         ToolbarDecorator decorator = ToolbarDecorator.createDecorator(checkboxTree);
-        decorator.setAddAction(new AddNodeActionButton(project));
+        decorator.setAddAction(new AddNodeActionButton(project, this));
         JPanel panel = decorator.createPanel();
         Collection<MethodConfig> configs = getProjectConfigs();
         if (configs == null) {
@@ -74,6 +74,10 @@ public class ChangeProfilerConfigDialog extends DialogWrapper {
         }
         checkboxTree.initTree(configs);
         return panel;
+    }
+
+    public void addNodeToTree(MethodConfig methodConfig) {
+        checkboxTree.addNode(methodConfig);
     }
 
     @Nullable
