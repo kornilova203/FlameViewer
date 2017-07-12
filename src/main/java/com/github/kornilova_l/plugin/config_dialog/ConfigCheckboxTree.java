@@ -88,7 +88,7 @@ public class ConfigCheckboxTree extends CheckboxTree {
     private ConfigCheckedTreeNode addMethodNode(MethodConfig methodConfig) {
         ConfigCheckedTreeNode packageNode = createChildIfNotPresent(root, methodConfig.getPackagePattern());
         ConfigCheckedTreeNode classNode = createChildIfNotPresent(packageNode, methodConfig.getClassPattern());
-        return createChild(classNode, methodConfig.methodPatternString + methodConfig.parametersToString());
+        return createChild(classNode, (methodConfig.isExcluding ? "!" : "") + methodConfig.methodPatternString + methodConfig.parametersToString());
     }
 
     @NotNull

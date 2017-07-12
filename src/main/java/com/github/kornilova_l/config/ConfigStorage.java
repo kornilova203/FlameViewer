@@ -103,5 +103,9 @@ public class ConfigStorage implements PersistentStateComponent<ConfigStorage.Con
             return getExcludingConfigs(method).size() == 0 &&
                     getIncludingConfigs(method).size() != 0;
         }
+
+        public void maybeRemoveExactExcludingConfig(PsiMethod method) {
+            methodConfigs.remove(new MethodConfig(method, true));
+        }
     }
 }
