@@ -29,9 +29,15 @@ public class MethodConfig implements Comparable<MethodConfig> {
     public LinkedList<Parameter> parameters = new LinkedList<>();
     public boolean isEnabled = true;
     public boolean saveReturnValue = false;
+    public boolean isExcluding = false;
     @Nullable
     private Pattern methodPattern;
-    public boolean isExcluding = false;
+
+    @SuppressWarnings("unused")
+    public MethodConfig() {
+        methodPatternString = "";
+        classPatternString = "";
+    }
 
     @SuppressWarnings("unused")
     public MethodConfig(PsiMethod psiMethod, boolean isExcluding) {
@@ -130,9 +136,10 @@ public class MethodConfig implements Comparable<MethodConfig> {
                 continue;
             }
             parameters.add(new MethodConfig.Parameter(
-                    psiTypeToString(psiParameter.getTypeElement()),
-                    psiParameter.getName()
-            ));
+                            psiTypeToString(psiParameter.getTypeElement()),
+                            psiParameter.getName()
+                    )
+            );
         }
         return parameters;
     }
