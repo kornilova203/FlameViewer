@@ -71,7 +71,7 @@ public class LineMarkersHolder extends AbstractProjectComponent {
         }
     }
 
-    public void updateMethodMarker(VirtualFile file) {
+    public void updateMethodMarker(@NotNull VirtualFile file) {
         PsiFile[] psiFiles = FilenameIndex.getFilesByName(
                 myProject,
                 file.getName(),

@@ -45,7 +45,9 @@ public class AddNodeActionButton implements AnActionButtonRunnable {
             }
             Document document = editor.getDocument();
             VirtualFile virtualFile = FileDocumentManager.getInstance().getFile(document);
-            lineMarkersHolder.updateMethodMarker(virtualFile);
+            if (virtualFile != null) {
+                lineMarkersHolder.updateMethodMarker(virtualFile);
+            }
         }
     }
 }
