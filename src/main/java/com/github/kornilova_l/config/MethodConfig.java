@@ -7,16 +7,13 @@ import com.intellij.psi.PsiTypeElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @SuppressWarnings("PublicField")
 public class MethodConfig implements Comparable<MethodConfig> {
-    private final static Pattern paramsPattern = Pattern.compile("(\\[?)(C|Z|S|I|J|F|D|B|(:?L[^;]+;))");
     private final static Pattern emptyParametersPattern = Pattern.compile("\\(\\)\\+?");
     @NotNull
     public String methodPatternString;
@@ -60,15 +57,18 @@ public class MethodConfig implements Comparable<MethodConfig> {
         if (emptyParametersPattern.matcher(parametersPattern).matches()) { // if parameters are empty
             return;
         }
-        setParameters(parametersPattern);
+        parameters = getParametersList(parametersPattern);
     }
 
-    private void setParameters(@NotNull String parametersPattern) {
+    @NotNull
+    private static LinkedList<Parameter> getParametersList(@NotNull String parametersPattern) {
+        LinkedList<Parameter> parameters = new LinkedList<>();
         parametersPattern = parametersPattern.substring(1, parametersPattern.lastIndexOf(")"));
         String[] stringParameters = parametersPattern.split(" *, *");
         for (String stringParameter : stringParameters) {
             parameters.addLast(new Parameter(stringParameter, ""));
         }
+        return parameters;
     }
 
     public static String parametersToStringForJvm(List<Parameter> parameters) {
@@ -79,21 +79,6 @@ public class MethodConfig implements Comparable<MethodConfig> {
         }
         stringBuilder.append(")");
         return stringBuilder.toString();
-    }
-
-    @Nullable
-    public static String[] getParamsDesc(String partOfDescWithParams) {
-        ArrayList<String> paramsDesc = new ArrayList<>();
-        Matcher m = paramsPattern.matcher(partOfDescWithParams);
-        while (m.find()) {
-            paramsDesc.add(m.group());
-        }
-        if (paramsDesc.isEmpty()) {
-            return null;
-        }
-        String[] ret = new String[paramsDesc.size()];
-        paramsDesc.toArray(ret);
-        return ret;
     }
 
     private static boolean areParametersSame(PsiParameter[] psiParameters, LinkedList<Parameter> configParameters) {
@@ -122,6 +107,26 @@ public class MethodConfig implements Comparable<MethodConfig> {
             }
         }
         return psiParameters.length == i;
+    }
+
+    private static boolean areParametersSame(String[] jvmParameters, LinkedList<Parameter> parameters) {
+        if (parameters.size() == 0) {
+            return jvmParameters.length == 0;
+        }
+        if (parameters.size() > jvmParameters.length) {
+            return false;
+        }
+        int i = 0;
+        for (; i < parameters.size(); i++) {
+            Parameter parameter = parameters.get(i);
+            if (Objects.equals(parameter.type, "*")) {
+                return true;
+            }
+            if (!Objects.equals(parameter.getJvmType(), jvmParameters[i])) {
+                return false;
+            }
+        }
+        return jvmParameters.length == i;
     }
 
     @NotNull
@@ -189,7 +194,7 @@ public class MethodConfig implements Comparable<MethodConfig> {
         String classAndMethod = methodConfigLine.substring(0, methodConfigLine.indexOf("("));
         classPatternString = classAndMethod.substring(0, classAndMethod.lastIndexOf("."));
         methodPatternString = classAndMethod.substring(classAndMethod.lastIndexOf(".") + 1, classAndMethod.length());
-        setParameters(methodConfigLine.substring(
+        parameters = getParametersList(methodConfigLine.substring(
                 methodConfigLine.indexOf("("),
                 methodConfigLine.indexOf(")") + 1
                 )
@@ -279,6 +284,14 @@ public class MethodConfig implements Comparable<MethodConfig> {
     public boolean isApplicableToClass(@NotNull String className) {
         assert classPattern != null;
         return classPattern.matcher(className).matches();
+    }
+
+    public boolean isApplicableTo(String className, String methodName, String[] jvmParameters) {
+        assert classPattern != null;
+        assert methodPattern != null;
+        return classPattern.matcher(className).matches() &&
+                methodPattern.matcher(methodName).matches() &&
+                areParametersSame(jvmParameters, parameters);
     }
 
     public static class Parameter {

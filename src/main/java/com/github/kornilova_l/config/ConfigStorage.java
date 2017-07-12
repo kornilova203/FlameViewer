@@ -4,19 +4,21 @@ import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.State;
 import com.intellij.psi.PsiMethod;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.TreeSet;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @State(name = "flamegraph-profiler")
 public class ConfigStorage implements PersistentStateComponent<ConfigStorage.Config> {
     Config config;
+    private final static Pattern paramsPattern = Pattern.compile("(\\[?)(C|Z|S|I|J|F|D|B|(:?L[^;]+;))");
+
 
     public ConfigStorage() {
         config = new Config();
@@ -140,13 +142,37 @@ public class ConfigStorage implements PersistentStateComponent<ConfigStorage.Con
         @NotNull
         public List<MethodConfig> findIncludingConfigs(@NotNull String className) {
             List<MethodConfig> wantedConfigs = new LinkedList<>();
-            className = className.replaceAll("/", ".");
             for (MethodConfig methodConfig : includingMethodConfigs) {
                 if (methodConfig.isApplicableToClass(className)) {
                     wantedConfigs.add(methodConfig);
                 }
             }
             return wantedConfigs;
+        }
+
+        public boolean isMethodExcluded(String className, String methodName, String jvmDesc) {
+            String[] jvmParameters = splitJvmParams(jvmDesc.substring(jvmDesc.indexOf("(") + 1, jvmDesc.indexOf(")")));
+            for (MethodConfig excludingMethodConfig : excludingMethodConfigs) {
+                if (excludingMethodConfig.isApplicableTo(className, methodName, jvmParameters)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        @Nullable
+        private static String[] splitJvmParams(String partOfDescWithParams) {
+            ArrayList<String> paramsDesc = new ArrayList<>();
+            Matcher m = paramsPattern.matcher(partOfDescWithParams);
+            while (m.find()) {
+                paramsDesc.add(m.group());
+            }
+            if (paramsDesc.isEmpty()) {
+                return null;
+            }
+            String[] ret = new String[paramsDesc.size()];
+            paramsDesc.toArray(ret);
+            return ret;
         }
     }
 }

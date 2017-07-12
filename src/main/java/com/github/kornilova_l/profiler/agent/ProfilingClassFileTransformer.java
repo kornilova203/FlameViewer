@@ -34,7 +34,7 @@ class ProfilingClassFileTransformer implements ClassFileTransformer {
                 !className.startsWith("jdk") &&
                 !className.startsWith("com/sun")) {
             List<MethodConfig> methodConfigs = Configuration.findIncludingConfigs(className);
-            if (methodConfigs != null) {
+            if (methodConfigs.size() != 0) {
                 ClassReader cr = new ClassReader(classfileBuffer);
                 ClassWriter cw = new ClassWriter(cr, ClassWriter.COMPUTE_FRAMES);
                 // uncomment for debugging

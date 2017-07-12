@@ -5,6 +5,7 @@ import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.commons.AdviceAdapter;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -19,7 +20,7 @@ class ProfilingMethodVisitor extends AdviceAdapter {
     private final MethodConfig methodConfig;
 
     ProfilingMethodVisitor(int access, String methodName, String desc,
-                           MethodVisitor mv, String className, boolean hasSystemCL, MethodConfig methodConfig) {
+                           MethodVisitor mv, String className, boolean hasSystemCL, List<MethodConfig> methodConfig) {
         super(Opcodes.ASM5, mv, access, methodName, desc);
         this.className = className;
         this.methodName = methodName;

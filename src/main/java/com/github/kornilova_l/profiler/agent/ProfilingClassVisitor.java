@@ -29,9 +29,12 @@ class ProfilingClassVisitor extends ClassVisitor {
                 !methodName.equals("<init>") &&
                 !methodName.equals("toString") &&
                 (access & Opcodes.ACC_SYNTHETIC) == 0) { // exclude synthetic includingMethodConfigs
-            MethodConfig methodConfig = Configuration.getMethodIfPresent(methodConfigs, methodName, desc);
-            if (methodConfig != null) {
-                return new ProfilingMethodVisitor(access, methodName, desc, mv, className, hasSystemCL, methodConfig);
+
+            if (!Configuration.isMethodExcluded(className, methodName, desc)) {
+                List<MethodConfig> finalMethodConfigs = Configuration.findIncludingConfigs(this.methodConfigs, methodName, desc);
+                if (finalMethodConfigs.size() != 0) {
+                    return new ProfilingMethodVisitor(access, methodName, desc, mv, className, hasSystemCL, finalMethodConfigs);
+                }
             }
         }
         return mv;
