@@ -21,9 +21,6 @@ public class MethodConfig implements Comparable<MethodConfig> {
     public String methodPatternString;
     @NotNull
     public String classPatternString;
-    @Nullable
-    public Pattern classPattern;
-
     // empty list means no parameters
     // list with one "*" element means any parameters set
     @NotNull
@@ -31,6 +28,8 @@ public class MethodConfig implements Comparable<MethodConfig> {
     public boolean isEnabled = true;
     public boolean saveReturnValue = false;
     public boolean isExcluding = false;
+    @Nullable
+    private Pattern classPattern;
     @Nullable
     private Pattern methodPattern;
 
@@ -67,20 +66,6 @@ public class MethodConfig implements Comparable<MethodConfig> {
         for (String stringParameter : stringParameters) {
             parameters.addLast(new Parameter(stringParameter, ""));
         }
-    }
-
-    public String parametersToString() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("(");
-        for (int i = 0; i < parameters.size(); i++) {
-            MethodConfig.Parameter parameter = parameters.get(i);
-            stringBuilder.append(parameter.type).append(" ").append(parameter.name);
-            if (i != parameters.size() - 1) {
-                stringBuilder.append(", ");
-            }
-        }
-        stringBuilder.append(")");
-        return stringBuilder.toString();
     }
 
     public static String parametersToStringForJvm(List<Parameter> parameters) {
@@ -158,6 +143,20 @@ public class MethodConfig implements Comparable<MethodConfig> {
         }
         return typeElement.getInnermostComponentReferenceElement().getQualifiedName() +
                 result.toString();
+    }
+
+    public String parametersToString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("(");
+        for (int i = 0; i < parameters.size(); i++) {
+            MethodConfig.Parameter parameter = parameters.get(i);
+            stringBuilder.append(parameter.type).append(" ").append(parameter.name);
+            if (i != parameters.size() - 1) {
+                stringBuilder.append(", ");
+            }
+        }
+        stringBuilder.append(")");
+        return stringBuilder.toString();
     }
 
     private void setNames(String methodConfigLine) {
