@@ -96,4 +96,13 @@ public class PluginFileManager {
     public File getLogDir() {
         return logDir;
     }
+
+    @NotNull
+    public String getPathToAgent() {
+        String path = getClass().getResource("/javaagent.jar").getPath();
+        if (System.getProperty("os.name").startsWith("Windows")) {
+            path = path.substring(1, path.length()).replaceAll("\\/", "\\");
+        }
+        return path;
+    }
 }

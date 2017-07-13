@@ -46,7 +46,7 @@ public class ProfilerProgramRunner extends DefaultJavaProgramRunner {
         PluginFileManager fileManager = new PluginFileManager(PathManager.getSystemPath());
         File configFile = fileManager.getConfigFile(project.getName());
         PluginConfigManager.exportConfig(configFile, configuration);
-        String pathToAgent = getClass().getResource("/javaagent.jar").getPath();
+        String pathToAgent = fileManager.getPathToAgent();
         System.out.println(pathToAgent);
         javaParameters.getVMParametersList().add(
                 "-javaagent:" +
