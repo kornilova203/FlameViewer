@@ -1,4 +1,4 @@
-package com.github.kornilova_l.profiler.logger;
+package com.github.kornilova_l.flamegraph.javaagent.logger;
 
 public class EnterEventData extends EventData {
     String className;

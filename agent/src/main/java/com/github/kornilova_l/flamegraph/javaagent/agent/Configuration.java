@@ -1,4 +1,4 @@
-package com.github.kornilova_l.profiler.agent;
+package com.github.kornilova_l.flamegraph.javaagent.agent;
 
 import com.github.kornilova_l.config.ConfigStorage;
 import com.github.kornilova_l.config.MethodConfig;

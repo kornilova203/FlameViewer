@@ -1,9 +1,8 @@
-package com.github.kornilova_l.profiler.agent;
+package com.github.kornilova_l.flamegraph.javaagent.agent;
 
 import com.github.kornilova_l.config.MethodConfig;
 import org.jetbrains.annotations.NotNull;
 import org.objectweb.asm.MethodVisitor;
-import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.commons.AdviceAdapter;
 
 import java.util.LinkedList;
@@ -16,7 +15,7 @@ import static com.github.kornilova_l.config.ConfigStorage.Config.splitJvmParams;
 
 class ProfilingMethodVisitor extends AdviceAdapter {
     private final static Pattern returnTypePattern = Pattern.compile("(?<=\\)).*"); // (?<=\)).*
-    private final static String LOGGER_PACKAGE_NAME = "com/github/kornilova_l/profiler/logger/";
+    private final static String LOGGER_PACKAGE_NAME = "com/github/kornilova_l/flamegraph/javaagent/logger/";
     private final String methodName;
     private final String className;
     private final boolean hasSystemCL;
@@ -25,11 +24,11 @@ class ProfilingMethodVisitor extends AdviceAdapter {
 
     ProfilingMethodVisitor(int access, String methodName, String desc,
                            MethodVisitor mv, String className, boolean hasSystemCL, List<MethodConfig> methodConfigs) {
-        super(Opcodes.ASM5, mv, access, methodName, desc);
+        super(ASM5, mv, access, methodName, desc);
         this.className = className;
         this.methodName = methodName;
         this.hasSystemCL = hasSystemCL;
-        jvmParameters = splitJvmParams(desc.substring(desc.indexOf("(") + 1, desc.indexOf(")")));
+        jvmParameters = Config.splitJvmParams(desc.substring(desc.indexOf("(") + 1, desc.indexOf(")")));
         this.parametersIncluded = getParametersIncluded(methodConfigs);
     }
 

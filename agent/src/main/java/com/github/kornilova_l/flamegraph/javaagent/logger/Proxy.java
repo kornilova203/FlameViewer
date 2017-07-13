@@ -1,4 +1,4 @@
-package com.github.kornilova_l.profiler.logger;
+package com.github.kornilova_l.flamegraph.javaagent.logger;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -22,7 +22,7 @@ public class Proxy {
             try {
                 if (logger == null) {
                     logger = ClassLoader.getSystemClassLoader()
-                            .loadClass("com.github.kornilova_l.profiler.logger.Logger");
+                            .loadClass("com.github.kornilova_l.flamegraph.javaagent.logger.Logger");
                 }
                 addEnter = logger.getMethod("addToQueue",
                                 long.class,
@@ -51,7 +51,7 @@ public class Proxy {
             try {
                 if (logger == null) {
                     logger = ClassLoader.getSystemClassLoader()
-                            .loadClass("com.github.kornilova_l.profiler.logger.Logger");
+                            .loadClass("com.github.kornilova_l.flamegraph.javaagent.logger.Logger");
                 }
                 addExit = logger.getMethod("addToQueue",
                                 Object.class,
@@ -76,7 +76,7 @@ public class Proxy {
             try {
                 if (logger == null) {
                     logger = ClassLoader.getSystemClassLoader()
-                            .loadClass("com.github.kornilova_l.profiler.logger.Logger");
+                            .loadClass("com.github.kornilova_l.flamegraph.javaagent.logger.Logger");
                 }
                 addException = logger.getMethod("addToQueue",
                                 Throwable.class,

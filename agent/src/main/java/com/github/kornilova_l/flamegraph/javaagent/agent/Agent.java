@@ -1,7 +1,7 @@
-package com.github.kornilova_l.profiler.agent;
+package com.github.kornilova_l.flamegraph.javaagent.agent;
 
-import com.github.kornilova_l.profiler.ProfilerFileManager;
-import com.github.kornilova_l.profiler.logger.Logger;
+import com.github.kornilova_l.flamegraph.javaagent.FileManager;
+import com.github.kornilova_l.flamegraph.javaagent.logger.Logger;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.BufferedReader;
@@ -23,7 +23,7 @@ public class Agent {
         if (methods == null) {
             return;
         }
-        Logger.init(new ProfilerFileManager(parameters[0]));
+        Logger.init(new FileManager(parameters[0]));
         Configuration.readMethods(methods);
         inst.addTransformer(new ProfilingClassFileTransformer());
     }

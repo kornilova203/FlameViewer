@@ -2,12 +2,14 @@ package com.github.kornilova_l.profiler;
 
 import io.netty.buffer.ByteBuf;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.io.*;
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class ProfilerFileManager {
@@ -17,7 +19,6 @@ public class ProfilerFileManager {
     private static final String CONFIG_DIR_NAME = "config";
     private static final String STATIC_DIR_NAME = "static";
     private final String PLUGIN_DIR_PATH;
-    private static final int FILE_NAME_LENGTH = 4;
     @NotNull
     private final File logDir;
 
@@ -26,22 +27,6 @@ public class ProfilerFileManager {
         createDirIfNotExist(new File(PLUGIN_DIR_PATH));
         logDir = new File(PLUGIN_DIR_PATH + DELIMITER + LOG_DIR_NAME);
         createDirIfNotExist(logDir);
-    }
-
-    /**
-     * 1 -> 0001
-     * 235 -> 0235
-     *
-     * @param num number
-     * @return string representation of number
-     */
-    private static String intToString(int num) {
-        StringBuilder string = new StringBuilder(String.valueOf(num));
-        int addZeros = FILE_NAME_LENGTH - string.length();
-        for (int i = 0; i < addZeros; i++) {
-            string.insert(0, "0");
-        }
-        return string.toString();
     }
 
     private static void createDirIfNotExist(@NotNull File dir) {
@@ -63,35 +48,6 @@ public class ProfilerFileManager {
         File configDir = new File(PLUGIN_DIR_PATH + DELIMITER + CONFIG_DIR_NAME);
         createDirIfNotExist(configDir);
         return new File(configDir.getAbsolutePath() + DELIMITER + projectName + ".config");
-    }
-
-    public File createLogFile() {
-        int max = getLargestFileNum();
-        return new File(logDir.getAbsolutePath() + DELIMITER + intToString(max + 1) + ".ser");
-    }
-
-    @Nullable
-    public File getLatestFile() {
-        File[] files = logDir.listFiles();
-        if (files != null) {
-            Optional<File> fileOptional = Arrays.stream(files)
-                    .max(Comparator.comparing(File::getName));
-            if (fileOptional.isPresent()) {
-                return fileOptional.get();
-            }
-        }
-        return null;
-    }
-
-    private int getLargestFileNum() {
-        File latestFile = getLatestFile();
-        if (latestFile != null) {
-            Matcher m = Pattern.compile("[0-9]+").matcher(latestFile.getName());
-            if (m.find()) {
-                return Integer.parseInt(m.group());
-            }
-        }
-        return 0;
     }
 
     @NotNull

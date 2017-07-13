@@ -1,4 +1,4 @@
-package com.github.kornilova_l.profiler.logger;
+package com.github.kornilova_l.flamegraph.javaagent.logger;
 
 abstract class EventData {
     EventData(long time, long threadId) {

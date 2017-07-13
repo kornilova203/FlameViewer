@@ -7,9 +7,6 @@ buildscript {
         maven {
             url 'http://dl.bintray.com/jetbrains/intellij-plugin-service'
         }
-        dependencies {
-            classpath "me.champeau.gradle:jmh-gradle-plugin:0.3.1"
-        }
     }
 }
 
@@ -17,49 +14,27 @@ plugins {
     id "org.jetbrains.intellij" version "0.1.10"
 }
 
-apply plugin: 'java'
-apply plugin: 'application'
+allprojects {
+    apply plugin: 'java'
+    group = 'com.gitgub.kornilova_l'
+    version = '1.0'
+}
+
+apply plugin: 'org.jetbrains.intellij'
 
 repositories {
     mavenCentral()
 }
 
 configurations {
-    // configuration that holds jars to include in the jar
-    agentLibs
     intellij.updateSinceUntilBuild = false
 }
 
 dependencies {
-    agentLibs "org.ow2.asm:asm:5.2"
-    agentLibs "org.ow2.asm:asm-util:5.2" // TraceClassVisitor (for debugging)
-    agentLibs group: 'org.ow2.asm', name: 'asm-commons', version: '5.0.3' // AdviceAdapter
-//    agentLibs "com.google.protobuf:protobuf-java:3.3.1" // avoid error when generating proto sources
     compile group: 'com.google.code.gson', name: 'gson', version: '2.8.1'
-    agentLibs fileTree(dir: 'libs', include: ['protobuf-java-kornilova-l-3.3.0.jar'])
-    compile fileTree(dir: '/usr/lib/jvm/java-8-oracle/lib/missioncontrol/plugins', include: ['com.jrockit.mc.flightrecorder_5.5.1.172852.jar'])
-    compile fileTree(dir: '/usr/lib/jvm/java-8-oracle/lib/missioncontrol/plugins', include: ['com.jrockit.mc.common_5.5.1.172852.jar'])
-    configurations.compile.extendsFrom(configurations.agentLibs)
+    compile fileTree(dir: 'libs', include: ['protobuf-java-kornilova-l-3.3.0.jar'])
 }
 
-apply plugin: "me.champeau.gradle.jmh"
-apply plugin: 'org.jetbrains.intellij'
-
-jar {
-    from {
-        configurations.agentLibs.collect { it.isDirectory() ? it : zipTree(it) }
-    }
-    manifest {
-        attributes "Premain-Class": "com.github.kornilova_l.profiler.agent.Agent"
-    }
-    archiveName = 'javaagent.jar'
-    exclude('com/github/kornilova_l/plugin/**')
-    exclude('com/github/kornilova_l/flight_recorder/**')
-    exclude('com/github/kornilova_l/samples/**')
-    exclude('com/github/kornilova_l/server/**')
-    exclude('resources/META-INF/plugin.xml')
-    includeEmptyDirs = false
-}
 
 task copyStatic(type: Copy) {
     from 'visualization/static'
@@ -71,27 +46,8 @@ task copyIcons(type: Copy) {
     into '/home/lk/java-profiling-plugin/build/idea-sandbox/plugins/java-profiling-plugin/classes/icons'
 }
 
-task copyAgent(type: Copy) {
-    from '/home/lk/java-profiling-plugin/build/libs'
-    into '/home/lk/java-profiling-plugin/build/idea-sandbox/plugins/java-profiling-plugin/classes'
-}
-
 task('prepareAndRunIde', dependsOn: [copyStatic, build, jar]) {
     doLast {
         runIdea.execute()
     }
-}
-
-task profileClass(type: JavaExec, dependsOn: [jar]) {
-    classpath = sourceSets.main.runtimeClasspath
-    main = "com.github.kornilova_l.samples.Sample"
-    jvmArgs += ["-javaagent:${jar.getArchivePath()}=agent-config/agent01.config"]
-}
-
-jmh {
-    jar.execute()
-    warmupIterations = 5
-    iterations = 10
-    fork = 2
-    include = "test.*"
 }

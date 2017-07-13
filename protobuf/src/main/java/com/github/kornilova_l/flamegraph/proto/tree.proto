@@ -1,10 +1,10 @@
 syntax = "proto3";
 
-package com.github.kornilova_l.protos;
+package com.github.kornilova_l.flamegraph.proto;
 
 option java_outer_classname = "TreeProtos";
 
-import "com/github/kornilova_l/protos/event.proto";
+import "com/github/kornilova_l/flamegraph/proto/event.proto";
 
 message Tree {
     TreeInfo tree_info = 1;
@@ -24,10 +24,10 @@ message Tree {
             string description = 7;
             bool is_static = 3;
             int32 count = 8; // how many times method was called
-            repeated com.github.kornilova_l.protos.Var parameters = 4; // only for trees which save original call structure
+            repeated com.github.kornilova_l.flamegraph.proto.Var parameters = 4; // only for trees which save original call structure
             oneof result { // only for trees which save original call structure
-                com.github.kornilova_l.protos.Var return_value = 5;
-                com.github.kornilova_l.protos.Var.Object exception = 6;
+                           com.github.kornilova_l.flamegraph.proto.Var return_value = 5;
+                           com.github.kornilova_l.flamegraph.proto.Var.Object exception = 6;
             }
         }
     }
