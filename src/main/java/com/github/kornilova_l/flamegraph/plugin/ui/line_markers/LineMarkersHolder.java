@@ -9,6 +9,7 @@ import com.intellij.openapi.editor.impl.DocumentMarkupModel;
 import com.intellij.openapi.editor.markup.HighlighterTargetArea;
 import com.intellij.openapi.editor.markup.RangeHighlighter;
 import com.intellij.openapi.progress.ProcessCanceledException;
+import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
@@ -72,18 +73,20 @@ public class LineMarkersHolder extends AbstractProjectComponent {
     }
 
     public void updateMethodMarker(@NotNull VirtualFile file) {
-        PsiFile[] psiFiles = FilenameIndex.getFilesByName(
-                myProject,
-                file.getName(),
-                GlobalSearchScope.fileScope(myProject, file));
-        if (psiFiles.length != 1) {
-            return;
-        }
-        PsiFile psiFile = psiFiles[0];
-        Document document = psiFile.getViewProvider().getDocument();
-        if (document == null) {
-            return;
-        }
-        updateMethodMarker(psiFile, document);
+        DumbService.getInstance(myProject).runWhenSmart(() -> {
+            PsiFile[] psiFiles = FilenameIndex.getFilesByName(
+                    myProject,
+                    file.getName(),
+                    GlobalSearchScope.fileScope(myProject, file));
+            if (psiFiles.length != 1) {
+                return;
+            }
+            PsiFile psiFile = psiFiles[0];
+            Document document = psiFile.getViewProvider().getDocument();
+            if (document == null) {
+                return;
+            }
+            updateMethodMarker(psiFile, document);
+        });
     }
 }
