@@ -26,20 +26,16 @@ class ProfilingClassVisitor extends ClassVisitor {
 //        System.out.println("visit method: " + classPatternString + "." + methodPatternString +
 //                " included? " + Configuration.isMethodIncluded(classPatternString + "." + methodPatternString) +
 //                " excluded? " + Configuration.isMethodExcluded(classPatternString + "." + methodPatternString));
-        System.out.println("method: " + methodName);
         if (mv != null &&
                 !methodName.equals("<init>") &&
                 !methodName.equals("toString") &&
                 (access & Opcodes.ACC_SYNTHETIC) == 0) { // exclude synthetic includingMethodConfigs
-            System.out.println("check method: " + className + " " + methodName);
             MethodConfig methodConfig = AgentConfigurationManager.newMethodConfig(className, methodName, desc);
             if (!AgentConfigurationManager.isMethodExcluded(methodConfig)) {
-                System.out.println("is not excluded");
                 List<MethodConfig> finalMethodConfigs = AgentConfigurationManager.findIncludingConfigs(
                         this.includingConfigs,
                         methodConfig
                 );
-                System.out.println("including configs: " + finalMethodConfigs);
                 if (finalMethodConfigs.size() != 0) {
                     return new ProfilingMethodVisitor(access, methodName, desc, mv, className, hasSystemCL);
                 }

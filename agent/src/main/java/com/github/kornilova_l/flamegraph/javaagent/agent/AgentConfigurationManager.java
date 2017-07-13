@@ -125,12 +125,9 @@ class AgentConfigurationManager {
     @NotNull
     public static List<MethodConfig> findIncludingConfigs(@NotNull List<MethodConfig> includingConfigs,
                                                           @NotNull MethodConfig methodConfig) {
-        System.out.println("findIncludingConfigs for " + methodConfig);
         List<MethodConfig> finalConfigs = new LinkedList<>();
         for (MethodConfig includingConfig : includingConfigs) {
-            System.out.println("check: " + includingConfig);
             if (includingConfig.isApplicableTo(methodConfig)) {
-                System.out.println("not");
                 finalConfigs.add(includingConfig);
             }
         }

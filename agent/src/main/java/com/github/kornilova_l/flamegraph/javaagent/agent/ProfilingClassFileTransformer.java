@@ -33,10 +33,8 @@ class ProfilingClassFileTransformer implements ClassFileTransformer {
                 !className.startsWith("com/github/kornilova_l") &&
                 !className.startsWith("jdk") &&
                 !className.startsWith("com/sun")) {
-            System.out.println("check: " + className);
             List<MethodConfig> methodConfigs = AgentConfigurationManager.findIncludingConfigs(className);
             if (methodConfigs.size() != 0) {
-                System.out.println("has including configs");
                 ClassReader cr = new ClassReader(classfileBuffer);
                 ClassWriter cw = new ClassWriter(cr, ClassWriter.COMPUTE_FRAMES);
                 // uncomment for debugging

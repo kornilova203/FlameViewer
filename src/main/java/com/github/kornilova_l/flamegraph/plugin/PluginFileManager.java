@@ -91,4 +91,9 @@ public class PluginFileManager {
         );
         return staticFilePath.replaceAll("/", DELIMITER);
     }
+
+    @NotNull
+    public File getLogDir() {
+        return logDir;
+    }
 }
