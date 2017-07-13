@@ -3,6 +3,7 @@ package com.github.kornilova_l.flamegraph.plugin.ui.line_markers;
 import com.intellij.openapi.components.AbstractProjectComponent;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.fileEditor.FileEditorManagerListener;
+import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.impl.PsiManagerImpl;
@@ -12,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 public class LineMarkerProjectComponent extends AbstractProjectComponent {
+
     protected LineMarkerProjectComponent(Project project) {
         super(project);
     }
@@ -26,7 +28,7 @@ public class LineMarkerProjectComponent extends AbstractProjectComponent {
             @Override
             public void fileOpened(@NotNull FileEditorManager source, @NotNull VirtualFile file) {
                 if (Objects.equals(file.getFileType().getDefaultExtension(), "java")) {
-                    lineMarkersHolder.updateMethodMarker(file);
+                    DumbService.getInstance(myProject).runWhenSmart(() -> lineMarkersHolder.updateMethodMarker(file));
                 }
             }
         });
