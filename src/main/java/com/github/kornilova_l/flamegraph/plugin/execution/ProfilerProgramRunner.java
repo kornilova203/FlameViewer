@@ -1,7 +1,8 @@
 package com.github.kornilova_l.flamegraph.plugin.execution;
 
+import com.github.kornilova_l.flamegraph.configuration.Configuration;
 import com.github.kornilova_l.flamegraph.plugin.PluginFileManager;
-import com.github.kornilova_l.flamegraph.plugin.configuration.ConfigStorage;
+import com.github.kornilova_l.flamegraph.plugin.configuration.PluginConfigManager;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.JavaParameters;
 import com.intellij.execution.configurations.RunProfile;
@@ -21,7 +22,7 @@ import java.util.Objects;
  */
 public class ProfilerProgramRunner extends DefaultJavaProgramRunner {
     private static final String RUNNER_ID = "ProfileRunnerID";
-    ConfigStorage.Config config;
+    Configuration configuration;
     private Project project;
 
     public ProfilerProgramRunner() {
@@ -31,7 +32,7 @@ public class ProfilerProgramRunner extends DefaultJavaProgramRunner {
     @Override
     public void execute(@NotNull ExecutionEnvironment environment) throws ExecutionException {
         project = environment.getProject();
-        config = ((ConfigStorage) environment.getProject().getComponent(PersistentStateComponent.class)).getState();
+        configuration = (Configuration) (environment.getProject().getComponent(PersistentStateComponent.class).getState());
         super.execute(environment);
     }
 
@@ -40,11 +41,11 @@ public class ProfilerProgramRunner extends DefaultJavaProgramRunner {
                       RunnerSettings settings,
                       RunProfile runProfile,
                       boolean beforeExecution) throws ExecutionException {
-        assert (config != null);
+        assert (configuration != null);
         assert (project != null);
         PluginFileManager fileManager = new PluginFileManager(PathManager.getSystemPath());
         File configFile = fileManager.getConfigFile(project.getName());
-        config.exportConfig(configFile);
+        PluginConfigManager.exportConfig(configFile, configuration);
         String pathToAgent = getClass().getResource("/javaagent.jar").getPath();
         System.out.println(pathToAgent);
         javaParameters.getVMParametersList().add(

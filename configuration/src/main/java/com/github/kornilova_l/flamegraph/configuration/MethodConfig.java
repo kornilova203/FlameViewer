@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.LinkedList;
 import java.util.List;
 
-class MethodConfig implements Comparable<MethodConfig> {
+public class MethodConfig implements Comparable<MethodConfig> {
     @NotNull
     private String methodPatternString = "";
     @NotNull
@@ -105,15 +105,35 @@ class MethodConfig implements Comparable<MethodConfig> {
         isEnabled = enabled;
     }
 
+    @NotNull
+    public String getPackagePattern() {
+        int dot = classPatternString.indexOf(".");
+        if (dot == -1) {
+            return "";
+        } else {
+            return classPatternString.substring(0, dot);
+        }
+    }
+
+    @NotNull
+    public String getClassPattern() {
+        int dot = classPatternString.indexOf(".");
+        if (dot == -1) {
+            return classPatternString;
+        } else {
+            return classPatternString.substring(dot + 1, classPatternString.length() - 1);
+        }
+    }
+
     public static class Parameter {
         private String type;
         private boolean isEnabled;
 
         @SuppressWarnings("unused")
-        Parameter() {
+        public Parameter() {
         }
 
-        Parameter(@NotNull String type, boolean isEnabled) {
+        public Parameter(@NotNull String type, boolean isEnabled) {
             this.type = type;
             this.isEnabled = isEnabled;
         }

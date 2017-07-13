@@ -14,19 +14,24 @@ import java.util.stream.Collectors;
 
 public class PluginFileManager {
     private static final String DELIMITER = System.getProperty("os.name").startsWith("Windows") ? "\\" : "/";
-    private static final String PLUGIN_DIR_NAME = "/flamegraph-profiler";
-    private static final String LOG_DIR_NAME = "events";
-    private static final String CONFIG_DIR_NAME = "configuration";
+    private static final String PLUGIN_DIR_NAME = DELIMITER + "flamegraph-profiler";
+    private static final String LOG_DIR_NAME = DELIMITER + "events";
+    private static final String CONFIG_DIR_NAME = DELIMITER + "configuration";
     private static final String STATIC_DIR_NAME = "static";
-    private final String PLUGIN_DIR_PATH;
     @NotNull
     private final File logDir;
+    @NotNull
+    private final File configDir;
+    @NotNull
+    private final File staticDir;
 
     public PluginFileManager(@NotNull String systemDirPath) {
-        PLUGIN_DIR_PATH = systemDirPath + PLUGIN_DIR_NAME;
-        createDirIfNotExist(new File(PLUGIN_DIR_PATH));
-        logDir = new File(PLUGIN_DIR_PATH + DELIMITER + LOG_DIR_NAME);
+        String pluginDirPath = systemDirPath + PLUGIN_DIR_NAME;
+        logDir = new File(pluginDirPath + LOG_DIR_NAME);
         createDirIfNotExist(logDir);
+        configDir = new File(pluginDirPath + CONFIG_DIR_NAME);
+        createDirIfNotExist(configDir);
+        staticDir = new File(getClass().getResource("/" + STATIC_DIR_NAME).getPath());
     }
 
     private static void createDirIfNotExist(@NotNull File dir) {
@@ -40,19 +45,12 @@ public class PluginFileManager {
         }
     }
 
-    public String getFilePath(String fileName) {
+    public String getFilePath(@NotNull String fileName) {
         return logDir.getAbsolutePath() + DELIMITER + fileName;
     }
 
     public File getConfigFile(String projectName) {
-        File configDir = new File(PLUGIN_DIR_PATH + DELIMITER + CONFIG_DIR_NAME);
-        createDirIfNotExist(configDir);
-        return new File(configDir.getAbsolutePath() + DELIMITER + projectName + ".configuration");
-    }
-
-    @NotNull
-    private File getStaticDir() {
-        return new File(getClass().getResource(DELIMITER + STATIC_DIR_NAME).getPath());
+        return new File(configDir.getAbsolutePath() + DELIMITER + projectName + ".config");
     }
 
     public List<String> getFileNameList() {
@@ -89,7 +87,7 @@ public class PluginFileManager {
     public String getStaticFilePath(String staticFileUri) {
         String staticFilePath = staticFileUri.replaceFirst(
                 "/[^/]+/",
-                getStaticDir().getAbsolutePath() + DELIMITER
+                staticDir.getAbsolutePath() + DELIMITER
         );
         return staticFilePath.replaceAll("/", DELIMITER);
     }
