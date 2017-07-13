@@ -121,11 +121,11 @@ public class MethodConfig implements Comparable<MethodConfig> {
 
     @NotNull
     public String getClassPatternString() {
-        return methodPatternString;
+        return classPatternString;
     }
 
-    public void setClassPatternString(@NotNull String methodPatternString) {
-        this.methodPatternString = methodPatternString;
+    public void setClassPatternString(@NotNull String classPatternString) {
+        this.classPatternString = classPatternString;
     }
 
     @NotNull
