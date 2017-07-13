@@ -37,6 +37,34 @@ public class MethodConfig implements Comparable<MethodConfig> {
         initPatterns();
     }
 
+    public MethodConfig(@NotNull String classPatternString,
+                        @NotNull String methodPatternString,
+                        @NotNull String parametersPattern) {
+        this.classPatternString = classPatternString;
+        this.methodPatternString = methodPatternString;
+        this.isEnabled = true;
+        this.saveReturnValue = parametersPattern.charAt(parametersPattern.length() - 1) == '+';
+        parameters = parametersPatternToList(parametersPattern.substring(parametersPattern.indexOf("(") + 1,
+                parametersPattern.indexOf(")")));
+    }
+
+    @NotNull
+    private static List<Parameter> parametersPatternToList(String parametersPatternInnerPart) {
+        LinkedList<MethodConfig.Parameter> parameters = new LinkedList<>();
+        if (Objects.equals(parametersPatternInnerPart, "")) {
+            return parameters;
+        }
+        String[] stringParameters = parametersPatternInnerPart.split(" *, *");
+        for (String stringParameter : stringParameters) {
+            boolean isEnabled = stringParameter.charAt(stringParameter.length() - 1) == '+';
+            if (isEnabled) {
+                stringParameter = stringParameter.substring(0, stringParameter.length() - 1);
+            }
+            parameters.addLast(new MethodConfig.Parameter(stringParameter, isEnabled));
+        }
+        return parameters;
+    }
+
     private static boolean areParametersApplicable(@NotNull List<Parameter> applicableParams,
                                                    @NotNull List<Parameter> testedParams) {
         if (applicableParams.size() == 0) {

@@ -13,10 +13,10 @@ buildscript {
 plugins {
     id "org.jetbrains.intellij" version "0.1.10"
 }
+apply plugin: 'org.jetbrains.intellij'
 
 allprojects {
     apply plugin: 'java'
-    apply plugin: 'org.jetbrains.intellij'
     group = 'com.gitgub.kornilova_l'
     version = '1.0'
 }
@@ -48,6 +48,11 @@ task copyStatic(type: Copy) {
 task copyIcons(type: Copy) {
     from '/home/lk/java-profiling-plugin/icons'
     into '/home/lk/java-profiling-plugin/build/idea-sandbox/plugins/java-profiling-plugin/classes/icons'
+}
+
+task copyAgent(type: Copy) {
+    from '/home/lk/java-profiling-plugin/agent/build/libs/javaagent.jar'
+    into '/home/lk/java-profiling-plugin/build/idea-sandbox/plugins/java-profiling-plugin/classes'
 }
 
 task('prepareAndRunIde', dependsOn: [copyStatic, build, jar]) {

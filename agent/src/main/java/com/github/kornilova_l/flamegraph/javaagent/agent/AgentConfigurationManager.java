@@ -1,20 +1,37 @@
 package com.github.kornilova_l.flamegraph.javaagent.agent;
 
+import com.github.kornilova_l.flamegraph.configuration.Configuration;
+import com.github.kornilova_l.flamegraph.configuration.MethodConfig;
+
 import java.util.List;
 
 class AgentConfigurationManager {
-//    private static final Configuration configuration = new Configuration;
+    private static final Configuration configuration = new Configuration();
+
     static void readMethods(List<String> methodConfigLines) {
-//        for (String methodConfigLine : methodConfigLines) {
-//            boolean isExcluding = methodConfigLine.charAt(0) == '!';
-//            if (isExcluding) {
-//                methodConfigLine = methodConfigLine.substring(1, methodConfigLine.length());
-//            }
-//            configuration.addMethodConfig(methodConfigLine, isExcluding);
-//        }
-//        System.out.println("Configuration:");
-//        System.out.println("Including methods: " + config.includingMethodConfigs);
-//        System.out.println("Excluding methods: " + config.excludingMethodConfigs);
+        for (String methodConfigLine : methodConfigLines) {
+            boolean isExcluding = methodConfigLine.charAt(0) == '!';
+            if (isExcluding) {
+                methodConfigLine = methodConfigLine.substring(1, methodConfigLine.length());
+            }
+            String classAndMethod = methodConfigLine.substring(0, methodConfigLine.indexOf("("));
+            String classPatternString = classAndMethod.substring(0, classAndMethod.lastIndexOf("."));
+            String methodPatternString = classAndMethod.substring(
+                    classAndMethod.indexOf(".") + 1,
+                    classAndMethod.length()
+            );
+            String parametersPattern = methodConfigLine.substring(methodConfigLine.indexOf("("), methodConfigLine.length());
+            configuration.addMethodConfig(
+                    new MethodConfig(
+                            classPatternString,
+                            methodPatternString,
+                            parametersPattern
+                    ),
+                    isExcluding);
+        }
+        System.out.println("Configuration:");
+        System.out.println("Including methods: " + configuration.getIncludingMethodConfigs());
+        System.out.println("Excluding methods: " + configuration.getExcludingMethodConfigs());
     }
 //
 //    @NotNull

@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 public class PluginConfigManager {
@@ -33,26 +32,6 @@ public class PluginConfigManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    @NotNull
-    public static MethodConfig newMethodConfig(@NotNull String classPattern,
-                                               @NotNull String methodPattern,
-                                               @NotNull String parametersPattern) {
-        boolean saveReturnValue = parametersPattern.charAt(parametersPattern.length() - 1) == '+';
-        List<MethodConfig.Parameter> parameters = parametersPatternToList(parametersPattern);
-        return new MethodConfig(classPattern, methodPattern, parameters, true, saveReturnValue);
-    }
-
-    @NotNull
-    private static List<MethodConfig.Parameter> parametersPatternToList(@NotNull String parametersPattern) {
-        LinkedList<MethodConfig.Parameter> parameters = new LinkedList<>();
-        parametersPattern = parametersPattern.substring(1, parametersPattern.lastIndexOf(")"));
-        String[] stringParameters = parametersPattern.split(" *, *");
-        for (String stringParameter : stringParameters) {
-            parameters.addLast(new MethodConfig.Parameter(stringParameter, true));
-        }
-        return parameters;
     }
 
     @NotNull

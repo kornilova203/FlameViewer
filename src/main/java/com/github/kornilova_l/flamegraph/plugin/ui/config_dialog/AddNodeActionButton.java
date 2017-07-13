@@ -31,7 +31,7 @@ public class AddNodeActionButton implements AnActionButtonRunnable {
         if (!dialog.showAndGet()) {
             return;
         }
-        MethodConfig methodConfig = PluginConfigManager.newMethodConfig(
+        MethodConfig methodConfig = new MethodConfig(
                 dialog.getClassPattern(),
                 dialog.getMethodPattern(),
                 dialog.getParametersPattern());
