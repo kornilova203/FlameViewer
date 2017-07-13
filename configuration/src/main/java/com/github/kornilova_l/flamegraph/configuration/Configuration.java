@@ -78,7 +78,7 @@ public class Configuration {
     }
 
     @NotNull
-    private Collection<MethodConfig> getExcludingConfigs(@NotNull MethodConfig methodConfig) {
+    public Collection<MethodConfig> getExcludingConfigs(@NotNull MethodConfig methodConfig) {
         return getApplicableMethodConfigs(excludingMethodConfigs, methodConfig);
     }
 

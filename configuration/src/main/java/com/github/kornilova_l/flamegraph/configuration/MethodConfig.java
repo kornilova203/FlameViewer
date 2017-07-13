@@ -200,6 +200,11 @@ public class MethodConfig implements Comparable<MethodConfig> {
                 areParametersApplicable(parameters, testedConfig.parameters);
     }
 
+    public boolean isApplicableTo(String className) {
+        initPatterns();
+        return classPattern.matcher(className).matches();
+    }
+
     public static class Parameter {
         private String type;
         private boolean isEnabled;
