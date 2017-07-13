@@ -1,8 +1,9 @@
-package com.github.kornilova_l.flamegraph.plugin.ui.gutter.add_remove_actions;
+package com.github.kornilova_l.flamegraph.plugin.ui.line_markers.add_remove_actions;
 
-import com.github.kornilova_l.flamegraph.plugin.configuration.ConfigStorage;
+import com.github.kornilova_l.flamegraph.configuration.Configuration;
+import com.github.kornilova_l.flamegraph.configuration.MethodConfig;
 import com.github.kornilova_l.flamegraph.plugin.configuration.PluginConfigManager;
-import com.github.kornilova_l.flamegraph.plugin.ui.gutter.LineMarkersHolder;
+import com.github.kornilova_l.flamegraph.plugin.ui.line_markers.LineMarkersHolder;
 import com.intellij.debugger.impl.DebuggerUtilsEx;
 import com.intellij.openapi.actionSystem.ActionPlaces;
 import com.intellij.openapi.actionSystem.AnAction;
@@ -94,11 +95,13 @@ public class AddMethodToConfigAction extends AnAction {
         }
         assert event.getProject() != null;
         LineMarkersHolder lineMarkersHolder = project.getComponent(LineMarkersHolder.class);
-        ConfigStorage.Config config = PluginConfigManager.getConfiguration(event.getProject());
+        Configuration configuration = PluginConfigManager.getConfiguration(event.getProject());
         MarkupModelEx markupModel = LineMarkersHolder.getMarkupModel(editor.getDocument(), project);
-        config.maybeRemoveExactExcludingConfig(method);
-        config.addMethodConfig(method, false);
-        if (config.isMethodInstrumented(method)) {
+        MethodConfig methodConfig = PluginConfigManager.newMethodConfig(method);
+
+        configuration.maybeRemoveExactExcludingConfig(methodConfig);
+        configuration.addMethodConfig(methodConfig, false);
+        if (configuration.isMethodInstrumented(methodConfig)) {
             lineMarkersHolder.setIcon(method, markupModel);
         }
     }

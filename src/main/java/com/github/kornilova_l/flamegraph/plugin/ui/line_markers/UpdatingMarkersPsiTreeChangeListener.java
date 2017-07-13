@@ -1,4 +1,4 @@
-package com.github.kornilova_l.flamegraph.plugin.ui.gutter;
+package com.github.kornilova_l.flamegraph.plugin.ui.line_markers;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;

@@ -1,6 +1,6 @@
-package com.github.kornilova_l.flamegraph.plugin.ui.gutter;
+package com.github.kornilova_l.flamegraph.plugin.ui.line_markers;
 
-import com.github.kornilova_l.flamegraph.plugin.configuration.ConfigStorage;
+import com.github.kornilova_l.flamegraph.configuration.Configuration;
 import com.github.kornilova_l.flamegraph.plugin.configuration.PluginConfigManager;
 import com.intellij.openapi.components.AbstractProjectComponent;
 import com.intellij.openapi.editor.Document;
@@ -22,11 +22,11 @@ import java.util.HashMap;
 
 public class LineMarkersHolder extends AbstractProjectComponent {
     private final HashMap<PsiMethod, RangeHighlighter> rangeHighlighters = new HashMap<>();
-    private final ConfigStorage.Config config;
+    private final Configuration configuration;
 
     protected LineMarkersHolder(Project project) {
         super(project);
-        config = PluginConfigManager.getConfiguration(myProject);
+        configuration = PluginConfigManager.getConfiguration(myProject);
     }
 
     public static MarkupModelEx getMarkupModel(Document document, Project project) {
@@ -64,7 +64,7 @@ public class LineMarkersHolder extends AbstractProjectComponent {
     }
 
     public void updateMethodMarker(PsiMethod psiMethod, MarkupModelEx markupModel) {
-        if (config.isMethodInstrumented(psiMethod)) {
+        if (configuration.isMethodInstrumented(PluginConfigManager.newMethodConfig(psiMethod))) {
             setIcon(psiMethod, markupModel);
         } else {
             removeIconIfPresent(psiMethod, markupModel);

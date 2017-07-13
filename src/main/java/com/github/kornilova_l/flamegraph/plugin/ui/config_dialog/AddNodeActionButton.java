@@ -2,7 +2,7 @@ package com.github.kornilova_l.flamegraph.plugin.ui.config_dialog;
 
 import com.github.kornilova_l.flamegraph.configuration.MethodConfig;
 import com.github.kornilova_l.flamegraph.plugin.configuration.PluginConfigManager;
-import com.github.kornilova_l.flamegraph.plugin.ui.gutter.LineMarkersHolder;
+import com.github.kornilova_l.flamegraph.plugin.ui.line_markers.LineMarkersHolder;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.EditorFactory;

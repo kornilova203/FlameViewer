@@ -39,25 +39,25 @@
         <group>
             <add-to-group group-id="EditorPopupMenu" anchor="last"/>
             <action id="flamegraph-profiler.AddMethodToConfigAction"
-                    class="com.github.kornilova_l.flamegraph.plugin.ui.gutter.add_remove_actions.AddMethodToConfigAction"
+                    class="com.github.kornilova_l.flamegraph.plugin.ui.line_markers.add_remove_actions.AddMethodToConfigAction"
                     text="Add method to Profiler Config"/>
             <action id="flamegraph-profiler.RemoveMethodToConfigAction"
-                    class="com.github.kornilova_l.flamegraph.plugin.ui.gutter.add_remove_actions.RemoveMethodFromConfigAction"
+                    class="com.github.kornilova_l.flamegraph.plugin.ui.line_markers.add_remove_actions.RemoveMethodFromConfigAction"
                     text="Remove method from Profiler Config"/>
         </group>
     </actions>
     <project-components>
         <component>
             <interface-class>com.intellij.openapi.components.PersistentStateComponent</interface-class>
-            <implementation-class>com.github.kornilova_l.flamegraph.config.ConfigStorage</implementation-class>
+            <implementation-class>com.github.kornilova_l.flamegraph.configuration.Configuration</implementation-class>
         </component>
         <component>
-            <interface-class>com.github.kornilova_l.flamegraph.plugin.ui.gutter.LineMarkerProjectComponent</interface-class>
-            <implementation-class>com.github.kornilova_l.flamegraph.plugin.ui.gutter.LineMarkerProjectComponent</implementation-class>
+            <interface-class>com.github.kornilova_l.flamegraph.plugin.ui.line_markers.LineMarkerProjectComponent</interface-class>
+            <implementation-class>com.github.kornilova_l.flamegraph.plugin.ui.line_markers.LineMarkerProjectComponent</implementation-class>
         </component>
         <component>
-            <interface-class>com.github.kornilova_l.flamegraph.plugin.ui.gutter.LineMarkersHolder</interface-class>
-            <implementation-class>com.github.kornilova_l.flamegraph.plugin.ui.gutter.LineMarkersHolder</implementation-class>
+            <interface-class>com.github.kornilova_l.flamegraph.plugin.ui.line_markers.LineMarkersHolder</interface-class>
+            <implementation-class>com.github.kornilova_l.flamegraph.plugin.ui.line_markers.LineMarkersHolder</implementation-class>
         </component>
     </project-components>
 

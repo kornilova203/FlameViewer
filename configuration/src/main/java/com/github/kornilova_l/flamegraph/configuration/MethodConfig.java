@@ -4,6 +4,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
+import java.util.regex.Pattern;
 
 public class MethodConfig implements Comparable<MethodConfig> {
     @NotNull
@@ -14,6 +16,9 @@ public class MethodConfig implements Comparable<MethodConfig> {
     private List<Parameter> parameters = new LinkedList<>();
     private boolean isEnabled = true;
     private boolean saveReturnValue = false;
+
+    private Pattern classPattern;
+    private Pattern methodPattern;
 
     @SuppressWarnings("unused")
     public MethodConfig() {
@@ -29,6 +34,41 @@ public class MethodConfig implements Comparable<MethodConfig> {
         this.parameters = parameters;
         this.isEnabled = isEnabled;
         this.saveReturnValue = saveReturnValue;
+        initPatterns();
+    }
+
+    private static boolean areParametersApplicable(@NotNull List<Parameter> applicableParams,
+                                                   @NotNull List<Parameter> testedParams) {
+        if (applicableParams.size() == 0) {
+            return testedParams.size() == 0;
+        }
+        if (applicableParams.size() > testedParams.size()) {
+            return false;
+        }
+        int i = 0;
+        for (; i < applicableParams.size(); i++) {
+            Parameter parameter = applicableParams.get(i);
+            if (Objects.equals(parameter.type, "*")) {
+                return true;
+            }
+            if (!Objects.equals(parameter.getType(), testedParams.get(i).getType())) {
+                return false;
+            }
+        }
+        return testedParams.size() == i;
+    }
+
+    private void initPatterns() {
+        if (classPattern == null || methodPattern == null) {
+            classPattern = Pattern.compile(
+                    classPatternString
+                            .replaceAll("\\.", "\\.")
+                            .replaceAll("\\*", ".*"));
+            methodPattern = Pattern.compile(
+                    methodPatternString
+                            .replaceAll("\\.", "\\.")
+                            .replaceAll("\\*", ".*"));
+        }
     }
 
     public boolean isSaveReturnValue() {
@@ -123,6 +163,13 @@ public class MethodConfig implements Comparable<MethodConfig> {
         } else {
             return classPatternString.substring(dot + 1, classPatternString.length() - 1);
         }
+    }
+
+    public boolean isApplicableTo(@NotNull MethodConfig testedConfig) {
+        initPatterns();
+        return classPattern.matcher(testedConfig.classPatternString).matches() &&
+                methodPattern.matcher(testedConfig.methodPatternString).matches() &&
+                areParametersApplicable(parameters, testedConfig.parameters);
     }
 
     public static class Parameter {

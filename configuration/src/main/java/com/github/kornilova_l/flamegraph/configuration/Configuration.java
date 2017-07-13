@@ -1,5 +1,7 @@
 package com.github.kornilova_l.flamegraph.configuration;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collection;
 import java.util.TreeSet;
 
@@ -55,5 +57,44 @@ public class Configuration {
         } else {
             includingMethodConfigs.add(methodConfig);
         }
+    }
+
+    public void maybeRemoveExactExcludingConfig(MethodConfig methodConfig) {
+        excludingMethodConfigs.remove(methodConfig);
+    }
+
+    public void maybeRemoveExactIncludingConfig(MethodConfig methodConfig) {
+        includingMethodConfigs.remove(methodConfig);
+    }
+
+    public boolean isMethodInstrumented(@NotNull MethodConfig methodConfig) {
+        return getExcludingConfigs(methodConfig).size() == 0 &&
+                getIncludingConfigs(methodConfig).size() != 0;
+    }
+
+    @NotNull
+    private Collection<MethodConfig> getIncludingConfigs(@NotNull MethodConfig methodConfig) {
+        return getApplicableMethodConfigs(includingMethodConfigs, methodConfig);
+    }
+
+    @NotNull
+    private Collection<MethodConfig> getExcludingConfigs(@NotNull MethodConfig methodConfig) {
+        return getApplicableMethodConfigs(excludingMethodConfigs, methodConfig);
+    }
+
+    @NotNull
+    private Collection<MethodConfig> getApplicableMethodConfigs(@NotNull Collection<MethodConfig> methodConfigs,
+                                                                @NotNull MethodConfig testedConfig) {
+        Collection<MethodConfig> excludingConfigs = new TreeSet<>();
+        for (MethodConfig methodConfig : excludingMethodConfigs) {
+            if (methodConfig.isApplicableTo(testedConfig)) {
+                excludingConfigs.add(methodConfig);
+            }
+        }
+        return excludingConfigs;
+    }
+
+    public boolean isMethodExcluded(@NotNull MethodConfig methodConfig) {
+        return getExcludingConfigs(methodConfig).size() != 0;
     }
 }
