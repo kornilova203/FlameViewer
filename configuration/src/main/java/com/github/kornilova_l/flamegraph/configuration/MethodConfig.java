@@ -70,6 +70,10 @@ public class MethodConfig implements Comparable<MethodConfig> {
         if (applicableParams.size() == 0) {
             return testedParams.size() == 0;
         }
+        if (applicableParams.size() == 1 &&
+                Objects.equals(applicableParams.get(0).type, "*")) {
+            return true;
+        }
         if (applicableParams.size() > testedParams.size()) {
             return false;
         }
