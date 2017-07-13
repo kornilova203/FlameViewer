@@ -3,10 +3,9 @@ package com.github.kornilova_l.profiler.agent;
 import com.github.kornilova_l.config.ConfigStorage;
 import com.github.kornilova_l.config.MethodConfig;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
 
 class Configuration {
     private static final ConfigStorage.Config config = new ConfigStorage.Config();
@@ -19,22 +18,14 @@ class Configuration {
             }
             config.addMethodConfig(methodConfigLine, isExcluding);
         }
+        System.out.println("Configuration:");
+        System.out.println("Including methods: " + config.includingMethodConfigs);
+        System.out.println("Excluding methods: " + config.excludingMethodConfigs);
     }
 
     @NotNull
     static List<MethodConfig> findIncludingConfigs(String className) {
         return config.findIncludingConfigs(className.replaceAll("/", "."));
-    }
-
-    @Nullable
-    public static MethodConfig getMethodIfPresent(List<MethodConfig> methodConfigs, String methodName, String desc) {
-        for (MethodConfig methodConfig : methodConfigs) {
-            if (Objects.equals(methodConfig.methodPatternString, methodName) &&
-                    desc.startsWith(MethodConfig.parametersToStringForJvm(methodConfig.parameters))) {
-                return methodConfig;
-            }
-        }
-        return null;
     }
 
     public static boolean isMethodExcluded(String className, String methodName, String desc) {
@@ -44,7 +35,13 @@ class Configuration {
     @NotNull
     public static List<MethodConfig> findIncludingConfigs(List<MethodConfig> methodConfigs,
                                                           String methodName,
-                                                          String jvmDesc) {
-        return null;
+                                                          String jvmDescPart) {
+        LinkedList<MethodConfig> applicableConfigs = new LinkedList<>();
+        for (MethodConfig methodConfig : methodConfigs) {
+            if (methodConfig.isApplicableTo(methodName, jvmDescPart)) {
+                applicableConfigs.add(methodConfig);
+            }
+        }
+        return applicableConfigs;
     }
 }

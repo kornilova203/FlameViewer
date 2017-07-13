@@ -4,7 +4,6 @@ import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.State;
 import com.intellij.psi.PsiMethod;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -17,8 +16,6 @@ import java.util.regex.Pattern;
 @State(name = "flamegraph-profiler")
 public class ConfigStorage implements PersistentStateComponent<ConfigStorage.Config> {
     Config config;
-    private final static Pattern paramsPattern = Pattern.compile("(\\[?)(C|Z|S|I|J|F|D|B|(:?L[^;]+;))");
-
 
     public ConfigStorage() {
         config = new Config();
@@ -34,6 +31,7 @@ public class ConfigStorage implements PersistentStateComponent<ConfigStorage.Con
 
     @SuppressWarnings("PublicField")
     public static class Config {
+        private final static Pattern paramsPattern = Pattern.compile("(\\[?)(C|Z|S|I|J|F|D|B|(:?L[^;]+;))");
 
         public Collection<MethodConfig> includingMethodConfigs; // node for tree of includingMethodConfigs
         public Collection<MethodConfig> excludingMethodConfigs; // node for tree of includingMethodConfigs
@@ -141,9 +139,12 @@ public class ConfigStorage implements PersistentStateComponent<ConfigStorage.Con
 
         @NotNull
         public List<MethodConfig> findIncludingConfigs(@NotNull String className) {
+//            System.out.println("findIncludingConfigs for class: " + className);
             List<MethodConfig> wantedConfigs = new LinkedList<>();
             for (MethodConfig methodConfig : includingMethodConfigs) {
+//                System.out.println("check " + methodConfig);
                 if (methodConfig.isApplicableToClass(className)) {
+//                    System.out.println("good");
                     wantedConfigs.add(methodConfig);
                 }
             }
@@ -151,27 +152,44 @@ public class ConfigStorage implements PersistentStateComponent<ConfigStorage.Con
         }
 
         public boolean isMethodExcluded(String className, String methodName, String jvmDesc) {
+            System.out.println("is method excluded? " + className + " " + methodName);
             String[] jvmParameters = splitJvmParams(jvmDesc.substring(jvmDesc.indexOf("(") + 1, jvmDesc.indexOf(")")));
+            System.out.println("jvmParameters: " + Arrays.toString(jvmParameters));
             for (MethodConfig excludingMethodConfig : excludingMethodConfigs) {
+                System.out.println("check: " + excludingMethodConfig);
                 if (excludingMethodConfig.isApplicableTo(className, methodName, jvmParameters)) {
+                    System.out.println("excluded");
                     return true;
+                } else {
+                    System.out.println("not excluded");
                 }
             }
             return false;
         }
 
-        @Nullable
-        private static String[] splitJvmParams(String partOfDescWithParams) {
+        @NotNull
+        public static String[] splitJvmParams(@NotNull String partOfDescWithParams) {
+            System.out.println("splitJvmParams " + partOfDescWithParams);
+            System.out.println("hello");
+            if (Objects.equals(partOfDescWithParams, "")) {
+                return new String[0];
+            }
+            System.out.println("hello");
             ArrayList<String> paramsDesc = new ArrayList<>();
+            System.out.println("hello");
+            System.out.println("paramsPattern: " + paramsPattern);
             Matcher m = paramsPattern.matcher(partOfDescWithParams);
             while (m.find()) {
+                System.out.println("found parameter: " + m.group());
                 paramsDesc.add(m.group());
             }
             if (paramsDesc.isEmpty()) {
-                return null;
+                System.out.println("is empty");
+                return new String[0];
             }
             String[] ret = new String[paramsDesc.size()];
             paramsDesc.toArray(ret);
+            System.out.println("result: " + paramsDesc);
             return ret;
         }
     }

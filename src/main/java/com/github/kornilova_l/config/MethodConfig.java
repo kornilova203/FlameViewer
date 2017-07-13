@@ -286,12 +286,18 @@ public class MethodConfig implements Comparable<MethodConfig> {
         return classPattern.matcher(className).matches();
     }
 
-    public boolean isApplicableTo(String className, String methodName, String[] jvmParameters) {
+    public boolean isApplicableTo(@NotNull String className, @NotNull String methodName, @NotNull String[] jvmParameters) {
         assert classPattern != null;
         assert methodPattern != null;
         return classPattern.matcher(className).matches() &&
                 methodPattern.matcher(methodName).matches() &&
                 areParametersSame(jvmParameters, parameters);
+    }
+
+    public boolean isApplicableTo(@NotNull String methodName, @NotNull String jvmDescPart) {
+        assert methodPattern != null;
+        return methodPattern.matcher(methodName).matches() &&
+                areParametersSame(ConfigStorage.Config.splitJvmParams(jvmDescPart), parameters);
     }
 
     public static class Parameter {
