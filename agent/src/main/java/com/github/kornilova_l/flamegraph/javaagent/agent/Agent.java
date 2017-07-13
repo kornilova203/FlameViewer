@@ -1,6 +1,6 @@
 package com.github.kornilova_l.flamegraph.javaagent.agent;
 
-import com.github.kornilova_l.flamegraph.javaagent.FileManager;
+import com.github.kornilova_l.flamegraph.javaagent.AgentFileManager;
 import com.github.kornilova_l.flamegraph.javaagent.logger.Logger;
 import org.jetbrains.annotations.Nullable;
 
@@ -23,8 +23,8 @@ public class Agent {
         if (methods == null) {
             return;
         }
-        Logger.init(new FileManager(parameters[0]));
-        Configuration.readMethods(methods);
+        Logger.init(new AgentFileManager(parameters[0]));
+        AgentConfigurationManager.readMethods(methods);
         inst.addTransformer(new ProfilingClassFileTransformer());
     }
 

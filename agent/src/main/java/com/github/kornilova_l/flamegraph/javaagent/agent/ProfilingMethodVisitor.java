@@ -1,17 +1,11 @@
 package com.github.kornilova_l.flamegraph.javaagent.agent;
 
-import com.github.kornilova_l.config.MethodConfig;
-import org.jetbrains.annotations.NotNull;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.commons.AdviceAdapter;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static com.github.kornilova_l.config.ConfigStorage.Config.splitJvmParams;
 
 class ProfilingMethodVisitor extends AdviceAdapter {
     private final static Pattern returnTypePattern = Pattern.compile("(?<=\\)).*"); // (?<=\)).*
@@ -19,52 +13,52 @@ class ProfilingMethodVisitor extends AdviceAdapter {
     private final String methodName;
     private final String className;
     private final boolean hasSystemCL;
-    private final List<Boolean> parametersIncluded;
-    private final String[] jvmParameters;
+//    private final List<Boolean> parametersIncluded;
+//    private final String[] jvmParameters;
 
     ProfilingMethodVisitor(int access, String methodName, String desc,
-                           MethodVisitor mv, String className, boolean hasSystemCL, List<MethodConfig> methodConfigs) {
+                           MethodVisitor mv, String className, boolean hasSystemCL) {
         super(ASM5, mv, access, methodName, desc);
         this.className = className;
         this.methodName = methodName;
         this.hasSystemCL = hasSystemCL;
-        jvmParameters = Config.splitJvmParams(desc.substring(desc.indexOf("(") + 1, desc.indexOf(")")));
-        this.parametersIncluded = getParametersIncluded(methodConfigs);
+//        jvmParameters = Config.splitJvmParams(desc.substring(desc.indexOf("(") + 1, desc.indexOf(")")));
+//        this.parametersIncluded = getParametersIncluded(methodConfigs);
     }
 
-    @NotNull
-    private List<Boolean> getParametersIncluded(@NotNull List<MethodConfig> methodConfigs) {
-        List<Boolean> parametersIncluded = new LinkedList<>();
-        initParametersIncludedList(parametersIncluded);
-        for (MethodConfig methodConfig : methodConfigs) {
-            updateParametersList(parametersIncluded, methodConfig);
-        }
-        return parametersIncluded;
-    }
+//    @NotNull
+//    private List<Boolean> getParametersIncluded(@NotNull List<MethodConfig> methodConfigs) {
+//        List<Boolean> parametersIncluded = new LinkedList<>();
+//        initParametersIncludedList(parametersIncluded);
+////        for (MethodConfig methodConfig : methodConfigs) {
+////            updateParametersList(parametersIncluded, methodConfig);
+////        }
+//        return parametersIncluded;
+//    }
 
-    private static void updateParametersList(List<Boolean> parametersIncluded, MethodConfig methodConfig) {
-        for (int i = 0; i < methodConfig.parameters.size(); i++) {
-            if (methodConfig.parameters.get(i).isEnable) {
-                if (Objects.equals(methodConfig.parameters.get(i).type, "*")) {
-                    makeAllParametersIncluded(parametersIncluded, i, methodConfig.parameters.size());
-                } else {
-                    parametersIncluded.add(i, true);
-                }
-            }
-        }
-    }
-
-    private static void makeAllParametersIncluded(List<Boolean> parametersIncluded, int startIndex, int length) {
-        for (int j = startIndex; j < length; j++) {
-            parametersIncluded.add(j, true);
-        }
-    }
-
-    private void initParametersIncludedList(List<Boolean> parametersIncluded) {
-        for (String ignored : jvmParameters) {
-            parametersIncluded.add(false);
-        }
-    }
+//    private static void updateParametersList(List<Boolean> parametersIncluded, MethodConfig methodConfig) {
+//        for (int i = 0; i < methodConfig.parameters.size(); i++) {
+//            if (methodConfig.parameters.get(i).isEnable) {
+//                if (Objects.equals(methodConfig.parameters.get(i).type, "*")) {
+//                    makeAllParametersIncluded(parametersIncluded, i, methodConfig.parameters.size());
+//                } else {
+//                    parametersIncluded.add(i, true);
+//                }
+//            }
+//        }
+//    }
+//
+//    private static void makeAllParametersIncluded(List<Boolean> parametersIncluded, int startIndex, int length) {
+//        for (int j = startIndex; j < length; j++) {
+//            parametersIncluded.add(j, true);
+//        }
+//    }
+//
+//    private void initParametersIncludedList(List<Boolean> parametersIncluded) {
+//        for (String ignored : jvmParameters) {
+//            parametersIncluded.add(false);
+//        }
+//    }
 
     private static int getSizeOfRetVal(int opcode) {
         if (opcode == LRETURN || // long
@@ -81,7 +75,7 @@ class ProfilingMethodVisitor extends AdviceAdapter {
         getClassNameAndMethodName();
         mv.visitLdcInsn(methodDesc);
         getIsStatic();
-        int countEnabledParams = (int) parametersIncluded.stream().filter((parameter -> parameter)).count();
+        int countEnabledParams = 0;//(int) parametersIncluded.stream().filter((parameter -> parameter)).count();
         if (countEnabledParams > 0) { // if at least one parameter is enabled
             getArrayWithParameters(countEnabledParams);
         } else {
@@ -113,21 +107,21 @@ class ProfilingMethodVisitor extends AdviceAdapter {
     }
 
     private void getArrayWithParameters(int arraySize) {
-        createObjArray(arraySize);
-        int posOfParam = 0;
-        if (!isStatic()) {
-            posOfParam = 1;
-        }
-        int index = 0;
-        for (int i = 0; i < parametersIncluded.size(); i++) {
-            if (parametersIncluded.get(i)) {
-                mv.visitInsn(DUP); // array reference
-                getIConst(index++); // index of element
-                paramToObj(jvmParameters[i], posOfParam);
-                visitInsn(AASTORE); // load obj to array
-            }
-            posOfParam = getObjSize(jvmParameters[i]);
-        }
+//        createObjArray(arraySize);
+//        int posOfParam = 0;
+//        if (!isStatic()) {
+//            posOfParam = 1;
+//        }
+//        int index = 0;
+//        for (int i = 0; i < parametersIncluded.size(); i++) {
+//            if (parametersIncluded.get(i)) {
+//                mv.visitInsn(DUP); // array reference
+//                getIConst(index++); // index of element
+//                paramToObj(jvmParameters[i], posOfParam);
+//                visitInsn(AASTORE); // load obj to array
+//            }
+//            posOfParam = getObjSize(jvmParameters[i]);
+//        }
     }
 
     private void loadNull() {

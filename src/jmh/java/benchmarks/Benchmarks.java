@@ -1,6 +1,6 @@
 package benchmarks;
 
-import com.github.kornilova_l.samples.Sample;
+import temp.samples.Sample;
 import org.openjdk.jmh.annotations.*;
 
 import java.util.concurrent.TimeUnit;

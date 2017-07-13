@@ -1,6 +1,6 @@
 package com.github.kornilova_l.flamegraph.javaagent.logger;
 
-import com.github.kornilova_l.flamegraph.javaagent.FileManager;
+import com.github.kornilova_l.flamegraph.javaagent.AgentFileManager;
 import com.github.kornilova_l.flamegraph.proto.EventProtos;
 
 import java.io.*;
@@ -18,7 +18,7 @@ public class Logger implements Runnable {
     private static int countEventsLogged = 0;
     boolean isDone = true; // changes to false when queue is enqueued
 
-    public static void init(FileManager profilerFileManager) {
+    public static void init(AgentFileManager profilerFileManager) {
         file = profilerFileManager.createLogFile();
         System.out.println("Output file: " + file);
         OutputStream temp = null;
