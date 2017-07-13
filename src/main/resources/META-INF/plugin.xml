@@ -49,7 +49,7 @@
     <project-components>
         <component>
             <interface-class>com.intellij.openapi.components.PersistentStateComponent</interface-class>
-            <implementation-class>com.github.kornilova_l.flamegraph.configuration.Configuration</implementation-class>
+            <implementation-class>com.github.kornilova_l.flamegraph.plugin.configuration.ConfigStorage</implementation-class>
         </component>
         <component>
             <interface-class>com.github.kornilova_l.flamegraph.plugin.ui.line_markers.LineMarkerProjectComponent</interface-class>
