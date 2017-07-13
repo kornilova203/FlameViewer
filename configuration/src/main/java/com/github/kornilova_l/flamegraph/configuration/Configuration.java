@@ -83,10 +83,10 @@ public class Configuration {
     }
 
     @NotNull
-    private Collection<MethodConfig> getApplicableMethodConfigs(@NotNull Collection<MethodConfig> methodConfigs,
-                                                                @NotNull MethodConfig testedConfig) {
+    private static Collection<MethodConfig> getApplicableMethodConfigs(@NotNull Collection<MethodConfig> methodConfigs,
+                                                                       @NotNull MethodConfig testedConfig) {
         Collection<MethodConfig> excludingConfigs = new TreeSet<>();
-        for (MethodConfig methodConfig : excludingMethodConfigs) {
+        for (MethodConfig methodConfig : methodConfigs) {
             if (methodConfig.isApplicableTo(testedConfig)) {
                 excludingConfigs.add(methodConfig);
             }
