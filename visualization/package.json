@@ -4,8 +4,8 @@
   "description": "flamegraph",
   "main": "index.html",
   "scripts": {
-    "watch-call-tree": "mkdir -p static/js/out && watchify static/js/src/call-tree.js -o static/js/out/call-tree.js -dv",
-    "watch-accumulative-trees": "mkdir -p static/js/out && watchify static/js/src/accumulative-trees.js -o static/js/out/accumulative-trees.js -dv"
+    "watch-call-tree": "watchify static/js/src/call-tree.js -o static/js/out/call-tree.js -dv",
+    "watch-accumulative-trees": "watchify static/js/src/accumulative-trees.js -o static/js/out/accumulative-trees.js -dv"
   },
   "author": "Liudmila Kornilova",
   "license": "ISC",

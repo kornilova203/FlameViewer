@@ -98,7 +98,10 @@ public class PluginFileManager {
                 "/[^/]+/",
                 (staticDir.getAbsolutePath() + DELIMITER).replaceAll("\\\\", "\\\\\\\\")
         );
-        return staticFilePath.replaceAll("/", DELIMITER);
+        if (isWindows) {
+            return staticFilePath.replaceAll("/", "\\\\");
+        }
+        return staticFilePath;
     }
 
     @NotNull
