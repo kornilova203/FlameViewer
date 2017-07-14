@@ -193,7 +193,7 @@ public class MethodConfig implements Comparable<MethodConfig> {
         if (dot == -1) {
             return classPatternString;
         } else {
-            return classPatternString.substring(dot + 1, classPatternString.length() - 1);
+            return classPatternString.substring(dot + 1, classPatternString.length());
         }
     }
 

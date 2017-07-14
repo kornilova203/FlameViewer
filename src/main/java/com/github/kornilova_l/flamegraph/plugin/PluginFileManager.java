@@ -37,7 +37,7 @@ public class PluginFileManager {
         staticDir = new File(getClass().getResource("/" + STATIC_DIR_NAME).getPath());
     }
 
-    private String getNormalSysPath(@NotNull String systemDirPath) {
+    private static String getNormalSysPath(@NotNull String systemDirPath) {
         if (isWindows) {
             return systemDirPath.replaceAll("/", "\\\\");
         }
