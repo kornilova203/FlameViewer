@@ -59,17 +59,21 @@ public class LineMarkersHolder extends AbstractProjectComponent {
         }
     }
 
-    public void updateMethodMarker(@NotNull PsiFile psiFile, @NotNull Document document) {
-        new UpdatingPsiElementVisitor(myProject, getMarkupModel(document, myProject))
-                .visitElement(psiFile);
+    private void updateMethodMarker(@NotNull PsiFile psiFile, @NotNull Document document) {
+        DumbService.getInstance(myProject).runWhenSmart(() -> {
+            new UpdatingPsiElementVisitor(myProject, getMarkupModel(document, myProject))
+                    .visitElement(psiFile);
+        });
     }
 
-    public void updateMethodMarker(PsiMethod psiMethod, MarkupModelEx markupModel) {
-        if (configuration.isMethodInstrumented(PluginConfigManager.newMethodConfig(psiMethod))) {
-            setIcon(psiMethod, markupModel);
-        } else {
-            removeIconIfPresent(psiMethod, markupModel);
-        }
+    void updateMethodMarker(PsiMethod psiMethod, MarkupModelEx markupModel) {
+        DumbService.getInstance(myProject).runWhenSmart(() -> {
+            if (configuration.isMethodInstrumented(PluginConfigManager.newMethodConfig(psiMethod))) {
+                setIcon(psiMethod, markupModel);
+            } else {
+                removeIconIfPresent(psiMethod, markupModel);
+            }
+        });
     }
 
     public void updateMethodMarker(@NotNull VirtualFile file) {
