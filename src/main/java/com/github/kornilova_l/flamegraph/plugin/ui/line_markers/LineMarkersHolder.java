@@ -34,21 +34,25 @@ public class LineMarkersHolder extends AbstractProjectComponent {
         return (MarkupModelEx) DocumentMarkupModel.forDocument(document, project, true);
     }
 
-    public void setIcon(PsiMethod method, MarkupModelEx markupModel) {
-        if (!rangeHighlighters.containsKey(method) || // if no highlighter for this method
-                !markupModel.containsHighlighter(rangeHighlighters.get(method))) { // or it isn't shown
-            try {
-                RangeHighlighter highlighter = markupModel.addRangeHighlighter(
-                        method.getTextOffset(),
-                        method.getTextOffset() + 1,
-                        DebuggerColors.BREAKPOINT_HIGHLIGHTER_LAYER,
-                        null,
-                        HighlighterTargetArea.EXACT_RANGE);
-                highlighter.setGutterIconRenderer(new ProfilerGutterIconRenderer());
-                rangeHighlighters.put(method, highlighter);
-            } catch (ProcessCanceledException exception) {
-                exception.printStackTrace();
-            }
+    public void setIcon(PsiMethod psiMethod, MarkupModelEx markupModel) {
+        removeIconIfPresent(psiMethod, markupModel);
+        try {
+            RangeHighlighter highlighter = markupModel.addRangeHighlighter(
+                    psiMethod.getTextOffset(),
+                    psiMethod.getTextOffset() + 1,
+                    DebuggerColors.BREAKPOINT_HIGHLIGHTER_LAYER,
+                    null,
+                    HighlighterTargetArea.EXACT_RANGE);
+            highlighter.setGutterIconRenderer(
+                    new ProfilerGutterIconRenderer(
+                            configuration.getIncludingConfigs(
+                                    PluginConfigManager.newMethodConfig(psiMethod)
+                            )
+                    )
+            );
+            rangeHighlighters.put(psiMethod, highlighter);
+        } catch (ProcessCanceledException exception) {
+            exception.printStackTrace();
         }
     }
 
@@ -56,6 +60,7 @@ public class LineMarkersHolder extends AbstractProjectComponent {
         RangeHighlighter highlighter = rangeHighlighters.get(method);
         if (highlighter != null) {
             markupModel.removeHighlighter(highlighter);
+            rangeHighlighters.remove(method);
         }
     }
 

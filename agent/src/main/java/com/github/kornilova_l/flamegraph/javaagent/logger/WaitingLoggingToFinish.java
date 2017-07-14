@@ -18,6 +18,6 @@ public class WaitingLoggingToFinish extends Thread {
             Thread.yield();
         }
         Logger.closeOutputStream();
-        Logger.printDataForHuman();
+//        Logger.printDataForHuman();
     }
 }

@@ -73,7 +73,7 @@ public class Configuration {
     }
 
     @NotNull
-    private Collection<MethodConfig> getIncludingConfigs(@NotNull MethodConfig methodConfig) {
+    public Collection<MethodConfig> getIncludingConfigs(@NotNull MethodConfig methodConfig) {
         return getApplicableMethodConfigs(includingMethodConfigs, methodConfig);
     }
 
