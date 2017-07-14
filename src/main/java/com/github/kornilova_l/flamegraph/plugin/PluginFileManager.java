@@ -13,7 +13,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class PluginFileManager {
-    private static final String DELIMITER = System.getProperty("os.name").startsWith("Windows") ? "\\" : "/";
+    private static final boolean isWindows = System.getProperty("os.name").startsWith("Windows");
+    private static final String DELIMITER = isWindows ? "\\" : "/";
     private static final String PLUGIN_DIR_NAME = DELIMITER + "flamegraph-profiler";
     private static final String LOG_DIR_NAME = DELIMITER + "events";
     private static final String CONFIG_DIR_NAME = DELIMITER + "configuration";
@@ -26,7 +27,9 @@ public class PluginFileManager {
     private final File staticDir;
 
     public PluginFileManager(@NotNull String systemDirPath) {
+        systemDirPath = getNormalSysPath(systemDirPath);
         String pluginDirPath = systemDirPath + PLUGIN_DIR_NAME;
+        createDirIfNotExist(new File(pluginDirPath));
         logDir = new File(pluginDirPath + LOG_DIR_NAME);
         createDirIfNotExist(logDir);
         configDir = new File(pluginDirPath + CONFIG_DIR_NAME);
@@ -34,11 +37,17 @@ public class PluginFileManager {
         staticDir = new File(getClass().getResource("/" + STATIC_DIR_NAME).getPath());
     }
 
+    private String getNormalSysPath(@NotNull String systemDirPath) {
+        if (isWindows) {
+            return systemDirPath.replaceAll("/", "\\\\");
+        }
+        return systemDirPath;
+    }
+
     private static void createDirIfNotExist(@NotNull File dir) {
         if (!dir.exists()) {
             try {
-                //noinspection ResultOfMethodCallIgnored
-                dir.mkdir();
+                assert dir.mkdir();
             } catch (SecurityException se) {
                 se.printStackTrace();
             }
@@ -87,7 +96,7 @@ public class PluginFileManager {
     public String getStaticFilePath(String staticFileUri) {
         String staticFilePath = staticFileUri.replaceFirst(
                 "/[^/]+/",
-                staticDir.getAbsolutePath() + DELIMITER
+                (staticDir.getAbsolutePath() + DELIMITER).replaceAll("\\\\", "\\\\\\\\")
         );
         return staticFilePath.replaceAll("/", DELIMITER);
     }
@@ -100,8 +109,8 @@ public class PluginFileManager {
     @NotNull
     public String getPathToAgent() {
         String path = getClass().getResource("/javaagent.jar").getPath();
-        if (System.getProperty("os.name").startsWith("Windows")) {
-            path = path.substring(1, path.length()).replaceAll("\\/", "\\");
+        if (isWindows) {
+            path = path.substring(1, path.length()).replaceAll("/", "\\\\");
         }
         return path;
     }
