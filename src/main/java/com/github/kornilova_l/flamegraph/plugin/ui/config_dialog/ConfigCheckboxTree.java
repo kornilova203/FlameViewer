@@ -76,22 +76,25 @@ public class ConfigCheckboxTree extends CheckboxTree {
         System.out.println("selection changed");
     }
 
-    public void initTree(@NotNull Collection<MethodConfig> methods) {
+    public void initTree(@NotNull Collection<MethodConfig> including, Collection<MethodConfig> excluding) {
         root.removeAllChildren();
-        for (MethodConfig methodConfig : methods) {
-            addMethodNode(methodConfig);
+        for (MethodConfig methodConfig : including) {
+            addMethodNode(methodConfig, false);
+        }
+        for (MethodConfig methodConfig : excluding) {
+            addMethodNode(methodConfig, true);
         }
         model.nodeStructureChanged(root);
         TreeUtil.expandAll(this);
         setSelectionRow(0);
     }
 
-    @NotNull
-    private ConfigCheckedTreeNode addMethodNode(MethodConfig methodConfig) {
+    private ConfigCheckedTreeNode addMethodNode(MethodConfig methodConfig, boolean isExcluding) {
         ConfigCheckedTreeNode packageNode = createChildIfNotPresent(root, methodConfig.getPackagePattern());
         ConfigCheckedTreeNode classNode = createChildIfNotPresent(packageNode, methodConfig.getClassPattern());
         return createChildIfNotPresent(classNode,
-                methodConfig.getMethodPatternString()
+                (isExcluding ? "!" : "") +
+                        methodConfig.getMethodPatternString()
                         + methodConfig.parametersToString() +
                         (methodConfig.isSaveReturnValue() ? "+" : ""));
     }
@@ -111,7 +114,7 @@ public class ConfigCheckboxTree extends CheckboxTree {
     }
 
     public void addNode(MethodConfig methodConfig) {
-        ConfigCheckedTreeNode newNode = addMethodNode(methodConfig);
+        ConfigCheckedTreeNode newNode = addMethodNode(methodConfig, false);
         model.nodeStructureChanged(root);
         TreeUtil.expandAll(this);
         getSelectionModel().setSelectionPath(new TreePath(newNode.getPath()));

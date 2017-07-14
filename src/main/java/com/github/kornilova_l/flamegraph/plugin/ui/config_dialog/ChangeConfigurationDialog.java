@@ -68,26 +68,15 @@ public class ChangeConfigurationDialog extends DialogWrapper {
         ToolbarDecorator decorator = ToolbarDecorator.createDecorator(checkboxTree);
         decorator.setAddAction(new AddNodeActionButton(project, this));
         JPanel panel = decorator.createPanel();
-        Collection<MethodConfig> configs = getProjectConfigs();
-        if (configs == null) {
-            // TODO: show that configuration is empty
-            return panel;
-        }
-        checkboxTree.initTree(configs);
+        Configuration configuration = PluginConfigManager.getConfiguration(project);
+        Collection<MethodConfig> including = configuration.getIncludingMethodConfigs();
+        Collection<MethodConfig> excluding = configuration.getExcludingMethodConfigs();
+        checkboxTree.initTree(including, excluding);
         return panel;
     }
 
     public void addNodeToTree(MethodConfig methodConfig) {
         checkboxTree.addNode(methodConfig);
-    }
-
-    @Nullable
-    private Collection<MethodConfig> getProjectConfigs() {
-        Configuration configuration = PluginConfigManager.getConfiguration(project);
-        if (configuration.getIncludingMethodConfigs().size() == 0) {
-            return null;
-        }
-        return configuration.getIncludingMethodConfigs();
     }
 
     private void createTree() {
