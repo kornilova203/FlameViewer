@@ -1,16 +1,52 @@
 package com.github.kornilova_l.flamegraph.javaagent.agent;
 
+import com.github.kornilova_l.flamegraph.configuration.MethodConfig;
+import org.junit.Before;
 import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import static org.junit.Assert.*;
 
-/**
- * Created by Liudmila Kornilova
- * on 16.07.17.
- */
 public class AgentConfigurationManagerTest {
+    private AgentConfigurationManager configurationManager;
+
+    @Before
+    public void setUp() {
+        List<String> configLines = new ArrayList<>();
+        configLines.add("samples.*.main(*)");
+        configLines.add("samples.OtherClass.main(*)");
+        configLines.add("samples.CheckIncomingCalls.fun1(boolean)");
+        configLines.add("samples.CheckIncomingCalls.fun2(int+, *)");
+        configLines.add("samples.CheckIncomingCalls.fun2(int, java.lang.String+)+");
+        configLines.add("!samples.CheckIncomingCalls.fun2(int, boolean)");
+        configLines.add("!samples.CheckIncomingCalls.fun2(int, long, *)");
+        configurationManager = new AgentConfigurationManager(configLines);
+    }
+
     @Test
-    public void findIncludingConfigs() throws Exception {
+    public void findIncludingConfigsForClass() throws Exception {
+        Set<MethodConfig> config = new TreeSet<>();
+        config.add(new MethodConfig("samples.*", "main" , "(*)"));
+        config.add(new MethodConfig(
+                "samples.CheckIncomingCalls",
+                "fun1",
+                "(boolean)"
+        ));
+        config.add(new MethodConfig(
+                "samples.CheckIncomingCalls",
+                "fun2",
+                "(int+, *)"
+        ));
+        config.add(new MethodConfig(
+                "samples.CheckIncomingCalls",
+                "fun2",
+                "(int, java.lang.String+)+"
+        ));
+        assertTrue(config.equals(configurationManager.findIncludingConfigs("samples/CheckIncomingCalls")));
     }
 
     @Test
@@ -63,6 +99,34 @@ public class AgentConfigurationManagerTest {
 
     @Test
     public void isMethodExcluded() throws Exception {
+        assertFalse(configurationManager.isMethodExcluded(
+                new MethodConfig(
+                        "samples.CheckIncomingCalls",
+                        "fun2",
+                        "(int)"
+                )
+        ));
+        assertTrue(configurationManager.isMethodExcluded(
+                new MethodConfig(
+                        "samples.CheckIncomingCalls",
+                        "fun2",
+                        "(int, boolean)"
+                )
+        ));
+        assertTrue(configurationManager.isMethodExcluded(
+                new MethodConfig(
+                        "samples.CheckIncomingCalls",
+                        "fun2",
+                        "(int, long)"
+                )
+        ));
+        assertTrue(configurationManager.isMethodExcluded(
+                new MethodConfig(
+                        "samples.CheckIncomingCalls",
+                        "fun2",
+                        "(int, long, boolean)"
+                )
+        ));
     }
 
     @Test
