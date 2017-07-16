@@ -30,7 +30,7 @@ public class AgentConfigurationManagerTest {
     @Test
     public void findIncludingConfigsForClass() throws Exception {
         Set<MethodConfig> config = new TreeSet<>();
-        config.add(new MethodConfig("samples.*", "main" , "(*)"));
+        config.add(new MethodConfig("samples.*", "main", "(*)"));
         config.add(new MethodConfig(
                 "samples.CheckIncomingCalls",
                 "fun1",
@@ -52,11 +52,11 @@ public class AgentConfigurationManagerTest {
     @Test
     public void newMethodConfig() throws Exception {
         assertEquals("MyClass.someMethod()",
-        AgentConfigurationManager.newMethodConfig(
-                "MyClass",
-                "someMethod",
-                "()V"
-        ).toString());
+                AgentConfigurationManager.newMethodConfig(
+                        "MyClass",
+                        "someMethod",
+                        "()V"
+                ).toString());
 
         assertEquals("my_package.MyClass.someMethod()",
                 AgentConfigurationManager.newMethodConfig(
@@ -130,7 +130,23 @@ public class AgentConfigurationManagerTest {
     }
 
     @Test
-    public void findIncludingConfigs1() throws Exception {
+    public void findIncludingConfigsForMethod() throws Exception {
+        Set<MethodConfig> config = new TreeSet<>();
+        config.add(new MethodConfig(
+                "samples.CheckIncomingCalls",
+                "fun2",
+                "(int+, *)"
+        ));
+        config.add(new MethodConfig(
+                "samples.CheckIncomingCalls",
+                "fun2",
+                "(int, java.lang.String+)+"
+        ));
+
+        AgentConfigurationManager.findIncludingConfigs(config,
+                new MethodConfig("samples.CheckIncomingCalls",
+                        "fun2",
+                        "(int, java.lang.String+)+"));
     }
 
 }
