@@ -149,4 +149,31 @@ public class AgentConfigurationManagerTest {
                         "(int, java.lang.String+)+"));
     }
 
+    @Test
+    public void setSaveParameters() {
+        MethodConfig trueMethodConfig = new MethodConfig(
+                "samples.MyClass",
+                "fun",
+                "(int, samples.MyClass$MyInnerClass, long, lang.java.String, boolean)");
+        Set<MethodConfig> config = new TreeSet<>();
+        config.add(new MethodConfig(
+                "samples.*",
+                "*",
+                "(int+, samples.MyClass$MyInnerClass, long+, lang.java.String, *)"
+        ));
+        config.add(new MethodConfig(
+                "samples.*",
+                "*",
+                "(int, samples.MyClass$MyInnerClass, long, *)+"
+        ));
+        config.add(new MethodConfig(
+                "samples.*",
+                "*",
+                "(int, samples.MyClass$MyInnerClass, long, *+)+"
+        ));
+        AgentConfigurationManager.setSaveParameters(trueMethodConfig, config);
+        assertEquals("samples.MyClass.fun(int+, samples.MyClass$MyInnerClass, long+, lang.java.String+, boolean+)+",
+                trueMethodConfig.toString());
+    }
+
 }

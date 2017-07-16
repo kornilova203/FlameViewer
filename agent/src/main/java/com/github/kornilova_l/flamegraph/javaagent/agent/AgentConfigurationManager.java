@@ -39,18 +39,6 @@ class AgentConfigurationManager {
     }
 
     @NotNull
-    Set<MethodConfig> findIncludingConfigs(String className) {
-        className = className.replaceAll("/", ".");
-        Set<MethodConfig> applicableMethodConfigs = new TreeSet<>();
-        for (MethodConfig methodConfig : configuration.getIncludingMethodConfigs()) {
-            if (methodConfig.isApplicableTo(className)) {
-                applicableMethodConfigs.add(methodConfig);
-            }
-        }
-        return applicableMethodConfigs;
-    }
-
-    @NotNull
     static MethodConfig newMethodConfig(@NotNull String className,
                                         @NotNull String methodName,
                                         @NotNull String desc) {
@@ -117,13 +105,9 @@ class AgentConfigurationManager {
         }
     }
 
-    boolean isMethodExcluded(MethodConfig methodConfig) {
-        return configuration.getExcludingConfigs(methodConfig).size() != 0;
-    }
-
     @NotNull
     static Set<MethodConfig> findIncludingConfigs(Set<MethodConfig> includingConfigs,
-                                                   @NotNull MethodConfig methodConfig) {
+                                                  @NotNull MethodConfig methodConfig) {
         Set<MethodConfig> finalConfigs = new TreeSet<>();
         for (MethodConfig includingConfig : includingConfigs) {
             if (includingConfig.isApplicableTo(methodConfig)) {
@@ -131,5 +115,53 @@ class AgentConfigurationManager {
             }
         }
         return finalConfigs;
+    }
+
+    static void setSaveParameters(@NotNull MethodConfig trueMethodConfig,
+                                  @NotNull Set<MethodConfig> methodConfigs) {
+        for (MethodConfig methodConfig : methodConfigs) {
+            mergeSavingParameters(trueMethodConfig.getParameters(), methodConfig.getParameters());
+            if (methodConfig.isSaveReturnValue()) {
+                trueMethodConfig.setSaveReturnValue(true);
+            }
+        }
+    }
+
+    private static void mergeSavingParameters(List<MethodConfig.Parameter> toParameters,
+                                              @NotNull List<MethodConfig.Parameter> fromParameters) {
+        for (int i = 0; i < fromParameters.size(); i++) {
+            MethodConfig.Parameter fromParameter = fromParameters.get(i);
+            if (Objects.equals(fromParameter.getType(), "*")) {
+                if (fromParameter.isEnabled()) {
+                    setAllEnabledFrom(toParameters, i);
+                }
+                break;
+            }
+            if (fromParameter.isEnabled()) {
+                toParameters.get(i).setEnabled(true);
+            }
+        }
+    }
+
+    private static void setAllEnabledFrom(List<MethodConfig.Parameter> toParameters, int from) {
+        for (int i = from; i < toParameters.size(); i++) {
+            toParameters.get(i).setEnabled(true);
+        }
+    }
+
+    @NotNull
+    Set<MethodConfig> findIncludingConfigs(String className) {
+        className = className.replaceAll("/", ".");
+        Set<MethodConfig> applicableMethodConfigs = new TreeSet<>();
+        for (MethodConfig methodConfig : configuration.getIncludingMethodConfigs()) {
+            if (methodConfig.isApplicableTo(className)) {
+                applicableMethodConfigs.add(methodConfig);
+            }
+        }
+        return applicableMethodConfigs;
+    }
+
+    boolean isMethodExcluded(MethodConfig methodConfig) {
+        return configuration.getExcludingConfigs(methodConfig).size() != 0;
     }
 }
