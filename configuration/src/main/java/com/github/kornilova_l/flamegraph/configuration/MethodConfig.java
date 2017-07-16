@@ -74,7 +74,9 @@ public class MethodConfig implements Comparable<MethodConfig> {
                 Objects.equals(applicableParams.get(0).type, "*")) {
             return true;
         }
-        if (applicableParams.size() > testedParams.size()) {
+        if (applicableParams.size() > testedParams.size() &&
+                !(applicableParams.size() == testedParams.size() + 1 && // for example "boolean, *" and "boolean"
+                        Objects.equals(applicableParams.get(applicableParams.size() - 1).type, "*"))) {
             return false;
         }
         int i = 0;
