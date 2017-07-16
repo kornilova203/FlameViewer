@@ -11,7 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 class AgentConfigurationManager {
-    private final static Pattern paramsPattern = Pattern.compile("(\\[?)(C|Z|S|I|J|F|D|B|(:?L[^;]+;))");
+    private final static Pattern paramsPattern = Pattern.compile("(\\[*)(C|Z|S|I|J|F|D|B|(:?L[^;]+;))");
     private final Configuration configuration = new Configuration();
 
     AgentConfigurationManager(List<String> methodConfigLines) {
