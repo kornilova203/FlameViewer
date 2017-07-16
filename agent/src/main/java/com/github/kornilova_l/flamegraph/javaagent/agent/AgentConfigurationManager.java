@@ -107,7 +107,7 @@ class AgentConfigurationManager {
             case "S":
                 return "short";
             case "B":
-                return "Byte";
+                return "byte";
             case "F":
                 return "float";
             case "D":
