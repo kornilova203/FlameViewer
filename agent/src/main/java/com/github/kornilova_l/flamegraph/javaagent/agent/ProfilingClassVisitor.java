@@ -5,19 +5,19 @@ import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
-import java.util.List;
+import java.util.Set;
 
 
 class ProfilingClassVisitor extends ClassVisitor {
     private final String className;
     private final boolean hasSystemCL;
-    private final List<MethodConfig> includingConfigs;
+    private final Set<MethodConfig> includingConfigs;
     private final AgentConfigurationManager configurationManager;
 
     ProfilingClassVisitor(ClassVisitor cv,
                           String className,
                           boolean hasSystemCL,
-                          List<MethodConfig> includingConfigs,
+                          Set<MethodConfig> includingConfigs,
                           AgentConfigurationManager configurationManager) {
         super(Opcodes.ASM5, cv);
         this.className = className;
@@ -38,7 +38,7 @@ class ProfilingClassVisitor extends ClassVisitor {
                 (access & Opcodes.ACC_SYNTHETIC) == 0) { // exclude synthetic includingMethodConfigs
             MethodConfig methodConfig = AgentConfigurationManager.newMethodConfig(className, methodName, desc);
             if (!configurationManager.isMethodExcluded(methodConfig)) {
-                List<MethodConfig> finalMethodConfigs = AgentConfigurationManager.findIncludingConfigs(
+                Set<MethodConfig> finalMethodConfigs = AgentConfigurationManager.findIncludingConfigs(
                         this.includingConfigs,
                         methodConfig
                 );

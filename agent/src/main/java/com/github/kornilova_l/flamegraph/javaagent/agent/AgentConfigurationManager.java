@@ -4,9 +4,7 @@ import com.github.kornilova_l.flamegraph.configuration.Configuration;
 import com.github.kornilova_l.flamegraph.configuration.MethodConfig;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -41,8 +39,9 @@ class AgentConfigurationManager {
     }
 
     @NotNull
-    List<MethodConfig> findIncludingConfigs(String className) {
-        List<MethodConfig> applicableMethodConfigs = new LinkedList<>();
+    Set<MethodConfig> findIncludingConfigs(String className) {
+        className = className.replaceAll("/", ".");
+        Set<MethodConfig> applicableMethodConfigs = new TreeSet<>();
         for (MethodConfig methodConfig : configuration.getIncludingMethodConfigs()) {
             if (methodConfig.isApplicableTo(className)) {
                 applicableMethodConfigs.add(methodConfig);
@@ -123,9 +122,9 @@ class AgentConfigurationManager {
     }
 
     @NotNull
-    static List<MethodConfig> findIncludingConfigs(@NotNull List<MethodConfig> includingConfigs,
+    static Set<MethodConfig> findIncludingConfigs(Set<MethodConfig> includingConfigs,
                                                    @NotNull MethodConfig methodConfig) {
-        List<MethodConfig> finalConfigs = new LinkedList<>();
+        Set<MethodConfig> finalConfigs = new TreeSet<>();
         for (MethodConfig includingConfig : includingConfigs) {
             if (includingConfig.isApplicableTo(methodConfig)) {
                 finalConfigs.add(includingConfig);
