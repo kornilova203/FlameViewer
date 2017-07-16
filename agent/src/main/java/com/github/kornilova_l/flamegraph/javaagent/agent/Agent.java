@@ -24,8 +24,8 @@ public class Agent {
             return;
         }
         Logger.init(new AgentFileManager(parameters[0]));
-        AgentConfigurationManager.readMethods(methods);
-        inst.addTransformer(new ProfilingClassFileTransformer());
+        AgentConfigurationManager configurationManager = new AgentConfigurationManager(methods);
+        inst.addTransformer(new ProfilingClassFileTransformer(configurationManager));
     }
 
     @Nullable

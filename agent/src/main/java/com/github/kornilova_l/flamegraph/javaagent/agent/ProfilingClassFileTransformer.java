@@ -11,6 +11,12 @@ import java.util.List;
 
 class ProfilingClassFileTransformer implements ClassFileTransformer {
 
+    private AgentConfigurationManager configurationManager;
+
+    ProfilingClassFileTransformer(AgentConfigurationManager configurationManager) {
+        this.configurationManager = configurationManager;
+    }
+
     private static boolean hasSystemCLInChain(ClassLoader loader) {
         ClassLoader chainLoader = loader;
         while (chainLoader != null) {
@@ -33,14 +39,21 @@ class ProfilingClassFileTransformer implements ClassFileTransformer {
                 !className.startsWith("com/github/kornilova_l") &&
                 !className.startsWith("jdk") &&
                 !className.startsWith("com/sun")) {
-            List<MethodConfig> methodConfigs = AgentConfigurationManager.findIncludingConfigs(className);
+            List<MethodConfig> methodConfigs = configurationManager.findIncludingConfigs(className);
             if (methodConfigs.size() != 0) {
                 ClassReader cr = new ClassReader(classfileBuffer);
                 ClassWriter cw = new ClassWriter(cr, ClassWriter.COMPUTE_FRAMES);
                 // uncomment for debugging
 //            TraceClassVisitor cv = new TraceClassVisitor(cw, new PrintWriter(System.out));
                 // SKIP_FRAMES avoids visiting frames that will be ignored and recomputed from scratch in the class writer.
-                cr.accept(new ProfilingClassVisitor(cw, className, hasSystemCLInChain(loader), methodConfigs), ClassReader.SKIP_FRAMES);
+                cr.accept(
+                        new ProfilingClassVisitor(
+                                cw,
+                                className,
+                                hasSystemCLInChain(loader),
+                                methodConfigs,
+                                configurationManager
+                        ), ClassReader.SKIP_FRAMES);
                 return cw.toByteArray();
             }
         }

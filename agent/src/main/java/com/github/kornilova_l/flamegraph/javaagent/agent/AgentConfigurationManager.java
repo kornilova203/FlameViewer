@@ -12,9 +12,9 @@ import java.util.regex.Pattern;
 
 class AgentConfigurationManager {
     private final static Pattern paramsPattern = Pattern.compile("(\\[?)(C|Z|S|I|J|F|D|B|(:?L[^;]+;))");
-    private static final Configuration configuration = new Configuration();
+    private final Configuration configuration = new Configuration();
 
-    static void readMethods(List<String> methodConfigLines) {
+    AgentConfigurationManager(List<String> methodConfigLines) {
         for (String methodConfigLine : methodConfigLines) {
             boolean isExcluding = methodConfigLine.charAt(0) == '!';
             if (isExcluding) {
@@ -41,7 +41,7 @@ class AgentConfigurationManager {
     }
 
     @NotNull
-    static List<MethodConfig> findIncludingConfigs(String className) {
+    List<MethodConfig> findIncludingConfigs(String className) {
         List<MethodConfig> applicableMethodConfigs = new LinkedList<>();
         for (MethodConfig methodConfig : configuration.getIncludingMethodConfigs()) {
             if (methodConfig.isApplicableTo(className)) {
@@ -118,13 +118,13 @@ class AgentConfigurationManager {
         }
     }
 
-    public static boolean isMethodExcluded(MethodConfig methodConfig) {
+    boolean isMethodExcluded(MethodConfig methodConfig) {
         return configuration.getExcludingConfigs(methodConfig).size() != 0;
     }
 
     @NotNull
-    public static List<MethodConfig> findIncludingConfigs(@NotNull List<MethodConfig> includingConfigs,
-                                                          @NotNull MethodConfig methodConfig) {
+    static List<MethodConfig> findIncludingConfigs(@NotNull List<MethodConfig> includingConfigs,
+                                                   @NotNull MethodConfig methodConfig) {
         List<MethodConfig> finalConfigs = new LinkedList<>();
         for (MethodConfig includingConfig : includingConfigs) {
             if (includingConfig.isApplicableTo(methodConfig)) {

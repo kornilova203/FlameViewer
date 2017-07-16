@@ -12,12 +12,18 @@ class ProfilingClassVisitor extends ClassVisitor {
     private final String className;
     private final boolean hasSystemCL;
     private final List<MethodConfig> includingConfigs;
+    private final AgentConfigurationManager configurationManager;
 
-    ProfilingClassVisitor(ClassVisitor cv, String className, boolean hasSystemCL, List<MethodConfig> includingConfigs) {
+    ProfilingClassVisitor(ClassVisitor cv,
+                          String className,
+                          boolean hasSystemCL,
+                          List<MethodConfig> includingConfigs,
+                          AgentConfigurationManager configurationManager) {
         super(Opcodes.ASM5, cv);
         this.className = className;
         this.hasSystemCL = hasSystemCL;
         this.includingConfigs = includingConfigs;
+        this.configurationManager = configurationManager;
     }
 
     @Override
@@ -31,7 +37,7 @@ class ProfilingClassVisitor extends ClassVisitor {
                 !methodName.equals("toString") &&
                 (access & Opcodes.ACC_SYNTHETIC) == 0) { // exclude synthetic includingMethodConfigs
             MethodConfig methodConfig = AgentConfigurationManager.newMethodConfig(className, methodName, desc);
-            if (!AgentConfigurationManager.isMethodExcluded(methodConfig)) {
+            if (!configurationManager.isMethodExcluded(methodConfig)) {
                 List<MethodConfig> finalMethodConfigs = AgentConfigurationManager.findIncludingConfigs(
                         this.includingConfigs,
                         methodConfig
