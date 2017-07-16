@@ -43,22 +43,32 @@ class AgentConfigurationManager {
                                         @NotNull String methodName,
                                         @NotNull String desc) {
         String descInnerPart = desc.substring(desc.indexOf("(") + 1, desc.indexOf(")"));
+        List<String> jvmParams = splitDesc(descInnerPart);
         return new MethodConfig(className.replaceAll("/", "."),
                 methodName,
                 Objects.equals(descInnerPart, "") ?
                         "()" :
-                        descToParametersPattern(descInnerPart));
+                        jvmParamsToPattern(jvmParams));
     }
 
     @NotNull
-    private static String descToParametersPattern(@NotNull String descInnerPart) {
+    static List<String> splitDesc(@NotNull String descInnerPart) {
+        List<String> jvmParams = new LinkedList<>();
         Matcher m = paramsPattern.matcher(descInnerPart);
-        LinkedList<String> params = new LinkedList<>();
         while (m.find()) {
+            jvmParams.add(m.group());
+        }
+        return jvmParams;
+    }
+
+    @NotNull
+    private static String jvmParamsToPattern(List<String> jvmParams) {
+        LinkedList<String> params = new LinkedList<>();
+        for (String jvmParam : jvmParams) {
             StringBuilder paramBuilder = new StringBuilder();
-            int dimensions = countDimensions(m.group());
+            int dimensions = countDimensions(jvmParam);
             paramBuilder.append(
-                    jvmTypeToParam(m.group().substring(dimensions, m.group().length()))
+                    jvmTypeToParam(jvmParam.substring(dimensions, jvmParam.length()))
             );
             for (int i = 0; i < dimensions; i++) {
                 paramBuilder.append("[]");

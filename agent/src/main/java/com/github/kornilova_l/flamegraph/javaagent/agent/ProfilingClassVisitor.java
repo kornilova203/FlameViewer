@@ -36,14 +36,15 @@ class ProfilingClassVisitor extends ClassVisitor {
                 !methodName.equals("<init>") &&
                 !methodName.equals("toString") &&
                 (access & Opcodes.ACC_SYNTHETIC) == 0) { // exclude synthetic includingMethodConfigs
-            MethodConfig methodConfig = AgentConfigurationManager.newMethodConfig(className, methodName, desc);
-            if (!configurationManager.isMethodExcluded(methodConfig)) {
-                Set<MethodConfig> finalMethodConfigs = AgentConfigurationManager.findIncludingConfigs(
+            MethodConfig trueMethodConfig = AgentConfigurationManager.newMethodConfig(className, methodName, desc);
+            if (!configurationManager.isMethodExcluded(trueMethodConfig)) {
+                Set<MethodConfig> includingConfigsForMethod = AgentConfigurationManager.findIncludingConfigs(
                         this.includingConfigs,
-                        methodConfig
+                        trueMethodConfig
                 );
-                if (finalMethodConfigs.size() != 0) {
-                    return new ProfilingMethodVisitor(access, methodName, desc, mv, className, hasSystemCL);
+                if (includingConfigsForMethod.size() != 0) {
+                    AgentConfigurationManager.setSaveParameters(trueMethodConfig, includingConfigsForMethod);
+                    return new ProfilingMethodVisitor(access, methodName, desc, mv, className, hasSystemCL, trueMethodConfig);
                 }
             }
         }

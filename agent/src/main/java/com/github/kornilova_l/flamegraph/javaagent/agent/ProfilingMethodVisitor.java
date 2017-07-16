@@ -1,8 +1,10 @@
 package com.github.kornilova_l.flamegraph.javaagent.agent;
 
+import com.github.kornilova_l.flamegraph.configuration.MethodConfig;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.commons.AdviceAdapter;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -13,17 +15,15 @@ class ProfilingMethodVisitor extends AdviceAdapter {
     private final String methodName;
     private final String className;
     private final boolean hasSystemCL;
-//    private final List<Boolean> parametersIncluded;
-//    private final String[] jvmParameters;
+    private final MethodConfig methodConfig;
 
     ProfilingMethodVisitor(int access, String methodName, String desc,
-                           MethodVisitor mv, String className, boolean hasSystemCL) {
+                           MethodVisitor mv, String className, boolean hasSystemCL, MethodConfig methodConfig) {
         super(ASM5, mv, access, methodName, desc);
         this.className = className;
         this.methodName = methodName;
         this.hasSystemCL = hasSystemCL;
-//        jvmParameters = Config.splitJvmParams(desc.substring(desc.indexOf("(") + 1, desc.indexOf(")")));
-//        this.parametersIncluded = getParametersIncluded(methodConfigs);
+        this.methodConfig = methodConfig;
     }
 
 //    @NotNull
@@ -75,7 +75,9 @@ class ProfilingMethodVisitor extends AdviceAdapter {
         getClassNameAndMethodName();
         mv.visitLdcInsn(methodDesc);
         getIsStatic();
-        int countEnabledParams = 0;//(int) parametersIncluded.stream().filter((parameter -> parameter)).count();
+        int countEnabledParams = (int) methodConfig.getParameters().stream()
+                .filter((MethodConfig.Parameter::isEnabled))
+                .count();
         if (countEnabledParams > 0) { // if at least one parameter is enabled
             getArrayWithParameters(countEnabledParams);
         } else {
@@ -107,21 +109,25 @@ class ProfilingMethodVisitor extends AdviceAdapter {
     }
 
     private void getArrayWithParameters(int arraySize) {
-//        createObjArray(arraySize);
-//        int posOfParam = 0;
-//        if (!isStatic()) {
-//            posOfParam = 1;
-//        }
-//        int index = 0;
-//        for (int i = 0; i < parametersIncluded.size(); i++) {
-//            if (parametersIncluded.get(i)) {
-//                mv.visitInsn(DUP); // array reference
-//                getIConst(index++); // index of element
-//                paramToObj(jvmParameters[i], posOfParam);
-//                visitInsn(AASTORE); // load obj to array
-//            }
-//            posOfParam = getObjSize(jvmParameters[i]);
-//        }
+        createObjArray(arraySize);
+        int posOfParam = 0;
+        if (!isStatic()) {
+            posOfParam = 1;
+        }
+        int index = 0;
+        int countParams = methodConfig.getParameters().size();
+        List<String> jvmParameters = AgentConfigurationManager.splitDesc(
+                methodDesc.substring(methodDesc.indexOf("(") + 1, methodDesc.indexOf(")"))
+        );
+        for (int i = 0; i < countParams; i++) {
+            if (methodConfig.getParameters().get(i).isEnabled()) {
+                mv.visitInsn(DUP); // array reference
+                getIConst(index++); // index of element
+                paramToObj(jvmParameters.get(i), posOfParam);
+                visitInsn(AASTORE); // load obj to array
+            }
+            posOfParam = getObjSize(jvmParameters.get(i));
+        }
     }
 
     private void loadNull() {
