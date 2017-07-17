@@ -84,7 +84,7 @@ public class PluginFileManager {
 
     public void saveFile(ByteBuf content, String fileName) {
         File file = new File(logDir.getAbsolutePath() + DELIMITER + fileName);
-        try(OutputStream outputStream = new FileOutputStream(file)) {
+        try (OutputStream outputStream = new FileOutputStream(file)) {
             byte[] bytes = new byte[content.readableBytes()];
             content.readBytes(bytes);
             outputStream.write(bytes);
@@ -94,10 +94,11 @@ public class PluginFileManager {
     }
 
     public String getStaticFilePath(String staticFileUri) {
-        String staticFilePath = staticFileUri.replaceFirst(
-                "/[^/]+/",
-                (staticDir.getAbsolutePath() + DELIMITER).replaceAll("\\\\", "\\\\\\\\")
-        );
+        String staticFilePath = staticFileUri
+                .replaceFirst(
+                        "/[^/]+/",
+                        (staticDir.getAbsolutePath() + DELIMITER).replaceAll("\\\\", "\\\\\\\\"))
+                .replaceAll("%20", " ");
         if (isWindows) {
             return staticFilePath.replaceAll("/", "\\\\");
         }
@@ -111,7 +112,9 @@ public class PluginFileManager {
 
     @NotNull
     public String getPathToAgent() {
-        String path = getClass().getResource("/javaagent.jar").getPath();
+        String path = getClass().getResource("/javaagent.jar")
+                .getPath()
+                .replaceAll("%20", " ");
         if (isWindows) {
             path = path.substring(1, path.length()).replaceAll("/", "\\\\");
         }
