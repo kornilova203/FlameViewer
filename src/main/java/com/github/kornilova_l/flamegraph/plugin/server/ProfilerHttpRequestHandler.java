@@ -172,13 +172,64 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
 
     private boolean processGetMethod(QueryStringDecoder urlDecoder, ChannelHandlerContext context) {
         String uri = urlDecoder.path(); // without get parameters
-        @Nullable File logFile = null;
+        switch (uri) {
+            case ServerNames.FILE_LIST:
+                LOG.info("file list");
+                if (urlDecoder.parameters().containsKey("project")) {
+                    sendFileList(context, urlDecoder.parameters().get("project").get(0));
+                }
+                return true;
+            case ServerNames.SELECT_FILE:
+                LOG.info("select-file.html");
+                try {
+                    sendStatic(context, ServerNames.MAIN_NAME + "/select-file.html", "text/html");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return true;
+        }
+        switch (uri) {
+            case ServerNames.OUTGOING_CALLS_JS_REQUEST:
+            case ServerNames.INCOMING_CALLS_JS_REQUEST:
+            case ServerNames.CALL_TREE_JS_REQUEST:
+                processTreeRequest(uri, urlDecoder, context);
+                return true;
+        }
+        switch (uri) {
+            case ServerNames.CALL_TREE:
+            case ServerNames.OUTGOING_CALLS:
+            case ServerNames.INCOMING_CALLS:
+                processHtmlRequest(uri, urlDecoder, context);
+                return true;
+        }
+        try {
+            if (ServerNames.CSS_PATTERN.matcher(uri).matches()) {
+                LOG.info("CSS");
+                sendStatic(context, uri, "text/css");
+            } else if (ServerNames.JS_PATTERN.matcher(uri).matches()) {
+                LOG.info("JS");
+                sendStatic(context, uri, "text/javascript");
+            } else if (ServerNames.FONT_PATTERN.matcher(uri).matches()) {
+                sendStatic(context, uri, "application/octet-stream");
+            } else if (ServerNames.PNG_PATTERN.matcher(uri).matches()) {
+                sendStatic(context, uri, "image/png");
+            }
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    private void processHtmlRequest(String uri, QueryStringDecoder urlDecoder, ChannelHandlerContext context) {
         @Nullable String projectName = null;
         @Nullable String fileName = null;
         if (urlDecoder.parameters().containsKey("file") && urlDecoder.parameters().containsKey("project")) {
             projectName = urlDecoder.parameters().get("project").get(0);
             fileName = urlDecoder.parameters().get("file").get(0);
-            logFile = fileManager.getConfigFile(projectName, fileName);
+        }
+        if (projectName == null || fileName == null) {
+            return;
         }
         switch (uri) {
             case ServerNames.CALL_TREE:
@@ -193,20 +244,6 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
                                 projectName
                         )
                 );
-                break;
-            case ServerNames.SELECT_FILE:
-                LOG.info("select-file.html");
-                try {
-                    sendStatic(context, ServerNames.MAIN_NAME + "/select-file.html", "text/html");
-                } catch (IOException e) {
-                    return false;
-                }
-                break;
-            case ServerNames.FILE_LIST:
-                LOG.info("file list");
-                if (urlDecoder.parameters().containsKey("project")) {
-                    sendFileList(context, urlDecoder.parameters().get("project").get(0));
-                }
                 break;
             case ServerNames.OUTGOING_CALLS:
                 LOG.info("outgoing-calls.html");
@@ -232,52 +269,42 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
                         )
                 );
                 break;
-            case ServerNames.CALL_TREE_JS_REQUEST:
-                LOG.info("CALL_TREE_JS_REQUEST");
-                if (logFile != null) {
-                    sendTrees(context, treeManager.getCallTree(logFile));
-                }
-                break;
+        }
+    }
+
+    private void processTreeRequest(String uri, QueryStringDecoder urlDecoder, ChannelHandlerContext context) {
+        @Nullable File logFile = null;
+        if (urlDecoder.parameters().containsKey("file") && urlDecoder.parameters().containsKey("project")) {
+            String projectName = urlDecoder.parameters().get("project").get(0);
+            String fileName = urlDecoder.parameters().get("file").get(0);
+            logFile = fileManager.getConfigFile(projectName, fileName);
+        }
+        if (logFile == null) {
+            return;
+        }
+        switch (uri) {
             case ServerNames.OUTGOING_CALLS_JS_REQUEST:
                 LOG.info("OUTGOING_CALLS_JS_REQUEST");
-                if (logFile != null) {
-                    if (urlDecoder.parameters().containsKey("method")) {
-                        sendTree(context, treeManager.getOutgoingCalls(urlDecoder.parameters(), logFile));
-                    } else {
-                        sendTree(context, treeManager.getOutgoingCalls(logFile));
-                    }
+                if (urlDecoder.parameters().containsKey("method")) {
+                    sendTree(context, treeManager.getOutgoingCalls(urlDecoder.parameters(), logFile));
+                } else {
+                    sendTree(context, treeManager.getOutgoingCalls(logFile));
                 }
                 break;
             case ServerNames.INCOMING_CALLS_JS_REQUEST:
                 LOG.info("INCOMING_CALLS_JS_REQUEST");
-                if (logFile != null) {
-                    if (urlDecoder.parameters().containsKey("method")) {
-                        sendTree(context, treeManager.getIncomingCalls(urlDecoder.parameters(), logFile));
-                    } else {
-                        sendTree(context, treeManager.getIncomingCalls(logFile));
-                    }
+                if (urlDecoder.parameters().containsKey("method")) {
+                    sendTree(context, treeManager.getIncomingCalls(urlDecoder.parameters(), logFile));
+                } else {
+                    sendTree(context, treeManager.getIncomingCalls(logFile));
                 }
                 break;
-            default:
-                try {
-                    if (ServerNames.CSS_PATTERN.matcher(uri).matches()) {
-                        LOG.info("CSS");
-                        sendStatic(context, uri, "text/css");
-                    } else if (ServerNames.JS_PATTERN.matcher(uri).matches()) {
-                        LOG.info("JS");
-                        sendStatic(context, uri, "text/javascript");
-                    } else if (ServerNames.FONT_PATTERN.matcher(uri).matches()) {
-                        sendStatic(context, uri, "application/octet-stream");
-                    } else if (ServerNames.PNG_PATTERN.matcher(uri).matches()) {
-                        sendStatic(context, uri, "image/png");
-                    } else {
-                        return false;
-                    }
-                } catch (IOException e) {
-                    return false;
-                }
+            case ServerNames.CALL_TREE_JS_REQUEST:
+                LOG.info("CALL_TREE_JS_REQUEST");
+                sendTrees(context, treeManager.getCallTree(logFile));
+                break;
         }
-        return true;
+
     }
 
     enum Extension {
