@@ -30,8 +30,8 @@
     <li><!--suppress HtmlUnknownTarget -->
       <a href="/flamegraph-profiler/call-tree?file={{ fileName }}&project={{ projectName }}">Call Tree</a>
     </li>
-    <li><!--suppress HtmlUnknownTarget -->
-      <a class="current-link" href="/flamegraph-profiler/outgoing-calls?file={{ fileName }}&project={{ projectName }}">Outgoing
+    <li class="current-link"><!--suppress HtmlUnknownTarget -->
+      <a href="/flamegraph-profiler/outgoing-calls?file={{ fileName }}&project={{ projectName }}">Outgoing
         Calls</a>
     </li>
     <li><!--suppress HtmlUnknownTarget -->
@@ -42,7 +42,6 @@
 <p class="choose-file-header"><b class="chosen-file">{{ fileName }}</b><!--suppress HtmlUnknownTarget -->
   <a href="/flamegraph-profiler/select-file?project={{ projectName }}">Select Another File</a></p>
 <main>
-  <h1>Outgoing Calls</h1>
 </main>
 </body>
 </html>

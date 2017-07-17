@@ -143,29 +143,50 @@ section {
 nav {
     margin: 0;
     padding: 0;
+    height: 60px;
+    background-color: #f3f3f3;
 }
 
 nav ul {
     display: flex;
     justify-content: center;
     padding: 0;
+    margin: 0;
+    height: 100%;
 }
 
 nav ul li {
+    height: 100%;
     list-style: none;
-    margin: 10px 20px;
+    vertical-align: baseline;
+    padding: 0 30px;
+    margin: 0;
 }
 
 nav ul li a, .choose-file-header a {
-    text-transform: uppercase;
     color: black;
+    text-transform: uppercase;
     font-family: "Gotham Pro", sans-serif;
     font-weight: normal;
     font-size: 14px;
+    text-decoration: none;
+    display: flex;
+    height: 100%;
+    vertical-align: baseline;
+    align-items: center;
+    transition: background 300ms, color 300ms;
 }
 
-nav ul li a:hover, .current-link {
-    color: #0887D7;
+nav ul li:hover, .current-link {
+    background-color: #0e8fdf;
+}
+
+.current-link a {
+    font-weight: bold;
+}
+
+nav ul li:hover a, .current-link a {
+    color: white;
 }
 
 .popup ul {
@@ -247,5 +268,5 @@ nav ul li a:hover, .current-link {
 
 .extension-error {
     float: right;
-    color: rgba(138,18,11,0.84);
+    color: rgba(138, 18, 11, 0.84);
 }
