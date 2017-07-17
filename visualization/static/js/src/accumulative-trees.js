@@ -14,7 +14,7 @@ function drawTree(tree, className, methodName, desc) {
 }
 
 $(window).on("load", function () {
-    getFilesList(getParameter("project"), updateFilesList);
+    getFilesList(projectName, updateFilesList);
     const request = new XMLHttpRequest();
     const parameters = window.location.href.split("?")[1];
     let className;

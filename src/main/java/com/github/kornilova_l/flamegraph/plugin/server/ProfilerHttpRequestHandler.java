@@ -122,6 +122,20 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
         }
     }
 
+
+    private void sendListProjects(ChannelHandlerContext context) {
+        String json = new Gson().toJson(
+                fileManager.getProjectList()
+        );
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        try {
+            outputStream.write(json.getBytes());
+            sendBytes(context, "application/json", outputStream.toByteArray());
+        } catch (IOException e) {
+            LOG.error(e);
+        }
+    }
+
     private void sendStatic(ChannelHandlerContext context,
                             String fileUri,
                             String contentType) throws IOException {
@@ -175,6 +189,10 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
     private boolean processGetMethod(QueryStringDecoder urlDecoder, ChannelHandlerContext context) {
         String uri = urlDecoder.path(); // without get parameters
         switch (uri) {
+            case ServerNames.LIST_PROJECTS:
+                LOG.info("list-projects");
+                sendListProjects(context);
+                return true;
             case ServerNames.FILE_LIST:
                 LOG.info("file list");
                 if (urlDecoder.parameters().containsKey("project")) {
@@ -222,6 +240,7 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
             return false;
         }
     }
+
 
     private void processHtmlRequest(String uri, QueryStringDecoder urlDecoder, ChannelHandlerContext context) {
         @Nullable String projectName = null;

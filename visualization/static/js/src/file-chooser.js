@@ -1,8 +1,10 @@
-const currentFileName = getParameter("file");
-
 function getPageName() {
     return /[^\/]*(?=\?)/.exec(window.location.href)[0];
 }
+
+$(window).on("load", () => {
+    showProjectsList();
+});
 
 function updateFilesList(filesList) {
     if (filesList.length === 0) {
@@ -10,12 +12,40 @@ function updateFilesList(filesList) {
     } else {
         const list = templates.tree.listOfFiles({
             fileNames: filesList,
-            projectName: getParameter("project"),
+            projectName: projectName,
             pageName: getPageName()
         }).content;
         $(list).appendTo($(".file-menu"));
-        $("#" + currentFileName.replace(/\./, "\\.")).addClass("current-file");
+        $("#" + fileName.replace(/\./, "\\.")).addClass("current-file");
     }
+}
+
+function appendProject(project) {
+    if (project === projectName) {
+        return;
+    }
+    const newElem = "<a href='#'>" + project + "</a>";
+    $(newElem).appendTo($(".projects-dropdown-content"));
+}
+
+function showProjectsList() {
+    if (projectName === "uploaded-files") {
+        $(".project-name").text("Uploaded files");
+    } else {
+        $(".project-name").text(projectName);
+    }
+    const request = new XMLHttpRequest();
+    request.open("GET", "/flamegraph-profiler/list-projects", true);
+    request.responseType = "json";
+
+    request.onload = function () {
+        const projects = request.response;
+        for (let i = 0; i < projects.length; i++) {
+            appendProject(projects[i]);
+        }
+        appendProject("Uploaded files");
+    };
+    request.send();
 }
 
 function getFilesList(projectName, callback) {
@@ -32,15 +62,4 @@ function getFilesList(projectName, callback) {
         }
     };
     request.send();
-}
-
-function getParameter(parameterName) {
-    const parameters = window.location.href.split("?")[1]
-        .split("&");
-    for (let i = 0; i < parameters.length; i++) {
-        if (parameters[i].startsWith(parameterName)) {
-            return parameters[i].substring(parameters[i].indexOf("=") + 1, parameters[i].length);
-        }
-    }
-    return "";
 }

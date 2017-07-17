@@ -20,6 +20,7 @@ public class PluginFileManager {
     private static final String CONFIG_DIR_NAME = "configuration";
     private static final String STATIC_DIR_NAME = "static";
     private static final String REQUEST_PREFIX = "/flamegraph-profiler/";
+    private static final String UPLOADED_FILES = "uploaded-files";
     @NotNull
     private final Path logDirPath;
     @NotNull
@@ -53,6 +54,16 @@ public class PluginFileManager {
         }
     }
 
+    @Nullable
+    private static File getLatestFile(File dir) {
+        File[] files = dir.listFiles();
+        if (files == null) {
+            return null;
+        }
+        Optional<File> maxFile = Arrays.stream(files).max(Comparator.comparingLong(File::lastModified));
+        return maxFile.orElse(null);
+    }
+
     public File getConfigFile(String projectName) {
         Path path = Paths.get(configDirPath.toString(), projectName + ".config");
         return new File(path.toString());
@@ -80,7 +91,7 @@ public class PluginFileManager {
     }
 
     public void saveFile(ByteBuf content, String fileName) {
-        Path uploadedFilesPath = Paths.get(logDirPath.toString(), "uploaded-files");
+        Path uploadedFilesPath = Paths.get(logDirPath.toString(), UPLOADED_FILES);
         createDirIfNotExist(uploadedFilesPath);
         Path filePath = Paths.get(uploadedFilesPath.toString(), fileName);
         File file = new File(filePath.toString());
@@ -143,13 +154,20 @@ public class PluginFileManager {
         return null;
     }
 
-    @Nullable
-    private static File getLatestFile(File dir) {
-        File[] files = dir.listFiles();
-        if (files == null) {
-            return null;
+    @NotNull
+    public List<String> getProjectList() {
+        File logDir = new File(logDirPath.toString());
+        if (logDir.exists() && logDir.isDirectory()) {
+            File[] files = logDir.listFiles();
+            if (files != null) {
+                return Arrays.stream(files)
+                        .filter(file ->
+                                !Objects.equals(file.getName(), UPLOADED_FILES) &&
+                                        file.isDirectory())
+                        .map(File::getName)
+                        .collect(Collectors.toList());
+            }
         }
-        Optional<File> maxFile = Arrays.stream(files).max(Comparator.comparingLong(File::lastModified));
-        return maxFile.orElse(null);
+        return new ArrayList<>();
     }
 }

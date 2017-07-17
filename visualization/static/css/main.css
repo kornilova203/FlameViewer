@@ -318,3 +318,58 @@ nav ul li:hover a, .current-link a {
 .file-list .current-file a {
     color: white;
 }
+
+.dropButton {
+    height: 60px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    background-color: rgba(19, 57, 136, 0.89);
+    color: white;
+}
+
+.projects-dropdown {
+    display: inline-block;
+    width: 100%;
+}
+
+.projects-dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    width: 100%;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.projects-dropdown-content a {
+    color: black;
+    padding: 12px 30px 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.projects-dropdown-content a:hover {
+    background-color: #f1f1f1
+}
+
+.projects-dropdown:hover .projects-dropdown-content {
+    display: block;
+}
+
+.projects-dropdown:hover .dropButton {
+    background-color: rgba(22, 67, 158, 0.91);
+}
+
+.projects-dropdown p {
+    width: 200px;
+    overflow: hidden;
+    padding: 22px 20px 10px;
+    margin: 0;
+}
+
+.drop-down-arrow {
+    position: absolute;
+    margin-top: -40px;
+    margin-left: 220px;
+}

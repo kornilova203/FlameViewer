@@ -7,6 +7,7 @@ class ServerNames {
     static final String MAIN_NAME = "/" + NAME;
     static final String FILE_LIST = MAIN_NAME + "/file-list";
     static final String CALL_TREE = MAIN_NAME + "/call-tree";
+    static final String LIST_PROJECTS = MAIN_NAME + "/list-projects";
     static final String CALL_TREE_JS_REQUEST = MAIN_NAME + "/trees/call-tree";
     static final String OUTGOING_CALLS = MAIN_NAME + "/outgoing-calls";
     static final String OUTGOING_CALLS_JS_REQUEST = MAIN_NAME + "/trees/outgoing-calls";
