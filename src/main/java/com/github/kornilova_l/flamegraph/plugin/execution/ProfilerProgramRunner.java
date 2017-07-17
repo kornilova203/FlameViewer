@@ -52,7 +52,7 @@ public class ProfilerProgramRunner extends DefaultJavaProgramRunner {
                 "-javaagent:" +
                         pathToAgent +
                         "=" +
-                        fileManager.getLogDir().getAbsolutePath() +
+                        fileManager.getLogDirPath() +
                         "&" +
                         configFile.getAbsolutePath()
         );

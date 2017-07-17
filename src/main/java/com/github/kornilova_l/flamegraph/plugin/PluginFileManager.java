@@ -7,6 +7,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -14,37 +16,35 @@ import java.util.stream.Collectors;
 
 public class PluginFileManager {
     private static final boolean isWindows = System.getProperty("os.name").startsWith("Windows");
-    private static final String DELIMITER = isWindows ? "\\" : "/";
-    private static final String PLUGIN_DIR_NAME = DELIMITER + "flamegraph-profiler";
-    private static final String LOG_DIR_NAME = DELIMITER + "events";
-    private static final String CONFIG_DIR_NAME = DELIMITER + "configuration";
+    private static final String PLUGIN_DIR_NAME = "flamegraph-profiler";
+    private static final String LOG_DIR_NAME = "events";
+    private static final String CONFIG_DIR_NAME = "configuration";
     private static final String STATIC_DIR_NAME = "static";
+    private static final String REQUEST_PREFIX = "/flamegraph-profiler/";
     @NotNull
-    private final File logDir;
+    private final Path logDirPath;
     @NotNull
-    private final File configDir;
+    private final Path configDirPath;
     @NotNull
-    private final File staticDir;
+    private final Path staticDirPath;
 
     public PluginFileManager(@NotNull String systemDirPath) {
-        systemDirPath = getNormalSysPath(systemDirPath);
-        String pluginDirPath = systemDirPath + PLUGIN_DIR_NAME;
-        createDirIfNotExist(new File(pluginDirPath));
-        logDir = new File(pluginDirPath + LOG_DIR_NAME);
-        createDirIfNotExist(logDir);
-        configDir = new File(pluginDirPath + CONFIG_DIR_NAME);
-        createDirIfNotExist(configDir);
-        staticDir = new File(getClass().getResource("/" + STATIC_DIR_NAME).getPath());
+        Path systemDir = Paths.get(systemDirPath);
+        Path pluginDir = Paths.get(systemDir.toString(), PLUGIN_DIR_NAME);
+        createDirIfNotExist(pluginDir);
+        logDirPath = Paths.get(pluginDir.toString(), LOG_DIR_NAME);
+        createDirIfNotExist(logDirPath);
+        configDirPath = Paths.get(pluginDir.toString(), CONFIG_DIR_NAME);
+        createDirIfNotExist(configDirPath);
+        staticDirPath = Paths.get(
+                new File(
+                        getClass().getResource("/" + STATIC_DIR_NAME).getPath()
+                ).getAbsolutePath()
+        );
     }
 
-    private static String getNormalSysPath(@NotNull String systemDirPath) {
-        if (isWindows) {
-            return systemDirPath.replaceAll("/", "\\\\");
-        }
-        return systemDirPath;
-    }
-
-    private static void createDirIfNotExist(@NotNull File dir) {
+    private static void createDirIfNotExist(@NotNull Path path) {
+        File dir = new File(path.toString());
         if (!dir.exists()) {
             try {
                 assert dir.mkdir();
@@ -55,15 +55,19 @@ public class PluginFileManager {
     }
 
     public String getFilePath(@NotNull String fileName) {
-        return logDir.getAbsolutePath() + DELIMITER + fileName;
+        return Paths.get(logDirPath.toString(), fileName)
+
+                .toString();
     }
 
     public File getConfigFile(String projectName) {
-        return new File(configDir.getAbsolutePath() + DELIMITER + projectName + ".config");
+        Path path = Paths.get(configDirPath.toString(), projectName + ".config");
+        return new File(path.toString());
     }
 
     public List<String> getFileNameList() {
         List<String> list = new LinkedList<>();
+        File logDir = new File(logDirPath.toString());
         File[] files = logDir.listFiles();
         if (files != null) {
             list = Arrays.stream(files)
@@ -83,7 +87,8 @@ public class PluginFileManager {
     }
 
     public void saveFile(ByteBuf content, String fileName) {
-        File file = new File(logDir.getAbsolutePath() + DELIMITER + fileName);
+        Path path = Paths.get(logDirPath.toString(), fileName);
+        File file = new File(path.toString());
         try (OutputStream outputStream = new FileOutputStream(file)) {
             byte[] bytes = new byte[content.readableBytes()];
             content.readBytes(bytes);
@@ -94,20 +99,16 @@ public class PluginFileManager {
     }
 
     public String getStaticFilePath(String staticFileUri) {
-        String staticFilePath = staticFileUri
-                .replaceFirst(
-                        "/[^/]+/",
-                        (staticDir.getAbsolutePath() + DELIMITER).replaceAll("\\\\", "\\\\\\\\"))
-                .replaceAll("%20", " ");
-        if (isWindows) {
-            return staticFilePath.replaceAll("/", "\\\\");
-        }
-        return staticFilePath;
+        Path path = Paths.get(
+                staticDirPath.toString(),
+                staticFileUri.substring(REQUEST_PREFIX.length(), staticFileUri.length())
+        );
+        return path.toString().replaceAll("%20", " ");
     }
 
     @NotNull
-    public File getLogDir() {
-        return logDir;
+    public String getLogDirPath() {
+        return logDirPath.toString();
     }
 
     @NotNull
