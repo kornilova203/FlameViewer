@@ -7,22 +7,20 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.application.PathManager;
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.ide.BuiltInServerManager;
 
-public class ShowProfilingResultsAction extends AnAction {
+public class ShowLastResultAction extends AnAction {
     @Override
     public void actionPerformed(AnActionEvent event) {
-        BrowserUtil.browse("http://localhost:" +
-                BuiltInServerManager.getInstance().getPort() +
-                getUri(event.getProject()));
+        if (event.getProject() != null) {
+            BrowserUtil.browse("http://localhost:" +
+                    BuiltInServerManager.getInstance().getPort() +
+                    getUri(event.getProject()));
+        }
     }
 
     @NotNull
-    private static String getUri(@Nullable Project project) {
-        if (project == null) {
-            return ServerNames.SELECT_FILE;
-        }
+    private static String getUri(@NotNull Project project) {
         return ServerNames.CALL_TREE +
                 "?project=" +
                 project.getName() +

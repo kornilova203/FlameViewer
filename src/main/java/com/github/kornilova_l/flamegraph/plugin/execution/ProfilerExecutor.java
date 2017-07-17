@@ -1,16 +1,16 @@
 package com.github.kornilova_l.flamegraph.plugin.execution;
 
 import com.intellij.execution.Executor;
-import com.intellij.openapi.util.IconLoader;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.wm.ToolWindowId;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 
+import static icons.ProfilerIcons.runIcon;
+
 public class ProfilerExecutor extends Executor {
     public static final String EXECUTOR_ID = "Flamegraph-Profiler-Executor";
-    private static final Icon runIcon = IconLoader.getIcon("/icons/flame-run16.png", ProfilerExecutor.class);
 
     @Override
     public String getToolWindowId() {

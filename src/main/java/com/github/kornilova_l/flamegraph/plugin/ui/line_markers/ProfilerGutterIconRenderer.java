@@ -6,7 +6,6 @@ import com.intellij.openapi.actionSystem.impl.SimpleDataContext;
 import com.intellij.openapi.editor.markup.GutterIconRenderer;
 import com.intellij.openapi.ui.popup.JBPopup;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
-import com.intellij.openapi.util.IconLoader;
 import com.intellij.ui.awt.RelativePoint;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -15,9 +14,9 @@ import javax.swing.*;
 import java.awt.event.MouseEvent;
 import java.util.Collection;
 
+import static icons.ProfilerIcons.flameIcon;
+
 public class ProfilerGutterIconRenderer extends GutterIconRenderer {
-    private static final Icon methodIcon = IconLoader.getIcon("/icons/flame16.png",
-            ProfilerGutterIconRenderer.class);
     private final DefaultActionGroup actionGroup = new DefaultActionGroup();
 
     ProfilerGutterIconRenderer(Collection<MethodConfig> includingMethodConfigs) {
@@ -76,6 +75,6 @@ public class ProfilerGutterIconRenderer extends GutterIconRenderer {
     @NotNull
     @Override
     public Icon getIcon() {
-        return methodIcon;
+        return flameIcon;
     }
 }

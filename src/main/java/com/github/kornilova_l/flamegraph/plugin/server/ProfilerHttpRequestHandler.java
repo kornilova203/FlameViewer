@@ -179,10 +179,10 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
                     sendFileList(context, urlDecoder.parameters().get("project").get(0));
                 }
                 return true;
-            case ServerNames.SELECT_FILE:
-                LOG.info("select-file.html");
+            case ServerNames.UPLOAD_FILE:
+                LOG.info("upload-file.html");
                 try {
-                    sendStatic(context, ServerNames.MAIN_NAME + "/select-file.html", "text/html");
+                    sendStatic(context, ServerNames.MAIN_NAME + "/upload-file.html", "text/html");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
