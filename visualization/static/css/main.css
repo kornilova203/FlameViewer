@@ -159,7 +159,7 @@ nav ul li {
     height: 100%;
     list-style: none;
     vertical-align: baseline;
-    padding: 0 30px;
+    padding: 0;
     margin: 0;
 }
 
@@ -175,6 +175,7 @@ nav ul li a, .choose-file-header a {
     vertical-align: baseline;
     align-items: center;
     transition: background 300ms, color 300ms;
+    padding: 0 30px;
 }
 
 nav ul li:hover, .current-link {
@@ -195,7 +196,7 @@ nav ul li:hover a, .current-link a {
     margin: 0 0;
 }
 
-#search {
+#search-method {
     position: fixed;
     margin-left: calc(700px / 2 + 150px / 2 + 50px);
     margin-top: 5px;
@@ -204,7 +205,7 @@ nav ul li:hover a, .current-link a {
     text-align: center;
 }
 
-#search input[type="text"] {
+#search-method input[type="text"] {
     background: url(../img/search-white.png) no-repeat 10px 7px #fcfcfc;
     border: 1px solid #d1d1d1;
     font-size: 14px;
@@ -217,16 +218,16 @@ nav ul li:hover a, .current-link a {
     pointer-events: initial;
 }
 
-#search input[type="text"]:focus {
+#search-method input[type="text"]:focus {
     outline: none;
 }
 
-#search input[type="text"]::placeholder {
+#search-method input[type="text"]::placeholder {
     transition: all 0.7s ease 0s;
     color: #888;
 }
 
-#search input[type="text"]:focus::placeholder {
+#search-method input[type="text"]:focus::placeholder {
     color: #bbb;
 }
 
@@ -269,4 +270,45 @@ nav ul li:hover a, .current-link a {
 .extension-error {
     float: right;
     color: rgba(138, 18, 11, 0.84);
+}
+
+.file-menu {
+    position: fixed;
+    height: 100%;
+    width: 250px;
+    top: 0;
+    left: 0;
+    background-color: #dadada;
+    color: #282828;
+}
+
+#search-file {
+    pointer-events: none;
+    text-align: center;
+}
+
+#search-file input[type="text"] {
+    background: url(../img/search-icon-black.png) no-repeat 0 4px;
+    background-size: 18px;
+    font-size: 14px;
+    color: #6a6a6a;
+    width: 170px;
+    padding: 6px 0 6px 25px;
+    pointer-events: initial;
+    border-width: 0;
+    border-bottom: solid black 1px;
+    margin-top: 10px;
+}
+
+#search-file input[type="text"]:focus {
+    outline: none;
+}
+
+#search-file input[type="text"]::placeholder {
+    transition: all 0.7s ease 0s;
+    color: #888;
+}
+
+#search-file input[type="text"]:focus::placeholder {
+    color: #bbb;
 }

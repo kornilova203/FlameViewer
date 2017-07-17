@@ -172,7 +172,7 @@ class AccumulativeTreeDrawer {
     }
 
     _enableSearch() {
-        const input = $("#search").find("input");
+        const input = $("#search-method").find("input");
         input.on('change keyup copy paste cut', () => {
             const val = input.val();
             if (!val) {

@@ -21,7 +21,7 @@
 </head>
 <body>
 <aside>
-  <form method="get" id="search">
+  <form method="get" id="search-method">
     <input name="q" type="text" size="40" placeholder="Type method name..."/>
   </form>
 </aside>
@@ -39,10 +39,13 @@
     </li>
   </ul>
 </nav>
-<p class="choose-file-header"><b class="chosen-file">{{ fileName }}</b><!--suppress HtmlUnknownTarget -->
-  <a href="/flamegraph-profiler/select-file?project={{ projectName }}">Select Another File</a></p>
 <main>
 </main>
+<div class="file-menu">
+  <form id="search-file">
+    <input name="q" type="text" size="40" placeholder="Search file"/>
+  </form>
+</div>
 </body>
 </html>
 
