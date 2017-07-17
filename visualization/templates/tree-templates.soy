@@ -86,12 +86,13 @@
 /**
  * Generate list of files
  * @param fileNames list of files
- * @param project
+ * @param projectName
+ * @param pageName
  */
 {template .listOfFiles}
 <ol class="file-list">
   {foreach $fileName in $fileNames}
-    <li><a href="/flamegraph-profiler/call-tree?file={$fileName}&amp;project={$project}">{$fileName}</a></li>
+    <li id="{$fileName}"><a href="/flamegraph-profiler/{$pageName}?file={$fileName}&amp;project={$projectName}">{$fileName}</a></li>
   {/foreach}
   </ol>
 {/template}

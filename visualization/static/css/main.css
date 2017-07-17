@@ -249,22 +249,21 @@ nav ul li:hover a, .current-link a {
 
 .file-list {
     list-style: none;
-    border-top: solid 1px #ccc;
     padding: 0;
 }
 
 .file-list li {
-    border-bottom: solid 1px #ccc;
-    padding: 12px 0 10px;
+    padding: 10px 0 8px;
 }
 
 .file-list li a {
+    padding-left: 20px;
     text-decoration: none;
-    color: #0887D7;
+    color: #282828;
 }
 
 .no-file-found {
-    text-align: center;
+    text-align: left;
 }
 
 .extension-error {
@@ -284,7 +283,7 @@ nav ul li:hover a, .current-link a {
 
 #search-file {
     pointer-events: none;
-    text-align: center;
+    margin-left: 20px;
 }
 
 #search-file input[type="text"] {
@@ -311,4 +310,12 @@ nav ul li:hover a, .current-link a {
 
 #search-file input[type="text"]:focus::placeholder {
     color: #bbb;
+}
+
+.current-file {
+    background-color: #0e8fdf;
+}
+
+.file-list .current-file a {
+    color: white;
 }

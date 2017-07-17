@@ -44,11 +44,11 @@ if (goog.DEBUG) {
 
 templates.tree.listOfFiles = function(opt_data, opt_ignored) {
   var output = '<ol class="file-list">';
-    var fileNameList83 = opt_data.fileNames;
-    var fileNameListLen83 = fileNameList83.length;
-    for (var fileNameIndex83 = 0; fileNameIndex83 < fileNameListLen83; fileNameIndex83++) {
-        var fileNameData83 = fileNameList83[fileNameIndex83];
-        output += '<li><a href="/flamegraph-profiler/call-tree?file=' + soy.$$escapeUri(fileNameData83) + '&amp;project=' + soy.$$escapeUri(opt_data.project) + '">' + soy.$$escapeHtml(fileNameData83) + '</a></li>';
+    var fileNameList87 = opt_data.fileNames;
+    var fileNameListLen87 = fileNameList87.length;
+    for (var fileNameIndex87 = 0; fileNameIndex87 < fileNameListLen87; fileNameIndex87++) {
+        var fileNameData87 = fileNameList87[fileNameIndex87];
+        output += '<li id="' + soy.$$escapeHtmlAttribute(fileNameData87) + '"><a href="/flamegraph-profiler/' + soy.$$escapeHtmlAttribute(opt_data.pageName) + '?file=' + soy.$$escapeUri(fileNameData87) + '&amp;project=' + soy.$$escapeUri(opt_data.projectName) + '">' + soy.$$escapeHtml(fileNameData87) + '</a></li>';
   }
   output += '</ol>';
   return soydata.VERY_UNSAFE.ordainSanitizedHtml(output);
