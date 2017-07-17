@@ -10,9 +10,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class PluginFileManager {
@@ -53,12 +51,6 @@ public class PluginFileManager {
                 se.printStackTrace();
             }
         }
-    }
-
-    public String getFilePath(@NotNull String fileName) {
-        return Paths.get(logDirPath.toString(), fileName)
-
-                .toString();
     }
 
     public File getConfigFile(String projectName) {
@@ -134,5 +126,28 @@ public class PluginFileManager {
             return file;
         }
         return null;
+    }
+
+    @Nullable
+    public String getLatestFileName(@NotNull String projectName) {
+        Path dirPath = Paths.get(logDirPath.toString(), projectName);
+        File dir = new File(dirPath.toString());
+        if (dir.exists() && dir.isDirectory()) {
+            File latestFile = getLatestFile(dir);
+            if (latestFile != null) {
+                return latestFile.getName();
+            }
+        }
+        return null;
+    }
+
+    @Nullable
+    private static File getLatestFile(File dir) {
+        File[] files = dir.listFiles();
+        if (files == null) {
+            return null;
+        }
+        Optional<File> maxFile = Arrays.stream(files).max(Comparator.comparingLong(File::lastModified));
+        return maxFile.orElse(null);
     }
 }
