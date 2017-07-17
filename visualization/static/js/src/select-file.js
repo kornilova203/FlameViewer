@@ -50,9 +50,21 @@ function listenInput() {
     });
 }
 
+function getProjectName() {
+    const parameters = window.location.href.split("?")[1]
+        .split("&");
+    for (let i = 0; i < parameters.length; i++) {
+        if (parameters[i].startsWith("project")) {
+            return parameters[i].substring(parameters[i].indexOf("=") + 1, parameters[i].length);
+        }
+    }
+    return "";
+}
+
 function getFilesList() {
+    const projectName = getProjectName();
     const request = new XMLHttpRequest();
-    request.open("GET", "/flamegraph-profiler/file-list", true);
+    request.open("GET", "/flamegraph-profiler/file-list?project=" + projectName, true);
     request.responseType = "json";
 
     request.onload = function () {
@@ -61,7 +73,8 @@ function getFilesList() {
             $("<p class='no-file-found'>No file was found</p>").appendTo($("main"));
         } else {
             const list = templates.tree.listOfFiles({
-                fileNames: fileNames
+                fileNames: fileNames,
+                project: projectName
             }).content;
             $(list).appendTo($("main"));
         }

@@ -20,8 +20,7 @@ import java.util.Objects;
 
 public class TreeManager {
     private static final Logger LOG = Logger.getInstance(TreeManager.class);
-    private File logFile;
-    private String fileName = "";
+    private File logFile = null;
     @Nullable private TreesProtos.Trees originalTrees;
     @Nullable private TreeProtos.Tree outgoingCalls;
     private final HashMap<String, TreeProtos.Tree> methodOutgoingCalls = new HashMap<>();
@@ -33,11 +32,11 @@ public class TreeManager {
         this.fileManager = fileManager;
     }
 
-    private void updateLogFile(String fileName) {
-        if (!Objects.equals(this.fileName, fileName)) {
-            this.fileName = fileName;
+    private void updateLogFile(File logFile) {
+        if (this.logFile == null ||
+                !Objects.equals(this.logFile.getAbsolutePath(), logFile.getAbsolutePath())) {
+            this.logFile = logFile;
             removeTrees();
-            logFile = new File(fileManager.getFilePath(fileName));
         }
     }
 
@@ -54,9 +53,8 @@ public class TreeManager {
      *
      * @return TreesProtos.Trees. Returning Trees object may not hove any Tree objects inside.
      */
-    @Nullable
-    public TreesProtos.Trees getCallTree(String fileName) {
-        updateLogFile(fileName);
+    public TreesProtos.Trees getCallTree(File logFile) {
+        updateLogFile(logFile);
         if (originalTrees == null) {
             originalTrees = new CallTreesBuilder(logFile).getTrees();
         }
@@ -69,10 +67,10 @@ public class TreeManager {
      * @return TreeProtos.Tree object. Tree may not have any nodes inside (if all methods took <1ms)
      */
     @Nullable
-    public TreeProtos.Tree getOutgoingCalls(String fileName) {
-        updateLogFile(fileName);
+    public TreeProtos.Tree getOutgoingCalls(File logFile) {
+        updateLogFile(logFile);
         if (outgoingCalls == null) {
-            getCallTree(fileName);
+            getCallTree(logFile);
             if (originalTrees == null) {
                 return null;
             }
@@ -82,9 +80,9 @@ public class TreeManager {
     }
 
     @Nullable
-    public TreeProtos.Tree getOutgoingCalls(Map<String, List<String>> parameters) {
-        updateLogFile(fileName);
-        getOutgoingCalls(parameters.get("file").get(0));
+    public TreeProtos.Tree getOutgoingCalls(Map<String, List<String>> parameters, File logFile) {
+        updateLogFile(logFile);
+        getOutgoingCalls(logFile);
         if (outgoingCalls == null) {
             return null;
         }
@@ -116,10 +114,10 @@ public class TreeManager {
     }
 
     @Nullable
-    public TreeProtos.Tree getIncomingCalls(String fileName) {
-        updateLogFile(fileName);
+    public TreeProtos.Tree getIncomingCalls(File logFile) {
+        updateLogFile(logFile);
         if (incomingCalls == null) {
-            getOutgoingCalls(fileName);
+            getOutgoingCalls(logFile);
             if (outgoingCalls == null) {
                 return null;
             }
@@ -129,10 +127,9 @@ public class TreeManager {
     }
 
     @Nullable
-    public TreeProtos.Tree getIncomingCalls(Map<String, List<String>> parameters) {
-        String fileName = parameters.get("file").get(0);
-        updateLogFile(fileName);
-        getIncomingCalls(fileName);
+    public TreeProtos.Tree getIncomingCalls(Map<String, List<String>> parameters, File logFile) {
+        updateLogFile(logFile);
+        getIncomingCalls(logFile);
         if (incomingCalls == null) {
             return null;
         }

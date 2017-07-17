@@ -5,6 +5,7 @@
 
   <script>
       const fileName = "{{ fileName }}";
+      const projectName = "{{ projectName }}";
   </script>
 
   <script src="js/external/easeljs-0.8.2.min.js"></script>
@@ -27,13 +28,14 @@
 <nav>
   <ul>
     <li><!--suppress HtmlUnknownTarget -->
-      <a href="/flamegraph-profiler/call-tree?file={{ fileName }}">Call Tree</a>
+      <a href="/flamegraph-profiler/call-tree?file={{ fileName }}&project={{ projectName }}">Call Tree</a>
     </li>
     <li><!--suppress HtmlUnknownTarget -->
-      <a href="/flamegraph-profiler/outgoing-calls?file={{ fileName }}">Outgoing Calls</a>
+      <a href="/flamegraph-profiler/outgoing-calls?file={{ fileName }}&project={{ projectName }}">Outgoing Calls</a>
     </li>
     <li><!--suppress HtmlUnknownTarget -->
-      <a href="/flamegraph-profiler/incoming-calls?file={{ fileName }}" class="current-link">Incoming calls</a>
+      <a href="/flamegraph-profiler/incoming-calls?file={{ fileName }}&project={{ projectName }}" class="current-link">Incoming
+        calls</a>
     </li>
   </ul>
 </nav>

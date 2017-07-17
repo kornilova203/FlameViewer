@@ -22,7 +22,7 @@ $(window).on("load", function () {
     const urlParts = window.location.href.split("?")[0].split("/");
     const treeType = urlParts[urlParts.length - 1];
     if (parameters.indexOf("method=") === -1) {
-        request.open("GET", `/flamegraph-profiler/trees/${treeType}?file=${fileName}`, true);
+        request.open("GET", `/flamegraph-profiler/trees/${treeType}?file=${fileName}&project=${getProjectName()}`, true);
     } else {
         request.open("GET", `/flamegraph-profiler/trees/${treeType}?${parameters}&file=${fileName}`, true);
         className = /(?:class=)([^&]+)(?:&)/.exec(parameters)[1];
@@ -40,3 +40,14 @@ $(window).on("load", function () {
     };
     request.send();
 });
+
+function getProjectName() {
+    const parameters = window.location.href.split("?")[1]
+        .split("&");
+    for (let i = 0; i < parameters.length; i++) {
+        if (parameters[i].startsWith("project")) {
+            return parameters[i].substring(parameters[i].indexOf("=") + 1, parameters[i].length);
+        }
+    }
+    return "";
+}

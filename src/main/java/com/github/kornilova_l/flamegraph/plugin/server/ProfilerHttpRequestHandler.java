@@ -27,36 +27,6 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
             com.intellij.openapi.diagnostic.Logger.getInstance(ProfilerHttpRequestHandler.class);
     private final PluginFileManager fileManager = new PluginFileManager(PathManager.getSystemPath());
     private final TreeManager treeManager = new TreeManager(fileManager);
-    enum Extension {
-        JFR,
-        SER,
-        UNSUPPORTED
-    }
-
-    private byte[] renderPage(String htmlFilePath, String logFile) {
-        htmlFilePath = fileManager.getStaticFilePath(htmlFilePath);
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(new File(htmlFilePath)))) {
-            return String.join("", bufferedReader.lines()
-                    .map((line) -> line.replaceAll("\\{\\{ *fileName *}}", logFile)) // {{ fileName }}
-                    .toArray(String[]::new)).getBytes();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    private void sendFileList(ChannelHandlerContext context) {
-        String json = new Gson().toJson(
-                fileManager.getFileNameList()
-        );
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        try {
-            outputStream.write(json.getBytes());
-            sendBytes(context, "application/json", outputStream.toByteArray());
-        } catch (IOException e) {
-            LOG.error(e);
-        }
-    }
 
     private static void sendTrees(ChannelHandlerContext context,
                                   @Nullable TreesProtos.Trees trees) {
@@ -88,21 +58,6 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
         }
     }
 
-    private void sendStatic(ChannelHandlerContext context,
-                                   String fileUri,
-                                   String contentType) throws IOException {
-        LOG.info("Got filename: " + fileUri);
-        String filePath = fileManager.getStaticFilePath(fileUri);
-        LOG.info("This file will be sent: " + filePath);
-        try (
-                InputStream inputStream = new FileInputStream(
-                        new File(filePath)
-                )
-        ) {
-            sendBytes(context, contentType, IOUtils.toByteArray(inputStream));
-        }
-    }
-
     private static void sendBytes(ChannelHandlerContext context,
                                   String contentType,
                                   byte[] bytes) {
@@ -114,20 +69,6 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
         response.headers().set("Content-Type", contentType);
         ChannelFuture f = context.channel().writeAndFlush(response);
         f.addListener(ChannelFutureListener.CLOSE);
-    }
-
-    private boolean processPostMethod(QueryStringDecoder urlDecoder, FullHttpRequest fullHttpRequest, ChannelHandlerContext context) {
-        String uri = urlDecoder.path(); // without get parameters
-        if (Objects.equals(uri, ServerNames.UPLOAD_FILE)) {
-            String fileName = fullHttpRequest.headers().get("File-Name");
-            LOG.info("Got file: " + fileName);
-            if (getExtension(fileName) != Extension.UNSUPPORTED) {
-                fileManager.saveFile(fullHttpRequest.content(), fileName);
-                sendStatus(HttpResponseStatus.OK, context.channel());
-                return true;
-            }
-        }
-        return false;
     }
 
     private static void sendStatus(HttpResponseStatus status, Channel channel) {
@@ -152,6 +93,65 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
         }
     }
 
+    private byte[] renderPage(String htmlFilePath,
+                              @NotNull String fileName,
+                              @NotNull String projectName) {
+        htmlFilePath = fileManager.getStaticFilePath(htmlFilePath);
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(new File(htmlFilePath)))) {
+            return String.join("", bufferedReader.lines()
+                    .map((line) -> line
+                            .replaceAll("\\{\\{ *fileName *}}", fileName) // {{ fileName }}
+                            .replaceAll("\\{\\{ *projectName *}}", projectName)
+                    )
+                    .toArray(String[]::new)).getBytes();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private void sendFileList(ChannelHandlerContext context, String projectName) {
+        String json = new Gson().toJson(
+                fileManager.getFileNameList(projectName)
+        );
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        try {
+            outputStream.write(json.getBytes());
+            sendBytes(context, "application/json", outputStream.toByteArray());
+        } catch (IOException e) {
+            LOG.error(e);
+        }
+    }
+
+    private void sendStatic(ChannelHandlerContext context,
+                            String fileUri,
+                            String contentType) throws IOException {
+        LOG.info("Got filename: " + fileUri);
+        String filePath = fileManager.getStaticFilePath(fileUri);
+        LOG.info("This file will be sent: " + filePath);
+        try (
+                InputStream inputStream = new FileInputStream(
+                        new File(filePath)
+                )
+        ) {
+            sendBytes(context, contentType, IOUtils.toByteArray(inputStream));
+        }
+    }
+
+    private boolean processPostMethod(QueryStringDecoder urlDecoder, FullHttpRequest fullHttpRequest, ChannelHandlerContext context) {
+        String uri = urlDecoder.path(); // without get parameters
+        if (Objects.equals(uri, ServerNames.UPLOAD_FILE)) {
+            String fileName = fullHttpRequest.headers().get("File-Name");
+            LOG.info("Got file: " + fileName);
+            if (getExtension(fileName) != Extension.UNSUPPORTED) {
+                fileManager.saveFile(fullHttpRequest.content(), fileName);
+                sendStatus(HttpResponseStatus.OK, context.channel());
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public boolean process(QueryStringDecoder urlDecoder,
                            FullHttpRequest fullHttpRequest,
@@ -172,6 +172,14 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
 
     private boolean processGetMethod(QueryStringDecoder urlDecoder, ChannelHandlerContext context) {
         String uri = urlDecoder.path(); // without get parameters
+        @Nullable File logFile = null;
+        @Nullable String projectName = null;
+        @Nullable String fileName = null;
+        if (urlDecoder.parameters().containsKey("file") && urlDecoder.parameters().containsKey("project")) {
+            projectName = urlDecoder.parameters().get("project").get(0);
+            fileName = urlDecoder.parameters().get("file").get(0);
+            logFile = fileManager.getConfigFile(projectName, fileName);
+        }
         switch (uri) {
             case ServerNames.CALL_TREE:
                 LOG.info("call-tree.html");
@@ -181,7 +189,8 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
                         "text/html",
                         renderPage(
                                 ServerNames.MAIN_NAME + "/call-tree.html",
-                                urlDecoder.parameters().get("file").get(0)
+                                fileName,
+                                projectName
                         )
                 );
                 break;
@@ -195,7 +204,9 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
                 break;
             case ServerNames.FILE_LIST:
                 LOG.info("file list");
-                sendFileList(context);
+                if (urlDecoder.parameters().containsKey("project")) {
+                    sendFileList(context, urlDecoder.parameters().get("project").get(0));
+                }
                 break;
             case ServerNames.OUTGOING_CALLS:
                 LOG.info("outgoing-calls.html");
@@ -204,7 +215,8 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
                         "text/html",
                         renderPage(
                                 ServerNames.MAIN_NAME + "/outgoing-calls.html",
-                                urlDecoder.parameters().get("file").get(0)
+                                fileName,
+                                projectName
                         )
                 );
                 break;
@@ -215,31 +227,35 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
                         "text/html",
                         renderPage(
                                 ServerNames.MAIN_NAME + "/incoming-calls.html",
-                                urlDecoder.parameters().get("file").get(0)
+                                fileName,
+                                projectName
                         )
                 );
                 break;
             case ServerNames.CALL_TREE_JS_REQUEST:
                 LOG.info("CALL_TREE_JS_REQUEST");
-                assert (urlDecoder.parameters().containsKey("file"));
-                sendTrees(context, treeManager.getCallTree(urlDecoder.parameters().get("file").get(0)));
+                if (logFile != null) {
+                    sendTrees(context, treeManager.getCallTree(logFile));
+                }
                 break;
             case ServerNames.OUTGOING_CALLS_JS_REQUEST:
                 LOG.info("OUTGOING_CALLS_JS_REQUEST");
-                assert (urlDecoder.parameters().containsKey("file"));
-                if (urlDecoder.parameters().containsKey("method")) {
-                    sendTree(context, treeManager.getOutgoingCalls(urlDecoder.parameters()));
-                } else {
-                    sendTree(context, treeManager.getOutgoingCalls(urlDecoder.parameters().get("file").get(0)));
+                if (logFile != null) {
+                    if (urlDecoder.parameters().containsKey("method")) {
+                        sendTree(context, treeManager.getOutgoingCalls(urlDecoder.parameters(), logFile));
+                    } else {
+                        sendTree(context, treeManager.getOutgoingCalls(logFile));
+                    }
                 }
                 break;
             case ServerNames.INCOMING_CALLS_JS_REQUEST:
                 LOG.info("INCOMING_CALLS_JS_REQUEST");
-                assert (urlDecoder.parameters().containsKey("file"));
-                if (urlDecoder.parameters().containsKey("method")) {
-                    sendTree(context, treeManager.getIncomingCalls(urlDecoder.parameters()));
-                } else {
-                    sendTree(context, treeManager.getIncomingCalls(urlDecoder.parameters().get("file").get(0)));
+                if (logFile != null) {
+                    if (urlDecoder.parameters().containsKey("method")) {
+                        sendTree(context, treeManager.getIncomingCalls(urlDecoder.parameters(), logFile));
+                    } else {
+                        sendTree(context, treeManager.getIncomingCalls(logFile));
+                    }
                 }
                 break;
             default:
@@ -262,5 +278,11 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
                 }
         }
         return true;
+    }
+
+    enum Extension {
+        JFR,
+        SER,
+        UNSUPPORTED
     }
 }

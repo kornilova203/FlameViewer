@@ -2,6 +2,7 @@ package com.github.kornilova_l.flamegraph.plugin;
 
 import io.netty.buffer.ByteBuf;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -17,7 +18,7 @@ import java.util.stream.Collectors;
 public class PluginFileManager {
     private static final boolean isWindows = System.getProperty("os.name").startsWith("Windows");
     private static final String PLUGIN_DIR_NAME = "flamegraph-profiler";
-    private static final String LOG_DIR_NAME = "events";
+    private static final String LOG_DIR_NAME = "log";
     private static final String CONFIG_DIR_NAME = "configuration";
     private static final String STATIC_DIR_NAME = "static";
     private static final String REQUEST_PREFIX = "/flamegraph-profiler/";
@@ -65,10 +66,10 @@ public class PluginFileManager {
         return new File(path.toString());
     }
 
-    public List<String> getFileNameList() {
+    public List<String> getFileNameList(@NotNull String projectName) {
         List<String> list = new LinkedList<>();
-        File logDir = new File(logDirPath.toString());
-        File[] files = logDir.listFiles();
+        File projectLogDir = new File(getLogDirPath(projectName));
+        File[] files = projectLogDir.listFiles();
         if (files != null) {
             list = Arrays.stream(files)
                     .sorted((f1, f2) -> {
@@ -107,8 +108,10 @@ public class PluginFileManager {
     }
 
     @NotNull
-    public String getLogDirPath() {
-        return logDirPath.toString();
+    public String getLogDirPath(@NotNull String projectName) {
+        Path path = Paths.get(logDirPath.toString(), projectName);
+        createDirIfNotExist(path);
+        return path.toString();
     }
 
     @NotNull
@@ -120,5 +123,16 @@ public class PluginFileManager {
             path = path.substring(1, path.length()).replaceAll("/", "\\\\");
         }
         return path;
+    }
+
+    @Nullable
+    public File getConfigFile(String projectName, String fileName) {
+        String projectLogDirPath = getLogDirPath(projectName);
+        Path path = Paths.get(projectLogDirPath, fileName);
+        File file = new File(path.toString());
+        if (file.exists()) {
+            return file;
+        }
+        return null;
     }
 }

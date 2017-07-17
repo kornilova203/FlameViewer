@@ -60,18 +60,19 @@
  * @param isStatic
  * @param desc
  * @param count
- * @param file
+ * @param fileName
+ * @param projectName
  */
 {template .accumulativeTreePopup}
 <div class="popup">
     <ul>
         <li>
-            <a href="/flamegraph-profiler/outgoing-calls?file={$file}&amp;class={$className}&amp;method={$methodName}&amp;desc={$desc}&amp;isStatic={$isStatic}">
+            <a href="/flamegraph-profiler/outgoing-calls?file={$fileName}&amp;project={$projectName}&amp;class={$className}&amp;method={$methodName}&amp;desc={$desc}&amp;isStatic={$isStatic}">
                 Outgoing Calls
             </a>
         </li>
         <li>
-            <a href="/flamegraph-profiler/incoming-calls?file={$file}&amp;class={$className}&amp;method={$methodName}&amp;desc={$desc}&amp;isStatic={$isStatic}">
+            <a href="/flamegraph-profiler/incoming-calls?file={$fileName}&amp;project={$projectName}&amp;class={$className}&amp;method={$methodName}&amp;desc={$desc}&amp;isStatic={$isStatic}">
                 Incoming Calls
             </a>
         </li>
@@ -85,11 +86,12 @@
 /**
  * Generate list of files
  * @param fileNames list of files
+ * @param project
  */
 {template .listOfFiles}
 <ol class="file-list">
   {foreach $fileName in $fileNames}
-    <li><a href="/flamegraph-profiler/call-tree?file={$fileName}">{$fileName}</a></li>
+    <li><a href="/flamegraph-profiler/call-tree?file={$fileName}&amp;project={$project}">{$fileName}</a></li>
   {/foreach}
   </ol>
 {/template}

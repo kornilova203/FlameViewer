@@ -111,7 +111,8 @@ class AccumulativeTreeDrawer {
                 isStatic: node.getNodeInfo().getIsStatic(),
                 duration: node.getWidth(),
                 count: node.getNodeInfo().getCount(),
-                file: fileName
+                fileName: fileName,
+                projectName: projectName
             }
         ).content;
         const popup = $(popupContent).appendTo(this.section);
@@ -266,7 +267,7 @@ class AccumulativeTreeDrawer {
     _isParent(mayBeParent, mayBeChild) {
         return (mayBeParent.originalX <= mayBeChild.originalX + 0.01 &&
         mayBeParent.originalX + (mayBeParent.originalScaleX * this.canvasWidth) >=
-            (mayBeChild.originalX + (mayBeChild.originalScaleX * this.canvasWidth) - 0.01));
+        (mayBeChild.originalX + (mayBeChild.originalScaleX * this.canvasWidth) - 0.01));
     }
 
     _resetZoom() {
