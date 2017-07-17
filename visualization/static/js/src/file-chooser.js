@@ -2,6 +2,10 @@ function getPageName() {
     return /[^\/]*(?=\?)/.exec(window.location.href)[0];
 }
 
+function showChooseFile() {
+    console.log("choose file");
+}
+
 $(window).on("load", () => {
     showProjectsList();
 });
@@ -16,7 +20,9 @@ function updateFilesList(filesList) {
             pageName: getPageName()
         }).content;
         $(list).appendTo($(".file-menu"));
-        $("#" + fileName.replace(/\./, "\\.")).addClass("current-file");
+        if (fileName !== "") {
+            $("#" + fileName.replace(/\./, "\\.")).addClass("current-file");
+        }
     }
 }
 
@@ -24,7 +30,11 @@ function appendProject(project) {
     if (project === projectName) {
         return;
     }
-    const newElem = "<a href='#'>" + project + "</a>";
+    const link = "/flamegraph-profiler/" +
+        getPageName() +
+        "?project=" +
+        (project === "Uploaded files" ? "uploaded-files" : project);
+    const newElem = `<a href='${link}'>${project}</a>`;
     $(newElem).appendTo($(".projects-dropdown-content"));
 }
 

@@ -243,25 +243,25 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
 
 
     private void processHtmlRequest(String uri, QueryStringDecoder urlDecoder, ChannelHandlerContext context) {
-        @Nullable String projectName = null;
+        @Nullable String projectName;
         @Nullable String fileName = null;
-        if (urlDecoder.parameters().containsKey("file") && urlDecoder.parameters().containsKey("project")) {
+        if (urlDecoder.parameters().containsKey("project")) {
             projectName = urlDecoder.parameters().get("project").get(0);
-            fileName = urlDecoder.parameters().get("file").get(0);
-        }
-        if (projectName == null || fileName == null) {
+        } else {
             return;
+        }
+        if (urlDecoder.parameters().containsKey("file")) {
+            fileName = urlDecoder.parameters().get("file").get(0);
         }
         switch (uri) {
             case ServerNames.CALL_TREE:
                 LOG.info("call-tree.html");
-                assert (urlDecoder.parameters().containsKey("file"));
                 sendBytes(
                         context,
                         "text/html",
                         renderPage(
                                 ServerNames.MAIN_NAME + "/call-tree.html",
-                                fileName,
+                                fileName == null ? "" : fileName,
                                 projectName
                         )
                 );
@@ -273,7 +273,7 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
                         "text/html",
                         renderPage(
                                 ServerNames.MAIN_NAME + "/outgoing-calls.html",
-                                fileName,
+                                fileName == null ? "" : fileName,
                                 projectName
                         )
                 );
@@ -285,7 +285,7 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
                         "text/html",
                         renderPage(
                                 ServerNames.MAIN_NAME + "/incoming-calls.html",
-                                fileName,
+                                fileName == null ? "" : fileName,
                                 projectName
                         )
                 );

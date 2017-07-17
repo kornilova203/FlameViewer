@@ -23,21 +23,25 @@ function drawTrees(trees) {
 
 $(window).on("load", function () {
     getFilesList(projectName, updateFilesList);
-    const request = new XMLHttpRequest();
-    request.open("GET", "/flamegraph-profiler/trees/call-tree?file=" +
-        fileName +
-        "&project=" +
-        getProjectName(),
-        true);
-    request.responseType = "arraybuffer";
+    if (fileName !== "") {
+        const request = new XMLHttpRequest();
+        request.open("GET", "/flamegraph-profiler/trees/call-tree?file=" +
+            fileName +
+            "&project=" +
+            getProjectName(),
+            true);
+        request.responseType = "arraybuffer";
 
-    request.onload = function () {
-        const arrayBuffer = request.response;
-        const byteArray = new Uint8Array(arrayBuffer);
-        const trees = TreesProto.Trees.deserializeBinary(byteArray).getTreesList();
-        drawTrees(trees);
-    };
-    request.send();
+        request.onload = function () {
+            const arrayBuffer = request.response;
+            const byteArray = new Uint8Array(arrayBuffer);
+            const trees = TreesProto.Trees.deserializeBinary(byteArray).getTreesList();
+            drawTrees(trees);
+        };
+        request.send();
+    } else {
+        showChooseFile();
+    }
 });
 
 function getProjectName() {
