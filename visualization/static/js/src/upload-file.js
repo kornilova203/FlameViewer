@@ -1,5 +1,19 @@
+function updateUploadedFilesList(filesList) {
+    if (filesList.length === 0) {
+        $("<p class='no-file-found'>No file was found</p>").appendTo($("main"));
+    } else {
+        const list = templates.tree.listOfFiles({
+            fileNames: filesList,
+            projectName: "uploaded-files",
+            pageName: "outgoing-calls"
+        }).content;
+        $(list).appendTo($("main"));
+        $("#" + currentFileName.replace(/\./, "\\.")).addClass("current-file");
+    }
+}
+
 $(window).on("load", function () {
-    getFilesList();
+    getFilesList("uploaded-files", updateUploadedFilesList);
     listenInput();
 });
 
@@ -31,7 +45,6 @@ function sendFile(file, statuses, fileCount) {
     request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     request.setRequestHeader('File-Name', file.name);
     request.send(file);
-
 }
 
 function listenInput() {
@@ -48,36 +61,4 @@ function listenInput() {
             })(e.target.files[i]);
         }
     });
-}
-
-function getProjectName() {
-    const parameters = window.location.href.split("?")[1]
-        .split("&");
-    for (let i = 0; i < parameters.length; i++) {
-        if (parameters[i].startsWith("project")) {
-            return parameters[i].substring(parameters[i].indexOf("=") + 1, parameters[i].length);
-        }
-    }
-    return "";
-}
-
-function getFilesList() {
-    const projectName = getProjectName();
-    const request = new XMLHttpRequest();
-    request.open("GET", "/flamegraph-profiler/file-list?project=" + projectName, true);
-    request.responseType = "json";
-
-    request.onload = function () {
-        const fileNames = request.response;
-        if (fileNames.length === 0) {
-            $("<p class='no-file-found'>No file was found</p>").appendTo($("main"));
-        } else {
-            const list = templates.tree.listOfFiles({
-                fileNames: fileNames,
-                project: projectName
-            }).content;
-            $(list).appendTo($("main"));
-        }
-    };
-    request.send();
 }

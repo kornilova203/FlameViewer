@@ -19,7 +19,6 @@ import org.jetbrains.ide.HttpRequestHandler;
 import org.jetbrains.io.Responses;
 
 import java.io.*;
-import java.util.Objects;
 
 public class ProfilerHttpRequestHandler extends HttpRequestHandler {
 
@@ -140,14 +139,17 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
 
     private boolean processPostMethod(QueryStringDecoder urlDecoder, FullHttpRequest fullHttpRequest, ChannelHandlerContext context) {
         String uri = urlDecoder.path(); // without get parameters
-        if (Objects.equals(uri, ServerNames.UPLOAD_FILE)) {
-            String fileName = fullHttpRequest.headers().get("File-Name");
-            LOG.info("Got file: " + fileName);
-            if (getExtension(fileName) != Extension.UNSUPPORTED) {
-                fileManager.saveFile(fullHttpRequest.content(), fileName);
-                sendStatus(HttpResponseStatus.OK, context.channel());
+        switch (uri) {
+            case ServerNames.UPLOAD_FILE:
+                String fileName = fullHttpRequest.headers().get("File-Name");
+                LOG.info("Got file: " + fileName);
+                if (getExtension(fileName) != Extension.UNSUPPORTED) {
+                    fileManager.saveFile(fullHttpRequest.content(), fileName);
+                    sendStatus(HttpResponseStatus.OK, context.channel());
+                } else {
+                    sendStatus(HttpResponseStatus.NOT_FOUND, context.channel());
+                }
                 return true;
-            }
         }
         return false;
     }

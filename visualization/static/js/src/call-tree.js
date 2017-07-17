@@ -22,6 +22,7 @@ function drawTrees(trees) {
 }
 
 $(window).on("load", function () {
+    getFilesList(getParameter("project"), updateFilesList);
     const request = new XMLHttpRequest();
     request.open("GET", "/flamegraph-profiler/trees/call-tree?file=" +
         fileName +

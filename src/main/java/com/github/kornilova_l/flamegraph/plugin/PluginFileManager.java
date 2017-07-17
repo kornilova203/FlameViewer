@@ -80,8 +80,10 @@ public class PluginFileManager {
     }
 
     public void saveFile(ByteBuf content, String fileName) {
-        Path path = Paths.get(logDirPath.toString(), fileName);
-        File file = new File(path.toString());
+        Path uploadedFilesPath = Paths.get(logDirPath.toString(), "uploaded-files");
+        createDirIfNotExist(uploadedFilesPath);
+        Path filePath = Paths.get(uploadedFilesPath.toString(), fileName);
+        File file = new File(filePath.toString());
         try (OutputStream outputStream = new FileOutputStream(file)) {
             byte[] bytes = new byte[content.readableBytes()];
             content.readBytes(bytes);

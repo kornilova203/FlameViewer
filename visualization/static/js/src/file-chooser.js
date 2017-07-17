@@ -1,15 +1,10 @@
-let filesList = [];
 const currentFileName = getParameter("file");
-
-$(window).on("load", () => {
-    getFilesList();
-});
 
 function getPageName() {
     return /[^\/]*(?=\?)/.exec(window.location.href)[0];
 }
 
-function updateFilesList() {
+function updateFilesList(filesList) {
     if (filesList.length === 0) {
         $("<p class='no-file-found'>No file was found</p>").appendTo($(".file-menu"));
     } else {
@@ -22,8 +17,8 @@ function updateFilesList() {
         $("#" + currentFileName.replace(/\./, "\\.")).addClass("current-file");
     }
 }
-function getFilesList() {
-    const projectName = getParameter("project");
+
+function getFilesList(projectName, callback) {
     const request = new XMLHttpRequest();
     request.open("GET", "/flamegraph-profiler/file-list?project=" + projectName, true);
     request.responseType = "json";
@@ -31,12 +26,10 @@ function getFilesList() {
     request.onload = function () {
         const fileNames = request.response;
         if (fileNames.length === 0) {
-            filesList = [];
+            callback([]);
         } else {
-            filesList = fileNames;
+            callback(fileNames);
         }
-        console.log(filesList);
-        updateFilesList();
     };
     request.send();
 }
