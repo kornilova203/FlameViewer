@@ -253,12 +253,10 @@ nav ul li:hover a, .current-link a {
     margin-top: 21px;
 }
 
-.file-list li {
-    padding: 10px 0 7px;
-}
-
 .file-list li a {
-    padding-left: 20px;
+    display: inline-block;
+    width: calc(100% - 20px);
+    padding: 10px 0 7px 20px;
     text-decoration: none;
     color: #282828;
 }
