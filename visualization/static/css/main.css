@@ -55,7 +55,6 @@ h1 {
 }
 
 .file-form-header {
-    float: left;
     margin-right: 10px;
 }
 
@@ -112,17 +111,20 @@ section {
     height: 0;
     opacity: 0;
     overflow: hidden;
-    position: absolute;
+    position: relative;
     z-index: -1;
 }
 
 .inputfile + label {
-    font-size: 14px;
     color: white;
-    background-color: #18A3FA;
-    display: inline-block;
-    padding: 10px 15px 8px;
-    border-radius: 30px;
+    background-color: #0887d7;
+    width: 30px;
+    height: 30px;
+    font-size: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
     margin-bottom: 20px;
     font-weight: bold;
     margin-top: 7px;

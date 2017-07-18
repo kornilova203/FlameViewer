@@ -96,3 +96,14 @@
   {/foreach}
   </ol>
 {/template}
+
+/**
+ * Form for uploading files
+ */
+{template .fileInput}
+<form class="file-form">
+    <input type="file" name="file" id="file" class="inputfile" multiple/>
+    <label for="file"><span>+</span></label>
+    <p class="file-form-header">Upload .jfr or .ser file</p>
+</form>
+{/template}

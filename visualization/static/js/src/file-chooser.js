@@ -3,12 +3,21 @@ function getPageName() {
 }
 
 function showChooseFile() {
-    $("main").append("<p class='choose-file-text'>Choose file</p>");
+    if (projectName === "uploaded-files") {
+        $("main").append("<p class='choose-file-text'>Choose or upload file</p>");
+    } else {
+        $("main").append("<p class='choose-file-text'>Choose file</p>");
+    }
 }
 
 $(window).on("load", () => {
     showProjectsList();
 });
+
+function appendInput() {
+    const input = templates.tree.fileInput().content;
+    $(input).insertBefore("#search-file");
+}
 
 function updateFilesList(filesList) {
     if (filesList.length === 0) {
@@ -23,6 +32,10 @@ function updateFilesList(filesList) {
         if (fileName !== "") {
             $("#" + fileName.replace(/\./, "\\.")).addClass("current-file");
         }
+    }
+    if (projectName === "uploaded-files") {
+        appendInput();
+        listenInput();
     }
 }
 

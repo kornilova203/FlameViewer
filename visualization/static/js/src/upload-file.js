@@ -1,22 +1,3 @@
-function updateUploadedFilesList(filesList) {
-    if (filesList.length === 0) {
-        $("<p class='no-file-found'>No file was found</p>").appendTo($("main"));
-    } else {
-        const list = templates.tree.listOfFiles({
-            fileNames: filesList,
-            projectName: "uploaded-files",
-            pageName: "outgoing-calls"
-        }).content;
-        $(list).appendTo($("main"));
-        $("#" + currentFileName.replace(/\./, "\\.")).addClass("current-file");
-    }
-}
-
-$(window).on("load", function () {
-    getFilesList("uploaded-files", updateUploadedFilesList);
-    listenInput();
-});
-
 function appendWrongExtension() {
     if ($(".extension-error").length === 0) {
         $(".file-form").append("<p class='extension-error'>Wrong file extension</p>");
