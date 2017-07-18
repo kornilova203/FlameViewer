@@ -21,24 +21,42 @@ function drawTrees(trees) {
     }
 }
 
+/**
+ * Get extension of file
+ * @param {string} fileName
+ * @returns {string}
+ */
+function getExtension(fileName) {
+    return fileName.substring(fileName.indexOf(".") + 1, fileName.length);
+}
+
+function getAndDrawTrees() {
+    const request = new XMLHttpRequest();
+    request.open("GET", "/flamegraph-profiler/trees/call-tree?file=" +
+        fileName +
+        "&project=" +
+        getProjectName(),
+        true);
+    request.responseType = "arraybuffer";
+
+    request.onload = function () {
+        const arrayBuffer = request.response;
+        const byteArray = new Uint8Array(arrayBuffer);
+        const trees = TreesProto.Trees.deserializeBinary(byteArray).getTreesList();
+        drawTrees(trees);
+    };
+    request.send();
+}
+
 $(window).on("load", function () {
     getFilesList(projectName, updateFilesList);
     if (fileName !== "") {
-        const request = new XMLHttpRequest();
-        request.open("GET", "/flamegraph-profiler/trees/call-tree?file=" +
-            fileName +
-            "&project=" +
-            getProjectName(),
-            true);
-        request.responseType = "arraybuffer";
-
-        request.onload = function () {
-            const arrayBuffer = request.response;
-            const byteArray = new Uint8Array(arrayBuffer);
-            const trees = TreesProto.Trees.deserializeBinary(byteArray).getTreesList();
-            drawTrees(trees);
-        };
-        request.send();
+        const extension = getExtension(fileName);
+        if (extension !== "jfr") {
+            getAndDrawTrees();
+        } else {
+            showMessage("This type of tree is unavailable for .jfr files")
+        }
     } else {
         showChooseFile();
     }

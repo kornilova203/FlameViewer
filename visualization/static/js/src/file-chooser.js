@@ -4,10 +4,18 @@ function getPageName() {
 
 function showChooseFile() {
     if (projectName === "uploaded-files") {
-        $("main").append("<p class='choose-file-text'>Choose or upload file</p>");
+        showMessage("Choose or upload file");
     } else {
-        $("main").append("<p class='choose-file-text'>Choose file</p>");
+        showMessage("Choose file");
     }
+}
+
+
+/**
+ * @param {string} message
+ */
+function showMessage(message) {
+    $("main").append(`<p class='message'>${message}</p>`);
 }
 
 $(window).on("load", () => {
