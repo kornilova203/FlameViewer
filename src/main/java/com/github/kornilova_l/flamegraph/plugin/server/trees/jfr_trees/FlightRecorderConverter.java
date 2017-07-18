@@ -8,10 +8,9 @@ import com.jrockit.mc.flightrecorder.internal.model.FLRStackTrace;
 import com.jrockit.mc.flightrecorder.spi.IEvent;
 import com.jrockit.mc.flightrecorder.spi.IView;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -122,5 +121,35 @@ public class FlightRecorderConverter {
             count++;
         }
         stacks.put(stackTrace, count);
+    }
+
+    public void writeTo(File file) {
+        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file))) {
+            for (Map.Entry<String, Integer> entry : stacks.entrySet()) {
+                bufferedWriter.write(String.format("%s %d%n", entry.getKey(), entry.getValue()));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Nullable
+    static Map<String, Integer> getStacks(File convertedFile) {
+        try (BufferedReader reader = new BufferedReader(
+                new FileReader(convertedFile)
+        )) {
+            Map<String, Integer> stacks = new HashMap<>();
+            reader.lines()
+                    .forEach(line -> stacks.put(
+                            line.substring(0, line.lastIndexOf(" ")),
+                            Integer.parseInt(line.substring(
+                                    line.lastIndexOf(" ") + 1,
+                                    line.length()
+                            ))));
+            return stacks;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

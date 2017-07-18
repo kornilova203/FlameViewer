@@ -27,6 +27,10 @@ public class PluginFileManager {
     private final Path configDirPath;
     @NotNull
     private final Path staticDirPath;
+    @NotNull
+    private final Path uploadedFilesPath;
+    @NotNull
+    private final Path convertedFilesPath;
 
     public PluginFileManager(@NotNull String systemDirPath) {
         Path systemDir = Paths.get(systemDirPath);
@@ -41,6 +45,10 @@ public class PluginFileManager {
                         getClass().getResource("/" + STATIC_DIR_NAME).getPath()
                 ).getAbsolutePath()
         );
+        uploadedFilesPath = Paths.get(logDirPath.toString(), UPLOADED_FILES);
+        createDirIfNotExist(uploadedFilesPath);
+        convertedFilesPath = Paths.get(uploadedFilesPath.toString(), "converted");
+        createDirIfNotExist(convertedFilesPath);
     }
 
     private static void createDirIfNotExist(@NotNull Path path) {
@@ -75,6 +83,7 @@ public class PluginFileManager {
         File[] files = projectLogDir.listFiles();
         if (files != null) {
             list = Arrays.stream(files)
+                    .filter(file -> !file.isDirectory())
                     .sorted((f1, f2) -> {
                         if (f1.lastModified() == f2.lastModified()) {
                             return 0;
@@ -91,8 +100,6 @@ public class PluginFileManager {
     }
 
     public void saveFile(ByteBuf content, String fileName) {
-        Path uploadedFilesPath = Paths.get(logDirPath.toString(), UPLOADED_FILES);
-        createDirIfNotExist(uploadedFilesPath);
         Path filePath = Paths.get(uploadedFilesPath.toString(), fileName);
         File file = new File(filePath.toString());
         try (OutputStream outputStream = new FileOutputStream(file)) {
@@ -169,5 +176,32 @@ public class PluginFileManager {
             }
         }
         return new ArrayList<>();
+    }
+
+    @Nullable
+    public File getConvertedFile(String name) {
+        File dir = new File(convertedFilesPath.toString());
+        assert dir.exists() && dir.isDirectory();
+        File[] files = dir.listFiles();
+        if (files == null) {
+            return null;
+        }
+        name = getFileName(name);
+        for (File file : files) {
+            if (Objects.equals(getFileName(file.getName()), name)) {
+                return file;
+            }
+        }
+        return null;
+    }
+
+    static String getFileName(String name) {
+        return name.substring(0, name.indexOf("."));
+    }
+
+    public File createdFileForConverted(File logFile) {
+        String name = getFileName(logFile.getName());
+        Path path = Paths.get(convertedFilesPath.toString(), name + ".converted");
+        return new File(path.toString());
     }
 }

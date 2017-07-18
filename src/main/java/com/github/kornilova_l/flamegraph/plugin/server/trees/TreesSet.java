@@ -4,7 +4,6 @@ import com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees.TreeManag
 import com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees.accumulative_trees.MethodAccumulativeTreeBuilder;
 import com.github.kornilova_l.flamegraph.proto.TreeProtos;
 import com.github.kornilova_l.flamegraph.proto.TreesProtos;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
@@ -30,20 +29,31 @@ public abstract class TreesSet {
 
     public abstract TreeProtos.Tree getTree(TreeManager.TreeType treeType);
 
-    public abstract TreeProtos.Tree getTree(TreeManager.TreeType treeType,
-                                            String className,
-                                            String methodName,
-                                            String desc,
-                                            boolean isStatic);
+    public final TreeProtos.Tree getTree(TreeManager.TreeType treeType, String className, String methodName, String desc, boolean isStatic) {
+        switch (treeType) {
+            case OUTGOING_CALLS:
+                getTree(TreeManager.TreeType.OUTGOING_CALLS);
+                return getTreeForMethod(outgoingCalls, methodOutgoingCalls, className, methodName, desc, isStatic);
+            case INCOMING_CALLS:
+                getTree(TreeManager.TreeType.INCOMING_CALLS);
+                return getTreeForMethod(incomingCalls, methodIncomingCalls, className, methodName, desc, isStatic);
+            default:
+                throw new IllegalArgumentException("Tree type is not supported");
+        }
+    }
 
     public abstract TreesProtos.Trees getCallTree();
 
-    protected static TreeProtos.Tree getTreeForMethod(@NotNull TreeProtos.Tree sourceTree,
+    @Nullable
+    private static TreeProtos.Tree getTreeForMethod(TreeProtos.Tree sourceTree,
                                                       HashMap<String, TreeProtos.Tree> map,
                                                       String className,
                                                       String methodName,
                                                       String desc,
                                                       boolean isStatic) {
+        if (sourceTree == null) {
+            return null;
+        }
         return map.computeIfAbsent(
                 className + methodName + desc,
                 n -> new MethodAccumulativeTreeBuilder(
