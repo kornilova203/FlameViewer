@@ -8,12 +8,14 @@ import com.github.kornilova_l.flamegraph.proto.TreesProtos;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
+import java.util.Map;
 
 public class JfrTreesSet extends TreesSet {
     public JfrTreesSet(File logFile) {
         super(logFile);
+        Map<String, Integer> stacks = new FlightRecorderConverter(logFile).getStacks();
+        outgoingCalls = new StacksOCTreeBuilder(stacks).getTree();
     }
-
 
     @Override
     protected void validateExtension() {
@@ -25,7 +27,14 @@ public class JfrTreesSet extends TreesSet {
     @Nullable
     @Override
     public TreeProtos.Tree getTree(TreeManager.TreeType treeType) {
-        return null;
+        switch (treeType) {
+            case INCOMING_CALLS:
+                return null;
+            case OUTGOING_CALLS:
+                return outgoingCalls;
+            default:
+                throw new IllegalArgumentException("Tree type is not supported");
+        }
     }
 
     @Nullable

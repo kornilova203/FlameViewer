@@ -1,4 +1,4 @@
-package com.github.kornilova_l.flamegraph.plugin.server.flight_recorder;
+package com.github.kornilova_l.flamegraph.plugin.server.trees.jfr_trees;
 
 import com.jrockit.mc.common.IMCFrame;
 import com.jrockit.mc.common.IMCMethod;
@@ -9,7 +9,9 @@ import com.jrockit.mc.flightrecorder.spi.IEvent;
 import com.jrockit.mc.flightrecorder.spi.IView;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -30,16 +32,11 @@ public class FlightRecorderConverter {
     private static final boolean ignoreLineNumbers = true;
     private final Map<String, Integer> stacks = new HashMap<>();
 
-    /**
-     * Convert .jfr file to <a href="https://github.com/brendangregg/FlameGraph">FlameGraph</a> format
-     *
-     * @param file .jft file
-     */
     public FlightRecorderConverter(@NotNull File file) throws IllegalArgumentException {
         if (!file.exists()) {
             throw new IllegalArgumentException("File does not exist");
         }
-        if (!Objects.equals(getExtension(file), "jft")) {
+        if (!Objects.equals(getExtension(file), "jfr")) {
             throw new IllegalArgumentException("Wrong file extension");
         }
         FlightRecording recording = getRecording(file);
@@ -85,14 +82,8 @@ public class FlightRecorderConverter {
         return methodBuilder.toString();
     }
 
-    public void writeTo(@NotNull File file) {
-        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file))) {
-            for (Map.Entry<String, Integer> entry : stacks.entrySet()) {
-                bufferedWriter.write(String.format("%s %d%n", entry.getKey(), entry.getValue()));
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public Map<String, Integer> getStacks() {
+        return stacks;
     }
 
     private void buildStacks(FlightRecording recording) {

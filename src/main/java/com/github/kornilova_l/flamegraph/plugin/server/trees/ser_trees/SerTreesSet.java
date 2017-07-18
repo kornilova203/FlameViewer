@@ -15,6 +15,7 @@ import java.io.File;
 public class SerTreesSet extends TreesSet {
     SerTreesSet(File logFile) {
         super(logFile);
+        callTree = new CallTreesBuilder(logFile).getTrees();
     }
 
     @Override
@@ -27,7 +28,6 @@ public class SerTreesSet extends TreesSet {
     @Nullable
     @Override
     public TreeProtos.Tree getTree(TreeManager.TreeType treeType) {
-        getCallTree();
         if (callTree == null) {
             return null;
         }
@@ -72,9 +72,6 @@ public class SerTreesSet extends TreesSet {
     @Nullable
     @Override
     public TreesProtos.Trees getCallTree() {
-        if (callTree == null) {
-            callTree = new CallTreesBuilder(logFile).getTrees();
-        }
         return callTree;
     }
 }
