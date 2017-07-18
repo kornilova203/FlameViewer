@@ -4,6 +4,7 @@
 const TreeProto = require('../generated/tree_pb');
 
 function drawTree(tree, className, methodName, desc) {
+    console.log("got tree");
     const drawer = new AccumulativeTreeDrawer(tree);
     if (className !== undefined && methodName !== undefined && desc !== undefined) {
         drawer.setHeader(className.split("%2F").join(".") + "." +

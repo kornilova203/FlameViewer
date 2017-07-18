@@ -1,4 +1,4 @@
-const MAIN_WIDTH = 700;
+const MAIN_WIDTH = 1200;
 const LAYER_HEIGHT = 19;
 const LAYER_GAP = 1;
 const POPUP_MARGIN = 4; // have no idea why there is a gap between popup and canvas
@@ -22,6 +22,7 @@ class AccumulativeTreeDrawer {
         this.searchList = [];
         this.shapeAndTextList = [];
         this._enableSearch();
+        this.nodesCount = 0;
     }
 
     setHeader(newHeader) {
@@ -40,6 +41,10 @@ class AccumulativeTreeDrawer {
     };
 
     _drawRecursively(node, depth) {
+        this.nodesCount++;
+        if (this.nodesCount % 1000 === 0) {
+            console.log(this.nodesCount);
+        }
         const childNodes = node.getNodesList();
         if (childNodes.length === 0) {
             return;
@@ -131,8 +136,9 @@ class AccumulativeTreeDrawer {
         text.y = this.flipY(depth * (LAYER_GAP + LAYER_HEIGHT));
         AccumulativeTreeDrawer._setTextPosition(text, shape);
         this.stage.setChildIndex(text, this.stage.getNumChildren() - 1);
-
-        this.stage.addChild(text);
+        if (shape.scaleX * MAIN_WIDTH > 10) {
+            this.stage.addChild(text);
+        }
         return text;
     }
 

@@ -24,9 +24,11 @@ body {
 }
 
 main {
-    width: 700px;
+    width: 1200px;
     display: block;
-    margin: 0 auto 300px;
+    margin-top: 0;
+    margin-left: calc((100vw - 250px - 1200px) / 2 + 250px);
+    margin-bottom: 300px;
 }
 
 h1 {
@@ -143,7 +145,7 @@ section {
 }
 
 nav {
-    margin: 0;
+    margin: 0 0 0 250px;
     padding: 0;
     height: 60px;
     background-color: #f3f3f3;
