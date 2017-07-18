@@ -1,9 +1,9 @@
-package com.github.kornilova_l.flamegraph.plugin.server.trees.accumulative_trees;
+package com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees.accumulative_trees;
 
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeBuilderInterface;
 import com.github.kornilova_l.flamegraph.proto.TreeProtos;
 
-import static com.github.kornilova_l.flamegraph.plugin.server.trees.accumulative_trees.AccumulativeTreesHelper.*;
+import static com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees.accumulative_trees.AccumulativeTreesHelper.*;
 
 public class MethodAccumulativeTreeBuilder implements TreeBuilderInterface {
     private TreeProtos.Tree.Builder treeBuilder;

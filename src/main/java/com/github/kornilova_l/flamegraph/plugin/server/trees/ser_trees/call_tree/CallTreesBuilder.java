@@ -1,4 +1,4 @@
-package com.github.kornilova_l.flamegraph.plugin.server.trees.call_tree;
+package com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees.call_tree;
 
 import com.github.kornilova_l.flamegraph.proto.EventProtos;
 import com.github.kornilova_l.flamegraph.proto.TreeProtos;

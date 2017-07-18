@@ -1,4 +1,4 @@
-package com.github.kornilova_l.flamegraph.plugin.server.trees.accumulative_trees.incoming_calls;
+package com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees.accumulative_trees.incoming_calls;
 
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeBuilderInterface;
 import com.github.kornilova_l.flamegraph.proto.TreeProtos;
@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.github.kornilova_l.flamegraph.plugin.server.trees.accumulative_trees.AccumulativeTreesHelper.*;
+import static com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees.accumulative_trees.AccumulativeTreesHelper.*;
 
 public final class IncomingCallsBuilder implements TreeBuilderInterface {
     private TreeProtos.Tree.Builder treeBuilder;

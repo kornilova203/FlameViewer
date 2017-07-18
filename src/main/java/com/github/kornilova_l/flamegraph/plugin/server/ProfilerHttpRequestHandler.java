@@ -2,6 +2,7 @@ package com.github.kornilova_l.flamegraph.plugin.server;
 
 import com.github.kornilova_l.flamegraph.plugin.PluginFileManager;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeManager;
+import com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees.SerTreeManager;
 import com.github.kornilova_l.flamegraph.proto.TreeProtos;
 import com.github.kornilova_l.flamegraph.proto.TreesProtos;
 import com.google.gson.Gson;
@@ -19,13 +20,16 @@ import org.jetbrains.ide.HttpRequestHandler;
 import org.jetbrains.io.Responses;
 
 import java.io.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 public class ProfilerHttpRequestHandler extends HttpRequestHandler {
 
     private static final com.intellij.openapi.diagnostic.Logger LOG =
             com.intellij.openapi.diagnostic.Logger.getInstance(ProfilerHttpRequestHandler.class);
     private final PluginFileManager fileManager = new PluginFileManager(PathManager.getSystemPath());
-    private final TreeManager treeManager = new TreeManager(fileManager);
+    private final SerTreeManager treeManager = new SerTreeManager();
 
     private static void sendTrees(ChannelHandlerContext context,
                                   @Nullable TreesProtos.Trees trees) {
@@ -92,6 +96,14 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
         }
     }
 
+    @Nullable
+    private static String getParameter(Map<String, List<String>> parameters, String key) {
+        if (parameters.containsKey(key)) {
+            return parameters.get(key).get(0);
+        }
+        return null;
+    }
+
     private byte[] renderPage(String htmlFilePath,
                               @NotNull String fileName,
                               @NotNull String projectName) {
@@ -121,7 +133,6 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
             LOG.error(e);
         }
     }
-
 
     private void sendListProjects(ChannelHandlerContext context) {
         String json = new Gson().toJson(
@@ -241,7 +252,6 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
         }
     }
 
-
     private void processHtmlRequest(String uri, QueryStringDecoder urlDecoder, ChannelHandlerContext context) {
         @Nullable String projectName;
         @Nullable String fileName = null;
@@ -305,20 +315,8 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
         }
         switch (uri) {
             case ServerNames.OUTGOING_CALLS_JS_REQUEST:
-                LOG.info("OUTGOING_CALLS_JS_REQUEST");
-                if (urlDecoder.parameters().containsKey("method")) {
-                    sendTree(context, treeManager.getOutgoingCalls(urlDecoder.parameters(), logFile));
-                } else {
-                    sendTree(context, treeManager.getOutgoingCalls(logFile));
-                }
-                break;
             case ServerNames.INCOMING_CALLS_JS_REQUEST:
-                LOG.info("INCOMING_CALLS_JS_REQUEST");
-                if (urlDecoder.parameters().containsKey("method")) {
-                    sendTree(context, treeManager.getIncomingCalls(urlDecoder.parameters(), logFile));
-                } else {
-                    sendTree(context, treeManager.getIncomingCalls(logFile));
-                }
+                processAccumulativeTreeRequest(uri, urlDecoder, context, logFile);
                 break;
             case ServerNames.CALL_TREE_JS_REQUEST:
                 LOG.info("CALL_TREE_JS_REQUEST");
@@ -326,6 +324,36 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
                 break;
         }
 
+    }
+
+    private void processAccumulativeTreeRequest(String uri, QueryStringDecoder urlDecoder, ChannelHandlerContext context, @Nullable File logFile) {
+        String methodName = getParameter(urlDecoder.parameters(), "method");
+        String className = getParameter(urlDecoder.parameters(), "class");
+        String desc = getParameter(urlDecoder.parameters(), "desc");
+        String isStaticString = getParameter(urlDecoder.parameters(), "isStatic");
+        if (methodName != null && className != null && desc != null && isStaticString != null) {
+            boolean isStatic = Objects.equals(isStaticString, "true");
+            switch (uri) {
+                case ServerNames.OUTGOING_CALLS_JS_REQUEST:
+                    LOG.info("outgoing calls for method js request");
+                    sendTree(context, treeManager.getTree(logFile, TreeManager.TreeType.OUTGOING_CALLS, className, methodName,
+                            desc, isStatic));
+                    return;
+                case ServerNames.INCOMING_CALLS_JS_REQUEST:
+                    LOG.info("incoming calls for method js request");
+                    sendTree(context, treeManager.getTree(logFile, TreeManager.TreeType.INCOMING_CALLS, className, methodName,
+                            desc, isStatic));
+            }
+        } else {
+            switch (uri) {
+                case ServerNames.OUTGOING_CALLS_JS_REQUEST:
+                    LOG.info("OUTGOING_CALLS_JS_REQUEST");
+                    sendTree(context, treeManager.getTree(logFile, TreeManager.TreeType.OUTGOING_CALLS));
+                    return;
+                case ServerNames.INCOMING_CALLS_JS_REQUEST:
+                    sendTree(context, treeManager.getTree(logFile, TreeManager.TreeType.INCOMING_CALLS));
+            }
+        }
     }
 
     enum Extension {

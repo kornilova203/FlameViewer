@@ -147,7 +147,7 @@ proto.com.github.kornilova_l.protos.Trees.serializeBinaryToWriter = function(mes
 
 
 /**
- * repeated Tree trees = 1;
+ * repeated Tree ser_trees = 1;
  * If you change this array by adding, removing or replacing elements, or if you
  * replace the array itself, then you must call the setter to update it.
  * @return {!Array.<!proto.com.github.kornilova_l.protos.Tree>}
