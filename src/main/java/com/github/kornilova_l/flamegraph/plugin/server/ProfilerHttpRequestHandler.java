@@ -1,8 +1,7 @@
 package com.github.kornilova_l.flamegraph.plugin.server;
 
 import com.github.kornilova_l.flamegraph.plugin.PluginFileManager;
-import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeManager;
-import com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees.SerTreeManager;
+import com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees.TreeManager;
 import com.github.kornilova_l.flamegraph.proto.TreeProtos;
 import com.github.kornilova_l.flamegraph.proto.TreesProtos;
 import com.google.gson.Gson;
@@ -29,7 +28,7 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
     private static final com.intellij.openapi.diagnostic.Logger LOG =
             com.intellij.openapi.diagnostic.Logger.getInstance(ProfilerHttpRequestHandler.class);
     private final PluginFileManager fileManager = new PluginFileManager(PathManager.getSystemPath());
-    private final SerTreeManager treeManager = new SerTreeManager();
+    private final TreeManager treeManager = new TreeManager();
 
     private static void sendTrees(ChannelHandlerContext context,
                                   @Nullable TreesProtos.Trees trees) {
@@ -84,15 +83,15 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
     }
 
     @NotNull
-    private static Extension getExtension(@NotNull String fileName) {
+    public static TreeManager.Extension getExtension(@NotNull String fileName) {
         String extension = fileName.substring(fileName.indexOf(".") + 1, fileName.length());
         switch (extension) {
             case "jfr":
-                return Extension.JFR;
+                return TreeManager.Extension.JFR;
             case "ser":
-                return Extension.SER;
+                return TreeManager.Extension.SER;
             default:
-                return Extension.UNSUPPORTED;
+                return TreeManager.Extension.UNSUPPORTED;
         }
     }
 
@@ -168,7 +167,7 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
             case ServerNames.UPLOAD_FILE:
                 String fileName = fullHttpRequest.headers().get("File-Name");
                 LOG.info("Got file: " + fileName);
-                if (getExtension(fileName) != Extension.UNSUPPORTED) {
+                if (getExtension(fileName) != TreeManager.Extension.UNSUPPORTED) {
                     fileManager.saveFile(fullHttpRequest.content(), fileName);
                     sendStatus(HttpResponseStatus.OK, context.channel());
                 } else {
@@ -313,6 +312,10 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
         if (logFile == null) {
             return;
         }
+        TreeManager.Extension extension = getExtension(logFile.getName());
+        if (extension == TreeManager.Extension.UNSUPPORTED) {
+            return;
+        }
         switch (uri) {
             case ServerNames.OUTGOING_CALLS_JS_REQUEST:
             case ServerNames.INCOMING_CALLS_JS_REQUEST:
@@ -326,7 +329,10 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
 
     }
 
-    private void processAccumulativeTreeRequest(String uri, QueryStringDecoder urlDecoder, ChannelHandlerContext context, @Nullable File logFile) {
+    private void processAccumulativeTreeRequest(String uri,
+                                                QueryStringDecoder urlDecoder,
+                                                ChannelHandlerContext context,
+                                                @Nullable File logFile) {
         String methodName = getParameter(urlDecoder.parameters(), "method");
         String className = getParameter(urlDecoder.parameters(), "class");
         String desc = getParameter(urlDecoder.parameters(), "desc");
@@ -354,11 +360,5 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
                     sendTree(context, treeManager.getTree(logFile, TreeManager.TreeType.INCOMING_CALLS));
             }
         }
-    }
-
-    enum Extension {
-        JFR,
-        SER,
-        UNSUPPORTED
     }
 }
