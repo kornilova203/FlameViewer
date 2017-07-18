@@ -3,7 +3,7 @@ function getPageName() {
 }
 
 function showChooseFile() {
-    console.log("choose file");
+    $("main").append("<p class='choose-file-text'>Choose file</p>");
 }
 
 $(window).on("load", () => {

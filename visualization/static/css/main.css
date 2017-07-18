@@ -161,6 +161,7 @@ nav ul li {
     vertical-align: baseline;
     padding: 0;
     margin: 0;
+    width: 200px;
 }
 
 nav ul li a, .choose-file-header a {
@@ -176,6 +177,7 @@ nav ul li a, .choose-file-header a {
     align-items: center;
     transition: background 300ms, color 300ms;
     padding: 0 30px;
+    justify-content: center;
 }
 
 nav ul li:hover, .current-link {
@@ -372,4 +374,10 @@ nav ul li:hover a, .current-link a {
     position: absolute;
     margin-top: -40px;
     margin-left: 220px;
+}
+
+.choose-file-text {
+    text-align: center;
+    color: #6a6a6a;
+    margin-top: 100px;
 }
