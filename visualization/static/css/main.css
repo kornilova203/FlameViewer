@@ -260,6 +260,8 @@ nav ul li:hover a, .current-link a {
 .file-list li a {
     display: inline-block;
     width: calc(100% - 20px);
+    text-overflow: ellipsis;
+    overflow: hidden;
     padding: 10px 0 7px 20px;
     text-decoration: none;
     color: #282828;
