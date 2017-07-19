@@ -53,7 +53,7 @@ class AccumulativeTreeDrawer {
      */
     _drawRecursively(node, scale, newOffset) {
         if (node.depth < LAYER_COUNT) {
-            this._drawNode(node, 0, scale, newOffset);
+            this._drawNode(node, COLORS[0], scale, newOffset);
             const childNodes = node.getNodesList();
             if (childNodes.length === 0) {
                 return;
@@ -87,29 +87,29 @@ class AccumulativeTreeDrawer {
 
     /**
      * @param node
-     * @param {Number} colorId
+     * @param {String} color
      * @param {Number} scale
      * @param {Number} newOffset
      * @private
      */
-    _drawNode(node, colorId, scale, newOffset) {
-        const shape = this._drawRectangle(node, colorId, scale, newOffset);
+    _drawNode(node, color, scale, newOffset) {
+        const shape = this._drawRectangle(node, color, scale, newOffset);
         this._drawLabel(node, shape);
     }
 
     /**
      *
      * @param node
-     * @param {Number} colorId
+     * @param {String} color
      * @param {Number} scale
      * @param {Number} newOffset
      * @returns {*}
      * @private
      */
-    _drawRectangle(node, colorId, scale, newOffset) {
+    _drawRectangle(node, color, scale, newOffset) {
         const shape = new createjs.Shape();
-        shape.fillCommand = shape.graphics.beginFill(COLORS[colorId]).command;
-        shape.originalColor = COLORS[colorId];
+        shape.fillCommand = shape.graphics.beginFill(color).command;
+        shape.originalColor = color;
         shape.graphics.drawRect(0, 0, this.canvasWidth, LAYER_HEIGHT);
         const offsetX = this._getOffsetXForNode(node) - newOffset;
         const offsetY = this.flipY(AccumulativeTreeDrawer._calcNormaOffsetY(node.depth));
@@ -132,8 +132,8 @@ class AccumulativeTreeDrawer {
         //noinspection JSUnresolvedFunction
         shape.addEventListener("click", () => {
             this.stage.removeAllChildren();
-            // this._expandParents(node);
-            this._drawRecursively(node, scale, this._getOffsetXForNode(node));
+            this._expandParents(node);
+            // this._drawRecursively(node, scale, this._getOffsetXForNode(node));
             this.stage.update();
         })
     }
@@ -323,7 +323,11 @@ class AccumulativeTreeDrawer {
     }
 
     _expandParents(node) {
-
+        let parent = node.parent;
+        while (parent !== this.tree.getBaseNode()) {
+            this._drawNode(parent, ZOOMED_PARENT_COLOR, parent.getWidth() / this.width, 0);
+            parent = parent.parent;
+        }
     }
 }
 
