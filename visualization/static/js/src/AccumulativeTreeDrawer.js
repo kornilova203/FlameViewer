@@ -16,7 +16,7 @@ class AccumulativeTreeDrawer {
         this.tree = tree;
         this.width = this.tree.getWidth();
         this.canvasWidth = MAIN_WIDTH;
-        this.canvasHeight = (LAYER_HEIGHT + LAYER_GAP) * LAYER_COUNT + 70;
+        this.canvasHeight = (LAYER_HEIGHT + LAYER_GAP) * this.tree.getDepth() + 70;
         this.section = null;
         this.stage = null;
         this.header = null;
@@ -37,11 +37,17 @@ class AccumulativeTreeDrawer {
         if (childNodes.length === 0) {
             return;
         }
+        let maxDepth = 0;
         for (let i = 0; i < childNodes.length; i++) {
-            this._drawNodesRecursively(childNodes[i], 0, 1, 0);
+            const depth = this._drawNodesRecursively(childNodes[i], 0, 1, 0, 0);
+            if (depth > maxDepth) {
+                maxDepth = depth;
+            }
         }
 
         this.stage.update();
+        this._moveCanvas(maxDepth);
+        this._updateDim(this.tree.getBaseNode());
         // this._enableZoom();
     };
 
@@ -269,7 +275,15 @@ class AccumulativeTreeDrawer {
     _setNodeZoomed(node) {
         this.stage.removeAllChildren();
         this._expandParents(node);
-        this._drawNodesRecursively(node, 0, node.getWidth() / this.width, this._getOffsetXForNode(node));
+        const maxDepth = this._drawNodesRecursively(
+            node,
+            0,
+            node.getWidth() / this.width,
+            this._getOffsetXForNode(node),
+            node.depth
+        );
+        this._moveCanvas(maxDepth);
+        this._updateDim(node, node.depth);
         // this._drawRecursively(node, scale, this._getOffsetXForNode(node));
         this.stage.update();
     }
@@ -279,11 +293,13 @@ class AccumulativeTreeDrawer {
      * @param {Number} drawnLayerCount
      * @param {Number} newFullWidth
      * @param {Number} newOffset
+     * @param {Number} maxDepth
      * @private
+     * @return {Number} max depth
      */
-    _drawNodesRecursively(node, drawnLayerCount, newFullWidth, newOffset) {
+    _drawNodesRecursively(node, drawnLayerCount, newFullWidth, newOffset, maxDepth) {
         if (drawnLayerCount === LAYER_COUNT) {
-            return;
+            return maxDepth;
         }
         this._drawNode(
             node,
@@ -293,11 +309,63 @@ class AccumulativeTreeDrawer {
         );
         const children = node.getNodesList();
         if (children === undefined) {
-            return;
+            return maxDepth;
         }
+        let newMaxDepth = maxDepth;
         for (let i = 0; i < children.length; i++) {
-            this._drawNodesRecursively(children[i], drawnLayerCount + 1, newFullWidth, newOffset);
+            const depth = this._drawNodesRecursively(
+                children[i],
+                drawnLayerCount + 1,
+                newFullWidth,
+                newOffset,
+                maxDepth + 1
+            );
+            if (depth > newMaxDepth) {
+                newMaxDepth = depth;
+            }
         }
+        return newMaxDepth;
+    }
+
+    _moveCanvas(maxDepth) {
+        const main = $("main");
+        let oldTopString = main.css("top");
+        oldTopString = oldTopString.substring(0, oldTopString.indexOf("p"));
+        const oldTop = parseInt(oldTopString);
+        const newY = AccumulativeTreeDrawer._calcNormaOffsetY(maxDepth) + 300;
+        main.css("top", -this.canvasHeight + newY);
+        if (oldTop < 0) {
+            window.scrollBy(0, -oldTop - this.canvasHeight + newY);
+        }
+    }
+
+    _updateDim(node) {
+        const maxDepth = node.depth + LAYER_COUNT;
+        if (maxDepth > this._getMaxDepth(node, node.depth)) {
+            $(".dim").hide();
+        } else {
+            $(".dim").show();
+        }
+    }
+
+    /**
+     * @param node
+     * @param {Number} maxDepth
+     * @private
+     */
+    _getMaxDepth(node, maxDepth) {
+        const children = node.getNodesList();
+        if (children === undefined) {
+            return maxDepth;
+        }
+        let newMaxDepth = maxDepth;
+        for (let i = 0; i < children.length; i++) {
+            const depth = this._getMaxDepth(children[i], maxDepth + 1);
+            if (depth > newMaxDepth) {
+                newMaxDepth = depth;
+            }
+        }
+        return newMaxDepth;
     }
 }
 

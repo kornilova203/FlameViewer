@@ -29,6 +29,8 @@ main {
     margin-top: 0;
     margin-left: calc((100vw - 250px - 1200px) / 2 + 250px);
     margin-bottom: 300px;
+    z-index: -1;
+    position: absolute;
 }
 
 h1 {
@@ -386,4 +388,13 @@ nav ul li:hover a, .current-link a {
     text-align: center;
     color: #6a6a6a;
     margin-top: 100px;
+}
+
+.dim {
+    width: 100vw;
+    height: 100px;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
+    position: absolute;
+    top: 280px;
+    pointer-events: none;
 }
