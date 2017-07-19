@@ -15,7 +15,8 @@ class AccumulativeTreeDrawer {
         this.tree = tree;
         this.width = this.tree.getWidth();
         this.canvasWidth = MAIN_WIDTH;
-        this.canvasHeight = (LAYER_HEIGHT + LAYER_GAP) * this.tree.getDepth() + 70;
+        // this.canvasHeight = (LAYER_HEIGHT + LAYER_GAP) * this.tree.getDepth() + 70;
+        this.canvasHeight = (LAYER_HEIGHT + LAYER_GAP) * 20 + 70;
         this.section = null;
         this.stage = null;
         this.header = null;
@@ -34,24 +35,34 @@ class AccumulativeTreeDrawer {
         this.stage = new createjs.Stage("canvas");
         this.stage.enableMouseOver(20);
 
-        this._drawRecursively(this.tree.getBaseNode(), 0);
-
-        this.stage.update();
-        this._enableZoom();
-    };
-
-    _drawRecursively(node, depth) {
-        this.nodesCount++;
-        if (this.nodesCount % 1000 === 0) {
-            console.log(this.nodesCount);
-        }
-        const childNodes = node.getNodesList();
+        const childNodes = this.tree.getBaseNode().getNodesList();
         if (childNodes.length === 0) {
             return;
         }
         for (let i = 0; i < childNodes.length; i++) {
-            this._drawNode(childNodes[i], depth, i % 2);
-            this._drawRecursively(childNodes[i], depth + 1);
+            this._drawRecursively(childNodes[i], 0, 1);
+        }
+
+        this.stage.update();
+        // this._enableZoom();
+    };
+
+    /**
+     * @param node
+     * @param {Number} depth
+     * @param {Number} scale
+     * @private
+     */
+    _drawRecursively(node, depth, scale) {
+        if (depth < 20) {
+            this._drawNode(node, depth, 0, scale);
+            const childNodes = node.getNodesList();
+            if (childNodes.length === 0) {
+                return;
+            }
+            for (let i = 0; i < childNodes.length; i++) {
+                this._drawRecursively(childNodes[i], depth + 1, scale);
+            }
         }
     }
 
@@ -76,8 +87,15 @@ class AccumulativeTreeDrawer {
         return $(sectionContent).appendTo($("main"));
     };
 
-    _drawNode(node, depth, colorId) {
-        const shape = this._drawRectangle(node, depth, colorId);
+    /**
+     * @param node
+     * @param {Number} depth
+     * @param {Number} colorId
+     * @param {Number} scale
+     * @private
+     */
+    _drawNode(node, depth, colorId, scale) {
+        const shape = this._drawRectangle(node, depth, colorId, scale);
         const text = this._drawLabel(node, depth, shape);
         this.shapeAndTextList.push({
             shape: shape,
@@ -86,21 +104,54 @@ class AccumulativeTreeDrawer {
         this.searchList.push(new SearchElem(shape, node.getNodeInfo().getMethodName()));
     }
 
-    _drawRectangle(node, depth, colorId) {
+    /**
+     *
+     * @param node
+     * @param {Number} depth
+     * @param {Number} colorId
+     * @param {Number} scale
+     * @returns {*}
+     * @private
+     */
+    _drawRectangle(node, depth, colorId, scale) {
         const shape = new createjs.Shape();
         shape.fillCommand = shape.graphics.beginFill(COLORS[colorId]).command;
         shape.originalColor = COLORS[colorId];
         shape.graphics.drawRect(0, 0, this.canvasWidth, LAYER_HEIGHT);
-        const offsetX = this._getOffsetXForNode(node);
+        const offsetX = this._getOffsetXForNode(node) / scale;
         const offsetY = this.flipY(AccumulativeTreeDrawer._calcNormaOffsetY(depth));
-        const scaleX = node.getWidth() / this.width;
+        const scaleX = node.getWidth() / this.width / scale;
         shape.originalX = offsetX;
         shape.originalScaleX = scaleX;
         shape.setTransform(offsetX, offsetY, scaleX);
         // console.log(`draw: ${depth}\t${scaleX}\t${node.getNodeInfo().getMethodName()}`);
         this._createPopup(node, shape, depth);
         this.stage.addChild(shape);
+        this.listenScale(node, shape, scaleX);
         return shape;
+    }
+
+    /**
+     * @param node
+     * @param {createjs.Shape} shape
+     * @param {Number} scale
+     */
+    listenScale(node, shape, scale) {
+        console.log("scale " + scale);
+        //noinspection JSUnresolvedFunction
+        shape.addEventListener("click", () => {
+            // this._resetZoom();
+            this.stage.removeAllChildren();
+            this._drawRecursively(node, 0, scale);
+            // resetZoomButton.scaleX = 0;
+            // if (!(zoomedShape.x === 0 && zoomedShape.scaleX === 1)) { // if it is not base node
+            //     resetZoomButton.scaleX = 1;
+            // for (let j in this.shapeAndTextList) {
+            //     this._setZoom(this.shapeAndTextList[j], zoomedShape);
+            // }
+            // }
+            this.stage.update();
+        })
     }
 
     _getOffsetXForNode(node) {
@@ -208,14 +259,15 @@ class AccumulativeTreeDrawer {
         for (let i in this.shapeAndTextList) {
             let zoomedShape = this.shapeAndTextList[i].shape;
             zoomedShape.addEventListener("click", () => {
-                this._resetZoom();
-                resetZoomButton.scaleX = 0;
-                if (!(zoomedShape.x === 0 && zoomedShape.scaleX === 1)) { // if it is not base node
-                    resetZoomButton.scaleX = 1;
+                // this._resetZoom();
+                this.stage.removeAllChildren();
+                // resetZoomButton.scaleX = 0;
+                // if (!(zoomedShape.x === 0 && zoomedShape.scaleX === 1)) { // if it is not base node
+                //     resetZoomButton.scaleX = 1;
                     for (let j in this.shapeAndTextList) {
                         this._setZoom(this.shapeAndTextList[j], zoomedShape);
                     }
-                }
+                // }
                 this.stage.update();
             })
         }

@@ -183,6 +183,10 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
                            FullHttpRequest fullHttpRequest,
                            ChannelHandlerContext context) {
         LOG.info(fullHttpRequest.method() + " Request: " + urlDecoder.uri());
+        if (!urlDecoder.uri().startsWith(ServerNames.MAIN_NAME)) {
+            return false;
+        }
+        LOG.info("It is profiler request");
         if (fullHttpRequest.method() == HttpMethod.POST) {
             return processPostMethod(urlDecoder, fullHttpRequest, context);
         } else {
