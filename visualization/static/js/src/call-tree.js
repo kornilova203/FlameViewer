@@ -49,7 +49,6 @@ function getAndDrawTrees() {
 }
 
 $(window).on("load", function () {
-    getFilesList(projectName, updateFilesList);
     if (fileName !== "") {
         const extension = getExtension(fileName);
         if (extension !== "jfr") {

@@ -127,7 +127,7 @@ class AccumulativeTreeDrawer {
         // console.log(`draw: ${depth}\t${scaleX}\t${node.getNodeInfo().getMethodName()}`);
         this._createPopup(node, shape, depth);
         this.stage.addChild(shape);
-        this.listenScale(node, shape, scaleX);
+        this.listenScale(node, shape, node.getWidth() / this.width);
         return shape;
     }
 
@@ -137,7 +137,6 @@ class AccumulativeTreeDrawer {
      * @param {Number} scale
      */
     listenScale(node, shape, scale) {
-        console.log("scale " + scale);
         //noinspection JSUnresolvedFunction
         shape.addEventListener("click", () => {
             // this._resetZoom();

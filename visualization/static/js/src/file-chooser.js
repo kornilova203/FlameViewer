@@ -1,5 +1,14 @@
+const projectName = getParameter("project");
+if (projectName === undefined) {
+    console.log("project is not defined");
+}
+const fileName = getParameter("file");
+if (fileName === undefined) {
+    console.log("file is not defined");
+}
+
 function getPageName() {
-    return /[^\/]*(?=\?)/.exec(window.location.href)[0];
+    return /[^\/]*((?=\?)|(?=\.html))/.exec(window.location.href)[0];
 }
 
 function showChooseFile() {
@@ -8,6 +17,28 @@ function showChooseFile() {
     } else {
         showMessage("Choose file");
     }
+}
+
+/**
+ * @param {String} parameterName
+ * @return {undefined|string}
+ */
+function getParameter(parameterName) {
+    const parametersString = window.location.href.split("?")[1];
+    if (parametersString === undefined) {
+        return undefined;
+    } else {
+        const parameters = parametersString.split("&");
+        for (let i = 0; i < parameters.length; i++) {
+            if (parameters[i].startsWith(parameterName + "=")) {
+                return parameters[i].substring(
+                    parameters[i].indexOf("=") + 1,
+                    parameters[i].length
+                );
+            }
+        }
+    }
+    return undefined;
 }
 
 
@@ -19,6 +50,7 @@ function showMessage(message) {
 }
 
 $(window).on("load", () => {
+    getFilesList(projectName);
     showProjectsList();
 });
 
@@ -37,7 +69,7 @@ function updateFilesList(filesList) {
             pageName: getPageName()
         }).content;
         $(list).appendTo($(".file-menu"));
-        if (fileName !== "") {
+        if (fileName !== undefined) {
             $("#" + fileName.replace(/\./, "\\.")).addClass("current-file");
         }
     }
@@ -79,7 +111,7 @@ function showProjectsList() {
     request.send();
 }
 
-function getFilesList(projectName, callback) {
+function getFilesList(projectName) {
     const request = new XMLHttpRequest();
     request.open("GET", "/flamegraph-profiler/file-list?project=" + projectName, true);
     request.responseType = "json";
@@ -87,9 +119,9 @@ function getFilesList(projectName, callback) {
     request.onload = function () {
         const fileNames = request.response;
         if (fileNames.length === 0) {
-            callback([]);
+            updateFilesList([])
         } else {
-            callback(fileNames);
+            updateFilesList(fileNames);
         }
     };
     request.send();

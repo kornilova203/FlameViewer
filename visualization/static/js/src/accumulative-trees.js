@@ -15,17 +15,20 @@ function drawTree(tree, className, methodName, desc) {
 }
 
 $(window).on("load", function () {
-    getFilesList(projectName, updateFilesList);
-    if (fileName !== "") {
+    if (fileName !== undefined) {
+        console.log("prepare request");
         const request = new XMLHttpRequest();
         const parameters = window.location.href.split("?")[1];
         let className;
         let methodName;
         let desc;
         const urlParts = window.location.href.split("?")[0].split("/");
-        const treeType = urlParts[urlParts.length - 1];
+        let treeType = urlParts[urlParts.length - 1];
+        if (treeType.indexOf(".") !== -1) {
+            treeType = treeType.substring(0, treeType.indexOf("."));
+        }
         if (parameters.indexOf("method=") === -1) {
-            request.open("GET", `/flamegraph-profiler/trees/${treeType}?file=${fileName}&project=${getProjectName()}`, true);
+            request.open("GET", `/flamegraph-profiler/trees/${treeType}?file=${fileName}&project=${projectName}`, true);
         } else {
             request.open("GET", `/flamegraph-profiler/trees/${treeType}?${parameters}&file=${fileName}`, true);
             className = /(?:class=)([^&]+)(?:&)/.exec(parameters)[1];
@@ -35,25 +38,16 @@ $(window).on("load", function () {
         request.responseType = "arraybuffer";
 
         request.onload = function () {
+            console.log("got response");
             const arrayBuffer = request.response;
             const byteArray = new Uint8Array(arrayBuffer);
             //noinspection JSUnresolvedVariable
             const tree = TreeProto.Tree.deserializeBinary(byteArray);
             drawTree(tree, className, methodName, desc);
         };
+        console.log("send request");
         request.send();
     } else {
         showChooseFile();
     }
 });
-
-function getProjectName() {
-    const parameters = window.location.href.split("?")[1]
-        .split("&");
-    for (let i = 0; i < parameters.length; i++) {
-        if (parameters[i].startsWith("project")) {
-            return parameters[i].substring(parameters[i].indexOf("=") + 1, parameters[i].length);
-        }
-    }
-    return "";
-}
