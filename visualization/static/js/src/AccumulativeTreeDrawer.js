@@ -4,6 +4,7 @@ const LAYER_GAP = 1;
 const POPUP_MARGIN = 4; // have no idea why there is a gap between popup and canvas
 const COLORS = ["#18A3FA", "#0887d7"];
 const ZOOMED_PARENT_COLOR = "#94bcff";
+const LAYER_COUNT = 30;
 
 /**
  * Draws tree without:
@@ -15,15 +16,12 @@ class AccumulativeTreeDrawer {
         this.tree = tree;
         this.width = this.tree.getWidth();
         this.canvasWidth = MAIN_WIDTH;
-        // this.canvasHeight = (LAYER_HEIGHT + LAYER_GAP) * this.tree.getDepth() + 70;
-        this.canvasHeight = (LAYER_HEIGHT + LAYER_GAP) * 20 + 70;
+        this.canvasHeight = (LAYER_HEIGHT + LAYER_GAP) * LAYER_COUNT + 70;
         this.section = null;
         this.stage = null;
         this.header = null;
-        this.searchList = [];
-        this.shapeAndTextList = [];
-        this._enableSearch();
-        this.nodesCount = 0;
+        this._assignParentsAndDepthRecursively(this.tree.getBaseNode(), 0);
+        // this._enableSearch();
     }
 
     setHeader(newHeader) {
@@ -40,7 +38,7 @@ class AccumulativeTreeDrawer {
             return;
         }
         for (let i = 0; i < childNodes.length; i++) {
-            this._drawRecursively(childNodes[i], 0, 1);
+            this._drawRecursively(childNodes[i], 1, 0);
         }
 
         this.stage.update();
@@ -49,19 +47,19 @@ class AccumulativeTreeDrawer {
 
     /**
      * @param node
-     * @param {Number} depth
      * @param {Number} scale
+     * @param {Number} newOffset
      * @private
      */
-    _drawRecursively(node, depth, scale) {
-        if (depth < 20) {
-            this._drawNode(node, depth, 0, scale);
+    _drawRecursively(node, scale, newOffset) {
+        if (node.depth < LAYER_COUNT) {
+            this._drawNode(node, 0, scale, newOffset);
             const childNodes = node.getNodesList();
             if (childNodes.length === 0) {
                 return;
             }
             for (let i = 0; i < childNodes.length; i++) {
-                this._drawRecursively(childNodes[i], depth + 1, scale);
+                this._drawRecursively(childNodes[i], scale, newOffset);
             }
         }
     }
@@ -89,43 +87,37 @@ class AccumulativeTreeDrawer {
 
     /**
      * @param node
-     * @param {Number} depth
      * @param {Number} colorId
      * @param {Number} scale
+     * @param {Number} newOffset
      * @private
      */
-    _drawNode(node, depth, colorId, scale) {
-        const shape = this._drawRectangle(node, depth, colorId, scale);
-        const text = this._drawLabel(node, depth, shape);
-        this.shapeAndTextList.push({
-            shape: shape,
-            text: text
-        });
-        this.searchList.push(new SearchElem(shape, node.getNodeInfo().getMethodName()));
+    _drawNode(node, colorId, scale, newOffset) {
+        const shape = this._drawRectangle(node, colorId, scale, newOffset);
+        this._drawLabel(node, shape);
     }
 
     /**
      *
      * @param node
-     * @param {Number} depth
      * @param {Number} colorId
      * @param {Number} scale
+     * @param {Number} newOffset
      * @returns {*}
      * @private
      */
-    _drawRectangle(node, depth, colorId, scale) {
+    _drawRectangle(node, colorId, scale, newOffset) {
         const shape = new createjs.Shape();
         shape.fillCommand = shape.graphics.beginFill(COLORS[colorId]).command;
         shape.originalColor = COLORS[colorId];
         shape.graphics.drawRect(0, 0, this.canvasWidth, LAYER_HEIGHT);
-        const offsetX = this._getOffsetXForNode(node) / scale;
-        const offsetY = this.flipY(AccumulativeTreeDrawer._calcNormaOffsetY(depth));
+        const offsetX = this._getOffsetXForNode(node) - newOffset;
+        const offsetY = this.flipY(AccumulativeTreeDrawer._calcNormaOffsetY(node.depth));
         const scaleX = node.getWidth() / this.width / scale;
         shape.originalX = offsetX;
         shape.originalScaleX = scaleX;
         shape.setTransform(offsetX, offsetY, scaleX);
-        // console.log(`draw: ${depth}\t${scaleX}\t${node.getNodeInfo().getMethodName()}`);
-        this._createPopup(node, shape, depth);
+        this._createPopup(node, shape, node.depth);
         this.stage.addChild(shape);
         this.listenScale(node, shape, node.getWidth() / this.width);
         return shape;
@@ -139,16 +131,9 @@ class AccumulativeTreeDrawer {
     listenScale(node, shape, scale) {
         //noinspection JSUnresolvedFunction
         shape.addEventListener("click", () => {
-            // this._resetZoom();
             this.stage.removeAllChildren();
-            this._drawRecursively(node, 0, scale);
-            // resetZoomButton.scaleX = 0;
-            // if (!(zoomedShape.x === 0 && zoomedShape.scaleX === 1)) { // if it is not base node
-            //     resetZoomButton.scaleX = 1;
-            // for (let j in this.shapeAndTextList) {
-            //     this._setZoom(this.shapeAndTextList[j], zoomedShape);
-            // }
-            // }
+            // this._expandParents(node);
+            this._drawRecursively(node, scale, this._getOffsetXForNode(node));
             this.stage.update();
         })
     }
@@ -175,7 +160,13 @@ class AccumulativeTreeDrawer {
         AccumulativeTreeDrawer._addMouseEvents(shape, popup);
     }
 
-    _drawLabel(node, depth, shape) {
+    /**
+     * @param node
+     * @param {createjs.Shape} shape
+     * @return {createjs.Text}
+     * @private
+     */
+    _drawLabel(node, shape) {
         const text = new createjs.Text(
             node.getNodeInfo().getClassName().split("/").join(".") + "." + node.getNodeInfo().getMethodName(),
             (LAYER_HEIGHT - 2) + "px Arial",
@@ -183,7 +174,7 @@ class AccumulativeTreeDrawer {
         );
         text.x = this._getOffsetXForNode(node) + 2;
         text.originalX = text.x;
-        text.y = this.flipY(depth * (LAYER_GAP + LAYER_HEIGHT));
+        text.y = this.flipY(node.depth * (LAYER_GAP + LAYER_HEIGHT));
         AccumulativeTreeDrawer._setTextPosition(text, shape);
         this.stage.setChildIndex(text, this.stage.getNumChildren() - 1);
         if (shape.scaleX * MAIN_WIDTH > 10) {
@@ -235,41 +226,14 @@ class AccumulativeTreeDrawer {
                 this._resetHighlight();
                 return;
             }
-            for (let i in this.searchList) {
-                if (this.searchList[i].matches(val)) {
-                    this.searchList[i].reset();
-                } else {
-                    this.searchList[i].dim();
-                }
-            }
+            // TODO: reimplement search
             this.stage.update();
         })
     }
 
     _resetHighlight() {
-        for (let i in this.searchList) {
-            this.searchList[i].reset();
-        }
+        // TODO: implement
         this.stage.update();
-    }
-
-    _enableZoom() {
-        const resetZoomButton = this._createResetZoomButton();
-        for (let i in this.shapeAndTextList) {
-            let zoomedShape = this.shapeAndTextList[i].shape;
-            zoomedShape.addEventListener("click", () => {
-                // this._resetZoom();
-                this.stage.removeAllChildren();
-                // resetZoomButton.scaleX = 0;
-                // if (!(zoomedShape.x === 0 && zoomedShape.scaleX === 1)) { // if it is not base node
-                //     resetZoomButton.scaleX = 1;
-                    for (let j in this.shapeAndTextList) {
-                        this._setZoom(this.shapeAndTextList[j], zoomedShape);
-                    }
-                // }
-                this.stage.update();
-            })
-        }
     }
 
     _createResetZoomButton() {
@@ -327,24 +291,39 @@ class AccumulativeTreeDrawer {
         (mayBeChild.originalX + (mayBeChild.originalScaleX * this.canvasWidth) - 0.01));
     }
 
-    _resetZoom() {
-        for (let i in this.shapeAndTextList) {
-            let shape = this.shapeAndTextList[i].shape;
-            let text = this.shapeAndTextList[i].text;
-            shape.scaleX = shape.originalScaleX;
-            shape.x = shape.originalX;
-            shape.fillCommand.style = shape.originalColor;
-            AccumulativeTreeDrawer._setTextPosition(text, shape);
-        }
-        this.stage.update();
-    }
-
     static _setTextPosition(text, shape) {
         text.scaleX = 1;
         const newShape = shape.clone();
         newShape.scaleX = shape.scaleX * 0.9;
         text.mask = newShape;
         text.x = shape.x + 2;
+    }
+
+    /**
+     * @param node
+     * @param {Number} depth
+     * @private
+     */
+    _assignParentsAndDepthRecursively(node, depth) {
+        let children;
+        try {
+            children = node.getNodesList();
+        } catch (err) {
+            console.error(err);
+            return;
+        }
+        if (children === undefined) {
+            return;
+        }
+        node.depth = depth;
+        for (let i = 0; i < children.length; i++) {
+            children[i].parent = node;
+            this._assignParentsAndDepthRecursively(children[i], depth + 1);
+        }
+    }
+
+    _expandParents(node) {
+
     }
 }
 
