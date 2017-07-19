@@ -81,7 +81,7 @@ class AccumulativeTreeDrawer {
      */
     _drawNode(node, color, scaleX, offsetX) {
         const shape = this._drawRectangle(node, color, scaleX, offsetX);
-        this._drawLabel(node, shape);
+        this._drawLabel(node, shape, scaleX, offsetX);
     }
 
     /**
@@ -98,7 +98,7 @@ class AccumulativeTreeDrawer {
         shape.originalColor = color;
         shape.graphics.drawRect(0, 0, this.canvasWidth, LAYER_HEIGHT);
         const offsetY = this.flipY(AccumulativeTreeDrawer._calcNormaOffsetY(node.depth));
-        shape.setTransform(offsetX, offsetY, scaleX);
+        shape.setTransform(offsetX + 1, offsetY, Math.floor(scaleX * this.width - 2) / this.width);
         this._createPopup(node, shape, node.depth);
         this.stage.addChild(shape);
         this.listenScale(node, shape);
@@ -141,21 +141,23 @@ class AccumulativeTreeDrawer {
     /**
      * @param node
      * @param {createjs.Shape} shape
+     * @param scaleX
+     * @param offsetX
      * @return {createjs.Text}
      * @private
      */
-    _drawLabel(node, shape) {
+    _drawLabel(node, shape, scaleX, offsetX) {
         const text = new createjs.Text(
             node.getNodeInfo().getClassName().split("/").join(".") + "." + node.getNodeInfo().getMethodName(),
             (LAYER_HEIGHT - 2) + "px Arial",
             "#fff"
         );
-        text.x = this._getOffsetXForNode(node) + 2;
+        text.x = offsetX + 2;
         text.originalX = text.x;
         text.y = this.flipY(node.depth * (LAYER_GAP + LAYER_HEIGHT));
-        AccumulativeTreeDrawer._setTextPosition(text, shape);
+        AccumulativeTreeDrawer._setTextMask(text, shape, scaleX);
         this.stage.setChildIndex(text, this.stage.getNumChildren() - 1);
-        if (shape.scaleX * MAIN_WIDTH > 10) {
+        if (scaleX * MAIN_WIDTH > 10) {
             this.stage.addChild(text);
         }
         return text;
@@ -239,12 +241,10 @@ class AccumulativeTreeDrawer {
         return resetZoomButton;
     }
 
-    static _setTextPosition(text, shape) {
-        text.scaleX = 1;
+    static _setTextMask(text, shape, scaleX) {
         const newShape = shape.clone();
-        newShape.scaleX = shape.scaleX * 0.9;
+        newShape.scaleX = scaleX * 0.9;
         text.mask = newShape;
-        text.x = shape.x + 2;
     }
 
     /**
