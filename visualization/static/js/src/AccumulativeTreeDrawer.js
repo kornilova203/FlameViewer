@@ -21,7 +21,7 @@ class AccumulativeTreeDrawer {
         this.header = null;
         this.nodesCount = 0;
         this._assignParentsAndDepthRecursively(this.tree.getBaseNode(), 0);
-        this.LAYER_COUNT = this.nodesCount > 20000 ? 30 : this.tree.getDepth();
+        this.LAYER_COUNT = this.nodesCount > 50000 ? 30 : this.tree.getDepth();
         console.log(this.nodesCount);
         // this._enableSearch();
     }
@@ -41,7 +41,7 @@ class AccumulativeTreeDrawer {
         }
         let maxDepth = 0;
         for (let i = 0; i < childNodes.length; i++) {
-            const depth = this._drawNodesRecursively(childNodes[i], 0, 1, 0, 0);
+            const depth = this._drawNodesRecursively(childNodes[i], 0, 1, 0, 0, i === 0, i === childNodes.length - 1);
             if (depth > maxDepth) {
                 maxDepth = depth;
             }
@@ -79,10 +79,12 @@ class AccumulativeTreeDrawer {
      * @param {String} color
      * @param {Number} scaleX
      * @param {Number} offsetX
+     * @param {Boolean} isFirst
+     * @param {Boolean} isLast
      * @private
      */
-    _drawNode(node, color, scaleX, offsetX) {
-        const shape = this._drawRectangle(node, color, scaleX, offsetX);
+    _drawNode(node, color, scaleX, offsetX, isFirst, isLast) {
+        const shape = this._drawRectangle(node, color, scaleX, offsetX, isFirst, isLast);
         this._drawLabel(node, shape, scaleX, offsetX);
     }
 
@@ -91,28 +93,29 @@ class AccumulativeTreeDrawer {
      * @param {String} color
      * @param {Number} scaleX
      * @param {Number} offsetX
+     * @param {Boolean} isMostFirst
+     * @param {Boolean} isMostLast
      * @returns {*}
      * @private
      */
-    _drawRectangle(node, color, scaleX, offsetX) {
+    _drawRectangle(node, color, scaleX, offsetX, isMostFirst, isMostLast) {
         const shape = new createjs.Shape();
         shape.fillCommand = shape.graphics.beginFill(color).command;
         shape.originalColor = color;
         shape.graphics.drawRect(0, 0, this.canvasWidth, LAYER_HEIGHT);
         const offsetY = this.flipY(AccumulativeTreeDrawer._calcNormaOffsetY(node.depth));
         const pixSizeX = Math.floor(scaleX * this.canvasWidth);
-        switch (pixSizeX) {
-            case 0:
-            case 1:
-                scaleX = 1 / this.canvasWidth;
-                break;
-            case 2:
-                offsetX = offsetX + 1;
-                scaleX = 1 / this.canvasWidth;
-                break;
-            default:
-                offsetX = offsetX + 1;
-                scaleX = (pixSizeX - 2) / this.canvasWidth;
+        if (!isMostFirst) {
+            offsetX = offsetX + 1;
+        }
+        if (!(pixSizeX < 2 || isMostFirst)) {
+            scaleX = (pixSizeX - 1) / this.canvasWidth;
+        }
+        if (pixSizeX <= 2) {
+            scaleX = 1 / this.canvasWidth;
+        }
+        if (pixSizeX === 0) {
+            offsetX = offsetX - 1;
         }
         shape.setTransform(offsetX, offsetY, scaleX);
         this._createPopup(node, shape, node.depth);
@@ -288,7 +291,7 @@ class AccumulativeTreeDrawer {
     _expandParents(node) {
         let parent = node.parent;
         while (parent !== this.tree.getBaseNode()) {
-            this._drawNode(parent, ZOOMED_PARENT_COLOR, 1, 0);
+            this._drawNode(parent, ZOOMED_PARENT_COLOR, 1, 0, true, true);
             parent = parent.parent;
         }
     }
@@ -301,7 +304,9 @@ class AccumulativeTreeDrawer {
             0,
             this._countScaleXForNode(node),
             this._countOffsetXForNode(node),
-            node.depth
+            node.depth,
+            true,
+            true
         );
         this._moveCanvas(maxDepth);
         this._updateDim(node, node.depth);
@@ -315,10 +320,12 @@ class AccumulativeTreeDrawer {
      * @param {Number} newFullScaleX
      * @param {Number} newOffsetX
      * @param {Number} maxDepth
+     * @param {Boolean} isMostFirst
+     * @param {Boolean} isMostLast
      * @private
      * @return {Number} max depth
      */
-    _drawNodesRecursively(node, drawnLayerCount, newFullScaleX, newOffsetX, maxDepth) {
+    _drawNodesRecursively(node, drawnLayerCount, newFullScaleX, newOffsetX, maxDepth, isMostFirst, isMostLast) {
         if (drawnLayerCount === this.LAYER_COUNT) {
             return maxDepth;
         }
@@ -326,7 +333,9 @@ class AccumulativeTreeDrawer {
             node,
             COLORS[0],
             this._countScaleXForNode(node) / newFullScaleX,
-            (this._countOffsetXForNode(node) - newOffsetX) / newFullScaleX
+            (this._countOffsetXForNode(node) - newOffsetX) / newFullScaleX,
+            isMostFirst,
+            isMostLast
         );
         const children = node.getNodesList();
         if (children === undefined) {
@@ -339,7 +348,9 @@ class AccumulativeTreeDrawer {
                 drawnLayerCount + 1,
                 newFullScaleX,
                 newOffsetX,
-                maxDepth + 1
+                maxDepth + 1,
+                i === 0 && isMostFirst,
+                i === children.length - 1 && isMostLast
             );
             if (depth > newMaxDepth) {
                 newMaxDepth = depth;
