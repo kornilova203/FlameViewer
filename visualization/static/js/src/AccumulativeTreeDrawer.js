@@ -129,7 +129,9 @@ class AccumulativeTreeDrawer {
     listenScale(node, shape) {
         //noinspection JSUnresolvedFunction
         shape.addEventListener("click", () => {
-            this._setNodeZoomed(node);
+            AccumulativeTreeDrawer.showLoader(() => {
+                this._setNodeZoomed(node);
+            });
         })
     }
 
@@ -270,6 +272,17 @@ class AccumulativeTreeDrawer {
         }
     }
 
+    /**
+     * @param {Function} callback
+     */
+    static showLoader(callback) {
+        $(".loader-background").fadeIn(400, callback);
+    }
+
+    static hideLoader() {
+        $(".loader-background").fadeOut();
+    }
+
     _setNodeZoomed(node) {
         this.stage.removeAllChildren();
         let maxDepth = 0;
@@ -292,6 +305,7 @@ class AccumulativeTreeDrawer {
             this._updateDim(node, node.depth);
         }
         this.stage.update();
+        AccumulativeTreeDrawer.hideLoader()
     }
 
     /**

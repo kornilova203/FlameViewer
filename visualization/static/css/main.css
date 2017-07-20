@@ -410,6 +410,7 @@ nav ul li:hover a, .current-link a {
     padding: 10px;
     box-sizing: border-box;
     opacity: 0.9;
+    display: none;
 }
 
 .loader {
