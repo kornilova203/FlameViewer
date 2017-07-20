@@ -19,6 +19,7 @@ class AccumulativeTreeDrawer {
         this.canvasHeight = (LAYER_HEIGHT + LAYER_GAP) * this.tree.getDepth() + 70;
         this.section = null;
         this.stage = null;
+        this.zoomedStage = null;
         this.header = null;
         this.nodesCount = 0;
         this.baseNode = this.tree.getBaseNode();
@@ -39,15 +40,17 @@ class AccumulativeTreeDrawer {
     draw() {
         this.section = this._createSectionWithCanvas();
         this.stage = new createjs.Stage("canvas");
+        this.stage.id = "canvas";
+        this.zoomedStage = new createjs.Stage("canvas-zoomed");
+        this.zoomedStage.id = "canvas-zoomed";
         this.stage.enableMouseOver(20);
+        this.zoomedStage.enableMouseOver(20);
 
         const childNodes = this.baseNode.getNodesList();
         if (childNodes.length === 0) {
             return;
         }
         const maxDepth = this._drawFullTree();
-
-        this.stage.update();
         this._moveCanvas(maxDepth);
         this._updateDim(this.baseNode);
         // this._enableZoom();
@@ -80,12 +83,13 @@ class AccumulativeTreeDrawer {
      * @param {Number} scaleX
      * @param {Number} offsetX
      * @param {Boolean} isMostFirst
+     * @param {createjs.Stage} stage
      * @private
      */
-    _drawNode(node, color, scaleX, offsetX, isMostFirst) {
-        const shape = this._drawRectangle(node, color, scaleX, offsetX, isMostFirst);
-        this._createPopup(node, shape, node.depth);
-        this._drawLabel(AccumulativeTreeDrawer._getLabelText(node), shape, scaleX, offsetX, node.depth);
+    _drawNode(node, color, scaleX, offsetX, isMostFirst, stage) {
+        const shape = this._drawRectangle(node, color, scaleX, offsetX, isMostFirst, stage);
+        // this._createPopup(node, shape, node.depth);
+        this._drawLabel(AccumulativeTreeDrawer._getLabelText(node), shape, scaleX, offsetX, node.depth, stage);
     }
 
     /**
@@ -94,10 +98,11 @@ class AccumulativeTreeDrawer {
      * @param {Number} scaleX
      * @param {Number} offsetX
      * @param {Boolean} isMostFirst
+     * @param {createjs.Stage} stage
      * @returns {*}
      * @private
      */
-    _drawRectangle(node, color, scaleX, offsetX, isMostFirst) {
+    _drawRectangle(node, color, scaleX, offsetX, isMostFirst, stage) {
         const shape = new createjs.Shape();
         shape.fillCommand = shape.graphics.beginFill(color).command;
         shape.originalColor = color;
@@ -117,7 +122,8 @@ class AccumulativeTreeDrawer {
             offsetX = offsetX - 1;
         }
         shape.setTransform(offsetX, offsetY, scaleX);
-        this.stage.addChild(shape);
+        // noinspection JSUnresolvedFunction
+        stage.addChild(shape);
         this.listenScale(node, shape);
         return shape;
     }
@@ -129,9 +135,7 @@ class AccumulativeTreeDrawer {
     listenScale(node, shape) {
         //noinspection JSUnresolvedFunction
         shape.addEventListener("click", () => {
-            AccumulativeTreeDrawer.showLoader(() => {
-                this._setNodeZoomed(node);
-            });
+            this._setNodeZoomed(node);
         })
     }
 
@@ -167,10 +171,11 @@ class AccumulativeTreeDrawer {
      * @param scaleX
      * @param offsetX
      * @param {Number} nodeDepth
+     * @param {createjs.Stage} stage
      * @return {createjs.Text}
      * @private
      */
-    _drawLabel(labelText, shape, scaleX, offsetX, nodeDepth) {
+    _drawLabel(labelText, shape, scaleX, offsetX, nodeDepth, stage) {
         const text = new createjs.Text(
             labelText,
             (LAYER_HEIGHT - 2) + "px Arial",
@@ -180,9 +185,11 @@ class AccumulativeTreeDrawer {
         text.originalX = text.x;
         text.y = this.flipY(nodeDepth * (LAYER_GAP + LAYER_HEIGHT));
         AccumulativeTreeDrawer._setTextMask(text, shape, scaleX);
-        this.stage.setChildIndex(text, this.stage.getNumChildren() - 1);
+        // noinspection JSUnresolvedFunction
+        stage.setChildIndex(text, this.stage.getNumChildren() - 1);
         if (scaleX * MAIN_WIDTH > 10) {
-            this.stage.addChild(text);
+            // noinspection JSUnresolvedFunction
+            stage.addChild(text);
         }
         return text;
     }
@@ -267,7 +274,7 @@ class AccumulativeTreeDrawer {
     _expandParents(node) {
         let parent = node.parent;
         while (parent !== this.baseNode) {
-            this._drawNode(parent, ZOOMED_PARENT_COLOR, 1, 0, true);
+            this._drawNode(parent, ZOOMED_PARENT_COLOR, 1, 0, true, this.zoomedStage);
             parent = parent.parent;
         }
     }
@@ -284,28 +291,34 @@ class AccumulativeTreeDrawer {
     }
 
     _setNodeZoomed(node) {
-        this.stage.removeAllChildren();
         let maxDepth = 0;
         if (node !== this.baseNode) {
-            this._expandParents(node);
-            maxDepth = this._drawNodesRecursively(
-                node,
-                0,
-                this._countScaleXForNode(node),
-                this._countOffsetXForNode(node),
-                node.depth,
-                true
-            );
-            this._addResetButton();
+            AccumulativeTreeDrawer.showLoader(() => {
+                this.zoomedStage.removeAllChildren();
+                this._expandParents(node);
+                maxDepth = this._drawNodesRecursively(
+                    node,
+                    0,
+                    this._countScaleXForNode(node),
+                    this._countOffsetXForNode(node),
+                    node.depth,
+                    true,
+                    this.zoomedStage
+                );
+                this._addResetButton();
+                $("#" + this.stage.id).hide();
+                this.zoomedStage.update();
+                $("#" + this.zoomedStage.id).show();
+            });
+            AccumulativeTreeDrawer.hideLoader()
         } else { // if reset zoom
-            maxDepth = this._drawFullTree();
+            $("#" + this.zoomedStage.id).hide();
+            $("#" + this.stage.id).show();
         }
         if (this.isDimSet) {
             this._moveCanvas(maxDepth);
             this._updateDim(node, node.depth);
         }
-        this.stage.update();
-        AccumulativeTreeDrawer.hideLoader()
     }
 
     /**
@@ -315,10 +328,11 @@ class AccumulativeTreeDrawer {
      * @param {Number} newOffsetX
      * @param {Number} maxDepth
      * @param {Boolean} isMostFirst
+     * @param {createjs.Stage} stage
      * @private
      * @return {Number} max depth
      */
-    _drawNodesRecursively(node, drawnLayerCount, newFullScaleX, newOffsetX, maxDepth, isMostFirst) {
+    _drawNodesRecursively(node, drawnLayerCount, newFullScaleX, newOffsetX, maxDepth, isMostFirst, stage) {
         if (drawnLayerCount === this.LAYER_COUNT) {
             return maxDepth;
         }
@@ -327,7 +341,8 @@ class AccumulativeTreeDrawer {
             COLORS[0],
             this._countScaleXForNode(node) / newFullScaleX,
             (this._countOffsetXForNode(node) - newOffsetX) / newFullScaleX,
-            isMostFirst
+            isMostFirst,
+            stage
         );
         const children = node.getNodesList();
         if (children === undefined) {
@@ -341,7 +356,8 @@ class AccumulativeTreeDrawer {
                 newFullScaleX,
                 newOffsetX,
                 maxDepth + 1,
-                i === 0 && isMostFirst
+                i === 0 && isMostFirst,
+                stage
             );
             if (depth > newMaxDepth) {
                 newMaxDepth = depth;
@@ -394,8 +410,8 @@ class AccumulativeTreeDrawer {
     }
 
     _addResetButton() {
-        const shape = this._drawRectangle(this.baseNode, RESET_ZOOM_BUTTON_COLOR, 1, 0, true);
-        this._drawLabel("Reset zoom", shape, 1, 0, 0);
+        const shape = this._drawRectangle(this.baseNode, RESET_ZOOM_BUTTON_COLOR, 1, 0, true, this.zoomedStage);
+        this._drawLabel("Reset zoom", shape, 1, 0, 0, this.zoomedStage);
     }
 
     /**
@@ -417,11 +433,13 @@ class AccumulativeTreeDrawer {
                 1,
                 0,
                 0,
-                true
+                true,
+                this.stage
             );
             if (depth > maxDepth) {
                 maxDepth = depth;
             }
         }
+        this.stage.update();
     }
 }

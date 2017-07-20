@@ -16,6 +16,11 @@
         height="{$canvasHeight}"
         style="margin-left:{$canvasOffset}px">
     </canvas>
+    <canvas id="canvas-zoomed-{$threadId}"
+                width="{$canvasWidth}"
+                height="{$canvasHeight}"
+                style="display: none;">
+    </canvas>
 </section>
 {/template}
 
@@ -33,6 +38,11 @@
     <canvas id="canvas"
         width="{$canvasWidth}"
         height="{$canvasHeight}">
+    </canvas>
+    <canvas id="canvas-zoomed"
+            width="{$canvasWidth}"
+            height="{$canvasHeight}"
+            style="display: none;">
     </canvas>
 </section>
 {/template}
