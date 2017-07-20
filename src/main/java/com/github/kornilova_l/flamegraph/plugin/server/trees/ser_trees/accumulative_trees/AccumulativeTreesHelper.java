@@ -131,5 +131,7 @@ public class AccumulativeTreesHelper {
             treeWidth += node.getWidth();
         }
         treeBuilder.setWidth(treeWidth);
+        treeBuilder.getBaseNodeBuilder().setWidth(treeWidth);
+        treeBuilder.getBaseNodeBuilder().setOffset(0);
     }
 }
