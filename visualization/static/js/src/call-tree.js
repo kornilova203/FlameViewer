@@ -33,6 +33,7 @@ function getExtension(fileName) {
 
 function getAndDrawTrees() {
     AccumulativeTreeDrawer.showLoader(() => {
+        console.log("prepare request");
         const request = new XMLHttpRequest();
         request.open("GET", "/flamegraph-profiler/trees/call-tree?file=" +
             fileName +
@@ -52,9 +53,11 @@ function getAndDrawTrees() {
 }
 
 $(window).on("load", function () {
+    console.log("loaded");
     if (fileName !== undefined) {
         const extension = getExtension(fileName);
         if (extension !== "jfr") {
+            console.log("not jfr");
             getAndDrawTrees();
         } else {
             showMessage("This type of tree is unavailable for .jfr files")

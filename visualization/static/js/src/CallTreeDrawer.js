@@ -8,8 +8,14 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
     }
 
     draw() {
+        console.log("draw");
         this.section = this._createSection(this.canvasOffset);
         this.stage = new createjs.Stage("canvas-" + this.threadId);
+        this.stage.id = "canvas-" + this.threadId;
+        this.stage.enableMouseOver(20);
+
+        this.zoomedStage = new createjs.Stage("canvas-zoomed-" + this.threadId);
+        this.zoomedStage.id = "canvas-zoomed-" + this.threadId;
         this.stage.enableMouseOver(20);
 
         const childNodes = this.baseNode.getNodesList();
