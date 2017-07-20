@@ -2,7 +2,7 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
     constructor(tree, minStartTime, maxFinishTime) {
         super(tree);
         const fullDuration = maxFinishTime - minStartTime;
-        this.canvasWidth = this.width / fullDuration * MAIN_WIDTH;
+        this.canvasWidth = this.treeWidth / fullDuration * MAIN_WIDTH;
         this.threadId = this.tree.getTreeInfo().getThreadId();
         this.canvasOffset = (this.tree.getTreeInfo().getStartTime() - minStartTime) / fullDuration * MAIN_WIDTH;
     }
@@ -46,7 +46,7 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
 
     _setPopupPosition(popup, node, depth) {
         popup
-            .css("left", this.canvasOffset + this._getOffsetXForNode(node))
+            .css("left", this.canvasOffset + this._countOffsetXForNode(node))
             .css("margin-top", - AccumulativeTreeDrawer._calcNormaOffsetY(depth) - POPUP_MARGIN)
     }
 }
