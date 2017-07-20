@@ -98,6 +98,18 @@ class AccumulativeTreeDrawer {
         shape.originalColor = color;
         shape.graphics.drawRect(0, 0, this.canvasWidth, LAYER_HEIGHT);
         const offsetY = this.flipY(AccumulativeTreeDrawer._calcNormaOffsetY(node.depth));
+        let pixSizeX = Math.floor(scaleX * this.canvasWidth);
+        switch (pixSizeX) {
+            case 0:
+            case 1:
+            case 2:
+                offsetX = offsetX + 1;
+                scaleX = 1 / this.canvasWidth;
+                break;
+            default:
+                offsetX = offsetX + 1;
+                scaleX = (pixSizeX - 2) / this.canvasWidth;
+        }
         shape.setTransform(offsetX, offsetY, scaleX);
         this._createPopup(node, shape, node.depth);
         this.stage.addChild(shape);
