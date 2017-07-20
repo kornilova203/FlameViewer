@@ -4,7 +4,6 @@ const LAYER_GAP = 1;
 const POPUP_MARGIN = 4; // have no idea why there is a gap between popup and canvas
 const COLORS = ["#18A3FA", "#0887d7"];
 const ZOOMED_PARENT_COLOR = "#94bcff";
-const LAYER_COUNT = 30;
 
 /**
  * Draws tree without:
@@ -20,7 +19,10 @@ class AccumulativeTreeDrawer {
         this.section = null;
         this.stage = null;
         this.header = null;
+        this.nodesCount = 0;
         this._assignParentsAndDepthRecursively(this.tree.getBaseNode(), 0);
+        this.LAYER_COUNT = this.nodesCount > 20000 ? 30 : this.tree.getDepth();
+        console.log(this.nodesCount);
         // this._enableSearch();
     }
 
@@ -98,10 +100,12 @@ class AccumulativeTreeDrawer {
         shape.originalColor = color;
         shape.graphics.drawRect(0, 0, this.canvasWidth, LAYER_HEIGHT);
         const offsetY = this.flipY(AccumulativeTreeDrawer._calcNormaOffsetY(node.depth));
-        let pixSizeX = Math.floor(scaleX * this.canvasWidth);
+        const pixSizeX = Math.floor(scaleX * this.canvasWidth);
         switch (pixSizeX) {
             case 0:
             case 1:
+                scaleX = 1 / this.canvasWidth;
+                break;
             case 2:
                 offsetX = offsetX + 1;
                 scaleX = 1 / this.canvasWidth;
@@ -164,7 +168,7 @@ class AccumulativeTreeDrawer {
      */
     _drawLabel(node, shape, scaleX, offsetX) {
         const text = new createjs.Text(
-            node.getNodeInfo().getClassName().split("/").join(".") + "." + node.getNodeInfo().getMethodName(),
+            `${node.getNodeInfo().getMethodName()} (${node.getNodeInfo().getClassName().split("/").join(".")})`,
             (LAYER_HEIGHT - 2) + "px Arial",
             "#fff"
         );
@@ -269,6 +273,7 @@ class AccumulativeTreeDrawer {
      * @private
      */
     _assignParentsAndDepthRecursively(node, depth) {
+        this.nodesCount++;
         const children = node.getNodesList();
         if (children === undefined) {
             return;
@@ -314,7 +319,7 @@ class AccumulativeTreeDrawer {
      * @return {Number} max depth
      */
     _drawNodesRecursively(node, drawnLayerCount, newFullScaleX, newOffsetX, maxDepth) {
-        if (drawnLayerCount === LAYER_COUNT) {
+        if (drawnLayerCount === this.LAYER_COUNT) {
             return maxDepth;
         }
         this._drawNode(
@@ -356,7 +361,7 @@ class AccumulativeTreeDrawer {
     }
 
     _updateDim(node) {
-        const maxDepth = node.depth + LAYER_COUNT;
+        const maxDepth = node.depth + this.LAYER_COUNT;
         if (maxDepth > this._getMaxDepth(node, node.depth)) {
             $(".dim").hide();
         } else {
