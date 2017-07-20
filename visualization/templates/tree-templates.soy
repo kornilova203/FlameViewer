@@ -64,32 +64,15 @@
 
 /**
  * Generate popup for method in base tree
- * @param duration
- * @param methodName
- * @param className
- * @param isStatic
- * @param desc
- * @param count
- * @param fileName
- * @param projectName
  */
 {template .accumulativeTreePopup}
 <div class="popup">
     <ul>
-        <li>
-            <a href="/flamegraph-profiler/outgoing-calls?file={$fileName}&amp;project={$projectName}&amp;class={$className}&amp;method={$methodName}&amp;desc={$desc}&amp;isStatic={$isStatic}">
-                Outgoing Calls
-            </a>
-        </li>
-        <li>
-            <a href="/flamegraph-profiler/incoming-calls?file={$fileName}&amp;project={$projectName}&amp;class={$className}&amp;method={$methodName}&amp;desc={$desc}&amp;isStatic={$isStatic}">
-                Incoming Calls
-            </a>
-        </li>
+        <li><a class="outgoing-link">Outgoing Calls</a></li>
+        <li><a class="incoming-link">Incoming Calls</a></li>
     </ul>
-    <h3>{$className}.{$methodName}</h3>
-    <p>Duration: {$duration}ms</p>
-    <p>{$count} call{if $count > 1}s{/if}</p>
+    <h3></h3>
+    <p class="p-calls-num"></p>
 </div>
 {/template}
 

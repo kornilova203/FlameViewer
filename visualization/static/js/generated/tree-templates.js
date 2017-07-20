@@ -35,7 +35,7 @@ if (goog.DEBUG) {
 
 
 templates.tree.accumulativeTreePopup = function(opt_data, opt_ignored) {
-    return soydata.VERY_UNSAFE.ordainSanitizedHtml('<div class="popup"><ul><li><a href="/flamegraph-profiler/outgoing-calls?file=' + soy.$$escapeUri(opt_data.fileName) + '&amp;project=' + soy.$$escapeUri(opt_data.projectName) + '&amp;class=' + soy.$$escapeUri(opt_data.className) + '&amp;method=' + soy.$$escapeUri(opt_data.methodName) + '&amp;desc=' + soy.$$escapeUri(opt_data.desc) + '&amp;isStatic=' + soy.$$escapeUri(opt_data.isStatic) + '">Outgoing Calls</a></li><li><a href="/flamegraph-profiler/incoming-calls?file=' + soy.$$escapeUri(opt_data.fileName) + '&amp;project=' + soy.$$escapeUri(opt_data.projectName) + '&amp;class=' + soy.$$escapeUri(opt_data.className) + '&amp;method=' + soy.$$escapeUri(opt_data.methodName) + '&amp;desc=' + soy.$$escapeUri(opt_data.desc) + '&amp;isStatic=' + soy.$$escapeUri(opt_data.isStatic) + '">Incoming Calls</a></li></ul><h3>' + soy.$$escapeHtml(opt_data.className) + '.' + soy.$$escapeHtml(opt_data.methodName) + '</h3><p>Duration: ' + soy.$$escapeHtml(opt_data.duration) + 'ms</p><p>' + soy.$$escapeHtml(opt_data.count) + ' call' + ((opt_data.count > 1) ? 's' : '') + '</p></div>');
+    return soydata.VERY_UNSAFE.ordainSanitizedHtml('<div class="popup"><ul><li><a class="outgoing-link">Outgoing Calls</a></li><li><a class="incoming-link">Incoming Calls</a></li></ul><h3></h3><p class="p-calls-num"></p></div>');
 };
 if (goog.DEBUG) {
   templates.tree.accumulativeTreePopup.soyTemplateName = 'templates.tree.accumulativeTreePopup';
@@ -44,11 +44,11 @@ if (goog.DEBUG) {
 
 templates.tree.listOfFiles = function(opt_data, opt_ignored) {
   var output = '<ol class="file-list">';
-    var fileNameList97 = opt_data.fileNames;
-    var fileNameListLen97 = fileNameList97.length;
-    for (var fileNameIndex97 = 0; fileNameIndex97 < fileNameListLen97; fileNameIndex97++) {
-        var fileNameData97 = fileNameList97[fileNameIndex97];
-        output += '<li id="' + soy.$$escapeHtmlAttribute(fileNameData97) + '"><a href="/flamegraph-profiler/' + soy.$$escapeHtmlAttribute(opt_data.pageName) + '?file=' + soy.$$escapeUri(fileNameData97) + '&amp;project=' + soy.$$escapeUri(opt_data.projectName) + '">' + soy.$$escapeHtml(fileNameData97) + '</a></li>';
+    var fileNameList61 = opt_data.fileNames;
+    var fileNameListLen61 = fileNameList61.length;
+    for (var fileNameIndex61 = 0; fileNameIndex61 < fileNameListLen61; fileNameIndex61++) {
+        var fileNameData61 = fileNameList61[fileNameIndex61];
+        output += '<li id="' + soy.$$escapeHtmlAttribute(fileNameData61) + '"><a href="/flamegraph-profiler/' + soy.$$escapeHtmlAttribute(opt_data.pageName) + '?file=' + soy.$$escapeUri(fileNameData61) + '&amp;project=' + soy.$$escapeUri(opt_data.projectName) + '">' + soy.$$escapeHtml(fileNameData61) + '</a></li>';
   }
   output += '</ol>';
   return soydata.VERY_UNSAFE.ordainSanitizedHtml(output);

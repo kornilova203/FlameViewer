@@ -18,6 +18,9 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
         this.zoomedStage.id = "canvas-zoomed-" + this.threadId;
         this.stage.enableMouseOver(20);
 
+
+        this._createPopup();
+
         const childNodes = this.baseNode.getNodesList();
         if (childNodes.length === 0) {
             return;
@@ -41,23 +44,8 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
         return $(sectionContent).appendTo($("main"));
     };
 
-    _createPopup(node, shape, depth) {
-        const popupContent = templates.tree.callTreePopup(
-            {
-                methodName: node.getNodeInfo().getMethodName(),
-                className: node.getNodeInfo().getClassName(),
-                duration: node.getWidth(),
-                startTime: node.getOffset()
-            }
-        ).content;
-        const popup = $(popupContent).appendTo(this.section);
-        this._setPopupPosition(popup, node, depth);
-        AccumulativeTreeDrawer._addMouseEvents(shape, popup);
-    }
-
-    _setPopupPosition(popup, node, depth) {
-        popup
-            .css("left", this.canvasOffset + this._countOffsetXForNode(node))
-            .css("margin-top", - AccumulativeTreeDrawer._calcNormaOffsetY(depth) - POPUP_MARGIN)
+    _createPopup() {
+        const popupContent = templates.tree.accumulativeTreePopup().content;
+        this.popup = $(popupContent).appendTo($("main"));
     }
 }

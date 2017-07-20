@@ -33,9 +33,9 @@ $(window).on("load", function () {
                 request.open("GET", `/flamegraph-profiler/trees/${treeType}?file=${fileName}&project=${projectName}`, true);
             } else {
                 request.open("GET", `/flamegraph-profiler/trees/${treeType}?${parameters}&file=${fileName}`, true);
-                className = /(?:class=)([^&]+)(?:&)/.exec(parameters)[1];
-                methodName = /(?:method=)([^&]+)(?:&)/.exec(parameters)[1];
-                desc = /(?:desc=)([^&]+)(?:&)/.exec(parameters)[1];
+                className = getParameter("class");
+                methodName = getParameter("method");
+                desc = getParameter("desc");
             }
             request.responseType = "arraybuffer";
 
