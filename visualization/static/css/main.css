@@ -398,3 +398,35 @@ nav ul li:hover a, .current-link a {
     top: 280px;
     pointer-events: none;
 }
+
+.loader-background {
+    width: 50px;
+    height: 50px;
+    background-color: white;
+    border-radius: 5px;
+    position: fixed;
+    top: calc(50% - 25px);
+    left: calc((100vw - 250px) / 2 + 250px - 25px);
+    padding: 10px;
+    box-sizing: border-box;
+    opacity: 0.9;
+}
+
+.loader {
+    border: 4px solid #d7d7d7;
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    animation: spin 2s linear infinite;
+    width: 30px;
+    height: 30px;
+    box-sizing: border-box;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
