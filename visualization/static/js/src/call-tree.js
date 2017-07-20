@@ -49,7 +49,7 @@ function getAndDrawTrees() {
 }
 
 $(window).on("load", function () {
-    if (fileName !== "") {
+    if (fileName !== undefined) {
         const extension = getExtension(fileName);
         if (extension !== "jfr") {
             getAndDrawTrees();

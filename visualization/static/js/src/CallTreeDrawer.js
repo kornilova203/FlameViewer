@@ -12,10 +12,15 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
         this.stage = new createjs.Stage("canvas-" + this.threadId);
         this.stage.enableMouseOver(20);
 
-        super._drawRecursively(this.tree.getBaseNode(), 0);
+        const childNodes = this.baseNode.getNodesList();
+        if (childNodes.length === 0) {
+            return;
+        }
+        const maxDepth = this._drawFullTree();
 
         this.stage.update();
-        this._enableZoom();
+        this._moveCanvas(maxDepth);
+        this._updateDim(this.baseNode);
     };
 
     _createSection(canvasOffset) {

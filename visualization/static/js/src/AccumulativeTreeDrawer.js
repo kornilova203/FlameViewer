@@ -287,8 +287,10 @@ class AccumulativeTreeDrawer {
         } else { // if reset zoom
             maxDepth = this._drawFullTree();
         }
-        this._moveCanvas(maxDepth);
-        this._updateDim(node, node.depth);
+        if (this.isDimSet) {
+            this._moveCanvas(maxDepth);
+            this._updateDim(node, node.depth);
+        }
         this.stage.update();
     }
 
@@ -407,25 +409,5 @@ class AccumulativeTreeDrawer {
                 maxDepth = depth;
             }
         }
-    }
-}
-
-class SearchElem {
-    constructor(shape, name) {
-        this.name = name;
-        this.shape = shape;
-    }
-
-    matches(val) {
-        return this.name.startsWith(val);
-    }
-
-    dim() {
-        this.shape.fillCommand.style = "#ccc";
-    }
-
-    //noinspection JSUnusedGlobalSymbols
-    reset() {
-        this.shape.fillCommand.style = this.shape.originalColor;
     }
 }
