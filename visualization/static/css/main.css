@@ -58,8 +58,10 @@ h1 {
     margin-bottom: 20px;
 }
 
-.file-form-header {
-    margin-right: 10px;
+.file-form p {
+    text-align: center;
+    margin-top: 10px;
+    opacity: 0.7;
 }
 
 section {
@@ -122,16 +124,15 @@ section {
 .inputfile + label {
     color: white;
     background-color: #0887d7;
-    width: 30px;
-    height: 30px;
+    width: 150px;
+    height: 50px;
     font-size: 14px;
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 50%;
-    margin-bottom: 20px;
+    border-radius: 25px;
     font-weight: bold;
-    margin-top: 7px;
+    margin: 7px auto 10px;
 }
 
 .inputfile + label:hover {
@@ -266,7 +267,7 @@ nav ul li:hover a, .current-link a {
     width: calc(100% - 20px);
     text-overflow: ellipsis;
     overflow: hidden;
-    padding: 10px 0 7px 20px;
+    padding: 12px 0 7px 20px;
     text-decoration: none;
     color: #282828;
 }

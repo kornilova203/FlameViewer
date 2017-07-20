@@ -59,7 +59,7 @@ if (goog.DEBUG) {
 
 
 templates.tree.fileInput = function (opt_data, opt_ignored) {
-    return soydata.VERY_UNSAFE.ordainSanitizedHtml('<form class="file-form"><input type="file" name="file" id="file" class="inputfile" multiple/><label for="file"><span>+</span></label><p class="file-form-header">Upload .jfr or .ser file</p></form>');
+    return soydata.VERY_UNSAFE.ordainSanitizedHtml('<form class="file-form"><input type="file" name="file" id="file" class="inputfile" multiple/><label for="file"><span>Upload file</span></label><p class="file-form-header">.jfr or .ser</p></form>');
 };
 if (goog.DEBUG) {
     templates.tree.fileInput.soyTemplateName = 'templates.tree.fileInput';
