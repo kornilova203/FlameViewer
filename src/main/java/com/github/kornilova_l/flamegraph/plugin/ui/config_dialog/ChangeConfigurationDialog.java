@@ -9,10 +9,12 @@ import com.intellij.openapi.actionSystem.ActionToolbarPosition;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.ui.ToolbarDecorator;
+import com.intellij.uiDesigner.core.GridConstraints;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import javax.swing.event.TreeSelectionEvent;
 import java.awt.*;
 import java.util.Collection;
 
@@ -22,6 +24,9 @@ public class ChangeConfigurationDialog extends DialogWrapper {
 
     private ConfigCheckboxTree includedTree;
     private ConfigCheckboxTree excludedTree;
+    private final JPanel mainPanel = new JPanel(new GridLayout(1, 2, 20, 0));
+    private final JPanel includedPanel = new JPanel(new GridLayout(2, 1));
+    private final JPanel excludedPanel = new JPanel(new GridLayout(2, 1));
 
     ChangeConfigurationDialog(@NotNull Project project) {
         super(project);
@@ -37,20 +42,44 @@ public class ChangeConfigurationDialog extends DialogWrapper {
     @Nullable
     @Override
     protected JComponent createCenterPanel() {
-        JPanel mainPanel = new JPanel(new GridLayout(2, 2, 10, 20));
-
         Configuration configuration = PluginConfigManager.getConfiguration(project);
 
+        ConfigurationForm configurationForm = new ConfigurationForm();
         includedTree = createTree();
-        mainPanel.add(createCheckboxTreeView(includedTree, configuration.getIncludingMethodConfigs()));
-        excludedTree = createTree();
-        mainPanel.add(createCheckboxTreeView(excludedTree, configuration.getExcludingMethodConfigs()));
-        mainPanel.add(getEmptyDetailView());
+//        configurationForm.includingPanel.add(createCheckboxTreeView(includedTree, configuration.getIncludingMethodConfigs()));
+        configurationForm.includingPanel.add(
+                createCheckboxTreeView(includedTree, configuration.getIncludingMethodConfigs()),
+                new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false)
+        );
 
-        return mainPanel;
+        excludedTree = createTree();
+        configurationForm.excludingPanel.add(
+                createCheckboxTreeView(excludedTree, configuration.getExcludingMethodConfigs()),
+                new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false)
+        );
+
+        return configurationForm.$$$getRootComponent$$$();
+
+//        mainPanel.add(includedPanel);
+//        mainPanel.add(excludedPanel);
+//
+//        JPanel detailCards = new JPanel(new CardLayout());
+//        detailCards.add(getEmptyDetailView(), "empty");
+//        detailCards.add(new JPanel(), "detail");
+//        includedPanel.add(createCheckboxTreeView(includedTree, configuration.getIncludingMethodConfigs()));
+//        includedPanel.add(detailCards);
+//
+//        detailCards = new JPanel(new CardLayout());
+//        detailCards.add(getEmptyDetailView(), "empty");
+//        detailCards.add(new JPanel(), "detail");
+//        excludedTree = createTree(detailCards);
+//        excludedPanel.add(createCheckboxTreeView(excludedTree, configuration.getExcludingMethodConfigs()));
+//        excludedPanel.add(detailCards);
+//
+//        return mainPanel;
     }
 
-    private static JComponent getEmptyDetailView() {
+    private static JPanel getEmptyDetailView() {
         JPanel panel = new JPanel(new GridLayout(1, 1));
         panel.add(new Label("select configuration"));
         return panel;
@@ -75,8 +104,10 @@ public class ChangeConfigurationDialog extends DialogWrapper {
     private ConfigCheckboxTree createTree() {
         return new ConfigCheckboxTree() {
             @Override
-            protected void selectionChanged() {
-                resetDetailView();
+            protected void selectionChanged(TreeSelectionEvent event) {
+//                System.out.println(event.getSource());
+//                CardLayout cl = (CardLayout) (cards.getLayout());
+//                cl.show(cards, "empty");
             }
         };
     }

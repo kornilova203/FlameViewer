@@ -17,7 +17,7 @@ public class AddMethod extends DialogWrapper {
     private JTextPane methodDescription;
     private JTextPane parametersDescription;
 
-    protected AddMethod(@Nullable Project project) {
+    public AddMethod(@Nullable Project project) {
         super(project);
         setTitle("Add Method");
         init();

@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import javax.swing.event.TreeSelectionEvent;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import java.util.Collection;
@@ -47,7 +48,7 @@ public class ConfigCheckboxTree extends CheckboxTree {
         model = (DefaultTreeModel) getModel();
         root = (CheckedTreeNode) model.getRoot();
 
-        getSelectionModel().addTreeSelectionListener(event -> selectionChanged());
+        getSelectionModel().addTreeSelectionListener(this::selectionChanged);
         setRootVisible(false);
         setShowsRootHandles(true);
     }
@@ -72,8 +73,7 @@ public class ConfigCheckboxTree extends CheckboxTree {
         return foundOrCreatedNode;
     }
 
-    protected void selectionChanged() {
-        System.out.println("selection changed");
+    protected void selectionChanged(TreeSelectionEvent event) {
     }
 
     void initTree(@NotNull Collection<MethodConfig> including) {
