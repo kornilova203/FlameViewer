@@ -1,4 +1,4 @@
-package com.github.kornilova_l.flamegraph.plugin.ui.config_dialog;
+package com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.add_remove;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;

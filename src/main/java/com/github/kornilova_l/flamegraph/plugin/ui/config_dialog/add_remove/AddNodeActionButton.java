@@ -1,7 +1,8 @@
-package com.github.kornilova_l.flamegraph.plugin.ui.config_dialog;
+package com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.add_remove;
 
 import com.github.kornilova_l.flamegraph.configuration.MethodConfig;
 import com.github.kornilova_l.flamegraph.plugin.configuration.PluginConfigManager;
+import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.ChangeConfigurationDialog;
 import com.github.kornilova_l.flamegraph.plugin.ui.line_markers.LineMarkersHolder;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
@@ -19,7 +20,7 @@ public class AddNodeActionButton implements AnActionButtonRunnable {
     private final LineMarkersHolder lineMarkersHolder;
     private final ChangeConfigurationDialog changeProfilerConfigDialog;
 
-    AddNodeActionButton(Project project, ChangeConfigurationDialog changeProfilerConfigDialog) {
+    public AddNodeActionButton(Project project, ChangeConfigurationDialog changeProfilerConfigDialog) {
         lineMarkersHolder = project.getComponent(LineMarkersHolder.class);
         this.project = project;
         this.changeProfilerConfigDialog = changeProfilerConfigDialog;
