@@ -457,7 +457,7 @@ class AccumulativeTreeDrawer {
      */
     static _setPopupContent(node) {
         const desc = node.getNodeInfo().getDescription()
-            .split(".").join("%2F")
+            .split("/").join("%2F")
             .split("(").join("%28")
             .split(")").join("%29")
             .split(";").join("%3B");

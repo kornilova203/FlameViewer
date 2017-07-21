@@ -21,10 +21,17 @@ public class ShowLastResultAction extends AnAction {
 
     @NotNull
     private static String getUri(@NotNull Project project) {
+        String fileName = new PluginFileManager(PathManager.getSystemPath()).getLatestFileName(project.getName());
+        if (fileName != null) {
+            return ServerNames.CALL_TREE +
+                    "?project=" +
+                    project.getName() +
+                    "&file=" +
+                    fileName;
+        }
         return ServerNames.CALL_TREE +
                 "?project=" +
-                project.getName() +
-                "&file=" +
-                new PluginFileManager(PathManager.getSystemPath()).getLatestFileName(project.getName());
+                project.getName();
+
     }
 }
