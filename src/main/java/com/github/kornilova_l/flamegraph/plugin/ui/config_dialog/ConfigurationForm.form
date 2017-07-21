@@ -18,7 +18,7 @@
         <properties/>
         <border type="none"/>
         <children>
-          <nested-form id="1c2b1" form-file="com/github/kornilova_l/flamegraph/plugin/ui/config_dialog/MethodForm.form" binding="methodForm1" default-binding="true">
+          <nested-form id="1c2b1" form-file="com/github/kornilova_l/flamegraph/plugin/ui/config_dialog/MethodForm.form" binding="methodFormIncluded">
             <constraints>
               <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -52,7 +52,7 @@
         <properties/>
         <border type="none"/>
         <children>
-          <nested-form id="9ca8" form-file="com/github/kornilova_l/flamegraph/plugin/ui/config_dialog/MethodForm.form" binding="methodForm2" default-binding="true">
+          <nested-form id="9ca8" form-file="com/github/kornilova_l/flamegraph/plugin/ui/config_dialog/MethodForm.form" binding="methodFormExcluded">
             <constraints>
               <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -76,9 +76,9 @@
           </component>
         </children>
       </grid>
-      <component id="3e8b7" class="javax.swing.JSeparator">
+      <component id="e49db" class="javax.swing.JToolBar$Separator">
         <constraints>
-          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties/>
       </component>

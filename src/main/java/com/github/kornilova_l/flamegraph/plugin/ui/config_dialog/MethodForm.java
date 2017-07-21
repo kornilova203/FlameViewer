@@ -9,8 +9,8 @@ import java.awt.*;
 
 public class MethodForm {
 
-    private JTextField classNamePatternTextField;
-    private JTextField methodNamePatternTextField;
+    public JTextField classNamePatternTextField;
+    public JTextField methodNamePatternTextField;
     private JPanel mainPanel;
 
     private void createUIComponents() {
