@@ -5,12 +5,21 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 import java.util.TreeSet;
 
-public class Configuration {
+public class Configuration implements Cloneable {
     private Collection<MethodConfig> includingMethodConfigs;
     private Collection<MethodConfig> excludingMethodConfigs;
 
     public Configuration() {
         this(new TreeSet<>(), new TreeSet<>());
+    }
+
+    public Configuration clone() {
+        try {
+            return (Configuration) super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     private Configuration(TreeSet<MethodConfig> includingMethodConfigs, TreeSet<MethodConfig> excludingMethodConfigs) {

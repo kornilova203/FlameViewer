@@ -27,6 +27,8 @@ public class ChangeConfigurationDialog extends DialogWrapper {
     private final JPanel mainPanel = new JPanel(new GridLayout(1, 2, 20, 0));
     private final JPanel includedPanel = new JPanel(new GridLayout(2, 1));
     private final JPanel excludedPanel = new JPanel(new GridLayout(2, 1));
+    private Configuration trueConfiguration;
+    private Configuration tempConfiguration;
 
     ChangeConfigurationDialog(@NotNull Project project) {
         super(project);
@@ -42,18 +44,19 @@ public class ChangeConfigurationDialog extends DialogWrapper {
     @Nullable
     @Override
     protected JComponent createCenterPanel() {
-        Configuration configuration = PluginConfigManager.getConfiguration(project);
+        trueConfiguration = PluginConfigManager.getConfiguration(project);
+        tempConfiguration = trueConfiguration.clone();
 
         ConfigurationForm configurationForm = new ConfigurationForm();
         includedTree = createTree(configurationForm.methodFormIncluded);
         configurationForm.includingPanel.add(
-                createCheckboxTreeView(includedTree, configuration.getIncludingMethodConfigs()),
+                createCheckboxTreeView(includedTree, tempConfiguration.getIncludingMethodConfigs()),
                 new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false)
         );
 
         excludedTree = createTree(configurationForm.methodFormExcluded);
         configurationForm.excludingPanel.add(
-                createCheckboxTreeView(excludedTree, configuration.getExcludingMethodConfigs()),
+                createCheckboxTreeView(excludedTree, tempConfiguration.getExcludingMethodConfigs()),
                 new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false)
         );
 
@@ -64,6 +67,12 @@ public class ChangeConfigurationDialog extends DialogWrapper {
         JPanel panel = new JPanel(new GridLayout(1, 1));
         panel.add(new Label("select configuration"));
         return panel;
+    }
+
+    @Override
+    protected void doOKAction() {
+        trueConfiguration = tempConfiguration.clone();
+        super.doOKAction();
     }
 
     @NotNull
