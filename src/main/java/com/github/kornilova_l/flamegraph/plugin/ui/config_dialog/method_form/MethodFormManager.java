@@ -23,7 +23,11 @@ public class MethodFormManager {
     private MyDocumentListener classDocumentListener;
     private MyFocusListener myFocusListener;
 
-    public MethodFormManager(TreeType treeType, JPanel cardPanel, MethodForm methodForm, Set<MethodConfig> methodConfigs, ConfigCheckboxTree tree) {
+    public MethodFormManager(TreeType treeType,
+                             JPanel cardPanel,
+                             MethodForm methodForm,
+                             Set<MethodConfig> methodConfigs,
+                             ConfigCheckboxTree tree) {
         this.treeType = treeType;
         this.cardPanel = cardPanel;
         this.methodForm = methodForm;
@@ -32,33 +36,6 @@ public class MethodFormManager {
         setDocumentsListeners();
     }
 
-//    @NotNull
-//    private JBScrollPane getParamsTable(List<MethodConfig.Parameter> parameterList) {
-//        switch (treeType) {
-//            case EXCLUDING:
-//                return getExcludingTable(parameterList);
-//            case INCLUDING:
-//                return getIncludingTable(parameterList);
-//            default:
-//                throw new RuntimeException("not known tree type");
-//        }
-//        Object[][] data = {
-//                {"String", true},
-//                {"int", false}
-//        };
-//        JTable myTable = new JBTable(new MyTableModel(data, includingColumnNames)) {
-//
-//        };
-//        JBScrollPane scrollPane = new JBScrollPane(myTable);
-//        scrollPane.setPreferredSize(new Dimension(300, 150));
-//        methodForm.paramTableCards.add(scrollPane,
-//                new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-//    }
-//
-//    @NotNull
-//    private JBScrollPane getIncludingTable(List<MethodConfig.Parameter> parameterList) {
-//        Object
-//    }
 
     private void setDocumentsListeners() {
         methodDocumentListener = new MyDocumentListener(

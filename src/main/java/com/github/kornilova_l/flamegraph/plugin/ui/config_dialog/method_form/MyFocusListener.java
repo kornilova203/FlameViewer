@@ -16,7 +16,9 @@ class MyFocusListener implements FocusListener {
     private ConfigCheckedTreeNode checkedTreeNode;
     private ConfigCheckboxTree tree;
 
-    MyFocusListener(@NotNull ConfigCheckedTreeNode checkedTreeNode, MethodConfig methodConfig, ConfigCheckboxTree tree) {
+    MyFocusListener(@NotNull ConfigCheckedTreeNode checkedTreeNode,
+                    MethodConfig methodConfig,
+                    ConfigCheckboxTree tree) {
         this.checkedTreeNode = checkedTreeNode;
         this.methodConfig = methodConfig;
         this.tree = tree;

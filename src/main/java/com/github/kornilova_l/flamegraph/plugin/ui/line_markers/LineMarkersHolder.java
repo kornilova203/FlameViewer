@@ -4,10 +4,13 @@ import com.github.kornilova_l.flamegraph.configuration.Configuration;
 import com.github.kornilova_l.flamegraph.plugin.configuration.PluginConfigManager;
 import com.intellij.openapi.components.AbstractProjectComponent;
 import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.editor.EditorFactory;
 import com.intellij.openapi.editor.ex.MarkupModelEx;
 import com.intellij.openapi.editor.impl.DocumentMarkupModel;
 import com.intellij.openapi.editor.markup.HighlighterTargetArea;
 import com.intellij.openapi.editor.markup.RangeHighlighter;
+import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.progress.ProcessCanceledException;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
@@ -81,7 +84,7 @@ public class LineMarkersHolder extends AbstractProjectComponent {
         });
     }
 
-    public void updateMethodMarker(@NotNull VirtualFile file) {
+    void updateMethodMarker(@NotNull VirtualFile file) {
         DumbService.getInstance(myProject).runWhenSmart(() -> {
             PsiFile[] psiFiles = FilenameIndex.getFilesByName(
                     myProject,
@@ -97,5 +100,19 @@ public class LineMarkersHolder extends AbstractProjectComponent {
             }
             updateMethodMarker(psiFile, document);
         });
+    }
+
+
+    public void updateOpenedDocuments() {
+        for (Editor editor : EditorFactory.getInstance().getAllEditors()) {
+            if (editor.getProject() != myProject) {
+                continue;
+            }
+            Document document = editor.getDocument();
+            VirtualFile virtualFile = FileDocumentManager.getInstance().getFile(document);
+            if (virtualFile != null) {
+                updateMethodMarker(virtualFile);
+            }
+        }
     }
 }

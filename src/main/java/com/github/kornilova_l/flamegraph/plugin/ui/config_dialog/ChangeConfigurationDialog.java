@@ -6,6 +6,7 @@ import com.github.kornilova_l.flamegraph.plugin.configuration.PluginConfigManage
 import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.add_remove.AddNodeActionButton;
 import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.add_remove.RemoveNodeActionButton;
 import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.method_form.MethodFormManager;
+import com.github.kornilova_l.flamegraph.plugin.ui.line_markers.LineMarkersHolder;
 import com.intellij.openapi.actionSystem.ActionToolbarPosition;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
@@ -71,6 +72,7 @@ public class ChangeConfigurationDialog extends DialogWrapper {
     protected void doOKAction() {
         System.out.println("OK");
         trueConfiguration.assign(tempConfiguration);
+        project.getComponent(LineMarkersHolder.class).updateOpenedDocuments();
         super.doOKAction();
     }
 
