@@ -106,4 +106,21 @@ public class Configuration implements Cloneable {
     public boolean isMethodExcluded(@NotNull MethodConfig methodConfig) {
         return getExcludingConfigs(methodConfig).size() != 0;
     }
+
+    @NotNull
+    public static MethodConfig getConfig(Collection<MethodConfig> methodConfigs,
+                                         String classNamePattern,
+                                         String methodAndParamsPattern) {
+        MethodConfig methodConfig = new MethodConfig(
+                classNamePattern,
+                methodAndParamsPattern.substring(0, methodAndParamsPattern.indexOf("(")),
+                methodAndParamsPattern.substring(methodAndParamsPattern.indexOf("("), methodAndParamsPattern.length())
+        );
+        for (MethodConfig config : methodConfigs) {
+            if (config.compareTo(methodConfig) == 0) {
+                return config;
+            }
+        }
+        throw new AssertionError("Could not find MethodConfig in configuration");
+    }
 }
