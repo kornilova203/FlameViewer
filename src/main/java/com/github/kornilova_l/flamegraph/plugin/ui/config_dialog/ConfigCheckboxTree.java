@@ -33,6 +33,7 @@ class ConfigCheckboxTree extends CheckboxTree {
     private Set<MethodConfig> methodConfigs;
     private MyDocumentListener methodDocumentListener;
     private MyDocumentListener classDocumentListener;
+    private MyFocusListener myFocusListener;
 
     ConfigCheckboxTree(JPanel cardPanel, MethodForm methodForm, Set<MethodConfig> methodConfigs) {
         super(new CheckboxTreeCellRenderer() {
@@ -110,38 +111,39 @@ class ConfigCheckboxTree extends CheckboxTree {
     private void selectionChanged(TreeSelectionEvent event) {
         methodForm.methodNamePatternTextField.getDocument().removeDocumentListener(methodDocumentListener);
         methodForm.classNamePatternTextField.getDocument().removeDocumentListener(classDocumentListener);
+        if (myFocusListener != null) {
+            methodForm.methodNamePatternTextField.removeFocusListener(myFocusListener);
+            methodForm.classNamePatternTextField.removeFocusListener(myFocusListener);
+        }
         TreePath treePath = event.getPath();
         if (treePath.getPathCount() < 4) {
             ((CardLayout) cardPanel.getLayout()).show(cardPanel, ConfigurationForm.EMPTY_CARD_KEY);
         } else {
-            ((CardLayout) cardPanel.getLayout()).show(cardPanel, ConfigurationForm.FORM_CARD_KEY);
-            MethodConfig methodConfig = getSelectedConfig();
-            if (methodConfig == null) {
-                return;
-            }
-            methodForm.methodNamePatternTextField.setText(methodConfig.getMethodPatternString());
-            methodForm.classNamePatternTextField.setText(methodConfig.getClassPatternString());
-            methodForm.methodNamePatternTextField.addFocusListener(
-                    new MyFocusListener(
-                            (ConfigCheckedTreeNode) treePath.getLastPathComponent(),
-                            methodConfig,
-                            this
-                    )
-            );
-            methodDocumentListener.setCurrentMethodConfig(methodConfig);
-            methodDocumentListener.setTreeNode(((ConfigCheckedTreeNode) treePath.getLastPathComponent()));
-            classDocumentListener.setCurrentMethodConfig(methodConfig);
-            classDocumentListener.setTreeNode(((ConfigCheckedTreeNode) treePath.getLastPathComponent()));
-            methodForm.classNamePatternTextField.addFocusListener(
-                    new MyFocusListener(
-                            (ConfigCheckedTreeNode) treePath.getLastPathComponent(),
-                            methodConfig,
-                            this
-                    )
-            );
-            methodForm.methodNamePatternTextField.getDocument().addDocumentListener(methodDocumentListener);
-            methodForm.classNamePatternTextField.getDocument().addDocumentListener(classDocumentListener);
+            showMethodForm(treePath);
         }
+    }
+
+    private void showMethodForm(TreePath treePath) {
+        ((CardLayout) cardPanel.getLayout()).show(cardPanel, ConfigurationForm.FORM_CARD_KEY);
+        MethodConfig methodConfig = getSelectedConfig();
+        myFocusListener = new MyFocusListener(
+                (ConfigCheckedTreeNode) treePath.getLastPathComponent(),
+                methodConfig,
+                this
+        );
+        if (methodConfig == null) {
+            return;
+        }
+        methodForm.methodNamePatternTextField.setText(methodConfig.getMethodPatternString());
+        methodForm.classNamePatternTextField.setText(methodConfig.getClassPatternString());
+        methodDocumentListener.setCurrentMethodConfig(methodConfig);
+        classDocumentListener.setCurrentMethodConfig(methodConfig);
+        methodDocumentListener.setTreeNode(((ConfigCheckedTreeNode) treePath.getLastPathComponent()));
+        classDocumentListener.setTreeNode(((ConfigCheckedTreeNode) treePath.getLastPathComponent()));
+        methodForm.classNamePatternTextField.addFocusListener(myFocusListener);
+        methodForm.methodNamePatternTextField.addFocusListener(myFocusListener);
+        methodForm.methodNamePatternTextField.getDocument().addDocumentListener(methodDocumentListener);
+        methodForm.classNamePatternTextField.getDocument().addDocumentListener(classDocumentListener);
     }
 
     void initTree(@NotNull Collection<MethodConfig> including) {
@@ -179,24 +181,28 @@ class ConfigCheckboxTree extends CheckboxTree {
         return null;
     }
 
-    void addNode(MethodConfig methodConfig) {
+    @NotNull
+    ConfigCheckedTreeNode addNode(MethodConfig methodConfig) {
         ConfigCheckedTreeNode newNode = addMethodNode(methodConfig);
         model.nodeStructureChanged(root);
         TreeUtil.expandAll(this);
-        getSelectionModel().setSelectionPath(new TreePath(newNode.getPath()));
+        return newNode;
     }
 
     void removeNode(@NotNull ConfigCheckedTreeNode treeNode) {
         CheckedTreeNode classNode = ((CheckedTreeNode) treeNode.getParent());
         CheckedTreeNode packageNode = ((CheckedTreeNode) classNode.getParent());
         if (packageNode.getChildCount() == 1) {
-            packageNode.removeAllChildren();
-        }
-        if (classNode.getChildCount() == 1) {
-            classNode.removeAllChildren();
+            int index = root.getIndex(packageNode);
+            if (index != -1) {
+                root.remove(index);
+            }
+        } else if (classNode.getChildCount() == 1) {
+            packageNode.remove(packageNode.getIndex(classNode));
         } else {
             classNode.remove(classNode.getIndex(treeNode));
         }
+        model.nodeStructureChanged(root);
     }
 }
 
@@ -263,12 +269,12 @@ class MyDocumentListener implements DocumentListener {
 
 class MyFocusListener implements FocusListener {
 
-    private final ConfigCheckedTreeNode checkedTreeNode;
+    @NotNull
+    private ConfigCheckedTreeNode checkedTreeNode;
     private final MethodConfig methodConfig;
     private ConfigCheckboxTree tree;
 
-    MyFocusListener(ConfigCheckedTreeNode checkedTreeNode, MethodConfig methodConfig, ConfigCheckboxTree tree) {
-
+    MyFocusListener(@NotNull ConfigCheckedTreeNode checkedTreeNode, MethodConfig methodConfig, ConfigCheckboxTree tree) {
         this.checkedTreeNode = checkedTreeNode;
         this.methodConfig = methodConfig;
         this.tree = tree;
@@ -283,6 +289,7 @@ class MyFocusListener implements FocusListener {
     public void focusLost(FocusEvent e) {
         tree.clearSelection();
         tree.removeNode(checkedTreeNode);
-        tree.addNode(methodConfig);
+        checkedTreeNode = tree.addNode(methodConfig);
+        tree.getSelectionModel().setSelectionPath(new TreePath(checkedTreeNode.getPath()));
     }
 }
