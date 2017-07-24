@@ -15,6 +15,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.text.BadLocationException;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import java.awt.*;
 import java.awt.event.FocusEvent;
@@ -71,24 +72,60 @@ class ConfigCheckboxTree extends CheckboxTree {
         setDocumentsListeners();
     }
 
-    private static ConfigCheckedTreeNode createChildIfNotPresent(CheckedTreeNode parent, String name) {
-        ConfigCheckedTreeNode foundOrCreatedNode = null;
+    private static ConfigCheckedTreeNode createChildIfNotPresent(CheckedTreeNode parent,
+                                                                 String name,
+                                                                 @Nullable MethodConfig methodConfig) {
         if (parent.getChildCount() == 0) {
-            foundOrCreatedNode = new ConfigCheckedTreeNode(name);
-            parent.add(foundOrCreatedNode);
+            return appendNode(parent, name, methodConfig);
         } else {
-            for (int i = 0; i < parent.getChildCount(); i++) {
-                ConfigCheckedTreeNode child = (ConfigCheckedTreeNode) parent.getChildAt(i);
-                if (Objects.equals(child.toString(), name)) {
-                    foundOrCreatedNode = child;
-                }
+            ConfigCheckedTreeNode node = maybeInsertOrFind(parent, name, methodConfig);
+            if (node != null) {
+                return node;
             }
         }
-        if (foundOrCreatedNode == null) {
-            foundOrCreatedNode = new ConfigCheckedTreeNode(name);
-            parent.add(foundOrCreatedNode);
+        return appendNode(parent, name, methodConfig);
+    }
+
+    @Nullable
+    private static ConfigCheckedTreeNode maybeInsertOrFind(CheckedTreeNode parent, String name, @Nullable MethodConfig methodConfig) {
+        if (name.compareTo(parent.getChildAt(0).toString()) < 0) {
+            return insertBefore(parent, parent.getChildAt(0), name, methodConfig);
         }
-        return foundOrCreatedNode;
+        for (int i = 0; i < parent.getChildCount(); i++) {
+            ConfigCheckedTreeNode child = (ConfigCheckedTreeNode) parent.getChildAt(i);
+            TreeNode nextNode = parent.getChildAfter(child);
+            if (nextNode != null) {
+                if (name.compareTo(child.toString()) > 0 &&
+                        name.compareTo(nextNode.toString()) < 0) {
+                    return insertBefore(parent, nextNode, name, methodConfig);
+                }
+            }
+            if (Objects.equals(child.toString(), name)) {
+                return child;
+            }
+        }
+        return null;
+    }
+
+    private static ConfigCheckedTreeNode appendNode(CheckedTreeNode parent, String name, @Nullable MethodConfig methodConfig) {
+        ConfigCheckedTreeNode node = new ConfigCheckedTreeNode(name, methodConfig);
+        parent.add(node);
+        return node;
+    }
+
+    @NotNull
+    private static ConfigCheckedTreeNode insertBefore(CheckedTreeNode parent,
+                                                      TreeNode child,
+                                                      String name,
+                                                      @Nullable MethodConfig methodConfig) {
+        ConfigCheckedTreeNode newNode = new ConfigCheckedTreeNode(name, methodConfig);
+        for (int i = 0; i < parent.getChildCount(); i++) {
+            if (Objects.equals(parent.getChildAt(i).toString(), child.toString())) {
+                parent.insert(newNode, i);
+                return newNode;
+            }
+        }
+        throw new RuntimeException("Cannot insert new node");
     }
 
     private void setDocumentsListeners() {
@@ -100,12 +137,6 @@ class ConfigCheckboxTree extends CheckboxTree {
                 MyDocumentListener.FieldType.CLASS,
                 methodConfigs
         );
-    }
-
-    private ConfigCheckedTreeNode createMethodNode(ConfigCheckedTreeNode classNode, String name, MethodConfig methodConfig) {
-        ConfigCheckedTreeNode treeNode = new ConfigCheckedTreeNode(name, methodConfig);
-        classNode.add(treeNode);
-        return treeNode;
     }
 
     private void selectionChanged(TreeSelectionEvent event) {
@@ -157,9 +188,9 @@ class ConfigCheckboxTree extends CheckboxTree {
     }
 
     private ConfigCheckedTreeNode addMethodNode(MethodConfig methodConfig) {
-        ConfigCheckedTreeNode packageNode = createChildIfNotPresent(root, methodConfig.getPackagePattern());
-        ConfigCheckedTreeNode classNode = createChildIfNotPresent(packageNode, methodConfig.getClassPattern());
-        return createMethodNode(classNode,
+        ConfigCheckedTreeNode packageNode = createChildIfNotPresent(root, methodConfig.getPackagePattern(), null);
+        ConfigCheckedTreeNode classNode = createChildIfNotPresent(packageNode, methodConfig.getClassPattern(), null);
+        return createChildIfNotPresent(classNode,
                 methodConfig.getMethodPatternString()
                         + methodConfig.parametersToString() +
                         (methodConfig.isSaveReturnValue() ? "+" : ""),
@@ -174,9 +205,7 @@ class ConfigCheckboxTree extends CheckboxTree {
         }
         Object lastPathComponent = path.getLastPathComponent();
         if (lastPathComponent instanceof ConfigCheckedTreeNode) {
-            MethodConfig methodConfig = ((ConfigCheckedTreeNode) lastPathComponent).getMethodConfig();
-            System.out.println(methodConfig.getClass() + " " + methodConfig);
-            return methodConfig;
+            return ((ConfigCheckedTreeNode) lastPathComponent).getMethodConfig();
         }
         return null;
     }
