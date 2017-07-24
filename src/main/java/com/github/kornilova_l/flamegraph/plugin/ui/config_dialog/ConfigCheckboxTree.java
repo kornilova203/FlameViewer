@@ -5,9 +5,8 @@ import com.intellij.icons.AllIcons;
 import com.intellij.ui.CheckboxTree;
 import com.intellij.ui.CheckedTreeNode;
 import com.intellij.ui.SimpleTextAttributes;
+import com.intellij.ui.table.JBTable;
 import com.intellij.uiDesigner.core.GridConstraints;
-import com.intellij.util.ui.ColumnInfo;
-import com.intellij.util.ui.ListTableModel;
 import com.intellij.util.ui.tree.TreeUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -16,6 +15,7 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.TreeSelectionEvent;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.text.BadLocationException;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
@@ -24,7 +24,6 @@ import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.Objects;
 import java.util.Set;
 
@@ -136,19 +135,25 @@ class ConfigCheckboxTree extends CheckboxTree {
     }
 
     private void addParamsTable() {
-        ColumnInfo<MyItem, MyItem> columnInfo = new ColumnInfo<MyItem, MyItem>("Column Info name") {
-            @NotNull
+        String[] columnNames = {"Type", "Save"};
+        Object[][] data = {
+                {"String", true},
+                {"int", false}
+        };
+        JTable myTable = new JBTable(new DefaultTableModel(data, columnNames)) {
             @Override
-            public MyItem valueOf(MyItem myItem) {
-                return new MyItem();
+            public Class<?> getColumnClass(int column) {
+                switch (column) {
+                    case 0:
+                        return String.class;
+                    case 1:
+                        return Boolean.class;
+                    default:
+                        return String.class;
+                }
             }
         };
-        ColumnInfo[] columnInfos = new ColumnInfo[1];
-        columnInfos[0] = columnInfo;
-        LinkedList<MyItem> myItems = new LinkedList<>();
-        myItems.add(new MyItem());
-        ParametersJBTable parametersJBTable = new ParametersJBTable(new ListTableModel<>(columnInfos, myItems));
-        methodForm.paramTablePanel.add(parametersJBTable.getTable(),
+        methodForm.paramTablePanel.add(myTable,
                 new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
 

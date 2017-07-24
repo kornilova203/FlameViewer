@@ -8,12 +8,6 @@ final class ConfigCheckedTreeNode extends CheckedTreeNode {
     private final String name;
     private final MethodConfig methodConfig;
 
-    ConfigCheckedTreeNode(@NotNull String name) {
-        super(name);
-        this.name = name;
-        methodConfig = null;
-    }
-
     ConfigCheckedTreeNode(@NotNull String name, MethodConfig methodConfig) {
         super(name);
         this.name = name;
