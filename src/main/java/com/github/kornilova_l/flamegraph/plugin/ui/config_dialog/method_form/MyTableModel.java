@@ -56,8 +56,20 @@ public class MyTableModel extends AbstractTableModel {
     }
 
     @Override
-    public void setValueAt(Object aValue, int row, int column) {
-//        super.setValueAt(aValue, row, column);
+    public void setValueAt(Object newValue, int row, int column) {
+        MethodConfig.Parameter parameter = parameters.get(row);
+        switch (column) {
+            case 0:
+                assert newValue instanceof String;
+                parameter.setType(((String) newValue));
+                return;
+            case 1:
+                assert newValue instanceof Boolean;
+                parameter.setEnabled(((Boolean) newValue));
+                return;
+            default:
+                throw new RuntimeException("Number of column is bigger than 1");
+        }
     }
 
     @Override
