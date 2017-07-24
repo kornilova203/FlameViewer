@@ -51,13 +51,23 @@ public class ChangeConfigurationDialog extends DialogWrapper {
         tempConfiguration = new Configuration(trueConfiguration);
 
         ConfigurationForm configurationForm = new ConfigurationForm();
-        includedTree = new ConfigCheckboxTree(configurationForm.cardPanelIncluded, configurationForm.methodFormIncluded, tempConfiguration.getIncludingMethodConfigs());
+        includedTree = new ConfigCheckboxTree(
+                configurationForm.cardPanelIncluded,
+                configurationForm.methodFormIncluded,
+                tempConfiguration.getIncludingMethodConfigs(),
+                ConfigCheckboxTree.TreeType.INCLUDING
+        );
         configurationForm.includingPanel.add(
                 createCheckboxTreeView(includedTree, tempConfiguration.getIncludingMethodConfigs()),
                 new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false)
         );
 
-        excludedTree = new ConfigCheckboxTree(configurationForm.cardPanelExcluded, configurationForm.methodFormExcluded, tempConfiguration.getExcludingMethodConfigs());
+        excludedTree = new ConfigCheckboxTree(
+                configurationForm.cardPanelExcluded,
+                configurationForm.methodFormExcluded,
+                tempConfiguration.getExcludingMethodConfigs(),
+                ConfigCheckboxTree.TreeType.EXCLUDING
+        );
         configurationForm.excludingPanel.add(
                 createCheckboxTreeView(excludedTree, tempConfiguration.getExcludingMethodConfigs()),
                 new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false)

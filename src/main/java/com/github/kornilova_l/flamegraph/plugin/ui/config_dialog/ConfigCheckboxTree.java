@@ -5,6 +5,9 @@ import com.intellij.icons.AllIcons;
 import com.intellij.ui.CheckboxTree;
 import com.intellij.ui.CheckedTreeNode;
 import com.intellij.ui.SimpleTextAttributes;
+import com.intellij.uiDesigner.core.GridConstraints;
+import com.intellij.util.ui.ColumnInfo;
+import com.intellij.util.ui.ListTableModel;
 import com.intellij.util.ui.tree.TreeUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -21,6 +24,7 @@ import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.Objects;
 import java.util.Set;
 
@@ -32,11 +36,12 @@ class ConfigCheckboxTree extends CheckboxTree {
     private JPanel cardPanel;
     private MethodForm methodForm;
     private Set<MethodConfig> methodConfigs;
+    private TreeType treeType;
     private MyDocumentListener methodDocumentListener;
     private MyDocumentListener classDocumentListener;
     private MyFocusListener myFocusListener;
 
-    ConfigCheckboxTree(JPanel cardPanel, MethodForm methodForm, Set<MethodConfig> methodConfigs) {
+    ConfigCheckboxTree(JPanel cardPanel, MethodForm methodForm, Set<MethodConfig> methodConfigs, TreeType treeType) {
         super(new CheckboxTreeCellRenderer() {
             @Override
             public void customizeRenderer(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
@@ -60,6 +65,7 @@ class ConfigCheckboxTree extends CheckboxTree {
         this.cardPanel = cardPanel;
         this.methodForm = methodForm;
         this.methodConfigs = methodConfigs;
+        this.treeType = treeType;
 
 
         model = (DefaultTreeModel) getModel();
@@ -70,6 +76,7 @@ class ConfigCheckboxTree extends CheckboxTree {
         setShowsRootHandles(true);
 
         setDocumentsListeners();
+        addParamsTable();
     }
 
     private static ConfigCheckedTreeNode createChildIfNotPresent(CheckedTreeNode parent,
@@ -126,6 +133,23 @@ class ConfigCheckboxTree extends CheckboxTree {
             }
         }
         throw new RuntimeException("Cannot insert new node");
+    }
+
+    private void addParamsTable() {
+        ColumnInfo<MyItem, MyItem> columnInfo = new ColumnInfo<MyItem, MyItem>("Column Info name") {
+            @NotNull
+            @Override
+            public MyItem valueOf(MyItem myItem) {
+                return new MyItem();
+            }
+        };
+        ColumnInfo[] columnInfos = new ColumnInfo[1];
+        columnInfos[0] = columnInfo;
+        LinkedList<MyItem> myItems = new LinkedList<>();
+        myItems.add(new MyItem());
+        ParametersJBTable parametersJBTable = new ParametersJBTable(new ListTableModel<>(columnInfos, myItems));
+        methodForm.paramTablePanel.add(parametersJBTable.getTable(),
+                new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
 
     private void setDocumentsListeners() {
@@ -233,6 +257,11 @@ class ConfigCheckboxTree extends CheckboxTree {
         }
         model.nodeStructureChanged(root);
     }
+
+    enum TreeType {
+        INCLUDING,
+        EXCLUDING
+    }
 }
 
 class MyDocumentListener implements DocumentListener {
@@ -298,9 +327,9 @@ class MyDocumentListener implements DocumentListener {
 
 class MyFocusListener implements FocusListener {
 
+    private final MethodConfig methodConfig;
     @NotNull
     private ConfigCheckedTreeNode checkedTreeNode;
-    private final MethodConfig methodConfig;
     private ConfigCheckboxTree tree;
 
     MyFocusListener(@NotNull ConfigCheckedTreeNode checkedTreeNode, MethodConfig methodConfig, ConfigCheckboxTree tree) {
