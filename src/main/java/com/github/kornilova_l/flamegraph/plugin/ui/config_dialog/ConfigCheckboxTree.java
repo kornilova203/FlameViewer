@@ -16,6 +16,7 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.text.BadLocationException;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
+import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.util.Collection;
@@ -27,12 +28,13 @@ class ConfigCheckboxTree extends CheckboxTree {
     private final CheckedTreeNode root;
     @NotNull
     private final DefaultTreeModel model;
+    private JPanel cardPanel;
     private MethodForm methodForm;
     private Set<MethodConfig> methodConfigs;
     private MyDocumentListener methodDocumentListener;
     private MyDocumentListener classDocumentListener;
 
-    ConfigCheckboxTree(MethodForm methodForm, Set<MethodConfig> methodConfigs) {
+    ConfigCheckboxTree(JPanel cardPanel, MethodForm methodForm, Set<MethodConfig> methodConfigs) {
         super(new CheckboxTreeCellRenderer() {
             @Override
             public void customizeRenderer(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
@@ -53,6 +55,7 @@ class ConfigCheckboxTree extends CheckboxTree {
                 this.getTextRenderer().append(value.toString(), SimpleTextAttributes.SIMPLE_CELL_ATTRIBUTES);
             }
         }, new CheckedTreeNode(null));
+        this.cardPanel = cardPanel;
         this.methodForm = methodForm;
         this.methodConfigs = methodConfigs;
 
@@ -109,9 +112,9 @@ class ConfigCheckboxTree extends CheckboxTree {
         methodForm.classNamePatternTextField.getDocument().removeDocumentListener(classDocumentListener);
         TreePath treePath = event.getPath();
         if (treePath.getPathCount() < 4) {
-            methodForm.methodNamePatternTextField.setText("");
-            methodForm.classNamePatternTextField.setText("");
+            ((CardLayout) cardPanel.getLayout()).show(cardPanel, ConfigurationForm.EMPTY_CARD_KEY);
         } else {
+            ((CardLayout) cardPanel.getLayout()).show(cardPanel, ConfigurationForm.FORM_CARD_KEY);
             MethodConfig methodConfig = getSelectedConfig();
             if (methodConfig == null) {
                 return;

@@ -16,7 +16,6 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 import java.awt.*;
 import java.util.Collection;
-import java.util.Set;
 
 public class ChangeConfigurationDialog extends DialogWrapper {
     @NotNull
@@ -52,13 +51,13 @@ public class ChangeConfigurationDialog extends DialogWrapper {
         tempConfiguration = new Configuration(trueConfiguration);
 
         ConfigurationForm configurationForm = new ConfigurationForm();
-        includedTree = createTree(configurationForm.methodFormIncluded, tempConfiguration.getIncludingMethodConfigs());
+        includedTree = new ConfigCheckboxTree(configurationForm.cardPanelIncluded, configurationForm.methodFormIncluded, tempConfiguration.getIncludingMethodConfigs());
         configurationForm.includingPanel.add(
                 createCheckboxTreeView(includedTree, tempConfiguration.getIncludingMethodConfigs()),
                 new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false)
         );
 
-        excludedTree = createTree(configurationForm.methodFormExcluded, tempConfiguration.getExcludingMethodConfigs());
+        excludedTree = new ConfigCheckboxTree(configurationForm.cardPanelExcluded, configurationForm.methodFormExcluded, tempConfiguration.getExcludingMethodConfigs());
         configurationForm.excludingPanel.add(
                 createCheckboxTreeView(excludedTree, tempConfiguration.getExcludingMethodConfigs()),
                 new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false)
@@ -87,9 +86,5 @@ public class ChangeConfigurationDialog extends DialogWrapper {
 
     public void addNodeToTree(MethodConfig methodConfig) {
         includedTree.addNode(methodConfig);
-    }
-
-    private ConfigCheckboxTree createTree(MethodForm methodForm, Set<MethodConfig> methodConfigs) {
-        return new ConfigCheckboxTree(methodForm, methodConfigs);
     }
 }
