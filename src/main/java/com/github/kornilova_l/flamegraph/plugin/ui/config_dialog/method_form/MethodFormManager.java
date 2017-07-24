@@ -5,6 +5,8 @@ import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.ConfigCheckboxT
 import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.ConfigCheckedTreeNode;
 import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.ConfigurationForm;
 import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.MethodForm;
+import com.intellij.ui.components.JBScrollPane;
+import com.intellij.ui.table.JBTable;
 
 import javax.swing.*;
 import javax.swing.tree.TreePath;
@@ -30,19 +32,32 @@ public class MethodFormManager {
         setDocumentsListeners();
     }
 
-    //    private void addParamsTable() {
-//        String[] columnNames = {"Type", "Save"};
+//    @NotNull
+//    private JBScrollPane getParamsTable(List<MethodConfig.Parameter> parameterList) {
+//        switch (treeType) {
+//            case EXCLUDING:
+//                return getExcludingTable(parameterList);
+//            case INCLUDING:
+//                return getIncludingTable(parameterList);
+//            default:
+//                throw new RuntimeException("not known tree type");
+//        }
 //        Object[][] data = {
 //                {"String", true},
 //                {"int", false}
 //        };
-//        JTable myTable = new JBTable(new DefaultTableModel(data, columnNames)) {
+//        JTable myTable = new JBTable(new MyTableModel(data, includingColumnNames)) {
 //
 //        };
 //        JBScrollPane scrollPane = new JBScrollPane(myTable);
 //        scrollPane.setPreferredSize(new Dimension(300, 150));
 //        methodForm.paramTableCards.add(scrollPane,
 //                new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+//    }
+//
+//    @NotNull
+//    private JBScrollPane getIncludingTable(List<MethodConfig.Parameter> parameterList) {
+//        Object
 //    }
 
     private void setDocumentsListeners() {
@@ -73,14 +88,20 @@ public class MethodFormManager {
     private void showMethodForm(TreePath treePath) {
         ((CardLayout) cardPanel.getLayout()).show(cardPanel, ConfigurationForm.FORM_CARD_KEY);
         MethodConfig methodConfig = tree.getSelectedConfig();
+        if (methodConfig == null) {
+            return;
+        }
+        String key = methodConfig.toString();
+        methodForm.paramTableCards.add(
+                new JBScrollPane(new JBTable(new MyTableModel(methodConfig.getParameters(), treeType))),
+                key
+        );
+        ((CardLayout) methodForm.paramTableCards.getLayout()).show(methodForm.paramTableCards, key);
         myFocusListener = new MyFocusListener(
                 (ConfigCheckedTreeNode) treePath.getLastPathComponent(),
                 methodConfig,
                 tree
         );
-        if (methodConfig == null) {
-            return;
-        }
         methodForm.methodNamePatternTextField.setText(methodConfig.getMethodPatternString());
         methodForm.classNamePatternTextField.setText(methodConfig.getClassPatternString());
         methodDocumentListener.setCurrentMethodConfig(methodConfig);
