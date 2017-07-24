@@ -1,6 +1,5 @@
 package com.github.kornilova_l.flamegraph.plugin.ui.config_dialog;
 
-import com.github.kornilova_l.flamegraph.configuration.Configuration;
 import com.github.kornilova_l.flamegraph.configuration.MethodConfig;
 import com.intellij.icons.AllIcons;
 import com.intellij.ui.CheckboxTree;
@@ -97,27 +96,31 @@ public class ConfigCheckboxTree extends CheckboxTree {
         return foundOrCreatedNode;
     }
 
+    private ConfigCheckedTreeNode createMethodNode(ConfigCheckedTreeNode classNode, String name, MethodConfig methodConfig) {
+        ConfigCheckedTreeNode treeNode = new ConfigCheckedTreeNode(name, methodConfig);
+        classNode.add(treeNode);
+        return treeNode;
+    }
+
     private void selectionChanged(TreeSelectionEvent event) {
         TreePath treePath = event.getPath();
         if (treePath.getPathCount() < 4) {
             methodForm.methodNamePatternTextField.setText("");
+            methodForm.classNamePatternTextField.setText("");
             methodForm.methodNamePatternTextField.getDocument().removeDocumentListener(methodDocumentListener);
             methodForm.classNamePatternTextField.getDocument().removeDocumentListener(classDocumentListener);
         } else {
-            String classNamePattern = getClassNamePattern(treePath);
-            String methodAndParametersPattern = treePath.getLastPathComponent().toString();
-            methodForm.methodNamePatternTextField.setText(methodAndParametersPattern.substring(0, methodAndParametersPattern.indexOf("(")));
-            methodForm.classNamePatternTextField.setText(classNamePattern);
-            MethodConfig currentMethodConfig = Configuration.getConfig(methodConfigs, classNamePattern, methodAndParametersPattern);
-            methodDocumentListener.setCurrentMethodConfig(currentMethodConfig);
-            classDocumentListener.setCurrentMethodConfig(currentMethodConfig);
+            MethodConfig methodConfig = getSelectedConfig();
+            if (methodConfig == null) {
+                return;
+            }
+            methodForm.methodNamePatternTextField.setText(methodConfig.getMethodPatternString());
+            methodForm.classNamePatternTextField.setText(methodConfig.getClassPatternString());
+            methodDocumentListener.setCurrentMethodConfig(methodConfig);
+            classDocumentListener.setCurrentMethodConfig(methodConfig);
             methodForm.methodNamePatternTextField.getDocument().addDocumentListener(methodDocumentListener);
             methodForm.classNamePatternTextField.getDocument().addDocumentListener(classDocumentListener);
         }
-    }
-
-    private String getClassNamePattern(TreePath path) {
-        return path.getPathComponent(1) + "." + path.getPathComponent(2);
     }
 
     void initTree(@NotNull Collection<MethodConfig> including) {
@@ -133,22 +136,24 @@ public class ConfigCheckboxTree extends CheckboxTree {
     private ConfigCheckedTreeNode addMethodNode(MethodConfig methodConfig) {
         ConfigCheckedTreeNode packageNode = createChildIfNotPresent(root, methodConfig.getPackagePattern());
         ConfigCheckedTreeNode classNode = createChildIfNotPresent(packageNode, methodConfig.getClassPattern());
-        return createChildIfNotPresent(classNode,
+        return createMethodNode(classNode,
                         methodConfig.getMethodPatternString()
                         + methodConfig.parametersToString() +
-                        (methodConfig.isSaveReturnValue() ? "+" : ""));
+                                (methodConfig.isSaveReturnValue() ? "+" : ""),
+                methodConfig);
     }
 
     @Nullable
-    public MethodConfig getSelectedConfig() {
+    private MethodConfig getSelectedConfig() {
         TreePath path = getSelectionModel().getSelectionPath();
         if (path == null) {
             return null;
         }
-        Object userObject = ((CheckedTreeNode) path.getLastPathComponent()).getUserObject();
-        System.out.println(userObject.getClass() + " " + userObject);
-        if (userObject instanceof MethodConfig) {
-            return ((MethodConfig) userObject);
+        Object lastPathComponent = path.getLastPathComponent();
+        if (lastPathComponent instanceof ConfigCheckedTreeNode) {
+            MethodConfig methodConfig = ((ConfigCheckedTreeNode) lastPathComponent).getMethodConfig();
+            System.out.println(methodConfig.getClass() + " " + methodConfig);
+            return methodConfig;
         }
         return null;
     }

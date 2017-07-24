@@ -114,23 +114,6 @@ public class Configuration implements Cloneable {
         return getExcludingConfigs(methodConfig).size() != 0;
     }
 
-    @NotNull
-    public static MethodConfig getConfig(Set<MethodConfig> methodConfigs,
-                                         String classNamePattern,
-                                         String methodAndParamsPattern) {
-        MethodConfig methodConfig = new MethodConfig(
-                classNamePattern,
-                methodAndParamsPattern.substring(0, methodAndParamsPattern.indexOf("(")),
-                methodAndParamsPattern.substring(methodAndParamsPattern.indexOf("("), methodAndParamsPattern.length())
-        );
-        for (MethodConfig config : methodConfigs) {
-            if (config.compareTo(methodConfig) == 0) {
-                return config;
-            }
-        }
-        throw new AssertionError("Could not find MethodConfig in configuration");
-    }
-
     /**
      * copies links to fields of tempConfiguration
      *

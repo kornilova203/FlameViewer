@@ -207,7 +207,7 @@ public class MethodConfig implements Comparable<MethodConfig>, Cloneable {
 
     @NotNull
     public String getPackagePattern() {
-        int dot = classPatternString.indexOf(".");
+        int dot = classPatternString.lastIndexOf(".");
         if (dot == -1) {
             return "";
         } else {
@@ -217,7 +217,7 @@ public class MethodConfig implements Comparable<MethodConfig>, Cloneable {
 
     @NotNull
     public String getClassPattern() {
-        int dot = classPatternString.indexOf(".");
+        int dot = classPatternString.lastIndexOf(".");
         if (dot == -1) {
             return classPatternString;
         } else {
