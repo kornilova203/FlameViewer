@@ -14,8 +14,8 @@ public class ConfigurationForm {
     JPanel cardPanelIncluded;
     MethodForm methodFormIncluded;
     MethodForm methodFormExcluded;
-    static final String FORM_CARD_KEY = "form";
-    static final String EMPTY_CARD_KEY = "empty";
+    public static final String FORM_CARD_KEY = "form";
+    public static final String EMPTY_CARD_KEY = "empty";
 
     private void createUIComponents() {
         cardPanelIncluded = new JPanel(new CardLayout());

@@ -5,6 +5,7 @@ import com.github.kornilova_l.flamegraph.configuration.MethodConfig;
 import com.github.kornilova_l.flamegraph.plugin.configuration.PluginConfigManager;
 import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.add_remove.AddNodeActionButton;
 import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.add_remove.RemoveNodeActionButton;
+import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.method_form.MethodFormManager;
 import com.intellij.openapi.actionSystem.ActionToolbarPosition;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
@@ -14,15 +15,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
-import java.awt.*;
 import java.util.Collection;
 
 public class ChangeConfigurationDialog extends DialogWrapper {
     @NotNull
     private final Project project;
-    private final JPanel mainPanel = new JPanel(new GridLayout(1, 2, 20, 0));
-    private final JPanel includedPanel = new JPanel(new GridLayout(2, 1));
-    private final JPanel excludedPanel = new JPanel(new GridLayout(2, 1));
     private ConfigCheckboxTree includedTree;
     private ConfigCheckboxTree excludedTree;
     private Configuration trueConfiguration;
@@ -38,12 +35,6 @@ public class ChangeConfigurationDialog extends DialogWrapper {
         setOKButtonText("Done");
     }
 
-    private static JPanel getEmptyDetailView() {
-        JPanel panel = new JPanel(new GridLayout(1, 1));
-        panel.add(new Label("select configuration"));
-        return panel;
-    }
-
     @Nullable
     @Override
     protected JComponent createCenterPanel() {
@@ -55,7 +46,7 @@ public class ChangeConfigurationDialog extends DialogWrapper {
                 configurationForm.cardPanelIncluded,
                 configurationForm.methodFormIncluded,
                 tempConfiguration.getIncludingMethodConfigs(),
-                ConfigCheckboxTree.TreeType.INCLUDING
+                MethodFormManager.TreeType.INCLUDING
         );
         configurationForm.includingPanel.add(
                 createCheckboxTreeView(includedTree, tempConfiguration.getIncludingMethodConfigs()),
@@ -66,7 +57,7 @@ public class ChangeConfigurationDialog extends DialogWrapper {
                 configurationForm.cardPanelExcluded,
                 configurationForm.methodFormExcluded,
                 tempConfiguration.getExcludingMethodConfigs(),
-                ConfigCheckboxTree.TreeType.EXCLUDING
+                MethodFormManager.TreeType.EXCLUDING
         );
         configurationForm.excludingPanel.add(
                 createCheckboxTreeView(excludedTree, tempConfiguration.getExcludingMethodConfigs()),

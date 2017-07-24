@@ -4,7 +4,7 @@ import com.github.kornilova_l.flamegraph.configuration.MethodConfig;
 import com.intellij.ui.CheckedTreeNode;
 import org.jetbrains.annotations.NotNull;
 
-final class ConfigCheckedTreeNode extends CheckedTreeNode {
+final public class ConfigCheckedTreeNode extends CheckedTreeNode {
     private final String name;
     private final MethodConfig methodConfig;
 
