@@ -3,11 +3,12 @@ package com.github.kornilova_l.flamegraph.configuration;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
+import java.util.Set;
 import java.util.TreeSet;
 
 public class Configuration implements Cloneable {
-    private Collection<MethodConfig> includingMethodConfigs;
-    private Collection<MethodConfig> excludingMethodConfigs;
+    private Set<MethodConfig> includingMethodConfigs;
+    private Set<MethodConfig> excludingMethodConfigs;
 
     public Configuration() {
         this(new TreeSet<>(), new TreeSet<>());
@@ -31,7 +32,7 @@ public class Configuration implements Cloneable {
         return includingMethodConfigs;
     }
 
-    public void setIncludingMethodConfigs(Collection<MethodConfig> includingMethodConfigs) {
+    public void setIncludingMethodConfigs(Set<MethodConfig> includingMethodConfigs) {
         this.includingMethodConfigs = includingMethodConfigs;
     }
 
@@ -39,7 +40,7 @@ public class Configuration implements Cloneable {
         return excludingMethodConfigs;
     }
 
-    public void setExcludingMethodConfigs(Collection<MethodConfig> excludingMethodConfigs) {
+    public void setExcludingMethodConfigs(Set<MethodConfig> excludingMethodConfigs) {
         this.excludingMethodConfigs = excludingMethodConfigs;
     }
 

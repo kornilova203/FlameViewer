@@ -73,6 +73,7 @@ public class ChangeConfigurationDialog extends DialogWrapper {
 
     @Override
     protected void doOKAction() {
+        System.out.println("OK");
         trueConfiguration = tempConfiguration.clone();
         super.doOKAction();
     }
