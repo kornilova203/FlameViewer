@@ -145,6 +145,20 @@ public class MethodConfig implements Comparable<MethodConfig>, Cloneable {
         for (int i = 0; i < parameters.size(); i++) {
             MethodConfig.Parameter parameter = parameters.get(i);
             stringBuilder.append(parameter.type);
+            if (i != parameters.size() - 1) {
+                stringBuilder.append(", ");
+            }
+        }
+        stringBuilder.append(")");
+        return stringBuilder.toString();
+    }
+
+    public String parametersWithSaveToString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("(");
+        for (int i = 0; i < parameters.size(); i++) {
+            MethodConfig.Parameter parameter = parameters.get(i);
+            stringBuilder.append(parameter.type);
             if (parameter.isEnabled) {
                 stringBuilder.append("+");
             }
@@ -158,7 +172,7 @@ public class MethodConfig implements Comparable<MethodConfig>, Cloneable {
 
     @Override
     public String toString() {
-        return getQualifiedName() + parametersToString() + (saveReturnValue ? "+" : "");
+        return getQualifiedName() + parametersWithSaveToString() + (saveReturnValue ? "+" : "");
     }
 
     public String getQualifiedName() {
