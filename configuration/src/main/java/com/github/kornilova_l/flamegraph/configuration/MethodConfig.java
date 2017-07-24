@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
-public class MethodConfig implements Comparable<MethodConfig> {
+public class MethodConfig implements Comparable<MethodConfig>, Cloneable {
     @NotNull
     private String methodPatternString = "";
     @NotNull
@@ -46,6 +46,32 @@ public class MethodConfig implements Comparable<MethodConfig> {
         this.saveReturnValue = parametersPattern.charAt(parametersPattern.length() - 1) == '+';
         parameters = parametersPatternToList(parametersPattern.substring(parametersPattern.indexOf("(") + 1,
                 parametersPattern.indexOf(")")));
+    }
+
+    /**
+     * Copy constructor
+     *
+     * @param methodConfig config to copy
+     */
+    public MethodConfig(MethodConfig methodConfig) {
+        classPatternString = methodConfig.classPatternString;
+        methodPatternString = methodConfig.methodPatternString;
+        parameters = new LinkedList<>();
+        for (Parameter parameter : methodConfig.parameters) {
+            parameters.add(new Parameter(parameter));
+        }
+        isEnabled = methodConfig.isEnabled;
+        saveReturnValue = methodConfig.saveReturnValue;
+        initPatterns();
+    }
+
+    public MethodConfig clone() {
+        try {
+            return (MethodConfig) super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        throw new RuntimeException("Cannot clone method config");
     }
 
     @NotNull
@@ -222,6 +248,16 @@ public class MethodConfig implements Comparable<MethodConfig> {
         public Parameter(@NotNull String type, boolean isEnabled) {
             this.type = type;
             this.isEnabled = isEnabled;
+        }
+
+        /**
+         * Copy constructor
+         *
+         * @param parameter parameter to copy
+         */
+        Parameter(Parameter parameter) {
+            type = parameter.type;
+            isEnabled = parameter.isEnabled;
         }
 
         public boolean isEnabled() {

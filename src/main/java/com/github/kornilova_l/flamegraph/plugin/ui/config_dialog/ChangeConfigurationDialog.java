@@ -53,7 +53,7 @@ public class ChangeConfigurationDialog extends DialogWrapper {
     @Override
     protected JComponent createCenterPanel() {
         trueConfiguration = PluginConfigManager.getConfiguration(project);
-        tempConfiguration = trueConfiguration.clone();
+        tempConfiguration = new Configuration(trueConfiguration);
 
         ConfigurationForm configurationForm = new ConfigurationForm();
         includedTree = createTree(configurationForm.methodFormIncluded, tempConfiguration.getIncludingMethodConfigs());
@@ -74,7 +74,7 @@ public class ChangeConfigurationDialog extends DialogWrapper {
     @Override
     protected void doOKAction() {
         System.out.println("OK");
-        trueConfiguration = tempConfiguration.clone();
+        trueConfiguration.assign(tempConfiguration);
         super.doOKAction();
     }
 

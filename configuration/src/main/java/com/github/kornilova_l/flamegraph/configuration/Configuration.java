@@ -14,16 +14,23 @@ public class Configuration implements Cloneable {
         this(new TreeSet<>(), new TreeSet<>());
     }
 
-    public Configuration clone() {
-        try {
-            return (Configuration) super.clone();
-        } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
+    /**
+     * copy construction
+     *
+     * @param configuration configuration to copy
+     */
+    public Configuration(Configuration configuration) {
+        includingMethodConfigs = new TreeSet<>();
+        for (MethodConfig includingMethodConfig : configuration.includingMethodConfigs) {
+            includingMethodConfigs.add(new MethodConfig(includingMethodConfig));
         }
-        return null;
+        excludingMethodConfigs = new TreeSet<>();
+        for (MethodConfig excludingMethodConfig : configuration.excludingMethodConfigs) {
+            includingMethodConfigs.add(new MethodConfig(excludingMethodConfig));
+        }
     }
 
-    private Configuration(TreeSet<MethodConfig> includingMethodConfigs, TreeSet<MethodConfig> excludingMethodConfigs) {
+    private Configuration(Set<MethodConfig> includingMethodConfigs, Set<MethodConfig> excludingMethodConfigs) {
         this.includingMethodConfigs = includingMethodConfigs;
         this.excludingMethodConfigs = excludingMethodConfigs;
     }
@@ -123,5 +130,15 @@ public class Configuration implements Cloneable {
             }
         }
         throw new AssertionError("Could not find MethodConfig in configuration");
+    }
+
+    /**
+     * copies links to fields of tempConfiguration
+     *
+     * @param tempConfiguration configuration from where links will be copied
+     */
+    public void assign(Configuration tempConfiguration) {
+        includingMethodConfigs = tempConfiguration.includingMethodConfigs;
+        excludingMethodConfigs = tempConfiguration.excludingMethodConfigs;
     }
 }
