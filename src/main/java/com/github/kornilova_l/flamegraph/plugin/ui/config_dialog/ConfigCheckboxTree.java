@@ -16,11 +16,13 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.text.BadLocationException;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.Set;
 
-public class ConfigCheckboxTree extends CheckboxTree {
+class ConfigCheckboxTree extends CheckboxTree {
     @NotNull
     private final CheckedTreeNode root;
     @NotNull
@@ -65,17 +67,6 @@ public class ConfigCheckboxTree extends CheckboxTree {
         setDocumentsListeners();
     }
 
-    private void setDocumentsListeners() {
-        methodDocumentListener = new MyDocumentListener(
-                MyDocumentListener.FieldType.METHOD,
-                methodConfigs
-        );
-        classDocumentListener = new MyDocumentListener(
-                MyDocumentListener.FieldType.CLASS,
-                methodConfigs
-        );
-    }
-
     private static ConfigCheckedTreeNode createChildIfNotPresent(CheckedTreeNode parent, String name) {
         ConfigCheckedTreeNode foundOrCreatedNode = null;
         if (parent.getChildCount() == 0) {
@@ -96,6 +87,17 @@ public class ConfigCheckboxTree extends CheckboxTree {
         return foundOrCreatedNode;
     }
 
+    private void setDocumentsListeners() {
+        methodDocumentListener = new MyDocumentListener(
+                MyDocumentListener.FieldType.METHOD,
+                methodConfigs
+        );
+        classDocumentListener = new MyDocumentListener(
+                MyDocumentListener.FieldType.CLASS,
+                methodConfigs
+        );
+    }
+
     private ConfigCheckedTreeNode createMethodNode(ConfigCheckedTreeNode classNode, String name, MethodConfig methodConfig) {
         ConfigCheckedTreeNode treeNode = new ConfigCheckedTreeNode(name, methodConfig);
         classNode.add(treeNode);
@@ -103,12 +105,12 @@ public class ConfigCheckboxTree extends CheckboxTree {
     }
 
     private void selectionChanged(TreeSelectionEvent event) {
+        methodForm.methodNamePatternTextField.getDocument().removeDocumentListener(methodDocumentListener);
+        methodForm.classNamePatternTextField.getDocument().removeDocumentListener(classDocumentListener);
         TreePath treePath = event.getPath();
         if (treePath.getPathCount() < 4) {
             methodForm.methodNamePatternTextField.setText("");
             methodForm.classNamePatternTextField.setText("");
-            methodForm.methodNamePatternTextField.getDocument().removeDocumentListener(methodDocumentListener);
-            methodForm.classNamePatternTextField.getDocument().removeDocumentListener(classDocumentListener);
         } else {
             MethodConfig methodConfig = getSelectedConfig();
             if (methodConfig == null) {
@@ -116,8 +118,24 @@ public class ConfigCheckboxTree extends CheckboxTree {
             }
             methodForm.methodNamePatternTextField.setText(methodConfig.getMethodPatternString());
             methodForm.classNamePatternTextField.setText(methodConfig.getClassPatternString());
+            methodForm.methodNamePatternTextField.addFocusListener(
+                    new MyFocusListener(
+                            (ConfigCheckedTreeNode) treePath.getLastPathComponent(),
+                            methodConfig,
+                            this
+                    )
+            );
             methodDocumentListener.setCurrentMethodConfig(methodConfig);
+            methodDocumentListener.setTreeNode(((ConfigCheckedTreeNode) treePath.getLastPathComponent()));
             classDocumentListener.setCurrentMethodConfig(methodConfig);
+            classDocumentListener.setTreeNode(((ConfigCheckedTreeNode) treePath.getLastPathComponent()));
+            methodForm.classNamePatternTextField.addFocusListener(
+                    new MyFocusListener(
+                            (ConfigCheckedTreeNode) treePath.getLastPathComponent(),
+                            methodConfig,
+                            this
+                    )
+            );
             methodForm.methodNamePatternTextField.getDocument().addDocumentListener(methodDocumentListener);
             methodForm.classNamePatternTextField.getDocument().addDocumentListener(classDocumentListener);
         }
@@ -137,9 +155,9 @@ public class ConfigCheckboxTree extends CheckboxTree {
         ConfigCheckedTreeNode packageNode = createChildIfNotPresent(root, methodConfig.getPackagePattern());
         ConfigCheckedTreeNode classNode = createChildIfNotPresent(packageNode, methodConfig.getClassPattern());
         return createMethodNode(classNode,
-                        methodConfig.getMethodPatternString()
+                methodConfig.getMethodPatternString()
                         + methodConfig.parametersToString() +
-                                (methodConfig.isSaveReturnValue() ? "+" : ""),
+                        (methodConfig.isSaveReturnValue() ? "+" : ""),
                 methodConfig);
     }
 
@@ -164,6 +182,19 @@ public class ConfigCheckboxTree extends CheckboxTree {
         TreeUtil.expandAll(this);
         getSelectionModel().setSelectionPath(new TreePath(newNode.getPath()));
     }
+
+    void removeNode(@NotNull ConfigCheckedTreeNode treeNode) {
+        CheckedTreeNode classNode = ((CheckedTreeNode) treeNode.getParent());
+        CheckedTreeNode packageNode = ((CheckedTreeNode) classNode.getParent());
+        if (packageNode.getChildCount() == 1) {
+            packageNode.removeAllChildren();
+        }
+        if (classNode.getChildCount() == 1) {
+            classNode.removeAllChildren();
+        } else {
+            classNode.remove(classNode.getIndex(treeNode));
+        }
+    }
 }
 
 class MyDocumentListener implements DocumentListener {
@@ -171,6 +202,8 @@ class MyDocumentListener implements DocumentListener {
     private Collection<MethodConfig> methodConfigs;
     @Nullable
     private MethodConfig currentMethodConfig = null;
+    @Nullable
+    private ConfigCheckedTreeNode treeNode = null;
 
     MyDocumentListener(FieldType fieldType, Collection<MethodConfig> methodConfigs) {
         this.fieldType = fieldType;
@@ -187,9 +220,10 @@ class MyDocumentListener implements DocumentListener {
     }
 
     private void updateConfig(DocumentEvent e) {
-        if (currentMethodConfig != null) {
+        if (currentMethodConfig != null && treeNode != null) {
             try {
                 methodConfigs.remove(currentMethodConfig);
+
                 switch (fieldType) {
                     case CLASS:
                         currentMethodConfig.setClassPatternString(e.getDocument().getText(0, e.getDocument().getLength()));
@@ -214,8 +248,38 @@ class MyDocumentListener implements DocumentListener {
 
     }
 
+    void setTreeNode(@Nullable ConfigCheckedTreeNode treeNode) {
+        this.treeNode = treeNode;
+    }
+
     enum FieldType {
         METHOD,
         CLASS
+    }
+}
+
+class MyFocusListener implements FocusListener {
+
+    private final ConfigCheckedTreeNode checkedTreeNode;
+    private final MethodConfig methodConfig;
+    private ConfigCheckboxTree tree;
+
+    MyFocusListener(ConfigCheckedTreeNode checkedTreeNode, MethodConfig methodConfig, ConfigCheckboxTree tree) {
+
+        this.checkedTreeNode = checkedTreeNode;
+        this.methodConfig = methodConfig;
+        this.tree = tree;
+    }
+
+    @Override
+    public void focusGained(FocusEvent e) {
+
+    }
+
+    @Override
+    public void focusLost(FocusEvent e) {
+        tree.clearSelection();
+        tree.removeNode(checkedTreeNode);
+        tree.addNode(methodConfig);
     }
 }
