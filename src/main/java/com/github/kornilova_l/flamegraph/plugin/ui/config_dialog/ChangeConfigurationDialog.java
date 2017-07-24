@@ -14,13 +14,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.text.BadLocationException;
-import javax.swing.tree.TreePath;
 import java.awt.*;
 import java.util.Collection;
+import java.util.Set;
 
 public class ChangeConfigurationDialog extends DialogWrapper {
     @NotNull
@@ -93,87 +89,7 @@ public class ChangeConfigurationDialog extends DialogWrapper {
         includedTree.addNode(methodConfig);
     }
 
-    private ConfigCheckboxTree createTree(MethodForm methodForm, Collection<MethodConfig> methodConfigs) {
-        MyDocumentListener methodDocumentListener = new MyDocumentListener(MyDocumentListener.FieldType.METHOD, methodConfigs);
-        MyDocumentListener classDocumentListener = new MyDocumentListener(MyDocumentListener.FieldType.CLASS, methodConfigs);
-        return new ConfigCheckboxTree() {
-            @Override
-            protected void selectionChanged(TreeSelectionEvent event) {
-                TreePath treePath = event.getPath();
-                if (treePath.getPathCount() < 4) {
-                    methodForm.methodNamePatternTextField.setText("");
-                    methodForm.methodNamePatternTextField.getDocument().removeDocumentListener(methodDocumentListener);
-                    methodForm.classNamePatternTextField.getDocument().removeDocumentListener(classDocumentListener);
-                } else {
-                    String classNamePattern = getClassNamePattern(treePath);
-                    String methodAndParametersPattern = treePath.getLastPathComponent().toString();
-                    methodForm.methodNamePatternTextField.setText(methodAndParametersPattern.substring(0, methodAndParametersPattern.indexOf("(")));
-                    methodForm.classNamePatternTextField.setText(classNamePattern);
-                    MethodConfig currentMethodConfig = Configuration.getConfig(methodConfigs, classNamePattern, methodAndParametersPattern);
-                    methodDocumentListener.setCurrentMethodConfig(currentMethodConfig);
-                    classDocumentListener.setCurrentMethodConfig(currentMethodConfig);
-                    methodForm.methodNamePatternTextField.getDocument().addDocumentListener(methodDocumentListener);
-                    methodForm.classNamePatternTextField.getDocument().addDocumentListener(classDocumentListener);
-                }
-            }
-        };
-    }
-
-    private String getClassNamePattern(TreePath path) {
-        return path.getPathComponent(1) + "." + path.getPathComponent(2);
-    }
-
-    static class MyDocumentListener implements DocumentListener {
-        private final FieldType fieldType;
-        private Collection<MethodConfig> methodConfigs;
-        @Nullable
-        private MethodConfig currentMethodConfig = null;
-
-        MyDocumentListener(FieldType fieldType, Collection<MethodConfig> methodConfigs) {
-            this.fieldType = fieldType;
-            this.methodConfigs = methodConfigs;
-        }
-
-        void setCurrentMethodConfig(@Nullable MethodConfig currentMethodConfig) {
-            this.currentMethodConfig = currentMethodConfig;
-        }
-
-        @Override
-        public void insertUpdate(DocumentEvent e) {
-            updateConfig(e);
-        }
-
-        private void updateConfig(DocumentEvent e) {
-            if (currentMethodConfig != null) {
-                try {
-                    methodConfigs.remove(currentMethodConfig);
-                    switch (fieldType) {
-                        case CLASS:
-                            currentMethodConfig.setClassPatternString(e.getDocument().getText(0, e.getDocument().getLength()));
-                            break;
-                        case METHOD:
-                            currentMethodConfig.setMethodPatternString(e.getDocument().getText(0, e.getDocument().getLength()));
-                    }
-                    methodConfigs.add(currentMethodConfig);
-                } catch (BadLocationException e1) {
-                    e1.printStackTrace();
-                }
-            }
-        }
-
-        @Override
-        public void removeUpdate(DocumentEvent e) {
-            updateConfig(e);
-        }
-
-        @Override
-        public void changedUpdate(DocumentEvent e) {
-
-        }
-
-        enum FieldType {
-            METHOD,
-            CLASS
-        }
+    private ConfigCheckboxTree createTree(MethodForm methodForm, Set<MethodConfig> methodConfigs) {
+        return new ConfigCheckboxTree(methodForm, methodConfigs);
     }
 }

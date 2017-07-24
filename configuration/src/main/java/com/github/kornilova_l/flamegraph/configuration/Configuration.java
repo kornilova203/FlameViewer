@@ -2,7 +2,6 @@ package com.github.kornilova_l.flamegraph.configuration;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -35,7 +34,7 @@ public class Configuration implements Cloneable {
         this.excludingMethodConfigs = excludingMethodConfigs;
     }
 
-    public Collection<MethodConfig> getIncludingMethodConfigs() {
+    public Set<MethodConfig> getIncludingMethodConfigs() {
         return includingMethodConfigs;
     }
 
@@ -43,7 +42,7 @@ public class Configuration implements Cloneable {
         this.includingMethodConfigs = includingMethodConfigs;
     }
 
-    public Collection<MethodConfig> getExcludingMethodConfigs() {
+    public Set<MethodConfig> getExcludingMethodConfigs() {
         return excludingMethodConfigs;
     }
 
@@ -90,19 +89,19 @@ public class Configuration implements Cloneable {
     }
 
     @NotNull
-    public Collection<MethodConfig> getIncludingConfigs(@NotNull MethodConfig methodConfig) {
+    public Set<MethodConfig> getIncludingConfigs(@NotNull MethodConfig methodConfig) {
         return getApplicableMethodConfigs(includingMethodConfigs, methodConfig);
     }
 
     @NotNull
-    public Collection<MethodConfig> getExcludingConfigs(@NotNull MethodConfig methodConfig) {
+    public Set<MethodConfig> getExcludingConfigs(@NotNull MethodConfig methodConfig) {
         return getApplicableMethodConfigs(excludingMethodConfigs, methodConfig);
     }
 
     @NotNull
-    private static Collection<MethodConfig> getApplicableMethodConfigs(@NotNull Collection<MethodConfig> methodConfigs,
-                                                                       @NotNull MethodConfig testedConfig) {
-        Collection<MethodConfig> excludingConfigs = new TreeSet<>();
+    private static Set<MethodConfig> getApplicableMethodConfigs(@NotNull Set<MethodConfig> methodConfigs,
+                                                                @NotNull MethodConfig testedConfig) {
+        Set<MethodConfig> excludingConfigs = new TreeSet<>();
         for (MethodConfig methodConfig : methodConfigs) {
             if (methodConfig.isApplicableTo(testedConfig)) {
                 excludingConfigs.add(methodConfig);
@@ -116,7 +115,7 @@ public class Configuration implements Cloneable {
     }
 
     @NotNull
-    public static MethodConfig getConfig(Collection<MethodConfig> methodConfigs,
+    public static MethodConfig getConfig(Set<MethodConfig> methodConfigs,
                                          String classNamePattern,
                                          String methodAndParamsPattern) {
         MethodConfig methodConfig = new MethodConfig(
