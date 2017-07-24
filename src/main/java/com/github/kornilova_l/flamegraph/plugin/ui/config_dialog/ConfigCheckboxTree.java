@@ -5,6 +5,7 @@ import com.intellij.icons.AllIcons;
 import com.intellij.ui.CheckboxTree;
 import com.intellij.ui.CheckedTreeNode;
 import com.intellij.ui.SimpleTextAttributes;
+import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.table.JBTable;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.util.ui.tree.TreeUtil;
@@ -153,7 +154,9 @@ class ConfigCheckboxTree extends CheckboxTree {
                 }
             }
         };
-        methodForm.paramTablePanel.add(myTable,
+        JBScrollPane scrollPane = new JBScrollPane(myTable);
+        scrollPane.setPreferredSize(new Dimension(300, 150));
+        methodForm.paramTablePanel.add(scrollPane,
                 new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
 
