@@ -127,7 +127,8 @@ public class MethodFormManager {
         );
         return ToolbarDecorator.createDecorator(myTableView, null)
                 .setAddAction(anActionButton -> {
-
+                    methodConfig.getParameters().add(new MethodConfig.Parameter("", false));
+                    myTableView.repaint();
                 })
                 .createPanel();
     }
