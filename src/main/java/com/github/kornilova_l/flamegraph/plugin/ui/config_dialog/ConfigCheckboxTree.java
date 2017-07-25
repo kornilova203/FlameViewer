@@ -146,13 +146,22 @@ public class ConfigCheckboxTree extends CheckboxTree {
 
     @Nullable
     public MethodConfig getSelectedConfig() {
+        ConfigCheckedTreeNode node = getSelectedNode();
+        if (node != null) {
+            return node.getMethodConfig();
+        }
+        return null;
+    }
+
+    @Nullable
+    public ConfigCheckedTreeNode getSelectedNode() {
         TreePath path = getSelectionModel().getSelectionPath();
         if (path == null) {
             return null;
         }
         Object lastPathComponent = path.getLastPathComponent();
         if (lastPathComponent instanceof ConfigCheckedTreeNode) {
-            return ((ConfigCheckedTreeNode) lastPathComponent).getMethodConfig();
+            return ((ConfigCheckedTreeNode) lastPathComponent);
         }
         return null;
     }
@@ -168,7 +177,7 @@ public class ConfigCheckboxTree extends CheckboxTree {
     public void removeNode(@NotNull ConfigCheckedTreeNode treeNode) {
         CheckedTreeNode classNode = ((CheckedTreeNode) treeNode.getParent());
         CheckedTreeNode packageNode = ((CheckedTreeNode) classNode.getParent());
-        if (packageNode.getChildCount() == 1) {
+        if (packageNode.getChildCount() == 1 && classNode.getChildCount() == 1) {
             int index = root.getIndex(packageNode);
             if (index != -1) {
                 root.remove(index);
@@ -179,5 +188,6 @@ public class ConfigCheckboxTree extends CheckboxTree {
             classNode.remove(classNode.getIndex(treeNode));
         }
         model.nodeStructureChanged(root);
+        TreeUtil.expandAll(this);
     }
 }
