@@ -43,16 +43,20 @@ public class AddExcludingDialogWrapper extends DialogWrapper {
 
     @Override
     protected void doOKAction() {
-        if (!Objects.equals(form.classNamePatternTextField.getText(), "") &&
-                !Objects.equals(form.methodNamePatternTextField.getText(), "")) {
-            DialogHelper.saveConfig(form,
-                    false,
-                    parameters,
-                    tree,
-                    tempConfiguration
-            );
-        }
+        DialogHelper.saveConfig(form,
+                false,
+                parameters,
+                tree,
+                tempConfiguration
+        );
+
         super.doOKAction();
+    }
+
+    @Override
+    public boolean isOKActionEnabled() {
+        return !Objects.equals(form.classNamePatternTextField.getText(), "") &&
+                !Objects.equals(form.methodNamePatternTextField.getText(), "");
     }
 
     @NotNull
@@ -64,6 +68,9 @@ public class AddExcludingDialogWrapper extends DialogWrapper {
         }
         if (!MethodFormManager.isValidField(form.methodNamePatternTextField.getText())) {
             validationInfos.add(new ValidationInfo("Pattern must not contain space character", form.methodNamePatternTextField));
+        }
+        if (validationInfos.size() == 0) {
+            setOKActionEnabled(isOKActionEnabled());
         }
         return validationInfos;
     }

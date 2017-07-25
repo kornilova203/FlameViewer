@@ -115,19 +115,33 @@ public class MethodFormManager {
     @NotNull
     public List<ValidationInfo> validateInfo() {
         List<ValidationInfo> validationInfos = new LinkedList<>();
-        String text = excludedMethodForm.methodNamePatternTextField.getText();
-        if (!isValidField(text)) {
-            validationInfos.add(new ValidationInfo(
-                    "Pattern must not contain space character",
-                    excludedMethodForm.methodNamePatternTextField
-            ));
-        }
-        text = excludedMethodForm.classNamePatternTextField.getText();
-        if (!isValidField(text)) {
-            validationInfos.add(new ValidationInfo(
-                    "Pattern must not contain space character",
-                    excludedMethodForm.classNamePatternTextField
-            ));
+        if (tree.getSelectedConfig() != null) {
+            String text = excludedMethodForm.methodNamePatternTextField.getText();
+            if (!isValidField(text)) {
+                validationInfos.add(new ValidationInfo(
+                        "Pattern must not contain space character",
+                        excludedMethodForm.methodNamePatternTextField
+                ));
+            }
+            if (Objects.equals(text, "")) {
+                validationInfos.add(new ValidationInfo(
+                        "Pattern must not be empty",
+                        excludedMethodForm.methodNamePatternTextField
+                ));
+            }
+            text = excludedMethodForm.classNamePatternTextField.getText();
+            if (!isValidField(text)) {
+                validationInfos.add(new ValidationInfo(
+                        "Pattern must not contain space character",
+                        excludedMethodForm.classNamePatternTextField
+                ));
+            }
+            if (Objects.equals(text, "")) {
+                validationInfos.add(new ValidationInfo(
+                        "Pattern must not be empty",
+                        excludedMethodForm.methodNamePatternTextField
+                ));
+            }
         }
         return validationInfos;
     }

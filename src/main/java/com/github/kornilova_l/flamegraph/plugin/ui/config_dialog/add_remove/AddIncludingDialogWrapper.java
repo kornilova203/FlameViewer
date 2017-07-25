@@ -42,16 +42,20 @@ public class AddIncludingDialogWrapper extends DialogWrapper {
     }
 
     @Override
+    public boolean isOKActionEnabled() {
+        return !Objects.equals(form.excludedMethodForm.classNamePatternTextField.getText(), "") &&
+                !Objects.equals(form.excludedMethodForm.methodNamePatternTextField.getText(), "");
+    }
+
+    @Override
     protected void doOKAction() {
-        if (!Objects.equals(form.excludedMethodForm.classNamePatternTextField.getText(), "") &&
-                !Objects.equals(form.excludedMethodForm.methodNamePatternTextField.getText(), "")) {
-            DialogHelper.saveConfig(form.excludedMethodForm,
-                    form.saveReturnValueCheckBox.isSelected(),
-                    parameters,
-                    tree,
-                    tempConfiguration
-            );
-        }
+        DialogHelper.saveConfig(form.excludedMethodForm,
+                form.saveReturnValueCheckBox.isSelected(),
+                parameters,
+                tree,
+                tempConfiguration
+        );
+
         super.doOKAction();
     }
 
@@ -66,6 +70,9 @@ public class AddIncludingDialogWrapper extends DialogWrapper {
         if (!MethodFormManager.isValidField(form.excludedMethodForm.methodNamePatternTextField.getText())) {
             validationInfos.add(new ValidationInfo("Pattern must not contain space character",
                     form.excludedMethodForm.methodNamePatternTextField));
+        }
+        if (validationInfos.size() == 0) {
+            setOKActionEnabled(isOKActionEnabled());
         }
         return validationInfos;
     }
