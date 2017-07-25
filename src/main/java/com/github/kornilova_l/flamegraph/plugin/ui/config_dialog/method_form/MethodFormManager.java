@@ -12,6 +12,9 @@ import javax.swing.*;
 import javax.swing.event.ChangeListener;
 import javax.swing.tree.TreePath;
 import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import static com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.method_form.MyTableView.createTablePanel;
@@ -28,6 +31,8 @@ public class MethodFormManager {
     private MyDocumentListener classDocumentListener;
     private MyFocusListener myFocusListener;
     private ChangeListener checkboxChangeListener;
+    private Map<MethodConfig, String> methodKeysMap = new HashMap<>();
+    private String latestMethodKey = "";
 
     public MethodFormManager(JPanel cardPanel,
                              @NotNull ExcludedMethodForm excludedMethodForm,
@@ -77,17 +82,20 @@ public class MethodFormManager {
         if (methodConfig == null) {
             return;
         }
-        String key = methodConfig.toString();
-        excludedMethodForm.paramTableCards.add(
-                createTablePanel(methodConfig.getParameters(), tree.treeType),
-                key
-        );
-        ((CardLayout) excludedMethodForm.paramTableCards.getLayout()).show(excludedMethodForm.paramTableCards, key);
-        myFocusListener = new MyFocusListener(
-                (ConfigCheckedTreeNode) treePath.getLastPathComponent(),
-                methodConfig,
-                tree
-        );
+        String key = methodKeysMap.computeIfAbsent(methodConfig, MethodConfig::toString);
+        if (!Objects.equals(latestMethodKey, key)) {
+            excludedMethodForm.paramTableCards.add(
+                    createTablePanel(methodConfig.getParameters(), tree.treeType),
+                    key
+            );
+            ((CardLayout) excludedMethodForm.paramTableCards.getLayout()).show(excludedMethodForm.paramTableCards, key);
+            myFocusListener = new MyFocusListener(
+                    (ConfigCheckedTreeNode) treePath.getLastPathComponent(),
+                    methodConfig,
+                    tree
+            );
+        }
+        latestMethodKey = key;
         excludedMethodForm.methodNamePatternTextField.setText(methodConfig.getMethodPatternString());
         excludedMethodForm.classNamePatternTextField.setText(methodConfig.getClassPatternString());
         methodDocumentListener.setCurrentMethodConfig(methodConfig);
