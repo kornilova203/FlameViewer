@@ -22,6 +22,7 @@ public class AddExcludingDialogWrapper extends DialogWrapper {
     private final ConfigCheckboxTree tree;
     private final Configuration tempConfiguration;
     private ExcludedMethodForm form;
+    private JPanel tablePanel = null;
 
     AddExcludingDialogWrapper(@Nullable Project project, ConfigCheckboxTree tree, Configuration tempConfiguration) {
         super(project);
@@ -38,7 +39,7 @@ public class AddExcludingDialogWrapper extends DialogWrapper {
     @Override
     protected JComponent createCenterPanel() {
         form = new ExcludedMethodForm();
-        DialogHelper.createAndShowTable(form.paramTableCards, parameters, tree.treeType);
+        tablePanel = DialogHelper.createAndShowTable(form.paramTableCards, parameters, tree.treeType);
         form.$$$getRootComponent$$$().setPreferredSize(new Dimension(350, 300));
         return form.$$$getRootComponent$$$();
     }
@@ -73,6 +74,9 @@ public class AddExcludingDialogWrapper extends DialogWrapper {
         }
         if (validationInfos.size() == 0) {
             setOKActionEnabled(isOKActionEnabled());
+        }
+        if (tablePanel != null) {
+            validationInfos.addAll(DialogHelper.validateParameters(tablePanel, parameters));
         }
         return validationInfos;
     }

@@ -5,6 +5,7 @@ import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.ConfigCheckboxT
 import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.ConfigCheckedTreeNode;
 import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.ConfigurationForm;
 import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.ExcludedMethodForm;
+import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.add_remove.DialogHelper;
 import com.intellij.openapi.ui.ValidationInfo;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -32,6 +33,8 @@ public class MethodFormManager {
     private ChangeListener checkboxChangeListener;
     private Map<MethodConfig, String> methodKeysMap = new HashMap<>();
     private String latestMethodKey = "";
+    private JPanel currentTablePanel = null;
+    private List<MethodConfig.Parameter> currentParameters = null;
 
     public MethodFormManager(JPanel cardPanel,
                              @NotNull ExcludedMethodForm excludedMethodForm,
@@ -83,8 +86,10 @@ public class MethodFormManager {
         }
         String key = methodKeysMap.computeIfAbsent(methodConfig, MethodConfig::toString);
         if (!Objects.equals(latestMethodKey, key)) {
+            currentTablePanel = createTablePanel(methodConfig.getParameters(), tree.treeType);
+            currentParameters = methodConfig.getParameters();
             excludedMethodForm.paramTableCards.add(
-                    createTablePanel(methodConfig.getParameters(), tree.treeType),
+                    currentTablePanel,
                     key
             );
             ((CardLayout) excludedMethodForm.paramTableCards.getLayout()).show(excludedMethodForm.paramTableCards, key);
@@ -141,6 +146,9 @@ public class MethodFormManager {
                         "Pattern must not be empty",
                         excludedMethodForm.methodNamePatternTextField
                 ));
+            }
+            if (currentTablePanel != null) {
+                validationInfos.addAll(DialogHelper.validateParameters(currentTablePanel, currentParameters));
             }
         }
         return validationInfos;
