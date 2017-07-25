@@ -30,6 +30,7 @@ public class AddExcludingDialogWrapper extends DialogWrapper {
         init();
         setTitle("Add Excluded Method Pattern");
         initValidation();
+        setOKActionEnabled(false);
     }
 
     @Nullable

@@ -30,6 +30,7 @@ public class AddIncludingDialogWrapper extends DialogWrapper {
         init();
         setTitle("Add Included Method Pattern");
         initValidation();
+        setOKActionEnabled(false);
     }
 
     @Nullable
