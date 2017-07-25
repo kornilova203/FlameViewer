@@ -59,10 +59,12 @@ public class MyTableView<Item> extends TableView<Item> {
         }
         return ToolbarDecorator.createDecorator(myTableView, null)
                 .setAddAction(anActionButton -> {
+                    myTableView.stopEditing();
                     parameters.add(new MethodConfig.Parameter("", false));
                     myTableView.repaint();
                 })
                 .setRemoveAction(anActionButton -> {
+                    myTableView.stopEditing();
                     MethodConfig.Parameter parameter = ((MethodConfig.Parameter) ((MyTableView) anActionButton.getContextComponent()).getSelectedObject());
                     parameters.remove(parameter);
                     myTableView.repaint();
