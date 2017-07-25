@@ -7,6 +7,7 @@ import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.ConfigurationFo
 import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.MethodForm;
 
 import javax.swing.*;
+import javax.swing.event.ChangeListener;
 import javax.swing.tree.TreePath;
 import java.awt.*;
 import java.util.Set;
@@ -21,6 +22,7 @@ public class MethodFormManager {
     private MyDocumentListener methodDocumentListener;
     private MyDocumentListener classDocumentListener;
     private MyFocusListener myFocusListener;
+    private ChangeListener checkboxChangeListener;
 
     public MethodFormManager(JPanel cardPanel,
                              MethodForm methodForm,
@@ -51,6 +53,9 @@ public class MethodFormManager {
         if (myFocusListener != null) {
             methodForm.methodNamePatternTextField.removeFocusListener(myFocusListener);
             methodForm.classNamePatternTextField.removeFocusListener(myFocusListener);
+        }
+        if (checkboxChangeListener != null) {
+            methodForm.saveReturnValueCheckBox.removeChangeListener(checkboxChangeListener);
         }
         if (path.getPathCount() < 4) {
             ((CardLayout) cardPanel.getLayout()).show(cardPanel, ConfigurationForm.EMPTY_CARD_KEY);
@@ -86,5 +91,8 @@ public class MethodFormManager {
         methodForm.methodNamePatternTextField.addFocusListener(myFocusListener);
         methodForm.methodNamePatternTextField.getDocument().addDocumentListener(methodDocumentListener);
         methodForm.classNamePatternTextField.getDocument().addDocumentListener(classDocumentListener);
+        methodForm.saveReturnValueCheckBox.setSelected(methodConfig.isSaveReturnValue());
+        checkboxChangeListener = e -> methodConfig.setSaveReturnValue(!methodConfig.isSaveReturnValue());
+        methodForm.saveReturnValueCheckBox.addChangeListener(checkboxChangeListener);
     }
 }
