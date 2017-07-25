@@ -34,6 +34,9 @@ class MyDocumentListener implements DocumentListener {
     private void updateConfig(DocumentEvent e) {
         if (currentMethodConfig != null && treeNode != null) {
             try {
+                if (!MethodFormManager.isValidField(e.getDocument().getText(0, e.getDocument().getLength()))) {
+                    return;
+                }
                 methodConfigs.remove(currentMethodConfig);
 
                 switch (fieldType) {

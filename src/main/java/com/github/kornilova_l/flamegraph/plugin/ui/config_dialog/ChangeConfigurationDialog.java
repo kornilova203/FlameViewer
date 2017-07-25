@@ -98,8 +98,20 @@ public class ChangeConfigurationDialog extends DialogWrapper {
     protected List<ValidationInfo> doValidateAll() {
         List<ValidationInfo> validationInfos = new LinkedList<>();
         if (includedTree != null && excludedTree != null) {
-            validationInfos.addAll(includedTree.validateInfo());
-            validationInfos.addAll(excludedTree.validateInfo());
+            List<ValidationInfo> list = includedTree.validateInfo();
+            if (list.size() != 0) {
+                includedTree.nodeWithBadValidation = includedTree.getSelectedNode();
+            } else {
+                includedTree.nodeWithBadValidation = null;
+            }
+            validationInfos.addAll(list);
+            list = excludedTree.validateInfo();
+            if (list.size() != 0) {
+                excludedTree.nodeWithBadValidation = excludedTree.getSelectedNode();
+            } else {
+                excludedTree.nodeWithBadValidation = null;
+            }
+            validationInfos.addAll(list);
         }
         return validationInfos;
     }

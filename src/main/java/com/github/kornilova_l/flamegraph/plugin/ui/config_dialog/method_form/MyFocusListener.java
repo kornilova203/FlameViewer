@@ -5,7 +5,6 @@ import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.ConfigCheckboxT
 import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.ConfigCheckedTreeNode;
 import org.jetbrains.annotations.NotNull;
 
-import javax.swing.tree.TreePath;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
@@ -31,9 +30,6 @@ class MyFocusListener implements FocusListener {
 
     @Override
     public void focusLost(FocusEvent e) {
-        tree.clearSelection();
-        tree.removeNode(checkedTreeNode);
-        checkedTreeNode = tree.addNode(methodConfig);
-        tree.getSelectionModel().setSelectionPath(new TreePath(checkedTreeNode.getPath()));
+        tree.updateTreeNodeNames(checkedTreeNode, methodConfig);
     }
 }
