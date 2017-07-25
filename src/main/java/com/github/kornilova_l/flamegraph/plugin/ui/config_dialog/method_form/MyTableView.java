@@ -50,6 +50,9 @@ public class MyTableView<Item> extends TableView<Item> {
                 new ListTableModel<>(columns, parameters),
                 parameters
         );
+        if (treeType == ConfigCheckboxTree.TreeType.INCLUDING) {
+            myTableView.getColumnModel().getColumn(1).setMaxWidth(60);
+        }
         return ToolbarDecorator.createDecorator(myTableView, null)
                 .setAddAction(anActionButton -> {
                     parameters.add(new MethodConfig.Parameter("", false));
