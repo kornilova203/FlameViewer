@@ -1,41 +1,35 @@
 package com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.add_remove;
 
-import com.github.kornilova_l.flamegraph.configuration.MethodConfig;
-import com.github.kornilova_l.flamegraph.plugin.configuration.PluginConfigManager;
-import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.ChangeConfigurationDialog;
-import com.github.kornilova_l.flamegraph.plugin.ui.line_markers.LineMarkersHolder;
+import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.method_form.MethodFormManager;
+import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.method_form.MyTableView;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.AnActionButton;
 import com.intellij.ui.AnActionButtonRunnable;
 import org.jetbrains.annotations.NotNull;
 
+import javax.swing.*;
+import java.awt.*;
+import java.util.LinkedList;
+
 public class AddNodeActionButton implements AnActionButtonRunnable {
+    @NotNull
     private final Project project;
     @NotNull
-    private final LineMarkersHolder lineMarkersHolder;
-    private final ChangeConfigurationDialog changeProfilerConfigDialog;
+    private MethodFormManager.TreeType treeType;
 
-    public AddNodeActionButton(Project project, ChangeConfigurationDialog changeProfilerConfigDialog) {
-        lineMarkersHolder = project.getComponent(LineMarkersHolder.class);
+    public AddNodeActionButton(@NotNull Project project, @NotNull MethodFormManager.TreeType treeType) {
         this.project = project;
-        this.changeProfilerConfigDialog = changeProfilerConfigDialog;
+        this.treeType = treeType;
     }
 
     @Override
     public void run(AnActionButton anActionButton) {
-        final AddMethod dialog = new AddMethod(project);
-        if (!dialog.showAndGet()) {
-            return;
-        }
-        MethodConfig methodConfig = new MethodConfig(
-                dialog.getClassPattern(),
-                dialog.getMethodPattern(),
-                dialog.getParametersPattern());
-        PluginConfigManager.getConfiguration(project).addMethodConfig(
-                methodConfig,
-                false);
-        changeProfilerConfigDialog.addNodeToTree(methodConfig);
+        final AddMethodDialog dialog = new AddMethodDialog(project);
+        dialog.pack();
+        JPanel paramTableCards = dialog.methodForm.paramTableCards;
+        String key = "new-table";
+        paramTableCards.add(MyTableView.createTablePanel(new LinkedList<>(), treeType), key);
+        ((CardLayout) paramTableCards.getLayout()).show(paramTableCards, key);
+        dialog.setVisible(true);
     }
-
-
 }

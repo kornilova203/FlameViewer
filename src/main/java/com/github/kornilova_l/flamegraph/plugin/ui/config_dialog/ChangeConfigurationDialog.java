@@ -50,7 +50,9 @@ public class ChangeConfigurationDialog extends DialogWrapper {
                 MethodFormManager.TreeType.INCLUDING
         );
         configurationForm.includingPanel.add(
-                createCheckboxTreeView(includedTree, tempConfiguration.getIncludingMethodConfigs()),
+                createCheckboxTreeView(includedTree,
+                        tempConfiguration.getIncludingMethodConfigs(),
+                        MethodFormManager.TreeType.INCLUDING),
                 new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false)
         );
 
@@ -61,7 +63,9 @@ public class ChangeConfigurationDialog extends DialogWrapper {
                 MethodFormManager.TreeType.EXCLUDING
         );
         configurationForm.excludingPanel.add(
-                createCheckboxTreeView(excludedTree, tempConfiguration.getExcludingMethodConfigs()),
+                createCheckboxTreeView(excludedTree,
+                        tempConfiguration.getExcludingMethodConfigs(),
+                        MethodFormManager.TreeType.EXCLUDING),
                 new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false)
         );
 
@@ -70,17 +74,17 @@ public class ChangeConfigurationDialog extends DialogWrapper {
 
     @Override
     protected void doOKAction() {
-        System.out.println("OK");
         trueConfiguration.assign(tempConfiguration);
         project.getComponent(LineMarkersHolder.class).updateOpenedDocuments();
         super.doOKAction();
     }
 
-    @NotNull
-    private JComponent createCheckboxTreeView(ConfigCheckboxTree checkboxTree, Collection<MethodConfig> configs) {
+    private JComponent createCheckboxTreeView(ConfigCheckboxTree checkboxTree,
+                                              Collection<MethodConfig> configs,
+                                              MethodFormManager.TreeType treeType) {
         ToolbarDecorator decorator = ToolbarDecorator.createDecorator(checkboxTree);
         decorator.setToolbarPosition(ActionToolbarPosition.RIGHT);
-        decorator.setAddAction(new AddNodeActionButton(project, this));
+        decorator.setAddAction(new AddNodeActionButton(project, treeType));
         decorator.setRemoveAction(new RemoveNodeActionButton(project, this));
         JPanel panel = decorator.createPanel();
         checkboxTree.initTree(configs);
