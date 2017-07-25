@@ -9,6 +9,7 @@ import com.github.kornilova_l.flamegraph.plugin.ui.line_markers.LineMarkersHolde
 import com.intellij.openapi.actionSystem.ActionToolbarPosition;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
+import com.intellij.openapi.ui.ValidationInfo;
 import com.intellij.ui.ToolbarDecorator;
 import com.intellij.uiDesigner.core.GridConstraints;
 import org.jetbrains.annotations.NotNull;
@@ -16,12 +17,16 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 
 public class ChangeConfigurationDialog extends DialogWrapper {
     @NotNull
     private final Project project;
     private Configuration trueConfiguration;
     private Configuration tempConfiguration;
+    private ConfigCheckboxTree includedTree;
+    private ConfigCheckboxTree excludedTree;
 
     ChangeConfigurationDialog(@NotNull Project project) {
         super(project);
@@ -40,7 +45,7 @@ public class ChangeConfigurationDialog extends DialogWrapper {
         tempConfiguration = new Configuration(trueConfiguration);
 
         ConfigurationForm configurationForm = new ConfigurationForm();
-        ConfigCheckboxTree includedTree = new ConfigCheckboxTree(
+        includedTree = new ConfigCheckboxTree(
                 configurationForm.cardPanelIncluded,
                 configurationForm.methodFormIncluded.excludedMethodForm,
                 configurationForm.methodFormIncluded.saveReturnValueCheckBox,
@@ -53,7 +58,7 @@ public class ChangeConfigurationDialog extends DialogWrapper {
                 new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false)
         );
 
-        ConfigCheckboxTree excludedTree = new ConfigCheckboxTree(
+        excludedTree = new ConfigCheckboxTree(
                 configurationForm.cardPanelExcluded,
                 configurationForm.methodFormExcluded,
                 null,
@@ -84,6 +89,18 @@ public class ChangeConfigurationDialog extends DialogWrapper {
         decorator.setRemoveAction(new RemoveNodeActionButton(tree, tempConfiguration));
         JPanel panel = decorator.createPanel();
         tree.initTree(configs);
+        initValidation();
         return panel;
+    }
+
+    @NotNull
+    @Override
+    protected List<ValidationInfo> doValidateAll() {
+        List<ValidationInfo> validationInfos = new LinkedList<>();
+        if (includedTree != null && excludedTree != null) {
+            validationInfos.addAll(includedTree.validateInfo());
+            validationInfos.addAll(excludedTree.validateInfo());
+        }
+        return validationInfos;
     }
 }

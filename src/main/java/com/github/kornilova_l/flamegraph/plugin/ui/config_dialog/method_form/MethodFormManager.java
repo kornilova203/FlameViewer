@@ -5,6 +5,7 @@ import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.ConfigCheckboxT
 import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.ConfigCheckedTreeNode;
 import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.ConfigurationForm;
 import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.ExcludedMethodForm;
+import com.intellij.openapi.ui.ValidationInfo;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,10 +13,8 @@ import javax.swing.*;
 import javax.swing.event.ChangeListener;
 import javax.swing.tree.TreePath;
 import java.awt.*;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
+import java.util.List;
 
 import static com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.method_form.MyTableView.createTablePanel;
 
@@ -111,5 +110,31 @@ public class MethodFormManager {
             checkboxChangeListener = e -> methodConfig.setSaveReturnValue(!methodConfig.isSaveReturnValue());
             saveReturnValueCheckBox.addChangeListener(checkboxChangeListener);
         }
+    }
+
+    @NotNull
+    public List<ValidationInfo> validateInfo() {
+        List<ValidationInfo> validationInfos = new LinkedList<>();
+        String text = excludedMethodForm.methodNamePatternTextField.getText();
+        if (!isValidField(text)) {
+            validationInfos.add(new ValidationInfo(
+                    "Pattern must not contain space character",
+                    excludedMethodForm.methodNamePatternTextField
+            ));
+        }
+        text = excludedMethodForm.classNamePatternTextField.getText();
+        if (!isValidField(text)) {
+            validationInfos.add(new ValidationInfo(
+                    "Pattern must not contain space character",
+                    excludedMethodForm.classNamePatternTextField
+            ));
+        }
+        return validationInfos;
+    }
+
+    private boolean isValidField(String text) {
+        return text.indexOf(' ') == -1 &&
+                text.indexOf('\n') == -1 &&
+                text.indexOf('\t') == -1;
     }
 }

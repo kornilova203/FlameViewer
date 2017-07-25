@@ -3,6 +3,7 @@ package com.github.kornilova_l.flamegraph.plugin.ui.config_dialog;
 import com.github.kornilova_l.flamegraph.configuration.MethodConfig;
 import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.method_form.MethodFormManager;
 import com.intellij.icons.AllIcons;
+import com.intellij.openapi.ui.ValidationInfo;
 import com.intellij.ui.CheckboxTree;
 import com.intellij.ui.CheckedTreeNode;
 import com.intellij.ui.SimpleTextAttributes;
@@ -16,22 +17,17 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
 public class ConfigCheckboxTree extends CheckboxTree {
-    public enum TreeType {
-        INCLUDING,
-        EXCLUDING
-    }
-
+    public final TreeType treeType;
     private final MethodFormManager methodFormManager;
     @NotNull
     private final CheckedTreeNode root;
     @NotNull
     private final DefaultTreeModel model;
-    public final TreeType treeType;
-
     ConfigCheckboxTree(JPanel cardPanel,
                        ExcludedMethodForm excludedMethodForm,
                        @Nullable JCheckBox saveReturnValueCheckBox,
@@ -124,6 +120,10 @@ public class ConfigCheckboxTree extends CheckboxTree {
         throw new RuntimeException("Cannot insert new node");
     }
 
+    @NotNull
+    List<ValidationInfo> validateInfo() {
+        return methodFormManager.validateInfo();
+    }
 
     private void selectionChanged(TreeSelectionEvent event) {
         methodFormManager.selectionChanged(event.getPath());
@@ -193,5 +193,10 @@ public class ConfigCheckboxTree extends CheckboxTree {
         }
         model.nodeStructureChanged(root);
         TreeUtil.expandAll(this);
+    }
+
+    public enum TreeType {
+        INCLUDING,
+        EXCLUDING
     }
 }
