@@ -1,35 +1,30 @@
 package com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.add_remove;
 
+import com.github.kornilova_l.flamegraph.configuration.Configuration;
+import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.ConfigCheckboxTree;
 import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.method_form.MethodFormManager;
-import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.method_form.MyTableView;
-import com.intellij.openapi.project.Project;
 import com.intellij.ui.AnActionButton;
 import com.intellij.ui.AnActionButtonRunnable;
 import org.jetbrains.annotations.NotNull;
 
-import javax.swing.*;
-import java.awt.*;
-import java.util.LinkedList;
-
 public class AddNodeActionButton implements AnActionButtonRunnable {
     @NotNull
-    private final Project project;
-    @NotNull
     private MethodFormManager.TreeType treeType;
+    private ConfigCheckboxTree tree;
+    private Configuration tempConfiguration;
 
-    public AddNodeActionButton(@NotNull Project project, @NotNull MethodFormManager.TreeType treeType) {
-        this.project = project;
+    public AddNodeActionButton(@NotNull MethodFormManager.TreeType treeType,
+                               ConfigCheckboxTree tree,
+                               Configuration tempConfiguration) {
         this.treeType = treeType;
+        this.tree = tree;
+        this.tempConfiguration = tempConfiguration;
     }
 
     @Override
     public void run(AnActionButton anActionButton) {
-        final AddMethodDialog dialog = new AddMethodDialog(project);
+        final AddMethodDialog dialog = new AddMethodDialog(treeType, tree, tempConfiguration);
         dialog.pack();
-        JPanel paramTableCards = dialog.methodForm.paramTableCards;
-        String key = "new-table";
-        paramTableCards.add(MyTableView.createTablePanel(new LinkedList<>(), treeType), key);
-        ((CardLayout) paramTableCards.getLayout()).show(paramTableCards, key);
         dialog.setVisible(true);
     }
 }

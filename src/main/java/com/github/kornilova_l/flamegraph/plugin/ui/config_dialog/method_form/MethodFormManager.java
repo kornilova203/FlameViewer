@@ -5,16 +5,13 @@ import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.ConfigCheckboxT
 import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.ConfigCheckedTreeNode;
 import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.ConfigurationForm;
 import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.MethodForm;
-import com.intellij.ui.ToolbarDecorator;
-import com.intellij.ui.table.TableView;
-import com.intellij.util.ui.ColumnInfo;
-import com.intellij.util.ui.ListTableModel;
-import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import javax.swing.tree.TreePath;
 import java.awt.*;
 import java.util.Set;
+
+import static com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.method_form.MyTableView.createTablePanel;
 
 public class MethodFormManager {
     private final TreeType treeType;
@@ -25,19 +22,6 @@ public class MethodFormManager {
     private MyDocumentListener methodDocumentListener;
     private MyDocumentListener classDocumentListener;
     private MyFocusListener myFocusListener;
-    private static final ColumnInfo<MethodConfig.Parameter, String> TYPE_COLUMN = new ColumnInfo<MethodConfig.Parameter, String>("Type") {
-        @Override
-        public String valueOf(MethodConfig.Parameter parameter) {
-            return parameter.getType();
-        }
-    };
-    private static final ColumnInfo<MethodConfig.Parameter, Boolean> SAVE_COLUMN = new ColumnInfo<MethodConfig.Parameter, Boolean>("Save") {
-        @NotNull
-        @Override
-        public Boolean valueOf(MethodConfig.Parameter parameter) {
-            return parameter.isEnabled();
-        }
-    };
 
     public MethodFormManager(TreeType treeType,
                              JPanel cardPanel,
@@ -86,7 +70,7 @@ public class MethodFormManager {
         }
         String key = methodConfig.toString();
         methodForm.paramTableCards.add(
-                createTablePanel(methodConfig),
+                createTablePanel(methodConfig.getParameters(), treeType),
                 key
         );
         ((CardLayout) methodForm.paramTableCards.getLayout()).show(methodForm.paramTableCards, key);
@@ -105,36 +89,6 @@ public class MethodFormManager {
         methodForm.methodNamePatternTextField.addFocusListener(myFocusListener);
         methodForm.methodNamePatternTextField.getDocument().addDocumentListener(methodDocumentListener);
         methodForm.classNamePatternTextField.getDocument().addDocumentListener(classDocumentListener);
-    }
-
-    @NotNull
-    private JPanel createTablePanel(MethodConfig methodConfig) {
-        ColumnInfo[] columns;
-        switch (treeType) {
-            case EXCLUDING:
-                columns = new ColumnInfo[]{TYPE_COLUMN};
-                break;
-            case INCLUDING:
-                columns = new ColumnInfo[]{TYPE_COLUMN, SAVE_COLUMN};
-                break;
-            default:
-                throw new RuntimeException("Not known tree type");
-        }
-        TableView<MethodConfig.Parameter> myTableView = new MyTableView<>(
-                new ListTableModel<>(columns, methodConfig.getParameters()),
-                methodConfig.getParameters(),
-                treeType
-        );
-        return ToolbarDecorator.createDecorator(myTableView, null)
-                .setAddAction(anActionButton -> {
-                    methodConfig.getParameters().add(new MethodConfig.Parameter("", false));
-                    myTableView.repaint();
-                })
-                .setRemoveAction(anActionButton -> {
-                    methodConfig.getParameters().remove(((MyTableView) anActionButton.getContextComponent()).getSelectedObject());
-                    myTableView.repaint();
-                })
-                .createPanel();
     }
 
     public enum TreeType {

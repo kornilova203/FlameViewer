@@ -21,8 +21,6 @@ import java.util.Collection;
 public class ChangeConfigurationDialog extends DialogWrapper {
     @NotNull
     private final Project project;
-    private ConfigCheckboxTree includedTree;
-    private ConfigCheckboxTree excludedTree;
     private Configuration trueConfiguration;
     private Configuration tempConfiguration;
 
@@ -43,7 +41,7 @@ public class ChangeConfigurationDialog extends DialogWrapper {
         tempConfiguration = new Configuration(trueConfiguration);
 
         ConfigurationForm configurationForm = new ConfigurationForm();
-        includedTree = new ConfigCheckboxTree(
+        ConfigCheckboxTree includedTree = new ConfigCheckboxTree(
                 configurationForm.cardPanelIncluded,
                 configurationForm.methodFormIncluded,
                 tempConfiguration.getIncludingMethodConfigs(),
@@ -56,7 +54,7 @@ public class ChangeConfigurationDialog extends DialogWrapper {
                 new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false)
         );
 
-        excludedTree = new ConfigCheckboxTree(
+        ConfigCheckboxTree excludedTree = new ConfigCheckboxTree(
                 configurationForm.cardPanelExcluded,
                 configurationForm.methodFormExcluded,
                 tempConfiguration.getExcludingMethodConfigs(),
@@ -79,19 +77,15 @@ public class ChangeConfigurationDialog extends DialogWrapper {
         super.doOKAction();
     }
 
-    private JComponent createCheckboxTreeView(ConfigCheckboxTree checkboxTree,
+    private JComponent createCheckboxTreeView(ConfigCheckboxTree tree,
                                               Collection<MethodConfig> configs,
                                               MethodFormManager.TreeType treeType) {
-        ToolbarDecorator decorator = ToolbarDecorator.createDecorator(checkboxTree);
+        ToolbarDecorator decorator = ToolbarDecorator.createDecorator(tree);
         decorator.setToolbarPosition(ActionToolbarPosition.RIGHT);
-        decorator.setAddAction(new AddNodeActionButton(project, treeType));
+        decorator.setAddAction(new AddNodeActionButton(treeType, tree, tempConfiguration));
         decorator.setRemoveAction(new RemoveNodeActionButton(project, this));
         JPanel panel = decorator.createPanel();
-        checkboxTree.initTree(configs);
+        tree.initTree(configs);
         return panel;
-    }
-
-    public void addNodeToTree(MethodConfig methodConfig) {
-        includedTree.addNode(methodConfig);
     }
 }

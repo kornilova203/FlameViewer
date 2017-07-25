@@ -1,19 +1,68 @@
 package com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.method_form;
 
 import com.github.kornilova_l.flamegraph.configuration.MethodConfig;
+import com.intellij.ui.ToolbarDecorator;
 import com.intellij.ui.table.TableView;
+import com.intellij.util.ui.ColumnInfo;
 import com.intellij.util.ui.ListTableModel;
+import org.jetbrains.annotations.NotNull;
 
+import javax.swing.*;
 import java.util.List;
 
 public class MyTableView<Item> extends TableView<Item> {
+    private static final ColumnInfo<MethodConfig.Parameter, String> TYPE_COLUMN = new ColumnInfo<MethodConfig.Parameter, String>("Type") {
+        @Override
+        public String valueOf(MethodConfig.Parameter parameter) {
+            return parameter.getType();
+        }
+    };
+    private static final ColumnInfo<MethodConfig.Parameter, Boolean> SAVE_COLUMN = new ColumnInfo<MethodConfig.Parameter, Boolean>("Save") {
+        @NotNull
+        @Override
+        public Boolean valueOf(MethodConfig.Parameter parameter) {
+            return parameter.isEnabled();
+        }
+    };
+
     private final List<MethodConfig.Parameter> parameters;
     private MethodFormManager.TreeType treeType;
 
-    MyTableView(ListTableModel<Item> listTableModel, List<MethodConfig.Parameter> parameters, MethodFormManager.TreeType treeType) {
+    private MyTableView(ListTableModel<Item> listTableModel, List<MethodConfig.Parameter> parameters, MethodFormManager.TreeType treeType) {
         super(listTableModel);
         this.parameters = parameters;
         this.treeType = treeType;
+    }
+
+    @NotNull
+    public static JPanel createTablePanel(List<MethodConfig.Parameter> parameters, MethodFormManager.TreeType treeType) {
+        ColumnInfo[] columns;
+        switch (treeType) {
+            case EXCLUDING:
+                columns = new ColumnInfo[]{TYPE_COLUMN};
+                break;
+            case INCLUDING:
+                columns = new ColumnInfo[]{TYPE_COLUMN, SAVE_COLUMN};
+                break;
+            default:
+                throw new RuntimeException("Not known tree type");
+        }
+        TableView<MethodConfig.Parameter> myTableView = new MyTableView<>(
+                new ListTableModel<>(columns, parameters),
+                parameters,
+                treeType
+        );
+        return ToolbarDecorator.createDecorator(myTableView, null)
+                .setAddAction(anActionButton -> {
+                    parameters.add(new MethodConfig.Parameter("", false));
+                    myTableView.repaint();
+                })
+                .setRemoveAction(anActionButton -> {
+                    MethodConfig.Parameter parameter = ((MethodConfig.Parameter) ((MyTableView) anActionButton.getContextComponent()).getSelectedObject());
+                    parameters.remove(parameter);
+                    myTableView.repaint();
+                })
+                .createPanel();
     }
 
     @Override

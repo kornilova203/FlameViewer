@@ -25,7 +25,7 @@ public class Configuration implements Cloneable {
         }
         excludingMethodConfigs = new TreeSet<>();
         for (MethodConfig excludingMethodConfig : configuration.excludingMethodConfigs) {
-            includingMethodConfigs.add(new MethodConfig(excludingMethodConfig));
+            excludingMethodConfigs.add(new MethodConfig(excludingMethodConfig));
         }
     }
 
