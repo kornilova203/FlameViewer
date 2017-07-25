@@ -153,7 +153,7 @@ public class MethodConfig implements Comparable<MethodConfig>, Cloneable {
         return stringBuilder.toString();
     }
 
-    public String parametersWithSaveToString() {
+    private String parametersWithSaveToString() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("(");
         for (int i = 0; i < parameters.size(); i++) {

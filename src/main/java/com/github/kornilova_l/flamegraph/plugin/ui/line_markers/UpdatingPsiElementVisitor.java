@@ -9,7 +9,7 @@ public class UpdatingPsiElementVisitor extends PsiRecursiveElementVisitor {
     private final MarkupModelEx markupModel;
     private final LineMarkersHolder lineMarkersHolder;
 
-    public UpdatingPsiElementVisitor(Project project, MarkupModelEx markupModel) {
+    UpdatingPsiElementVisitor(Project project, MarkupModelEx markupModel) {
         this.markupModel = markupModel;
         lineMarkersHolder = project.getComponent(LineMarkersHolder.class);
     }
