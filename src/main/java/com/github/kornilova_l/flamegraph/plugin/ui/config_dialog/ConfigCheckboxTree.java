@@ -125,7 +125,25 @@ public class ConfigCheckboxTree extends CheckboxTree {
         return methodFormManager.validateInfo();
     }
 
+    public static void updateTreeNodeNames(ConfigCheckboxTree tree,
+                                           ConfigCheckedTreeNode checkedTreeNode,
+                                           MethodConfig methodConfig) {
+        checkedTreeNode.setName(methodConfig.getMethodPatternString() + methodConfig.parametersToString());
+        tree.model.nodeChanged(checkedTreeNode);
+        ((ConfigCheckedTreeNode) checkedTreeNode.getParent()).setName(methodConfig.getClassPattern());
+        tree.model.nodeChanged(checkedTreeNode.getParent());
+        ((ConfigCheckedTreeNode) checkedTreeNode.getParent().getParent()).setName(methodConfig.getPackagePattern());
+        tree.model.nodeChanged(checkedTreeNode.getParent().getParent());
+    }
+
     private void selectionChanged(TreeSelectionEvent event) {
+        TreePath oldPath = event.getOldLeadSelectionPath();
+        if (oldPath != null && oldPath.getPathCount() == 4) {
+            Object node = oldPath.getLastPathComponent();
+            if (node != null) {
+                updateTreeNodeNames(this, (ConfigCheckedTreeNode) node, ((ConfigCheckedTreeNode) node).getMethodConfig());
+            }
+        }
         methodFormManager.selectionChanged(event.getPath());
     }
 

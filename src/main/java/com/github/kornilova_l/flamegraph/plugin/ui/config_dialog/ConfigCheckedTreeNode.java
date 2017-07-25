@@ -5,7 +5,7 @@ import com.intellij.ui.CheckedTreeNode;
 import org.jetbrains.annotations.NotNull;
 
 final public class ConfigCheckedTreeNode extends CheckedTreeNode {
-    private final String name;
+    private String name;
     private final MethodConfig methodConfig;
 
     ConfigCheckedTreeNode(@NotNull String name, MethodConfig methodConfig) {
@@ -21,5 +21,9 @@ final public class ConfigCheckedTreeNode extends CheckedTreeNode {
 
     MethodConfig getMethodConfig() {
         return methodConfig;
+    }
+
+    void setName(String name) {
+        this.name = name;
     }
 }
