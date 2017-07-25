@@ -28,9 +28,7 @@ public class AddNodeActionButton implements AnActionButtonRunnable {
                 new AddIncludingDialogWrapper(project, tree, tempConfiguration).show();
                 break;
             case EXCLUDING:
-                final AddExcludingConfigDialog excludingDialog = new AddExcludingConfigDialog(tree, tempConfiguration);
-                excludingDialog.pack();
-                excludingDialog.setVisible(true);
+                new AddExludingDialogWrapper(project, tree, tempConfiguration).show();
                 break;
             default:
                 throw new RuntimeException("Not known tree type");
