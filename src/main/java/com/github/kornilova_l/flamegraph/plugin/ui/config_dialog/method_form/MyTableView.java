@@ -1,6 +1,7 @@
 package com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.method_form;
 
 import com.github.kornilova_l.flamegraph.configuration.MethodConfig;
+import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.ConfigCheckboxTree;
 import com.intellij.ui.ToolbarDecorator;
 import com.intellij.ui.table.TableView;
 import com.intellij.util.ui.ColumnInfo;
@@ -26,16 +27,14 @@ public class MyTableView<Item> extends TableView<Item> {
     };
 
     private final List<MethodConfig.Parameter> parameters;
-    private MethodFormManager.TreeType treeType;
 
-    private MyTableView(ListTableModel<Item> listTableModel, List<MethodConfig.Parameter> parameters, MethodFormManager.TreeType treeType) {
+    private MyTableView(ListTableModel<Item> listTableModel, List<MethodConfig.Parameter> parameters) {
         super(listTableModel);
         this.parameters = parameters;
-        this.treeType = treeType;
     }
 
     @NotNull
-    public static JPanel createTablePanel(List<MethodConfig.Parameter> parameters, MethodFormManager.TreeType treeType) {
+    public static JPanel createTablePanel(List<MethodConfig.Parameter> parameters, ConfigCheckboxTree.TreeType treeType) {
         ColumnInfo[] columns;
         switch (treeType) {
             case EXCLUDING:
@@ -49,8 +48,7 @@ public class MyTableView<Item> extends TableView<Item> {
         }
         TableView<MethodConfig.Parameter> myTableView = new MyTableView<>(
                 new ListTableModel<>(columns, parameters),
-                parameters,
-                treeType
+                parameters
         );
         return ToolbarDecorator.createDecorator(myTableView, null)
                 .setAddAction(anActionButton -> {

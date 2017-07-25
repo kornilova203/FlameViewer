@@ -14,7 +14,6 @@ import java.util.Set;
 import static com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.method_form.MyTableView.createTablePanel;
 
 public class MethodFormManager {
-    private final TreeType treeType;
     private final JPanel cardPanel;
     private final MethodForm methodForm;
     private final Set<MethodConfig> methodConfigs;
@@ -23,12 +22,10 @@ public class MethodFormManager {
     private MyDocumentListener classDocumentListener;
     private MyFocusListener myFocusListener;
 
-    public MethodFormManager(TreeType treeType,
-                             JPanel cardPanel,
+    public MethodFormManager(JPanel cardPanel,
                              MethodForm methodForm,
                              Set<MethodConfig> methodConfigs,
                              ConfigCheckboxTree tree) {
-        this.treeType = treeType;
         this.cardPanel = cardPanel;
         this.methodForm = methodForm;
         this.methodConfigs = methodConfigs;
@@ -70,7 +67,7 @@ public class MethodFormManager {
         }
         String key = methodConfig.toString();
         methodForm.paramTableCards.add(
-                createTablePanel(methodConfig.getParameters(), treeType),
+                createTablePanel(methodConfig.getParameters(), tree.treeType),
                 key
         );
         ((CardLayout) methodForm.paramTableCards.getLayout()).show(methodForm.paramTableCards, key);
@@ -89,10 +86,5 @@ public class MethodFormManager {
         methodForm.methodNamePatternTextField.addFocusListener(myFocusListener);
         methodForm.methodNamePatternTextField.getDocument().addDocumentListener(methodDocumentListener);
         methodForm.classNamePatternTextField.getDocument().addDocumentListener(classDocumentListener);
-    }
-
-    public enum TreeType {
-        INCLUDING,
-        EXCLUDING
     }
 }

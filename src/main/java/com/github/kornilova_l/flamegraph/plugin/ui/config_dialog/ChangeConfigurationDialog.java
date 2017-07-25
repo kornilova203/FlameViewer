@@ -5,7 +5,6 @@ import com.github.kornilova_l.flamegraph.configuration.MethodConfig;
 import com.github.kornilova_l.flamegraph.plugin.configuration.PluginConfigManager;
 import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.add_remove.AddNodeActionButton;
 import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.add_remove.RemoveNodeActionButton;
-import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.method_form.MethodFormManager;
 import com.github.kornilova_l.flamegraph.plugin.ui.line_markers.LineMarkersHolder;
 import com.intellij.openapi.actionSystem.ActionToolbarPosition;
 import com.intellij.openapi.project.Project;
@@ -45,12 +44,11 @@ public class ChangeConfigurationDialog extends DialogWrapper {
                 configurationForm.cardPanelIncluded,
                 configurationForm.methodFormIncluded,
                 tempConfiguration.getIncludingMethodConfigs(),
-                MethodFormManager.TreeType.INCLUDING
+                ConfigCheckboxTree.TreeType.INCLUDING
         );
         configurationForm.includingPanel.add(
                 createCheckboxTreeView(includedTree,
-                        tempConfiguration.getIncludingMethodConfigs(),
-                        MethodFormManager.TreeType.INCLUDING),
+                        tempConfiguration.getIncludingMethodConfigs()),
                 new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false)
         );
 
@@ -58,12 +56,11 @@ public class ChangeConfigurationDialog extends DialogWrapper {
                 configurationForm.cardPanelExcluded,
                 configurationForm.methodFormExcluded,
                 tempConfiguration.getExcludingMethodConfigs(),
-                MethodFormManager.TreeType.EXCLUDING
+                ConfigCheckboxTree.TreeType.EXCLUDING
         );
         configurationForm.excludingPanel.add(
                 createCheckboxTreeView(excludedTree,
-                        tempConfiguration.getExcludingMethodConfigs(),
-                        MethodFormManager.TreeType.EXCLUDING),
+                        tempConfiguration.getExcludingMethodConfigs()),
                 new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false)
         );
 
@@ -78,12 +75,11 @@ public class ChangeConfigurationDialog extends DialogWrapper {
     }
 
     private JComponent createCheckboxTreeView(ConfigCheckboxTree tree,
-                                              Collection<MethodConfig> configs,
-                                              MethodFormManager.TreeType treeType) {
+                                              Collection<MethodConfig> configs) {
         ToolbarDecorator decorator = ToolbarDecorator.createDecorator(tree);
         decorator.setToolbarPosition(ActionToolbarPosition.RIGHT);
-        decorator.setAddAction(new AddNodeActionButton(treeType, tree, tempConfiguration));
-        decorator.setRemoveAction(new RemoveNodeActionButton(project, this));
+        decorator.setAddAction(new AddNodeActionButton(tree, tempConfiguration));
+        decorator.setRemoveAction(new RemoveNodeActionButton(tree, tempConfiguration));
         JPanel panel = decorator.createPanel();
         tree.initTree(configs);
         return panel;

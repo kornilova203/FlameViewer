@@ -4,7 +4,6 @@ import com.github.kornilova_l.flamegraph.configuration.Configuration;
 import com.github.kornilova_l.flamegraph.configuration.MethodConfig;
 import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.ConfigCheckboxTree;
 import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.MethodForm;
-import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.method_form.MethodFormManager;
 import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.method_form.MyTableView;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
@@ -22,7 +21,6 @@ public class AddMethodDialog extends JDialog {
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
-    private MethodFormManager.TreeType treeType;
     private ConfigCheckboxTree tree;
     private Configuration tempConfig;
 
@@ -33,10 +31,8 @@ public class AddMethodDialog extends JDialog {
         $$$setupUI$$$();
     }
 
-    AddMethodDialog(MethodFormManager.TreeType treeType,
-                    ConfigCheckboxTree tree,
+    AddMethodDialog(ConfigCheckboxTree tree,
                     Configuration tempConfiguration) {
-        this.treeType = treeType;
         this.tree = tree;
         this.tempConfig = tempConfiguration;
         setContentPane(contentPane);
@@ -80,7 +76,7 @@ public class AddMethodDialog extends JDialog {
                 true,
                 false
         );
-        switch (treeType) {
+        switch (tree.treeType) {
             case INCLUDING:
                 tempConfig.addMethodConfig(methodConfig, false);
                 break;
@@ -101,7 +97,7 @@ public class AddMethodDialog extends JDialog {
 
     private void createTable() {
         JPanel paramTableCards = methodForm.paramTableCards;
-        paramTableCards.add(MyTableView.createTablePanel(parameters, treeType), AddMethodDialog.cardKey);
+        paramTableCards.add(MyTableView.createTablePanel(parameters, tree.treeType), AddMethodDialog.cardKey);
         ((CardLayout) paramTableCards.getLayout()).show(paramTableCards, AddMethodDialog.cardKey);
     }
 

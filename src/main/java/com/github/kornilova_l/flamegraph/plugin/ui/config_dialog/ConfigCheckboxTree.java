@@ -20,13 +20,19 @@ import java.util.Objects;
 import java.util.Set;
 
 public class ConfigCheckboxTree extends CheckboxTree {
+    public enum TreeType {
+        INCLUDING,
+        EXCLUDING
+    }
+
     private final MethodFormManager methodFormManager;
     @NotNull
     private final CheckedTreeNode root;
     @NotNull
     private final DefaultTreeModel model;
+    public final TreeType treeType;
 
-    ConfigCheckboxTree(JPanel cardPanel, MethodForm methodForm, Set<MethodConfig> methodConfigs, MethodFormManager.TreeType treeType) {
+    ConfigCheckboxTree(JPanel cardPanel, MethodForm methodForm, Set<MethodConfig> methodConfigs, TreeType treeType) {
         super(new CheckboxTreeCellRenderer() {
             @Override
             public void customizeRenderer(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
@@ -47,8 +53,9 @@ public class ConfigCheckboxTree extends CheckboxTree {
                 this.getTextRenderer().append(value.toString(), SimpleTextAttributes.SIMPLE_CELL_ATTRIBUTES);
             }
         }, new CheckedTreeNode(null));
-        methodFormManager = new MethodFormManager(treeType, cardPanel, methodForm, methodConfigs, this);
+        methodFormManager = new MethodFormManager(cardPanel, methodForm, methodConfigs, this);
 
+        this.treeType = treeType;
         model = (DefaultTreeModel) getModel();
         root = (CheckedTreeNode) model.getRoot();
 
