@@ -31,6 +31,10 @@ public class MyTableView<Item> extends TableView<Item> {
     private MyTableView(ListTableModel<Item> listTableModel, List<MethodConfig.Parameter> parameters) {
         super(listTableModel);
         this.parameters = parameters;
+
+        DefaultCellEditor doubleClick = new DefaultCellEditor(new JTextField());
+        doubleClick.setClickCountToStart(2);
+        setDefaultEditor(String.class, doubleClick);
     }
 
     @NotNull
@@ -51,7 +55,7 @@ public class MyTableView<Item> extends TableView<Item> {
                 parameters
         );
         if (treeType == ConfigCheckboxTree.TreeType.INCLUDING) {
-            myTableView.getColumnModel().getColumn(1).setMaxWidth(60);
+            myTableView.getColumnModel().getColumn(1).setMaxWidth(50);
         }
         return ToolbarDecorator.createDecorator(myTableView, null)
                 .setAddAction(anActionButton -> {
