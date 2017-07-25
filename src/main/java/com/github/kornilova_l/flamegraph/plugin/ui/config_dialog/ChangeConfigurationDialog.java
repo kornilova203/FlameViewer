@@ -85,7 +85,7 @@ public class ChangeConfigurationDialog extends DialogWrapper {
                                               Collection<MethodConfig> configs) {
         ToolbarDecorator decorator = ToolbarDecorator.createDecorator(tree);
         decorator.setToolbarPosition(ActionToolbarPosition.RIGHT);
-        decorator.setAddAction(new AddNodeActionButton(tree, tempConfiguration));
+        decorator.setAddAction(new AddNodeActionButton(tree, tempConfiguration, project));
         decorator.setRemoveAction(new RemoveNodeActionButton(tree, tempConfiguration));
         JPanel panel = decorator.createPanel();
         tree.initTree(configs);

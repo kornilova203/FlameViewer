@@ -8,10 +8,10 @@
     <border type="none"/>
     <children>
       <nested-form id="15ec4" form-file="com/github/kornilova_l/flamegraph/plugin/ui/config_dialog/ExcludedMethodForm.form" binding="excludedMethodForm" default-binding="true">
-        <constraints border-constraint="North"/>
+        <constraints border-constraint="Center"/>
       </nested-form>
       <component id="aec1" class="javax.swing.JCheckBox" binding="saveReturnValueCheckBox" default-binding="true">
-        <constraints border-constraint="Center"/>
+        <constraints border-constraint="South"/>
         <properties>
           <text value="Save return value"/>
         </properties>
