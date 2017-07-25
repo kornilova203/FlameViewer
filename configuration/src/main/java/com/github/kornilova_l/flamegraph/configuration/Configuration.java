@@ -120,7 +120,13 @@ public class Configuration implements Cloneable {
      * @param tempConfiguration configuration from where links will be copied
      */
     public void assign(Configuration tempConfiguration) {
+        for (MethodConfig includingMethodConfig : tempConfiguration.includingMethodConfigs) {
+            includingMethodConfig.removeEmptyParams();
+        }
         includingMethodConfigs = tempConfiguration.includingMethodConfigs;
+        for (MethodConfig excludingMethodConfig : tempConfiguration.excludingMethodConfigs) {
+            excludingMethodConfig.removeEmptyParams();
+        }
         excludingMethodConfigs = tempConfiguration.excludingMethodConfigs;
     }
 }

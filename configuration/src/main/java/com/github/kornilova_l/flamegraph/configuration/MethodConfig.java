@@ -251,6 +251,16 @@ public class MethodConfig implements Comparable<MethodConfig>, Cloneable {
         return classPattern.matcher(className).matches();
     }
 
+    void removeEmptyParams() {
+        List<Parameter> newParameters = new LinkedList<>();
+        for (Parameter parameter : parameters) {
+            if (!Objects.equals(parameter.type, "")) {
+                newParameters.add(parameter);
+            }
+        }
+        parameters = newParameters;
+    }
+
     public static class Parameter {
         private String type;
         private boolean isEnabled;
