@@ -130,6 +130,10 @@ public class MethodFormManager {
                     methodConfig.getParameters().add(new MethodConfig.Parameter("", false));
                     myTableView.repaint();
                 })
+                .setRemoveAction(anActionButton -> {
+                    methodConfig.getParameters().remove(((MyTableView) anActionButton.getContextComponent()).getSelectedObject());
+                    myTableView.repaint();
+                })
                 .createPanel();
     }
 
