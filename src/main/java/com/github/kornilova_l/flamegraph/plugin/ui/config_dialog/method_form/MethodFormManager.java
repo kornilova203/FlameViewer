@@ -132,7 +132,7 @@ public class MethodFormManager {
         return validationInfos;
     }
 
-    static boolean isValidField(String text) {
+    public static boolean isValidField(String text) {
         return text.indexOf(' ') == -1 &&
                 text.indexOf('\n') == -1 &&
                 text.indexOf('\t') == -1;

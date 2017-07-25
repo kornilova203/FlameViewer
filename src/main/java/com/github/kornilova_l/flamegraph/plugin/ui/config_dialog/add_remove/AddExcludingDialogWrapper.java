@@ -3,7 +3,7 @@ package com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.add_remove;
 import com.github.kornilova_l.flamegraph.configuration.Configuration;
 import com.github.kornilova_l.flamegraph.configuration.MethodConfig;
 import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.ConfigCheckboxTree;
-import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.IncludedMethodForm;
+import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.ExcludedMethodForm;
 import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.method_form.MethodFormManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
@@ -17,36 +17,36 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
-public class AddIncludingDialogWrapper extends DialogWrapper {
+public class AddExcludingDialogWrapper extends DialogWrapper {
     private final LinkedList<MethodConfig.Parameter> parameters = new LinkedList<>();
     private final ConfigCheckboxTree tree;
     private final Configuration tempConfiguration;
-    private IncludedMethodForm form;
+    private ExcludedMethodForm form;
 
-    AddIncludingDialogWrapper(@Nullable Project project, ConfigCheckboxTree tree, Configuration tempConfiguration) {
+    AddExcludingDialogWrapper(@Nullable Project project, ConfigCheckboxTree tree, Configuration tempConfiguration) {
         super(project);
         this.tree = tree;
         this.tempConfiguration = tempConfiguration;
         init();
-        setTitle("Add Included Method Pattern");
+        setTitle("Add Excluded Method Pattern");
         initValidation();
     }
 
     @Nullable
     @Override
     protected JComponent createCenterPanel() {
-        form = new IncludedMethodForm();
-        DialogHelper.createAndShowTable(form.excludedMethodForm.paramTableCards, parameters, tree.treeType);
+        form = new ExcludedMethodForm();
+        DialogHelper.createAndShowTable(form.paramTableCards, parameters, tree.treeType);
         form.$$$getRootComponent$$$().setPreferredSize(new Dimension(350, 300));
         return form.$$$getRootComponent$$$();
     }
 
     @Override
     protected void doOKAction() {
-        if (!Objects.equals(form.excludedMethodForm.classNamePatternTextField.getText(), "") &&
-                !Objects.equals(form.excludedMethodForm.methodNamePatternTextField.getText(), "")) {
-            DialogHelper.saveConfig(form.excludedMethodForm,
-                    form.saveReturnValueCheckBox.isSelected(),
+        if (!Objects.equals(form.classNamePatternTextField.getText(), "") &&
+                !Objects.equals(form.methodNamePatternTextField.getText(), "")) {
+            DialogHelper.saveConfig(form,
+                    false,
                     parameters,
                     tree,
                     tempConfiguration
@@ -57,15 +57,13 @@ public class AddIncludingDialogWrapper extends DialogWrapper {
 
     @NotNull
     @Override
-    protected java.util.List<ValidationInfo> doValidateAll() {
+    protected List<ValidationInfo> doValidateAll() {
         List<ValidationInfo> validationInfos = new LinkedList<>();
-        if (!MethodFormManager.isValidField(form.excludedMethodForm.classNamePatternTextField.getText())) {
-            validationInfos.add(new ValidationInfo("Pattern must not contain space character",
-                    form.excludedMethodForm.classNamePatternTextField));
+        if (!MethodFormManager.isValidField(form.classNamePatternTextField.getText())) {
+            validationInfos.add(new ValidationInfo("Pattern must not contain space character", form.classNamePatternTextField));
         }
-        if (!MethodFormManager.isValidField(form.excludedMethodForm.methodNamePatternTextField.getText())) {
-            validationInfos.add(new ValidationInfo("Pattern must not contain space character",
-                    form.excludedMethodForm.methodNamePatternTextField));
+        if (!MethodFormManager.isValidField(form.methodNamePatternTextField.getText())) {
+            validationInfos.add(new ValidationInfo("Pattern must not contain space character", form.methodNamePatternTextField));
         }
         return validationInfos;
     }
