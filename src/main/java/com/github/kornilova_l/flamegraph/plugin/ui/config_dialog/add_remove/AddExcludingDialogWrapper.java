@@ -27,6 +27,7 @@ public class AddExcludingDialogWrapper extends DialogWrapper {
         super(project);
         this.tree = tree;
         this.tempConfiguration = tempConfiguration;
+        parameters.add(new MethodConfig.Parameter("*", false));
         init();
         setTitle("Add Excluded Method Pattern");
         initValidation();
