@@ -19,8 +19,19 @@ public class AddNodeActionButton implements AnActionButtonRunnable {
 
     @Override
     public void run(AnActionButton anActionButton) {
-        final AddMethodDialog dialog = new AddMethodDialog(tree, tempConfiguration);
-        dialog.pack();
-        dialog.setVisible(true);
+        switch (tree.treeType) {
+            case INCLUDING:
+                final AddIncludingConfigDialog includingDialog = new AddIncludingConfigDialog(tree, tempConfiguration);
+                includingDialog.pack();
+                includingDialog.setVisible(true);
+                break;
+            case EXCLUDING:
+                final AddExcludingConfigDialog excludingDialog = new AddExcludingConfigDialog(tree, tempConfiguration);
+                excludingDialog.pack();
+                excludingDialog.setVisible(true);
+                break;
+            default:
+                throw new RuntimeException("Not known tree type");
+        }
     }
 }

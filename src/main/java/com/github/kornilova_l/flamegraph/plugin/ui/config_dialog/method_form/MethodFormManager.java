@@ -4,7 +4,9 @@ import com.github.kornilova_l.flamegraph.configuration.MethodConfig;
 import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.ConfigCheckboxTree;
 import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.ConfigCheckedTreeNode;
 import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.ConfigurationForm;
-import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.MethodForm;
+import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.ExcludedMethodForm;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import javax.swing.event.ChangeListener;
@@ -16,8 +18,11 @@ import static com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.method_f
 
 public class MethodFormManager {
     private final JPanel cardPanel;
-    private final MethodForm methodForm;
+    @NotNull
+    private final ExcludedMethodForm excludedMethodForm;
     private final Set<MethodConfig> methodConfigs;
+    @Nullable
+    private JCheckBox saveReturnValueCheckBox;
     private ConfigCheckboxTree tree;
     private MyDocumentListener methodDocumentListener;
     private MyDocumentListener classDocumentListener;
@@ -25,11 +30,13 @@ public class MethodFormManager {
     private ChangeListener checkboxChangeListener;
 
     public MethodFormManager(JPanel cardPanel,
-                             MethodForm methodForm,
+                             @NotNull ExcludedMethodForm excludedMethodForm,
+                             @Nullable JCheckBox saveReturnValueCheckBox,
                              Set<MethodConfig> methodConfigs,
                              ConfigCheckboxTree tree) {
         this.cardPanel = cardPanel;
-        this.methodForm = methodForm;
+        this.excludedMethodForm = excludedMethodForm;
+        this.saveReturnValueCheckBox = saveReturnValueCheckBox;
         this.methodConfigs = methodConfigs;
         this.tree = tree;
         setDocumentsListeners();
@@ -48,14 +55,14 @@ public class MethodFormManager {
     }
 
     public void selectionChanged(TreePath path) {
-        methodForm.methodNamePatternTextField.getDocument().removeDocumentListener(methodDocumentListener);
-        methodForm.classNamePatternTextField.getDocument().removeDocumentListener(classDocumentListener);
+        excludedMethodForm.methodNamePatternTextField.getDocument().removeDocumentListener(methodDocumentListener);
+        excludedMethodForm.classNamePatternTextField.getDocument().removeDocumentListener(classDocumentListener);
         if (myFocusListener != null) {
-            methodForm.methodNamePatternTextField.removeFocusListener(myFocusListener);
-            methodForm.classNamePatternTextField.removeFocusListener(myFocusListener);
+            excludedMethodForm.methodNamePatternTextField.removeFocusListener(myFocusListener);
+            excludedMethodForm.classNamePatternTextField.removeFocusListener(myFocusListener);
         }
-        if (checkboxChangeListener != null) {
-            methodForm.saveReturnValueCheckBox.removeChangeListener(checkboxChangeListener);
+        if (saveReturnValueCheckBox != null && checkboxChangeListener != null) {
+            saveReturnValueCheckBox.removeChangeListener(checkboxChangeListener);
         }
         if (path.getPathCount() < 4) {
             ((CardLayout) cardPanel.getLayout()).show(cardPanel, ConfigurationForm.EMPTY_CARD_KEY);
@@ -71,28 +78,30 @@ public class MethodFormManager {
             return;
         }
         String key = methodConfig.toString();
-        methodForm.paramTableCards.add(
+        excludedMethodForm.paramTableCards.add(
                 createTablePanel(methodConfig.getParameters(), tree.treeType),
                 key
         );
-        ((CardLayout) methodForm.paramTableCards.getLayout()).show(methodForm.paramTableCards, key);
+        ((CardLayout) excludedMethodForm.paramTableCards.getLayout()).show(excludedMethodForm.paramTableCards, key);
         myFocusListener = new MyFocusListener(
                 (ConfigCheckedTreeNode) treePath.getLastPathComponent(),
                 methodConfig,
                 tree
         );
-        methodForm.methodNamePatternTextField.setText(methodConfig.getMethodPatternString());
-        methodForm.classNamePatternTextField.setText(methodConfig.getClassPatternString());
+        excludedMethodForm.methodNamePatternTextField.setText(methodConfig.getMethodPatternString());
+        excludedMethodForm.classNamePatternTextField.setText(methodConfig.getClassPatternString());
         methodDocumentListener.setCurrentMethodConfig(methodConfig);
         classDocumentListener.setCurrentMethodConfig(methodConfig);
         methodDocumentListener.setTreeNode(((ConfigCheckedTreeNode) treePath.getLastPathComponent()));
         classDocumentListener.setTreeNode(((ConfigCheckedTreeNode) treePath.getLastPathComponent()));
-        methodForm.classNamePatternTextField.addFocusListener(myFocusListener);
-        methodForm.methodNamePatternTextField.addFocusListener(myFocusListener);
-        methodForm.methodNamePatternTextField.getDocument().addDocumentListener(methodDocumentListener);
-        methodForm.classNamePatternTextField.getDocument().addDocumentListener(classDocumentListener);
-        methodForm.saveReturnValueCheckBox.setSelected(methodConfig.isSaveReturnValue());
-        checkboxChangeListener = e -> methodConfig.setSaveReturnValue(!methodConfig.isSaveReturnValue());
-        methodForm.saveReturnValueCheckBox.addChangeListener(checkboxChangeListener);
+        excludedMethodForm.classNamePatternTextField.addFocusListener(myFocusListener);
+        excludedMethodForm.methodNamePatternTextField.addFocusListener(myFocusListener);
+        excludedMethodForm.methodNamePatternTextField.getDocument().addDocumentListener(methodDocumentListener);
+        excludedMethodForm.classNamePatternTextField.getDocument().addDocumentListener(classDocumentListener);
+        if (saveReturnValueCheckBox != null) {
+            saveReturnValueCheckBox.setSelected(methodConfig.isSaveReturnValue());
+            checkboxChangeListener = e -> methodConfig.setSaveReturnValue(!methodConfig.isSaveReturnValue());
+            saveReturnValueCheckBox.addChangeListener(checkboxChangeListener);
+        }
     }
 }

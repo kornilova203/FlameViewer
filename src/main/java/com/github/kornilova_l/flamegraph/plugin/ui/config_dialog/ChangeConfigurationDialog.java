@@ -42,7 +42,8 @@ public class ChangeConfigurationDialog extends DialogWrapper {
         ConfigurationForm configurationForm = new ConfigurationForm();
         ConfigCheckboxTree includedTree = new ConfigCheckboxTree(
                 configurationForm.cardPanelIncluded,
-                configurationForm.methodFormIncluded,
+                configurationForm.methodFormIncluded.excludedMethodForm,
+                configurationForm.methodFormIncluded.saveReturnValueCheckBox,
                 tempConfiguration.getIncludingMethodConfigs(),
                 ConfigCheckboxTree.TreeType.INCLUDING
         );
@@ -55,6 +56,7 @@ public class ChangeConfigurationDialog extends DialogWrapper {
         ConfigCheckboxTree excludedTree = new ConfigCheckboxTree(
                 configurationForm.cardPanelExcluded,
                 configurationForm.methodFormExcluded,
+                null,
                 tempConfiguration.getExcludingMethodConfigs(),
                 ConfigCheckboxTree.TreeType.EXCLUDING
         );

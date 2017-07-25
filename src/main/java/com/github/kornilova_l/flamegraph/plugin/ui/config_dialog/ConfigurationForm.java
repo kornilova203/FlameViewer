@@ -12,19 +12,19 @@ public class ConfigurationForm {
     private JPanel mainPanel;
     JPanel cardPanelExcluded;
     JPanel cardPanelIncluded;
-    MethodForm methodFormIncluded;
-    MethodForm methodFormExcluded;
+    IncludedMethodForm methodFormIncluded;
+    ExcludedMethodForm methodFormExcluded;
     public static final String FORM_CARD_KEY = "form";
     public static final String EMPTY_CARD_KEY = "empty";
 
     private void createUIComponents() {
         cardPanelIncluded = new JPanel(new CardLayout());
-        methodFormIncluded = new MethodForm();
+        methodFormIncluded = new IncludedMethodForm();
         cardPanelIncluded.add(new SelectConfiguration().$$$getRootComponent$$$(), EMPTY_CARD_KEY);
         cardPanelIncluded.add(methodFormIncluded.$$$getRootComponent$$$(), FORM_CARD_KEY);
 
         cardPanelExcluded = new JPanel(new CardLayout());
-        methodFormExcluded = new MethodForm();
+        methodFormExcluded = new ExcludedMethodForm();
         cardPanelExcluded.add(new SelectConfiguration().$$$getRootComponent$$$(), EMPTY_CARD_KEY);
         cardPanelExcluded.add(methodFormExcluded.$$$getRootComponent$$$(), FORM_CARD_KEY);
 
