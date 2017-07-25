@@ -74,7 +74,7 @@ public class AddMethodDialog extends JDialog {
                 methodForm.methodNamePatternTextField.getText(),
                 parameters,
                 true,
-                false
+                methodForm.saveReturnValueCheckBox.isSelected()
         );
         switch (tree.treeType) {
             case INCLUDING:
