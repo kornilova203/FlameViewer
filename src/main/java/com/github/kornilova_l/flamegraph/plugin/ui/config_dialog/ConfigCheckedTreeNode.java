@@ -3,15 +3,33 @@ package com.github.kornilova_l.flamegraph.plugin.ui.config_dialog;
 import com.github.kornilova_l.flamegraph.configuration.MethodConfig;
 import com.intellij.ui.CheckedTreeNode;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 final public class ConfigCheckedTreeNode extends CheckedTreeNode {
     private String name;
+    @Nullable
     private final MethodConfig methodConfig;
 
-    ConfigCheckedTreeNode(@NotNull String name, MethodConfig methodConfig) {
+    ConfigCheckedTreeNode(@NotNull String name, @Nullable MethodConfig methodConfig) {
         super(name);
         this.name = name;
         this.methodConfig = methodConfig;
+    }
+
+    @Override
+    public boolean isChecked() {
+        if (methodConfig != null) {
+            return methodConfig.isEnabled();
+        }
+        return super.isChecked();
+    }
+
+    @Override
+    public void setChecked(boolean checked) {
+        if (methodConfig != null) {
+            methodConfig.setEnabled(checked);
+        }
+        super.setChecked(checked);
     }
 
     @Override
@@ -19,7 +37,7 @@ final public class ConfigCheckedTreeNode extends CheckedTreeNode {
         return name;
     }
 
-    MethodConfig getMethodConfig() {
+    @Nullable MethodConfig getMethodConfig() {
         return methodConfig;
     }
 
