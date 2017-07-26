@@ -93,7 +93,7 @@ public class MethodFormManager {
                     key
             );
             ((CardLayout) excludedMethodForm.paramTableCards.getLayout()).show(excludedMethodForm.paramTableCards, key);
-            myFocusListener = new MyFocusListener(tree);
+            myFocusListener = new MyFocusListener(treePath.getPath(), tree);
         }
         latestMethodKey = key;
         excludedMethodForm.methodNamePatternTextField.setText(methodConfig.getMethodPatternString());

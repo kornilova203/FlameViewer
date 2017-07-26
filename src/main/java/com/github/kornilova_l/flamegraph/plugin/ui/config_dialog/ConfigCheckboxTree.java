@@ -150,10 +150,9 @@ public class ConfigCheckboxTree extends CheckboxTree {
             TreePath oldPath = event.getOldLeadSelectionPath();
             if (oldPath != null) {
                 Object[] path = oldPath.getPath();
-                if (path.length != 4) {
-                    return;
+                if (path.length == 4) {
+                    updateTreeNodeNames(path);
                 }
-                updateTreeNodeNames(path);
             }
             methodFormManager.selectionChanged(event.getPath());
         }
