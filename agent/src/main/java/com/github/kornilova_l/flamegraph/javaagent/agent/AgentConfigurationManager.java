@@ -110,8 +110,8 @@ class AgentConfigurationManager {
             case "D":
                 return "double";
             default:
-                return typeWithoutDimensions.substring(1, typeWithoutDimensions.length() - 1)
-                        .replaceAll("/", ".");
+                String nameWithoutLAndSemicolon = typeWithoutDimensions.substring(1, typeWithoutDimensions.length() - 1);
+                return nameWithoutLAndSemicolon.substring(nameWithoutLAndSemicolon.lastIndexOf("/") + 1, nameWithoutLAndSemicolon.length());
         }
     }
 

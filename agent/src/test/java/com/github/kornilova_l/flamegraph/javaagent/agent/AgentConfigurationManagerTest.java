@@ -21,7 +21,7 @@ public class AgentConfigurationManagerTest {
         configLines.add("samples.OtherClass.main(*)");
         configLines.add("samples.CheckIncomingCalls.fun1(boolean)");
         configLines.add("samples.CheckIncomingCalls.fun2(int+, *)");
-        configLines.add("samples.CheckIncomingCalls.fun2(int, java.lang.String+)+");
+        configLines.add("samples.CheckIncomingCalls.fun2(int, String+)+");
         configLines.add("!samples.CheckIncomingCalls.fun2(int, boolean)");
         configLines.add("!samples.CheckIncomingCalls.fun2(int, long, *)");
         configurationManager = new AgentConfigurationManager(configLines);
@@ -44,7 +44,7 @@ public class AgentConfigurationManagerTest {
         config.add(new MethodConfig(
                 "samples.CheckIncomingCalls",
                 "fun2",
-                "(int, java.lang.String+)+"
+                "(int, String+)+"
         ));
         assertTrue(config.equals(configurationManager.findIncludingConfigs("samples/CheckIncomingCalls")));
     }
@@ -65,14 +65,14 @@ public class AgentConfigurationManagerTest {
                         "()V"
                 ).toString());
 
-        assertEquals("my_package.MyClass.someMethod(java.lang.String)",
+        assertEquals("my_package.MyClass.someMethod(String)",
                 AgentConfigurationManager.newMethodConfig(
                         "my_package.MyClass",
                         "someMethod",
                         "(Ljava/lang/String;)V"
                 ).toString());
 
-        assertEquals("my_package.MyClass.someMethod(java.lang.String[][], int)",
+        assertEquals("my_package.MyClass.someMethod(String[][], int)",
                 AgentConfigurationManager.newMethodConfig(
                         "my_package.MyClass",
                         "someMethod",
@@ -140,13 +140,13 @@ public class AgentConfigurationManagerTest {
         config.add(new MethodConfig(
                 "samples.CheckIncomingCalls",
                 "fun2",
-                "(int, java.lang.String+)+"
+                "(int, String+)+"
         ));
 
         AgentConfigurationManager.findIncludingConfigs(config,
                 new MethodConfig("samples.CheckIncomingCalls",
                         "fun2",
-                        "(int, java.lang.String+)+"));
+                        "(int, String+)+"));
     }
 
     @Test
@@ -154,25 +154,25 @@ public class AgentConfigurationManagerTest {
         MethodConfig trueMethodConfig = new MethodConfig(
                 "samples.MyClass",
                 "fun",
-                "(int, samples.MyClass$MyInnerClass, long, lang.java.String, boolean)");
+                "(int, MyClass$MyInnerClass, long, String, boolean)");
         Set<MethodConfig> config = new TreeSet<>();
         config.add(new MethodConfig(
                 "samples.*",
                 "*",
-                "(int+, samples.MyClass$MyInnerClass, long+, lang.java.String, *)"
+                "(int+, MyClass$MyInnerClass, long+, String, *)"
         ));
         config.add(new MethodConfig(
                 "samples.*",
                 "*",
-                "(int, samples.MyClass$MyInnerClass, long, *)+"
+                "(int, MyClass$MyInnerClass, long, *)+"
         ));
         config.add(new MethodConfig(
                 "samples.*",
                 "*",
-                "(int, samples.MyClass$MyInnerClass, long, *+)+"
+                "(int, MyClass$MyInnerClass, long, *+)+"
         ));
         AgentConfigurationManager.setSaveParameters(trueMethodConfig, config);
-        assertEquals("samples.MyClass.fun(int+, samples.MyClass$MyInnerClass, long+, lang.java.String+, boolean+)+",
+        assertEquals("samples.MyClass.fun(int+, MyClass$MyInnerClass, long+, String+, boolean+)+",
                 trueMethodConfig.toString());
     }
 
