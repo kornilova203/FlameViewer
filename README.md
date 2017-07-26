@@ -1,6 +1,7 @@
 # Java profiler for IntelliJ IDEA
-see [link js files](/visualization/README.md)
-windows:
+See [link js files](/visualization/README.md)
+
+Windows:
 ```
 gradlew :agent:jar && \
 gradlew copyAgent && \
