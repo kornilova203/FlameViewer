@@ -155,4 +155,8 @@ public class MethodFormManager {
                 text.indexOf('\n') == -1 &&
                 text.indexOf('\t') == -1;
     }
+
+    public void showChooseConfig() {
+        ((CardLayout) cardPanel.getLayout()).show(cardPanel, ConfigurationForm.EMPTY_CARD_KEY);
+    }
 }

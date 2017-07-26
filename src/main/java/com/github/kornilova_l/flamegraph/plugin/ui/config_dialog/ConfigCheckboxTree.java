@@ -215,6 +215,7 @@ public class ConfigCheckboxTree extends CheckboxTree {
             classNode.remove(classNode.getIndex(treeNode));
         }
         model.nodeStructureChanged(root);
+        methodFormManager.showChooseConfig();
         TreeUtil.expandAll(this);
     }
 
