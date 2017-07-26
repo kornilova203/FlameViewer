@@ -92,6 +92,11 @@ public class PluginConfigManager {
 
     @NotNull
     private static String psiTypeToString(@NotNull PsiTypeElement typeElement) {
-        return typeElement.getType().getPresentableText();
+        String fullName = typeElement.getType().getPresentableText();
+        int generic = fullName.indexOf('<');
+        if (generic == -1) {
+            return fullName;
+        }
+        return fullName.substring(0, generic);
     }
 }
