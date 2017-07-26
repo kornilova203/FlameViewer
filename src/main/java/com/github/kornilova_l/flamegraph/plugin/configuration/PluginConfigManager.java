@@ -4,6 +4,7 @@ import com.github.kornilova_l.flamegraph.configuration.Configuration;
 import com.github.kornilova_l.flamegraph.configuration.MethodConfig;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.project.Project;
+import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiParameter;
 import com.intellij.psi.PsiTypeElement;
@@ -42,11 +43,38 @@ public class PluginConfigManager {
                 psiMethod.getContainingClass().getQualifiedName() == null) {
             classPatternString = "";
         } else {
-            classPatternString = psiMethod.getContainingClass().getQualifiedName();
+            classPatternString = formClassString(psiMethod);
         }
         methodPatternString = psiMethod.getName();
         LinkedList<MethodConfig.Parameter> parameters = getParametersList(psiMethod.getParameterList().getParameters());
         return new MethodConfig(classPatternString, methodPatternString, parameters, true, false);
+    }
+
+    @NotNull
+    private static String formClassString(@NotNull PsiMethod psiMethod) {
+        StringBuilder stringBuilder = new StringBuilder();
+        PsiClass psiClass = psiMethod.getContainingClass();
+        String packageName = "";
+        while (psiClass != null) {
+            stringBuilder.insert(0, psiClass.getName()).append("$");
+            PsiClass nextClass = psiClass.getContainingClass();
+            if (nextClass == null) {
+                packageName = psiClass.getQualifiedName();
+                if (packageName != null) {
+                    int dot = packageName.lastIndexOf(".");
+                    if (dot == -1) {
+                        packageName = "";
+                    } else {
+                        packageName = packageName.substring(0, packageName.lastIndexOf("."));
+                    }
+                } else {
+                    packageName = "";
+                }
+            }
+            psiClass = nextClass;
+        }
+        String string = stringBuilder.toString();
+        return packageName + "." + string.substring(0, string.length() - 1);
     }
 
     @NotNull
@@ -64,14 +92,6 @@ public class PluginConfigManager {
 
     @NotNull
     private static String psiTypeToString(@NotNull PsiTypeElement typeElement) {
-        if (typeElement.getInnermostComponentReferenceElement() == null) { // primitive type
-            return typeElement.getType().getPresentableText();
-        }
-        StringBuilder result = new StringBuilder();
-        for (int i = 0; i < typeElement.getType().getArrayDimensions(); i++) {
-            result.append("[]");
-        }
-        return typeElement.getInnermostComponentReferenceElement().getQualifiedName() +
-                result.toString();
+        return typeElement.getType().getPresentableText();
     }
 }

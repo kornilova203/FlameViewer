@@ -6,6 +6,7 @@ import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.ConfigCheckboxT
 import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.ConfigCheckedTreeNode;
 import com.intellij.ui.AnActionButton;
 import com.intellij.ui.AnActionButtonRunnable;
+import com.intellij.util.ui.tree.TreeUtil;
 
 public class RemoveNodeActionButton implements AnActionButtonRunnable {
     private ConfigCheckboxTree tree;
@@ -35,6 +36,7 @@ public class RemoveNodeActionButton implements AnActionButtonRunnable {
         ConfigCheckedTreeNode node = tree.getSelectedNode();
         if (node != null) {
             tree.removeNode(node);
+            TreeUtil.expandAll(tree);
         }
     }
 }

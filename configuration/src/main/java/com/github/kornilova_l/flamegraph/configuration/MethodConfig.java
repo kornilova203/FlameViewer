@@ -111,7 +111,7 @@ public class MethodConfig implements Comparable<MethodConfig>, Cloneable {
             if (Objects.equals(parameter.type, "*")) {
                 return true;
             }
-            if (!Objects.equals(parameter.getType(), testedParams.get(i).getType())) {
+            if (!testedParams.get(i).getType().endsWith(parameter.getType())) {
                 return false;
             }
         }
