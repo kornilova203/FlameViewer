@@ -12,7 +12,10 @@ function drawTree(tree, className, methodName, desc) {
             desc.split("%2F").join(".").split("%28").join("(").split("%29").join(")").split("%3B").join(";"));
     }
     drawer.draw();
-    AccumulativeTreeDrawer.hideLoader();
+}
+
+function treeIsEmpty(tree) {
+    return tree.getBaseNode() === undefined;
 }
 
 $(window).on("load", function () {
@@ -45,7 +48,12 @@ $(window).on("load", function () {
                 const byteArray = new Uint8Array(arrayBuffer);
                 //noinspection JSUnresolvedVariable
                 const tree = TreeProto.Tree.deserializeBinary(byteArray);
-                drawTree(tree, className, methodName, desc);
+                if (!treeIsEmpty(tree)) {
+                    drawTree(tree, className, methodName, desc);
+                } else {
+                    showNoDataFound();
+                }
+                AccumulativeTreeDrawer.hideLoader();
             };
             console.log("send request");
             request.send();

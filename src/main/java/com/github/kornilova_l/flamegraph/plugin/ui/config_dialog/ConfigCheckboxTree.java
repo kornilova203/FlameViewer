@@ -133,6 +133,9 @@ public class ConfigCheckboxTree extends CheckboxTree {
     public void updateTreeNodeNames(Object[] path) {
         ConfigCheckedTreeNode checkedTreeNode = (ConfigCheckedTreeNode) path[path.length - 1];
         MethodConfig methodConfig = checkedTreeNode.getMethodConfig();
+        if (methodConfig == null) {
+            return;
+        }
         checkedTreeNode.setName(methodConfig.getMethodPatternString() + methodConfig.parametersToString());
         model.nodeChanged(checkedTreeNode);
         ((ConfigCheckedTreeNode) path[path.length - 2]).setName(methodConfig.getClassPattern());

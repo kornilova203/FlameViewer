@@ -41,6 +41,9 @@ function getParameter(parameterName) {
     return undefined;
 }
 
+function showNoDataFound() {
+    showMessage("No call was registered or all methods took <1ms");
+}
 
 /**
  * @param {string} message

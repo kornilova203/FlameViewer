@@ -19,7 +19,6 @@ function drawTrees(trees) {
         const drawer = new CallTreeDrawer(trees[i], minStartTime, maxFinishTime);
         drawer.draw();
     }
-    AccumulativeTreeDrawer.hideLoader();
 }
 
 /**
@@ -46,7 +45,12 @@ function getAndDrawTrees() {
             const arrayBuffer = request.response;
             const byteArray = new Uint8Array(arrayBuffer);
             const trees = TreesProto.Trees.deserializeBinary(byteArray).getTreesList();
-            drawTrees(trees);
+            if (trees.length !== 0) {
+                drawTrees(trees);
+            } else {
+                showNoDataFound();
+            }
+            AccumulativeTreeDrawer.hideLoader();
         };
         request.send();
     });

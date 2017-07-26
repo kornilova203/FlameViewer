@@ -242,6 +242,9 @@ public class MethodConfig implements Comparable<MethodConfig>, Cloneable {
     }
 
     public boolean isApplicableTo(@NotNull MethodConfig testedConfig) {
+        if (!isEnabled) {
+            return false;
+        }
         compilePatterns();
         return classPattern.matcher(testedConfig.classPatternString).matches() &&
                 methodPattern.matcher(testedConfig.methodPatternString).matches() &&

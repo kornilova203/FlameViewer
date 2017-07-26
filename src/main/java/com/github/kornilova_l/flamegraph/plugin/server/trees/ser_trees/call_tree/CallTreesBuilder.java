@@ -20,6 +20,10 @@ public class CallTreesBuilder {
         try (InputStream inputStream = new FileInputStream(logFile)) {
             HashMap<Long, CTBuilder> treesMap = new HashMap<>();
             EventProtos.Event event = EventProtos.Event.parseDelimitedFrom(inputStream);
+            if (event == null) { // if no event was written
+                trees = TreesProtos.Trees.newBuilder().build();
+                return;
+            }
             long timeOfLastEvent = event.getTime(); // is used to finish calls which does not have exit events
             while (event != null) {
                 EventProtos.Event finalEvent = event;
