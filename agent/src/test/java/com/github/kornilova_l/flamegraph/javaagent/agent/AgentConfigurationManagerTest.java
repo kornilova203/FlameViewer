@@ -95,6 +95,20 @@ public class AgentConfigurationManagerTest {
                         "someMethod",
                         "(LSomeClass$NestedStaticClass;)V"
                 ).toString());
+        // generic parameter
+        assertEquals("my_package.MyClass$MyInnerClass.method(ArrayList)",
+                AgentConfigurationManager.newMethodConfig(
+                        "my_package.MyClass$MyInnerClass",
+                        "method",
+                        "(Ljava/util/ArrayList;)V"
+                ).toString());
+        // enum and static inner class
+        assertEquals("MyClass.takesEnumFromDifClass(Main$EnumInDifClass)",
+                AgentConfigurationManager.newMethodConfig(
+                        "MyClass",
+                        "takesEnumFromDifClass",
+                        "(Lsamples/Main$EnumInDifClass;)V"
+                ).toString());
     }
 
     @Test

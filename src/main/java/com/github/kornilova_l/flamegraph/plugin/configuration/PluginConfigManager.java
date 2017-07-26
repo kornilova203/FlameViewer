@@ -92,11 +92,24 @@ public class PluginConfigManager {
 
     @NotNull
     private static String psiTypeToString(@NotNull PsiTypeElement typeElement) {
+        String typeElementString = typeElement.toString();
+        int dot = typeElement.toString().indexOf(".");
+        String outerClasses = null;
+        if (dot != -1) {
+            int generic = typeElementString.indexOf('<');
+            if (generic != -1) {
+                typeElementString = typeElementString.substring(0, generic);
+            }
+            outerClasses = typeElementString.substring(typeElementString.indexOf(":") + 1, typeElementString.lastIndexOf("."));
+        }
         String fullName = typeElement.getType().getPresentableText();
         int generic = fullName.indexOf('<');
-        if (generic == -1) {
-            return fullName;
+        if (generic != -1) {
+            fullName = fullName.substring(0, generic);
         }
-        return fullName.substring(0, generic);
+        return (outerClasses == null ?
+                "" :
+                outerClasses.replaceAll("\\.", "\\$") + "$") +
+                fullName;
     }
 }
