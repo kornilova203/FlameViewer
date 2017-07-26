@@ -34,7 +34,7 @@ public class MethodConfig implements Comparable<MethodConfig>, Cloneable {
         this.parameters = parameters;
         this.isEnabled = isEnabled;
         this.saveReturnValue = saveReturnValue;
-        initPatterns();
+        compilePatterns();
     }
 
     public MethodConfig(@NotNull String classPatternString,
@@ -62,16 +62,7 @@ public class MethodConfig implements Comparable<MethodConfig>, Cloneable {
         }
         isEnabled = methodConfig.isEnabled;
         saveReturnValue = methodConfig.saveReturnValue;
-        initPatterns();
-    }
-
-    public MethodConfig clone() {
-        try {
-            return (MethodConfig) super.clone();
-        } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
-        }
-        throw new RuntimeException("Cannot clone method config");
+        compilePatterns();
     }
 
     @NotNull
@@ -118,16 +109,27 @@ public class MethodConfig implements Comparable<MethodConfig>, Cloneable {
         return testedParams.size() == i;
     }
 
-    private void initPatterns() {
+    public MethodConfig clone() {
+        try {
+            return (MethodConfig) super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        throw new RuntimeException("Cannot clone method config");
+    }
+
+    private void compilePatterns() {
         if (classPattern == null || methodPattern == null) {
             classPattern = Pattern.compile(
                     classPatternString
                             .replaceAll("\\.", "\\.")
-                            .replaceAll("\\*", ".*"));
+                            .replaceAll("\\*", ".*")
+                            .replaceAll("\\$", "\\\\\\$"));
             methodPattern = Pattern.compile(
                     methodPatternString
                             .replaceAll("\\.", "\\.")
-                            .replaceAll("\\*", ".*"));
+                            .replaceAll("\\*", ".*")
+                            .replaceAll("\\$", "\\\\\\$"));
         }
     }
 
@@ -240,14 +242,14 @@ public class MethodConfig implements Comparable<MethodConfig>, Cloneable {
     }
 
     public boolean isApplicableTo(@NotNull MethodConfig testedConfig) {
-        initPatterns();
+        compilePatterns();
         return classPattern.matcher(testedConfig.classPatternString).matches() &&
                 methodPattern.matcher(testedConfig.methodPatternString).matches() &&
                 areParametersApplicable(parameters, testedConfig.parameters);
     }
 
     public boolean isApplicableTo(String className) {
-        initPatterns();
+        compilePatterns();
         return classPattern.matcher(className).matches();
     }
 

@@ -56,7 +56,7 @@ public class PluginConfigManager {
         PsiClass psiClass = psiMethod.getContainingClass();
         String packageName = "";
         while (psiClass != null) {
-            stringBuilder.insert(0, psiClass.getName()).append("$");
+            stringBuilder.insert(0, psiClass.getName() + "$");
             PsiClass nextClass = psiClass.getContainingClass();
             if (nextClass == null) {
                 packageName = psiClass.getQualifiedName();
