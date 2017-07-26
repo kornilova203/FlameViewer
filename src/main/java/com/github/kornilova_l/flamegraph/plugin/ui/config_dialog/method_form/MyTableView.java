@@ -60,7 +60,7 @@ public class MyTableView<Item> extends TableView<Item> {
         return ToolbarDecorator.createDecorator(myTableView, null)
                 .setAddAction(anActionButton -> {
                     myTableView.stopEditing();
-                    parameters.add(new MethodConfig.Parameter("", false));
+                    parameters.add(new MethodConfig.Parameter("*", false));
                     myTableView.repaint();
                 })
                 .setRemoveAction(anActionButton -> {
