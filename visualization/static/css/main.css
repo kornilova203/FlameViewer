@@ -336,8 +336,8 @@ nav ul li:hover a, .current-link a {
     font-size: 16px;
     border: none;
     cursor: pointer;
-    background-color: rgba(19, 57, 136, 0.89);
-    color: white;
+    background-color: #bcbcbc;
+    color: #111;
 }
 
 .projects-dropdown {
@@ -370,7 +370,7 @@ nav ul li:hover a, .current-link a {
 }
 
 .projects-dropdown:hover .dropButton {
-    background-color: rgba(22, 67, 158, 0.91);
+    background-color: rgba(152, 152, 152, 0.91);
 }
 
 .projects-dropdown p {
