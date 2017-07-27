@@ -29,7 +29,7 @@ main {
     margin-top: 0;
     margin-left: calc((100vw - 250px - 1200px) / 2 + 250px);
     margin-bottom: 300px;
-    z-index: -1;
+    z-index: -2;
     position: absolute;
 }
 
@@ -422,4 +422,14 @@ nav ul li:hover a, .current-link a {
 #search-method-form {
     position: fixed;
     right: 30px;
+}
+
+.search-white-bg {
+    z-index: -1;
+    position: fixed;
+    background-color: white;
+    right: 22px;
+    width: 210px;
+    height: 50px;
+    opacity: 0.9;
 }
