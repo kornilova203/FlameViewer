@@ -321,7 +321,6 @@ nav ul li:hover a, .current-link a {
 }
 
 .projects-dropdown {
-    pointer-events: none;
     display: inline-block;
     width: 100%;
 }
