@@ -37,6 +37,7 @@ class AccumulativeTreeDrawer {
         this.searchVal = "";
         this.currentlyShownNodes = [];
         this.baseNode.fillCommand = {};
+        this.wasMainStageHighlighted = false;
         this._enableSearch();
         console.log("Nodes count: " + this.nodesCount);
     }
@@ -356,6 +357,8 @@ class AccumulativeTreeDrawer {
         } else { // if reset zoom
             if (this.searchVal !== "") {
                 this._setHighlightOnMainStage(this.searchVal);
+            } else if (this.wasMainStageHighlighted) {
+                this._resetHighlight();
             }
             $("#" + this.zoomedStage.id).hide();
             $("#" + this.stage.id).show();
@@ -621,7 +624,7 @@ class AccumulativeTreeDrawer {
      */
     _resetHighlight() {
         if (this.currentlyShownNodes.length === 0) { // if not zoomed
-            console.log("_resetHighlightRecursively");
+            this.wasMainStageHighlighted = false;
             AccumulativeTreeDrawer._resetHighlightRecursively(this.baseNode);
             this.stage.update();
         } else { // if zoomed
@@ -631,6 +634,7 @@ class AccumulativeTreeDrawer {
     }
 
     _setHighlightOnMainStage(lowercaseVal) {
+        this.wasMainStageHighlighted = true;
         this._updateHighlightRecursively(this.baseNode, lowercaseVal);
         this.stage.update();
     }
