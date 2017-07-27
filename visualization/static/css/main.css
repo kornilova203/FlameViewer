@@ -205,41 +205,6 @@ nav ul li:hover a, .current-link a {
     margin: 0 0;
 }
 
-#search-method {
-    position: fixed;
-    margin-left: calc(700px / 2 + 150px / 2 + 50px);
-    margin-top: 5px;
-    pointer-events: none;
-    width: 100%;
-    text-align: center;
-}
-
-#search-method input[type="text"] {
-    background: url(../img/search-white.png) no-repeat 10px 7px #fcfcfc;
-    border: 1px solid #d1d1d1;
-    font-size: 14px;
-    color: #6a6a6a;
-    width: 150px;
-    padding: 6px 15px 6px 35px;
-    border-radius: 20px;
-    text-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15) inset;
-    pointer-events: initial;
-}
-
-#search-method input[type="text"]:focus {
-    outline: none;
-}
-
-#search-method input[type="text"]::placeholder {
-    transition: all 0.7s ease 0s;
-    color: #888;
-}
-
-#search-method input[type="text"]:focus::placeholder {
-    color: #bbb;
-}
-
 .choose-file-header {
     position: absolute;
     top: 0;
@@ -304,12 +269,12 @@ nav ul li:hover a, .current-link a {
     color: #282828;
 }
 
-#search-file {
+.search-form {
     pointer-events: none;
     margin-left: 20px;
 }
 
-#search-file input[type="text"] {
+.search-form input {
     background: url(../img/search-icon-black.png) no-repeat 0 4px;
     background-size: 18px;
     font-size: 14px;
@@ -322,16 +287,16 @@ nav ul li:hover a, .current-link a {
     margin-top: 10px;
 }
 
-#search-file input[type="text"]:focus {
+.search-form input:focus {
     outline: none;
 }
 
-#search-file input[type="text"]::placeholder {
+.search-form input::placeholder {
     transition: all 0.7s ease 0s;
     color: #888;
 }
 
-#search-file input[type="text"]:focus::placeholder {
+.search-form input:focus::placeholder {
     color: #bbb;
 }
 
@@ -450,4 +415,9 @@ nav ul li:hover a, .current-link a {
 
 .uploaded-files-drop-down {
     background-color: #f1f1f1;
+}
+
+#search-method-form {
+    position: fixed;
+    right: 30px;
 }

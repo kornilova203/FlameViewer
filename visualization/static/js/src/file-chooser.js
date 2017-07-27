@@ -59,7 +59,7 @@ $(window).on("load", () => {
 
 function appendInput() {
     const input = templates.tree.fileInput().content;
-    $(input).insertBefore("#search-file");
+    $(input).insertBefore("#search-file-form");
 }
 
 function updateFilesList(filesList) {
