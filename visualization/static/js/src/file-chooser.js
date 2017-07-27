@@ -90,8 +90,11 @@ function appendProject(project) {
         getPageName() +
         "?project=" +
         (project === "Uploaded files" ? "uploaded-files" : project);
-    const newElem = `<a href='${link}'>${project}</a>`;
-    $(newElem).appendTo($(".projects-dropdown-content"));
+    const newElem = $(`<a href='${link}'>${project}</a>`);
+    if (project === "Uploaded files") {
+        newElem.addClass("uploaded-files-drop-down");
+    }
+    newElem.appendTo($(".projects-dropdown-content"));
 }
 
 function showProjectsList() {

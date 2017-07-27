@@ -352,6 +352,8 @@ nav ul li:hover a, .current-link a {
     width: 100%;
     overflow: hidden;
     z-index: 1;
+    border: solid #888 1px;
+    box-sizing: border-box;
 }
 
 .projects-dropdown-content a {
@@ -362,7 +364,7 @@ nav ul li:hover a, .current-link a {
 }
 
 .projects-dropdown-content a:hover {
-    background-color: #f1f1f1
+    background-color: #d8d8d8
 }
 
 .projects-dropdown:hover .projects-dropdown-content {
@@ -432,4 +434,8 @@ nav ul li:hover a, .current-link a {
     100% {
         transform: rotate(360deg);
     }
+}
+
+.uploaded-files-drop-down {
+    background-color: #f1f1f1;
 }
