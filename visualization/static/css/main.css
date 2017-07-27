@@ -272,6 +272,18 @@ nav ul li:hover a, .current-link a {
     color: #282828;
 }
 
+.file-list li:hover {
+    transition: background 300ms;
+    display: inline-block;
+    padding-right: 10px;
+    background-color: #0e8fdf;
+}
+
+.file-list li a:hover {
+    color: white;
+    transition: color 300ms;
+}
+
 .no-file-found {
     text-align: left;
     padding-left: 20px;

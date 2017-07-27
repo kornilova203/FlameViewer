@@ -83,7 +83,8 @@ function updateFilesList(filesList) {
 }
 
 function appendProject(project) {
-    if (project === projectName) {
+    if (project === projectName ||
+        (project === "Uploaded files" && projectName === "uploaded-files")) {
         return;
     }
     const link = "/flamegraph-profiler/" +
