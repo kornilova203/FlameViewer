@@ -31,6 +31,7 @@ main {
     margin-bottom: 300px;
     z-index: -2;
     position: absolute;
+    transition: margin 300ms;
 }
 
 h1 {
@@ -148,7 +149,6 @@ section {
 }
 
 nav {
-    margin: 0 0 0 250px;
     padding: 0;
     height: 60px;
     background-color: #f3f3f3;
@@ -269,6 +269,7 @@ nav ul li:hover a, .current-link a {
     left: 0;
     background-color: #dadada;
     color: #282828;
+    transition: width 200ms;
 }
 
 .search-form {
@@ -320,6 +321,7 @@ nav ul li:hover a, .current-link a {
 }
 
 .projects-dropdown {
+    pointer-events: none;
     display: inline-block;
     width: 100%;
 }
@@ -431,5 +433,57 @@ nav ul li:hover a, .current-link a {
     right: 22px;
     width: 210px;
     height: 50px;
+}
+
+#hide-file-list-button {
+    position: absolute;
+    bottom: 30px;
+    right: 10px;
+    background: none;
+    border: 0;
+    color: inherit;
+    font: inherit;
+    line-height: normal;
+    overflow: visible;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+}
+
+#hide-file-list-button img {
+    position: absolute;
+    margin-left: -45%;
+    margin-top: -50%;
+    opacity: 0.5;
+    transition: opacity 300ms;
+}
+
+#hide-file-list-button img:hover {
+    cursor: pointer;
     opacity: 0.9;
+}
+
+#arrow-right {
+    display: none;
+}
+
+button:focus {
+    outline: none;
+}
+
+.vertical-project-name {
+    transform: rotate(-90deg) translateX(-50px) translateY(-155px);
+    margin-top: 100px;
+    height: 40px;
+    width: 350px;
+    background-color: #c6c6c6;
+    display: flex;
+    opacity: 0;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+}
+
+.vertical-project-name:hover {
+    cursor: pointer;
 }

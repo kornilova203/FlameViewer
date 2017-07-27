@@ -250,7 +250,6 @@ class AccumulativeTreeDrawer {
         const input = $("#search-method-form").find("input");
         input.on('change keyup copy paste cut', () => {
             const val = input.val();
-            console.log(!val);
             if (!val) {
                 this.searchVal = "";
                 this._resetHighlight();

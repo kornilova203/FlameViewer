@@ -7,6 +7,60 @@ if (fileName === undefined) {
     console.log("file is not defined");
 }
 
+$(window).on("load", () => {
+    getFilesList(projectName);
+    showProjectsList();
+    unableHideFilesList();
+});
+
+function showFilesList(projectsDropdown, searchForm, arrowRight, arrowLeft, verticalProjectName) {
+    $(".file-menu").css("width", 250);
+    projectsDropdown.css("transition", "opacity 300ms");
+    projectsDropdown.css("opacity", 1);
+    projectsDropdown.css("pointer-events", "auto");
+    projectsDropdown.css("position", "relative");
+    $("main").css("margin-left", "calc((100vw - 250px - 1200px) / 2 + 250px)");
+    // projectsDropdown.show();
+    searchForm.show();
+    $(".file-form").show();
+    arrowLeft.show();
+    arrowRight.hide();
+    verticalProjectName.css("transition", "");
+    verticalProjectName.css("opacity", 0);
+    $(".file-list").show();
+}
+
+function unableHideFilesList() {
+    const arrowLeft = $("#arrow-left");
+    const arrowRight = $("#arrow-right");
+    const projectsDropdown = $(".projects-dropdown");
+    const searchForm = $(".search-form");
+    const verticalProjectName = $(".vertical-project-name");
+    verticalProjectName.html(projectName === "uploaded-files" ? "Uploaded files" : projectName);
+    arrowLeft.click(() => { // hide
+        projectsDropdown.css("opacity", 0);
+        $(".file-menu").css("width", 40);
+        $("main").css("margin-left", "calc((100vw - 40px - 1200px) / 2 + 40px)");
+        projectsDropdown.css("transition", "opacity 50ms");
+        projectsDropdown.css("pointer-events", "none");
+        projectsDropdown.css("position", "absolute");
+        // projectsDropdown.hide();
+        searchForm.hide();
+        $(".file-form").hide();
+        arrowLeft.hide();
+        arrowRight.show();
+        verticalProjectName.css("transition", "opacity 300ms");
+        verticalProjectName.css("opacity", 1);
+        $(".file-list").hide();
+    });
+    arrowRight.click(() => { // show
+        showFilesList(projectsDropdown, searchForm, arrowRight, arrowLeft, verticalProjectName);
+    });
+    verticalProjectName.click(() => {
+        showFilesList(projectsDropdown, searchForm, arrowRight, arrowLeft, verticalProjectName);
+    });
+}
+
 function getPageName() {
     return /[^\/]*((?=\?)|(?=\.html))/.exec(window.location.href)[0];
 }
@@ -51,11 +105,6 @@ function showNoDataFound() {
 function showMessage(message) {
     $("main").append(`<p class='message'>${message}</p>`);
 }
-
-$(window).on("load", () => {
-    getFilesList(projectName);
-    showProjectsList();
-});
 
 function appendInput() {
     const input = templates.tree.fileInput().content;
