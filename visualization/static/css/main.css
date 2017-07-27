@@ -242,6 +242,8 @@ nav ul li:hover a, .current-link a {
     display: inline-block;
     padding-right: 10px;
     background-color: #0e8fdf;
+    min-width: 100%;
+    box-sizing: border-box;
 }
 
 .file-list li a:hover {

@@ -5,6 +5,7 @@ const POPUP_MARGIN = 4; // have no idea why there is a gap between popup and can
 const COLORS = ["#18A3FA", "#0887d7"];
 const ZOOMED_PARENT_COLOR = "#94bcff";
 const RESET_ZOOM_BUTTON_COLOR = "#9da1ff";
+const HIGHLIGHT_NOT_SET_COLOR = "#e4e4e4";
 
 /**
  * Draws tree without:
@@ -26,12 +27,18 @@ class AccumulativeTreeDrawer {
         this.baseNode.depth = 0;
         this.popup = null;
         this._assignParentsAndDepthRecursively(this.baseNode, 0);
+        this._setOriginalColorRecursively(this.baseNode);
         this.isDimSet = this.nodesCount > 50000;
         if (!this.isDimSet) {
             $(".dim").hide();
         }
         this.LAYER_COUNT = this.isDimSet ? 30 : this.tree.getDepth();
-        console.log(this.nodesCount);
+        // for search:
+        this.searchVal = "";
+        this.currentlyShownNodes = [];
+        this.baseNode.fillCommand = {};
+        this._enableSearch();
+        console.log("Nodes count: " + this.nodesCount);
     }
 
     setHeader(newHeader) {
@@ -58,7 +65,6 @@ class AccumulativeTreeDrawer {
         const maxDepth = this._drawFullTree();
         this._moveCanvas(maxDepth);
         this._updateDim(this.baseNode);
-        // this._enableZoom();
         console.log("Drawing took " + (new Date().getTime() - startTime));
     };
 
@@ -112,8 +118,11 @@ class AccumulativeTreeDrawer {
      */
     _drawRectangle(node, color, scaleX, offsetX, isMostFirst, stage) {
         const shape = new createjs.Shape();
-        shape.fillCommand = shape.graphics.beginFill(color).command;
-        shape.originalColor = color;
+        if (stage === this.stage) {
+            node.fillCommand = shape.graphics.beginFill(color).command;
+        } else {
+            node.zoomedFillCommand = shape.graphics.beginFill(color).command;
+        }
         shape.graphics.drawRect(0, 0, this.canvasWidth, LAYER_HEIGHT);
         const offsetY = this.flipY(AccumulativeTreeDrawer._calcNormaOffsetY(node.depth));
         const pixSizeX = Math.floor(scaleX * this.canvasWidth);
@@ -238,21 +247,39 @@ class AccumulativeTreeDrawer {
     }
 
     _enableSearch() {
-        const input = $("#search-method").find("input");
+        const input = $("#search-method-form").find("input");
         input.on('change keyup copy paste cut', () => {
             const val = input.val();
+            console.log(!val);
             if (!val) {
+                this.searchVal = "";
                 this._resetHighlight();
-                return;
+            } else {
+                const lowercaseVal = val.toLowerCase();
+                this.searchVal = lowercaseVal;
+                if (this.currentlyShownNodes.length === 0) {
+                    this._setHighlightOnMainStage(lowercaseVal);
+                } else {
+                    this._setHighlightOnZoomedStage(lowercaseVal);
+                }
             }
-            // TODO: reimplement search
-            this.stage.update();
         })
     }
 
-    _resetHighlight() {
-        // TODO: implement
-        this.stage.update();
+    /**
+     * @param node
+     * @private
+     */
+    static _resetHighlightRecursively(node) {
+        if (node.fillCommand !== undefined) {
+            node.fillCommand.style = node.originalColor;
+        }
+        const children = node.getNodesList();
+        if (children !== undefined) {
+            for (let i = 0; i < children.length; i++) {
+                AccumulativeTreeDrawer._resetHighlightRecursively(children[i]);
+            }
+        }
     }
 
     static _setTextMask(text, shape, scaleX) {
@@ -272,6 +299,7 @@ class AccumulativeTreeDrawer {
         if (children === undefined) {
             return;
         }
+        AccumulativeTreeDrawer._assignNormalizedName(node);
         node.depth = depth;
         for (let i = 0; i < children.length; i++) {
             children[i].parent = node;
@@ -300,6 +328,7 @@ class AccumulativeTreeDrawer {
 
     _setNodeZoomed(node) {
         let maxDepth = 0;
+        this.currentlyShownNodes = [];
         if (node !== this.baseNode) {
             AccumulativeTreeDrawer.showLoader(() => {
                 this.zoomedStage.removeAllChildren();
@@ -311,15 +340,24 @@ class AccumulativeTreeDrawer {
                     this._countOffsetXForNode(node),
                     node.depth,
                     true,
-                    this.zoomedStage
+                    this.zoomedStage,
+                    true,
+                    false
                 );
                 this._addResetButton();
+                if (this.searchVal !== "") {
+                    this._setHighlightOnZoomedStage(this.searchVal);
+                } else {
+                    this.zoomedStage.update();
+                }
                 $("#" + this.stage.id).hide();
-                this.zoomedStage.update();
                 $("#" + this.zoomedStage.id).show();
             });
             AccumulativeTreeDrawer.hideLoader()
         } else { // if reset zoom
+            if (this.searchVal !== "") {
+                this._setHighlightOnMainStage(this.searchVal);
+            }
             $("#" + this.zoomedStage.id).hide();
             $("#" + this.stage.id).show();
         }
@@ -337,10 +375,23 @@ class AccumulativeTreeDrawer {
      * @param {Number} maxDepth
      * @param {Boolean} isMostFirst
      * @param {createjs.Stage} stage
+     * @param {Boolean} saveNodesToList
+     * @param {Boolean} saveOriginalColor
      * @private
      * @return {Number} max depth
      */
-    _drawNodesRecursively(node, drawnLayerCount, newFullScaleX, newOffsetX, maxDepth, isMostFirst, stage) {
+    _drawNodesRecursively(node,
+                          drawnLayerCount,
+                          newFullScaleX,
+                          newOffsetX,
+                          maxDepth,
+                          isMostFirst,
+                          stage,
+                          saveNodesToList,
+                          saveOriginalColor) {
+        if (saveNodesToList) {
+            this.currentlyShownNodes.push(node);
+        }
         if (drawnLayerCount === this.LAYER_COUNT) {
             return maxDepth;
         }
@@ -365,7 +416,9 @@ class AccumulativeTreeDrawer {
                 newOffsetX,
                 maxDepth + 1,
                 i === 0 && isMostFirst,
-                stage
+                stage,
+                saveNodesToList,
+                saveOriginalColor
             );
             if (depth > newMaxDepth) {
                 newMaxDepth = depth;
@@ -418,12 +471,11 @@ class AccumulativeTreeDrawer {
     }
 
     _addResetButton() {
-        const shape = this._drawRectangle(this.baseNode, RESET_ZOOM_BUTTON_COLOR, 1, 0, true, this.zoomedStage);
-        this._drawLabel("Reset zoom", shape, 1, 0, 0, this.zoomedStage);
+        this._drawRectangle(this.baseNode, RESET_ZOOM_BUTTON_COLOR, 1, 0, true, this.zoomedStage);
     }
 
     /**
-     * @param node
+     * @param node not a baseNode
      * @return {String}
      * @private
      */
@@ -442,7 +494,9 @@ class AccumulativeTreeDrawer {
                 0,
                 0,
                 true,
-                this.stage
+                this.stage,
+                false,
+                true
             );
             if (depth > maxDepth) {
                 maxDepth = depth;
@@ -478,5 +532,124 @@ class AccumulativeTreeDrawer {
             `desc=${desc}&` +
             `isStatic=${node.getNodeInfo().getIsStatic() === true ? "true" : "false"}`
         );
+    }
+
+    /**
+     * @param node
+     * @param {String} val string in lowercase
+     * @private
+     */
+    _updateHighlightRecursively(node, val) {
+        if (AccumulativeTreeDrawer._isNodeHighlighted(node, val)) {
+            AccumulativeTreeDrawer._setHighlight(node, true, true);
+        } else {
+            AccumulativeTreeDrawer._setHighlight(node, false, true);
+        }
+        const children = node.getNodesList();
+        if (children === undefined) {
+            return;
+        }
+        for (let i = 0; i < children.length; i++) {
+            this._updateHighlightRecursively(children[i], val);
+        }
+    }
+
+    /**
+     * @param {Array} currentlyShownNodes
+     * @param {String} lowercaseVal
+     * @private
+     */
+    static _updateHighlight(currentlyShownNodes, lowercaseVal) {
+        for (let i = 0; i < currentlyShownNodes.length; i++) {
+            if (AccumulativeTreeDrawer._isNodeHighlighted(currentlyShownNodes[i], lowercaseVal)) {
+                AccumulativeTreeDrawer._setHighlight(currentlyShownNodes[i], true, false);
+            } else {
+                AccumulativeTreeDrawer._setHighlight(currentlyShownNodes[i], false, false);
+            }
+        }
+    }
+
+    /**
+     * @param node
+     * @param {Boolean} isHighlightSet
+     * @param {Boolean} isMainStage
+     * @private
+     */
+    static _setHighlight(node, isHighlightSet, isMainStage) {
+        if (isMainStage) {
+            node.fillCommand.style = isHighlightSet ? node.originalColor : HIGHLIGHT_NOT_SET_COLOR;
+        } else {
+            node.zoomedFillCommand.style = isHighlightSet ? node.originalColor : HIGHLIGHT_NOT_SET_COLOR;
+        }
+    }
+
+    /**
+     * @param node
+     * @param {String} val
+     * @return {boolean}
+     * @private
+     */
+    static _isNodeHighlighted(node, val) {
+        if (node.normalizedName !== undefined) { // if not a baseNode
+            return node.normalizedName.indexOf(val) !== -1;
+        }
+    }
+
+    /**
+     * @param node
+     * @private
+     */
+    static _assignNormalizedName(node) {
+        const nodeInfo = node.getNodeInfo();
+        if (nodeInfo === undefined) {
+            return;
+        }
+        let className = nodeInfo.getClassName();
+        if (className.indexOf("/") !== -1) {
+            className = className.split("/").join(".");
+        }
+        node.normalizedName = (className + "." + nodeInfo.getMethodName()).toLowerCase();
+    }
+
+    static _resetHighlightList(currentlyShownNodes) {
+        for (let i = 0; i < currentlyShownNodes.length; i++) {
+            AccumulativeTreeDrawer._setHighlight(currentlyShownNodes[i], true, false);
+        }
+    }
+
+    /**
+     * @private
+     */
+    _resetHighlight() {
+        if (this.currentlyShownNodes.length === 0) { // if not zoomed
+            console.log("_resetHighlightRecursively");
+            AccumulativeTreeDrawer._resetHighlightRecursively(this.baseNode);
+            this.stage.update();
+        } else { // if zoomed
+            AccumulativeTreeDrawer._resetHighlightList(this.currentlyShownNodes);
+            this.zoomedStage.update();
+        }
+    }
+
+    _setHighlightOnMainStage(lowercaseVal) {
+        this._updateHighlightRecursively(this.baseNode, lowercaseVal);
+        this.stage.update();
+    }
+
+    _setHighlightOnZoomedStage(lowercaseVal) {
+        AccumulativeTreeDrawer._updateHighlight(this.currentlyShownNodes, lowercaseVal);
+        this.zoomedStage.update();
+    }
+
+    _setOriginalColorRecursively(node) {
+        node.originalColor = COLORS[0];
+        const children = node.getNodesList();
+        if (children === undefined) {
+            return;
+        }
+        for (let i = 0; i < children.length; i++) {
+            this._setOriginalColorRecursively(children[i]);
+        }
+
     }
 }
