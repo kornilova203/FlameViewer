@@ -274,6 +274,7 @@ nav ul li:hover a, .current-link a {
 
 .no-file-found {
     text-align: left;
+    padding-left: 20px;
 }
 
 .extension-error {

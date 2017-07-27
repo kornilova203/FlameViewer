@@ -25,14 +25,14 @@
 <nav>
   <ul>
     <li><!--suppress HtmlUnknownTarget -->
-      <a href="/flamegraph-profiler/call-tree?file={{ fileName }}&project={{ projectName }}">Call Tree</a>
+      <a href="/flamegraph-profiler/call-tree?{{ fileParam }}project={{ projectName }}">Call Tree</a>
     </li>
     <li class="current-link"><!--suppress HtmlUnknownTarget -->
-      <a href="/flamegraph-profiler/outgoing-calls?file={{ fileName }}&project={{ projectName }}">Outgoing
+      <a href="/flamegraph-profiler/outgoing-calls?{{ fileParam }}project={{ projectName }}">Outgoing
         Calls</a>
     </li>
     <li><!--suppress HtmlUnknownTarget -->
-      <a href="/flamegraph-profiler/incoming-calls?file={{ fileName }}&project={{ projectName }}">Incoming Calls</a>
+      <a href="/flamegraph-profiler/incoming-calls?{{ fileParam }}project={{ projectName }}">Incoming Calls</a>
     </li>
   </ul>
 </nav>
@@ -52,7 +52,6 @@
 <div class="loader-background">
   <div class="loader"></div>
 </div>
-<a href="/somthin/?file=dsf;asef"></a>
 </body>
 </html>
 

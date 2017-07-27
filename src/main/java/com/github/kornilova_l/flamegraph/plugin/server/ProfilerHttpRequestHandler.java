@@ -104,14 +104,19 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
     }
 
     private byte[] renderPage(String htmlFilePath,
-                              @NotNull String fileName,
+                              @Nullable String fileName,
                               @NotNull String projectName) {
         htmlFilePath = fileManager.getStaticFilePath(htmlFilePath);
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(new File(htmlFilePath)))) {
             return String.join("", bufferedReader.lines()
-                    .map((line) -> line
-                            .replaceAll("\\{\\{ *fileName *}}", fileName) // {{ fileName }}
-                            .replaceAll("\\{\\{ *projectName *}}", projectName)
+                    .map((line) -> {
+                                String replacement = fileName == null ?
+                                        "" :
+                                        "file=" + fileName + "&";
+                                line = line.replaceAll(
+                                        "\\{\\{ *fileParam *}}", replacement);
+                                return line.replaceAll("\\{\\{ *projectName *}}", projectName);
+                            }
                     )
                     .toArray(String[]::new)).getBytes();
         } catch (IOException e) {
@@ -274,7 +279,7 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
                         "text/html",
                         renderPage(
                                 ServerNames.MAIN_NAME + "/call-tree.html",
-                                fileName == null ? "" : fileName,
+                                fileName,
                                 projectName
                         )
                 );
@@ -286,7 +291,7 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
                         "text/html",
                         renderPage(
                                 ServerNames.MAIN_NAME + "/outgoing-calls.html",
-                                fileName == null ? "" : fileName,
+                                fileName,
                                 projectName
                         )
                 );
@@ -298,7 +303,7 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
                         "text/html",
                         renderPage(
                                 ServerNames.MAIN_NAME + "/incoming-calls.html",
-                                fileName == null ? "" : fileName,
+                                fileName,
                                 projectName
                         )
                 );
