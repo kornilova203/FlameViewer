@@ -2,7 +2,6 @@ const MAIN_WIDTH = 1200;
 const LAYER_HEIGHT = 19;
 const LAYER_GAP = 1;
 const POPUP_MARGIN = 4; // have no idea why there is a gap between popup and canvas
-const COLORS = ["#18A3FA", "#0887d7"];
 const ZOOMED_PARENT_COLOR = "#94bcff";
 const RESET_ZOOM_BUTTON_COLOR = "#9da1ff";
 const HIGHLIGHT_NOT_SET_COLOR = "#e4e4e4";
@@ -27,6 +26,8 @@ class AccumulativeTreeDrawer {
         this.baseNode.depth = 0;
         this.popup = null;
         this._assignParentsAndDepthRecursively(this.baseNode, 0);
+        this.biggestSelfTime = this._findBiggestSelfTimeRecursively(this.baseNode, 0);
+        console.log("biggest self time: " + this.biggestSelfTime);
         this._setOriginalColorRecursively(this.baseNode);
         this.isDimSet = this.nodesCount > 50000;
         if (!this.isDimSet) {
@@ -275,10 +276,8 @@ class AccumulativeTreeDrawer {
             node.fillCommand.style = node.originalColor;
         }
         const children = node.getNodesList();
-        if (children !== undefined) {
-            for (let i = 0; i < children.length; i++) {
-                AccumulativeTreeDrawer._resetHighlightRecursively(children[i]);
-            }
+        for (let i = 0; i < children.length; i++) {
+            AccumulativeTreeDrawer._resetHighlightRecursively(children[i]);
         }
     }
 
@@ -291,14 +290,10 @@ class AccumulativeTreeDrawer {
     /**
      * @param node
      * @param {Number} depth
-     * @private
      */
     _assignParentsAndDepthRecursively(node, depth) {
         this.nodesCount++;
         const children = node.getNodesList();
-        if (children === undefined) {
-            return;
-        }
         AccumulativeTreeDrawer._assignNormalizedName(node);
         node.depth = depth;
         for (let i = 0; i < children.length; i++) {
@@ -399,16 +394,13 @@ class AccumulativeTreeDrawer {
         }
         this._drawNode(
             node,
-            COLORS[0],
+            node.originalColor,
             this._countScaleXForNode(node) / newFullScaleX,
             (this._countOffsetXForNode(node) - newOffsetX) / newFullScaleX,
             isMostFirst,
             stage
         );
         const children = node.getNodesList();
-        if (children === undefined) {
-            return maxDepth;
-        }
         let newMaxDepth = maxDepth;
         for (let i = 0; i < children.length; i++) {
             const depth = this._drawNodesRecursively(
@@ -459,9 +451,6 @@ class AccumulativeTreeDrawer {
      */
     _getMaxDepth(node, maxDepth) {
         const children = node.getNodesList();
-        if (children === undefined) {
-            return maxDepth;
-        }
         let newMaxDepth = maxDepth;
         for (let i = 0; i < children.length; i++) {
             const depth = this._getMaxDepth(children[i], maxDepth + 1);
@@ -548,9 +537,6 @@ class AccumulativeTreeDrawer {
             AccumulativeTreeDrawer._setHighlight(node, false, true);
         }
         const children = node.getNodesList();
-        if (children === undefined) {
-            return;
-        }
         for (let i = 0; i < children.length; i++) {
             this._updateHighlightRecursively(children[i], val);
         }
@@ -645,14 +631,35 @@ class AccumulativeTreeDrawer {
     }
 
     _setOriginalColorRecursively(node) {
-        node.originalColor = COLORS[0];
+        const lightness = 70 - (node.selfTime / this.biggestSelfTime) * 30;
+        node.originalColor = `hsl(205, 94%, ${lightness}%)`;
         const children = node.getNodesList();
-        if (children === undefined) {
-            return;
-        }
         for (let i = 0; i < children.length; i++) {
             this._setOriginalColorRecursively(children[i]);
         }
 
+    }
+
+    /**
+     * @param node
+     * @param biggestSelfTime
+     * @return {Number}
+     * @private
+     */
+    _findBiggestSelfTimeRecursively(node, biggestSelfTime) {
+        let thisNodeSelfTime = node.getWidth();
+        const children = node.getNodesList();
+        for (let i = 0; i < children.length; i++) {
+            thisNodeSelfTime -= children[i].getWidth();
+            const returnedBiggestSelfTime = this._findBiggestSelfTimeRecursively(children[i], biggestSelfTime);
+            if (returnedBiggestSelfTime > biggestSelfTime) {
+                biggestSelfTime = returnedBiggestSelfTime;
+            }
+        }
+        node.selfTime = thisNodeSelfTime;
+        if (thisNodeSelfTime > biggestSelfTime) {
+            return thisNodeSelfTime;
+        }
+        return biggestSelfTime;
     }
 }
