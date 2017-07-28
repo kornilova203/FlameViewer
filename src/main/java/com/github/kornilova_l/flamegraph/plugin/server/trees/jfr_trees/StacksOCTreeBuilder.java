@@ -61,7 +61,7 @@ public class StacksOCTreeBuilder implements TreeBuilder {
                                     .setIsStatic(false)
                     )
                     .build();
-            nodeBuilder = updateNodeList(nodeBuilder, callNode);
+            nodeBuilder = updateNodeList(nodeBuilder, callNode, -1);
         }
     }
 

@@ -52,7 +52,7 @@ public final class OutgoingCallsBuilder implements TreeBuilder {
         if (depth > maxDepth) {
             maxDepth = depth;
         }
-        nodeBuilder = updateNodeList(nodeBuilder, node);
+        nodeBuilder = updateNodeList(nodeBuilder, node, -1);
         for (TreeProtos.Tree.Node childNode : node.getNodesList()) {
             addNodesRecursively(nodeBuilder, childNode, depth);
         }

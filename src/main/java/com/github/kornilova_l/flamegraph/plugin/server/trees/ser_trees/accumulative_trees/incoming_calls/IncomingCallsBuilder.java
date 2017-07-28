@@ -78,7 +78,7 @@ public final class IncomingCallsBuilder implements TreeBuilder {
 
     private List<NodeBuilderAndTime> addLeafToBaseNodeChildren(TreeProtos.Tree.Node node) {
         ArrayList<NodeBuilderAndTime> arrayList = new ArrayList<>();
-        TreeProtos.Tree.Node.Builder newNode = updateNodeList(treeBuilder.getBaseNodeBuilder(), node);
+        TreeProtos.Tree.Node.Builder newNode = updateNodeList(treeBuilder.getBaseNodeBuilder(), node, -1);
         arrayList.add(
                 new NodeBuilderAndTime(
                         newNode,
