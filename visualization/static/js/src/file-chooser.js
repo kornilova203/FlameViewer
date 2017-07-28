@@ -10,6 +10,9 @@ if (fileName === undefined) {
 $(window).on("load", () => {
     getFilesList(projectName);
     showProjectsList();
+    if (fileName === undefined) {
+        showChooseFile();
+    }
     unableHideFilesList();
 });
 
@@ -103,7 +106,7 @@ function showNoDataFound() {
  * @param {string} message
  */
 function showMessage(message) {
-    $("main").append(`<p class='message'>${message}</p>`);
+    $("body").append(`<p class='message'>${message}</p>`);
 }
 
 function appendInput() {

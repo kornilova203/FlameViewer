@@ -70,7 +70,5 @@ $(window).on("load", function () {
             request.send();
 
         });
-    } else {
-        showChooseFile();
     }
 });

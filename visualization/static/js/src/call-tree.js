@@ -66,8 +66,6 @@ $(window).on("load", function () {
         } else {
             showMessage("This type of tree is unavailable for .jfr files")
         }
-    } else {
-        showChooseFile();
     }
 });
 

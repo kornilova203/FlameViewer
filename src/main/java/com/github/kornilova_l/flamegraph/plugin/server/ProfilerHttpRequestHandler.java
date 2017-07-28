@@ -238,6 +238,7 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
             case ServerNames.CALL_TREE:
             case ServerNames.OUTGOING_CALLS:
             case ServerNames.INCOMING_CALLS:
+            case ServerNames.HOT_SPOTS:
                 processHtmlRequest(uri, urlDecoder, context);
                 return true;
         }
@@ -271,44 +272,16 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
         if (urlDecoder.parameters().containsKey("file")) {
             fileName = urlDecoder.parameters().get("file").get(0);
         }
-        switch (uri) {
-            case ServerNames.CALL_TREE:
-                LOG.info("call-tree.html");
-                sendBytes(
-                        context,
-                        "text/html",
-                        renderPage(
-                                ServerNames.MAIN_NAME + "/call-tree.html",
-                                fileName,
-                                projectName
-                        )
-                );
-                break;
-            case ServerNames.OUTGOING_CALLS:
-                LOG.info("outgoing-calls.html");
-                sendBytes(
-                        context,
-                        "text/html",
-                        renderPage(
-                                ServerNames.MAIN_NAME + "/outgoing-calls.html",
-                                fileName,
-                                projectName
-                        )
-                );
-                break;
-            case ServerNames.INCOMING_CALLS:
-                LOG.info("incoming-calls.html");
-                sendBytes(
-                        context,
-                        "text/html",
-                        renderPage(
-                                ServerNames.MAIN_NAME + "/incoming-calls.html",
-                                fileName,
-                                projectName
-                        )
-                );
-                break;
-        }
+        LOG.info(uri + ".html");
+        sendBytes(
+                context,
+                "text/html",
+                renderPage(
+                        uri + ".html",
+                        fileName,
+                        projectName
+                )
+        );
     }
 
     private void processTreeRequest(String uri, QueryStringDecoder urlDecoder, ChannelHandlerContext context) {
