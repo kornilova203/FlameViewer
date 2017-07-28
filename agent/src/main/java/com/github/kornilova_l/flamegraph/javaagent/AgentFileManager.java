@@ -42,7 +42,7 @@ public class AgentFileManager {
     }
 
     @Nullable
-    public File getLatestFile() {
+    private File getLatestFile() {
         File[] files = logDir.listFiles();
         if (files != null) {
             Optional<File> fileOptional = Arrays.stream(files)

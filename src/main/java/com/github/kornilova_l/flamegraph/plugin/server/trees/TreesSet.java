@@ -21,32 +21,31 @@ public abstract class TreesSet {
     @Nullable
     protected TreeProtos.Tree incomingCalls;
 
-    public static class HotSpot implements Comparable<HotSpot> {
-        private final String methodName;
-        private final String className;
-        private final String desc;
-        private long time = 0;
-
-        HotSpot(String className, String methodName, String desc) {
-            this.className = className;
-            this.methodName = methodName;
-            this.desc = desc;
-        }
-
-        @Override
-        public int compareTo(@NotNull TreesSet.HotSpot hotSpot) {
-            return (className + methodName + desc)
-                    .compareTo(hotSpot.className + hotSpot.methodName + hotSpot.desc);
-        }
-
-        void addTime(long width) {
-            time += width;
-        }
-    }
-
     public TreesSet(File logFile) {
         this.logFile = logFile;
         validateExtension();
+    }
+
+    @Nullable
+    private static TreeProtos.Tree getTreeForMethod(TreeProtos.Tree sourceTree,
+                                                    HashMap<String, TreeProtos.Tree> map,
+                                                    String className,
+                                                    String methodName,
+                                                    String desc,
+                                                    boolean isStatic) {
+        if (sourceTree == null) {
+            return null;
+        }
+        return map.computeIfAbsent(
+                className + methodName + desc,
+                n -> new MethodAccumulativeTreeBuilder(
+                        sourceTree,
+                        className,
+                        methodName,
+                        desc,
+                        isStatic
+                ).getTree()
+        );
     }
 
     protected abstract void validateExtension();
@@ -68,28 +67,6 @@ public abstract class TreesSet {
 
     public abstract TreesProtos.Trees getCallTree();
 
-    @Nullable
-    private static TreeProtos.Tree getTreeForMethod(TreeProtos.Tree sourceTree,
-                                                      HashMap<String, TreeProtos.Tree> map,
-                                                      String className,
-                                                      String methodName,
-                                                      String desc,
-                                                      boolean isStatic) {
-        if (sourceTree == null) {
-            return null;
-        }
-        return map.computeIfAbsent(
-                className + methodName + desc,
-                n -> new MethodAccumulativeTreeBuilder(
-                        sourceTree,
-                        className,
-                        methodName,
-                        desc,
-                        isStatic
-                ).getTree()
-        );
-    }
-
     @NotNull List<HotSpot> getHotSpots() {
         if (hotSpots.size() == 0) {
             if (incomingCalls == null) {
@@ -109,13 +86,45 @@ public abstract class TreesSet {
     }
 
     private void getHotSpotsRecursively(TreeProtos.Tree.Node node, TreeMap<HotSpot, HotSpot> hotSpotTreeMap) {
-        HotSpot hotSpot = new HotSpot(node.getNodeInfo().getClassName(),
+        HotSpot hotSpot = new HotSpot(
+                node.getNodeInfo().getClassName(),
                 node.getNodeInfo().getMethodName(),
-                node.getNodeInfo().getDescription());
+                getBeautifulParams(node.getNodeInfo().getDescription()),
+                getBeautifulRetVal(node.getNodeInfo().getDescription())
+        );
         hotSpot = hotSpotTreeMap.computeIfAbsent(hotSpot, k -> k);
         hotSpot.addTime(node.getWidth());
         for (TreeProtos.Tree.Node child : node.getNodesList()) {
             getHotSpotsRecursively(child, hotSpotTreeMap);
+        }
+    }
+
+    protected abstract String getBeautifulRetVal(String description);
+
+    abstract protected List<String> getBeautifulParams(String desc);
+
+    public static class HotSpot implements Comparable<HotSpot> {
+        private final String methodName;
+        private final String className;
+        private final List<String> parameters;
+        private final String retVal;
+        private long time = 0;
+
+        HotSpot(String className, String methodName, List<String> parameters, String retVal) {
+            this.className = className;
+            this.methodName = methodName;
+            this.parameters = parameters;
+            this.retVal = retVal;
+        }
+
+        @Override
+        public int compareTo(@NotNull TreesSet.HotSpot hotSpot) {
+            return (className + methodName + String.join("", parameters)).compareTo(
+                    hotSpot.className + hotSpot.methodName + String.join("", hotSpot.parameters));
+        }
+
+        void addTime(long width) {
+            time += width;
         }
     }
 }

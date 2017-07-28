@@ -5,9 +5,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class MethodConfig implements Comparable<MethodConfig>, Cloneable {
+    private final static Pattern paramsPattern = Pattern.compile("(\\[*)(C|Z|S|I|J|F|D|B|(:?L[^;]+;))");
     @NotNull
     private String methodPatternString = "";
     @NotNull
@@ -264,6 +266,43 @@ public class MethodConfig implements Comparable<MethodConfig>, Cloneable {
             }
         }
         parameters = newParameters;
+    }
+
+    @NotNull
+    public static List<String> splitDesc(@NotNull String descInnerPart) {
+        List<String> jvmParams = new LinkedList<>();
+        Matcher m = paramsPattern.matcher(descInnerPart);
+        while (m.find()) {
+            jvmParams.add(m.group());
+        }
+        return jvmParams;
+    }
+
+    @NotNull
+    public static String jvmTypeToParam(@NotNull String typeWithoutDimensions) {
+        switch (typeWithoutDimensions) {
+            case "I":
+                return "int";
+            case "J":
+                return "long";
+            case "Z":
+                return "boolean";
+            case "C":
+                return "char";
+            case "S":
+                return "short";
+            case "B":
+                return "byte";
+            case "F":
+                return "float";
+            case "D":
+                return "double";
+            case "V":
+                return "void";
+            default:
+                String nameWithoutLAndSemicolon = typeWithoutDimensions.substring(1, typeWithoutDimensions.length() - 1);
+                return nameWithoutLAndSemicolon.substring(nameWithoutLAndSemicolon.lastIndexOf("/") + 1, nameWithoutLAndSemicolon.length());
+        }
     }
 
     public static class Parameter {

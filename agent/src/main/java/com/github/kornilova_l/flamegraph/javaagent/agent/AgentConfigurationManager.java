@@ -5,11 +5,11 @@ import com.github.kornilova_l.flamegraph.configuration.MethodConfig;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
+import static com.github.kornilova_l.flamegraph.configuration.MethodConfig.jvmTypeToParam;
+import static com.github.kornilova_l.flamegraph.configuration.MethodConfig.splitDesc;
 
 class AgentConfigurationManager {
-    private final static Pattern paramsPattern = Pattern.compile("(\\[*)(C|Z|S|I|J|F|D|B|(:?L[^;]+;))");
     private final Configuration configuration = new Configuration();
 
     AgentConfigurationManager(List<String> methodConfigLines) {
@@ -52,16 +52,6 @@ class AgentConfigurationManager {
     }
 
     @NotNull
-    static List<String> splitDesc(@NotNull String descInnerPart) {
-        List<String> jvmParams = new LinkedList<>();
-        Matcher m = paramsPattern.matcher(descInnerPart);
-        while (m.find()) {
-            jvmParams.add(m.group());
-        }
-        return jvmParams;
-    }
-
-    @NotNull
     private static String jvmParamsToPattern(List<String> jvmParams) {
         LinkedList<String> params = new LinkedList<>();
         for (String jvmParam : jvmParams) {
@@ -88,31 +78,6 @@ class AgentConfigurationManager {
             }
         }
         return count;
-    }
-
-    @NotNull
-    private static String jvmTypeToParam(@NotNull String typeWithoutDimensions) {
-        switch (typeWithoutDimensions) {
-            case "I":
-                return "int";
-            case "J":
-                return "long";
-            case "Z":
-                return "boolean";
-            case "C":
-                return "char";
-            case "S":
-                return "short";
-            case "B":
-                return "byte";
-            case "F":
-                return "float";
-            case "D":
-                return "double";
-            default:
-                String nameWithoutLAndSemicolon = typeWithoutDimensions.substring(1, typeWithoutDimensions.length() - 1);
-                return nameWithoutLAndSemicolon.substring(nameWithoutLAndSemicolon.lastIndexOf("/") + 1, nameWithoutLAndSemicolon.length());
-        }
     }
 
     @NotNull
