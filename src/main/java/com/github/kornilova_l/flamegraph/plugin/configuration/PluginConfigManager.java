@@ -92,24 +92,23 @@ public class PluginConfigManager {
 
     @NotNull
     private static String psiTypeToString(@NotNull PsiTypeElement typeElement) {
-        String typeElementString = typeElement.toString();
-        int dot = typeElement.toString().indexOf(".");
-        String outerClasses = null;
+        String name = removeGeneric(typeElement.getType().getPresentableText());
+        String typeElementString = removeGeneric(typeElement.toString());
+        int dot = typeElementString.indexOf(".");
         if (dot != -1) {
-            int generic = typeElementString.indexOf('<');
-            if (generic != -1) {
-                typeElementString = typeElementString.substring(0, generic);
-            }
-            outerClasses = typeElementString.substring(typeElementString.indexOf(":") + 1, typeElementString.lastIndexOf("."));
+            String outerClasses = typeElementString.substring(typeElementString.indexOf(":") + 1, typeElementString.lastIndexOf("."));
+            return outerClasses.replaceAll("\\.", "\\$") + "$" + name;
         }
-        String fullName = typeElement.getType().getPresentableText();
-        int generic = fullName.indexOf('<');
+        return name;
+    }
+
+    @NotNull
+    private static String removeGeneric(@NotNull String typeName) {
+        int generic = typeName.indexOf('<');
         if (generic != -1) {
-            fullName = fullName.substring(0, generic);
+            return typeName.substring(0, generic)
+                    + typeName.substring(typeName.lastIndexOf('>') + 1, typeName.length());
         }
-        return (outerClasses == null ?
-                "" :
-                outerClasses.replaceAll("\\.", "\\$") + "$") +
-                fullName;
+        return typeName;
     }
 }

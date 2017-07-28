@@ -1,8 +1,5 @@
 package com.github.kornilova_l.flamegraph.plugin.ui.config_dialog;
 
-import com.intellij.uiDesigner.core.GridConstraints;
-import com.intellij.uiDesigner.core.GridLayoutManager;
-
 import javax.swing.*;
 import java.awt.*;
 
@@ -27,12 +24,12 @@ public class IncludedMethodForm {
      */
     private void $$$setupUI$$$() {
         mainPanel = new JPanel();
-        mainPanel.setLayout(new GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
+        mainPanel.setLayout(new BorderLayout(0, 0));
         excludedMethodForm = new ExcludedMethodForm();
-        mainPanel.add(excludedMethodForm.$$$getRootComponent$$$(), new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(300, -1), null, 0, false));
+        mainPanel.add(excludedMethodForm.$$$getRootComponent$$$(), BorderLayout.CENTER);
         saveReturnValueCheckBox = new JCheckBox();
         saveReturnValueCheckBox.setText("Save return value");
-        mainPanel.add(saveReturnValueCheckBox, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        mainPanel.add(saveReturnValueCheckBox, BorderLayout.SOUTH);
     }
 
     /**

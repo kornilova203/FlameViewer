@@ -104,6 +104,9 @@ public class ConfigCheckboxTree extends CheckboxTree {
 
     private ConfigCheckedTreeNode appendNode(CheckedTreeNode parent, String name, @Nullable MethodConfig methodConfig) {
         ConfigCheckedTreeNode node = new ConfigCheckedTreeNode(name, methodConfig);
+        if (methodConfig != null) {
+            node.setChecked(methodConfig.isEnabled());
+        }
         model.insertNodeInto(node, parent, parent.getChildCount());
         model.nodeStructureChanged(parent);
         return node;
@@ -115,6 +118,9 @@ public class ConfigCheckboxTree extends CheckboxTree {
                                                String name,
                                                @Nullable MethodConfig methodConfig) {
         ConfigCheckedTreeNode newNode = new ConfigCheckedTreeNode(name, methodConfig);
+        if (methodConfig != null) {
+            newNode.setChecked(methodConfig.isEnabled());
+        }
         for (int i = 0; i < parent.getChildCount(); i++) {
             if (Objects.equals(parent.getChildAt(i).toString(), child.toString())) {
                 model.insertNodeInto(newNode, parent, i);
@@ -167,8 +173,37 @@ public class ConfigCheckboxTree extends CheckboxTree {
             addMethodNode(methodConfig);
         }
         model.nodeStructureChanged(root);
+        setNodesChecked(root);
         TreeUtil.expandAll(this);
         setSelectionRow(0);
+    }
+
+    private void setNodesChecked(@NotNull CheckedTreeNode node) {
+        if (!node.isRoot() && !node.isLeaf()) {
+            if (hasAnyCheckedLeaf(node)) {
+                node.setChecked(true);
+            } else {
+                node.setChecked(false);
+            }
+        }
+        int childCount = node.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            setNodesChecked(((CheckedTreeNode) node.getChildAt(i)));
+        }
+    }
+
+    private boolean hasAnyCheckedLeaf(@NotNull CheckedTreeNode node) {
+        if (node.isLeaf()) {
+            MethodConfig methodConfig = ((ConfigCheckedTreeNode) node).getMethodConfig();
+            return methodConfig != null && methodConfig.isEnabled();
+        }
+        int childCount = node.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            if (hasAnyCheckedLeaf(((CheckedTreeNode) node.getChildAt(i)))) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void addMethodNode(MethodConfig methodConfig) {

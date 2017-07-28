@@ -113,9 +113,9 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
                                 String replacement = fileName == null ?
                                         "" :
                                         "file=" + fileName + "&";
-                                line = line.replaceAll(
-                                        "\\{\\{ *fileParam *}}", replacement);
-                                return line.replaceAll("\\{\\{ *projectName *}}", projectName);
+                        line = line.replace(
+                                "{{ fileParam }}", replacement);
+                        return line.replace("{{ projectName }}", projectName);
                             }
                     )
                     .toArray(String[]::new)).getBytes();

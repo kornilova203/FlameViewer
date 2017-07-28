@@ -161,7 +161,7 @@ class AgentConfigurationManager {
 
     @NotNull
     Set<MethodConfig> findIncludingConfigs(String className) {
-        className = className.replaceAll("/", ".");
+        className = className.replace('/', '.');
         Set<MethodConfig> applicableMethodConfigs = new TreeSet<>();
         for (MethodConfig methodConfig : configuration.getIncludingMethodConfigs()) {
             if (methodConfig.isApplicableTo(className)) {

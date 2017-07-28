@@ -17,14 +17,6 @@ final public class ConfigCheckedTreeNode extends CheckedTreeNode {
     }
 
     @Override
-    public boolean isChecked() {
-        if (methodConfig != null) {
-            return methodConfig.isEnabled();
-        }
-        return super.isChecked();
-    }
-
-    @Override
     public void setChecked(boolean checked) {
         if (methodConfig != null) {
             methodConfig.setEnabled(checked);

@@ -60,6 +60,13 @@ public class UpdatingMarkersPsiTreeChangeListener implements PsiTreeChangeListen
                 return;
             }
         }
+        if (event.getNewChild() instanceof PsiMethod) {
+            PsiMethod psiMethod = (PsiMethod) event.getNewChild();
+            if (psiMethod.getContainingClass() == null) {
+                return;
+            }
+            updateMethodMarker(psiMethod);
+        }
         if (event.getParent() instanceof PsiMethod) {
             PsiMethod psiMethod = (PsiMethod) event.getParent();
             if (psiMethod.getContainingClass() == null) {
@@ -103,9 +110,11 @@ public class UpdatingMarkersPsiTreeChangeListener implements PsiTreeChangeListen
 
     @Override
     public void childMoved(@NotNull PsiTreeChangeEvent event) {
+        System.out.println("childMoved");
     }
 
     @Override
     public void propertyChanged(@NotNull PsiTreeChangeEvent event) {
+        System.out.println("propertyChanged");
     }
 }
