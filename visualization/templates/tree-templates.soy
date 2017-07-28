@@ -108,6 +108,9 @@
  * @param parameters
  * @param doBreak
  * @param relativeTime
+ * @param fileName
+ * @param projectName
+ * @param desc
  */
 {template .hotSpot}
 <div>
@@ -136,6 +139,8 @@
     {/foreach}
     )
     </p>
+    <a href="/flamegraph-profiler/outgoing-calls?file={$fileName}&amp;project={$projectName}&amp;method={$methodName}&amp;class={$className}&amp;desc={$desc}">Outgoing calls</a>
+    <a href="/flamegraph-profiler/incoming-calls?file={$fileName}&amp;project={$projectName}&amp;method={$methodName}&amp;class={$className}&amp;desc={$desc}">Outgoing calls</a>
 
 </div>
 {/template}

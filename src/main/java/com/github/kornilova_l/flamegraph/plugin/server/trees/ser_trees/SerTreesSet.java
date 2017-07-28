@@ -19,6 +19,8 @@ import java.util.stream.Collectors;
 import static com.github.kornilova_l.flamegraph.configuration.MethodConfig.jvmTypeToParam;
 import static com.github.kornilova_l.flamegraph.configuration.MethodConfig.splitDesc;
 
+// TODO: do not send '/' to client
+
 public class SerTreesSet extends TreesSet {
     public SerTreesSet(File logFile) {
         super(logFile);

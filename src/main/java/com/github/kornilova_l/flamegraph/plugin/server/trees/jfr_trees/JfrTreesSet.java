@@ -18,6 +18,8 @@ import java.util.Map;
 
 import static com.github.kornilova_l.flamegraph.plugin.server.trees.jfr_trees.FlightRecorderConverter.getStacks;
 
+// TODO: remove package from parameters and return value when building tree
+
 public class JfrTreesSet extends TreesSet {
     public JfrTreesSet(File logFile) {
         super(logFile);

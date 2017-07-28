@@ -47,7 +47,10 @@ function appendHotSpot(hotSpot, biggestRelativeTime) {
             retVal: hotSpot.retVal,
             parameters: hotSpot.parameters,
             doBreak: (hotSpot.retVal + hotSpot.className + hotSpot.methodName).length > 80,
-            relativeTime: Math.round(hotSpot.relativeTime * 1000) / 10
+            relativeTime: Math.round(hotSpot.relativeTime * 1000) / 10,
+            fileName: fileName,
+            projectName: projectName,
+            desc: "(" + hotSpot.parameters.join(', ') + ")" + hotSpot.retVal
         }
     ).content);
     $(hotSpotBlock).find(".method-time").css("width", Math.round(hotSpot.relativeTime / biggestRelativeTime * 194));
