@@ -190,7 +190,7 @@ class AccumulativeTreeDrawer {
         );
         text.x = offsetX + 2;
         text.y = this.flipY(nodeDepth * (LAYER_GAP + LAYER_HEIGHT));
-        AccumulativeTreeDrawer._setTextMask(text, shape, scaleX);
+        this._setTextMask(text, shape, scaleX);
         // noinspection JSUnresolvedFunction
         stage.setChildIndex(text, this.stage.getNumChildren() - 1);
         // noinspection JSUnresolvedFunction
@@ -282,9 +282,10 @@ class AccumulativeTreeDrawer {
         }
     }
 
-    static _setTextMask(text, shape, scaleX) {
+    _setTextMask(text, shape, scaleX) {
         const newShape = shape.clone();
-        newShape.scaleX = scaleX * 0.9;
+        const nodeWidth = scaleX * this.canvasWidth;
+        newShape.scaleX = (nodeWidth - 4) / this.canvasWidth;
         text.mask = newShape;
     }
 

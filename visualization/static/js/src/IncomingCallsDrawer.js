@@ -3,11 +3,14 @@ class IncomingCallsDrawer extends AccumulativeTreeDrawer {
         super(tree);
         this.nodesCount = -1;
     }
+
+    // noinspection all
     /**
      * Get canvas Y coordinate (it start from top)
      * @param y
      * @returns {number}
      * @protected
+     * @override
      */
     flipY(y) {
         return y + 40;
