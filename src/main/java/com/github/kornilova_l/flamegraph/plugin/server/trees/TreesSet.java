@@ -1,24 +1,48 @@
 package com.github.kornilova_l.flamegraph.plugin.server.trees;
 
-import com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees.TreeManager;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees.accumulative_trees.MethodAccumulativeTreeBuilder;
 import com.github.kornilova_l.flamegraph.proto.TreeProtos;
 import com.github.kornilova_l.flamegraph.proto.TreesProtos;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
-import java.util.HashMap;
+import java.util.*;
 
 public abstract class TreesSet {
     protected final File logFile;
-    protected final HashMap<String, TreeProtos.Tree> methodOutgoingCalls = new HashMap<>();
-    protected final HashMap<String, TreeProtos.Tree> methodIncomingCalls = new HashMap<>();
+    private final HashMap<String, TreeProtos.Tree> methodOutgoingCalls = new HashMap<>();
+    private final HashMap<String, TreeProtos.Tree> methodIncomingCalls = new HashMap<>();
+    private final List<HotSpot> hotSpots = new ArrayList<>();
     @Nullable
     protected TreesProtos.Trees callTree;
     @Nullable
     protected TreeProtos.Tree outgoingCalls;
     @Nullable
     protected TreeProtos.Tree incomingCalls;
+
+    public static class HotSpot implements Comparable<HotSpot> {
+        private final String methodName;
+        private final String className;
+        private final String desc;
+        private long time = 0;
+
+        HotSpot(String className, String methodName, String desc) {
+            this.className = className;
+            this.methodName = methodName;
+            this.desc = desc;
+        }
+
+        @Override
+        public int compareTo(@NotNull TreesSet.HotSpot hotSpot) {
+            return (className + methodName + desc)
+                    .compareTo(hotSpot.className + hotSpot.methodName + hotSpot.desc);
+        }
+
+        void addTime(long width) {
+            time += width;
+        }
+    }
 
     public TreesSet(File logFile) {
         this.logFile = logFile;
@@ -64,5 +88,34 @@ public abstract class TreesSet {
                         isStatic
                 ).getTree()
         );
+    }
+
+    @NotNull List<HotSpot> getHotSpots() {
+        if (hotSpots.size() == 0) {
+            if (incomingCalls == null) {
+                incomingCalls = getTree(TreeManager.TreeType.INCOMING_CALLS);
+            }
+            if (incomingCalls == null) {
+                return new LinkedList<>();
+            }
+            TreeMap<HotSpot, HotSpot> hotSpotTreeMap = new TreeMap<>();
+            for (TreeProtos.Tree.Node node : incomingCalls.getBaseNode().getNodesList()) { // avoid baseNode
+                getHotSpotsRecursively(node, hotSpotTreeMap);
+            }
+            hotSpots.addAll(hotSpotTreeMap.values());
+            hotSpots.sort((hotSpot1, hotSpot2) -> Long.compare(hotSpot2.time, hotSpot1.time));
+        }
+        return hotSpots;
+    }
+
+    private void getHotSpotsRecursively(TreeProtos.Tree.Node node, TreeMap<HotSpot, HotSpot> hotSpotTreeMap) {
+        HotSpot hotSpot = new HotSpot(node.getNodeInfo().getClassName(),
+                node.getNodeInfo().getMethodName(),
+                node.getNodeInfo().getDescription());
+        hotSpot = hotSpotTreeMap.computeIfAbsent(hotSpot, k -> k);
+        hotSpot.addTime(node.getWidth());
+        for (TreeProtos.Tree.Node child : node.getNodesList()) {
+            getHotSpotsRecursively(child, hotSpotTreeMap);
+        }
     }
 }

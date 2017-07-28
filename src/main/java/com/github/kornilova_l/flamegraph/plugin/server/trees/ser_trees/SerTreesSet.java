@@ -1,6 +1,7 @@
 package com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees;
 
 import com.github.kornilova_l.flamegraph.plugin.server.ProfilerHttpRequestHandler;
+import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeManager;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TreesSet;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees.accumulative_trees.incoming_calls.IncomingCallsBuilder;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees.accumulative_trees.outgoing_calls.OutgoingCallsBuilder;
@@ -12,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 import java.io.File;
 
 public class SerTreesSet extends TreesSet {
-    SerTreesSet(File logFile) {
+    public SerTreesSet(File logFile) {
         super(logFile);
         callTree = new CallTreesBuilder(logFile).getTrees();
     }

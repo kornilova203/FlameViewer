@@ -1,8 +1,8 @@
-package com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees;
+package com.github.kornilova_l.flamegraph.plugin.server.trees;
 
 import com.github.kornilova_l.flamegraph.plugin.server.ProfilerHttpRequestHandler;
-import com.github.kornilova_l.flamegraph.plugin.server.trees.TreesSet;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.jfr_trees.JfrTreesSet;
+import com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees.SerTreesSet;
 import com.github.kornilova_l.flamegraph.proto.TreeProtos;
 import com.github.kornilova_l.flamegraph.proto.TreesProtos;
 import com.intellij.openapi.diagnostic.Logger;
@@ -10,11 +10,11 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 
 public class TreeManager {
     private static final Logger LOG = Logger.getInstance(TreeManager.class);
-    private final HashMap<String, SerTreesSet> serTreesSets = new HashMap<>();
-    private final HashMap<String, JfrTreesSet> jfrTreesSets = new HashMap<>();
+    private final HashMap<String, TreesSet> treesSets = new HashMap<>();
 
     public TreeManager() {
     }
@@ -25,11 +25,11 @@ public class TreeManager {
         TreesSet treesSet;
         switch (extension) {
             case JFR:
-                treesSet = jfrTreesSets.computeIfAbsent(logFile.getAbsolutePath(),
+                treesSet = treesSets.computeIfAbsent(logFile.getAbsolutePath(),
                         n -> new JfrTreesSet(logFile));
                 return treesSet.getCallTree();
             case SER:
-                treesSet = serTreesSets.computeIfAbsent(logFile.getAbsolutePath(),
+                treesSet = treesSets.computeIfAbsent(logFile.getAbsolutePath(),
                         n -> new SerTreesSet(logFile));
                 return treesSet.getCallTree();
             case UNSUPPORTED:
@@ -44,11 +44,11 @@ public class TreeManager {
         TreesSet treesSet;
         switch (extension) {
             case JFR:
-                treesSet = jfrTreesSets.computeIfAbsent(logFile.getAbsolutePath(),
+                treesSet = treesSets.computeIfAbsent(logFile.getAbsolutePath(),
                         n -> new JfrTreesSet(logFile));
                 return treesSet.getTree(treeType);
             case SER:
-                treesSet = serTreesSets.computeIfAbsent(logFile.getAbsolutePath(),
+                treesSet = treesSets.computeIfAbsent(logFile.getAbsolutePath(),
                         n -> new SerTreesSet(logFile));
                 return treesSet.getTree(treeType);
             case UNSUPPORTED:
@@ -68,13 +68,31 @@ public class TreeManager {
         TreesSet treesSet;
         switch (extension) {
             case JFR:
-                treesSet = jfrTreesSets.computeIfAbsent(logFile.getAbsolutePath(),
+                treesSet = treesSets.computeIfAbsent(logFile.getAbsolutePath(),
                         n -> new JfrTreesSet(logFile));
                 return treesSet.getTree(treeType, className, methodName, desc, isStatic);
             case SER:
-                treesSet = serTreesSets.computeIfAbsent(logFile.getAbsolutePath(),
+                treesSet = treesSets.computeIfAbsent(logFile.getAbsolutePath(),
                         n -> new SerTreesSet(logFile));
                 return treesSet.getTree(treeType, className, methodName, desc, isStatic);
+            case UNSUPPORTED:
+            default:
+                throw new IllegalArgumentException("Extension is unsupported");
+        }
+    }
+
+    public List<TreesSet.HotSpot> getHotSpots(File logFile) {
+        Extension extension = ProfilerHttpRequestHandler.getExtension(logFile.getName());
+        TreesSet treesSet;
+        switch (extension) {
+            case JFR:
+                treesSet = treesSets.computeIfAbsent(logFile.getAbsolutePath(),
+                        n -> new JfrTreesSet(logFile));
+                return treesSet.getHotSpots();
+            case SER:
+                treesSet = treesSets.computeIfAbsent(logFile.getAbsolutePath(),
+                        n -> new SerTreesSet(logFile));
+                return treesSet.getHotSpots();
             case UNSUPPORTED:
             default:
                 throw new IllegalArgumentException("Extension is unsupported");

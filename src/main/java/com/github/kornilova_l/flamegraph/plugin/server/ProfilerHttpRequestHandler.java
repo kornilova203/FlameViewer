@@ -1,7 +1,7 @@
 package com.github.kornilova_l.flamegraph.plugin.server;
 
 import com.github.kornilova_l.flamegraph.plugin.PluginFileManager;
-import com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees.TreeManager;
+import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeManager;
 import com.github.kornilova_l.flamegraph.proto.TreeProtos;
 import com.github.kornilova_l.flamegraph.proto.TreesProtos;
 import com.google.gson.Gson;
@@ -19,7 +19,6 @@ import org.jetbrains.ide.HttpRequestHandler;
 import org.jetbrains.io.Responses;
 
 import java.io.*;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -96,7 +95,8 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
     }
 
     @Nullable
-    private static String getParameter(Map<String, List<String>> parameters, String key) {
+    private static String getParameter(QueryStringDecoder urlDecoder, String key) {
+        Map<String, java.util.List<String>> parameters = urlDecoder.parameters();
         if (parameters.containsKey(key)) {
             return parameters.get(key).get(0);
         }
@@ -126,16 +126,7 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
     }
 
     private void sendFileList(ChannelHandlerContext context, String projectName) {
-        String json = new Gson().toJson(
-                fileManager.getFileNameList(projectName)
-        );
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        try {
-            outputStream.write(json.getBytes());
-            sendBytes(context, "application/json", outputStream.toByteArray());
-        } catch (IOException e) {
-            LOG.error(e);
-        }
+        sendJson(context, new Gson().toJson(fileManager.getFileNameList(projectName)));
     }
 
     private void sendListProjects(ChannelHandlerContext context) {
@@ -226,6 +217,10 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
                     e.printStackTrace();
                 }
                 return true;
+            case ServerNames.HOT_SPOTS_JS_REQUEST:
+                LOG.info("hot spots js request");
+                sendHotSpots(urlDecoder, context);
+                return true;
         }
         switch (uri) {
             case ServerNames.OUTGOING_CALLS_JS_REQUEST:
@@ -258,6 +253,30 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
         } catch (IOException e) {
             e.printStackTrace();
             return false;
+        }
+    }
+
+    private void sendHotSpots(QueryStringDecoder urlDecoder, ChannelHandlerContext context) {
+        String projectName = getParameter(urlDecoder, "project");
+        String fileName = getParameter(urlDecoder, "file");
+        if (projectName == null ||
+                fileName == null) {
+            return;
+        }
+        File logFile = fileManager.getConfigFile(projectName, fileName);
+        if (logFile == null) {
+            return;
+        }
+        sendJson(context, new Gson().toJson(treeManager.getHotSpots(logFile)));
+    }
+
+    private void sendJson(ChannelHandlerContext context, String json) {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        try {
+            outputStream.write(json.getBytes());
+            sendBytes(context, "application/json", outputStream.toByteArray());
+        } catch (IOException e) {
+            LOG.error(e);
         }
     }
 
@@ -315,10 +334,10 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
                                                 QueryStringDecoder urlDecoder,
                                                 ChannelHandlerContext context,
                                                 @Nullable File logFile) {
-        String methodName = getParameter(urlDecoder.parameters(), "method");
-        String className = getParameter(urlDecoder.parameters(), "class");
-        String desc = getParameter(urlDecoder.parameters(), "desc");
-        String isStaticString = getParameter(urlDecoder.parameters(), "isStatic");
+        String methodName = getParameter(urlDecoder, "method");
+        String className = getParameter(urlDecoder, "class");
+        String desc = getParameter(urlDecoder, "desc");
+        String isStaticString = getParameter(urlDecoder, "isStatic");
         if (methodName != null && className != null && desc != null && isStaticString != null) {
             boolean isStatic = Objects.equals(isStaticString, "true");
             switch (uri) {

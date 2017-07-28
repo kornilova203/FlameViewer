@@ -2,8 +2,8 @@ package com.github.kornilova_l.flamegraph.plugin.server.trees.jfr_trees;
 
 import com.github.kornilova_l.flamegraph.plugin.PluginFileManager;
 import com.github.kornilova_l.flamegraph.plugin.server.ProfilerHttpRequestHandler;
+import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeManager;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TreesSet;
-import com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees.TreeManager;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees.accumulative_trees.incoming_calls.IncomingCallsBuilder;
 import com.github.kornilova_l.flamegraph.proto.TreeProtos;
 import com.github.kornilova_l.flamegraph.proto.TreesProtos;
