@@ -507,10 +507,9 @@ button:focus {
     height: 17px;
     float: left;
     border: solid #ccc 1px;
-    margin-right: 10px;
+    margin-left: 20px;
     padding: 2px;
     box-sizing: border-box;
-    position: absolute;
 }
 
 .method-time {
@@ -519,10 +518,22 @@ button:focus {
 }
 
 .method {
-    margin-left: 230px;
+    margin-left: 260px;
 }
 
 .code-margin {
     margin: 0;
     display: inline-block;
+}
+
+.relative-time {
+    float: left;
+    margin: 0;
+    font-size: 12px;
+    width: 20px;
+    text-align: right;
+}
+
+.outer-time-div {
+    position: absolute;
 }

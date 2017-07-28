@@ -106,11 +106,15 @@
  * @param className
  * @param retVal
  * @param parameters
- * @param break
+ * @param doBreak
+ * @param relativeTime
  */
 {template .hotSpot}
 <div>
-    <div class="total-time"><div class="method-time"></div></div>
+    <div class="outer-time-div">
+        <p class="relative-time">{$relativeTime}%</p>
+        <div class="total-time"><div class="method-time"></div></div>
+    </div>
     <p class="method">
     <code class="return-value">{$retVal}</code>
     <code> <code>
@@ -122,8 +126,8 @@
     (
     {foreach $parameter in $parameters}
         {if $parameter}
-            {if $break}<br/>{/if}
-            {if $break}<code>&#160&#160&#160&#160&#160&#160&#160&#160&#160&#160&#160&#160&#160&#160</code>{/if}
+            {if $doBreak}<br/>{/if}
+            {if $doBreak}<code>&#160&#160&#160&#160&#160&#160&#160&#160&#160&#160&#160&#160&#160&#160</code>{/if}
             <code class="parameter">{$parameter}</code>
             {if not isLast($parameter)}
                 <code>, </code>

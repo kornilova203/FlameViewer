@@ -67,12 +67,12 @@ if (goog.DEBUG) {
 
 
 templates.tree.hotSpot = function (opt_data, opt_ignored) {
-    var output = '<div><div class="total-time"><div class="method-time"></div></div><p class="method"><code class="return-value">' + soy.$$escapeHtml(opt_data.retVal) + '</code><code> <code><code class="class-name">' + soy.$$escapeHtml(opt_data.className) + '</code><wbr>.<code class="method-name">' + soy.$$escapeHtml(opt_data.methodName) + '</code><wbr>(';
-    var parameterList88 = opt_data.parameters;
-    var parameterListLen88 = parameterList88.length;
-    for (var parameterIndex88 = 0; parameterIndex88 < parameterListLen88; parameterIndex88++) {
-        var parameterData88 = parameterList88[parameterIndex88];
-        output += (parameterData88) ? ((opt_data['break']) ? '<br/>' : '') + ((opt_data['break']) ? '<code>&#160&#160&#160&#160&#160&#160&#160&#160&#160&#160&#160&#160&#160&#160</code>' : '') + '<code class="parameter">' + soy.$$escapeHtml(parameterData88) + '</code>' + ((!(parameterIndex88 == parameterListLen88 - 1)) ? '<code>, </code>' : '') : '';
+    var output = '<div><div class="outer-time-div"><p class="relative-time">' + soy.$$escapeHtml(opt_data.relativeTime) + '%</p><div class="total-time"><div class="method-time"></div></div></div><p class="method"><code class="return-value">' + soy.$$escapeHtml(opt_data.retVal) + '</code><code> <code><code class="class-name">' + soy.$$escapeHtml(opt_data.className) + '</code><wbr>.<code class="method-name">' + soy.$$escapeHtml(opt_data.methodName) + '</code><wbr>(';
+    var parameterList90 = opt_data.parameters;
+    var parameterListLen90 = parameterList90.length;
+    for (var parameterIndex90 = 0; parameterIndex90 < parameterListLen90; parameterIndex90++) {
+        var parameterData90 = parameterList90[parameterIndex90];
+        output += (parameterData90) ? ((opt_data.doBreak) ? '<br/>' : '') + ((opt_data.doBreak) ? '<code>&#160&#160&#160&#160&#160&#160&#160&#160&#160&#160&#160&#160&#160&#160</code>' : '') + '<code class="parameter">' + soy.$$escapeHtml(parameterData90) + '</code>' + ((!(parameterIndex90 == parameterListLen90 - 1)) ? '<code>, </code>' : '') : '';
     }
     output += ')</p></div>';
     return soydata.VERY_UNSAFE.ordainSanitizedHtml(output);

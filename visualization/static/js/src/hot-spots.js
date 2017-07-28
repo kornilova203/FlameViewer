@@ -19,9 +19,9 @@ function showHotSpots() {
         const hotSpots = request.response;
         console.log(hotSpots);
         if (hotSpots !== undefined && hotSpots.length > 0) {
-            const biggestWidth = hotSpots[0].time;
+            const biggestRelativeTime = hotSpots[0].relativeTime;
             for (let i = 0; i < hotSpots.length && i < 200; i++) {
-                appendHotSpot(hotSpots[i], biggestWidth);
+                appendHotSpot(hotSpots[i], biggestRelativeTime);
             }
         }
     };
@@ -35,21 +35,22 @@ function showHotSpots() {
  *  methodName: String,
  *  retVal: String,
  *  parameters: Array<String>,
- *  time: Number
+ *  relativeTime: Number
  * }} hotSpot
- * @param {Number} biggestWidth
+ * @param {Number} biggestRelativeTime
  */
-function appendHotSpot(hotSpot, biggestWidth) {
+function appendHotSpot(hotSpot, biggestRelativeTime) {
     const hotSpotBlock = $(templates.tree.hotSpot(
         {
             methodName: hotSpot.methodName,
             className: hotSpot.className.split("/").join("."),
             retVal: hotSpot.retVal,
             parameters: hotSpot.parameters,
-            break: (hotSpot.retVal + hotSpot.className + hotSpot.methodName).length > 50
+            doBreak: (hotSpot.retVal + hotSpot.className + hotSpot.methodName).length > 80,
+            relativeTime: Math.round(hotSpot.relativeTime * 1000) / 10
         }
     ).content);
-    $(hotSpotBlock).find(".method-time").css("width", Math.round(hotSpot.time / biggestWidth * 194));
+    $(hotSpotBlock).find(".method-time").css("width", Math.round(hotSpot.relativeTime / biggestRelativeTime * 194));
 
     $("main").append(hotSpotBlock);
 }

@@ -69,18 +69,18 @@ public abstract class TreesSet {
 
     @NotNull List<HotSpot> getHotSpots() {
         if (hotSpots.size() == 0) {
-            if (incomingCalls == null) {
-                incomingCalls = getTree(TreeManager.TreeType.INCOMING_CALLS);
+            if (outgoingCalls == null) {
+                outgoingCalls = getTree(TreeManager.TreeType.OUTGOING_CALLS);
             }
-            if (incomingCalls == null) {
+            if (outgoingCalls == null) {
                 return new LinkedList<>();
             }
             TreeMap<HotSpot, HotSpot> hotSpotTreeMap = new TreeMap<>();
-            for (TreeProtos.Tree.Node node : incomingCalls.getBaseNode().getNodesList()) { // avoid baseNode
+            for (TreeProtos.Tree.Node node : outgoingCalls.getBaseNode().getNodesList()) { // avoid baseNode
                 getHotSpotsRecursively(node, hotSpotTreeMap);
             }
             hotSpots.addAll(hotSpotTreeMap.values());
-            hotSpots.sort((hotSpot1, hotSpot2) -> Long.compare(hotSpot2.time, hotSpot1.time));
+            hotSpots.sort((hotSpot1, hotSpot2) -> Float.compare(hotSpot2.relativeTime, hotSpot1.relativeTime));
         }
         return hotSpots;
     }
@@ -93,10 +93,19 @@ public abstract class TreesSet {
                 getBeautifulRetVal(node.getNodeInfo().getDescription())
         );
         hotSpot = hotSpotTreeMap.computeIfAbsent(hotSpot, k -> k);
-        hotSpot.addTime(node.getWidth());
+        assert outgoingCalls != null;
+        hotSpot.addTime((float) getSelfTime(node) / outgoingCalls.getWidth());
         for (TreeProtos.Tree.Node child : node.getNodesList()) {
             getHotSpotsRecursively(child, hotSpotTreeMap);
         }
+    }
+
+    private long getSelfTime(TreeProtos.Tree.Node node) {
+        long childTime = 0;
+        for (TreeProtos.Tree.Node child : node.getNodesList()) {
+            childTime += child.getWidth();
+        }
+        return node.getWidth() - childTime;
     }
 
     protected abstract String getBeautifulRetVal(String description);
@@ -108,7 +117,7 @@ public abstract class TreesSet {
         private final String className;
         private final List<String> parameters;
         private final String retVal;
-        private long time = 0;
+        private float relativeTime = 0;
 
         HotSpot(String className, String methodName, List<String> parameters, String retVal) {
             this.className = className;
@@ -123,8 +132,8 @@ public abstract class TreesSet {
                     hotSpot.className + hotSpot.methodName + String.join("", hotSpot.parameters));
         }
 
-        void addTime(long width) {
-            time += width;
+        void addTime(float callRelativeTime) {
+            relativeTime += callRelativeTime;
         }
     }
 }
