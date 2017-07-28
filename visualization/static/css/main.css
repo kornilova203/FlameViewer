@@ -485,3 +485,44 @@ button:focus {
 .vertical-project-name:hover {
     cursor: pointer;
 }
+
+.return-value {
+    color: #000080;
+}
+
+.method-name {
+    color: black;
+}
+
+.class-name {
+    color: #df7300;
+}
+
+.parameter {
+    color: #660E82;
+}
+
+.total-time {
+    width: 200px;
+    height: 17px;
+    float: left;
+    border: solid #ccc 1px;
+    margin-right: 10px;
+    padding: 2px;
+    box-sizing: border-box;
+    position: absolute;
+}
+
+.method-time {
+    height: 100%;
+    background-color: #0e8fdf;
+}
+
+.method {
+    margin-left: 230px;
+}
+
+.code-margin {
+    margin: 0;
+    display: inline-block;
+}

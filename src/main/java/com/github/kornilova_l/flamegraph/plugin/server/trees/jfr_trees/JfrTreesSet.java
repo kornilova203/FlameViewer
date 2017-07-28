@@ -70,7 +70,9 @@ public class JfrTreesSet extends TreesSet {
     @NotNull
     @Override
     protected String getBeautifulRetVal(String description) {
-        return description.substring(description.indexOf(")") + 1, description.length());
+        return removePackage(
+                description.substring(description.indexOf(")") + 1, description.length())
+        );
     }
 
     @NotNull
@@ -78,6 +80,17 @@ public class JfrTreesSet extends TreesSet {
     protected List<String> getBeautifulParams(String desc) {
         String innerPart = desc.substring(1, desc.indexOf(")"));
         String[] stringParameters = innerPart.split(" *, *");
+        for (int i = 0; i < stringParameters.length; i++) {
+            stringParameters[i] = removePackage(stringParameters[i]);
+        }
         return Arrays.asList(stringParameters);
+    }
+
+    private String removePackage(String type) {
+        int dot = type.lastIndexOf('.');
+        if (dot != -1) {
+            return type.substring(dot + 1, type.length());
+        }
+        return type;
     }
 }

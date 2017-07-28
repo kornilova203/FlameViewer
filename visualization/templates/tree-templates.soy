@@ -100,3 +100,38 @@
     <p class="file-form-header">.jfr or .ser</p>
 </form>
 {/template}
+
+/**
+ * @param methodName
+ * @param className
+ * @param retVal
+ * @param parameters
+ * @param break
+ */
+{template .hotSpot}
+<div>
+    <div class="total-time"><div class="method-time"></div></div>
+    <p class="method">
+    <code class="return-value">{$retVal}</code>
+    <code> <code>
+    <code class="class-name">{$className}</code>
+    <wbr>
+    .
+    <code class="method-name">{$methodName}</code>
+    <wbr>
+    (
+    {foreach $parameter in $parameters}
+        {if $parameter}
+            {if $break}<br/>{/if}
+            {if $break}<code>&#160&#160&#160&#160&#160&#160&#160&#160&#160&#160&#160&#160&#160&#160</code>{/if}
+            <code class="parameter">{$parameter}</code>
+            {if not isLast($parameter)}
+                <code>, </code>
+            {/if}
+        {/if}
+    {/foreach}
+    )
+    </p>
+
+</div>
+{/template}
