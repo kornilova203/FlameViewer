@@ -8,6 +8,8 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
     }
 
     draw() {
+        this._prepareDraw();
+
         console.log("draw");
         this.section = this._createSection(this.canvasOffset);
         this.stage = new createjs.Stage("canvas-" + this.threadId);
@@ -29,7 +31,6 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
 
         this.stage.update();
         this._moveCanvas(maxDepth);
-        this._updateDim(this.baseNode);
     };
 
     _createSection(canvasOffset) {

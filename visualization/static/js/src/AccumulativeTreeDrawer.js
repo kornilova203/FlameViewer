@@ -21,26 +21,15 @@ class AccumulativeTreeDrawer {
         this.stage = null;
         this.zoomedStage = null;
         this.header = null;
-        this.nodesCount = 0;
+        this.biggestSelfTime = 0;
         this.baseNode = this.tree.getBaseNode();
         this.baseNode.depth = 0;
         this.popup = null;
-        this._assignParentsAndDepthRecursively(this.baseNode, 0);
-        this.biggestSelfTime = this._findBiggestSelfTimeRecursively(this.baseNode, 0);
-        console.log("biggest self time: " + this.biggestSelfTime);
-        this._setOriginalColorRecursively(this.baseNode);
-        this.isDimSet = this.nodesCount > 50000;
-        if (!this.isDimSet) {
-            $(".dim").hide();
-        }
-        this.LAYER_COUNT = this.isDimSet ? 30 : this.tree.getDepth();
         // for search:
         this.searchVal = "";
         this.currentlyShownNodes = [];
         this.baseNode.fillCommand = {};
         this.wasMainStageHighlighted = false;
-        this._enableSearch();
-        console.log("Nodes count: " + this.nodesCount);
     }
 
     setHeader(newHeader) {
@@ -48,6 +37,8 @@ class AccumulativeTreeDrawer {
     }
 
     draw() {
+        this._prepareDraw();
+
         console.log("start drawing");
         const startTime = new Date().getTime();
         this.section = this._createSectionWithCanvas();
@@ -66,9 +57,19 @@ class AccumulativeTreeDrawer {
         }
         const maxDepth = this._drawFullTree();
         this._moveCanvas(maxDepth);
-        this._updateDim(this.baseNode);
         console.log("Drawing took " + (new Date().getTime() - startTime));
     };
+
+    /**
+     * @protected
+     */
+    _prepareDraw() {
+        this._assignParentsAndDepthRecursively(this.baseNode, 0);
+        this.biggestSelfTime = this._findBiggestSelfTimeRecursively(this.baseNode, 0);
+        console.log("biggest self time: " + this.biggestSelfTime);
+        this._setOriginalColorRecursively(this.baseNode);
+        this._enableSearch();
+    }
 
     /**
      * Get canvas Y coordinate (it start from top)
@@ -292,7 +293,6 @@ class AccumulativeTreeDrawer {
      * @param {Number} depth
      */
     _assignParentsAndDepthRecursively(node, depth) {
-        this.nodesCount++;
         const children = node.getNodesList();
         AccumulativeTreeDrawer._assignNormalizedName(node);
         node.depth = depth;
@@ -358,10 +358,6 @@ class AccumulativeTreeDrawer {
             $("#" + this.zoomedStage.id).hide();
             $("#" + this.stage.id).show();
         }
-        if (this.isDimSet) {
-            this._moveCanvas(maxDepth);
-            this._updateDim(node, node.depth);
-        }
     }
 
     /**
@@ -388,9 +384,6 @@ class AccumulativeTreeDrawer {
                           saveOriginalColor) {
         if (saveNodesToList) {
             this.currentlyShownNodes.push(node);
-        }
-        if (drawnLayerCount === this.LAYER_COUNT) {
-            return maxDepth;
         }
         this._drawNode(
             node,
@@ -431,34 +424,6 @@ class AccumulativeTreeDrawer {
         if (oldTop < 0) {
             window.scrollBy(0, -oldTop - this.canvasHeight + newY);
         }
-    }
-
-    _updateDim(node) {
-        if (this.isDimSet) {
-            const maxDepth = node.depth + this.LAYER_COUNT;
-            if (maxDepth > this._getMaxDepth(node, node.depth)) {
-                $(".dim").hide();
-            } else {
-                $(".dim").show();
-            }
-        }
-    }
-
-    /**
-     * @param node
-     * @param {Number} maxDepth
-     * @private
-     */
-    _getMaxDepth(node, maxDepth) {
-        const children = node.getNodesList();
-        let newMaxDepth = maxDepth;
-        for (let i = 0; i < children.length; i++) {
-            const depth = this._getMaxDepth(children[i], maxDepth + 1);
-            if (depth > newMaxDepth) {
-                newMaxDepth = depth;
-            }
-        }
-        return newMaxDepth;
     }
 
     _addResetButton() {

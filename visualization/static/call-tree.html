@@ -21,19 +21,23 @@
 <aside>
   <div class="search-white-bg"></div>
   <form class="search-form" id="search-method-form">
-    <input name="q" size="40" placeholder="Search method"/>
+    <input size="40" placeholder="Search method"/>
   </form>
 </aside>
 <nav>
   <ul>
-    <li class="current-link">
-      <a href="">Call Tree</a>
+    <li class="current-link"><!--suppress HtmlUnknownTarget -->
+      <a href="/flamegraph-profiler/call-tree?{{ fileParam }}project={{ projectName }}">Call Tree</a>
     </li>
     <li><!--suppress HtmlUnknownTarget -->
-      <a href="/flamegraph-profiler/outgoing-calls?{{ fileParam }}project={{ projectName }}">Outgoing Calls</a>
+      <a href="/flamegraph-profiler/outgoing-calls?{{ fileParam }}project={{ projectName }}">
+        Outgoing Calls
+      </a>
     </li>
     <li><!--suppress HtmlUnknownTarget -->
-      <a href="/flamegraph-profiler/incoming-calls?{{ fileParam }}project={{ projectName }}">Incoming Calls</a>
+      <a href="/flamegraph-profiler/incoming-calls?{{ fileParam }}project={{ projectName }}">
+        Incoming Calls
+      </a>
     </li>
   </ul>
 </nav>
