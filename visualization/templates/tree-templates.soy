@@ -113,14 +113,14 @@
  * @param desc
  */
 {template .hotSpot}
-<div>
+<div class="hot-spot">
     <div class="outer-time-div">
         <p class="relative-time">{$relativeTime}%</p>
         <div class="total-time"><div class="method-time"></div></div>
     </div>
     <p class="method">
     <code class="return-value">{$retVal}</code>
-    <code> <code>
+    <code> </code>
     <code class="class-name">{$className}</code>
     <wbr>
     .
@@ -140,7 +140,7 @@
     )
     </p>
     <a href="/flamegraph-profiler/outgoing-calls?file={$fileName}&amp;project={$projectName}&amp;method={$methodName}&amp;class={$className}&amp;desc={$desc}">Outgoing calls</a>
-    <a href="/flamegraph-profiler/incoming-calls?file={$fileName}&amp;project={$projectName}&amp;method={$methodName}&amp;class={$className}&amp;desc={$desc}">Outgoing calls</a>
+    <a href="/flamegraph-profiler/incoming-calls?file={$fileName}&amp;project={$projectName}&amp;method={$methodName}&amp;class={$className}&amp;desc={$desc}">Incoming calls</a>
 
 </div>
 {/template}

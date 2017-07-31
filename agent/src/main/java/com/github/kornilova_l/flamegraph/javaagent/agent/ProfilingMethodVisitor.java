@@ -116,7 +116,7 @@ class ProfilingMethodVisitor extends AdviceAdapter {
         }
         int index = 0;
         int countParams = methodConfig.getParameters().size();
-        List<String> jvmParameters = AgentConfigurationManager.splitDesc(
+        List<String> jvmParameters = MethodConfig.splitDesc(
                 methodDesc.substring(methodDesc.indexOf("(") + 1, methodDesc.indexOf(")"))
         );
         for (int i = 0; i < countParams; i++) {

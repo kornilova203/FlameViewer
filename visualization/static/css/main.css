@@ -537,3 +537,7 @@ button:focus {
 .outer-time-div {
     position: absolute;
 }
+
+.hot-spot a {
+    margin-right: 10px;
+}
