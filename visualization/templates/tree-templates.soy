@@ -85,7 +85,11 @@
 {template .listOfFiles}
 <ol class="file-list">
   {foreach $fileName in $fileNames}
-    <li id="{$fileName}"><a href="/flamegraph-profiler/{$pageName}?file={$fileName}&amp;project={$projectName}">{$fileName}</a></li>
+    <li id="{$fileName}">
+        <img class="delete-file-black delete-file" src="img/close-black.png"/>
+        <img class="delete-file-white delete-file" src="img/close-white.png"/>
+        <a href="/flamegraph-profiler/{$pageName}?file={$fileName}&amp;project={$projectName}">{$fileName}</a>
+    </li>
   {/foreach}
   </ol>
 {/template}
@@ -142,5 +146,20 @@
     <a href="/flamegraph-profiler/outgoing-calls?file={$fileName}&amp;project={$projectName}&amp;method={$methodName}&amp;class={$className}&amp;desc={$desc}">Outgoing calls</a>
     <a href="/flamegraph-profiler/incoming-calls?file={$fileName}&amp;project={$projectName}&amp;method={$methodName}&amp;class={$className}&amp;desc={$desc}">Incoming calls</a>
 
+</div>
+{/template}
+
+/**
+ *
+ * @param fileName
+ */
+{template .confirmDelete}
+<div>
+    <div class="confirm-delete-bg"></div>
+    <div class="confirm-delete-popup">
+        <h3>Delete file {$fileName}?</h3>
+        <div class="do-delete"><a>Ok</a></div>
+        <div class="do-not-delete"><p>Cancel</p></div>
+    </div>
 </div>
 {/template}

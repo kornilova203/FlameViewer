@@ -1,3 +1,5 @@
+const KEYCODE_ESC = 27;
+const KEYCODE_ENTER = 13;
 const projectName = getParameter("project");
 if (projectName === undefined) {
     console.log("project is not defined");
@@ -30,6 +32,7 @@ function showFilesList(projectsDropdown, searchForm, arrowRight, arrowLeft, vert
     arrowRight.hide();
     verticalProjectName.css("transition", "");
     verticalProjectName.css("opacity", 0);
+    verticalProjectName.css("pointer-events", "none");
     $(".file-list").show();
 }
 
@@ -53,6 +56,7 @@ function unableHideFilesList() {
         arrowLeft.hide();
         arrowRight.show();
         verticalProjectName.css("transition", "opacity 300ms");
+        verticalProjectName.css("pointer-events", "auto");
         verticalProjectName.css("opacity", 1);
         $(".file-list").hide();
     });
@@ -111,19 +115,84 @@ function showMessage(message) {
 
 function appendInput() {
     const input = templates.tree.fileInput().content;
+    // noinspection all
     $(input).insertBefore("#search-file-form");
+}
+
+function deleteFile(popup, li, liFileName) {
+    popup.remove();
+    const request = new XMLHttpRequest();
+    request.open("POST", "/flamegraph-profiler/delete-file", true);
+    request.setRequestHeader('File-Name', liFileName);
+    request.setRequestHeader('Project-Name', projectName);
+    request.send();
+    li.remove();
+    $(document).unbind("keyup");
+}
+
+function bindEscAndCancel(popup) {
+    // noinspection JSUnresolvedFunction
+    $(document).keyup(function (e) {
+        if (e.keyCode === KEYCODE_ENTER) {
+            popup.find(".do-delete").click();
+        }
+        if (e.keyCode === KEYCODE_ESC) {
+            console.log("esc");
+            popup.find(".confirm-delete-bg").click();
+        }
+    });
+}
+
+function createDeleteFilePopup(li, liFileName) {
+    const popupText = templates.tree.confirmDelete({
+        fileName: liFileName
+    }).content;
+    const popup = $(popupText);
+    $("body").append(popup);
+    let wasPopupClicked = false;
+    if (liFileName === fileName) {
+        popup.find("a").attr("href", "/flamegraph-profiler/" + getPageName() + "?project=" + projectName);
+    }
+    popup.find(".do-delete").click(() => {
+        deleteFile(popup, li, liFileName);
+    });
+    popup.find(".do-not-delete").click(() => {
+        popup.remove();
+        $(document).unbind("keyup");
+    });
+    popup.find(".confirm-delete-bg").click(() => {
+        if (wasPopupClicked) {
+            wasPopupClicked = false;
+        } else {
+            popup.remove();
+            $(document).unbind("keyup");
+        }
+    });
+    popup.find(".confirm-delete-popup").click(() => {
+        wasPopupClicked = true;
+    });
+    bindEscAndCancel(popup);
 }
 
 function updateFilesList(filesList) {
     if (filesList.length === 0) {
         $("<p class='no-file-found'>No file was found</p>").appendTo($(".file-menu"));
     } else {
-        const list = templates.tree.listOfFiles({
+        const listString = templates.tree.listOfFiles({
             fileNames: filesList,
             projectName: projectName,
             pageName: getPageName()
         }).content;
-        $(list).appendTo($(".file-menu"));
+        const list = $(listString);
+        list.appendTo($(".file-menu"));
+        // noinspection JSValidateTypes
+        list.children().each(function () {
+            const li = $(this);
+            const liFileName = li.attr("id");
+            li.find("img").click(() => {
+                createDeleteFilePopup(li, liFileName);
+            })
+        });
         if (fileName !== undefined) {
             $("#" + fileName.replace(/\./, "\\.")).addClass("current-file");
         }

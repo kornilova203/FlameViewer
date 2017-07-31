@@ -84,15 +84,7 @@ public class PluginFileManager {
         if (files != null) {
             list = Arrays.stream(files)
                     .filter(file -> !file.isDirectory())
-                    .sorted((f1, f2) -> {
-                        if (f1.lastModified() == f2.lastModified()) {
-                            return 0;
-                        }
-                        if (f1.lastModified() < f2.lastModified()) {
-                            return 1;
-                        }
-                        return -1;
-                    })
+                    .sorted((f1, f2) -> Long.compare(f2.lastModified(), f1.lastModified()))
                     .map(File::getName)
                     .collect(Collectors.toList());
         }
@@ -195,7 +187,7 @@ public class PluginFileManager {
         return null;
     }
 
-    static String getFileName(String name) {
+    private static String getFileName(String name) {
         return name.substring(0, name.indexOf("."));
     }
 
@@ -203,5 +195,15 @@ public class PluginFileManager {
         String name = getFileName(logFile.getName());
         Path path = Paths.get(convertedFilesPath.toString(), name + ".converted");
         return new File(path.toString());
+    }
+
+    public void deleteFile(@NotNull String fileName, @NotNull String projectName) {
+        Path path = Paths.get(logDirPath.toString(), projectName, fileName);
+        File file = new File(path.toString());
+        if (!file.exists()) {
+            return;
+        }
+        //noinspection ResultOfMethodCallIgnored
+        file.delete();
     }
 }

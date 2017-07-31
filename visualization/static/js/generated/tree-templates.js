@@ -48,7 +48,7 @@ templates.tree.listOfFiles = function(opt_data, opt_ignored) {
     var fileNameListLen61 = fileNameList61.length;
     for (var fileNameIndex61 = 0; fileNameIndex61 < fileNameListLen61; fileNameIndex61++) {
         var fileNameData61 = fileNameList61[fileNameIndex61];
-        output += '<li id="' + soy.$$escapeHtmlAttribute(fileNameData61) + '"><a href="/flamegraph-profiler/' + soy.$$escapeHtmlAttribute(opt_data.pageName) + '?file=' + soy.$$escapeUri(fileNameData61) + '&amp;project=' + soy.$$escapeUri(opt_data.projectName) + '">' + soy.$$escapeHtml(fileNameData61) + '</a></li>';
+        output += '<li id="' + soy.$$escapeHtmlAttribute(fileNameData61) + '"><img class="delete-file-black delete-file" src="img/close-black.png"/><img class="delete-file-white delete-file" src="img/close-white.png"/><a href="/flamegraph-profiler/' + soy.$$escapeHtmlAttribute(opt_data.pageName) + '?file=' + soy.$$escapeUri(fileNameData61) + '&amp;project=' + soy.$$escapeUri(opt_data.projectName) + '">' + soy.$$escapeHtml(fileNameData61) + '</a></li>';
   }
   output += '</ol>';
   return soydata.VERY_UNSAFE.ordainSanitizedHtml(output);
@@ -79,4 +79,12 @@ templates.tree.hotSpot = function (opt_data, opt_ignored) {
 };
 if (goog.DEBUG) {
     templates.tree.hotSpot.soyTemplateName = 'templates.tree.hotSpot';
+}
+
+
+templates.tree.confirmDelete = function (opt_data, opt_ignored) {
+    return soydata.VERY_UNSAFE.ordainSanitizedHtml('<div><div class="confirm-delete-bg"></div><div class="confirm-delete-popup"><h3>Delete file ' + soy.$$escapeHtml(opt_data.fileName) + '?</h3><div class="do-delete"><a>Ok</a></div><div class="do-not-delete"><p>Cancel</p></div></div></div>');
+};
+if (goog.DEBUG) {
+    templates.tree.confirmDelete.soyTemplateName = 'templates.tree.confirmDelete';
 }

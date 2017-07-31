@@ -228,10 +228,10 @@ nav ul li:hover a, .current-link a {
 
 .file-list li a {
     display: inline-block;
-    width: calc(100% - 20px);
+    width: calc(100% - 40px);
     text-overflow: ellipsis;
     overflow: hidden;
-    padding: 12px 0 7px 20px;
+    padding: 14px 0 7px 40px;
     text-decoration: none;
     color: #282828;
 }
@@ -239,13 +239,13 @@ nav ul li:hover a, .current-link a {
 .file-list li:hover {
     transition: background 300ms;
     display: inline-block;
-    padding-right: 10px;
+    /*padding-right: 10px;*/
     background-color: #0e8fdf;
     min-width: 100%;
     box-sizing: border-box;
 }
 
-.file-list li a:hover {
+.file-list li:hover a {
     color: white;
     transition: color 300ms;
 }
@@ -470,6 +470,7 @@ button:focus {
 }
 
 .vertical-project-name {
+    pointer-events: none;
     transform: rotate(-90deg) translateX(-50px) translateY(-155px);
     margin-top: 100px;
     height: 40px;
@@ -540,4 +541,83 @@ button:focus {
 
 .hot-spot a {
     margin-right: 10px;
+}
+
+.delete-file-white {
+    display: none;
+}
+
+.current-file .delete-file-white, .file-list li:hover .delete-file-white {
+    display: inline-block;
+}
+
+.current-file .delete-file-black, .file-list li:hover .delete-file-black {
+    display: none;
+}
+
+.delete-file {
+    opacity: 0.8;
+    cursor: pointer;
+    position: absolute;
+    height: 40px;
+    box-sizing: border-box;
+    padding: 11px;
+}
+
+.delete-file:hover {
+    opacity: 1;
+}
+
+.confirm-delete-popup {
+    position: fixed;
+    background-color: white;
+    border: solid #aaa 1px;
+    width: 200px;
+    height: 90px;
+    top: calc(50vh - 45px);
+    left: calc(50vw - 100px);
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+.confirm-delete-popup h3 {
+    width: 100%;
+    text-align: center;
+    font-weight: normal;
+    font-size: 14px;
+}
+
+.do-delete, .do-not-delete {
+    width: 70px;
+    height: 30px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+
+.do-delete {
+    float: left;
+    background-color: #60b3df;
+}
+
+.do-not-delete {
+    float: right;
+    background-color: #0e8fdf;
+}
+
+.confirm-delete-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: white;
+    opacity: 0.3;
+}
+
+.do-delete a {
+    text-decoration: none;
+    color: white;
 }

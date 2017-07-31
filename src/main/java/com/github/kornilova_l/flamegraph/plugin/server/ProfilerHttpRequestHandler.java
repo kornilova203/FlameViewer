@@ -170,6 +170,16 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
                     sendStatus(HttpResponseStatus.NOT_FOUND, context.channel());
                 }
                 return true;
+            case ServerNames.DELETE_FILE:
+                fileName = fullHttpRequest.headers().get("File-Name");
+                String projectName = fullHttpRequest.headers().get("Project-Name");
+                if (fileName == null || projectName == null) {
+                    return true;
+                }
+                LOG.info("Delete file: " + fileName + " project: " + projectName);
+                fileManager.deleteFile(fileName, projectName);
+                sendStatus(HttpResponseStatus.OK, context.channel());
+                return true;
         }
         return false;
     }
@@ -207,14 +217,6 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
                 LOG.info("file list");
                 if (urlDecoder.parameters().containsKey("project")) {
                     sendFileList(context, urlDecoder.parameters().get("project").get(0));
-                }
-                return true;
-            case ServerNames.UPLOAD_FILE:
-                LOG.info("upload-file.html");
-                try {
-                    sendStatic(context, ServerNames.MAIN_NAME + "/upload-file.html", "text/html");
-                } catch (IOException e) {
-                    e.printStackTrace();
                 }
                 return true;
             case ServerNames.HOT_SPOTS_JS_REQUEST:

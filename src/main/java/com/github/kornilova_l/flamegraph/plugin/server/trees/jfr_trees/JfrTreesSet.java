@@ -15,22 +15,27 @@ import java.util.Map;
 
 import static com.github.kornilova_l.flamegraph.plugin.server.trees.jfr_trees.FlightRecorderConverter.getStacks;
 
-// TODO: remove package from parameters and return value when building tree
-
 public class JfrTreesSet extends TreesSet {
+    private static final com.intellij.openapi.diagnostic.Logger LOG =
+            com.intellij.openapi.diagnostic.Logger.getInstance(JfrTreesSet.class);
+
     public JfrTreesSet(File logFile) {
         super(logFile);
         PluginFileManager fileManager = new PluginFileManager(PathManager.getSystemPath());
         File convertedFile = fileManager.getConvertedFile(logFile.getName());
         if (convertedFile == null) {
+            long startTime = System.currentTimeMillis();
             convertedFile = fileManager.createdFileForConverted(logFile);
             new FlightRecorderConverter(logFile).writeTo(convertedFile);
+            LOG.info("Converting of: " + logFile.getName() + " took " + (System.currentTimeMillis() - startTime) + "ms");
         }
         Map<String, Integer> stacks = getStacks(convertedFile);
         if (stacks == null) {
             outgoingCalls = null;
         } else {
+            long startTime = System.currentTimeMillis();
             outgoingCalls = new StacksOCTreeBuilder(stacks).getTree();
+            LOG.info("Building outgoing calls for: " + logFile.getName() + " took " + (System.currentTimeMillis() - startTime) + "ms");
         }
     }
 

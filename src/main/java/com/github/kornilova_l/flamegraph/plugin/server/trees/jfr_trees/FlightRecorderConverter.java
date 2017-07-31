@@ -22,7 +22,7 @@ import java.util.zip.GZIPInputStream;
  * Converts it to <a href="https://github.com/brendangregg/FlameGraph">FlameGraph</a> format
  * Saves to /stacks dir in profiler dir
  */
-public class FlightRecorderConverter {
+class FlightRecorderConverter {
     private static final String EVENT_TYPE = "Method Profiling Sample";
     private static final String EVENT_VALUE_STACK = "(stackTrace)";
     private static final boolean showReturnValue = true;
@@ -31,7 +31,7 @@ public class FlightRecorderConverter {
     private static final boolean ignoreLineNumbers = true;
     private final Map<String, Integer> stacks = new HashMap<>();
 
-    public FlightRecorderConverter(@NotNull File file) throws IllegalArgumentException {
+    FlightRecorderConverter(@NotNull File file) throws IllegalArgumentException {
         if (!file.exists()) {
             throw new IllegalArgumentException("File does not exist");
         }
@@ -81,10 +81,6 @@ public class FlightRecorderConverter {
         return methodBuilder.toString();
     }
 
-    public Map<String, Integer> getStacks() {
-        return stacks;
-    }
-
     private void buildStacks(FlightRecording recording) {
         IView view = recording.createView();
         for (IEvent event : view) {
@@ -123,7 +119,7 @@ public class FlightRecorderConverter {
         stacks.put(stackTrace, count);
     }
 
-    public void writeTo(File file) {
+    void writeTo(File file) {
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file))) {
             for (Map.Entry<String, Integer> entry : stacks.entrySet()) {
                 bufferedWriter.write(String.format("%s %d%n", entry.getKey(), entry.getValue()));
