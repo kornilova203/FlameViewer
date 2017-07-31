@@ -437,7 +437,7 @@ class AccumulativeTreeDrawer {
      * @private
      */
     static _getLabelText(node) {
-        return `${node.getNodeInfo().getMethodName()} (${node.getNodeInfo().getClassName().split("/").join(".")})`;
+        return `${node.getNodeInfo().getMethodName()} (${node.getNodeInfo().getClassName()})`;
     }
 
     _drawFullTree() {
@@ -472,7 +472,7 @@ class AccumulativeTreeDrawer {
             .split("(").join("%28")
             .split(")").join("%29")
             .split(";").join("%3B");
-        $(".popup h3").text(`${node.getNodeInfo().getClassName().split("/").join(".")}.${node.getNodeInfo().getMethodName()}`);
+        $(".popup h3").text(`${node.getNodeInfo().getClassName()}.${node.getNodeInfo().getMethodName()}`);
         $(".popup .outgoing-link").attr("href", `/flamegraph-profiler/outgoing-calls?` +
             `file=${fileName}&` +
             `project=${projectName}&` +

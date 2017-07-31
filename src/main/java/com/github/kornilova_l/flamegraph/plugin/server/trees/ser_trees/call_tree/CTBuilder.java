@@ -86,7 +86,7 @@ class CTBuilder {
     private static void setNodeInfo(TreeProtos.Tree.Node.Builder node, EventProtos.Event.Enter enter) {
         node.setNodeInfo(
                 TreeProtos.Tree.Node.NodeInfo.newBuilder()
-                        .setClassName(enter.getClassName())
+                        .setClassName(enter.getClassName().replace('/', '.'))
                         .setMethodName(enter.getMethodName())
                         .setDescription(enter.getDescription())
                         .setIsStatic(enter.getIsStatic())

@@ -43,7 +43,7 @@ function appendHotSpot(hotSpot, biggestRelativeTime) {
     const hotSpotBlock = $(templates.tree.hotSpot(
         {
             methodName: hotSpot.methodName,
-            className: hotSpot.className.split("/").join("."),
+            className: hotSpot.className,
             retVal: hotSpot.retVal,
             parameters: hotSpot.parameters,
             doBreak: (hotSpot.retVal + hotSpot.className + hotSpot.methodName).length > 80,
