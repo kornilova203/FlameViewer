@@ -116,7 +116,7 @@ class AccumulativeTreeDrawer {
      * @param {Number} offsetX
      * @param {Boolean} isMostFirst
      * @param {createjs.Stage} stage
-     * @returns {*}
+     * @return {createjs.Shape}
      * @private
      */
     _drawRectangle(node, color, scaleX, offsetX, isMostFirst, stage) {
@@ -428,7 +428,8 @@ class AccumulativeTreeDrawer {
     }
 
     _addResetButton() {
-        this._drawRectangle(this.baseNode, RESET_ZOOM_BUTTON_COLOR, 1, 0, true, this.zoomedStage);
+        const shape = this._drawRectangle(this.baseNode, RESET_ZOOM_BUTTON_COLOR, 1, 0, true, this.zoomedStage);
+        this._drawLabel("Reset zoom", shape, 1, 0, 0, this.zoomedStage);
     }
 
     /**
