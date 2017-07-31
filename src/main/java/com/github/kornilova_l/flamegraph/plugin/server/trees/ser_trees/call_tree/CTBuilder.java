@@ -1,15 +1,22 @@
 package com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees.call_tree;
 
+import com.github.kornilova_l.flamegraph.configuration.MethodConfig;
 import com.github.kornilova_l.flamegraph.proto.EventProtos;
 import com.github.kornilova_l.flamegraph.proto.TreeProtos;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static com.github.kornilova_l.flamegraph.configuration.MethodConfig.splitDesc;
 
 class CTBuilder {
     private LinkedList<TreeProtos.Tree.Node.Builder> callStack;
     private TreeProtos.Tree.Builder treeBuilder = TreeProtos.Tree.newBuilder();
-    @Nullable private TreeProtos.Tree tree = null;
+    @Nullable
+    private TreeProtos.Tree tree = null;
     private int maxDepth = 0;
     private int currentDepth = 0;
 
@@ -21,6 +28,36 @@ class CTBuilder {
                         .build()
         );
         initCallStack();
+    }
+
+    private static void setNodeInfo(TreeProtos.Tree.Node.Builder node, EventProtos.Event.Enter enter) {
+        node.setNodeInfo(
+                TreeProtos.Tree.Node.NodeInfo.newBuilder()
+                        .setClassName(enter.getClassName().replace('/', '.'))
+                        .setMethodName(enter.getMethodName())
+                        .setDescription(enter.getDescription())
+                        .setIsStatic(enter.getIsStatic())
+                        .addAllParameters(enter.getParametersList())
+        );
+    }
+
+    /**
+     * @param desc file specific description
+     * @return (Ljava...lang...String...Z)V -> (String, boolean)void
+     */
+    @NotNull
+    private static String getBeautifulDesc(String desc) {
+        List<String> jvmParams = splitDesc(desc.substring(1, desc.indexOf(")")));
+        List<String> parameters = jvmParams.stream()
+                .map(MethodConfig::jvmTypeToParam)
+                .collect(Collectors.toList());
+
+        String jvmRetVal = desc.substring(desc.indexOf(")") + 1, desc.length());
+
+        return "(" +
+                String.join(", ", parameters) +
+                ")" +
+                MethodConfig.jvmTypeToParam(jvmRetVal);
     }
 
     private void initCallStack() {
@@ -71,7 +108,6 @@ class CTBuilder {
         nodeBuilder.setWidth(width);
     }
 
-
     private void pushNewNode(EventProtos.Event event) {
         if (++currentDepth > maxDepth) {
             maxDepth = currentDepth;
@@ -83,17 +119,6 @@ class CTBuilder {
         callStack.addFirst(node);
     }
 
-    private static void setNodeInfo(TreeProtos.Tree.Node.Builder node, EventProtos.Event.Enter enter) {
-        node.setNodeInfo(
-                TreeProtos.Tree.Node.NodeInfo.newBuilder()
-                        .setClassName(enter.getClassName().replace('/', '.'))
-                        .setMethodName(enter.getMethodName())
-                        .setDescription(enter.getDescription())
-                        .setIsStatic(enter.getIsStatic())
-                        .addAllParameters(enter.getParametersList())
-        );
-    }
-
     private void buildTree(long timeOfLastEvent) {
         if (callStack.size() == 1) { // if call stack has only one base node (everything is okay)
             if (callStack.getFirst().getNodesCount() == 0) { // if tree is empty
@@ -101,11 +126,21 @@ class CTBuilder {
                 return;
             }
             finishTreeBuilding();
-        } else { // something went wrong
+        } else { // if something went wrong
             finishAllCallsInStack(timeOfLastEvent);
         }
+        setBeautifulDescRecursively(treeBuilder.getBaseNodeBuilder());
         tree = treeBuilder.build();
         treeBuilder = null;
+    }
+
+    private void setBeautifulDescRecursively(TreeProtos.Tree.Node.Builder node) {
+        for (TreeProtos.Tree.Node.Builder child : node.getNodesBuilderList()) {
+            child.getNodeInfoBuilder().setDescription(
+                    getBeautifulDesc(child.getNodeInfoBuilder().getDescription())
+            );
+            setBeautifulDescRecursively(child);
+        }
     }
 
     private void finishTreeBuilding() {

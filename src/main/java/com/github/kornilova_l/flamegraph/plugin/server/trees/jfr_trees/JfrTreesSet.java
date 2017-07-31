@@ -8,12 +8,9 @@ import com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees.accumulat
 import com.github.kornilova_l.flamegraph.proto.TreeProtos;
 import com.github.kornilova_l.flamegraph.proto.TreesProtos;
 import com.intellij.openapi.application.PathManager;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 
 import static com.github.kornilova_l.flamegraph.plugin.server.trees.jfr_trees.FlightRecorderConverter.getStacks;
@@ -67,32 +64,5 @@ public class JfrTreesSet extends TreesSet {
     @Override
     public TreesProtos.Trees getCallTree() {
         throw new UnsupportedOperationException("Call tree is not supported for .jfr");
-    }
-
-    @NotNull
-    @Override
-    protected String getBeautifulRetVal(String description) {
-        return removePackage(
-                description.substring(description.indexOf(")") + 1, description.length())
-        );
-    }
-
-    @NotNull
-    @Override
-    protected List<String> getBeautifulParams(String desc) {
-        String innerPart = desc.substring(1, desc.indexOf(")"));
-        String[] stringParameters = innerPart.split(" *, *");
-        for (int i = 0; i < stringParameters.length; i++) {
-            stringParameters[i] = removePackage(stringParameters[i]);
-        }
-        return Arrays.asList(stringParameters);
-    }
-
-    private String removePackage(String type) {
-        int dot = type.lastIndexOf('.');
-        if (dot != -1) {
-            return type.substring(dot + 1, type.length());
-        }
-        return type;
     }
 }

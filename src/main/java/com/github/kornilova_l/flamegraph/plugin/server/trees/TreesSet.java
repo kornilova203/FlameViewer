@@ -89,8 +89,7 @@ public abstract class TreesSet {
         HotSpot hotSpot = new HotSpot(
                 node.getNodeInfo().getClassName(),
                 node.getNodeInfo().getMethodName(),
-                getBeautifulParams(node.getNodeInfo().getDescription()),
-                getBeautifulRetVal(node.getNodeInfo().getDescription())
+                node.getNodeInfo().getDescription()
         );
         hotSpot = hotSpotTreeMap.computeIfAbsent(hotSpot, k -> k);
         assert outgoingCalls != null;
@@ -108,22 +107,19 @@ public abstract class TreesSet {
         return node.getWidth() - childTime;
     }
 
-    protected abstract String getBeautifulRetVal(String description);
-
-    abstract protected List<String> getBeautifulParams(String desc);
-
     public static class HotSpot implements Comparable<HotSpot> {
         private final String methodName;
         private final String className;
-        private final List<String> parameters;
+        private final String[] parameters;
         private final String retVal;
         private float relativeTime = 0;
 
-        HotSpot(String className, String methodName, List<String> parameters, String retVal) {
+        HotSpot(String className, String methodName, String description) {
             this.className = className;
             this.methodName = methodName;
-            this.parameters = parameters;
-            this.retVal = retVal;
+            String params = description.substring(1, description.indexOf(")"));
+            parameters = params.split(", ");
+            retVal = description.substring(description.indexOf(")") + 1, description.length());
         }
 
         @Override
