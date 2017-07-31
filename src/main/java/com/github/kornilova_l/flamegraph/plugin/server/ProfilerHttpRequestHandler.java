@@ -338,8 +338,9 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
         String className = getParameter(urlDecoder, "class");
         String desc = getParameter(urlDecoder, "desc");
         String isStaticString = getParameter(urlDecoder, "isStatic");
-        if (methodName != null && className != null && desc != null && isStaticString != null) {
-            boolean isStatic = Objects.equals(isStaticString, "true");
+        if (methodName != null && className != null && desc != null) {
+            boolean isStatic;
+            isStatic = isStaticString != null && Objects.equals(isStaticString, "true");
             switch (uri) {
                 case ServerNames.OUTGOING_CALLS_JS_REQUEST:
                     LOG.info("outgoing calls for method js request");
