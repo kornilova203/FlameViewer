@@ -1,5 +1,6 @@
 package com.github.kornilova_l.flamegraph.plugin.server.trees;
 
+import com.github.kornilova_l.flamegraph.configuration.Configuration;
 import com.github.kornilova_l.flamegraph.plugin.server.ProfilerHttpRequestHandler;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.jfr_trees.JfrTreesSet;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees.SerTreesSet;
@@ -20,18 +21,18 @@ public class TreeManager {
     }
 
     @Nullable
-    public TreesProtos.Trees getCallTree(File logFile) {
+    public TreesProtos.Trees getCallTree(File logFile, @Nullable Configuration configuration) {
         Extension extension = ProfilerHttpRequestHandler.getExtension(logFile.getName());
         TreesSet treesSet;
         switch (extension) {
             case JFR:
                 treesSet = treesSets.computeIfAbsent(logFile.getAbsolutePath(),
                         n -> new JfrTreesSet(logFile));
-                return treesSet.getCallTree();
+                return treesSet.getCallTree(configuration);
             case SER:
                 treesSet = treesSets.computeIfAbsent(logFile.getAbsolutePath(),
                         n -> new SerTreesSet(logFile));
-                return treesSet.getCallTree();
+                return treesSet.getCallTree(configuration);
             case UNSUPPORTED:
             default:
                 throw new IllegalArgumentException("Extension is unsupported");
@@ -39,18 +40,18 @@ public class TreeManager {
     }
 
     @Nullable
-    public TreeProtos.Tree getTree(File logFile, TreeType treeType) {
+    public TreeProtos.Tree getTree(File logFile, TreeType treeType, @Nullable Configuration configuration) {
         Extension extension = ProfilerHttpRequestHandler.getExtension(logFile.getName());
         TreesSet treesSet;
         switch (extension) {
             case JFR:
                 treesSet = treesSets.computeIfAbsent(logFile.getAbsolutePath(),
                         n -> new JfrTreesSet(logFile));
-                return treesSet.getTree(treeType);
+                return treesSet.getTree(treeType, configuration);
             case SER:
                 treesSet = treesSets.computeIfAbsent(logFile.getAbsolutePath(),
                         n -> new SerTreesSet(logFile));
-                return treesSet.getTree(treeType);
+                return treesSet.getTree(treeType, configuration);
             case UNSUPPORTED:
             default:
                 throw new IllegalArgumentException("Extension is unsupported");
@@ -63,18 +64,19 @@ public class TreeManager {
                                    String className,
                                    String methodName,
                                    String desc,
-                                   boolean isStatic) {
+                                   boolean isStatic,
+                                   @Nullable Configuration configuration) {
         Extension extension = ProfilerHttpRequestHandler.getExtension(logFile.getName());
         TreesSet treesSet;
         switch (extension) {
             case JFR:
                 treesSet = treesSets.computeIfAbsent(logFile.getAbsolutePath(),
                         n -> new JfrTreesSet(logFile));
-                return treesSet.getTree(treeType, className, methodName, desc, isStatic);
+                return treesSet.getTree(treeType, className, methodName, desc, isStatic, configuration);
             case SER:
                 treesSet = treesSets.computeIfAbsent(logFile.getAbsolutePath(),
                         n -> new SerTreesSet(logFile));
-                return treesSet.getTree(treeType, className, methodName, desc, isStatic);
+                return treesSet.getTree(treeType, className, methodName, desc, isStatic, configuration);
             case UNSUPPORTED:
             default:
                 throw new IllegalArgumentException("Extension is unsupported");

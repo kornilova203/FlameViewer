@@ -18,20 +18,7 @@ class AgentConfigurationManager {
             if (isExcluding) {
                 methodConfigLine = methodConfigLine.substring(1, methodConfigLine.length());
             }
-            String classAndMethod = methodConfigLine.substring(0, methodConfigLine.indexOf("("));
-            String classPatternString = classAndMethod.substring(0, classAndMethod.lastIndexOf("."));
-            String methodPatternString = classAndMethod.substring(
-                    classAndMethod.lastIndexOf(".") + 1,
-                    classAndMethod.length()
-            );
-            String parametersPattern = methodConfigLine.substring(methodConfigLine.indexOf("("), methodConfigLine.length());
-            configuration.addMethodConfig(
-                    new MethodConfig(
-                            classPatternString,
-                            methodPatternString,
-                            parametersPattern
-                    ),
-                    isExcluding);
+            configuration.addMethodConfig(methodConfigLine, isExcluding);
         }
         System.out.println("Configuration:");
         System.out.println("Including methods: " + configuration.getIncludingMethodConfigs());

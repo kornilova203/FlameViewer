@@ -1,6 +1,8 @@
 package com.github.kornilova_l.flamegraph.plugin.server;
 
+import com.github.kornilova_l.flamegraph.configuration.Configuration;
 import com.github.kornilova_l.flamegraph.plugin.PluginFileManager;
+import com.github.kornilova_l.flamegraph.plugin.configuration.PluginConfigManager;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeManager;
 import com.github.kornilova_l.flamegraph.proto.TreeProtos;
 import com.github.kornilova_l.flamegraph.proto.TreesProtos;
@@ -315,6 +317,21 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
         if (logFile == null) {
             return;
         }
+        Configuration configuration = null;
+        if (urlDecoder.parameters().containsKey("include") || urlDecoder.parameters().containsKey("exclude")) {
+            String includingConfigsString = getParameter(urlDecoder, "include");
+            String[] includingConfigs = null;
+            if (includingConfigsString != null) {
+                includingConfigs = includingConfigsString.split(",");
+            }
+            String excludingConfigsString = getParameter(urlDecoder, "exclude");
+            String[] excludingConfigs = null;
+            if (excludingConfigsString != null) {
+                excludingConfigs = excludingConfigsString.split(",");
+            }
+            configuration = PluginConfigManager.newConfiguration(includingConfigs, excludingConfigs);
+
+        }
         TreeManager.Extension extension = getExtension(logFile.getName());
         if (extension == TreeManager.Extension.UNSUPPORTED) {
             return;
@@ -322,11 +339,11 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
         switch (uri) {
             case ServerNames.OUTGOING_CALLS_JS_REQUEST:
             case ServerNames.INCOMING_CALLS_JS_REQUEST:
-                processAccumulativeTreeRequest(uri, urlDecoder, context, logFile);
+                processAccumulativeTreeRequest(uri, urlDecoder, context, logFile, configuration);
                 break;
             case ServerNames.CALL_TREE_JS_REQUEST:
                 LOG.info("CALL_TREE_JS_REQUEST");
-                sendTrees(context, treeManager.getCallTree(logFile));
+                sendTrees(context, treeManager.getCallTree(logFile, configuration));
                 break;
         }
 
@@ -335,7 +352,7 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
     private void processAccumulativeTreeRequest(String uri,
                                                 QueryStringDecoder urlDecoder,
                                                 ChannelHandlerContext context,
-                                                @Nullable File logFile) {
+                                                @Nullable File logFile, Configuration configuration) {
         String methodName = getParameter(urlDecoder, "method");
         String className = getParameter(urlDecoder, "class");
         String desc = getParameter(urlDecoder, "desc");
@@ -347,21 +364,21 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
                 case ServerNames.OUTGOING_CALLS_JS_REQUEST:
                     LOG.info("outgoing calls for method js request");
                     sendTree(context, treeManager.getTree(logFile, TreeManager.TreeType.OUTGOING_CALLS, className, methodName,
-                            desc, isStatic));
+                            desc, isStatic, configuration));
                     return;
                 case ServerNames.INCOMING_CALLS_JS_REQUEST:
                     LOG.info("incoming calls for method js request");
                     sendTree(context, treeManager.getTree(logFile, TreeManager.TreeType.INCOMING_CALLS, className, methodName,
-                            desc, isStatic));
+                            desc, isStatic, configuration));
             }
         } else {
             switch (uri) {
                 case ServerNames.OUTGOING_CALLS_JS_REQUEST:
                     LOG.info("OUTGOING_CALLS_JS_REQUEST");
-                    sendTree(context, treeManager.getTree(logFile, TreeManager.TreeType.OUTGOING_CALLS));
+                    sendTree(context, treeManager.getTree(logFile, TreeManager.TreeType.OUTGOING_CALLS, configuration));
                     return;
                 case ServerNames.INCOMING_CALLS_JS_REQUEST:
-                    sendTree(context, treeManager.getTree(logFile, TreeManager.TreeType.INCOMING_CALLS));
+                    sendTree(context, treeManager.getTree(logFile, TreeManager.TreeType.INCOMING_CALLS, configuration));
             }
         }
     }

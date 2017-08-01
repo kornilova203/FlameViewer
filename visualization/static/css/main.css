@@ -421,7 +421,7 @@ nav ul li:hover a, .current-link a {
 
 #search-method-form {
     position: fixed;
-    right: 30px;
+    right: 100px;
 }
 
 .search-white-bg {
@@ -620,4 +620,57 @@ button:focus {
 .do-delete a {
     text-decoration: none;
     color: white;
+}
+
+.filter {
+    position: fixed;
+    width: 80px;
+    height: 60px;
+    background-color: rgba(172, 172, 172, 0.91);
+    right: 0;
+    top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.filter-content {
+    position: fixed;
+    background-color: #f3f3f3;
+    width: 300px;
+    height: 310px;
+    top: 60px;
+    right: 0;
+    display: none;
+    padding: 20px;
+}
+
+.apply-filter, .cancel-filter {
+    position: absolute;
+    background: none;
+    border: 0;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    width: 70px;
+    height: 40px;
+    color: white;
+    bottom: 10px;
+    cursor: pointer;
+}
+
+.apply-filter {
+    background-color: #0e8fdf;
+    right: 90px;
+}
+
+.cancel-filter {
+    background-color: rgba(172, 172, 172, 0.91);
+    right: 10px;
+}
+
+.filter-content label {
+    display: block;
+    margin: 10px 0 5px;
 }

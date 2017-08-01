@@ -1,10 +1,10 @@
 package com.github.kornilova_l.flamegraph.plugin.server.trees.jfr_trees;
 
+import com.github.kornilova_l.flamegraph.configuration.Configuration;
 import com.github.kornilova_l.flamegraph.plugin.PluginFileManager;
 import com.github.kornilova_l.flamegraph.plugin.server.ProfilerHttpRequestHandler;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeManager;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TreesSet;
-import com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees.accumulative_trees.incoming_calls.IncomingCallsBuilder;
 import com.github.kornilova_l.flamegraph.proto.TreeProtos;
 import com.github.kornilova_l.flamegraph.proto.TreesProtos;
 import com.intellij.openapi.application.PathManager;
@@ -48,26 +48,13 @@ public class JfrTreesSet extends TreesSet {
 
     @Nullable
     @Override
-    public TreeProtos.Tree getTree(TreeManager.TreeType treeType) {
-        switch (treeType) {
-            case INCOMING_CALLS:
-                if (outgoingCalls == null) {
-                    return null;
-                }
-                if (incomingCalls == null) {
-                    incomingCalls = new IncomingCallsBuilder(outgoingCalls).getTree();
-                }
-                return incomingCalls;
-            case OUTGOING_CALLS:
-                return outgoingCalls;
-            default:
-                throw new IllegalArgumentException("Tree type is not supported");
-        }
+    public TreeProtos.Tree getTree(TreeManager.TreeType treeType, Configuration configuration) {
+        return getTreeMaybeFilter(treeType, configuration);
     }
 
     @Nullable
     @Override
-    public TreesProtos.Trees getCallTree() {
+    public TreesProtos.Trees getCallTree(@Nullable Configuration configuration) {
         throw new UnsupportedOperationException("Call tree is not supported for .jfr");
     }
 }

@@ -1,0 +1,29 @@
+tree_info {
+  start_time: 1501593715920
+  thread_id: 1
+}
+base_node {
+  nodes {
+    width: 6
+    node_info {
+      method_name: "fun2"
+      class_name: "samples.TestDataGen"
+      return_value {
+      }
+      description: "()void"
+    }
+  }
+  nodes {
+    offset: 6
+    width: 5
+    node_info {
+      method_name: "fun3"
+      class_name: "samples.TestDataGen"
+      return_value {
+      }
+      description: "()void"
+    }
+  }
+}
+depth: 1
+width: 11

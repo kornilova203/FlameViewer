@@ -1,0 +1,22 @@
+base_node {
+  nodes {
+    width: 23
+    node_info {
+      method_name: "fun2"
+      class_name: "samples.TestDataGen"
+      description: "()void"
+      count: 1
+    }
+    nodes {
+      width: 10
+      node_info {
+        method_name: "fun3"
+        class_name: "samples.TestDataGen"
+        description: "()void"
+        count: 2
+      }
+    }
+  }
+}
+depth: 2
+width: 23

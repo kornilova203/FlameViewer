@@ -1,6 +1,9 @@
 package com.github.kornilova_l.flamegraph.plugin.server.trees;
 
+import com.github.kornilova_l.flamegraph.configuration.Configuration;
+import com.github.kornilova_l.flamegraph.plugin.configuration.PluginConfigManager;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees.accumulative_trees.MethodAccumulativeTreeBuilder;
+import com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees.accumulative_trees.incoming_calls.IncomingCallsBuilder;
 import com.github.kornilova_l.flamegraph.proto.TreeProtos;
 import com.github.kornilova_l.flamegraph.proto.TreesProtos;
 import org.jetbrains.annotations.NotNull;
@@ -8,6 +11,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.*;
+
+import static com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees.accumulative_trees.AccumulativeTreesHelper.*;
 
 public abstract class TreesSet {
     protected final File logFile;
@@ -19,7 +24,7 @@ public abstract class TreesSet {
     @Nullable
     protected TreeProtos.Tree outgoingCalls;
     @Nullable
-    protected TreeProtos.Tree incomingCalls;
+    private TreeProtos.Tree incomingCalls;
 
     public TreesSet(File logFile) {
         this.logFile = logFile;
@@ -50,27 +55,33 @@ public abstract class TreesSet {
 
     protected abstract void validateExtension();
 
-    public abstract TreeProtos.Tree getTree(TreeManager.TreeType treeType);
+    public abstract TreeProtos.Tree getTree(TreeManager.TreeType treeType,
+                                            @Nullable Configuration configuration);
 
-    public final TreeProtos.Tree getTree(TreeManager.TreeType treeType, String className, String methodName, String desc, boolean isStatic) {
+    public final TreeProtos.Tree getTree(TreeManager.TreeType treeType,
+                                         String className,
+                                         String methodName,
+                                         String desc,
+                                         boolean isStatic,
+                                         @Nullable Configuration configuration) {
         switch (treeType) {
             case OUTGOING_CALLS:
-                getTree(TreeManager.TreeType.OUTGOING_CALLS);
+                getTree(TreeManager.TreeType.OUTGOING_CALLS, configuration);
                 return getTreeForMethod(outgoingCalls, methodOutgoingCalls, className, methodName, desc, isStatic);
             case INCOMING_CALLS:
-                getTree(TreeManager.TreeType.INCOMING_CALLS);
+                getTree(TreeManager.TreeType.INCOMING_CALLS, configuration);
                 return getTreeForMethod(incomingCalls, methodIncomingCalls, className, methodName, desc, isStatic);
             default:
                 throw new IllegalArgumentException("Tree type is not supported");
         }
     }
 
-    public abstract TreesProtos.Trees getCallTree();
+    public abstract TreesProtos.Trees getCallTree(@Nullable Configuration configuration);
 
     @NotNull List<HotSpot> getHotSpots() {
         if (hotSpots.size() == 0) {
             if (outgoingCalls == null) {
-                outgoingCalls = getTree(TreeManager.TreeType.OUTGOING_CALLS);
+                outgoingCalls = getTree(TreeManager.TreeType.OUTGOING_CALLS, null);
             }
             if (outgoingCalls == null) {
                 return new LinkedList<>();
@@ -111,6 +122,7 @@ public abstract class TreesSet {
         private final String methodName;
         private final String className;
         private final String[] parameters;
+        @SuppressWarnings("unused")
         private final String retVal;
         private float relativeTime = 0;
 
@@ -130,6 +142,130 @@ public abstract class TreesSet {
 
         void addTime(float callRelativeTime) {
             relativeTime += callRelativeTime;
+        }
+    }
+
+    @NotNull
+    protected TreeProtos.Tree filterTree(TreeProtos.Tree tree,
+                                         @NotNull Configuration configuration,
+                                         boolean isCallTree) {
+        TreeProtos.Tree.Builder filteredTree = TreeProtos.Tree.newBuilder();
+        filteredTree.setBaseNode(TreeProtos.Tree.Node.newBuilder());
+        if (isCallTree) {
+            filteredTree.setTreeInfo(tree.getTreeInfo());
+        }
+        buildFilteredTreeRecursively(filteredTree.getBaseNodeBuilder(),
+                tree.getBaseNode(),
+                configuration,
+                isCallTree);
+        int maxDepth = getMaxDepthRecursively(filteredTree.getBaseNodeBuilder(), 0);
+        if (!isCallTree) {
+            setNodesOffsetRecursively(filteredTree.getBaseNodeBuilder(), 0);
+        } else {
+            updateOffset(filteredTree);
+        }
+        setTreeWidth(filteredTree);
+        filteredTree.setDepth(maxDepth);
+        return filteredTree.build();
+    }
+
+    /**
+     * Subtract offset of first node from all offsets
+     *
+     * @param filteredTree tree
+     */
+    private void updateOffset(TreeProtos.Tree.Builder filteredTree) {
+        if (filteredTree.getBaseNodeBuilder().getNodesBuilderList().size() == 0) {
+            return;
+        }
+        long offset = filteredTree.getBaseNodeBuilder().getNodes(0).getOffset();
+        if (offset == 0) {
+            return;
+        }
+        for (TreeProtos.Tree.Node.Builder node : filteredTree.getBaseNodeBuilder().getNodesBuilderList()) {
+            updateOffsetRecursively(node, offset);
+        }
+    }
+
+    private void updateOffsetRecursively(TreeProtos.Tree.Node.Builder node, long offset) {
+        node.setOffset(node.getOffset() - offset);
+        for (TreeProtos.Tree.Node.Builder child : node.getNodesBuilderList()) {
+            updateOffsetRecursively(child, offset);
+        }
+    }
+
+    private int getMaxDepthRecursively(TreeProtos.Tree.Node.Builder nodeBuilder, int currentDepth) {
+        int maxDepth = currentDepth;
+        for (TreeProtos.Tree.Node.Builder child : nodeBuilder.getNodesBuilderList()) {
+            int newDepth = getMaxDepthRecursively(child, currentDepth + 1);
+            if (newDepth > maxDepth) {
+                maxDepth = newDepth;
+            }
+        }
+        return maxDepth;
+    }
+
+    /**
+     * @param nodeBuilder   to this node children will be added
+     * @param node          children of this node will be added to nodeBuilder
+     * @param configuration decides if child will be added
+     * @param isCallTree    if it is a call tree
+     */
+    private void buildFilteredTreeRecursively(TreeProtos.Tree.Node.Builder nodeBuilder,
+                                              TreeProtos.Tree.Node node,
+                                              @NotNull Configuration configuration,
+                                              boolean isCallTree) {
+
+        for (TreeProtos.Tree.Node child : node.getNodesList()) {
+            if (configuration.isMethodInstrumented(PluginConfigManager.newMethodConfig(child))) {
+                TreeProtos.Tree.Node.Builder newNode;
+                if (isCallTree) {
+                    newNode = copyNode(child);
+                    newNode.setOffset(child.getOffset());
+                    nodeBuilder.addNodes(newNode);
+                    newNode = nodeBuilder.getNodesBuilderList().get(nodeBuilder.getNodesBuilderList().size() - 1);
+                } else {
+                    newNode = updateNodeList(nodeBuilder, child, -1, false);
+                }
+                buildFilteredTreeRecursively(
+                        newNode,
+                        child,
+                        configuration,
+                        isCallTree);
+            } else {
+                buildFilteredTreeRecursively(nodeBuilder, child, configuration, isCallTree);
+            }
+        }
+    }
+
+    @NotNull
+    private TreeProtos.Tree.Node.Builder copyNode(TreeProtos.Tree.Node node) {
+        TreeProtos.Tree.Node.Builder nodeBuilder = TreeProtos.Tree.Node.newBuilder();
+        nodeBuilder.setWidth(node.getWidth());
+        nodeBuilder.setNodeInfo(node.getNodeInfo());
+        return nodeBuilder;
+    }
+
+    protected TreeProtos.Tree getTreeMaybeFilter(TreeManager.TreeType treeType, @Nullable Configuration configuration) {
+        switch (treeType) {
+            case OUTGOING_CALLS:
+                if (configuration == null) {
+                    return outgoingCalls;
+                }
+                return filterTree(outgoingCalls, configuration, false);
+            case INCOMING_CALLS:
+                if (outgoingCalls == null) {
+                    return null;
+                }
+                if (incomingCalls == null) {
+                    incomingCalls = new IncomingCallsBuilder(outgoingCalls).getTree();
+                }
+                if (configuration == null) {
+                    return incomingCalls;
+                }
+                return filterTree(incomingCalls, configuration, false);
+            default:
+                throw new IllegalArgumentException("Tree type is not supported");
         }
     }
 }

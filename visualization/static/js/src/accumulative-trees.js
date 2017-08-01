@@ -44,9 +44,10 @@ $(window).on("load", function () {
                 treeType = treeType.substring(0, treeType.indexOf("."));
             }
             if (parameters.indexOf("method=") === -1) {
-                request.open("GET", `/flamegraph-profiler/trees/${treeType}?file=${fileName}&project=${projectName}`, true);
+                request.open("GET", `/flamegraph-profiler/trees/${treeType}?${parameters}`, true);
             } else {
-                request.open("GET", `/flamegraph-profiler/trees/${treeType}?${parameters}&file=${fileName}`, true);
+                console.log(parameters);
+                request.open("GET", `/flamegraph-profiler/trees/${treeType}?${parameters}`, true);
                 className = getParameter("class");
                 methodName = getParameter("method");
                 desc = getParameter("desc");

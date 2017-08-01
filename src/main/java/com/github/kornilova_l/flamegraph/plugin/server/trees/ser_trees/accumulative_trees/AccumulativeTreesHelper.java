@@ -1,5 +1,6 @@
 package com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees.accumulative_trees;
 
+import com.github.kornilova_l.flamegraph.proto.EventProtos;
 import com.github.kornilova_l.flamegraph.proto.TreeProtos;
 import org.jetbrains.annotations.NotNull;
 
@@ -11,24 +12,31 @@ public class AccumulativeTreesHelper {
                                                                 String methodName,
                                                                 String desc,
                                                                 boolean isStatic,
-                                                                int callsCount) {
-        return TreeProtos.Tree.Node.NodeInfo.newBuilder()
+                                                                int callsCount,
+                                                                EventProtos.Var retVal) {
+        TreeProtos.Tree.Node.NodeInfo.Builder nodeInfo = TreeProtos.Tree.Node.NodeInfo.newBuilder()
                 .setClassName(className)
                 .setMethodName(methodName)
                 .setDescription(desc)
                 .setIsStatic(isStatic)
                 .setCount(callsCount);
+        if (retVal != null) {
+            nodeInfo.setReturnValue(retVal);
+        }
+        return nodeInfo;
     }
 
     /**
      * @param nodeBuilder node in building tree. Child of this node will be updated or created
      * @param node        node in source tree. Information of this node will be added to building tree
      * @param time        time which will be set (or added) to created or updated node (-1 if time should be taken from node)
+     * @param isCallTree
      * @return Node.Builder from building tree which was created or updated
      */
     public static TreeProtos.Tree.Node.Builder updateNodeList(TreeProtos.Tree.Node.Builder nodeBuilder,
                                                               TreeProtos.Tree.Node node,
-                                                              long time) {
+                                                              long time,
+                                                              boolean isCallTree) {
         time = time == -1 ? node.getWidth() : time;
         int childCount = nodeBuilder.getNodesCount();
         List<TreeProtos.Tree.Node.Builder> children = nodeBuilder.getNodesBuilderList();
@@ -40,10 +48,10 @@ public class AccumulativeTreesHelper {
                 return childNodeBuilder;
             }
             if (comparableName.compareTo(getComparableName(children.get(i))) < 0) { // if insert between
-                return addNodeToList(nodeBuilder, node, time, i);
+                return addNodeToList(nodeBuilder, node, time, i, isCallTree);
             }
         }
-        return addNodeToList(nodeBuilder, node, time, childCount); // no such method and it is biggest
+        return addNodeToList(nodeBuilder, node, time, childCount, isCallTree); // no such method and it is biggest
     }
 
     private static void updateNode(TreeProtos.Tree.Node.Builder childNodeBuilder, TreeProtos.Tree.Node node, long time) {
@@ -81,14 +89,16 @@ public class AccumulativeTreesHelper {
     private static TreeProtos.Tree.Node.Builder addNodeToList(TreeProtos.Tree.Node.Builder nodeBuilder,
                                                               TreeProtos.Tree.Node node,
                                                               long time,
-                                                              int pos) {
-        TreeProtos.Tree.Node.Builder newNodeBuilder = createNodeBuilder(node, time);
+                                                              int pos,
+                                                              boolean isCallTree) {
+        TreeProtos.Tree.Node.Builder newNodeBuilder = createNodeBuilder(node, time, isCallTree);
         nodeBuilder.addNodes(pos, newNodeBuilder);
         return nodeBuilder.getNodesBuilder(pos);
     }
 
     private static TreeProtos.Tree.Node.Builder createNodeBuilder(TreeProtos.Tree.Node node,
-                                                                  long time) {
+                                                                  long time,
+                                                                  boolean isCallTree) {
         TreeProtos.Tree.Node.NodeInfo CTNodeInfo = node.getNodeInfo();
         int callsCount = node.getNodeInfo().getCount();
         if (callsCount == 0) {
@@ -101,7 +111,8 @@ public class AccumulativeTreesHelper {
                                 CTNodeInfo.getMethodName(),
                                 CTNodeInfo.getDescription(),
                                 CTNodeInfo.getIsStatic(),
-                                callsCount
+                                callsCount,
+                                isCallTree ? CTNodeInfo.getReturnValue() : null
                         )
                 )
                 .setWidth(time);

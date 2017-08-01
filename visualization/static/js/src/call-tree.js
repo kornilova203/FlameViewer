@@ -34,10 +34,8 @@ function getAndDrawTrees() {
     AccumulativeTreeDrawer.showLoader(() => {
         console.log("prepare request");
         const request = new XMLHttpRequest();
-        request.open("GET", "/flamegraph-profiler/trees/call-tree?file=" +
-            fileName +
-            "&project=" +
-            getProjectName(),
+        const parameters = window.location.href.split("?")[1];
+        request.open("GET", "/flamegraph-profiler/trees/call-tree?" + parameters,
             true);
         request.responseType = "arraybuffer";
 

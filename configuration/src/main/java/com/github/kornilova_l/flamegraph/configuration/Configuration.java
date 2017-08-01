@@ -34,6 +34,18 @@ public class Configuration implements Cloneable {
         this.excludingMethodConfigs = excludingMethodConfigs;
     }
 
+    @NotNull
+    private static Set<MethodConfig> getApplicableMethodConfigs(@NotNull Set<MethodConfig> methodConfigs,
+                                                                @NotNull MethodConfig testedConfig) {
+        Set<MethodConfig> excludingConfigs = new TreeSet<>();
+        for (MethodConfig methodConfig : methodConfigs) {
+            if (methodConfig.isApplicableTo(testedConfig)) {
+                excludingConfigs.add(methodConfig);
+            }
+        }
+        return excludingConfigs;
+    }
+
     public Set<MethodConfig> getIncludingMethodConfigs() {
         return includingMethodConfigs;
     }
@@ -75,6 +87,24 @@ public class Configuration implements Cloneable {
         }
     }
 
+    public void addMethodConfig(@NotNull String methodConfigLine, boolean isExcluding) {
+        String classAndMethod = methodConfigLine.substring(0, methodConfigLine.indexOf("("));
+        String classPatternString = classAndMethod.substring(0, classAndMethod.lastIndexOf("."));
+        String methodPatternString = classAndMethod.substring(
+                classAndMethod.lastIndexOf(".") + 1,
+                classAndMethod.length()
+        );
+        String parametersPattern = methodConfigLine.substring(methodConfigLine.indexOf("("), methodConfigLine.length());
+        addMethodConfig(
+                new MethodConfig(
+                        classPatternString,
+                        methodPatternString,
+                        parametersPattern
+                ),
+                isExcluding
+        );
+    }
+
     public void maybeRemoveExactExcludingConfig(MethodConfig methodConfig) {
         excludingMethodConfigs.remove(methodConfig);
     }
@@ -96,18 +126,6 @@ public class Configuration implements Cloneable {
     @NotNull
     public Set<MethodConfig> getExcludingConfigs(@NotNull MethodConfig methodConfig) {
         return getApplicableMethodConfigs(excludingMethodConfigs, methodConfig);
-    }
-
-    @NotNull
-    private static Set<MethodConfig> getApplicableMethodConfigs(@NotNull Set<MethodConfig> methodConfigs,
-                                                                @NotNull MethodConfig testedConfig) {
-        Set<MethodConfig> excludingConfigs = new TreeSet<>();
-        for (MethodConfig methodConfig : methodConfigs) {
-            if (methodConfig.isApplicableTo(testedConfig)) {
-                excludingConfigs.add(methodConfig);
-            }
-        }
-        return excludingConfigs;
     }
 
     public boolean isMethodExcluded(@NotNull MethodConfig methodConfig) {

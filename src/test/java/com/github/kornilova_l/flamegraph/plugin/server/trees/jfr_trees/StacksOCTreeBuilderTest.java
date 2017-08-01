@@ -1,14 +1,17 @@
 package com.github.kornilova_l.flamegraph.plugin.server.trees.jfr_trees;
 
+import com.github.kornilova_l.flamegraph.plugin.server.trees.TestHelper;
 import com.github.kornilova_l.flamegraph.proto.TreeProtos;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 public class StacksOCTreeBuilderTest {
@@ -20,7 +23,7 @@ public class StacksOCTreeBuilderTest {
 
     @Test
     public void getTree() throws Exception {
-        doTest(new File("src/test/resources/test_data01.txt"), new File("src/test/resources/result01.txt"));
+        doTest(new File("src/test/resources/StacksOCTreeBuilderTest/test_data01.txt"), new File("src/test/resources/StacksOCTreeBuilderTest/result01.txt"));
 
     }
 
@@ -29,20 +32,7 @@ public class StacksOCTreeBuilderTest {
         stacks = getStacksFromFile(data);
         TreeProtos.Tree tree = new StacksOCTreeBuilder(stacks).getTree();
         assertNotNull(tree);
-        compare(tree, res);
-    }
-
-    private void compare(TreeProtos.Tree tree, File res) {
-        try (FileInputStream inputStream = new FileInputStream(res)) {
-            byte[] data = new byte[(int) res.length()];
-            //noinspection ResultOfMethodCallIgnored
-            inputStream.read(data);
-            String result = new String(data, "UTF-8");
-            assertEquals(result,
-                    tree.toString());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        TestHelper.compare(tree, res);
     }
 
     private Map<String, Integer> getStacksFromFile(File data) {
