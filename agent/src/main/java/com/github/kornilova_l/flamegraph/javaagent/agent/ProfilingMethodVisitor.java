@@ -56,13 +56,13 @@ class ProfilingMethodVisitor extends AdviceAdapter {
         String description = null;
         switch (type) {
             case Enter:
-                description = "(JJLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Z[Ljava/lang/Object;)V";
+                description = "(Ljava/lang/Thread;JLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Z[Ljava/lang/Object;)V";
                 break;
             case Exit:
-                description = "(Ljava/lang/Object;JJ)V";
+                description = "(Ljava/lang/Object;Ljava/lang/Thread;J)V";
                 break;
             case Exception:
-                description = "(Ljava/lang/Throwable;JJ)V";
+                description = "(Ljava/lang/Thread;Ljava/lang/Throwable;J)V";
                 break;
         }
         if (hasSystemCL) {

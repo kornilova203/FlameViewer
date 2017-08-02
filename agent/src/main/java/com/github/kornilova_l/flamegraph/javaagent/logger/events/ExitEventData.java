@@ -2,25 +2,32 @@ package com.github.kornilova_l.flamegraph.javaagent.logger.events;
 
 import com.github.kornilova_l.flamegraph.proto.EventProtos;
 
+import java.util.LinkedList;
+import java.util.List;
+
 public class ExitEventData extends MethodEventData {
     private Object returnValue;
 
-    public ExitEventData(Object returnValue, long threadId, long exitTime) {
-        super(exitTime, threadId);
+    public ExitEventData(Object returnValue, String threadName, long exitTime) {
+        super(exitTime, threadName);
         this.returnValue = returnValue;
     }
 
     @Override
-    public EventProtos.Event getEventProto() {
+    public List<EventProtos.Event> getEvents() {
+        List<EventProtos.Event> events = new LinkedList<>();
+        Long threadNameId = getThreadNameId(events);
+
         EventProtos.Event.Builder eventBuilder = EventProtos.Event.newBuilder();
         EventProtos.Event.MethodEvent.Builder methodEventBuilder = EventProtos.Event.MethodEvent.newBuilder()
                 .setTime(time)
-                .setThreadId(threadId);
+                .setThreadId(threadNameId);
         methodEventBuilder.setExit(
                 formExitMessage()
         );
         eventBuilder.setMethodEvent(methodEventBuilder.build());
-        return eventBuilder.build();
+        events.add(eventBuilder.build());
+        return events;
     }
 
     private EventProtos.Event.MethodEvent.Exit formExitMessage() {

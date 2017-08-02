@@ -1,15 +1,38 @@
 package com.github.kornilova_l.flamegraph.javaagent.logger.events;
 
+import com.github.kornilova_l.flamegraph.javaagent.logger.LoggerQueue;
 import com.github.kornilova_l.flamegraph.proto.EventProtos;
 
-public abstract class MethodEventData implements EventData {
-    MethodEventData(long time, long threadId) {
-        this.time = time;
-        this.threadId = threadId;
+import java.util.List;
+
+abstract class MethodEventData implements EventData {
+
+    Long getThreadNameId(List<EventProtos.Event> events) {
+        Long threadNameId = LoggerQueue.registeredThreadNames.get(threadName);
+        if (threadNameId == null) {
+            threadNameId = ++LoggerQueue.threadNamesId;
+            LoggerQueue.registeredThreadNames.put(threadName, threadNameId);
+            events.add(createNewThreadEvent(threadNameId, threadName));
+        }
+        return threadNameId;
     }
 
-    public long time;
-    public long threadId;
+    private EventProtos.Event createNewThreadEvent(Long id, String name) {
+        return EventProtos.Event.newBuilder()
+                .setNewThread(EventProtos.Event.Map.newBuilder()
+                        .setId(id)
+                        .setName(name)
+                        .build()
+                ).build();
+    }
+
+    MethodEventData(long time, String threadName) {
+        this.time = time;
+        this.threadName = threadName;
+    }
+
+    final long time;
+    final String threadName;
 
     EventProtos.Var objectToVar(Object o) {
         EventProtos.Var.Builder varBuilder = EventProtos.Var.newBuilder();

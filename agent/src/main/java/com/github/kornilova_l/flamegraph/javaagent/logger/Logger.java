@@ -5,6 +5,7 @@ import com.github.kornilova_l.flamegraph.javaagent.logger.events.EventData;
 import com.github.kornilova_l.flamegraph.proto.EventProtos;
 
 import java.io.*;
+import java.util.List;
 
 import static com.github.kornilova_l.flamegraph.javaagent.logger.LoggerQueue.countEventsAdded;
 import static com.github.kornilova_l.flamegraph.javaagent.logger.LoggerQueue.queue;
@@ -33,9 +34,11 @@ public class Logger implements Runnable {
         System.out.println("Events added: " + countEventsAdded);
     }
 
-    private void writeToFile(EventProtos.Event event) {
+    private void writeToFile(List<EventProtos.Event> events) {
         try {
-            event.writeDelimitedTo(outputStream);
+            for (EventProtos.Event event : events) {
+                event.writeDelimitedTo(outputStream);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -75,7 +78,7 @@ public class Logger implements Runnable {
 
     private void logEvent(EventData eventData) {
         isDone = false;
-        writeToFile(eventData.getEventProto());
+        writeToFile(eventData.getEvents());
         if (queue.size() == 0) {
             isDone = true;
         }

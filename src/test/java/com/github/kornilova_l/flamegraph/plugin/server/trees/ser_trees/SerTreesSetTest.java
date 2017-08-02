@@ -80,21 +80,10 @@ public class SerTreesSetTest {
     @Test
     public void getCallTree() throws Exception {
         SerTreesSet treesSet = new SerTreesSet(
-                new File("src/test/resources/SerTreesSetTest/call-tree/01-one-thread.ser"));
+                new File("src/test/resources/SerTreesSetTest/call-tree/01-three-threads.ser"));
         TreesProtos.Trees callTree = treesSet.getCallTree(null);
         assertTrue(callTree != null);
         TestHelper.compare(callTree.getTrees(0).toString(),
                 new File("src/test/resources/SerTreesSetTest/call-tree/result01.txt"));
-
-        treesSet = new SerTreesSet(
-                new File("src/test/resources/SerTreesSetTest/call-tree/02-five-threads.ser"));
-        callTree = treesSet.getCallTree(null);
-        assertTrue(callTree != null);
-        TestHelper.compare(
-                callTree.getTreesList().stream()
-                        .map(AbstractMessage::toString)
-                        .collect(Collectors.joining("\n")),
-                new File("src/test/resources/SerTreesSetTest/call-tree/result02.txt")
-        );
     }
 }
