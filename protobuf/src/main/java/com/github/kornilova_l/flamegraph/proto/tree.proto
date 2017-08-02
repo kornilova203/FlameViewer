@@ -32,8 +32,9 @@ message Tree {
         }
     }
 
-    message TreeInfo {
-        int64 start_time = 2; // only for ser_trees which save original call structure
-        int64 thread_id = 3; // only for ser_trees which save original call structure
+    message TreeInfo { // only for ser_trees which save original call structure
+        int64 start_time = 2;
+        int64 thread_id = 3;
+        string thread_name = 4;
     }
 }

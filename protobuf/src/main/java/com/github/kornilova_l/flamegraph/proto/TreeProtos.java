@@ -15,7 +15,7 @@ public final class TreeProtos {
         (com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite) registry);
   }
   public interface TreeOrBuilder extends
-          // @@protoc_insertion_point(interface_extends:com.github.kornilova_l.flamegraph.proto.Tree)
+      // @@protoc_insertion_point(interface_extends:com.github.kornilova_l.flamegraph.proto.Tree)
       com.github.kornilova_l.libs.com.google.protobuf.MessageOrBuilder {
 
     /**
@@ -59,7 +59,7 @@ public final class TreeProtos {
    */
   public  static final class Tree extends
       com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3 implements
-          // @@protoc_insertion_point(message_implements:com.github.kornilova_l.flamegraph.proto.Tree)
+      // @@protoc_insertion_point(message_implements:com.github.kornilova_l.flamegraph.proto.Tree)
       TreeOrBuilder {
     // Use Tree.newBuilder() to construct.
     private Tree(com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
@@ -151,11 +151,11 @@ public final class TreeProtos {
         internalGetFieldAccessorTable() {
       return com.github.kornilova_l.flamegraph.proto.TreeProtos.internal_static_com_github_kornilova_l_flamegraph_proto_Tree_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-                  com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.class, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Builder.class);
+              com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.class, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Builder.class);
     }
 
     public interface NodeOrBuilder extends
-            // @@protoc_insertion_point(interface_extends:com.github.kornilova_l.flamegraph.proto.Tree.Node)
+        // @@protoc_insertion_point(interface_extends:com.github.kornilova_l.flamegraph.proto.Tree.Node)
         com.github.kornilova_l.libs.com.google.protobuf.MessageOrBuilder {
 
       /**
@@ -218,7 +218,7 @@ public final class TreeProtos {
      */
     public  static final class Node extends
         com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3 implements
-            // @@protoc_insertion_point(message_implements:com.github.kornilova_l.flamegraph.proto.Tree.Node)
+        // @@protoc_insertion_point(message_implements:com.github.kornilova_l.flamegraph.proto.Tree.Node)
         NodeOrBuilder {
       // Use Node.newBuilder() to construct.
       private Node(com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
@@ -284,7 +284,7 @@ public final class TreeProtos {
                   mutable_bitField0_ |= 0x00000008;
                 }
                 nodes_.add(
-                        input.readMessage(com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.parser(), extensionRegistry));
+                    input.readMessage(com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.parser(), extensionRegistry));
                 break;
               }
             }
@@ -310,11 +310,11 @@ public final class TreeProtos {
           internalGetFieldAccessorTable() {
         return com.github.kornilova_l.flamegraph.proto.TreeProtos.internal_static_com_github_kornilova_l_flamegraph_proto_Tree_Node_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                    com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.class, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.Builder.class);
+                com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.class, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.Builder.class);
       }
 
       public interface NodeInfoOrBuilder extends
-              // @@protoc_insertion_point(interface_extends:com.github.kornilova_l.flamegraph.proto.Tree.Node.NodeInfo)
+          // @@protoc_insertion_point(interface_extends:com.github.kornilova_l.flamegraph.proto.Tree.Node.NodeInfo)
           com.github.kornilova_l.libs.com.google.protobuf.MessageOrBuilder {
 
         /**
@@ -423,14 +423,14 @@ public final class TreeProtos {
          */
         com.github.kornilova_l.flamegraph.proto.EventProtos.Var.ObjectOrBuilder getExceptionOrBuilder();
 
-        com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.NodeInfo.ResultCase getResultCase();
+        public com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.NodeInfo.ResultCase getResultCase();
       }
       /**
        * Protobuf type {@code com.github.kornilova_l.flamegraph.proto.Tree.Node.NodeInfo}
        */
       public  static final class NodeInfo extends
           com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3 implements
-              // @@protoc_insertion_point(message_implements:com.github.kornilova_l.flamegraph.proto.Tree.Node.NodeInfo)
+          // @@protoc_insertion_point(message_implements:com.github.kornilova_l.flamegraph.proto.Tree.Node.NodeInfo)
           NodeInfoOrBuilder {
         // Use NodeInfo.newBuilder() to construct.
         private NodeInfo(com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
@@ -493,7 +493,7 @@ public final class TreeProtos {
                     mutable_bitField0_ |= 0x00000020;
                   }
                   parameters_.add(
-                          input.readMessage(com.github.kornilova_l.flamegraph.proto.EventProtos.Var.parser(), extensionRegistry));
+                      input.readMessage(com.github.kornilova_l.flamegraph.proto.EventProtos.Var.parser(), extensionRegistry));
                   break;
                 }
                 case 42: {
@@ -502,7 +502,7 @@ public final class TreeProtos {
                     subBuilder = ((com.github.kornilova_l.flamegraph.proto.EventProtos.Var) result_).toBuilder();
                   }
                   result_ =
-                          input.readMessage(com.github.kornilova_l.flamegraph.proto.EventProtos.Var.parser(), extensionRegistry);
+                      input.readMessage(com.github.kornilova_l.flamegraph.proto.EventProtos.Var.parser(), extensionRegistry);
                   if (subBuilder != null) {
                     subBuilder.mergeFrom((com.github.kornilova_l.flamegraph.proto.EventProtos.Var) result_);
                     result_ = subBuilder.buildPartial();
@@ -516,7 +516,7 @@ public final class TreeProtos {
                     subBuilder = ((com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object) result_).toBuilder();
                   }
                   result_ =
-                          input.readMessage(com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object.parser(), extensionRegistry);
+                      input.readMessage(com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object.parser(), extensionRegistry);
                   if (subBuilder != null) {
                     subBuilder.mergeFrom((com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object) result_);
                     result_ = subBuilder.buildPartial();
@@ -558,7 +558,7 @@ public final class TreeProtos {
             internalGetFieldAccessorTable() {
           return com.github.kornilova_l.flamegraph.proto.TreeProtos.internal_static_com_github_kornilova_l_flamegraph_proto_Tree_Node_NodeInfo_fieldAccessorTable
               .ensureFieldAccessorsInitialized(
-                      com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.NodeInfo.class, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.NodeInfo.Builder.class);
+                  com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.NodeInfo.class, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.NodeInfo.Builder.class);
         }
 
         private int bitField0_;
@@ -570,7 +570,7 @@ public final class TreeProtos {
           EXCEPTION(6),
           RESULT_NOT_SET(0);
           private final int value;
-          ResultCase(int value) {
+          private ResultCase(int value) {
             this.value = value;
           }
           /**
@@ -592,9 +592,9 @@ public final class TreeProtos {
           public int getNumber() {
             return this.value;
           }
-        }
+        };
 
-          public ResultCase
+        public ResultCase
         getResultCase() {
           return ResultCase.forNumber(
               resultCase_);
@@ -785,7 +785,7 @@ public final class TreeProtos {
          */
         public com.github.kornilova_l.flamegraph.proto.EventProtos.Var getReturnValue() {
           if (resultCase_ == 5) {
-              return (com.github.kornilova_l.flamegraph.proto.EventProtos.Var) result_;
+             return (com.github.kornilova_l.flamegraph.proto.EventProtos.Var) result_;
           }
           return com.github.kornilova_l.flamegraph.proto.EventProtos.Var.getDefaultInstance();
         }
@@ -794,7 +794,7 @@ public final class TreeProtos {
          */
         public com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder getReturnValueOrBuilder() {
           if (resultCase_ == 5) {
-              return (com.github.kornilova_l.flamegraph.proto.EventProtos.Var) result_;
+             return (com.github.kornilova_l.flamegraph.proto.EventProtos.Var) result_;
           }
           return com.github.kornilova_l.flamegraph.proto.EventProtos.Var.getDefaultInstance();
         }
@@ -805,7 +805,7 @@ public final class TreeProtos {
          */
         public com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object getException() {
           if (resultCase_ == 6) {
-              return (com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object) result_;
+             return (com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object) result_;
           }
           return com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object.getDefaultInstance();
         }
@@ -814,7 +814,7 @@ public final class TreeProtos {
          */
         public com.github.kornilova_l.flamegraph.proto.EventProtos.Var.ObjectOrBuilder getExceptionOrBuilder() {
           if (resultCase_ == 6) {
-              return (com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object) result_;
+             return (com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object) result_;
           }
           return com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object.getDefaultInstance();
         }
@@ -878,11 +878,11 @@ public final class TreeProtos {
           }
           if (resultCase_ == 5) {
             size += com.github.kornilova_l.libs.com.google.protobuf.CodedOutputStream
-                    .computeMessageSize(5, (com.github.kornilova_l.flamegraph.proto.EventProtos.Var) result_);
+              .computeMessageSize(5, (com.github.kornilova_l.flamegraph.proto.EventProtos.Var) result_);
           }
           if (resultCase_ == 6) {
             size += com.github.kornilova_l.libs.com.google.protobuf.CodedOutputStream
-                    .computeMessageSize(6, (com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object) result_);
+              .computeMessageSize(6, (com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object) result_);
           }
           if (!getDescriptionBytes().isEmpty()) {
             size += com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.computeStringSize(7, description_);
@@ -1069,8 +1069,8 @@ public final class TreeProtos {
          */
         public static final class Builder extends
             com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-                // @@protoc_insertion_point(builder_implements:com.github.kornilova_l.flamegraph.proto.Tree.Node.NodeInfo)
-                com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.NodeInfoOrBuilder {
+            // @@protoc_insertion_point(builder_implements:com.github.kornilova_l.flamegraph.proto.Tree.Node.NodeInfo)
+            com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.NodeInfoOrBuilder {
           public static final com.github.kornilova_l.libs.com.google.protobuf.Descriptors.Descriptor
               getDescriptor() {
             return com.github.kornilova_l.flamegraph.proto.TreeProtos.internal_static_com_github_kornilova_l_flamegraph_proto_Tree_Node_NodeInfo_descriptor;
@@ -1080,7 +1080,7 @@ public final class TreeProtos {
               internalGetFieldAccessorTable() {
             return com.github.kornilova_l.flamegraph.proto.TreeProtos.internal_static_com_github_kornilova_l_flamegraph_proto_Tree_Node_NodeInfo_fieldAccessorTable
                 .ensureFieldAccessorsInitialized(
-                        com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.NodeInfo.class, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.NodeInfo.Builder.class);
+                    com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.NodeInfo.class, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.NodeInfo.Builder.class);
           }
 
           // Construct using com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.NodeInfo.newBuilder()
@@ -1178,34 +1178,34 @@ public final class TreeProtos {
           }
 
           public Builder clone() {
-            return super.clone();
+            return (Builder) super.clone();
           }
           public Builder setField(
               com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FieldDescriptor field,
               Object value) {
-            return super.setField(field, value);
+            return (Builder) super.setField(field, value);
           }
           public Builder clearField(
               com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FieldDescriptor field) {
-            return super.clearField(field);
+            return (Builder) super.clearField(field);
           }
           public Builder clearOneof(
               com.github.kornilova_l.libs.com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-            return super.clearOneof(oneof);
+            return (Builder) super.clearOneof(oneof);
           }
           public Builder setRepeatedField(
               com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FieldDescriptor field,
               int index, Object value) {
-            return super.setRepeatedField(field, index, value);
+            return (Builder) super.setRepeatedField(field, index, value);
           }
           public Builder addRepeatedField(
               com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FieldDescriptor field,
               Object value) {
-            return super.addRepeatedField(field, value);
+            return (Builder) super.addRepeatedField(field, value);
           }
           public Builder mergeFrom(com.github.kornilova_l.libs.com.google.protobuf.Message other) {
             if (other instanceof com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.NodeInfo) {
-                return mergeFrom((com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.NodeInfo) other);
+              return mergeFrom((com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.NodeInfo)other);
             } else {
               super.mergeFrom(other);
               return this;
@@ -1213,8 +1213,7 @@ public final class TreeProtos {
           }
 
           public Builder mergeFrom(com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.NodeInfo other) {
-              if (other == com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.NodeInfo.getDefaultInstance())
-                  return this;
+            if (other == com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.NodeInfo.getDefaultInstance()) return this;
             if (!other.getMethodName().isEmpty()) {
               methodName_ = other.methodName_;
               onChanged();
@@ -1595,7 +1594,7 @@ public final class TreeProtos {
           }
 
           private com.github.kornilova_l.libs.com.google.protobuf.RepeatedFieldBuilderV3<
-                  com.github.kornilova_l.flamegraph.proto.EventProtos.Var, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder, com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder> parametersBuilder_;
+              com.github.kornilova_l.flamegraph.proto.EventProtos.Var, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder, com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder> parametersBuilder_;
 
           /**
            * <pre>
@@ -1647,7 +1646,7 @@ public final class TreeProtos {
            * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 4;</code>
            */
           public Builder setParameters(
-                  int index, com.github.kornilova_l.flamegraph.proto.EventProtos.Var value) {
+              int index, com.github.kornilova_l.flamegraph.proto.EventProtos.Var value) {
             if (parametersBuilder_ == null) {
               if (value == null) {
                 throw new NullPointerException();
@@ -1668,7 +1667,7 @@ public final class TreeProtos {
            * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 4;</code>
            */
           public Builder setParameters(
-                  int index, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder builderForValue) {
+              int index, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder builderForValue) {
             if (parametersBuilder_ == null) {
               ensureParametersIsMutable();
               parameters_.set(index, builderForValue.build());
@@ -1706,7 +1705,7 @@ public final class TreeProtos {
            * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 4;</code>
            */
           public Builder addParameters(
-                  int index, com.github.kornilova_l.flamegraph.proto.EventProtos.Var value) {
+              int index, com.github.kornilova_l.flamegraph.proto.EventProtos.Var value) {
             if (parametersBuilder_ == null) {
               if (value == null) {
                 throw new NullPointerException();
@@ -1727,7 +1726,7 @@ public final class TreeProtos {
            * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 4;</code>
            */
           public Builder addParameters(
-                  com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder builderForValue) {
+              com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder builderForValue) {
             if (parametersBuilder_ == null) {
               ensureParametersIsMutable();
               parameters_.add(builderForValue.build());
@@ -1745,7 +1744,7 @@ public final class TreeProtos {
            * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 4;</code>
            */
           public Builder addParameters(
-                  int index, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder builderForValue) {
+              int index, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder builderForValue) {
             if (parametersBuilder_ == null) {
               ensureParametersIsMutable();
               parameters_.add(index, builderForValue.build());
@@ -1763,7 +1762,7 @@ public final class TreeProtos {
            * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 4;</code>
            */
           public Builder addAllParameters(
-                  java.lang.Iterable<? extends com.github.kornilova_l.flamegraph.proto.EventProtos.Var> values) {
+              java.lang.Iterable<? extends com.github.kornilova_l.flamegraph.proto.EventProtos.Var> values) {
             if (parametersBuilder_ == null) {
               ensureParametersIsMutable();
               com.github.kornilova_l.libs.com.google.protobuf.AbstractMessageLite.Builder.addAll(
@@ -1857,7 +1856,7 @@ public final class TreeProtos {
            */
           public com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder addParametersBuilder() {
             return getParametersFieldBuilder().addBuilder(
-                    com.github.kornilova_l.flamegraph.proto.EventProtos.Var.getDefaultInstance());
+                com.github.kornilova_l.flamegraph.proto.EventProtos.Var.getDefaultInstance());
           }
           /**
            * <pre>
@@ -1869,7 +1868,7 @@ public final class TreeProtos {
           public com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder addParametersBuilder(
               int index) {
             return getParametersFieldBuilder().addBuilder(
-                    index, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.getDefaultInstance());
+                index, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.getDefaultInstance());
           }
           /**
            * <pre>
@@ -1883,11 +1882,11 @@ public final class TreeProtos {
             return getParametersFieldBuilder().getBuilderList();
           }
           private com.github.kornilova_l.libs.com.google.protobuf.RepeatedFieldBuilderV3<
-                  com.github.kornilova_l.flamegraph.proto.EventProtos.Var, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder, com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder>
+              com.github.kornilova_l.flamegraph.proto.EventProtos.Var, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder, com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder> 
               getParametersFieldBuilder() {
             if (parametersBuilder_ == null) {
               parametersBuilder_ = new com.github.kornilova_l.libs.com.google.protobuf.RepeatedFieldBuilderV3<
-                      com.github.kornilova_l.flamegraph.proto.EventProtos.Var, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder, com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder>(
+                  com.github.kornilova_l.flamegraph.proto.EventProtos.Var, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder, com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder>(
                       parameters_,
                       ((bitField0_ & 0x00000020) == 0x00000020),
                       getParentForChildren(),
@@ -1898,7 +1897,7 @@ public final class TreeProtos {
           }
 
           private com.github.kornilova_l.libs.com.google.protobuf.SingleFieldBuilderV3<
-                  com.github.kornilova_l.flamegraph.proto.EventProtos.Var, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder, com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder> returnValueBuilder_;
+              com.github.kornilova_l.flamegraph.proto.EventProtos.Var, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder, com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder> returnValueBuilder_;
           /**
            * <code>.com.github.kornilova_l.flamegraph.proto.Var return_value = 5;</code>
            */
@@ -1935,7 +1934,7 @@ public final class TreeProtos {
            * <code>.com.github.kornilova_l.flamegraph.proto.Var return_value = 5;</code>
            */
           public Builder setReturnValue(
-                  com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder builderForValue) {
+              com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder builderForValue) {
             if (returnValueBuilder_ == null) {
               result_ = builderForValue.build();
               onChanged();
@@ -1951,7 +1950,7 @@ public final class TreeProtos {
           public Builder mergeReturnValue(com.github.kornilova_l.flamegraph.proto.EventProtos.Var value) {
             if (returnValueBuilder_ == null) {
               if (resultCase_ == 5 &&
-                      result_ != com.github.kornilova_l.flamegraph.proto.EventProtos.Var.getDefaultInstance()) {
+                  result_ != com.github.kornilova_l.flamegraph.proto.EventProtos.Var.getDefaultInstance()) {
                 result_ = com.github.kornilova_l.flamegraph.proto.EventProtos.Var.newBuilder((com.github.kornilova_l.flamegraph.proto.EventProtos.Var) result_)
                     .mergeFrom(value).buildPartial();
               } else {
@@ -2009,26 +2008,26 @@ public final class TreeProtos {
            * <code>.com.github.kornilova_l.flamegraph.proto.Var return_value = 5;</code>
            */
           private com.github.kornilova_l.libs.com.google.protobuf.SingleFieldBuilderV3<
-                  com.github.kornilova_l.flamegraph.proto.EventProtos.Var, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder, com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder>
+              com.github.kornilova_l.flamegraph.proto.EventProtos.Var, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder, com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder> 
               getReturnValueFieldBuilder() {
             if (returnValueBuilder_ == null) {
               if (!(resultCase_ == 5)) {
                 result_ = com.github.kornilova_l.flamegraph.proto.EventProtos.Var.getDefaultInstance();
               }
               returnValueBuilder_ = new com.github.kornilova_l.libs.com.google.protobuf.SingleFieldBuilderV3<
-                      com.github.kornilova_l.flamegraph.proto.EventProtos.Var, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder, com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder>(
+                  com.github.kornilova_l.flamegraph.proto.EventProtos.Var, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder, com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder>(
                       (com.github.kornilova_l.flamegraph.proto.EventProtos.Var) result_,
                       getParentForChildren(),
                       isClean());
               result_ = null;
             }
             resultCase_ = 5;
-            onChanged();
-              return returnValueBuilder_;
+            onChanged();;
+            return returnValueBuilder_;
           }
 
           private com.github.kornilova_l.libs.com.google.protobuf.SingleFieldBuilderV3<
-                  com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object.Builder, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.ObjectOrBuilder> exceptionBuilder_;
+              com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object.Builder, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.ObjectOrBuilder> exceptionBuilder_;
           /**
            * <code>.com.github.kornilova_l.flamegraph.proto.Var.Object exception = 6;</code>
            */
@@ -2065,7 +2064,7 @@ public final class TreeProtos {
            * <code>.com.github.kornilova_l.flamegraph.proto.Var.Object exception = 6;</code>
            */
           public Builder setException(
-                  com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object.Builder builderForValue) {
+              com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object.Builder builderForValue) {
             if (exceptionBuilder_ == null) {
               result_ = builderForValue.build();
               onChanged();
@@ -2081,7 +2080,7 @@ public final class TreeProtos {
           public Builder mergeException(com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object value) {
             if (exceptionBuilder_ == null) {
               if (resultCase_ == 6 &&
-                      result_ != com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object.getDefaultInstance()) {
+                  result_ != com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object.getDefaultInstance()) {
                 result_ = com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object.newBuilder((com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object) result_)
                     .mergeFrom(value).buildPartial();
               } else {
@@ -2139,22 +2138,22 @@ public final class TreeProtos {
            * <code>.com.github.kornilova_l.flamegraph.proto.Var.Object exception = 6;</code>
            */
           private com.github.kornilova_l.libs.com.google.protobuf.SingleFieldBuilderV3<
-                  com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object.Builder, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.ObjectOrBuilder>
+              com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object.Builder, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.ObjectOrBuilder> 
               getExceptionFieldBuilder() {
             if (exceptionBuilder_ == null) {
               if (!(resultCase_ == 6)) {
                 result_ = com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object.getDefaultInstance();
               }
               exceptionBuilder_ = new com.github.kornilova_l.libs.com.google.protobuf.SingleFieldBuilderV3<
-                      com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object.Builder, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.ObjectOrBuilder>(
+                  com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object.Builder, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.ObjectOrBuilder>(
                       (com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object) result_,
                       getParentForChildren(),
                       isClean());
               result_ = null;
             }
             resultCase_ = 6;
-            onChanged();
-              return exceptionBuilder_;
+            onChanged();;
+            return exceptionBuilder_;
           }
           public final Builder setUnknownFields(
               final com.github.kornilova_l.libs.com.google.protobuf.UnknownFieldSet unknownFields) {
@@ -2484,8 +2483,8 @@ public final class TreeProtos {
        */
       public static final class Builder extends
           com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-              // @@protoc_insertion_point(builder_implements:com.github.kornilova_l.flamegraph.proto.Tree.Node)
-              com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.NodeOrBuilder {
+          // @@protoc_insertion_point(builder_implements:com.github.kornilova_l.flamegraph.proto.Tree.Node)
+          com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.NodeOrBuilder {
         public static final com.github.kornilova_l.libs.com.google.protobuf.Descriptors.Descriptor
             getDescriptor() {
           return com.github.kornilova_l.flamegraph.proto.TreeProtos.internal_static_com_github_kornilova_l_flamegraph_proto_Tree_Node_descriptor;
@@ -2495,7 +2494,7 @@ public final class TreeProtos {
             internalGetFieldAccessorTable() {
           return com.github.kornilova_l.flamegraph.proto.TreeProtos.internal_static_com_github_kornilova_l_flamegraph_proto_Tree_Node_fieldAccessorTable
               .ensureFieldAccessorsInitialized(
-                      com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.class, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.Builder.class);
+                  com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.class, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.Builder.class);
         }
 
         // Construct using com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.newBuilder()
@@ -2578,34 +2577,34 @@ public final class TreeProtos {
         }
 
         public Builder clone() {
-          return super.clone();
+          return (Builder) super.clone();
         }
         public Builder setField(
             com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FieldDescriptor field,
             Object value) {
-          return super.setField(field, value);
+          return (Builder) super.setField(field, value);
         }
         public Builder clearField(
             com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FieldDescriptor field) {
-          return super.clearField(field);
+          return (Builder) super.clearField(field);
         }
         public Builder clearOneof(
             com.github.kornilova_l.libs.com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-          return super.clearOneof(oneof);
+          return (Builder) super.clearOneof(oneof);
         }
         public Builder setRepeatedField(
             com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FieldDescriptor field,
             int index, Object value) {
-          return super.setRepeatedField(field, index, value);
+          return (Builder) super.setRepeatedField(field, index, value);
         }
         public Builder addRepeatedField(
             com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FieldDescriptor field,
             Object value) {
-          return super.addRepeatedField(field, value);
+          return (Builder) super.addRepeatedField(field, value);
         }
         public Builder mergeFrom(com.github.kornilova_l.libs.com.google.protobuf.Message other) {
           if (other instanceof com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node) {
-              return mergeFrom((com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node) other);
+            return mergeFrom((com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node)other);
           } else {
             super.mergeFrom(other);
             return this;
@@ -2754,7 +2753,7 @@ public final class TreeProtos {
 
         private com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.NodeInfo nodeInfo_ = null;
         private com.github.kornilova_l.libs.com.google.protobuf.SingleFieldBuilderV3<
-                com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.NodeInfo, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.NodeInfo.Builder, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.NodeInfoOrBuilder> nodeInfoBuilder_;
+            com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.NodeInfo, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.NodeInfo.Builder, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.NodeInfoOrBuilder> nodeInfoBuilder_;
         /**
          * <code>.com.github.kornilova_l.flamegraph.proto.Tree.Node.NodeInfo node_info = 3;</code>
          */
@@ -2791,7 +2790,7 @@ public final class TreeProtos {
          * <code>.com.github.kornilova_l.flamegraph.proto.Tree.Node.NodeInfo node_info = 3;</code>
          */
         public Builder setNodeInfo(
-                com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.NodeInfo.Builder builderForValue) {
+            com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.NodeInfo.Builder builderForValue) {
           if (nodeInfoBuilder_ == null) {
             nodeInfo_ = builderForValue.build();
             onChanged();
@@ -2808,7 +2807,7 @@ public final class TreeProtos {
           if (nodeInfoBuilder_ == null) {
             if (nodeInfo_ != null) {
               nodeInfo_ =
-                      com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.NodeInfo.newBuilder(nodeInfo_).mergeFrom(value).buildPartial();
+                com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.NodeInfo.newBuilder(nodeInfo_).mergeFrom(value).buildPartial();
             } else {
               nodeInfo_ = value;
             }
@@ -2849,18 +2848,18 @@ public final class TreeProtos {
             return nodeInfoBuilder_.getMessageOrBuilder();
           } else {
             return nodeInfo_ == null ?
-                    com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.NodeInfo.getDefaultInstance() : nodeInfo_;
+                com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.NodeInfo.getDefaultInstance() : nodeInfo_;
           }
         }
         /**
          * <code>.com.github.kornilova_l.flamegraph.proto.Tree.Node.NodeInfo node_info = 3;</code>
          */
         private com.github.kornilova_l.libs.com.google.protobuf.SingleFieldBuilderV3<
-                com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.NodeInfo, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.NodeInfo.Builder, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.NodeInfoOrBuilder>
+            com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.NodeInfo, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.NodeInfo.Builder, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.NodeInfoOrBuilder> 
             getNodeInfoFieldBuilder() {
           if (nodeInfoBuilder_ == null) {
             nodeInfoBuilder_ = new com.github.kornilova_l.libs.com.google.protobuf.SingleFieldBuilderV3<
-                    com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.NodeInfo, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.NodeInfo.Builder, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.NodeInfoOrBuilder>(
+                com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.NodeInfo, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.NodeInfo.Builder, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.NodeInfoOrBuilder>(
                     getNodeInfo(),
                     getParentForChildren(),
                     isClean());
@@ -2879,7 +2878,7 @@ public final class TreeProtos {
         }
 
         private com.github.kornilova_l.libs.com.google.protobuf.RepeatedFieldBuilderV3<
-                com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.Builder, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.NodeOrBuilder> nodesBuilder_;
+            com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.Builder, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.NodeOrBuilder> nodesBuilder_;
 
         /**
          * <code>repeated .com.github.kornilova_l.flamegraph.proto.Tree.Node nodes = 4;</code>
@@ -2915,7 +2914,7 @@ public final class TreeProtos {
          * <code>repeated .com.github.kornilova_l.flamegraph.proto.Tree.Node nodes = 4;</code>
          */
         public Builder setNodes(
-                int index, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node value) {
+            int index, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node value) {
           if (nodesBuilder_ == null) {
             if (value == null) {
               throw new NullPointerException();
@@ -2932,7 +2931,7 @@ public final class TreeProtos {
          * <code>repeated .com.github.kornilova_l.flamegraph.proto.Tree.Node nodes = 4;</code>
          */
         public Builder setNodes(
-                int index, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.Builder builderForValue) {
+            int index, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.Builder builderForValue) {
           if (nodesBuilder_ == null) {
             ensureNodesIsMutable();
             nodes_.set(index, builderForValue.build());
@@ -2962,7 +2961,7 @@ public final class TreeProtos {
          * <code>repeated .com.github.kornilova_l.flamegraph.proto.Tree.Node nodes = 4;</code>
          */
         public Builder addNodes(
-                int index, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node value) {
+            int index, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node value) {
           if (nodesBuilder_ == null) {
             if (value == null) {
               throw new NullPointerException();
@@ -2979,7 +2978,7 @@ public final class TreeProtos {
          * <code>repeated .com.github.kornilova_l.flamegraph.proto.Tree.Node nodes = 4;</code>
          */
         public Builder addNodes(
-                com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.Builder builderForValue) {
+            com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.Builder builderForValue) {
           if (nodesBuilder_ == null) {
             ensureNodesIsMutable();
             nodes_.add(builderForValue.build());
@@ -2993,7 +2992,7 @@ public final class TreeProtos {
          * <code>repeated .com.github.kornilova_l.flamegraph.proto.Tree.Node nodes = 4;</code>
          */
         public Builder addNodes(
-                int index, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.Builder builderForValue) {
+            int index, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.Builder builderForValue) {
           if (nodesBuilder_ == null) {
             ensureNodesIsMutable();
             nodes_.add(index, builderForValue.build());
@@ -3007,7 +3006,7 @@ public final class TreeProtos {
          * <code>repeated .com.github.kornilova_l.flamegraph.proto.Tree.Node nodes = 4;</code>
          */
         public Builder addAllNodes(
-                java.lang.Iterable<? extends com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node> values) {
+            java.lang.Iterable<? extends com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node> values) {
           if (nodesBuilder_ == null) {
             ensureNodesIsMutable();
             com.github.kornilova_l.libs.com.google.protobuf.AbstractMessageLite.Builder.addAll(
@@ -3077,7 +3076,7 @@ public final class TreeProtos {
          */
         public com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.Builder addNodesBuilder() {
           return getNodesFieldBuilder().addBuilder(
-                  com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.getDefaultInstance());
+              com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.getDefaultInstance());
         }
         /**
          * <code>repeated .com.github.kornilova_l.flamegraph.proto.Tree.Node nodes = 4;</code>
@@ -3085,7 +3084,7 @@ public final class TreeProtos {
         public com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.Builder addNodesBuilder(
             int index) {
           return getNodesFieldBuilder().addBuilder(
-                  index, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.getDefaultInstance());
+              index, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.getDefaultInstance());
         }
         /**
          * <code>repeated .com.github.kornilova_l.flamegraph.proto.Tree.Node nodes = 4;</code>
@@ -3095,11 +3094,11 @@ public final class TreeProtos {
           return getNodesFieldBuilder().getBuilderList();
         }
         private com.github.kornilova_l.libs.com.google.protobuf.RepeatedFieldBuilderV3<
-                com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.Builder, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.NodeOrBuilder>
+            com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.Builder, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.NodeOrBuilder> 
             getNodesFieldBuilder() {
           if (nodesBuilder_ == null) {
             nodesBuilder_ = new com.github.kornilova_l.libs.com.google.protobuf.RepeatedFieldBuilderV3<
-                    com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.Builder, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.NodeOrBuilder>(
+                com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.Builder, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.NodeOrBuilder>(
                     nodes_,
                     ((bitField0_ & 0x00000008) == 0x00000008),
                     getParentForChildren(),
@@ -3158,33 +3157,39 @@ public final class TreeProtos {
     }
 
     public interface TreeInfoOrBuilder extends
-            // @@protoc_insertion_point(interface_extends:com.github.kornilova_l.flamegraph.proto.Tree.TreeInfo)
+        // @@protoc_insertion_point(interface_extends:com.github.kornilova_l.flamegraph.proto.Tree.TreeInfo)
         com.github.kornilova_l.libs.com.google.protobuf.MessageOrBuilder {
 
       /**
-       * <pre>
-       * only for ser_trees which save original call structure
-       * </pre>
-       *
        * <code>int64 start_time = 2;</code>
        */
       long getStartTime();
 
       /**
-       * <pre>
-       * only for ser_trees which save original call structure
-       * </pre>
-       *
        * <code>int64 thread_id = 3;</code>
        */
       long getThreadId();
+
+      /**
+       * <code>string thread_name = 4;</code>
+       */
+      java.lang.String getThreadName();
+      /**
+       * <code>string thread_name = 4;</code>
+       */
+      com.github.kornilova_l.libs.com.google.protobuf.ByteString
+          getThreadNameBytes();
     }
     /**
+     * <pre>
+     * only for ser_trees which save original call structure
+     * </pre>
+     *
      * Protobuf type {@code com.github.kornilova_l.flamegraph.proto.Tree.TreeInfo}
      */
     public  static final class TreeInfo extends
         com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3 implements
-            // @@protoc_insertion_point(message_implements:com.github.kornilova_l.flamegraph.proto.Tree.TreeInfo)
+        // @@protoc_insertion_point(message_implements:com.github.kornilova_l.flamegraph.proto.Tree.TreeInfo)
         TreeInfoOrBuilder {
       // Use TreeInfo.newBuilder() to construct.
       private TreeInfo(com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
@@ -3193,6 +3198,7 @@ public final class TreeProtos {
       private TreeInfo() {
         startTime_ = 0L;
         threadId_ = 0L;
+        threadName_ = "";
       }
 
       @java.lang.Override
@@ -3230,6 +3236,12 @@ public final class TreeProtos {
                 threadId_ = input.readInt64();
                 break;
               }
+              case 34: {
+                java.lang.String s = input.readStringRequireUtf8();
+
+                threadName_ = s;
+                break;
+              }
             }
           }
         } catch (com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException e) {
@@ -3250,16 +3262,12 @@ public final class TreeProtos {
           internalGetFieldAccessorTable() {
         return com.github.kornilova_l.flamegraph.proto.TreeProtos.internal_static_com_github_kornilova_l_flamegraph_proto_Tree_TreeInfo_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                    com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfo.class, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfo.Builder.class);
+                com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfo.class, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfo.Builder.class);
       }
 
       public static final int START_TIME_FIELD_NUMBER = 2;
       private long startTime_;
       /**
-       * <pre>
-       * only for ser_trees which save original call structure
-       * </pre>
-       *
        * <code>int64 start_time = 2;</code>
        */
       public long getStartTime() {
@@ -3269,14 +3277,44 @@ public final class TreeProtos {
       public static final int THREAD_ID_FIELD_NUMBER = 3;
       private long threadId_;
       /**
-       * <pre>
-       * only for ser_trees which save original call structure
-       * </pre>
-       *
        * <code>int64 thread_id = 3;</code>
        */
       public long getThreadId() {
         return threadId_;
+      }
+
+      public static final int THREAD_NAME_FIELD_NUMBER = 4;
+      private volatile java.lang.Object threadName_;
+      /**
+       * <code>string thread_name = 4;</code>
+       */
+      public java.lang.String getThreadName() {
+        java.lang.Object ref = threadName_;
+        if (ref instanceof java.lang.String) {
+          return (java.lang.String) ref;
+        } else {
+          com.github.kornilova_l.libs.com.google.protobuf.ByteString bs = 
+              (com.github.kornilova_l.libs.com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          threadName_ = s;
+          return s;
+        }
+      }
+      /**
+       * <code>string thread_name = 4;</code>
+       */
+      public com.github.kornilova_l.libs.com.google.protobuf.ByteString
+          getThreadNameBytes() {
+        java.lang.Object ref = threadName_;
+        if (ref instanceof java.lang.String) {
+          com.github.kornilova_l.libs.com.google.protobuf.ByteString b = 
+              com.github.kornilova_l.libs.com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          threadName_ = b;
+          return b;
+        } else {
+          return (com.github.kornilova_l.libs.com.google.protobuf.ByteString) ref;
+        }
       }
 
       private byte memoizedIsInitialized = -1;
@@ -3297,6 +3335,9 @@ public final class TreeProtos {
         if (threadId_ != 0L) {
           output.writeInt64(3, threadId_);
         }
+        if (!getThreadNameBytes().isEmpty()) {
+          com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.writeString(output, 4, threadName_);
+        }
       }
 
       public int getSerializedSize() {
@@ -3311,6 +3352,9 @@ public final class TreeProtos {
         if (threadId_ != 0L) {
           size += com.github.kornilova_l.libs.com.google.protobuf.CodedOutputStream
             .computeInt64Size(3, threadId_);
+        }
+        if (!getThreadNameBytes().isEmpty()) {
+          size += com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.computeStringSize(4, threadName_);
         }
         memoizedSize = size;
         return size;
@@ -3332,6 +3376,8 @@ public final class TreeProtos {
             == other.getStartTime());
         result = result && (getThreadId()
             == other.getThreadId());
+        result = result && getThreadName()
+            .equals(other.getThreadName());
         return result;
       }
 
@@ -3348,6 +3394,8 @@ public final class TreeProtos {
         hash = (37 * hash) + THREAD_ID_FIELD_NUMBER;
         hash = (53 * hash) + com.github.kornilova_l.libs.com.google.protobuf.Internal.hashLong(
             getThreadId());
+        hash = (37 * hash) + THREAD_NAME_FIELD_NUMBER;
+        hash = (53 * hash) + getThreadName().hashCode();
         hash = (29 * hash) + unknownFields.hashCode();
         memoizedHashCode = hash;
         return hash;
@@ -3442,12 +3490,16 @@ public final class TreeProtos {
         return builder;
       }
       /**
+       * <pre>
+       * only for ser_trees which save original call structure
+       * </pre>
+       *
        * Protobuf type {@code com.github.kornilova_l.flamegraph.proto.Tree.TreeInfo}
        */
       public static final class Builder extends
           com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-              // @@protoc_insertion_point(builder_implements:com.github.kornilova_l.flamegraph.proto.Tree.TreeInfo)
-              com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfoOrBuilder {
+          // @@protoc_insertion_point(builder_implements:com.github.kornilova_l.flamegraph.proto.Tree.TreeInfo)
+          com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfoOrBuilder {
         public static final com.github.kornilova_l.libs.com.google.protobuf.Descriptors.Descriptor
             getDescriptor() {
           return com.github.kornilova_l.flamegraph.proto.TreeProtos.internal_static_com_github_kornilova_l_flamegraph_proto_Tree_TreeInfo_descriptor;
@@ -3457,7 +3509,7 @@ public final class TreeProtos {
             internalGetFieldAccessorTable() {
           return com.github.kornilova_l.flamegraph.proto.TreeProtos.internal_static_com_github_kornilova_l_flamegraph_proto_Tree_TreeInfo_fieldAccessorTable
               .ensureFieldAccessorsInitialized(
-                      com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfo.class, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfo.Builder.class);
+                  com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfo.class, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfo.Builder.class);
         }
 
         // Construct using com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfo.newBuilder()
@@ -3480,6 +3532,8 @@ public final class TreeProtos {
           startTime_ = 0L;
 
           threadId_ = 0L;
+
+          threadName_ = "";
 
           return this;
         }
@@ -3505,39 +3559,40 @@ public final class TreeProtos {
           com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfo result = new com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfo(this);
           result.startTime_ = startTime_;
           result.threadId_ = threadId_;
+          result.threadName_ = threadName_;
           onBuilt();
           return result;
         }
 
         public Builder clone() {
-          return super.clone();
+          return (Builder) super.clone();
         }
         public Builder setField(
             com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FieldDescriptor field,
             Object value) {
-          return super.setField(field, value);
+          return (Builder) super.setField(field, value);
         }
         public Builder clearField(
             com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FieldDescriptor field) {
-          return super.clearField(field);
+          return (Builder) super.clearField(field);
         }
         public Builder clearOneof(
             com.github.kornilova_l.libs.com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-          return super.clearOneof(oneof);
+          return (Builder) super.clearOneof(oneof);
         }
         public Builder setRepeatedField(
             com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FieldDescriptor field,
             int index, Object value) {
-          return super.setRepeatedField(field, index, value);
+          return (Builder) super.setRepeatedField(field, index, value);
         }
         public Builder addRepeatedField(
             com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FieldDescriptor field,
             Object value) {
-          return super.addRepeatedField(field, value);
+          return (Builder) super.addRepeatedField(field, value);
         }
         public Builder mergeFrom(com.github.kornilova_l.libs.com.google.protobuf.Message other) {
           if (other instanceof com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfo) {
-              return mergeFrom((com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfo) other);
+            return mergeFrom((com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfo)other);
           } else {
             super.mergeFrom(other);
             return this;
@@ -3545,13 +3600,16 @@ public final class TreeProtos {
         }
 
         public Builder mergeFrom(com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfo other) {
-            if (other == com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfo.getDefaultInstance())
-                return this;
+          if (other == com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfo.getDefaultInstance()) return this;
           if (other.getStartTime() != 0L) {
             setStartTime(other.getStartTime());
           }
           if (other.getThreadId() != 0L) {
             setThreadId(other.getThreadId());
+          }
+          if (!other.getThreadName().isEmpty()) {
+            threadName_ = other.threadName_;
+            onChanged();
           }
           onChanged();
           return this;
@@ -3581,20 +3639,12 @@ public final class TreeProtos {
 
         private long startTime_ ;
         /**
-         * <pre>
-         * only for ser_trees which save original call structure
-         * </pre>
-         *
          * <code>int64 start_time = 2;</code>
          */
         public long getStartTime() {
           return startTime_;
         }
         /**
-         * <pre>
-         * only for ser_trees which save original call structure
-         * </pre>
-         *
          * <code>int64 start_time = 2;</code>
          */
         public Builder setStartTime(long value) {
@@ -3604,10 +3654,6 @@ public final class TreeProtos {
           return this;
         }
         /**
-         * <pre>
-         * only for ser_trees which save original call structure
-         * </pre>
-         *
          * <code>int64 start_time = 2;</code>
          */
         public Builder clearStartTime() {
@@ -3619,20 +3665,12 @@ public final class TreeProtos {
 
         private long threadId_ ;
         /**
-         * <pre>
-         * only for ser_trees which save original call structure
-         * </pre>
-         *
          * <code>int64 thread_id = 3;</code>
          */
         public long getThreadId() {
           return threadId_;
         }
         /**
-         * <pre>
-         * only for ser_trees which save original call structure
-         * </pre>
-         *
          * <code>int64 thread_id = 3;</code>
          */
         public Builder setThreadId(long value) {
@@ -3642,15 +3680,80 @@ public final class TreeProtos {
           return this;
         }
         /**
-         * <pre>
-         * only for ser_trees which save original call structure
-         * </pre>
-         *
          * <code>int64 thread_id = 3;</code>
          */
         public Builder clearThreadId() {
           
           threadId_ = 0L;
+          onChanged();
+          return this;
+        }
+
+        private java.lang.Object threadName_ = "";
+        /**
+         * <code>string thread_name = 4;</code>
+         */
+        public java.lang.String getThreadName() {
+          java.lang.Object ref = threadName_;
+          if (!(ref instanceof java.lang.String)) {
+            com.github.kornilova_l.libs.com.google.protobuf.ByteString bs =
+                (com.github.kornilova_l.libs.com.google.protobuf.ByteString) ref;
+            java.lang.String s = bs.toStringUtf8();
+            threadName_ = s;
+            return s;
+          } else {
+            return (java.lang.String) ref;
+          }
+        }
+        /**
+         * <code>string thread_name = 4;</code>
+         */
+        public com.github.kornilova_l.libs.com.google.protobuf.ByteString
+            getThreadNameBytes() {
+          java.lang.Object ref = threadName_;
+          if (ref instanceof String) {
+            com.github.kornilova_l.libs.com.google.protobuf.ByteString b = 
+                com.github.kornilova_l.libs.com.google.protobuf.ByteString.copyFromUtf8(
+                    (java.lang.String) ref);
+            threadName_ = b;
+            return b;
+          } else {
+            return (com.github.kornilova_l.libs.com.google.protobuf.ByteString) ref;
+          }
+        }
+        /**
+         * <code>string thread_name = 4;</code>
+         */
+        public Builder setThreadName(
+            java.lang.String value) {
+          if (value == null) {
+    throw new NullPointerException();
+  }
+  
+          threadName_ = value;
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>string thread_name = 4;</code>
+         */
+        public Builder clearThreadName() {
+          
+          threadName_ = getDefaultInstance().getThreadName();
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>string thread_name = 4;</code>
+         */
+        public Builder setThreadNameBytes(
+            com.github.kornilova_l.libs.com.google.protobuf.ByteString value) {
+          if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+          
+          threadName_ = value;
           onChanged();
           return this;
         }
@@ -3961,8 +4064,8 @@ public final class TreeProtos {
      */
     public static final class Builder extends
         com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-            // @@protoc_insertion_point(builder_implements:com.github.kornilova_l.flamegraph.proto.Tree)
-            com.github.kornilova_l.flamegraph.proto.TreeProtos.TreeOrBuilder {
+        // @@protoc_insertion_point(builder_implements:com.github.kornilova_l.flamegraph.proto.Tree)
+        com.github.kornilova_l.flamegraph.proto.TreeProtos.TreeOrBuilder {
       public static final com.github.kornilova_l.libs.com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.github.kornilova_l.flamegraph.proto.TreeProtos.internal_static_com_github_kornilova_l_flamegraph_proto_Tree_descriptor;
@@ -3972,7 +4075,7 @@ public final class TreeProtos {
           internalGetFieldAccessorTable() {
         return com.github.kornilova_l.flamegraph.proto.TreeProtos.internal_static_com_github_kornilova_l_flamegraph_proto_Tree_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                    com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.class, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Builder.class);
+                com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.class, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Builder.class);
       }
 
       // Construct using com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.newBuilder()
@@ -4047,34 +4150,34 @@ public final class TreeProtos {
       }
 
       public Builder clone() {
-        return super.clone();
+        return (Builder) super.clone();
       }
       public Builder setField(
           com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FieldDescriptor field,
           Object value) {
-        return super.setField(field, value);
+        return (Builder) super.setField(field, value);
       }
       public Builder clearField(
           com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FieldDescriptor field) {
-        return super.clearField(field);
+        return (Builder) super.clearField(field);
       }
       public Builder clearOneof(
           com.github.kornilova_l.libs.com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-        return super.clearOneof(oneof);
+        return (Builder) super.clearOneof(oneof);
       }
       public Builder setRepeatedField(
           com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FieldDescriptor field,
           int index, Object value) {
-        return super.setRepeatedField(field, index, value);
+        return (Builder) super.setRepeatedField(field, index, value);
       }
       public Builder addRepeatedField(
           com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FieldDescriptor field,
           Object value) {
-        return super.addRepeatedField(field, value);
+        return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.github.kornilova_l.libs.com.google.protobuf.Message other) {
         if (other instanceof com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree) {
-            return mergeFrom((com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree) other);
+          return mergeFrom((com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree)other);
         } else {
           super.mergeFrom(other);
           return this;
@@ -4123,7 +4226,7 @@ public final class TreeProtos {
 
       private com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfo treeInfo_ = null;
       private com.github.kornilova_l.libs.com.google.protobuf.SingleFieldBuilderV3<
-              com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfo, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfo.Builder, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfoOrBuilder> treeInfoBuilder_;
+          com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfo, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfo.Builder, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfoOrBuilder> treeInfoBuilder_;
       /**
        * <code>.com.github.kornilova_l.flamegraph.proto.Tree.TreeInfo tree_info = 1;</code>
        */
@@ -4160,7 +4263,7 @@ public final class TreeProtos {
        * <code>.com.github.kornilova_l.flamegraph.proto.Tree.TreeInfo tree_info = 1;</code>
        */
       public Builder setTreeInfo(
-              com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfo.Builder builderForValue) {
+          com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfo.Builder builderForValue) {
         if (treeInfoBuilder_ == null) {
           treeInfo_ = builderForValue.build();
           onChanged();
@@ -4177,7 +4280,7 @@ public final class TreeProtos {
         if (treeInfoBuilder_ == null) {
           if (treeInfo_ != null) {
             treeInfo_ =
-                    com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfo.newBuilder(treeInfo_).mergeFrom(value).buildPartial();
+              com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfo.newBuilder(treeInfo_).mergeFrom(value).buildPartial();
           } else {
             treeInfo_ = value;
           }
@@ -4218,18 +4321,18 @@ public final class TreeProtos {
           return treeInfoBuilder_.getMessageOrBuilder();
         } else {
           return treeInfo_ == null ?
-                  com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfo.getDefaultInstance() : treeInfo_;
+              com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfo.getDefaultInstance() : treeInfo_;
         }
       }
       /**
        * <code>.com.github.kornilova_l.flamegraph.proto.Tree.TreeInfo tree_info = 1;</code>
        */
       private com.github.kornilova_l.libs.com.google.protobuf.SingleFieldBuilderV3<
-              com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfo, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfo.Builder, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfoOrBuilder>
+          com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfo, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfo.Builder, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfoOrBuilder> 
           getTreeInfoFieldBuilder() {
         if (treeInfoBuilder_ == null) {
           treeInfoBuilder_ = new com.github.kornilova_l.libs.com.google.protobuf.SingleFieldBuilderV3<
-                  com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfo, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfo.Builder, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfoOrBuilder>(
+              com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfo, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfo.Builder, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfoOrBuilder>(
                   getTreeInfo(),
                   getParentForChildren(),
                   isClean());
@@ -4240,7 +4343,7 @@ public final class TreeProtos {
 
       private com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node baseNode_ = null;
       private com.github.kornilova_l.libs.com.google.protobuf.SingleFieldBuilderV3<
-              com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.Builder, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.NodeOrBuilder> baseNodeBuilder_;
+          com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.Builder, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.NodeOrBuilder> baseNodeBuilder_;
       /**
        * <code>.com.github.kornilova_l.flamegraph.proto.Tree.Node base_node = 2;</code>
        */
@@ -4277,7 +4380,7 @@ public final class TreeProtos {
        * <code>.com.github.kornilova_l.flamegraph.proto.Tree.Node base_node = 2;</code>
        */
       public Builder setBaseNode(
-              com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.Builder builderForValue) {
+          com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.Builder builderForValue) {
         if (baseNodeBuilder_ == null) {
           baseNode_ = builderForValue.build();
           onChanged();
@@ -4294,7 +4397,7 @@ public final class TreeProtos {
         if (baseNodeBuilder_ == null) {
           if (baseNode_ != null) {
             baseNode_ =
-                    com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.newBuilder(baseNode_).mergeFrom(value).buildPartial();
+              com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.newBuilder(baseNode_).mergeFrom(value).buildPartial();
           } else {
             baseNode_ = value;
           }
@@ -4335,18 +4438,18 @@ public final class TreeProtos {
           return baseNodeBuilder_.getMessageOrBuilder();
         } else {
           return baseNode_ == null ?
-                  com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.getDefaultInstance() : baseNode_;
+              com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.getDefaultInstance() : baseNode_;
         }
       }
       /**
        * <code>.com.github.kornilova_l.flamegraph.proto.Tree.Node base_node = 2;</code>
        */
       private com.github.kornilova_l.libs.com.google.protobuf.SingleFieldBuilderV3<
-              com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.Builder, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.NodeOrBuilder>
+          com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.Builder, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.NodeOrBuilder> 
           getBaseNodeFieldBuilder() {
         if (baseNodeBuilder_ == null) {
           baseNodeBuilder_ = new com.github.kornilova_l.libs.com.google.protobuf.SingleFieldBuilderV3<
-                  com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.Builder, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.NodeOrBuilder>(
+              com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.Builder, com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.NodeOrBuilder>(
                   getBaseNode(),
                   getParentForChildren(),
                   isClean());
@@ -4456,25 +4559,25 @@ public final class TreeProtos {
   }
 
   private static final com.github.kornilova_l.libs.com.google.protobuf.Descriptors.Descriptor
-          internal_static_com_github_kornilova_l_flamegraph_proto_Tree_descriptor;
+    internal_static_com_github_kornilova_l_flamegraph_proto_Tree_descriptor;
   private static final 
     com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-          internal_static_com_github_kornilova_l_flamegraph_proto_Tree_fieldAccessorTable;
+      internal_static_com_github_kornilova_l_flamegraph_proto_Tree_fieldAccessorTable;
   private static final com.github.kornilova_l.libs.com.google.protobuf.Descriptors.Descriptor
-          internal_static_com_github_kornilova_l_flamegraph_proto_Tree_Node_descriptor;
+    internal_static_com_github_kornilova_l_flamegraph_proto_Tree_Node_descriptor;
   private static final 
     com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-          internal_static_com_github_kornilova_l_flamegraph_proto_Tree_Node_fieldAccessorTable;
+      internal_static_com_github_kornilova_l_flamegraph_proto_Tree_Node_fieldAccessorTable;
   private static final com.github.kornilova_l.libs.com.google.protobuf.Descriptors.Descriptor
-          internal_static_com_github_kornilova_l_flamegraph_proto_Tree_Node_NodeInfo_descriptor;
+    internal_static_com_github_kornilova_l_flamegraph_proto_Tree_Node_NodeInfo_descriptor;
   private static final 
     com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-          internal_static_com_github_kornilova_l_flamegraph_proto_Tree_Node_NodeInfo_fieldAccessorTable;
+      internal_static_com_github_kornilova_l_flamegraph_proto_Tree_Node_NodeInfo_fieldAccessorTable;
   private static final com.github.kornilova_l.libs.com.google.protobuf.Descriptors.Descriptor
-          internal_static_com_github_kornilova_l_flamegraph_proto_Tree_TreeInfo_descriptor;
+    internal_static_com_github_kornilova_l_flamegraph_proto_Tree_TreeInfo_descriptor;
   private static final 
     com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-          internal_static_com_github_kornilova_l_flamegraph_proto_Tree_TreeInfo_fieldAccessorTable;
+      internal_static_com_github_kornilova_l_flamegraph_proto_Tree_TreeInfo_fieldAccessorTable;
 
   public static com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -4484,29 +4587,30 @@ public final class TreeProtos {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-            "\n2com/github/kornilova_l/flamegraph/prot" +
-                    "o/tree.proto\022\'com.github.kornilova_l.fla" +
-                    "megraph.proto\0323com/github/kornilova_l/fl" +
-                    "amegraph/proto/event.proto\"\355\005\n\004Tree\022I\n\tt" +
-                    "ree_info\030\001 \001(\01326.com.github.kornilova_l." +
-                    "flamegraph.proto.Tree.TreeInfo\022E\n\tbase_n" +
-                    "ode\030\002 \001(\01322.com.github.kornilova_l.flame" +
-                    "graph.proto.Tree.Node\022\r\n\005depth\030\003 \001(\r\022\r\n\005" +
-                    "width\030\004 \001(\003\032\201\004\n\004Node\022\016\n\006offset\030\001 \001(\003\022\r\n\005" +
-                    "width\030\002 \001(\003\022N\n\tnode_info\030\003 \001(\0132;.com.git",
-            "hub.kornilova_l.flamegraph.proto.Tree.No" +
-                    "de.NodeInfo\022A\n\005nodes\030\004 \003(\01322.com.github." +
-                    "kornilova_l.flamegraph.proto.Tree.Node\032\306" +
-                    "\002\n\010NodeInfo\022\023\n\013method_name\030\001 \001(\t\022\022\n\nclas" +
-                    "s_name\030\002 \001(\t\022\023\n\013description\030\007 \001(\t\022\021\n\tis_" +
-                    "static\030\003 \001(\010\022\r\n\005count\030\010 \001(\005\022@\n\nparameter" +
-                    "s\030\004 \003(\0132,.com.github.kornilova_l.flamegr" +
-                    "aph.proto.Var\022D\n\014return_value\030\005 \001(\0132,.co" +
-                    "m.github.kornilova_l.flamegraph.proto.Va" +
-                    "rH\000\022H\n\texception\030\006 \001(\01323.com.github.korn",
-            "ilova_l.flamegraph.proto.Var.ObjectH\000B\010\n" +
-                    "\006result\0321\n\010TreeInfo\022\022\n\nstart_time\030\002 \001(\003\022" +
-                    "\021\n\tthread_id\030\003 \001(\003B\014B\nTreeProtosb\006proto3"
+      "\n2com/github/kornilova_l/flamegraph/prot" +
+      "o/tree.proto\022\'com.github.kornilova_l.fla" +
+      "megraph.proto\0323com/github/kornilova_l/fl" +
+      "amegraph/proto/event.proto\"\202\006\n\004Tree\022I\n\tt" +
+      "ree_info\030\001 \001(\01326.com.github.kornilova_l." +
+      "flamegraph.proto.Tree.TreeInfo\022E\n\tbase_n" +
+      "ode\030\002 \001(\01322.com.github.kornilova_l.flame" +
+      "graph.proto.Tree.Node\022\r\n\005depth\030\003 \001(\r\022\r\n\005" +
+      "width\030\004 \001(\003\032\201\004\n\004Node\022\016\n\006offset\030\001 \001(\003\022\r\n\005" +
+      "width\030\002 \001(\003\022N\n\tnode_info\030\003 \001(\0132;.com.git",
+      "hub.kornilova_l.flamegraph.proto.Tree.No" +
+      "de.NodeInfo\022A\n\005nodes\030\004 \003(\01322.com.github." +
+      "kornilova_l.flamegraph.proto.Tree.Node\032\306" +
+      "\002\n\010NodeInfo\022\023\n\013method_name\030\001 \001(\t\022\022\n\nclas" +
+      "s_name\030\002 \001(\t\022\023\n\013description\030\007 \001(\t\022\021\n\tis_" +
+      "static\030\003 \001(\010\022\r\n\005count\030\010 \001(\005\022@\n\nparameter" +
+      "s\030\004 \003(\0132,.com.github.kornilova_l.flamegr" +
+      "aph.proto.Var\022D\n\014return_value\030\005 \001(\0132,.co" +
+      "m.github.kornilova_l.flamegraph.proto.Va" +
+      "rH\000\022H\n\texception\030\006 \001(\01323.com.github.korn",
+      "ilova_l.flamegraph.proto.Var.ObjectH\000B\010\n" +
+      "\006result\032F\n\010TreeInfo\022\022\n\nstart_time\030\002 \001(\003\022" +
+      "\021\n\tthread_id\030\003 \001(\003\022\023\n\013thread_name\030\004 \001(\tB" +
+      "\014B\nTreeProtosb\006proto3"
     };
     com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -4519,32 +4623,32 @@ public final class TreeProtos {
     com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FileDescriptor[] {
-                com.github.kornilova_l.flamegraph.proto.EventProtos.getDescriptor(),
+          com.github.kornilova_l.flamegraph.proto.EventProtos.getDescriptor(),
         }, assigner);
     internal_static_com_github_kornilova_l_flamegraph_proto_Tree_descriptor =
       getDescriptor().getMessageTypes().get(0);
     internal_static_com_github_kornilova_l_flamegraph_proto_Tree_fieldAccessorTable = new
       com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-            internal_static_com_github_kornilova_l_flamegraph_proto_Tree_descriptor,
+        internal_static_com_github_kornilova_l_flamegraph_proto_Tree_descriptor,
         new java.lang.String[] { "TreeInfo", "BaseNode", "Depth", "Width", });
     internal_static_com_github_kornilova_l_flamegraph_proto_Tree_Node_descriptor =
-            internal_static_com_github_kornilova_l_flamegraph_proto_Tree_descriptor.getNestedTypes().get(0);
+      internal_static_com_github_kornilova_l_flamegraph_proto_Tree_descriptor.getNestedTypes().get(0);
     internal_static_com_github_kornilova_l_flamegraph_proto_Tree_Node_fieldAccessorTable = new
       com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-            internal_static_com_github_kornilova_l_flamegraph_proto_Tree_Node_descriptor,
+        internal_static_com_github_kornilova_l_flamegraph_proto_Tree_Node_descriptor,
         new java.lang.String[] { "Offset", "Width", "NodeInfo", "Nodes", });
     internal_static_com_github_kornilova_l_flamegraph_proto_Tree_Node_NodeInfo_descriptor =
-            internal_static_com_github_kornilova_l_flamegraph_proto_Tree_Node_descriptor.getNestedTypes().get(0);
+      internal_static_com_github_kornilova_l_flamegraph_proto_Tree_Node_descriptor.getNestedTypes().get(0);
     internal_static_com_github_kornilova_l_flamegraph_proto_Tree_Node_NodeInfo_fieldAccessorTable = new
       com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-            internal_static_com_github_kornilova_l_flamegraph_proto_Tree_Node_NodeInfo_descriptor,
+        internal_static_com_github_kornilova_l_flamegraph_proto_Tree_Node_NodeInfo_descriptor,
         new java.lang.String[] { "MethodName", "ClassName", "Description", "IsStatic", "Count", "Parameters", "ReturnValue", "Exception", "Result", });
     internal_static_com_github_kornilova_l_flamegraph_proto_Tree_TreeInfo_descriptor =
-            internal_static_com_github_kornilova_l_flamegraph_proto_Tree_descriptor.getNestedTypes().get(1);
+      internal_static_com_github_kornilova_l_flamegraph_proto_Tree_descriptor.getNestedTypes().get(1);
     internal_static_com_github_kornilova_l_flamegraph_proto_Tree_TreeInfo_fieldAccessorTable = new
       com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-            internal_static_com_github_kornilova_l_flamegraph_proto_Tree_TreeInfo_descriptor,
-        new java.lang.String[] { "StartTime", "ThreadId", });
+        internal_static_com_github_kornilova_l_flamegraph_proto_Tree_TreeInfo_descriptor,
+        new java.lang.String[] { "StartTime", "ThreadId", "ThreadName", });
     com.github.kornilova_l.flamegraph.proto.EventProtos.getDescriptor();
   }
 
