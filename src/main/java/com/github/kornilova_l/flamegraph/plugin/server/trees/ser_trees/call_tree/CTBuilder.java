@@ -20,24 +20,23 @@ class CTBuilder {
     private int maxDepth = 0;
     private int currentDepth = 0;
 
-    CTBuilder(long startTime, long threadId) {
+    CTBuilder(long startTime, long threadId, String threadName) {
         treeBuilder.setTreeInfo(
                 TreeProtos.Tree.TreeInfo.newBuilder()
                         .setThreadId(threadId)
                         .setStartTime(startTime)
+                        .setThreadName(threadName)
                         .build()
         );
         initCallStack();
     }
 
-    long getThreadStartTime() {
-        return treeBuilder.getTreeInfoBuilder().getStartTime();
-    }
-
-    private static void setNodeInfo(TreeProtos.Tree.Node.Builder node, EventProtos.Event.Enter enter) {
+    private static void setNodeInfo(TreeProtos.Tree.Node.Builder node,
+                                    EventProtos.Event.MethodEvent.Enter enter,
+                                    String className) {
         node.setNodeInfo(
                 TreeProtos.Tree.Node.NodeInfo.newBuilder()
-                        .setClassName(enter.getClassName().replace('/', '.'))
+                        .setClassName(className.replace('/', '.'))
                         .setMethodName(enter.getMethodName())
                         .setDescription(enter.getDescription())
                         .setIsStatic(enter.getIsStatic())
@@ -64,26 +63,36 @@ class CTBuilder {
                 MethodConfig.jvmTypeToParam(jvmRetVal);
     }
 
+    long getThreadStartTime() {
+        return treeBuilder.getTreeInfoBuilder().getStartTime();
+    }
+
     private void initCallStack() {
         callStack = new LinkedList<>();
         callStack.addFirst(TreeProtos.Tree.Node.newBuilder()); // add base node
     }
 
-    void addEvent(EventProtos.Event event) {
+    void addEvent(EventProtos.Event.MethodEvent methodEvent, String className) {
+        assert methodEvent.getInfoCase() == EventProtos.Event.MethodEvent.InfoCase.ENTER;
         if (treeBuilder == null) {
             throw new AssertionError("Tree was already built");
         }
-        if (event.getInfoCase() == EventProtos.Event.InfoCase.ENTER) {
-            pushNewNode(event);
-        } else { // exit or exception
-            finishCall(event);
-        }
+        pushNewNode(methodEvent, className);
     }
 
-    private void finishCall(EventProtos.Event event) {
+    void addEvent(EventProtos.Event.MethodEvent methodEvent) {
+        assert methodEvent.getInfoCase() == EventProtos.Event.MethodEvent.InfoCase.EXCEPTION ||
+                methodEvent.getInfoCase() == EventProtos.Event.MethodEvent.InfoCase.EXIT;
+        if (treeBuilder == null) {
+            throw new AssertionError("Tree was already built");
+        }
+        finishCall(methodEvent);
+    }
+
+    private void finishCall(EventProtos.Event.MethodEvent methodEvent) {
         currentDepth--;
         TreeProtos.Tree.Node.Builder node = callStack.removeFirst();
-        finishNode(node, event);
+        finishNode(node, methodEvent);
         addNodeToParent(node);
     }
 
@@ -96,29 +105,29 @@ class CTBuilder {
     }
 
     private void finishNode(TreeProtos.Tree.Node.Builder nodeBuilder,
-                            EventProtos.Event event) {
-        if (event.getInfoCase() == EventProtos.Event.InfoCase.EXIT) {
+                            EventProtos.Event.MethodEvent methodEvent) {
+        if (methodEvent.getInfoCase() == EventProtos.Event.MethodEvent.InfoCase.EXIT) {
             nodeBuilder.getNodeInfoBuilder()
                     .setReturnValue(
-                            event.getExit().getReturnValue()
+                            methodEvent.getExit().getReturnValue()
                     );
         } else { // exception
             nodeBuilder.getNodeInfoBuilder()
                     .setException(
-                            event.getException().getObject()
+                            methodEvent.getException().getObject()
                     );
         }
-        long width = event.getTime() - treeBuilder.getTreeInfo().getStartTime() - nodeBuilder.getOffset();
+        long width = methodEvent.getTime() - treeBuilder.getTreeInfo().getStartTime() - nodeBuilder.getOffset();
         nodeBuilder.setWidth(width);
     }
 
-    private void pushNewNode(EventProtos.Event event) {
+    private void pushNewNode(EventProtos.Event.MethodEvent methodEvent, String className) {
         if (++currentDepth > maxDepth) {
             maxDepth = currentDepth;
         }
         TreeProtos.Tree.Node.Builder node = TreeProtos.Tree.Node.newBuilder();
-        setNodeInfo(node, event.getEnter());
-        long offset = event.getTime() - treeBuilder.getTreeInfo().getStartTime();
+        setNodeInfo(node, methodEvent.getEnter(), className);
+        long offset = methodEvent.getTime() - treeBuilder.getTreeInfo().getStartTime();
         node.setOffset(offset);
         callStack.addFirst(node);
     }
