@@ -428,7 +428,7 @@ nav ul li:hover a, .current-link a {
     z-index: -1;
     position: fixed;
     background-color: white;
-    right: 22px;
+    right: 92px;
     width: 210px;
     height: 50px;
 }

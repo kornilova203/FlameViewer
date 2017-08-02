@@ -30,6 +30,10 @@ class CTBuilder {
         initCallStack();
     }
 
+    long getThreadStartTime() {
+        return treeBuilder.getTreeInfoBuilder().getStartTime();
+    }
+
     private static void setNodeInfo(TreeProtos.Tree.Node.Builder node, EventProtos.Event.Enter enter) {
         node.setNodeInfo(
                 TreeProtos.Tree.Node.NodeInfo.newBuilder()
@@ -187,5 +191,14 @@ class CTBuilder {
             return null;
         }
         return tree;
+    }
+
+    void subtractFromThreadStartTime(long startTimeOfFirstThread) {
+        if (treeBuilder == null) {
+            throw new RuntimeException("Tree was already build");
+        }
+        treeBuilder.getTreeInfoBuilder().setStartTime(
+                treeBuilder.getTreeInfoBuilder().getStartTime() - startTimeOfFirstThread
+        );
     }
 }

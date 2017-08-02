@@ -32,7 +32,7 @@ public class StacksOCTreeBuilderTest {
         stacks = getStacksFromFile(data);
         TreeProtos.Tree tree = new StacksOCTreeBuilder(stacks).getTree();
         assertNotNull(tree);
-        TestHelper.compare(tree, res);
+        TestHelper.compare(tree.toString(), res);
     }
 
     private Map<String, Integer> getStacksFromFile(File data) {
