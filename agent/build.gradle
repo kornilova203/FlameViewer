@@ -17,12 +17,14 @@ repositories {
 }
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
     compile "org.ow2.asm:asm:5.2"
     compile "org.ow2.asm:asm-util:5.2" // TraceClassVisitor (for debugging)
     compile group: 'org.ow2.asm', name: 'asm-commons', version: '5.0.3' // AdviceAdapter
     compile project(':protobuf')
     compile project(':configuration')
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile project(':protobuf')
+    testCompile project(':configuration')
     compile fileTree(dir: '../lib', include: ['annotations-java8.jar'])
 }
 

@@ -570,7 +570,6 @@ public final class TreeProtos {
           EXCEPTION(6),
           RESULT_NOT_SET(0);
           private final int value;
-
           ResultCase(int value) {
             this.value = value;
           }
@@ -595,7 +594,7 @@ public final class TreeProtos {
           }
         }
 
-        public ResultCase
+          public ResultCase
         getResultCase() {
           return ResultCase.forNumber(
               resultCase_);
@@ -786,7 +785,7 @@ public final class TreeProtos {
          */
         public com.github.kornilova_l.flamegraph.proto.EventProtos.Var getReturnValue() {
           if (resultCase_ == 5) {
-            return (com.github.kornilova_l.flamegraph.proto.EventProtos.Var) result_;
+              return (com.github.kornilova_l.flamegraph.proto.EventProtos.Var) result_;
           }
           return com.github.kornilova_l.flamegraph.proto.EventProtos.Var.getDefaultInstance();
         }
@@ -795,7 +794,7 @@ public final class TreeProtos {
          */
         public com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder getReturnValueOrBuilder() {
           if (resultCase_ == 5) {
-            return (com.github.kornilova_l.flamegraph.proto.EventProtos.Var) result_;
+              return (com.github.kornilova_l.flamegraph.proto.EventProtos.Var) result_;
           }
           return com.github.kornilova_l.flamegraph.proto.EventProtos.Var.getDefaultInstance();
         }
@@ -806,7 +805,7 @@ public final class TreeProtos {
          */
         public com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object getException() {
           if (resultCase_ == 6) {
-            return (com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object) result_;
+              return (com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object) result_;
           }
           return com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object.getDefaultInstance();
         }
@@ -815,7 +814,7 @@ public final class TreeProtos {
          */
         public com.github.kornilova_l.flamegraph.proto.EventProtos.Var.ObjectOrBuilder getExceptionOrBuilder() {
           if (resultCase_ == 6) {
-            return (com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object) result_;
+              return (com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object) result_;
           }
           return com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object.getDefaultInstance();
         }
@@ -982,45 +981,38 @@ public final class TreeProtos {
             throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
           return PARSER.parseFrom(data);
         }
-
         public static com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.NodeInfo parseFrom(
             java.nio.ByteBuffer data,
             com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
           return PARSER.parseFrom(data, extensionRegistry);
         }
-
         public static com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.NodeInfo parseFrom(
             com.github.kornilova_l.libs.com.google.protobuf.ByteString data)
             throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
           return PARSER.parseFrom(data);
         }
-
         public static com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.NodeInfo parseFrom(
             com.github.kornilova_l.libs.com.google.protobuf.ByteString data,
             com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
           return PARSER.parseFrom(data, extensionRegistry);
         }
-
         public static com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.NodeInfo parseFrom(byte[] data)
             throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
           return PARSER.parseFrom(data);
         }
-
         public static com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.NodeInfo parseFrom(
             byte[] data,
             com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
           return PARSER.parseFrom(data, extensionRegistry);
         }
-
         public static com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.NodeInfo parseFrom(java.io.InputStream input)
             throws java.io.IOException {
           return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
         }
-
         public static com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.NodeInfo parseFrom(
             java.io.InputStream input,
             com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -1028,13 +1020,11 @@ public final class TreeProtos {
           return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input, extensionRegistry);
         }
-
         public static com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.NodeInfo parseDelimitedFrom(java.io.InputStream input)
             throws java.io.IOException {
           return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
               .parseDelimitedWithIOException(PARSER, input);
         }
-
         public static com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.NodeInfo parseDelimitedFrom(
             java.io.InputStream input,
             com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -1042,14 +1032,12 @@ public final class TreeProtos {
           return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
               .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
         }
-
         public static com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.NodeInfo parseFrom(
             com.github.kornilova_l.libs.com.google.protobuf.CodedInputStream input)
             throws java.io.IOException {
           return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
         }
-
         public static com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.NodeInfo parseFrom(
             com.github.kornilova_l.libs.com.google.protobuf.CodedInputStream input,
             com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -1062,7 +1050,6 @@ public final class TreeProtos {
         public static Builder newBuilder() {
           return DEFAULT_INSTANCE.toBuilder();
         }
-
         public static Builder newBuilder(com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.NodeInfo prototype) {
           return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
         }
@@ -1218,7 +1205,7 @@ public final class TreeProtos {
           }
           public Builder mergeFrom(com.github.kornilova_l.libs.com.google.protobuf.Message other) {
             if (other instanceof com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.NodeInfo) {
-              return mergeFrom((com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.NodeInfo) other);
+                return mergeFrom((com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.NodeInfo) other);
             } else {
               super.mergeFrom(other);
               return this;
@@ -1226,8 +1213,8 @@ public final class TreeProtos {
           }
 
           public Builder mergeFrom(com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.NodeInfo other) {
-            if (other == com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.NodeInfo.getDefaultInstance())
-              return this;
+              if (other == com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node.NodeInfo.getDefaultInstance())
+                  return this;
             if (!other.getMethodName().isEmpty()) {
               methodName_ = other.methodName_;
               onChanged();
@@ -2037,7 +2024,7 @@ public final class TreeProtos {
             }
             resultCase_ = 5;
             onChanged();
-            return returnValueBuilder_;
+              return returnValueBuilder_;
           }
 
           private com.github.kornilova_l.libs.com.google.protobuf.SingleFieldBuilderV3<
@@ -2167,7 +2154,7 @@ public final class TreeProtos {
             }
             resultCase_ = 6;
             onChanged();
-            return exceptionBuilder_;
+              return exceptionBuilder_;
           }
           public final Builder setUnknownFields(
               final com.github.kornilova_l.libs.com.google.protobuf.UnknownFieldSet unknownFields) {
@@ -2409,45 +2396,38 @@ public final class TreeProtos {
           throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data);
       }
-
       public static com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node parseFrom(
           java.nio.ByteBuffer data,
           com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data, extensionRegistry);
       }
-
       public static com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node parseFrom(
           com.github.kornilova_l.libs.com.google.protobuf.ByteString data)
           throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data);
       }
-
       public static com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node parseFrom(
           com.github.kornilova_l.libs.com.google.protobuf.ByteString data,
           com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data, extensionRegistry);
       }
-
       public static com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node parseFrom(byte[] data)
           throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data);
       }
-
       public static com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node parseFrom(
           byte[] data,
           com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data, extensionRegistry);
       }
-
       public static com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node parseFrom(java.io.InputStream input)
           throws java.io.IOException {
         return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
             .parseWithIOException(PARSER, input);
       }
-
       public static com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node parseFrom(
           java.io.InputStream input,
           com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -2455,13 +2435,11 @@ public final class TreeProtos {
         return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
             .parseWithIOException(PARSER, input, extensionRegistry);
       }
-
       public static com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node parseDelimitedFrom(java.io.InputStream input)
           throws java.io.IOException {
         return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
             .parseDelimitedWithIOException(PARSER, input);
       }
-
       public static com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node parseDelimitedFrom(
           java.io.InputStream input,
           com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -2469,14 +2447,12 @@ public final class TreeProtos {
         return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
             .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
       }
-
       public static com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node parseFrom(
           com.github.kornilova_l.libs.com.google.protobuf.CodedInputStream input)
           throws java.io.IOException {
         return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
             .parseWithIOException(PARSER, input);
       }
-
       public static com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node parseFrom(
           com.github.kornilova_l.libs.com.google.protobuf.CodedInputStream input,
           com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -2489,7 +2465,6 @@ public final class TreeProtos {
       public static Builder newBuilder() {
         return DEFAULT_INSTANCE.toBuilder();
       }
-
       public static Builder newBuilder(com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node prototype) {
         return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
       }
@@ -2630,7 +2605,7 @@ public final class TreeProtos {
         }
         public Builder mergeFrom(com.github.kornilova_l.libs.com.google.protobuf.Message other) {
           if (other instanceof com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node) {
-            return mergeFrom((com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node) other);
+              return mergeFrom((com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node) other);
           } else {
             super.mergeFrom(other);
             return this;
@@ -3383,45 +3358,38 @@ public final class TreeProtos {
           throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data);
       }
-
       public static com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfo parseFrom(
           java.nio.ByteBuffer data,
           com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data, extensionRegistry);
       }
-
       public static com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfo parseFrom(
           com.github.kornilova_l.libs.com.google.protobuf.ByteString data)
           throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data);
       }
-
       public static com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfo parseFrom(
           com.github.kornilova_l.libs.com.google.protobuf.ByteString data,
           com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data, extensionRegistry);
       }
-
       public static com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfo parseFrom(byte[] data)
           throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data);
       }
-
       public static com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfo parseFrom(
           byte[] data,
           com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data, extensionRegistry);
       }
-
       public static com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfo parseFrom(java.io.InputStream input)
           throws java.io.IOException {
         return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
             .parseWithIOException(PARSER, input);
       }
-
       public static com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfo parseFrom(
           java.io.InputStream input,
           com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -3429,13 +3397,11 @@ public final class TreeProtos {
         return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
             .parseWithIOException(PARSER, input, extensionRegistry);
       }
-
       public static com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfo parseDelimitedFrom(java.io.InputStream input)
           throws java.io.IOException {
         return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
             .parseDelimitedWithIOException(PARSER, input);
       }
-
       public static com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfo parseDelimitedFrom(
           java.io.InputStream input,
           com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -3443,14 +3409,12 @@ public final class TreeProtos {
         return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
             .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
       }
-
       public static com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfo parseFrom(
           com.github.kornilova_l.libs.com.google.protobuf.CodedInputStream input)
           throws java.io.IOException {
         return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
             .parseWithIOException(PARSER, input);
       }
-
       public static com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfo parseFrom(
           com.github.kornilova_l.libs.com.google.protobuf.CodedInputStream input,
           com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -3463,7 +3427,6 @@ public final class TreeProtos {
       public static Builder newBuilder() {
         return DEFAULT_INSTANCE.toBuilder();
       }
-
       public static Builder newBuilder(com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfo prototype) {
         return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
       }
@@ -3574,7 +3537,7 @@ public final class TreeProtos {
         }
         public Builder mergeFrom(com.github.kornilova_l.libs.com.google.protobuf.Message other) {
           if (other instanceof com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfo) {
-            return mergeFrom((com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfo) other);
+              return mergeFrom((com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfo) other);
           } else {
             super.mergeFrom(other);
             return this;
@@ -3582,8 +3545,8 @@ public final class TreeProtos {
         }
 
         public Builder mergeFrom(com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfo other) {
-          if (other == com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfo.getDefaultInstance())
-            return this;
+            if (other == com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfo.getDefaultInstance())
+                return this;
           if (other.getStartTime() != 0L) {
             setStartTime(other.getStartTime());
           }
@@ -3910,45 +3873,38 @@ public final class TreeProtos {
         throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree parseFrom(
         java.nio.ByteBuffer data,
         com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-
     public static com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree parseFrom(
         com.github.kornilova_l.libs.com.google.protobuf.ByteString data)
         throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree parseFrom(
         com.github.kornilova_l.libs.com.google.protobuf.ByteString data,
         com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-
     public static com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree parseFrom(byte[] data)
         throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree parseFrom(
         byte[] data,
         com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-
     public static com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-
     public static com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree parseFrom(
         java.io.InputStream input,
         com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -3956,13 +3912,11 @@ public final class TreeProtos {
       return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-
     public static com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree parseDelimitedFrom(
         java.io.InputStream input,
         com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -3970,14 +3924,12 @@ public final class TreeProtos {
       return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree parseFrom(
         com.github.kornilova_l.libs.com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-
     public static com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree parseFrom(
         com.github.kornilova_l.libs.com.google.protobuf.CodedInputStream input,
         com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -3990,7 +3942,6 @@ public final class TreeProtos {
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
@@ -4123,7 +4074,7 @@ public final class TreeProtos {
       }
       public Builder mergeFrom(com.github.kornilova_l.libs.com.google.protobuf.Message other) {
         if (other instanceof com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree) {
-          return mergeFrom((com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree) other);
+            return mergeFrom((com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree) other);
         } else {
           super.mergeFrom(other);
           return this;

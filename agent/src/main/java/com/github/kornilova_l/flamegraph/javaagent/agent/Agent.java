@@ -2,6 +2,7 @@ package com.github.kornilova_l.flamegraph.javaagent.agent;
 
 import com.github.kornilova_l.flamegraph.javaagent.AgentFileManager;
 import com.github.kornilova_l.flamegraph.javaagent.logger.Logger;
+import com.github.kornilova_l.flamegraph.javaagent.logger.WaitingLoggingToFinish;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.BufferedReader;
@@ -23,9 +24,19 @@ public class Agent {
         if (methods == null) {
             return;
         }
-        Logger.init(new AgentFileManager(parameters[0]));
+        createLogger(parameters[0]);
         AgentConfigurationManager configurationManager = new AgentConfigurationManager(methods);
         inst.addTransformer(new ProfilingClassFileTransformer(configurationManager));
+    }
+
+    private static void createLogger(String logDirPath) {
+        Logger logger = new Logger(new AgentFileManager(logDirPath));
+
+        Thread loggerThread = new Thread(logger, "logging thread");
+        loggerThread.setDaemon(true);
+        loggerThread.start();
+
+        Runtime.getRuntime().addShutdownHook(new WaitingLoggingToFinish("shutdown-hook", logger));
     }
 
     @Nullable

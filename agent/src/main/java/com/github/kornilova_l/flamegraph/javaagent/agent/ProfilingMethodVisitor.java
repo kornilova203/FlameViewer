@@ -26,40 +26,6 @@ class ProfilingMethodVisitor extends AdviceAdapter {
         this.methodConfig = methodConfig;
     }
 
-//    @NotNull
-//    private List<Boolean> getParametersIncluded(@NotNull List<MethodConfig> methodConfigs) {
-//        List<Boolean> parametersIncluded = new LinkedList<>();
-//        initParametersIncludedList(parametersIncluded);
-////        for (MethodConfig methodConfig : methodConfigs) {
-////            updateParametersList(parametersIncluded, methodConfig);
-////        }
-//        return parametersIncluded;
-//    }
-
-//    private static void updateParametersList(List<Boolean> parametersIncluded, MethodConfig methodConfig) {
-//        for (int i = 0; i < methodConfig.parameters.size(); i++) {
-//            if (methodConfig.parameters.get(i).isEnable) {
-//                if (Objects.equals(methodConfig.parameters.get(i).type, "*")) {
-//                    makeAllParametersIncluded(parametersIncluded, i, methodConfig.parameters.size());
-//                } else {
-//                    parametersIncluded.add(i, true);
-//                }
-//            }
-//        }
-//    }
-//
-//    private static void makeAllParametersIncluded(List<Boolean> parametersIncluded, int startIndex, int length) {
-//        for (int j = startIndex; j < length; j++) {
-//            parametersIncluded.add(j, true);
-//        }
-//    }
-//
-//    private void initParametersIncludedList(List<Boolean> parametersIncluded) {
-//        for (String ignored : jvmParameters) {
-//            parametersIncluded.add(false);
-//        }
-//    }
-
     private static int getSizeOfRetVal(int opcode) {
         if (opcode == LRETURN || // long
                 opcode == DRETURN) { // double
@@ -70,7 +36,7 @@ class ProfilingMethodVisitor extends AdviceAdapter {
 
     @Override
     protected void onMethodEnter() {
-        getThreadId();
+        getThread();
         getTime();
         getClassNameAndMethodName();
         mv.visitLdcInsn(methodDesc);
@@ -100,7 +66,7 @@ class ProfilingMethodVisitor extends AdviceAdapter {
                 break;
         }
         if (hasSystemCL) {
-            mv.visitMethodInsn(INVOKESTATIC, LOGGER_PACKAGE_NAME + "Logger", "addToQueue",
+            mv.visitMethodInsn(INVOKESTATIC, LOGGER_PACKAGE_NAME + "LoggerQueue", "addToQueue",
                     description, false);
         } else {
             mv.visitMethodInsn(INVOKESTATIC, LOGGER_PACKAGE_NAME + "Proxy", "addToQueue",
@@ -268,10 +234,9 @@ class ProfilingMethodVisitor extends AdviceAdapter {
                 "currentTimeMillis", "()J", false);
     }
 
-    private void getThreadId() {
+    private void getThread() {
         mv.visitMethodInsn(INVOKESTATIC, "java/lang/Thread", "currentThread",
                 "()Ljava/lang/Thread;", false);
-        mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Thread", "getId", "()J", false);
     }
 
     private boolean isStatic() {
@@ -282,7 +247,7 @@ class ProfilingMethodVisitor extends AdviceAdapter {
     protected void onMethodExit(int opcode) {
         if (opcode == ATHROW) {
             dup();
-            getThreadId();
+            getThread();
             getTime();
             addToQueue(Type.Exception);
             return;
@@ -291,8 +256,8 @@ class ProfilingMethodVisitor extends AdviceAdapter {
             int sizeOfRetVal = getSizeOfRetVal(opcode);
             dupRetVal(sizeOfRetVal);
         }
-        retValToObj();
-        getThreadId();
+        getThread();
+        retValToObj(); // load throwable
         getTime();
         addToQueue(Type.Exit);
     }

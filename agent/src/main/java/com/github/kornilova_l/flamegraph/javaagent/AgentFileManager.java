@@ -17,6 +17,12 @@ public class AgentFileManager {
 
     public AgentFileManager(@NotNull String logDirPath) {
         logDir = new File(logDirPath);
+        if (!logDir.exists()) {
+            boolean res = logDir.mkdir();
+            if (!res) {
+                throw new RuntimeException("Unable to create log dir");
+            }
+        }
         assert logDir.exists() && logDir.isDirectory();
     }
 

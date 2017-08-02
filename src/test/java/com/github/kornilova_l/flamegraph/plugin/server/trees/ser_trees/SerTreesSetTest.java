@@ -24,12 +24,12 @@ public class SerTreesSetTest {
 //        configuration.addMethodConfig("*.fun1(*)", false);
 //        TreesProtos.Trees callTree = treesSet.getCallTree(configuration);
 //        assertTrue(callTree != null);
-//        TestHelper.compare(callTree.getTrees(0), new File("src/test/resources/SerTreesSetTest/result01.txt"));
+//        com.github.kornilova_l.flamegraph.plugin.server.trees.TestHelper.compare(callTree.getTrees(0), new File("src/test/resources/SerTreesSetTest/result01.txt"));
 //
 //        configuration.addMethodConfig("*.fun2(*)", false);
 //        callTree = treesSet.getCallTree(configuration);
 //        assertTrue(callTree != null);
-//        TestHelper.compare(callTree.getTrees(0),
+//        com.github.kornilova_l.flamegraph.plugin.server.trees.TestHelper.compare(callTree.getTrees(0),
 //                new File("src/test/resources/SerTreesSetTest/result02.txt"));
 //
 //        // remove first node from call tree
@@ -38,7 +38,7 @@ public class SerTreesSetTest {
 //        configuration2.addMethodConfig("*.fun2(*)", false);
 //        callTree = treesSet.getCallTree(configuration2);
 //        assertTrue(callTree != null);
-//        TestHelper.compare(callTree.getTrees(0),
+//        com.github.kornilova_l.flamegraph.plugin.server.trees.TestHelper.compare(callTree.getTrees(0),
 //                new File("src/test/resources/SerTreesSetTest/result03.txt"));
 //
 //        // remove parent of children
@@ -46,11 +46,11 @@ public class SerTreesSetTest {
 //                new File("src/test/resources/SerTreesSetTest/test_data04.ser"));
 //        callTree = treesSet2.getCallTree(configuration2);
 //        assertTrue(callTree != null);
-//        TestHelper.compare(callTree.getTrees(0),
+//        com.github.kornilova_l.flamegraph.plugin.server.trees.TestHelper.compare(callTree.getTrees(0),
 //                new File("src/test/resources/SerTreesSetTest/result04.txt"));
 //
 //        // check incoming calls
-//        TestHelper.compare(treesSet2.getTree(TreeManager.TreeType.INCOMING_CALLS, configuration2),
+//        com.github.kornilova_l.flamegraph.plugin.server.trees.TestHelper.compare(treesSet2.getTree(TreeManager.TreeType.INCOMING_CALLS, configuration2),
 //                new File("src/test/resources/SerTreesSetTest/result05.txt"));
 //
 //        // remove parent of twins
@@ -58,11 +58,11 @@ public class SerTreesSetTest {
 //                new File("src/test/resources/SerTreesSetTest/test_data06.ser"));
 //        callTree = treesSet3.getCallTree(configuration2);
 //        assertTrue(callTree != null);
-//        TestHelper.compare(callTree.getTrees(0),
+//        com.github.kornilova_l.flamegraph.plugin.server.trees.TestHelper.compare(callTree.getTrees(0),
 //                new File("src/test/resources/SerTreesSetTest/result06.txt"));
 //
 //        // check outgoing calls
-//        TestHelper.compare(treesSet3.getTree(TreeManager.TreeType.OUTGOING_CALLS, configuration2),
+//        com.github.kornilova_l.flamegraph.plugin.server.trees.TestHelper.compare(treesSet3.getTree(TreeManager.TreeType.OUTGOING_CALLS, configuration2),
 //                new File("src/test/resources/SerTreesSetTest/result07.txt"));
 //
 //        // remove parent will have twins
@@ -70,10 +70,10 @@ public class SerTreesSetTest {
 //                new File("src/test/resources/SerTreesSetTest/test_data08.ser"));
 //        callTree = treesSet4.getCallTree(configuration2);
 //        assertTrue(callTree != null);
-//        TestHelper.compare(callTree.getTrees(0),
+//        com.github.kornilova_l.flamegraph.plugin.server.trees.TestHelper.compare(callTree.getTrees(0),
 //                new File("src/test/resources/SerTreesSetTest/result08.txt"));
 //
-//        TestHelper.compare(treesSet4.getTree(TreeManager.TreeType.OUTGOING_CALLS, configuration2),
+//        com.github.kornilova_l.flamegraph.plugin.server.trees.TestHelper.compare(treesSet4.getTree(TreeManager.TreeType.OUTGOING_CALLS, configuration2),
 //                new File("src/test/resources/SerTreesSetTest/result09.txt"));
     }
 

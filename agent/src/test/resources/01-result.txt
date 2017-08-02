@@ -1,0 +1,156 @@
+newThread {
+  id: 19
+  name: "pool-1-thread-2"
+}
+newThread {
+  id: 18
+  name: "pool-1-thread-1"
+}
+newClass {
+  id: 1
+  name: "com.github.kornilova_l.flamegraph.javaagent.logger.test_application.MyRunnable"
+}
+methodEvent {
+  thread_id: 19
+  time: 1501678052864
+  enter {
+    class_name_id: 1
+    method_name: "fun1"
+    parameters {
+      object {
+        type: "class java.lang.String"
+        value: "hello"
+      }
+    }
+    parameters {
+      I: 1
+    }
+    parameters {
+      I: 2
+    }
+    description: "(Ljava/lang/String;II)V"
+  }
+}
+methodEvent {
+  thread_id: 18
+  time: 1501678052864
+  enter {
+    class_name_id: 1
+    method_name: "fun1"
+    parameters {
+      object {
+        type: "class java.lang.String"
+        value: "hello"
+      }
+    }
+    parameters {
+      I: 1
+    }
+    parameters {
+      I: 2
+    }
+    description: "(Ljava/lang/String;II)V"
+  }
+}
+methodEvent {
+  thread_id: 19
+  time: 1501678052866
+  enter {
+    class_name_id: 1
+    method_name: "fun2"
+    description: "()Ljava/util/List;"
+  }
+}
+methodEvent {
+  thread_id: 18
+  time: 1501678052866
+  enter {
+    class_name_id: 1
+    method_name: "fun2"
+    description: "()Ljava/util/List;"
+  }
+}
+methodEvent {
+  thread_id: 18
+  time: 1501678052866
+  exit {
+    return_value {
+      object {
+        type: "class java.util.LinkedList"
+        value: "[list-item]"
+      }
+    }
+  }
+}
+methodEvent {
+  thread_id: 19
+  time: 1501678052866
+  exit {
+    return_value {
+      object {
+        type: "class java.util.LinkedList"
+        value: "[list-item]"
+      }
+    }
+  }
+}
+methodEvent {
+  thread_id: 18
+  time: 1501678052866
+  exit {
+  }
+}
+methodEvent {
+  thread_id: 19
+  time: 1501678052866
+  exit {
+  }
+}
+methodEvent {
+  thread_id: 18
+  time: 1501678052866
+  enter {
+    class_name_id: 1
+    method_name: "fun1"
+    parameters {
+      object {
+        type: "class java.lang.String"
+        value: "hello"
+      }
+    }
+    parameters {
+      I: 1
+    }
+    parameters {
+      I: 2
+    }
+    description: "(Ljava/lang/String;II)V"
+  }
+}
+methodEvent {
+  thread_id: 18
+  time: 1501678052866
+  enter {
+    class_name_id: 1
+    method_name: "fun2"
+    description: "()Ljava/util/List;"
+  }
+}
+methodEvent {
+  thread_id: 18
+  time: 1501678052866
+  exit {
+    return_value {
+      object {
+        type: "class java.util.LinkedList"
+        value: "[list-item]"
+      }
+    }
+  }
+}
+methodEvent {
+  thread_id: 18
+  time: 1501678052866
+  exit {
+  }
+}

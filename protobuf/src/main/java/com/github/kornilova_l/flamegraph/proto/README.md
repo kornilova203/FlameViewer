@@ -1,8 +1,9 @@
 ```bash
 # Java
-protoc -I=src/main/java --java_out=src/main/java src/main/java/com/github/kornilova_l/flamegraph/proto/event.proto
-protoc -I=src/main/java --java_out=src/main/java src/main/java/com/github/kornilova_l/flamegraph/proto/tree.proto
-protoc -I=src/main/java --java_out=src/main/java src/main/java/com/github/kornilova_l/flamegraph/proto/trees.proto
+protoc -I=protobuf/src/main/java --java_out=protobuf/src/main/java protobuf/src/main/java/com/github/kornilova_l/flamegraph/proto/event.proto
+protoc -I=protobuf/src/main/java --java_out=protobuf/src/main/java protobuf/src/main/java/com/github/kornilova_l/flamegraph/proto/tree.proto
+protoc -I=protobuf/src/main/java --java_out=protobuf/src/main/java protobuf/src/main/java/com/github/kornilova_l/flamegraph/proto/trees.proto
+perl -p -i -e 's/com.google.protobuf/com.github.kornilova_l.libs.com.google.protobuf/g' protobuf/src/main/java/com/github/kornilova_l/flamegraph/proto/*.java
 
 # JavaScript
 cd src/main/java

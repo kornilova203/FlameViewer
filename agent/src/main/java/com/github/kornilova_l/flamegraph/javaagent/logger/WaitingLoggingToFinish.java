@@ -13,11 +13,10 @@ public class WaitingLoggingToFinish extends Thread {
 
     @Override
     public void run() {
-        Logger.printStatus();
+        logger.printStatus();
         while (!logger.isDone) { // wait for logger to log all events
             Thread.yield();
         }
-        Logger.closeOutputStream();
-//        Logger.printDataForHuman();
+        logger.closeOutputStream();
     }
 }
