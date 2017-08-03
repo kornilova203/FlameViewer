@@ -2,9 +2,7 @@ package com.github.kornilova_l.flamegraph.javaagent.logger;
 
 import com.github.kornilova_l.flamegraph.javaagent.logger.events.*;
 
-import java.util.Collections;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingDeque;
 

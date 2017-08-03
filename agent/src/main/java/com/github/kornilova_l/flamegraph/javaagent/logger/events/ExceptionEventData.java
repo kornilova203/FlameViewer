@@ -5,7 +5,7 @@ import com.github.kornilova_l.flamegraph.proto.EventProtos;
 import java.util.LinkedList;
 import java.util.List;
 
-public class ExceptionEventData extends MethodEventData {
+public class ExceptionEventData extends EventData {
     private Throwable throwable;
 
     public ExceptionEventData(Throwable throwable, String threadName, long exitTime) {

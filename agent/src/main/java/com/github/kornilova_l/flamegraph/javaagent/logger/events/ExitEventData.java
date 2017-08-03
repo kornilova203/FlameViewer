@@ -5,7 +5,7 @@ import com.github.kornilova_l.flamegraph.proto.EventProtos;
 import java.util.LinkedList;
 import java.util.List;
 
-public class ExitEventData extends MethodEventData {
+public class ExitEventData extends EventData {
     private Object returnValue;
 
     public ExitEventData(Object returnValue, String threadName, long exitTime) {

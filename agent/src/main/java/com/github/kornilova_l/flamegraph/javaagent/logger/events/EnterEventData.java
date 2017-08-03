@@ -6,7 +6,7 @@ import com.github.kornilova_l.flamegraph.proto.EventProtos;
 import java.util.LinkedList;
 import java.util.List;
 
-public class EnterEventData extends MethodEventData {
+public class EnterEventData extends EventData {
     private final String className;
     private String methodName;
     private String description;
