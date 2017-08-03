@@ -4,19 +4,15 @@
 const TreesProto = require('../generated/trees_pb');
 
 function drawTrees(trees) {
-    let minStartTime = trees[0].getTreeInfo().getStartTime();
-    let maxFinishTime = trees[0].getTreeInfo().getStartTime() + trees[0].getWidth();
+    let maxDuration = trees[0].getTreeInfo().getStartTime() + trees[0].getWidth();
     for (let i = 1; i < trees.length; i++) {
         const startTime = trees[i].getTreeInfo().getStartTime();
-        if (startTime < minStartTime) {
-            minStartTime = startTime;
-        }
-        if (startTime + trees[i].getWidth() > maxFinishTime) {
-            maxFinishTime = startTime + trees[i].getWidth();
+        if (startTime + trees[i].getWidth() > maxDuration) {
+            maxDuration = startTime + trees[i].getWidth();
         }
     }
     for (let i = 0; i < trees.length; i++) {
-        const drawer = new CallTreeDrawer(trees[i], minStartTime, maxFinishTime);
+        const drawer = new CallTreeDrawer(trees[i], maxDuration, i);
         drawer.draw();
     }
 }

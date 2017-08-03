@@ -1,10 +1,16 @@
 class CallTreeDrawer extends AccumulativeTreeDrawer {
-    constructor(tree, minStartTime, maxFinishTime) {
+    /**
+     * @param tree
+     * @param {Number} maxDuration
+     * @param {Number} id
+     */
+    constructor(tree, maxDuration, id) {
         super(tree);
-        const fullDuration = maxFinishTime - minStartTime;
+        const fullDuration = maxDuration;
         this.canvasWidth = this.treeWidth / fullDuration * MAIN_WIDTH;
-        this.threadId = this.tree.getTreeInfo().getThreadId();
-        this.canvasOffset = (this.tree.getTreeInfo().getStartTime() - minStartTime) / fullDuration * MAIN_WIDTH;
+        this.threadName = this.tree.getTreeInfo().getThreadName();
+        this.canvasOffset = this.tree.getTreeInfo().getStartTime() / fullDuration * MAIN_WIDTH;
+        this.id = id;
     }
 
     draw() {
@@ -12,14 +18,13 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
 
         console.log("draw");
         this.section = this._createSection(this.canvasOffset);
-        this.stage = new createjs.Stage("canvas-" + this.threadId);
-        this.stage.id = "canvas-" + this.threadId;
+        this.stage = new createjs.Stage("canvas-" + this.id);
+        this.stage.id = "canvas-" + this.id;
         this.stage.enableMouseOver(20);
 
-        this.zoomedStage = new createjs.Stage("canvas-zoomed-" + this.threadId);
-        this.zoomedStage.id = "canvas-zoomed-" + this.threadId;
+        this.zoomedStage = new createjs.Stage("canvas-zoomed-" + this.id);
+        this.zoomedStage.id = "canvas-zoomed-" + this.id;
         this.stage.enableMouseOver(20);
-
 
         this._createPopup();
 
@@ -36,7 +41,8 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
     _createSection(canvasOffset) {
         const sectionContent = templates.tree.getCallTreeSection(
             {
-                threadId: this.threadId,
+                id: this.id,
+                threadName: this.threadName,
                 canvasHeight: this.canvasHeight,
                 canvasWidth: this.canvasWidth,
                 canvasOffset: canvasOffset

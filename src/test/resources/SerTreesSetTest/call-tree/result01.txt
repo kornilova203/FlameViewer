@@ -1,9 +1,9 @@
 tree_info {
-  thread_id: 1
+  thread_name: "pool-1-thread-1"
 }
 base_node {
   nodes {
-    width: 17
+    width: 12
     node_info {
       method_name: "fun1"
       class_name: "samples.TestDataGen"
@@ -13,27 +13,118 @@ base_node {
     }
     nodes {
       offset: 6
-      width: 11
+      width: 5
       node_info {
-        method_name: "fun2"
+        method_name: "fun3"
         class_name: "samples.TestDataGen"
         return_value {
         }
         description: "()void"
       }
-      nodes {
-        offset: 11
-        width: 5
-        node_info {
-          method_name: "fun3"
-          class_name: "samples.TestDataGen"
-          return_value {
-          }
-          description: "()void"
+    }
+  }
+  nodes {
+    offset: 15
+    width: 10
+    node_info {
+      method_name: "fun1"
+      class_name: "samples.TestDataGen"
+      return_value {
+      }
+      description: "()void"
+    }
+    nodes {
+      offset: 20
+      width: 5
+      node_info {
+        method_name: "fun3"
+        class_name: "samples.TestDataGen"
+        return_value {
         }
+        description: "()void"
       }
     }
   }
 }
-depth: 3
-width: 17
+depth: 2
+width: 25
+tree_info {
+  start_time: 9
+  thread_name: "pool-1-thread-2"
+}
+base_node {
+  nodes {
+    width: 10
+    node_info {
+      method_name: "fun1"
+      class_name: "samples.TestDataGen"
+      return_value {
+      }
+      description: "()void"
+    }
+    nodes {
+      offset: 5
+      width: 5
+      node_info {
+        method_name: "fun3"
+        class_name: "samples.TestDataGen"
+        return_value {
+        }
+        description: "()void"
+      }
+    }
+  }
+  nodes {
+    offset: 10
+    width: 13
+    node_info {
+      method_name: "fun1"
+      class_name: "samples.TestDataGen"
+      return_value {
+      }
+      description: "()void"
+    }
+    nodes {
+      offset: 15
+      width: 7
+      node_info {
+        method_name: "fun3"
+        class_name: "samples.TestDataGen"
+        return_value {
+        }
+        description: "()void"
+      }
+    }
+  }
+}
+depth: 2
+width: 23
+tree_info {
+  start_time: 13
+  thread_name: "pool-1-thread-3"
+}
+base_node {
+  nodes {
+    width: 11
+    node_info {
+      method_name: "fun1"
+      class_name: "samples.TestDataGen"
+      return_value {
+      }
+      description: "()void"
+    }
+    nodes {
+      offset: 5
+      width: 6
+      node_info {
+        method_name: "fun3"
+        class_name: "samples.TestDataGen"
+        return_value {
+        }
+        description: "()void"
+      }
+    }
+  }
+}
+depth: 2
+width: 11

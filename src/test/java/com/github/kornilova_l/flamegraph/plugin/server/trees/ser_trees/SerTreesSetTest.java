@@ -1,6 +1,7 @@
 package com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees;
 
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TestHelper;
+import com.github.kornilova_l.flamegraph.proto.TreeProtos;
 import com.github.kornilova_l.flamegraph.proto.TreesProtos;
 import com.github.kornilova_l.libs.com.google.protobuf.AbstractMessage;
 import org.junit.Test;
@@ -80,10 +81,21 @@ public class SerTreesSetTest {
     @Test
     public void getCallTree() throws Exception {
         SerTreesSet treesSet = new SerTreesSet(
-                new File("src/test/resources/SerTreesSetTest/call-tree/01-three-threads.ser"));
+                new File("src/test/resources/SerTreesSetTest/call-tree/00-one-method.ser"));
         TreesProtos.Trees callTree = treesSet.getCallTree(null);
         assertTrue(callTree != null);
         TestHelper.compare(callTree.getTrees(0).toString(),
+                new File("src/test/resources/SerTreesSetTest/call-tree/result00.txt"));
+
+        treesSet = new SerTreesSet(
+                new File("src/test/resources/SerTreesSetTest/call-tree/01-three-threads.ser"));
+        callTree = treesSet.getCallTree(null);
+        assertTrue(callTree != null);
+        StringBuilder actual = new StringBuilder();
+        for (TreeProtos.Tree tree : callTree.getTreesList()) {
+            actual.append(tree.toString());
+        }
+        TestHelper.compare(actual.toString(),
                 new File("src/test/resources/SerTreesSetTest/call-tree/result01.txt"));
     }
 }

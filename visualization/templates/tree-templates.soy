@@ -2,21 +2,22 @@
 
 /**
  * Get section template for tree of particular thread
- * @param threadId Thread id
+ * @param id Thread id
  * @param canvasHeight Height of canvas
  * @param canvasWidth
  * @param canvasOffset
+ * @param threadName
  */
 {template .getCallTreeSection}
 <section>
-    <h2 class="call-tree-header">{$threadId}</h2>
+    <h2 class="call-tree-header">{$threadName}</h2>
     <canvas
-        id="canvas-{$threadId}"
+        id="canvas-{$id}"
         width="{$canvasWidth}"
         height="{$canvasHeight}"
         style="margin-left:{$canvasOffset}px">
     </canvas>
-    <canvas id="canvas-zoomed-{$threadId}"
+    <canvas id="canvas-zoomed-{$id}"
                 width="{$canvasWidth}"
                 height="{$canvasHeight}"
                 style="display: none;">

@@ -1,14 +1,16 @@
 package com.github.kornilova_l.flamegraph.javaagent.logger.events;
 
 import com.github.kornilova_l.flamegraph.proto.EventProtos;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedList;
 import java.util.List;
 
 public class ExitEventData extends EventData {
+    @Nullable
     private Object returnValue;
 
-    public ExitEventData(Object returnValue, String threadName, long exitTime) {
+    public ExitEventData(@Nullable Object returnValue, String threadName, long exitTime) {
         super(exitTime, threadName);
         this.returnValue = returnValue;
     }

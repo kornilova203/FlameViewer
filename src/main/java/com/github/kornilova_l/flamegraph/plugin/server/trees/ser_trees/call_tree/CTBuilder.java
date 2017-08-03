@@ -51,7 +51,18 @@ class CTBuilder {
     private static String getBeautifulDesc(String desc) {
         List<String> jvmParams = splitDesc(desc.substring(1, desc.indexOf(")")));
         List<String> parameters = jvmParams.stream()
-                .map(MethodConfig::jvmTypeToParam)
+                .map(parameter -> {
+                    int lastArr = parameter.lastIndexOf('[');
+                    lastArr++;
+                    StringBuilder parameterBuilder = new StringBuilder(
+                            MethodConfig.jvmTypeToParam(parameter.substring(lastArr, parameter.length()))
+                    );
+                    for (int i = 0; i < lastArr; i++) {
+                        parameterBuilder.append("[]");
+                    }
+                    parameter = parameterBuilder.toString();
+                    return parameter;
+                })
                 .collect(Collectors.toList());
 
         String jvmRetVal = desc.substring(desc.indexOf(")") + 1, desc.length());

@@ -256,8 +256,8 @@ class ProfilingMethodVisitor extends AdviceAdapter {
             int sizeOfRetVal = getSizeOfRetVal(opcode);
             dupRetVal(sizeOfRetVal);
         }
-        getThread();
         retValToObj(); // load throwable
+        getThread();
         getTime();
         addToQueue(Type.Exit);
     }
