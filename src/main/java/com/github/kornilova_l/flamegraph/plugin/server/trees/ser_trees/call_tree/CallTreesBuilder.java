@@ -111,7 +111,6 @@ public class CallTreesBuilder {
                 methodEvent.getThreadId(),
                 k -> new CTBuilder(
                         methodEvent.getTime(),
-                        methodEvent.getThreadId(),
                         threadName
                 )
         );

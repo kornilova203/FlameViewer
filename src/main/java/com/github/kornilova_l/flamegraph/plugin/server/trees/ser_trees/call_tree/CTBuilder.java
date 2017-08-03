@@ -20,10 +20,9 @@ class CTBuilder {
     private int maxDepth = 0;
     private int currentDepth = 0;
 
-    CTBuilder(long startTime, long threadId, String threadName) {
+    CTBuilder(long startTime, String threadName) {
         treeBuilder.setTreeInfo(
                 TreeProtos.Tree.TreeInfo.newBuilder()
-                        .setThreadId(threadId)
                         .setStartTime(startTime)
                         .setThreadName(threadName)
                         .build()

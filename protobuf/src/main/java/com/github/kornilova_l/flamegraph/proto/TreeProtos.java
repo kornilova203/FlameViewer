@@ -3166,11 +3166,6 @@ public final class TreeProtos {
       long getStartTime();
 
       /**
-       * <code>int64 thread_id = 3;</code>
-       */
-      long getThreadId();
-
-      /**
        * <code>string thread_name = 4;</code>
        */
       java.lang.String getThreadName();
@@ -3197,7 +3192,6 @@ public final class TreeProtos {
       }
       private TreeInfo() {
         startTime_ = 0L;
-        threadId_ = 0L;
         threadName_ = "";
       }
 
@@ -3229,11 +3223,6 @@ public final class TreeProtos {
               case 16: {
 
                 startTime_ = input.readInt64();
-                break;
-              }
-              case 24: {
-
-                threadId_ = input.readInt64();
                 break;
               }
               case 34: {
@@ -3272,15 +3261,6 @@ public final class TreeProtos {
        */
       public long getStartTime() {
         return startTime_;
-      }
-
-      public static final int THREAD_ID_FIELD_NUMBER = 3;
-      private long threadId_;
-      /**
-       * <code>int64 thread_id = 3;</code>
-       */
-      public long getThreadId() {
-        return threadId_;
       }
 
       public static final int THREAD_NAME_FIELD_NUMBER = 4;
@@ -3332,9 +3312,6 @@ public final class TreeProtos {
         if (startTime_ != 0L) {
           output.writeInt64(2, startTime_);
         }
-        if (threadId_ != 0L) {
-          output.writeInt64(3, threadId_);
-        }
         if (!getThreadNameBytes().isEmpty()) {
           com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.writeString(output, 4, threadName_);
         }
@@ -3348,10 +3325,6 @@ public final class TreeProtos {
         if (startTime_ != 0L) {
           size += com.github.kornilova_l.libs.com.google.protobuf.CodedOutputStream
             .computeInt64Size(2, startTime_);
-        }
-        if (threadId_ != 0L) {
-          size += com.github.kornilova_l.libs.com.google.protobuf.CodedOutputStream
-            .computeInt64Size(3, threadId_);
         }
         if (!getThreadNameBytes().isEmpty()) {
           size += com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.computeStringSize(4, threadName_);
@@ -3374,8 +3347,6 @@ public final class TreeProtos {
         boolean result = true;
         result = result && (getStartTime()
             == other.getStartTime());
-        result = result && (getThreadId()
-            == other.getThreadId());
         result = result && getThreadName()
             .equals(other.getThreadName());
         return result;
@@ -3391,9 +3362,6 @@ public final class TreeProtos {
         hash = (37 * hash) + START_TIME_FIELD_NUMBER;
         hash = (53 * hash) + com.github.kornilova_l.libs.com.google.protobuf.Internal.hashLong(
             getStartTime());
-        hash = (37 * hash) + THREAD_ID_FIELD_NUMBER;
-        hash = (53 * hash) + com.github.kornilova_l.libs.com.google.protobuf.Internal.hashLong(
-            getThreadId());
         hash = (37 * hash) + THREAD_NAME_FIELD_NUMBER;
         hash = (53 * hash) + getThreadName().hashCode();
         hash = (29 * hash) + unknownFields.hashCode();
@@ -3531,8 +3499,6 @@ public final class TreeProtos {
           super.clear();
           startTime_ = 0L;
 
-          threadId_ = 0L;
-
           threadName_ = "";
 
           return this;
@@ -3558,7 +3524,6 @@ public final class TreeProtos {
         public com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfo buildPartial() {
           com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfo result = new com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfo(this);
           result.startTime_ = startTime_;
-          result.threadId_ = threadId_;
           result.threadName_ = threadName_;
           onBuilt();
           return result;
@@ -3603,9 +3568,6 @@ public final class TreeProtos {
           if (other == com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfo.getDefaultInstance()) return this;
           if (other.getStartTime() != 0L) {
             setStartTime(other.getStartTime());
-          }
-          if (other.getThreadId() != 0L) {
-            setThreadId(other.getThreadId());
           }
           if (!other.getThreadName().isEmpty()) {
             threadName_ = other.threadName_;
@@ -3659,32 +3621,6 @@ public final class TreeProtos {
         public Builder clearStartTime() {
           
           startTime_ = 0L;
-          onChanged();
-          return this;
-        }
-
-        private long threadId_ ;
-        /**
-         * <code>int64 thread_id = 3;</code>
-         */
-        public long getThreadId() {
-          return threadId_;
-        }
-        /**
-         * <code>int64 thread_id = 3;</code>
-         */
-        public Builder setThreadId(long value) {
-          
-          threadId_ = value;
-          onChanged();
-          return this;
-        }
-        /**
-         * <code>int64 thread_id = 3;</code>
-         */
-        public Builder clearThreadId() {
-          
-          threadId_ = 0L;
           onChanged();
           return this;
         }
@@ -4590,7 +4526,7 @@ public final class TreeProtos {
       "\n2com/github/kornilova_l/flamegraph/prot" +
       "o/tree.proto\022\'com.github.kornilova_l.fla" +
       "megraph.proto\0323com/github/kornilova_l/fl" +
-      "amegraph/proto/event.proto\"\202\006\n\004Tree\022I\n\tt" +
+      "amegraph/proto/event.proto\"\357\005\n\004Tree\022I\n\tt" +
       "ree_info\030\001 \001(\01326.com.github.kornilova_l." +
       "flamegraph.proto.Tree.TreeInfo\022E\n\tbase_n" +
       "ode\030\002 \001(\01322.com.github.kornilova_l.flame" +
@@ -4608,9 +4544,9 @@ public final class TreeProtos {
       "m.github.kornilova_l.flamegraph.proto.Va" +
       "rH\000\022H\n\texception\030\006 \001(\01323.com.github.korn",
       "ilova_l.flamegraph.proto.Var.ObjectH\000B\010\n" +
-      "\006result\032F\n\010TreeInfo\022\022\n\nstart_time\030\002 \001(\003\022" +
-      "\021\n\tthread_id\030\003 \001(\003\022\023\n\013thread_name\030\004 \001(\tB" +
-      "\014B\nTreeProtosb\006proto3"
+      "\006result\0323\n\010TreeInfo\022\022\n\nstart_time\030\002 \001(\003\022" +
+      "\023\n\013thread_name\030\004 \001(\tB\014B\nTreeProtosb\006prot" +
+      "o3"
     };
     com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -4648,7 +4584,7 @@ public final class TreeProtos {
     internal_static_com_github_kornilova_l_flamegraph_proto_Tree_TreeInfo_fieldAccessorTable = new
       com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_github_kornilova_l_flamegraph_proto_Tree_TreeInfo_descriptor,
-        new java.lang.String[] { "StartTime", "ThreadId", "ThreadName", });
+        new java.lang.String[] { "StartTime", "ThreadName", });
     com.github.kornilova_l.flamegraph.proto.EventProtos.getDescriptor();
   }
 
