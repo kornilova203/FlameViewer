@@ -140,10 +140,12 @@ public class Configuration implements Cloneable {
     public void assign(Configuration tempConfiguration) {
         for (MethodConfig includingMethodConfig : tempConfiguration.includingMethodConfigs) {
             includingMethodConfig.removeEmptyParams();
+            includingMethodConfig.clearPatterns();
         }
         includingMethodConfigs = tempConfiguration.includingMethodConfigs;
         for (MethodConfig excludingMethodConfig : tempConfiguration.excludingMethodConfigs) {
             excludingMethodConfig.removeEmptyParams();
+            excludingMethodConfig.clearPatterns();
         }
         excludingMethodConfigs = tempConfiguration.excludingMethodConfigs;
     }

@@ -305,6 +305,11 @@ public class MethodConfig implements Comparable<MethodConfig>, Cloneable {
         }
     }
 
+    void clearPatterns() {
+        classPattern = null;
+        methodPattern = null;
+    }
+
     public static class Parameter {
         private String type;
         private boolean isEnabled;
