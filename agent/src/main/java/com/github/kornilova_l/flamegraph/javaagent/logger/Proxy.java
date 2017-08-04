@@ -5,13 +5,14 @@ import java.lang.reflect.Method;
 
 @SuppressWarnings("unused")
 public class Proxy {
-    private static Class<?> logger = null;
+    private static final String loggerQueueClassName = "com.github.kornilova_l.flamegraph.javaagent.logger.LoggerQueue";
+    private static Class<?> loggerQueue = null;
     private static Method addEnter = null;
     private static Method addExit = null;
     private static Method addException = null;
 
     @SuppressWarnings("unused")
-    public static void addToQueue(long threadId,
+    public static void addToQueue(Thread thread,
                                   long startTime,
                                   String className,
                                   String methodName,
@@ -20,18 +21,18 @@ public class Proxy {
                                   Object[] parameters) {
         if (addEnter == null) {
             try {
-                if (logger == null) {
-                    logger = ClassLoader.getSystemClassLoader()
-                            .loadClass("com.github.kornilova_l.flamegraph.javaagent.logger.Logger");
+                if (loggerQueue == null) {
+                    loggerQueue = ClassLoader.getSystemClassLoader()
+                            .loadClass(loggerQueueClassName);
                 }
-                addEnter = logger.getMethod("addToQueue",
-                                long.class,
-                                long.class,
-                                String.class,
-                                String.class,
-                                String.class,
-                                boolean.class,
-                                Object[].class);
+                addEnter = loggerQueue.getMethod("addToQueue",
+                        Thread.class,
+                        long.class,
+                        String.class,
+                        String.class,
+                        String.class,
+                        boolean.class,
+                        Object[].class);
             } catch (ClassNotFoundException |
                     NoSuchMethodException |
                     ExceptionInInitializerError e) {
@@ -39,24 +40,24 @@ public class Proxy {
             }
         }
         try {
-            addEnter.invoke(null, threadId, startTime, className, methodName, description, isStatic, parameters);
+            addEnter.invoke(null, thread, startTime, className, methodName, description, isStatic, parameters);
         } catch (IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
     }
 
     @SuppressWarnings("unused")
-    public static void addToQueue(Object returnValue, long threadId, long exitTime) {
+    public static void addToQueue(Object returnValue, Thread thread, long exitTime) {
         if (addExit == null) {
             try {
-                if (logger == null) {
-                    logger = ClassLoader.getSystemClassLoader()
-                            .loadClass("com.github.kornilova_l.flamegraph.javaagent.logger.Logger");
+                if (loggerQueue == null) {
+                    loggerQueue = ClassLoader.getSystemClassLoader()
+                            .loadClass(loggerQueueClassName);
                 }
-                addExit = logger.getMethod("addToQueue",
-                                Object.class,
-                                long.class,
-                                long.class);
+                addExit = loggerQueue.getMethod("addToQueue",
+                        Object.class,
+                        Thread.class,
+                        long.class);
             } catch (ClassNotFoundException |
                     NoSuchMethodException |
                     ExceptionInInitializerError e) {
@@ -64,24 +65,24 @@ public class Proxy {
             }
         }
         try {
-            addExit.invoke(null, returnValue, threadId, exitTime);
+            addExit.invoke(null, returnValue, thread, exitTime);
         } catch (IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
     }
 
     @SuppressWarnings("unused")
-    public static void addToQueue(Throwable throwable, long threadId, long exitTime) {
+    public static void addToQueue(Thread thread, Throwable throwable, long exitTime) {
         if (addException == null) {
             try {
-                if (logger == null) {
-                    logger = ClassLoader.getSystemClassLoader()
-                            .loadClass("com.github.kornilova_l.flamegraph.javaagent.logger.Logger");
+                if (loggerQueue == null) {
+                    loggerQueue = ClassLoader.getSystemClassLoader()
+                            .loadClass(loggerQueueClassName);
                 }
-                addException = logger.getMethod("addToQueue",
-                                Throwable.class,
-                                long.class,
-                                long.class);
+                addException = loggerQueue.getMethod("addToQueue",
+                        Thread.class,
+                        Throwable.class,
+                        long.class);
             } catch (ClassNotFoundException |
                     NoSuchMethodException |
                     ExceptionInInitializerError e) {
@@ -89,7 +90,7 @@ public class Proxy {
             }
         }
         try {
-            addException.invoke(null, throwable, threadId, exitTime);
+            addException.invoke(null, thread, throwable, exitTime);
         } catch (IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }

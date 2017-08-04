@@ -2,6 +2,7 @@ package com.github.kornilova_l.flamegraph.javaagent.agent;
 
 import com.github.kornilova_l.flamegraph.configuration.MethodConfig;
 import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.commons.AdviceAdapter;
 
 import java.util.List;
@@ -245,18 +246,29 @@ class ProfilingMethodVisitor extends AdviceAdapter {
 
     @Override
     protected void onMethodExit(int opcode) {
-        if (opcode == ATHROW) {
-            dup();
+        if (opcode == ATHROW) { // Thread, Throwable, long
+            if (methodConfig.isSaveReturnValue()) {
+                dup();
+            } else {
+                loadNull();
+            }
             getThread();
+            mv.visitInsn(Opcodes.SWAP);
             getTime();
             addToQueue(Type.Exception);
             return;
         }
         if (opcode != RETURN) { // return some value
-            int sizeOfRetVal = getSizeOfRetVal(opcode);
-            dupRetVal(sizeOfRetVal);
+            if (methodConfig.isSaveReturnValue()) {
+                int sizeOfRetVal = getSizeOfRetVal(opcode);
+                dupRetVal(sizeOfRetVal);
+                retValToObj();
+            } else {
+                loadNull();
+            }
+        } else {
+            retValToObj();
         }
-        retValToObj(); // load throwable
         getThread();
         getTime();
         addToQueue(Type.Exit);
