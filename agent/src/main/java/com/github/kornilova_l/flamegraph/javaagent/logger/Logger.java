@@ -30,7 +30,7 @@ public class Logger implements Runnable {
         }
     }
 
-    void printStatus() {
+    public void printStatus() {
         System.out.println("Events added: " + countEventsAdded);
     }
 

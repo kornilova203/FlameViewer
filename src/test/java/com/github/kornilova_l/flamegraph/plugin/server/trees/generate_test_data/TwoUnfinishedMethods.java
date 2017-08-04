@@ -1,21 +1,17 @@
 package com.github.kornilova_l.flamegraph.plugin.server.trees.generate_test_data;
 
-import com.github.kornilova_l.flamegraph.javaagent.AgentFileManager;
-import com.github.kornilova_l.flamegraph.javaagent.logger.Logger;
 import com.github.kornilova_l.flamegraph.javaagent.logger.LoggerQueue;
 
-import java.io.File;
+import static com.github.kornilova_l.flamegraph.plugin.server.trees.generate_test_data.TestHelper.generateFile;
 
-import static com.github.kornilova_l.flamegraph.plugin.server.trees.generate_test_data.TestHelper.getLatestFile;
-import static com.github.kornilova_l.flamegraph.plugin.server.trees.generate_test_data.TestHelper.startLogger;
-import static com.github.kornilova_l.flamegraph.plugin.server.trees.generate_test_data.TestHelper.waitLogger;
+public class TwoUnfinishedMethods implements Runnable {
+    public static String fileName = "two-unfinished-methods";
 
-public class TwoUnfinishedMethods {
-    private void start() {
-        fun1();
+    public static void main(String[] args) {
+        generateFile(new TwoUnfinishedMethods(), fileName + ".ser");
     }
 
-    private void fun1() {
+    public void run() {
         LoggerQueue.addToQueue(Thread.currentThread(),
                 10,
                 "com.github.kornilova_l.flamegraph.plugin.server.trees.generate_test_data.TwoUnfinishedMethods",
@@ -39,18 +35,5 @@ public class TwoUnfinishedMethods {
                 "()V",
                 true,
                 null);
-    }
-
-    public static void main(String[] args) {
-        Logger logger = new Logger(new AgentFileManager(TestHelper.path.toString()));
-
-        startLogger(logger);
-
-        new TwoUnfinishedMethods().start();
-
-        waitLogger(logger);
-
-        File file = getLatestFile();
-        TestHelper.renameFile(file, "two-unfinished-methods.ser");
     }
 }

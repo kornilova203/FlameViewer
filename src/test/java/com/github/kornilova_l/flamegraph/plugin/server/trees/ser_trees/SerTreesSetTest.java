@@ -1,19 +1,15 @@
 package com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees;
 
-import com.github.kornilova_l.flamegraph.javaagent.AgentFileManager;
-import com.github.kornilova_l.flamegraph.javaagent.logger.Logger;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TestHelper;
-import com.github.kornilova_l.flamegraph.plugin.server.trees.generate_test_data.OneUnfinishedMethod;
+import com.github.kornilova_l.flamegraph.plugin.server.trees.generate_test_data.ExceptionCaught;
+import com.github.kornilova_l.flamegraph.plugin.server.trees.generate_test_data.OneMethodFinishedByException;
+import com.github.kornilova_l.flamegraph.plugin.server.trees.generate_test_data.SecondMethodFinishedByException;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.generate_test_data.TwoUnfinishedMethods;
 import com.github.kornilova_l.flamegraph.proto.TreeProtos;
 import com.github.kornilova_l.flamegraph.proto.TreesProtos;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Optional;
 
 import static org.junit.Assert.assertTrue;
 
@@ -87,23 +83,10 @@ public class SerTreesSetTest {
 
     @Test
     public void getCallTree() throws Exception {
-        SerTreesSet treesSet = new SerTreesSet(
-                new File("src/test/resources/SerTreesSetTest/call-tree/00-one-method.ser"));
-        TreesProtos.Trees callTree = treesSet.getCallTree(null);
-        assertTrue(callTree != null);
-        TestHelper.compare(callTree.getTrees(0).toString(),
-                new File("src/test/resources/SerTreesSetTest/call-tree/result00.txt"));
-
-        treesSet = new SerTreesSet(
-                new File("src/test/resources/SerTreesSetTest/call-tree/01-three-threads.ser"));
-        callTree = treesSet.getCallTree(null);
-        assertTrue(callTree != null);
-        StringBuilder actual = new StringBuilder();
-        for (TreeProtos.Tree tree : callTree.getTreesList()) {
-            actual.append(tree.toString());
-        }
-        TestHelper.compare(actual.toString(),
-                new File("src/test/resources/SerTreesSetTest/call-tree/result01.txt"));
+        test(OneMethodFinishedByException.fileName);
+        test(SecondMethodFinishedByException.fileName);
+        test(ExceptionCaught.fileName);
+        test(TwoUnfinishedMethods.fileName);
     }
 
     @Test
@@ -113,9 +96,9 @@ public class SerTreesSetTest {
         assertTrue(callTree == null);
     }
 
-    @Test
-    public void callTreeOfTwoUnfinishedMethod() {
-        SerTreesSet treesSet = new SerTreesSet(new File("src/test/resources/out/two-unfinished-methods.ser"));
+    private void test(String fileName) {
+        SerTreesSet treesSet = new SerTreesSet(
+                new File("src/test/resources/out/" + fileName + ".ser"));
         TreesProtos.Trees callTree = treesSet.getCallTree(null);
         assertTrue(callTree != null);
 
@@ -124,6 +107,6 @@ public class SerTreesSetTest {
             actual.append(tree.toString());
         }
         TestHelper.compare(actual.toString(),
-                new File("src/test/resources/SerTreesSetTest/call-tree/two-unfinished-methods.txt"));
+                new File("src/test/resources/SerTreesSetTest/call-tree/" + fileName + ".txt"));
     }
 }

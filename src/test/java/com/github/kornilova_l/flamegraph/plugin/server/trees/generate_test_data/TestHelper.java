@@ -1,5 +1,6 @@
 package com.github.kornilova_l.flamegraph.plugin.server.trees.generate_test_data;
 
+import com.github.kornilova_l.flamegraph.javaagent.AgentFileManager;
 import com.github.kornilova_l.flamegraph.javaagent.logger.Logger;
 
 import java.io.File;
@@ -12,22 +13,27 @@ import java.util.Comparator;
 import java.util.Optional;
 
 class TestHelper {
-    static Path path = Paths.get("src", "test", "resources", "out");
+    private static Path path = Paths.get("src", "test", "resources", "out");
 
-    static void waitLogger(Logger logger) {
+    static void generateFile(Runnable runnable, String fileName) {
+        Logger logger = new Logger(new AgentFileManager(TestHelper.path.toString()));
 
-        while (!logger.isDone) { // wait for logger to log all events
-            Thread.yield();
-        }
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        logger.closeOutputStream();
+        startLogger(logger);
+
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            logger.printStatus();
+            while (!logger.isDone) { // wait for logger to log all events
+                Thread.yield();
+            }
+            logger.closeOutputStream();
+            File file = getLatestFile();
+            TestHelper.renameFile(file, fileName);
+        }));
+
+        runnable.run();
     }
 
-    static Thread startLogger(Logger logger) {
+    private static Thread startLogger(Logger logger) {
         Thread loggerThread = new Thread(logger, "logging thread");
         loggerThread.setDaemon(true);
         loggerThread.start();
@@ -35,7 +41,7 @@ class TestHelper {
         return loggerThread;
     }
 
-    static File getLatestFile() {
+    private static File getLatestFile() {
         File[] files = new File(path.toString()).listFiles();
         assert files != null;
         Optional<File> latestFile = Arrays.stream(files)
@@ -44,7 +50,7 @@ class TestHelper {
         return latestFile.get();
     }
 
-    static void renameFile(File file, String newName) {
+    private static void renameFile(File file, String newName) {
         Path path = Paths.get(file.getAbsolutePath());
         try {
             Path siblingPath = path.resolveSibling(newName);
