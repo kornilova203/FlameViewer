@@ -27,10 +27,14 @@ public class CallTreesBuilder {
         try (InputStream inputStream = new FileInputStream(logFile)) {
             EventProtos.Event event = EventProtos.Event.parseDelimitedFrom(inputStream);
             if (event == null) { // if no event was written
-                trees = TreesProtos.Trees.newBuilder().build();
+                trees = null;
                 return;
             }
             long timeOfLastEvent = processEvents(event, inputStream);
+            if (timeOfLastEvent == 0) {
+                trees = null;
+                return;
+            }
             long startTimeOfFirstThread = getStartTimeOfFirstThread(treesMap);
             trees = HashMapToTrees(treesMap, timeOfLastEvent, startTimeOfFirstThread);
         } catch (IOException e) {
@@ -44,6 +48,7 @@ public class CallTreesBuilder {
         TreesProtos.Trees.Builder treesBuilder = TreesProtos.Trees.newBuilder();
         for (CTBuilder oTBuilder : trees.values()) {
             oTBuilder.subtractFromThreadStartTime(startTimeOfFirstThread);
+            timeOfLastEvent = timeOfLastEvent - startTimeOfFirstThread;
             TreeProtos.Tree tree = oTBuilder.getBuiltTree(timeOfLastEvent);
             if (tree != null) {
                 treesBuilder.addTrees(
@@ -76,7 +81,6 @@ public class CallTreesBuilder {
             }
             event = EventProtos.Event.parseDelimitedFrom(inputStream);
         }
-        assert timeOfLastEvent != 0;
         return timeOfLastEvent;
     }
 

@@ -1,17 +1,24 @@
 package com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees;
 
+import com.github.kornilova_l.flamegraph.javaagent.AgentFileManager;
+import com.github.kornilova_l.flamegraph.javaagent.logger.Logger;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TestHelper;
+import com.github.kornilova_l.flamegraph.plugin.server.trees.generate_test_data.OneUnfinishedMethod;
+import com.github.kornilova_l.flamegraph.plugin.server.trees.generate_test_data.TwoUnfinishedMethods;
 import com.github.kornilova_l.flamegraph.proto.TreeProtos;
 import com.github.kornilova_l.flamegraph.proto.TreesProtos;
-import com.github.kornilova_l.libs.com.google.protobuf.AbstractMessage;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.File;
-import java.util.stream.Collectors;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Optional;
 
 import static org.junit.Assert.assertTrue;
 
 public class SerTreesSetTest {
+
     @Test
     public void getTree() throws Exception {
 
@@ -97,5 +104,26 @@ public class SerTreesSetTest {
         }
         TestHelper.compare(actual.toString(),
                 new File("src/test/resources/SerTreesSetTest/call-tree/result01.txt"));
+    }
+
+    @Test
+    public void callTreeOfOneUnfinishedMethod() {
+        SerTreesSet treesSet = new SerTreesSet(new File("src/test/resources/out/one-unfinished-method.ser"));
+        TreesProtos.Trees callTree = treesSet.getCallTree(null);
+        assertTrue(callTree == null);
+    }
+
+    @Test
+    public void callTreeOfTwoUnfinishedMethod() {
+        SerTreesSet treesSet = new SerTreesSet(new File("src/test/resources/out/two-unfinished-methods.ser"));
+        TreesProtos.Trees callTree = treesSet.getCallTree(null);
+        assertTrue(callTree != null);
+
+        StringBuilder actual = new StringBuilder();
+        for (TreeProtos.Tree tree : callTree.getTreesList()) {
+            actual.append(tree.toString());
+        }
+        TestHelper.compare(actual.toString(),
+                new File("src/test/resources/SerTreesSetTest/call-tree/two-unfinished-methods.txt"));
     }
 }

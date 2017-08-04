@@ -14,7 +14,7 @@ import static com.github.kornilova_l.flamegraph.javaagent.logger.LoggerQueue.que
  * Thread which writes all events from loggingQueue to file
  */
 public class Logger implements Runnable {
-    boolean isDone = true; // changes to false when queue is enqueued
+    public boolean isDone = true; // changes to false when queue is enqueued
     private File file;
     private OutputStream outputStream;
 
@@ -56,7 +56,7 @@ public class Logger implements Runnable {
         }
     }
 
-    void closeOutputStream() {
+    public void closeOutputStream() {
         try {
             outputStream.close();
         } catch (IOException e) {

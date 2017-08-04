@@ -38,6 +38,7 @@ dependencies {
     compile fileTree(dir: 'lib', include: ['com.jrockit.mc.common_5.5.1.172852.jar'])
     compile project('configuration')
     compile project('protobuf')
+    testCompile project('agent')
 }
 
 

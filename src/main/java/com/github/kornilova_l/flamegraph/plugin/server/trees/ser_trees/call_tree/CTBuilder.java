@@ -1,6 +1,7 @@
 package com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees.call_tree;
 
 import com.github.kornilova_l.flamegraph.configuration.MethodConfig;
+import com.github.kornilova_l.flamegraph.plugin.server.trees.TreesSet;
 import com.github.kornilova_l.flamegraph.proto.EventProtos;
 import com.github.kornilova_l.flamegraph.proto.TreeProtos;
 import org.jetbrains.annotations.NotNull;
@@ -17,8 +18,6 @@ class CTBuilder {
     private TreeProtos.Tree.Builder treeBuilder = TreeProtos.Tree.newBuilder();
     @Nullable
     private TreeProtos.Tree tree = null;
-    private int maxDepth = 0;
-    private int currentDepth = 0;
 
     CTBuilder(long startTime, String threadName) {
         treeBuilder.setTreeInfo(
@@ -100,7 +99,6 @@ class CTBuilder {
     }
 
     private void finishCall(EventProtos.Event.MethodEvent methodEvent) {
-        currentDepth--;
         TreeProtos.Tree.Node.Builder node = callStack.removeFirst();
         finishNode(node, methodEvent);
         addNodeToParent(node);
@@ -132,9 +130,6 @@ class CTBuilder {
     }
 
     private void pushNewNode(EventProtos.Event.MethodEvent methodEvent, String className) {
-        if (++currentDepth > maxDepth) {
-            maxDepth = currentDepth;
-        }
         TreeProtos.Tree.Node.Builder node = TreeProtos.Tree.Node.newBuilder();
         setNodeInfo(node, methodEvent.getEnter(), className);
         long offset = methodEvent.getTime() - treeBuilder.getTreeInfo().getStartTime();
@@ -151,6 +146,9 @@ class CTBuilder {
             finishTreeBuilding();
         } else { // if something went wrong
             finishAllCallsInStack(timeOfLastEvent);
+        }
+        if (treeBuilder == null) {
+            return;
         }
         setBeautifulDescRecursively(treeBuilder.getBaseNodeBuilder());
         tree = treeBuilder.build();
@@ -169,8 +167,13 @@ class CTBuilder {
     private void finishTreeBuilding() {
         TreeProtos.Tree.Node.Builder baseNode = callStack.removeFirst();
         treeBuilder.setBaseNode(baseNode);
+        if (baseNode.getNodesCount() == 0) {
+            treeBuilder = null;
+            return;
+        }
         TreeProtos.Tree.Node lastFinishedNode = baseNode.getNodes(baseNode.getNodesCount() - 1);
         long treeWidth = lastFinishedNode.getOffset() + lastFinishedNode.getWidth();
+        int maxDepth = TreesSet.getMaxDepthRecursively(treeBuilder.getBaseNodeBuilder(), 0);
         treeBuilder.setWidth(treeWidth)
                 .setDepth(maxDepth);
     }
@@ -186,6 +189,10 @@ class CTBuilder {
     */
     private void finishAllCallsInStack(long timeOfLastEvent) {
         long treeWidth = timeOfLastEvent - treeBuilder.getTreeInfo().getStartTime();
+        if (treeWidth == 0) {
+            treeBuilder = null;
+            return;
+        }
         while (callStack.size() > 1) {
             TreeProtos.Tree.Node.Builder unfinishedNode = callStack.removeFirst();
             unfinishedNode.setWidth(treeWidth - unfinishedNode.getOffset());
@@ -204,8 +211,6 @@ class CTBuilder {
             buildTree(timeOfLastEvent);
         }
         if (tree == null ||
-                tree.getBaseNode() == null ||
-                tree.getBaseNode().getNodesList() == null ||
                 tree.getBaseNode().getNodesCount() == 0) {
             return null;
         }

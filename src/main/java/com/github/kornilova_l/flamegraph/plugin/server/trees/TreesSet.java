@@ -194,7 +194,7 @@ public abstract class TreesSet {
         }
     }
 
-    private int getMaxDepthRecursively(TreeProtos.Tree.Node.Builder nodeBuilder, int currentDepth) {
+    public static int getMaxDepthRecursively(TreeProtos.Tree.Node.Builder nodeBuilder, int currentDepth) {
         int maxDepth = currentDepth;
         for (TreeProtos.Tree.Node.Builder child : nodeBuilder.getNodesBuilderList()) {
             int newDepth = getMaxDepthRecursively(child, currentDepth + 1);

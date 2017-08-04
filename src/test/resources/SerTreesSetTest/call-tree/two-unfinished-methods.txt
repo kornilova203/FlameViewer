@@ -1,0 +1,16 @@
+tree_info {
+  thread_name: "main"
+}
+base_node {
+  nodes {
+    width: 5
+    node_info {
+      method_name: "fun1"
+      class_name: "com.github.kornilova_l.flamegraph.plugin.server.trees.generate_test_data.TwoUnfinishedMethods"
+      is_static: true
+      description: "()void"
+    }
+  }
+}
+depth: 1
+width: 5

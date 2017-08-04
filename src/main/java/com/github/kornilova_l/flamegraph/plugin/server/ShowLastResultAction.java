@@ -5,11 +5,12 @@ import com.intellij.ide.BrowserUtil;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.application.PathManager;
+import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.ide.BuiltInServerManager;
 
-public class ShowLastResultAction extends AnAction {
+public class ShowLastResultAction extends AnAction implements DumbAware {
     @Override
     public void actionPerformed(AnActionEvent event) {
         if (event.getProject() != null) {
