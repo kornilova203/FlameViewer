@@ -44,7 +44,7 @@ class ProfilingClassFileTransformer implements ClassFileTransformer {
                 ClassReader cr = new ClassReader(classfileBuffer);
                 ClassWriter cw = new ClassWriter(cr, ClassWriter.COMPUTE_FRAMES);
                 // uncomment for debugging
-//            TraceClassVisitor cv = new TraceClassVisitor(cw, new PrintWriter(System.out));
+//                TraceClassVisitor cv = new TraceClassVisitor(cw, new PrintWriter(System.out));
                 // SKIP_FRAMES avoids visiting frames that will be ignored and recomputed from scratch in the class writer.
                 cr.accept(
                         new ProfilingClassVisitor(

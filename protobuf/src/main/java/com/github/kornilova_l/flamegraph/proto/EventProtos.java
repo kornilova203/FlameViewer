@@ -161,38 +161,88 @@ public final class EventProtos {
       long getThreadId();
 
       /**
-       * <code>int64 time = 2;</code>
+       * <code>int64 class_name_id = 2;</code>
        */
-      long getTime();
+      long getClassNameId();
 
       /**
-       * <code>.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.Enter enter = 3;</code>
+       * <code>int64 start_time = 3;</code>
        */
-      com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter getEnter();
-      /**
-       * <code>.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.Enter enter = 3;</code>
-       */
-      com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.EnterOrBuilder getEnterOrBuilder();
+      long getStartTime();
 
       /**
-       * <code>.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.Exit exit = 4;</code>
+       * <code>int64 duration = 4;</code>
        */
-      com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit getExit();
-      /**
-       * <code>.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.Exit exit = 4;</code>
-       */
-      com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.ExitOrBuilder getExitOrBuilder();
+      long getDuration();
 
       /**
-       * <code>.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.Exception exception = 5;</code>
+       * <code>string method_name = 5;</code>
        */
-      com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception getException();
+      java.lang.String getMethodName();
       /**
-       * <code>.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.Exception exception = 5;</code>
+       * <code>string method_name = 5;</code>
        */
-      com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.ExceptionOrBuilder getExceptionOrBuilder();
+      com.github.kornilova_l.libs.com.google.protobuf.ByteString
+          getMethodNameBytes();
 
-      public com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.InfoCase getInfoCase();
+      /**
+       * <code>string desc = 6;</code>
+       */
+      java.lang.String getDesc();
+      /**
+       * <code>string desc = 6;</code>
+       */
+      com.github.kornilova_l.libs.com.google.protobuf.ByteString
+          getDescBytes();
+
+      /**
+       * <code>bool is_static = 7;</code>
+       */
+      boolean getIsStatic();
+
+      /**
+       * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 8;</code>
+       */
+      java.util.List<com.github.kornilova_l.flamegraph.proto.EventProtos.Var> 
+          getParametersList();
+      /**
+       * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 8;</code>
+       */
+      com.github.kornilova_l.flamegraph.proto.EventProtos.Var getParameters(int index);
+      /**
+       * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 8;</code>
+       */
+      int getParametersCount();
+      /**
+       * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 8;</code>
+       */
+      java.util.List<? extends com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder> 
+          getParametersOrBuilderList();
+      /**
+       * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 8;</code>
+       */
+      com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder getParametersOrBuilder(
+          int index);
+
+      /**
+       * <code>.com.github.kornilova_l.flamegraph.proto.Var return_value = 9;</code>
+       */
+      com.github.kornilova_l.flamegraph.proto.EventProtos.Var getReturnValue();
+      /**
+       * <code>.com.github.kornilova_l.flamegraph.proto.Var return_value = 9;</code>
+       */
+      com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder getReturnValueOrBuilder();
+
+      /**
+       * <code>.com.github.kornilova_l.flamegraph.proto.Var.Object throwable = 10;</code>
+       */
+      com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object getThrowable();
+      /**
+       * <code>.com.github.kornilova_l.flamegraph.proto.Var.Object throwable = 10;</code>
+       */
+      com.github.kornilova_l.flamegraph.proto.EventProtos.Var.ObjectOrBuilder getThrowableOrBuilder();
+
+      public com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.EndCase getEndCase();
     }
     /**
      * Protobuf type {@code com.github.kornilova_l.flamegraph.proto.Event.MethodEvent}
@@ -207,7 +257,13 @@ public final class EventProtos {
       }
       private MethodEvent() {
         threadId_ = 0L;
-        time_ = 0L;
+        classNameId_ = 0L;
+        startTime_ = 0L;
+        duration_ = 0L;
+        methodName_ = "";
+        desc_ = "";
+        isStatic_ = false;
+        parameters_ = java.util.Collections.emptyList();
       }
 
       @java.lang.Override
@@ -242,49 +298,71 @@ public final class EventProtos {
               }
               case 16: {
 
-                time_ = input.readInt64();
+                classNameId_ = input.readInt64();
                 break;
               }
-              case 26: {
-                com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter.Builder subBuilder = null;
-                if (infoCase_ == 3) {
-                  subBuilder = ((com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter) info_).toBuilder();
-                }
-                info_ =
-                    input.readMessage(com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter.parser(), extensionRegistry);
-                if (subBuilder != null) {
-                  subBuilder.mergeFrom((com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter) info_);
-                  info_ = subBuilder.buildPartial();
-                }
-                infoCase_ = 3;
+              case 24: {
+
+                startTime_ = input.readInt64();
                 break;
               }
-              case 34: {
-                com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit.Builder subBuilder = null;
-                if (infoCase_ == 4) {
-                  subBuilder = ((com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit) info_).toBuilder();
-                }
-                info_ =
-                    input.readMessage(com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit.parser(), extensionRegistry);
-                if (subBuilder != null) {
-                  subBuilder.mergeFrom((com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit) info_);
-                  info_ = subBuilder.buildPartial();
-                }
-                infoCase_ = 4;
+              case 32: {
+
+                duration_ = input.readInt64();
                 break;
               }
               case 42: {
-                com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception.Builder subBuilder = null;
-                if (infoCase_ == 5) {
-                  subBuilder = ((com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception) info_).toBuilder();
+                java.lang.String s = input.readStringRequireUtf8();
+
+                methodName_ = s;
+                break;
+              }
+              case 50: {
+                java.lang.String s = input.readStringRequireUtf8();
+
+                desc_ = s;
+                break;
+              }
+              case 56: {
+
+                isStatic_ = input.readBool();
+                break;
+              }
+              case 66: {
+                if (!((mutable_bitField0_ & 0x00000080) == 0x00000080)) {
+                  parameters_ = new java.util.ArrayList<com.github.kornilova_l.flamegraph.proto.EventProtos.Var>();
+                  mutable_bitField0_ |= 0x00000080;
                 }
-                info_ =
-                    input.readMessage(com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception.parser(), extensionRegistry);
+                parameters_.add(
+                    input.readMessage(com.github.kornilova_l.flamegraph.proto.EventProtos.Var.parser(), extensionRegistry));
+                break;
+              }
+              case 74: {
+                com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder subBuilder = null;
+                if (endCase_ == 9) {
+                  subBuilder = ((com.github.kornilova_l.flamegraph.proto.EventProtos.Var) end_).toBuilder();
+                }
+                end_ =
+                    input.readMessage(com.github.kornilova_l.flamegraph.proto.EventProtos.Var.parser(), extensionRegistry);
                 if (subBuilder != null) {
-                  subBuilder.mergeFrom((com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception) info_);
-                  info_ = subBuilder.buildPartial();
+                  subBuilder.mergeFrom((com.github.kornilova_l.flamegraph.proto.EventProtos.Var) end_);
+                  end_ = subBuilder.buildPartial();
                 }
-                infoCase_ = 5;
+                endCase_ = 9;
+                break;
+              }
+              case 82: {
+                com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object.Builder subBuilder = null;
+                if (endCase_ == 10) {
+                  subBuilder = ((com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object) end_).toBuilder();
+                }
+                end_ =
+                    input.readMessage(com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object.parser(), extensionRegistry);
+                if (subBuilder != null) {
+                  subBuilder.mergeFrom((com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object) end_);
+                  end_ = subBuilder.buildPartial();
+                }
+                endCase_ = 10;
                 break;
               }
             }
@@ -295,6 +373,9 @@ public final class EventProtos {
           throw new com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException(
               e).setUnfinishedMessage(this);
         } finally {
+          if (((mutable_bitField0_ & 0x00000080) == 0x00000080)) {
+            parameters_ = java.util.Collections.unmodifiableList(parameters_);
+          }
           makeExtensionsImmutable();
         }
       }
@@ -310,2325 +391,31 @@ public final class EventProtos {
                 com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.class, com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Builder.class);
       }
 
-      public interface EnterOrBuilder extends
-          // @@protoc_insertion_point(interface_extends:com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.Enter)
-          com.github.kornilova_l.libs.com.google.protobuf.MessageOrBuilder {
-
-        /**
-         * <code>int64 class_name_id = 1;</code>
-         */
-        long getClassNameId();
-
-        /**
-         * <code>string method_name = 2;</code>
-         */
-        java.lang.String getMethodName();
-        /**
-         * <code>string method_name = 2;</code>
-         */
-        com.github.kornilova_l.libs.com.google.protobuf.ByteString
-            getMethodNameBytes();
-
-        /**
-         * <code>bool is_static = 3;</code>
-         */
-        boolean getIsStatic();
-
-        /**
-         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 4;</code>
-         */
-        java.util.List<com.github.kornilova_l.flamegraph.proto.EventProtos.Var> 
-            getParametersList();
-        /**
-         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 4;</code>
-         */
-        com.github.kornilova_l.flamegraph.proto.EventProtos.Var getParameters(int index);
-        /**
-         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 4;</code>
-         */
-        int getParametersCount();
-        /**
-         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 4;</code>
-         */
-        java.util.List<? extends com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder> 
-            getParametersOrBuilderList();
-        /**
-         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 4;</code>
-         */
-        com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder getParametersOrBuilder(
-            int index);
-
-        /**
-         * <code>string description = 5;</code>
-         */
-        java.lang.String getDescription();
-        /**
-         * <code>string description = 5;</code>
-         */
-        com.github.kornilova_l.libs.com.google.protobuf.ByteString
-            getDescriptionBytes();
-      }
-      /**
-       * Protobuf type {@code com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.Enter}
-       */
-      public  static final class Enter extends
-          com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3 implements
-          // @@protoc_insertion_point(message_implements:com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.Enter)
-          EnterOrBuilder {
-        // Use Enter.newBuilder() to construct.
-        private Enter(com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
-          super(builder);
-        }
-        private Enter() {
-          classNameId_ = 0L;
-          methodName_ = "";
-          isStatic_ = false;
-          parameters_ = java.util.Collections.emptyList();
-          description_ = "";
-        }
-
-        @java.lang.Override
-        public final com.github.kornilova_l.libs.com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
-          return com.github.kornilova_l.libs.com.google.protobuf.UnknownFieldSet.getDefaultInstance();
-        }
-        private Enter(
-            com.github.kornilova_l.libs.com.google.protobuf.CodedInputStream input,
-            com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
-          this();
-          int mutable_bitField0_ = 0;
-          try {
-            boolean done = false;
-            while (!done) {
-              int tag = input.readTag();
-              switch (tag) {
-                case 0:
-                  done = true;
-                  break;
-                default: {
-                  if (!input.skipField(tag)) {
-                    done = true;
-                  }
-                  break;
-                }
-                case 8: {
-
-                  classNameId_ = input.readInt64();
-                  break;
-                }
-                case 18: {
-                  java.lang.String s = input.readStringRequireUtf8();
-
-                  methodName_ = s;
-                  break;
-                }
-                case 24: {
-
-                  isStatic_ = input.readBool();
-                  break;
-                }
-                case 34: {
-                  if (!((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
-                    parameters_ = new java.util.ArrayList<com.github.kornilova_l.flamegraph.proto.EventProtos.Var>();
-                    mutable_bitField0_ |= 0x00000008;
-                  }
-                  parameters_.add(
-                      input.readMessage(com.github.kornilova_l.flamegraph.proto.EventProtos.Var.parser(), extensionRegistry));
-                  break;
-                }
-                case 42: {
-                  java.lang.String s = input.readStringRequireUtf8();
-
-                  description_ = s;
-                  break;
-                }
-              }
-            }
-          } catch (com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException e) {
-            throw e.setUnfinishedMessage(this);
-          } catch (java.io.IOException e) {
-            throw new com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException(
-                e).setUnfinishedMessage(this);
-          } finally {
-            if (((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
-              parameters_ = java.util.Collections.unmodifiableList(parameters_);
-            }
-            makeExtensionsImmutable();
-          }
-        }
-        public static final com.github.kornilova_l.libs.com.google.protobuf.Descriptors.Descriptor
-            getDescriptor() {
-          return com.github.kornilova_l.flamegraph.proto.EventProtos.internal_static_com_github_kornilova_l_flamegraph_proto_Event_MethodEvent_Enter_descriptor;
-        }
-
-        protected com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-            internalGetFieldAccessorTable() {
-          return com.github.kornilova_l.flamegraph.proto.EventProtos.internal_static_com_github_kornilova_l_flamegraph_proto_Event_MethodEvent_Enter_fieldAccessorTable
-              .ensureFieldAccessorsInitialized(
-                  com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter.class, com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter.Builder.class);
-        }
-
-        private int bitField0_;
-        public static final int CLASS_NAME_ID_FIELD_NUMBER = 1;
-        private long classNameId_;
-        /**
-         * <code>int64 class_name_id = 1;</code>
-         */
-        public long getClassNameId() {
-          return classNameId_;
-        }
-
-        public static final int METHOD_NAME_FIELD_NUMBER = 2;
-        private volatile java.lang.Object methodName_;
-        /**
-         * <code>string method_name = 2;</code>
-         */
-        public java.lang.String getMethodName() {
-          java.lang.Object ref = methodName_;
-          if (ref instanceof java.lang.String) {
-            return (java.lang.String) ref;
-          } else {
-            com.github.kornilova_l.libs.com.google.protobuf.ByteString bs = 
-                (com.github.kornilova_l.libs.com.google.protobuf.ByteString) ref;
-            java.lang.String s = bs.toStringUtf8();
-            methodName_ = s;
-            return s;
-          }
-        }
-        /**
-         * <code>string method_name = 2;</code>
-         */
-        public com.github.kornilova_l.libs.com.google.protobuf.ByteString
-            getMethodNameBytes() {
-          java.lang.Object ref = methodName_;
-          if (ref instanceof java.lang.String) {
-            com.github.kornilova_l.libs.com.google.protobuf.ByteString b = 
-                com.github.kornilova_l.libs.com.google.protobuf.ByteString.copyFromUtf8(
-                    (java.lang.String) ref);
-            methodName_ = b;
-            return b;
-          } else {
-            return (com.github.kornilova_l.libs.com.google.protobuf.ByteString) ref;
-          }
-        }
-
-        public static final int IS_STATIC_FIELD_NUMBER = 3;
-        private boolean isStatic_;
-        /**
-         * <code>bool is_static = 3;</code>
-         */
-        public boolean getIsStatic() {
-          return isStatic_;
-        }
-
-        public static final int PARAMETERS_FIELD_NUMBER = 4;
-        private java.util.List<com.github.kornilova_l.flamegraph.proto.EventProtos.Var> parameters_;
-        /**
-         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 4;</code>
-         */
-        public java.util.List<com.github.kornilova_l.flamegraph.proto.EventProtos.Var> getParametersList() {
-          return parameters_;
-        }
-        /**
-         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 4;</code>
-         */
-        public java.util.List<? extends com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder> 
-            getParametersOrBuilderList() {
-          return parameters_;
-        }
-        /**
-         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 4;</code>
-         */
-        public int getParametersCount() {
-          return parameters_.size();
-        }
-        /**
-         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 4;</code>
-         */
-        public com.github.kornilova_l.flamegraph.proto.EventProtos.Var getParameters(int index) {
-          return parameters_.get(index);
-        }
-        /**
-         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 4;</code>
-         */
-        public com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder getParametersOrBuilder(
-            int index) {
-          return parameters_.get(index);
-        }
-
-        public static final int DESCRIPTION_FIELD_NUMBER = 5;
-        private volatile java.lang.Object description_;
-        /**
-         * <code>string description = 5;</code>
-         */
-        public java.lang.String getDescription() {
-          java.lang.Object ref = description_;
-          if (ref instanceof java.lang.String) {
-            return (java.lang.String) ref;
-          } else {
-            com.github.kornilova_l.libs.com.google.protobuf.ByteString bs = 
-                (com.github.kornilova_l.libs.com.google.protobuf.ByteString) ref;
-            java.lang.String s = bs.toStringUtf8();
-            description_ = s;
-            return s;
-          }
-        }
-        /**
-         * <code>string description = 5;</code>
-         */
-        public com.github.kornilova_l.libs.com.google.protobuf.ByteString
-            getDescriptionBytes() {
-          java.lang.Object ref = description_;
-          if (ref instanceof java.lang.String) {
-            com.github.kornilova_l.libs.com.google.protobuf.ByteString b = 
-                com.github.kornilova_l.libs.com.google.protobuf.ByteString.copyFromUtf8(
-                    (java.lang.String) ref);
-            description_ = b;
-            return b;
-          } else {
-            return (com.github.kornilova_l.libs.com.google.protobuf.ByteString) ref;
-          }
-        }
-
-        private byte memoizedIsInitialized = -1;
-        public final boolean isInitialized() {
-          byte isInitialized = memoizedIsInitialized;
-          if (isInitialized == 1) return true;
-          if (isInitialized == 0) return false;
-
-          memoizedIsInitialized = 1;
-          return true;
-        }
-
-        public void writeTo(com.github.kornilova_l.libs.com.google.protobuf.CodedOutputStream output)
-                            throws java.io.IOException {
-          if (classNameId_ != 0L) {
-            output.writeInt64(1, classNameId_);
-          }
-          if (!getMethodNameBytes().isEmpty()) {
-            com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.writeString(output, 2, methodName_);
-          }
-          if (isStatic_ != false) {
-            output.writeBool(3, isStatic_);
-          }
-          for (int i = 0; i < parameters_.size(); i++) {
-            output.writeMessage(4, parameters_.get(i));
-          }
-          if (!getDescriptionBytes().isEmpty()) {
-            com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.writeString(output, 5, description_);
-          }
-        }
-
-        public int getSerializedSize() {
-          int size = memoizedSize;
-          if (size != -1) return size;
-
-          size = 0;
-          if (classNameId_ != 0L) {
-            size += com.github.kornilova_l.libs.com.google.protobuf.CodedOutputStream
-              .computeInt64Size(1, classNameId_);
-          }
-          if (!getMethodNameBytes().isEmpty()) {
-            size += com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.computeStringSize(2, methodName_);
-          }
-          if (isStatic_ != false) {
-            size += com.github.kornilova_l.libs.com.google.protobuf.CodedOutputStream
-              .computeBoolSize(3, isStatic_);
-          }
-          for (int i = 0; i < parameters_.size(); i++) {
-            size += com.github.kornilova_l.libs.com.google.protobuf.CodedOutputStream
-              .computeMessageSize(4, parameters_.get(i));
-          }
-          if (!getDescriptionBytes().isEmpty()) {
-            size += com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.computeStringSize(5, description_);
-          }
-          memoizedSize = size;
-          return size;
-        }
-
-        private static final long serialVersionUID = 0L;
-        @java.lang.Override
-        public boolean equals(final java.lang.Object obj) {
-          if (obj == this) {
-           return true;
-          }
-          if (!(obj instanceof com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter)) {
-            return super.equals(obj);
-          }
-          com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter other = (com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter) obj;
-
-          boolean result = true;
-          result = result && (getClassNameId()
-              == other.getClassNameId());
-          result = result && getMethodName()
-              .equals(other.getMethodName());
-          result = result && (getIsStatic()
-              == other.getIsStatic());
-          result = result && getParametersList()
-              .equals(other.getParametersList());
-          result = result && getDescription()
-              .equals(other.getDescription());
-          return result;
-        }
-
-        @java.lang.Override
-        public int hashCode() {
-          if (memoizedHashCode != 0) {
-            return memoizedHashCode;
-          }
-          int hash = 41;
-          hash = (19 * hash) + getDescriptor().hashCode();
-          hash = (37 * hash) + CLASS_NAME_ID_FIELD_NUMBER;
-          hash = (53 * hash) + com.github.kornilova_l.libs.com.google.protobuf.Internal.hashLong(
-              getClassNameId());
-          hash = (37 * hash) + METHOD_NAME_FIELD_NUMBER;
-          hash = (53 * hash) + getMethodName().hashCode();
-          hash = (37 * hash) + IS_STATIC_FIELD_NUMBER;
-          hash = (53 * hash) + com.github.kornilova_l.libs.com.google.protobuf.Internal.hashBoolean(
-              getIsStatic());
-          if (getParametersCount() > 0) {
-            hash = (37 * hash) + PARAMETERS_FIELD_NUMBER;
-            hash = (53 * hash) + getParametersList().hashCode();
-          }
-          hash = (37 * hash) + DESCRIPTION_FIELD_NUMBER;
-          hash = (53 * hash) + getDescription().hashCode();
-          hash = (29 * hash) + unknownFields.hashCode();
-          memoizedHashCode = hash;
-          return hash;
-        }
-
-        public static com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter parseFrom(
-            java.nio.ByteBuffer data)
-            throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
-          return PARSER.parseFrom(data);
-        }
-        public static com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter parseFrom(
-            java.nio.ByteBuffer data,
-            com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
-          return PARSER.parseFrom(data, extensionRegistry);
-        }
-        public static com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter parseFrom(
-            com.github.kornilova_l.libs.com.google.protobuf.ByteString data)
-            throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
-          return PARSER.parseFrom(data);
-        }
-        public static com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter parseFrom(
-            com.github.kornilova_l.libs.com.google.protobuf.ByteString data,
-            com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
-          return PARSER.parseFrom(data, extensionRegistry);
-        }
-        public static com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter parseFrom(byte[] data)
-            throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
-          return PARSER.parseFrom(data);
-        }
-        public static com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter parseFrom(
-            byte[] data,
-            com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
-          return PARSER.parseFrom(data, extensionRegistry);
-        }
-        public static com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter parseFrom(java.io.InputStream input)
-            throws java.io.IOException {
-          return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input);
-        }
-        public static com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter parseFrom(
-            java.io.InputStream input,
-            com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws java.io.IOException {
-          return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input, extensionRegistry);
-        }
-        public static com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter parseDelimitedFrom(java.io.InputStream input)
-            throws java.io.IOException {
-          return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
-              .parseDelimitedWithIOException(PARSER, input);
-        }
-        public static com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter parseDelimitedFrom(
-            java.io.InputStream input,
-            com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws java.io.IOException {
-          return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
-              .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
-        }
-        public static com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter parseFrom(
-            com.github.kornilova_l.libs.com.google.protobuf.CodedInputStream input)
-            throws java.io.IOException {
-          return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input);
-        }
-        public static com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter parseFrom(
-            com.github.kornilova_l.libs.com.google.protobuf.CodedInputStream input,
-            com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws java.io.IOException {
-          return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input, extensionRegistry);
-        }
-
-        public Builder newBuilderForType() { return newBuilder(); }
-        public static Builder newBuilder() {
-          return DEFAULT_INSTANCE.toBuilder();
-        }
-        public static Builder newBuilder(com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter prototype) {
-          return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
-        }
-        public Builder toBuilder() {
-          return this == DEFAULT_INSTANCE
-              ? new Builder() : new Builder().mergeFrom(this);
-        }
-
-        @java.lang.Override
-        protected Builder newBuilderForType(
-            com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
-          Builder builder = new Builder(parent);
-          return builder;
-        }
-        /**
-         * Protobuf type {@code com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.Enter}
-         */
-        public static final class Builder extends
-            com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-            // @@protoc_insertion_point(builder_implements:com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.Enter)
-            com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.EnterOrBuilder {
-          public static final com.github.kornilova_l.libs.com.google.protobuf.Descriptors.Descriptor
-              getDescriptor() {
-            return com.github.kornilova_l.flamegraph.proto.EventProtos.internal_static_com_github_kornilova_l_flamegraph_proto_Event_MethodEvent_Enter_descriptor;
-          }
-
-          protected com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-              internalGetFieldAccessorTable() {
-            return com.github.kornilova_l.flamegraph.proto.EventProtos.internal_static_com_github_kornilova_l_flamegraph_proto_Event_MethodEvent_Enter_fieldAccessorTable
-                .ensureFieldAccessorsInitialized(
-                    com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter.class, com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter.Builder.class);
-          }
-
-          // Construct using com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter.newBuilder()
-          private Builder() {
-            maybeForceBuilderInitialization();
-          }
-
-          private Builder(
-              com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
-            super(parent);
-            maybeForceBuilderInitialization();
-          }
-          private void maybeForceBuilderInitialization() {
-            if (com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
-                    .alwaysUseFieldBuilders) {
-              getParametersFieldBuilder();
-            }
-          }
-          public Builder clear() {
-            super.clear();
-            classNameId_ = 0L;
-
-            methodName_ = "";
-
-            isStatic_ = false;
-
-            if (parametersBuilder_ == null) {
-              parameters_ = java.util.Collections.emptyList();
-              bitField0_ = (bitField0_ & ~0x00000008);
-            } else {
-              parametersBuilder_.clear();
-            }
-            description_ = "";
-
-            return this;
-          }
-
-          public com.github.kornilova_l.libs.com.google.protobuf.Descriptors.Descriptor
-              getDescriptorForType() {
-            return com.github.kornilova_l.flamegraph.proto.EventProtos.internal_static_com_github_kornilova_l_flamegraph_proto_Event_MethodEvent_Enter_descriptor;
-          }
-
-          public com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter getDefaultInstanceForType() {
-            return com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter.getDefaultInstance();
-          }
-
-          public com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter build() {
-            com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter result = buildPartial();
-            if (!result.isInitialized()) {
-              throw newUninitializedMessageException(result);
-            }
-            return result;
-          }
-
-          public com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter buildPartial() {
-            com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter result = new com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter(this);
-            int from_bitField0_ = bitField0_;
-            int to_bitField0_ = 0;
-            result.classNameId_ = classNameId_;
-            result.methodName_ = methodName_;
-            result.isStatic_ = isStatic_;
-            if (parametersBuilder_ == null) {
-              if (((bitField0_ & 0x00000008) == 0x00000008)) {
-                parameters_ = java.util.Collections.unmodifiableList(parameters_);
-                bitField0_ = (bitField0_ & ~0x00000008);
-              }
-              result.parameters_ = parameters_;
-            } else {
-              result.parameters_ = parametersBuilder_.build();
-            }
-            result.description_ = description_;
-            result.bitField0_ = to_bitField0_;
-            onBuilt();
-            return result;
-          }
-
-          public Builder clone() {
-            return (Builder) super.clone();
-          }
-          public Builder setField(
-              com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FieldDescriptor field,
-              Object value) {
-            return (Builder) super.setField(field, value);
-          }
-          public Builder clearField(
-              com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FieldDescriptor field) {
-            return (Builder) super.clearField(field);
-          }
-          public Builder clearOneof(
-              com.github.kornilova_l.libs.com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-            return (Builder) super.clearOneof(oneof);
-          }
-          public Builder setRepeatedField(
-              com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FieldDescriptor field,
-              int index, Object value) {
-            return (Builder) super.setRepeatedField(field, index, value);
-          }
-          public Builder addRepeatedField(
-              com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FieldDescriptor field,
-              Object value) {
-            return (Builder) super.addRepeatedField(field, value);
-          }
-          public Builder mergeFrom(com.github.kornilova_l.libs.com.google.protobuf.Message other) {
-            if (other instanceof com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter) {
-              return mergeFrom((com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter)other);
-            } else {
-              super.mergeFrom(other);
-              return this;
-            }
-          }
-
-          public Builder mergeFrom(com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter other) {
-            if (other == com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter.getDefaultInstance()) return this;
-            if (other.getClassNameId() != 0L) {
-              setClassNameId(other.getClassNameId());
-            }
-            if (!other.getMethodName().isEmpty()) {
-              methodName_ = other.methodName_;
-              onChanged();
-            }
-            if (other.getIsStatic() != false) {
-              setIsStatic(other.getIsStatic());
-            }
-            if (parametersBuilder_ == null) {
-              if (!other.parameters_.isEmpty()) {
-                if (parameters_.isEmpty()) {
-                  parameters_ = other.parameters_;
-                  bitField0_ = (bitField0_ & ~0x00000008);
-                } else {
-                  ensureParametersIsMutable();
-                  parameters_.addAll(other.parameters_);
-                }
-                onChanged();
-              }
-            } else {
-              if (!other.parameters_.isEmpty()) {
-                if (parametersBuilder_.isEmpty()) {
-                  parametersBuilder_.dispose();
-                  parametersBuilder_ = null;
-                  parameters_ = other.parameters_;
-                  bitField0_ = (bitField0_ & ~0x00000008);
-                  parametersBuilder_ = 
-                    com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
-                       getParametersFieldBuilder() : null;
-                } else {
-                  parametersBuilder_.addAllMessages(other.parameters_);
-                }
-              }
-            }
-            if (!other.getDescription().isEmpty()) {
-              description_ = other.description_;
-              onChanged();
-            }
-            onChanged();
-            return this;
-          }
-
-          public final boolean isInitialized() {
-            return true;
-          }
-
-          public Builder mergeFrom(
-              com.github.kornilova_l.libs.com.google.protobuf.CodedInputStream input,
-              com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-              throws java.io.IOException {
-            com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter parsedMessage = null;
-            try {
-              parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-            } catch (com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException e) {
-              parsedMessage = (com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter) e.getUnfinishedMessage();
-              throw e.unwrapIOException();
-            } finally {
-              if (parsedMessage != null) {
-                mergeFrom(parsedMessage);
-              }
-            }
-            return this;
-          }
-          private int bitField0_;
-
-          private long classNameId_ ;
-          /**
-           * <code>int64 class_name_id = 1;</code>
-           */
-          public long getClassNameId() {
-            return classNameId_;
-          }
-          /**
-           * <code>int64 class_name_id = 1;</code>
-           */
-          public Builder setClassNameId(long value) {
-            
-            classNameId_ = value;
-            onChanged();
-            return this;
-          }
-          /**
-           * <code>int64 class_name_id = 1;</code>
-           */
-          public Builder clearClassNameId() {
-            
-            classNameId_ = 0L;
-            onChanged();
-            return this;
-          }
-
-          private java.lang.Object methodName_ = "";
-          /**
-           * <code>string method_name = 2;</code>
-           */
-          public java.lang.String getMethodName() {
-            java.lang.Object ref = methodName_;
-            if (!(ref instanceof java.lang.String)) {
-              com.github.kornilova_l.libs.com.google.protobuf.ByteString bs =
-                  (com.github.kornilova_l.libs.com.google.protobuf.ByteString) ref;
-              java.lang.String s = bs.toStringUtf8();
-              methodName_ = s;
-              return s;
-            } else {
-              return (java.lang.String) ref;
-            }
-          }
-          /**
-           * <code>string method_name = 2;</code>
-           */
-          public com.github.kornilova_l.libs.com.google.protobuf.ByteString
-              getMethodNameBytes() {
-            java.lang.Object ref = methodName_;
-            if (ref instanceof String) {
-              com.github.kornilova_l.libs.com.google.protobuf.ByteString b = 
-                  com.github.kornilova_l.libs.com.google.protobuf.ByteString.copyFromUtf8(
-                      (java.lang.String) ref);
-              methodName_ = b;
-              return b;
-            } else {
-              return (com.github.kornilova_l.libs.com.google.protobuf.ByteString) ref;
-            }
-          }
-          /**
-           * <code>string method_name = 2;</code>
-           */
-          public Builder setMethodName(
-              java.lang.String value) {
-            if (value == null) {
-    throw new NullPointerException();
-  }
-  
-            methodName_ = value;
-            onChanged();
-            return this;
-          }
-          /**
-           * <code>string method_name = 2;</code>
-           */
-          public Builder clearMethodName() {
-            
-            methodName_ = getDefaultInstance().getMethodName();
-            onChanged();
-            return this;
-          }
-          /**
-           * <code>string method_name = 2;</code>
-           */
-          public Builder setMethodNameBytes(
-              com.github.kornilova_l.libs.com.google.protobuf.ByteString value) {
-            if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-            
-            methodName_ = value;
-            onChanged();
-            return this;
-          }
-
-          private boolean isStatic_ ;
-          /**
-           * <code>bool is_static = 3;</code>
-           */
-          public boolean getIsStatic() {
-            return isStatic_;
-          }
-          /**
-           * <code>bool is_static = 3;</code>
-           */
-          public Builder setIsStatic(boolean value) {
-            
-            isStatic_ = value;
-            onChanged();
-            return this;
-          }
-          /**
-           * <code>bool is_static = 3;</code>
-           */
-          public Builder clearIsStatic() {
-            
-            isStatic_ = false;
-            onChanged();
-            return this;
-          }
-
-          private java.util.List<com.github.kornilova_l.flamegraph.proto.EventProtos.Var> parameters_ =
-            java.util.Collections.emptyList();
-          private void ensureParametersIsMutable() {
-            if (!((bitField0_ & 0x00000008) == 0x00000008)) {
-              parameters_ = new java.util.ArrayList<com.github.kornilova_l.flamegraph.proto.EventProtos.Var>(parameters_);
-              bitField0_ |= 0x00000008;
-             }
-          }
-
-          private com.github.kornilova_l.libs.com.google.protobuf.RepeatedFieldBuilderV3<
-              com.github.kornilova_l.flamegraph.proto.EventProtos.Var, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder, com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder> parametersBuilder_;
-
-          /**
-           * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 4;</code>
-           */
-          public java.util.List<com.github.kornilova_l.flamegraph.proto.EventProtos.Var> getParametersList() {
-            if (parametersBuilder_ == null) {
-              return java.util.Collections.unmodifiableList(parameters_);
-            } else {
-              return parametersBuilder_.getMessageList();
-            }
-          }
-          /**
-           * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 4;</code>
-           */
-          public int getParametersCount() {
-            if (parametersBuilder_ == null) {
-              return parameters_.size();
-            } else {
-              return parametersBuilder_.getCount();
-            }
-          }
-          /**
-           * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 4;</code>
-           */
-          public com.github.kornilova_l.flamegraph.proto.EventProtos.Var getParameters(int index) {
-            if (parametersBuilder_ == null) {
-              return parameters_.get(index);
-            } else {
-              return parametersBuilder_.getMessage(index);
-            }
-          }
-          /**
-           * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 4;</code>
-           */
-          public Builder setParameters(
-              int index, com.github.kornilova_l.flamegraph.proto.EventProtos.Var value) {
-            if (parametersBuilder_ == null) {
-              if (value == null) {
-                throw new NullPointerException();
-              }
-              ensureParametersIsMutable();
-              parameters_.set(index, value);
-              onChanged();
-            } else {
-              parametersBuilder_.setMessage(index, value);
-            }
-            return this;
-          }
-          /**
-           * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 4;</code>
-           */
-          public Builder setParameters(
-              int index, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder builderForValue) {
-            if (parametersBuilder_ == null) {
-              ensureParametersIsMutable();
-              parameters_.set(index, builderForValue.build());
-              onChanged();
-            } else {
-              parametersBuilder_.setMessage(index, builderForValue.build());
-            }
-            return this;
-          }
-          /**
-           * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 4;</code>
-           */
-          public Builder addParameters(com.github.kornilova_l.flamegraph.proto.EventProtos.Var value) {
-            if (parametersBuilder_ == null) {
-              if (value == null) {
-                throw new NullPointerException();
-              }
-              ensureParametersIsMutable();
-              parameters_.add(value);
-              onChanged();
-            } else {
-              parametersBuilder_.addMessage(value);
-            }
-            return this;
-          }
-          /**
-           * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 4;</code>
-           */
-          public Builder addParameters(
-              int index, com.github.kornilova_l.flamegraph.proto.EventProtos.Var value) {
-            if (parametersBuilder_ == null) {
-              if (value == null) {
-                throw new NullPointerException();
-              }
-              ensureParametersIsMutable();
-              parameters_.add(index, value);
-              onChanged();
-            } else {
-              parametersBuilder_.addMessage(index, value);
-            }
-            return this;
-          }
-          /**
-           * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 4;</code>
-           */
-          public Builder addParameters(
-              com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder builderForValue) {
-            if (parametersBuilder_ == null) {
-              ensureParametersIsMutable();
-              parameters_.add(builderForValue.build());
-              onChanged();
-            } else {
-              parametersBuilder_.addMessage(builderForValue.build());
-            }
-            return this;
-          }
-          /**
-           * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 4;</code>
-           */
-          public Builder addParameters(
-              int index, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder builderForValue) {
-            if (parametersBuilder_ == null) {
-              ensureParametersIsMutable();
-              parameters_.add(index, builderForValue.build());
-              onChanged();
-            } else {
-              parametersBuilder_.addMessage(index, builderForValue.build());
-            }
-            return this;
-          }
-          /**
-           * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 4;</code>
-           */
-          public Builder addAllParameters(
-              java.lang.Iterable<? extends com.github.kornilova_l.flamegraph.proto.EventProtos.Var> values) {
-            if (parametersBuilder_ == null) {
-              ensureParametersIsMutable();
-              com.github.kornilova_l.libs.com.google.protobuf.AbstractMessageLite.Builder.addAll(
-                  values, parameters_);
-              onChanged();
-            } else {
-              parametersBuilder_.addAllMessages(values);
-            }
-            return this;
-          }
-          /**
-           * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 4;</code>
-           */
-          public Builder clearParameters() {
-            if (parametersBuilder_ == null) {
-              parameters_ = java.util.Collections.emptyList();
-              bitField0_ = (bitField0_ & ~0x00000008);
-              onChanged();
-            } else {
-              parametersBuilder_.clear();
-            }
-            return this;
-          }
-          /**
-           * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 4;</code>
-           */
-          public Builder removeParameters(int index) {
-            if (parametersBuilder_ == null) {
-              ensureParametersIsMutable();
-              parameters_.remove(index);
-              onChanged();
-            } else {
-              parametersBuilder_.remove(index);
-            }
-            return this;
-          }
-          /**
-           * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 4;</code>
-           */
-          public com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder getParametersBuilder(
-              int index) {
-            return getParametersFieldBuilder().getBuilder(index);
-          }
-          /**
-           * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 4;</code>
-           */
-          public com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder getParametersOrBuilder(
-              int index) {
-            if (parametersBuilder_ == null) {
-              return parameters_.get(index);  } else {
-              return parametersBuilder_.getMessageOrBuilder(index);
-            }
-          }
-          /**
-           * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 4;</code>
-           */
-          public java.util.List<? extends com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder> 
-               getParametersOrBuilderList() {
-            if (parametersBuilder_ != null) {
-              return parametersBuilder_.getMessageOrBuilderList();
-            } else {
-              return java.util.Collections.unmodifiableList(parameters_);
-            }
-          }
-          /**
-           * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 4;</code>
-           */
-          public com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder addParametersBuilder() {
-            return getParametersFieldBuilder().addBuilder(
-                com.github.kornilova_l.flamegraph.proto.EventProtos.Var.getDefaultInstance());
-          }
-          /**
-           * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 4;</code>
-           */
-          public com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder addParametersBuilder(
-              int index) {
-            return getParametersFieldBuilder().addBuilder(
-                index, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.getDefaultInstance());
-          }
-          /**
-           * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 4;</code>
-           */
-          public java.util.List<com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder> 
-               getParametersBuilderList() {
-            return getParametersFieldBuilder().getBuilderList();
-          }
-          private com.github.kornilova_l.libs.com.google.protobuf.RepeatedFieldBuilderV3<
-              com.github.kornilova_l.flamegraph.proto.EventProtos.Var, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder, com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder> 
-              getParametersFieldBuilder() {
-            if (parametersBuilder_ == null) {
-              parametersBuilder_ = new com.github.kornilova_l.libs.com.google.protobuf.RepeatedFieldBuilderV3<
-                  com.github.kornilova_l.flamegraph.proto.EventProtos.Var, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder, com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder>(
-                      parameters_,
-                      ((bitField0_ & 0x00000008) == 0x00000008),
-                      getParentForChildren(),
-                      isClean());
-              parameters_ = null;
-            }
-            return parametersBuilder_;
-          }
-
-          private java.lang.Object description_ = "";
-          /**
-           * <code>string description = 5;</code>
-           */
-          public java.lang.String getDescription() {
-            java.lang.Object ref = description_;
-            if (!(ref instanceof java.lang.String)) {
-              com.github.kornilova_l.libs.com.google.protobuf.ByteString bs =
-                  (com.github.kornilova_l.libs.com.google.protobuf.ByteString) ref;
-              java.lang.String s = bs.toStringUtf8();
-              description_ = s;
-              return s;
-            } else {
-              return (java.lang.String) ref;
-            }
-          }
-          /**
-           * <code>string description = 5;</code>
-           */
-          public com.github.kornilova_l.libs.com.google.protobuf.ByteString
-              getDescriptionBytes() {
-            java.lang.Object ref = description_;
-            if (ref instanceof String) {
-              com.github.kornilova_l.libs.com.google.protobuf.ByteString b = 
-                  com.github.kornilova_l.libs.com.google.protobuf.ByteString.copyFromUtf8(
-                      (java.lang.String) ref);
-              description_ = b;
-              return b;
-            } else {
-              return (com.github.kornilova_l.libs.com.google.protobuf.ByteString) ref;
-            }
-          }
-          /**
-           * <code>string description = 5;</code>
-           */
-          public Builder setDescription(
-              java.lang.String value) {
-            if (value == null) {
-    throw new NullPointerException();
-  }
-  
-            description_ = value;
-            onChanged();
-            return this;
-          }
-          /**
-           * <code>string description = 5;</code>
-           */
-          public Builder clearDescription() {
-            
-            description_ = getDefaultInstance().getDescription();
-            onChanged();
-            return this;
-          }
-          /**
-           * <code>string description = 5;</code>
-           */
-          public Builder setDescriptionBytes(
-              com.github.kornilova_l.libs.com.google.protobuf.ByteString value) {
-            if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-            
-            description_ = value;
-            onChanged();
-            return this;
-          }
-          public final Builder setUnknownFields(
-              final com.github.kornilova_l.libs.com.google.protobuf.UnknownFieldSet unknownFields) {
-            return this;
-          }
-
-          public final Builder mergeUnknownFields(
-              final com.github.kornilova_l.libs.com.google.protobuf.UnknownFieldSet unknownFields) {
-            return this;
-          }
-
-
-          // @@protoc_insertion_point(builder_scope:com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.Enter)
-        }
-
-        // @@protoc_insertion_point(class_scope:com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.Enter)
-        private static final com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter DEFAULT_INSTANCE;
-        static {
-          DEFAULT_INSTANCE = new com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter();
-        }
-
-        public static com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter getDefaultInstance() {
-          return DEFAULT_INSTANCE;
-        }
-
-        private static final com.github.kornilova_l.libs.com.google.protobuf.Parser<Enter>
-            PARSER = new com.github.kornilova_l.libs.com.google.protobuf.AbstractParser<Enter>() {
-          public Enter parsePartialFrom(
-              com.github.kornilova_l.libs.com.google.protobuf.CodedInputStream input,
-              com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-              throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
-              return new Enter(input, extensionRegistry);
-          }
-        };
-
-        public static com.github.kornilova_l.libs.com.google.protobuf.Parser<Enter> parser() {
-          return PARSER;
-        }
-
-        @java.lang.Override
-        public com.github.kornilova_l.libs.com.google.protobuf.Parser<Enter> getParserForType() {
-          return PARSER;
-        }
-
-        public com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter getDefaultInstanceForType() {
-          return DEFAULT_INSTANCE;
-        }
-
-      }
-
-      public interface ExitOrBuilder extends
-          // @@protoc_insertion_point(interface_extends:com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.Exit)
-          com.github.kornilova_l.libs.com.google.protobuf.MessageOrBuilder {
-
-        /**
-         * <code>.com.github.kornilova_l.flamegraph.proto.Var return_value = 1;</code>
-         */
-        boolean hasReturnValue();
-        /**
-         * <code>.com.github.kornilova_l.flamegraph.proto.Var return_value = 1;</code>
-         */
-        com.github.kornilova_l.flamegraph.proto.EventProtos.Var getReturnValue();
-        /**
-         * <code>.com.github.kornilova_l.flamegraph.proto.Var return_value = 1;</code>
-         */
-        com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder getReturnValueOrBuilder();
-      }
-      /**
-       * Protobuf type {@code com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.Exit}
-       */
-      public  static final class Exit extends
-          com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3 implements
-          // @@protoc_insertion_point(message_implements:com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.Exit)
-          ExitOrBuilder {
-        // Use Exit.newBuilder() to construct.
-        private Exit(com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
-          super(builder);
-        }
-        private Exit() {
-        }
-
-        @java.lang.Override
-        public final com.github.kornilova_l.libs.com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
-          return com.github.kornilova_l.libs.com.google.protobuf.UnknownFieldSet.getDefaultInstance();
-        }
-        private Exit(
-            com.github.kornilova_l.libs.com.google.protobuf.CodedInputStream input,
-            com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
-          this();
-          int mutable_bitField0_ = 0;
-          try {
-            boolean done = false;
-            while (!done) {
-              int tag = input.readTag();
-              switch (tag) {
-                case 0:
-                  done = true;
-                  break;
-                default: {
-                  if (!input.skipField(tag)) {
-                    done = true;
-                  }
-                  break;
-                }
-                case 10: {
-                  com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder subBuilder = null;
-                  if (returnValue_ != null) {
-                    subBuilder = returnValue_.toBuilder();
-                  }
-                  returnValue_ = input.readMessage(com.github.kornilova_l.flamegraph.proto.EventProtos.Var.parser(), extensionRegistry);
-                  if (subBuilder != null) {
-                    subBuilder.mergeFrom(returnValue_);
-                    returnValue_ = subBuilder.buildPartial();
-                  }
-
-                  break;
-                }
-              }
-            }
-          } catch (com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException e) {
-            throw e.setUnfinishedMessage(this);
-          } catch (java.io.IOException e) {
-            throw new com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException(
-                e).setUnfinishedMessage(this);
-          } finally {
-            makeExtensionsImmutable();
-          }
-        }
-        public static final com.github.kornilova_l.libs.com.google.protobuf.Descriptors.Descriptor
-            getDescriptor() {
-          return com.github.kornilova_l.flamegraph.proto.EventProtos.internal_static_com_github_kornilova_l_flamegraph_proto_Event_MethodEvent_Exit_descriptor;
-        }
-
-        protected com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-            internalGetFieldAccessorTable() {
-          return com.github.kornilova_l.flamegraph.proto.EventProtos.internal_static_com_github_kornilova_l_flamegraph_proto_Event_MethodEvent_Exit_fieldAccessorTable
-              .ensureFieldAccessorsInitialized(
-                  com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit.class, com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit.Builder.class);
-        }
-
-        public static final int RETURN_VALUE_FIELD_NUMBER = 1;
-        private com.github.kornilova_l.flamegraph.proto.EventProtos.Var returnValue_;
-        /**
-         * <code>.com.github.kornilova_l.flamegraph.proto.Var return_value = 1;</code>
-         */
-        public boolean hasReturnValue() {
-          return returnValue_ != null;
-        }
-        /**
-         * <code>.com.github.kornilova_l.flamegraph.proto.Var return_value = 1;</code>
-         */
-        public com.github.kornilova_l.flamegraph.proto.EventProtos.Var getReturnValue() {
-          return returnValue_ == null ? com.github.kornilova_l.flamegraph.proto.EventProtos.Var.getDefaultInstance() : returnValue_;
-        }
-        /**
-         * <code>.com.github.kornilova_l.flamegraph.proto.Var return_value = 1;</code>
-         */
-        public com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder getReturnValueOrBuilder() {
-          return getReturnValue();
-        }
-
-        private byte memoizedIsInitialized = -1;
-        public final boolean isInitialized() {
-          byte isInitialized = memoizedIsInitialized;
-          if (isInitialized == 1) return true;
-          if (isInitialized == 0) return false;
-
-          memoizedIsInitialized = 1;
-          return true;
-        }
-
-        public void writeTo(com.github.kornilova_l.libs.com.google.protobuf.CodedOutputStream output)
-                            throws java.io.IOException {
-          if (returnValue_ != null) {
-            output.writeMessage(1, getReturnValue());
-          }
-        }
-
-        public int getSerializedSize() {
-          int size = memoizedSize;
-          if (size != -1) return size;
-
-          size = 0;
-          if (returnValue_ != null) {
-            size += com.github.kornilova_l.libs.com.google.protobuf.CodedOutputStream
-              .computeMessageSize(1, getReturnValue());
-          }
-          memoizedSize = size;
-          return size;
-        }
-
-        private static final long serialVersionUID = 0L;
-        @java.lang.Override
-        public boolean equals(final java.lang.Object obj) {
-          if (obj == this) {
-           return true;
-          }
-          if (!(obj instanceof com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit)) {
-            return super.equals(obj);
-          }
-          com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit other = (com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit) obj;
-
-          boolean result = true;
-          result = result && (hasReturnValue() == other.hasReturnValue());
-          if (hasReturnValue()) {
-            result = result && getReturnValue()
-                .equals(other.getReturnValue());
-          }
-          return result;
-        }
-
-        @java.lang.Override
-        public int hashCode() {
-          if (memoizedHashCode != 0) {
-            return memoizedHashCode;
-          }
-          int hash = 41;
-          hash = (19 * hash) + getDescriptor().hashCode();
-          if (hasReturnValue()) {
-            hash = (37 * hash) + RETURN_VALUE_FIELD_NUMBER;
-            hash = (53 * hash) + getReturnValue().hashCode();
-          }
-          hash = (29 * hash) + unknownFields.hashCode();
-          memoizedHashCode = hash;
-          return hash;
-        }
-
-        public static com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit parseFrom(
-            java.nio.ByteBuffer data)
-            throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
-          return PARSER.parseFrom(data);
-        }
-        public static com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit parseFrom(
-            java.nio.ByteBuffer data,
-            com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
-          return PARSER.parseFrom(data, extensionRegistry);
-        }
-        public static com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit parseFrom(
-            com.github.kornilova_l.libs.com.google.protobuf.ByteString data)
-            throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
-          return PARSER.parseFrom(data);
-        }
-        public static com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit parseFrom(
-            com.github.kornilova_l.libs.com.google.protobuf.ByteString data,
-            com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
-          return PARSER.parseFrom(data, extensionRegistry);
-        }
-        public static com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit parseFrom(byte[] data)
-            throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
-          return PARSER.parseFrom(data);
-        }
-        public static com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit parseFrom(
-            byte[] data,
-            com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
-          return PARSER.parseFrom(data, extensionRegistry);
-        }
-        public static com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit parseFrom(java.io.InputStream input)
-            throws java.io.IOException {
-          return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input);
-        }
-        public static com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit parseFrom(
-            java.io.InputStream input,
-            com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws java.io.IOException {
-          return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input, extensionRegistry);
-        }
-        public static com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit parseDelimitedFrom(java.io.InputStream input)
-            throws java.io.IOException {
-          return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
-              .parseDelimitedWithIOException(PARSER, input);
-        }
-        public static com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit parseDelimitedFrom(
-            java.io.InputStream input,
-            com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws java.io.IOException {
-          return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
-              .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
-        }
-        public static com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit parseFrom(
-            com.github.kornilova_l.libs.com.google.protobuf.CodedInputStream input)
-            throws java.io.IOException {
-          return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input);
-        }
-        public static com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit parseFrom(
-            com.github.kornilova_l.libs.com.google.protobuf.CodedInputStream input,
-            com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws java.io.IOException {
-          return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input, extensionRegistry);
-        }
-
-        public Builder newBuilderForType() { return newBuilder(); }
-        public static Builder newBuilder() {
-          return DEFAULT_INSTANCE.toBuilder();
-        }
-        public static Builder newBuilder(com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit prototype) {
-          return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
-        }
-        public Builder toBuilder() {
-          return this == DEFAULT_INSTANCE
-              ? new Builder() : new Builder().mergeFrom(this);
-        }
-
-        @java.lang.Override
-        protected Builder newBuilderForType(
-            com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
-          Builder builder = new Builder(parent);
-          return builder;
-        }
-        /**
-         * Protobuf type {@code com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.Exit}
-         */
-        public static final class Builder extends
-            com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-            // @@protoc_insertion_point(builder_implements:com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.Exit)
-            com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.ExitOrBuilder {
-          public static final com.github.kornilova_l.libs.com.google.protobuf.Descriptors.Descriptor
-              getDescriptor() {
-            return com.github.kornilova_l.flamegraph.proto.EventProtos.internal_static_com_github_kornilova_l_flamegraph_proto_Event_MethodEvent_Exit_descriptor;
-          }
-
-          protected com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-              internalGetFieldAccessorTable() {
-            return com.github.kornilova_l.flamegraph.proto.EventProtos.internal_static_com_github_kornilova_l_flamegraph_proto_Event_MethodEvent_Exit_fieldAccessorTable
-                .ensureFieldAccessorsInitialized(
-                    com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit.class, com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit.Builder.class);
-          }
-
-          // Construct using com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit.newBuilder()
-          private Builder() {
-            maybeForceBuilderInitialization();
-          }
-
-          private Builder(
-              com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
-            super(parent);
-            maybeForceBuilderInitialization();
-          }
-          private void maybeForceBuilderInitialization() {
-            if (com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
-                    .alwaysUseFieldBuilders) {
-            }
-          }
-          public Builder clear() {
-            super.clear();
-            if (returnValueBuilder_ == null) {
-              returnValue_ = null;
-            } else {
-              returnValue_ = null;
-              returnValueBuilder_ = null;
-            }
-            return this;
-          }
-
-          public com.github.kornilova_l.libs.com.google.protobuf.Descriptors.Descriptor
-              getDescriptorForType() {
-            return com.github.kornilova_l.flamegraph.proto.EventProtos.internal_static_com_github_kornilova_l_flamegraph_proto_Event_MethodEvent_Exit_descriptor;
-          }
-
-          public com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit getDefaultInstanceForType() {
-            return com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit.getDefaultInstance();
-          }
-
-          public com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit build() {
-            com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit result = buildPartial();
-            if (!result.isInitialized()) {
-              throw newUninitializedMessageException(result);
-            }
-            return result;
-          }
-
-          public com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit buildPartial() {
-            com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit result = new com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit(this);
-            if (returnValueBuilder_ == null) {
-              result.returnValue_ = returnValue_;
-            } else {
-              result.returnValue_ = returnValueBuilder_.build();
-            }
-            onBuilt();
-            return result;
-          }
-
-          public Builder clone() {
-            return (Builder) super.clone();
-          }
-          public Builder setField(
-              com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FieldDescriptor field,
-              Object value) {
-            return (Builder) super.setField(field, value);
-          }
-          public Builder clearField(
-              com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FieldDescriptor field) {
-            return (Builder) super.clearField(field);
-          }
-          public Builder clearOneof(
-              com.github.kornilova_l.libs.com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-            return (Builder) super.clearOneof(oneof);
-          }
-          public Builder setRepeatedField(
-              com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FieldDescriptor field,
-              int index, Object value) {
-            return (Builder) super.setRepeatedField(field, index, value);
-          }
-          public Builder addRepeatedField(
-              com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FieldDescriptor field,
-              Object value) {
-            return (Builder) super.addRepeatedField(field, value);
-          }
-          public Builder mergeFrom(com.github.kornilova_l.libs.com.google.protobuf.Message other) {
-            if (other instanceof com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit) {
-              return mergeFrom((com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit)other);
-            } else {
-              super.mergeFrom(other);
-              return this;
-            }
-          }
-
-          public Builder mergeFrom(com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit other) {
-            if (other == com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit.getDefaultInstance()) return this;
-            if (other.hasReturnValue()) {
-              mergeReturnValue(other.getReturnValue());
-            }
-            onChanged();
-            return this;
-          }
-
-          public final boolean isInitialized() {
-            return true;
-          }
-
-          public Builder mergeFrom(
-              com.github.kornilova_l.libs.com.google.protobuf.CodedInputStream input,
-              com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-              throws java.io.IOException {
-            com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit parsedMessage = null;
-            try {
-              parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-            } catch (com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException e) {
-              parsedMessage = (com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit) e.getUnfinishedMessage();
-              throw e.unwrapIOException();
-            } finally {
-              if (parsedMessage != null) {
-                mergeFrom(parsedMessage);
-              }
-            }
-            return this;
-          }
-
-          private com.github.kornilova_l.flamegraph.proto.EventProtos.Var returnValue_ = null;
-          private com.github.kornilova_l.libs.com.google.protobuf.SingleFieldBuilderV3<
-              com.github.kornilova_l.flamegraph.proto.EventProtos.Var, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder, com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder> returnValueBuilder_;
-          /**
-           * <code>.com.github.kornilova_l.flamegraph.proto.Var return_value = 1;</code>
-           */
-          public boolean hasReturnValue() {
-            return returnValueBuilder_ != null || returnValue_ != null;
-          }
-          /**
-           * <code>.com.github.kornilova_l.flamegraph.proto.Var return_value = 1;</code>
-           */
-          public com.github.kornilova_l.flamegraph.proto.EventProtos.Var getReturnValue() {
-            if (returnValueBuilder_ == null) {
-              return returnValue_ == null ? com.github.kornilova_l.flamegraph.proto.EventProtos.Var.getDefaultInstance() : returnValue_;
-            } else {
-              return returnValueBuilder_.getMessage();
-            }
-          }
-          /**
-           * <code>.com.github.kornilova_l.flamegraph.proto.Var return_value = 1;</code>
-           */
-          public Builder setReturnValue(com.github.kornilova_l.flamegraph.proto.EventProtos.Var value) {
-            if (returnValueBuilder_ == null) {
-              if (value == null) {
-                throw new NullPointerException();
-              }
-              returnValue_ = value;
-              onChanged();
-            } else {
-              returnValueBuilder_.setMessage(value);
-            }
-
-            return this;
-          }
-          /**
-           * <code>.com.github.kornilova_l.flamegraph.proto.Var return_value = 1;</code>
-           */
-          public Builder setReturnValue(
-              com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder builderForValue) {
-            if (returnValueBuilder_ == null) {
-              returnValue_ = builderForValue.build();
-              onChanged();
-            } else {
-              returnValueBuilder_.setMessage(builderForValue.build());
-            }
-
-            return this;
-          }
-          /**
-           * <code>.com.github.kornilova_l.flamegraph.proto.Var return_value = 1;</code>
-           */
-          public Builder mergeReturnValue(com.github.kornilova_l.flamegraph.proto.EventProtos.Var value) {
-            if (returnValueBuilder_ == null) {
-              if (returnValue_ != null) {
-                returnValue_ =
-                  com.github.kornilova_l.flamegraph.proto.EventProtos.Var.newBuilder(returnValue_).mergeFrom(value).buildPartial();
-              } else {
-                returnValue_ = value;
-              }
-              onChanged();
-            } else {
-              returnValueBuilder_.mergeFrom(value);
-            }
-
-            return this;
-          }
-          /**
-           * <code>.com.github.kornilova_l.flamegraph.proto.Var return_value = 1;</code>
-           */
-          public Builder clearReturnValue() {
-            if (returnValueBuilder_ == null) {
-              returnValue_ = null;
-              onChanged();
-            } else {
-              returnValue_ = null;
-              returnValueBuilder_ = null;
-            }
-
-            return this;
-          }
-          /**
-           * <code>.com.github.kornilova_l.flamegraph.proto.Var return_value = 1;</code>
-           */
-          public com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder getReturnValueBuilder() {
-            
-            onChanged();
-            return getReturnValueFieldBuilder().getBuilder();
-          }
-          /**
-           * <code>.com.github.kornilova_l.flamegraph.proto.Var return_value = 1;</code>
-           */
-          public com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder getReturnValueOrBuilder() {
-            if (returnValueBuilder_ != null) {
-              return returnValueBuilder_.getMessageOrBuilder();
-            } else {
-              return returnValue_ == null ?
-                  com.github.kornilova_l.flamegraph.proto.EventProtos.Var.getDefaultInstance() : returnValue_;
-            }
-          }
-          /**
-           * <code>.com.github.kornilova_l.flamegraph.proto.Var return_value = 1;</code>
-           */
-          private com.github.kornilova_l.libs.com.google.protobuf.SingleFieldBuilderV3<
-              com.github.kornilova_l.flamegraph.proto.EventProtos.Var, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder, com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder> 
-              getReturnValueFieldBuilder() {
-            if (returnValueBuilder_ == null) {
-              returnValueBuilder_ = new com.github.kornilova_l.libs.com.google.protobuf.SingleFieldBuilderV3<
-                  com.github.kornilova_l.flamegraph.proto.EventProtos.Var, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder, com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder>(
-                      getReturnValue(),
-                      getParentForChildren(),
-                      isClean());
-              returnValue_ = null;
-            }
-            return returnValueBuilder_;
-          }
-          public final Builder setUnknownFields(
-              final com.github.kornilova_l.libs.com.google.protobuf.UnknownFieldSet unknownFields) {
-            return this;
-          }
-
-          public final Builder mergeUnknownFields(
-              final com.github.kornilova_l.libs.com.google.protobuf.UnknownFieldSet unknownFields) {
-            return this;
-          }
-
-
-          // @@protoc_insertion_point(builder_scope:com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.Exit)
-        }
-
-        // @@protoc_insertion_point(class_scope:com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.Exit)
-        private static final com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit DEFAULT_INSTANCE;
-        static {
-          DEFAULT_INSTANCE = new com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit();
-        }
-
-        public static com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit getDefaultInstance() {
-          return DEFAULT_INSTANCE;
-        }
-
-        private static final com.github.kornilova_l.libs.com.google.protobuf.Parser<Exit>
-            PARSER = new com.github.kornilova_l.libs.com.google.protobuf.AbstractParser<Exit>() {
-          public Exit parsePartialFrom(
-              com.github.kornilova_l.libs.com.google.protobuf.CodedInputStream input,
-              com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-              throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
-              return new Exit(input, extensionRegistry);
-          }
-        };
-
-        public static com.github.kornilova_l.libs.com.google.protobuf.Parser<Exit> parser() {
-          return PARSER;
-        }
-
-        @java.lang.Override
-        public com.github.kornilova_l.libs.com.google.protobuf.Parser<Exit> getParserForType() {
-          return PARSER;
-        }
-
-        public com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit getDefaultInstanceForType() {
-          return DEFAULT_INSTANCE;
-        }
-
-      }
-
-      public interface ExceptionOrBuilder extends
-          // @@protoc_insertion_point(interface_extends:com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.Exception)
-          com.github.kornilova_l.libs.com.google.protobuf.MessageOrBuilder {
-
-        /**
-         * <code>.com.github.kornilova_l.flamegraph.proto.Var.Object object = 1;</code>
-         */
-        boolean hasObject();
-        /**
-         * <code>.com.github.kornilova_l.flamegraph.proto.Var.Object object = 1;</code>
-         */
-        com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object getObject();
-        /**
-         * <code>.com.github.kornilova_l.flamegraph.proto.Var.Object object = 1;</code>
-         */
-        com.github.kornilova_l.flamegraph.proto.EventProtos.Var.ObjectOrBuilder getObjectOrBuilder();
-      }
-      /**
-       * Protobuf type {@code com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.Exception}
-       */
-      public  static final class Exception extends
-          com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3 implements
-          // @@protoc_insertion_point(message_implements:com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.Exception)
-          ExceptionOrBuilder {
-        // Use Exception.newBuilder() to construct.
-        private Exception(com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
-          super(builder);
-        }
-        private Exception() {
-        }
-
-        @java.lang.Override
-        public final com.github.kornilova_l.libs.com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
-          return com.github.kornilova_l.libs.com.google.protobuf.UnknownFieldSet.getDefaultInstance();
-        }
-        private Exception(
-            com.github.kornilova_l.libs.com.google.protobuf.CodedInputStream input,
-            com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
-          this();
-          int mutable_bitField0_ = 0;
-          try {
-            boolean done = false;
-            while (!done) {
-              int tag = input.readTag();
-              switch (tag) {
-                case 0:
-                  done = true;
-                  break;
-                default: {
-                  if (!input.skipField(tag)) {
-                    done = true;
-                  }
-                  break;
-                }
-                case 10: {
-                  com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object.Builder subBuilder = null;
-                  if (object_ != null) {
-                    subBuilder = object_.toBuilder();
-                  }
-                  object_ = input.readMessage(com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object.parser(), extensionRegistry);
-                  if (subBuilder != null) {
-                    subBuilder.mergeFrom(object_);
-                    object_ = subBuilder.buildPartial();
-                  }
-
-                  break;
-                }
-              }
-            }
-          } catch (com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException e) {
-            throw e.setUnfinishedMessage(this);
-          } catch (java.io.IOException e) {
-            throw new com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException(
-                e).setUnfinishedMessage(this);
-          } finally {
-            makeExtensionsImmutable();
-          }
-        }
-        public static final com.github.kornilova_l.libs.com.google.protobuf.Descriptors.Descriptor
-            getDescriptor() {
-          return com.github.kornilova_l.flamegraph.proto.EventProtos.internal_static_com_github_kornilova_l_flamegraph_proto_Event_MethodEvent_Exception_descriptor;
-        }
-
-        protected com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-            internalGetFieldAccessorTable() {
-          return com.github.kornilova_l.flamegraph.proto.EventProtos.internal_static_com_github_kornilova_l_flamegraph_proto_Event_MethodEvent_Exception_fieldAccessorTable
-              .ensureFieldAccessorsInitialized(
-                  com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception.class, com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception.Builder.class);
-        }
-
-        public static final int OBJECT_FIELD_NUMBER = 1;
-        private com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object object_;
-        /**
-         * <code>.com.github.kornilova_l.flamegraph.proto.Var.Object object = 1;</code>
-         */
-        public boolean hasObject() {
-          return object_ != null;
-        }
-        /**
-         * <code>.com.github.kornilova_l.flamegraph.proto.Var.Object object = 1;</code>
-         */
-        public com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object getObject() {
-          return object_ == null ? com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object.getDefaultInstance() : object_;
-        }
-        /**
-         * <code>.com.github.kornilova_l.flamegraph.proto.Var.Object object = 1;</code>
-         */
-        public com.github.kornilova_l.flamegraph.proto.EventProtos.Var.ObjectOrBuilder getObjectOrBuilder() {
-          return getObject();
-        }
-
-        private byte memoizedIsInitialized = -1;
-        public final boolean isInitialized() {
-          byte isInitialized = memoizedIsInitialized;
-          if (isInitialized == 1) return true;
-          if (isInitialized == 0) return false;
-
-          memoizedIsInitialized = 1;
-          return true;
-        }
-
-        public void writeTo(com.github.kornilova_l.libs.com.google.protobuf.CodedOutputStream output)
-                            throws java.io.IOException {
-          if (object_ != null) {
-            output.writeMessage(1, getObject());
-          }
-        }
-
-        public int getSerializedSize() {
-          int size = memoizedSize;
-          if (size != -1) return size;
-
-          size = 0;
-          if (object_ != null) {
-            size += com.github.kornilova_l.libs.com.google.protobuf.CodedOutputStream
-              .computeMessageSize(1, getObject());
-          }
-          memoizedSize = size;
-          return size;
-        }
-
-        private static final long serialVersionUID = 0L;
-        @java.lang.Override
-        public boolean equals(final java.lang.Object obj) {
-          if (obj == this) {
-           return true;
-          }
-          if (!(obj instanceof com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception)) {
-            return super.equals(obj);
-          }
-          com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception other = (com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception) obj;
-
-          boolean result = true;
-          result = result && (hasObject() == other.hasObject());
-          if (hasObject()) {
-            result = result && getObject()
-                .equals(other.getObject());
-          }
-          return result;
-        }
-
-        @java.lang.Override
-        public int hashCode() {
-          if (memoizedHashCode != 0) {
-            return memoizedHashCode;
-          }
-          int hash = 41;
-          hash = (19 * hash) + getDescriptor().hashCode();
-          if (hasObject()) {
-            hash = (37 * hash) + OBJECT_FIELD_NUMBER;
-            hash = (53 * hash) + getObject().hashCode();
-          }
-          hash = (29 * hash) + unknownFields.hashCode();
-          memoizedHashCode = hash;
-          return hash;
-        }
-
-        public static com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception parseFrom(
-            java.nio.ByteBuffer data)
-            throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
-          return PARSER.parseFrom(data);
-        }
-        public static com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception parseFrom(
-            java.nio.ByteBuffer data,
-            com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
-          return PARSER.parseFrom(data, extensionRegistry);
-        }
-        public static com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception parseFrom(
-            com.github.kornilova_l.libs.com.google.protobuf.ByteString data)
-            throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
-          return PARSER.parseFrom(data);
-        }
-        public static com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception parseFrom(
-            com.github.kornilova_l.libs.com.google.protobuf.ByteString data,
-            com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
-          return PARSER.parseFrom(data, extensionRegistry);
-        }
-        public static com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception parseFrom(byte[] data)
-            throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
-          return PARSER.parseFrom(data);
-        }
-        public static com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception parseFrom(
-            byte[] data,
-            com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
-          return PARSER.parseFrom(data, extensionRegistry);
-        }
-        public static com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception parseFrom(java.io.InputStream input)
-            throws java.io.IOException {
-          return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input);
-        }
-        public static com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception parseFrom(
-            java.io.InputStream input,
-            com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws java.io.IOException {
-          return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input, extensionRegistry);
-        }
-        public static com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception parseDelimitedFrom(java.io.InputStream input)
-            throws java.io.IOException {
-          return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
-              .parseDelimitedWithIOException(PARSER, input);
-        }
-        public static com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception parseDelimitedFrom(
-            java.io.InputStream input,
-            com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws java.io.IOException {
-          return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
-              .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
-        }
-        public static com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception parseFrom(
-            com.github.kornilova_l.libs.com.google.protobuf.CodedInputStream input)
-            throws java.io.IOException {
-          return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input);
-        }
-        public static com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception parseFrom(
-            com.github.kornilova_l.libs.com.google.protobuf.CodedInputStream input,
-            com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws java.io.IOException {
-          return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input, extensionRegistry);
-        }
-
-        public Builder newBuilderForType() { return newBuilder(); }
-        public static Builder newBuilder() {
-          return DEFAULT_INSTANCE.toBuilder();
-        }
-        public static Builder newBuilder(com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception prototype) {
-          return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
-        }
-        public Builder toBuilder() {
-          return this == DEFAULT_INSTANCE
-              ? new Builder() : new Builder().mergeFrom(this);
-        }
-
-        @java.lang.Override
-        protected Builder newBuilderForType(
-            com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
-          Builder builder = new Builder(parent);
-          return builder;
-        }
-        /**
-         * Protobuf type {@code com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.Exception}
-         */
-        public static final class Builder extends
-            com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-            // @@protoc_insertion_point(builder_implements:com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.Exception)
-            com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.ExceptionOrBuilder {
-          public static final com.github.kornilova_l.libs.com.google.protobuf.Descriptors.Descriptor
-              getDescriptor() {
-            return com.github.kornilova_l.flamegraph.proto.EventProtos.internal_static_com_github_kornilova_l_flamegraph_proto_Event_MethodEvent_Exception_descriptor;
-          }
-
-          protected com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-              internalGetFieldAccessorTable() {
-            return com.github.kornilova_l.flamegraph.proto.EventProtos.internal_static_com_github_kornilova_l_flamegraph_proto_Event_MethodEvent_Exception_fieldAccessorTable
-                .ensureFieldAccessorsInitialized(
-                    com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception.class, com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception.Builder.class);
-          }
-
-          // Construct using com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception.newBuilder()
-          private Builder() {
-            maybeForceBuilderInitialization();
-          }
-
-          private Builder(
-              com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
-            super(parent);
-            maybeForceBuilderInitialization();
-          }
-          private void maybeForceBuilderInitialization() {
-            if (com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
-                    .alwaysUseFieldBuilders) {
-            }
-          }
-          public Builder clear() {
-            super.clear();
-            if (objectBuilder_ == null) {
-              object_ = null;
-            } else {
-              object_ = null;
-              objectBuilder_ = null;
-            }
-            return this;
-          }
-
-          public com.github.kornilova_l.libs.com.google.protobuf.Descriptors.Descriptor
-              getDescriptorForType() {
-            return com.github.kornilova_l.flamegraph.proto.EventProtos.internal_static_com_github_kornilova_l_flamegraph_proto_Event_MethodEvent_Exception_descriptor;
-          }
-
-          public com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception getDefaultInstanceForType() {
-            return com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception.getDefaultInstance();
-          }
-
-          public com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception build() {
-            com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception result = buildPartial();
-            if (!result.isInitialized()) {
-              throw newUninitializedMessageException(result);
-            }
-            return result;
-          }
-
-          public com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception buildPartial() {
-            com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception result = new com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception(this);
-            if (objectBuilder_ == null) {
-              result.object_ = object_;
-            } else {
-              result.object_ = objectBuilder_.build();
-            }
-            onBuilt();
-            return result;
-          }
-
-          public Builder clone() {
-            return (Builder) super.clone();
-          }
-          public Builder setField(
-              com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FieldDescriptor field,
-              Object value) {
-            return (Builder) super.setField(field, value);
-          }
-          public Builder clearField(
-              com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FieldDescriptor field) {
-            return (Builder) super.clearField(field);
-          }
-          public Builder clearOneof(
-              com.github.kornilova_l.libs.com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-            return (Builder) super.clearOneof(oneof);
-          }
-          public Builder setRepeatedField(
-              com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FieldDescriptor field,
-              int index, Object value) {
-            return (Builder) super.setRepeatedField(field, index, value);
-          }
-          public Builder addRepeatedField(
-              com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FieldDescriptor field,
-              Object value) {
-            return (Builder) super.addRepeatedField(field, value);
-          }
-          public Builder mergeFrom(com.github.kornilova_l.libs.com.google.protobuf.Message other) {
-            if (other instanceof com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception) {
-              return mergeFrom((com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception)other);
-            } else {
-              super.mergeFrom(other);
-              return this;
-            }
-          }
-
-          public Builder mergeFrom(com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception other) {
-            if (other == com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception.getDefaultInstance()) return this;
-            if (other.hasObject()) {
-              mergeObject(other.getObject());
-            }
-            onChanged();
-            return this;
-          }
-
-          public final boolean isInitialized() {
-            return true;
-          }
-
-          public Builder mergeFrom(
-              com.github.kornilova_l.libs.com.google.protobuf.CodedInputStream input,
-              com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-              throws java.io.IOException {
-            com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception parsedMessage = null;
-            try {
-              parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-            } catch (com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException e) {
-              parsedMessage = (com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception) e.getUnfinishedMessage();
-              throw e.unwrapIOException();
-            } finally {
-              if (parsedMessage != null) {
-                mergeFrom(parsedMessage);
-              }
-            }
-            return this;
-          }
-
-          private com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object object_ = null;
-          private com.github.kornilova_l.libs.com.google.protobuf.SingleFieldBuilderV3<
-              com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object.Builder, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.ObjectOrBuilder> objectBuilder_;
-          /**
-           * <code>.com.github.kornilova_l.flamegraph.proto.Var.Object object = 1;</code>
-           */
-          public boolean hasObject() {
-            return objectBuilder_ != null || object_ != null;
-          }
-          /**
-           * <code>.com.github.kornilova_l.flamegraph.proto.Var.Object object = 1;</code>
-           */
-          public com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object getObject() {
-            if (objectBuilder_ == null) {
-              return object_ == null ? com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object.getDefaultInstance() : object_;
-            } else {
-              return objectBuilder_.getMessage();
-            }
-          }
-          /**
-           * <code>.com.github.kornilova_l.flamegraph.proto.Var.Object object = 1;</code>
-           */
-          public Builder setObject(com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object value) {
-            if (objectBuilder_ == null) {
-              if (value == null) {
-                throw new NullPointerException();
-              }
-              object_ = value;
-              onChanged();
-            } else {
-              objectBuilder_.setMessage(value);
-            }
-
-            return this;
-          }
-          /**
-           * <code>.com.github.kornilova_l.flamegraph.proto.Var.Object object = 1;</code>
-           */
-          public Builder setObject(
-              com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object.Builder builderForValue) {
-            if (objectBuilder_ == null) {
-              object_ = builderForValue.build();
-              onChanged();
-            } else {
-              objectBuilder_.setMessage(builderForValue.build());
-            }
-
-            return this;
-          }
-          /**
-           * <code>.com.github.kornilova_l.flamegraph.proto.Var.Object object = 1;</code>
-           */
-          public Builder mergeObject(com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object value) {
-            if (objectBuilder_ == null) {
-              if (object_ != null) {
-                object_ =
-                  com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object.newBuilder(object_).mergeFrom(value).buildPartial();
-              } else {
-                object_ = value;
-              }
-              onChanged();
-            } else {
-              objectBuilder_.mergeFrom(value);
-            }
-
-            return this;
-          }
-          /**
-           * <code>.com.github.kornilova_l.flamegraph.proto.Var.Object object = 1;</code>
-           */
-          public Builder clearObject() {
-            if (objectBuilder_ == null) {
-              object_ = null;
-              onChanged();
-            } else {
-              object_ = null;
-              objectBuilder_ = null;
-            }
-
-            return this;
-          }
-          /**
-           * <code>.com.github.kornilova_l.flamegraph.proto.Var.Object object = 1;</code>
-           */
-          public com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object.Builder getObjectBuilder() {
-            
-            onChanged();
-            return getObjectFieldBuilder().getBuilder();
-          }
-          /**
-           * <code>.com.github.kornilova_l.flamegraph.proto.Var.Object object = 1;</code>
-           */
-          public com.github.kornilova_l.flamegraph.proto.EventProtos.Var.ObjectOrBuilder getObjectOrBuilder() {
-            if (objectBuilder_ != null) {
-              return objectBuilder_.getMessageOrBuilder();
-            } else {
-              return object_ == null ?
-                  com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object.getDefaultInstance() : object_;
-            }
-          }
-          /**
-           * <code>.com.github.kornilova_l.flamegraph.proto.Var.Object object = 1;</code>
-           */
-          private com.github.kornilova_l.libs.com.google.protobuf.SingleFieldBuilderV3<
-              com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object.Builder, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.ObjectOrBuilder> 
-              getObjectFieldBuilder() {
-            if (objectBuilder_ == null) {
-              objectBuilder_ = new com.github.kornilova_l.libs.com.google.protobuf.SingleFieldBuilderV3<
-                  com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object.Builder, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.ObjectOrBuilder>(
-                      getObject(),
-                      getParentForChildren(),
-                      isClean());
-              object_ = null;
-            }
-            return objectBuilder_;
-          }
-          public final Builder setUnknownFields(
-              final com.github.kornilova_l.libs.com.google.protobuf.UnknownFieldSet unknownFields) {
-            return this;
-          }
-
-          public final Builder mergeUnknownFields(
-              final com.github.kornilova_l.libs.com.google.protobuf.UnknownFieldSet unknownFields) {
-            return this;
-          }
-
-
-          // @@protoc_insertion_point(builder_scope:com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.Exception)
-        }
-
-        // @@protoc_insertion_point(class_scope:com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.Exception)
-        private static final com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception DEFAULT_INSTANCE;
-        static {
-          DEFAULT_INSTANCE = new com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception();
-        }
-
-        public static com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception getDefaultInstance() {
-          return DEFAULT_INSTANCE;
-        }
-
-        private static final com.github.kornilova_l.libs.com.google.protobuf.Parser<Exception>
-            PARSER = new com.github.kornilova_l.libs.com.google.protobuf.AbstractParser<Exception>() {
-          public Exception parsePartialFrom(
-              com.github.kornilova_l.libs.com.google.protobuf.CodedInputStream input,
-              com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-              throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
-              return new Exception(input, extensionRegistry);
-          }
-        };
-
-        public static com.github.kornilova_l.libs.com.google.protobuf.Parser<Exception> parser() {
-          return PARSER;
-        }
-
-        @java.lang.Override
-        public com.github.kornilova_l.libs.com.google.protobuf.Parser<Exception> getParserForType() {
-          return PARSER;
-        }
-
-        public com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception getDefaultInstanceForType() {
-          return DEFAULT_INSTANCE;
-        }
-
-      }
-
-      private int infoCase_ = 0;
-      private java.lang.Object info_;
-      public enum InfoCase
+      private int bitField0_;
+      private int endCase_ = 0;
+      private java.lang.Object end_;
+      public enum EndCase
           implements com.github.kornilova_l.libs.com.google.protobuf.Internal.EnumLite {
-        ENTER(3),
-        EXIT(4),
-        EXCEPTION(5),
-        INFO_NOT_SET(0);
+        RETURN_VALUE(9),
+        THROWABLE(10),
+        END_NOT_SET(0);
         private final int value;
-        private InfoCase(int value) {
+        private EndCase(int value) {
           this.value = value;
         }
         /**
          * @deprecated Use {@link #forNumber(int)} instead.
          */
         @java.lang.Deprecated
-        public static InfoCase valueOf(int value) {
+        public static EndCase valueOf(int value) {
           return forNumber(value);
         }
 
-        public static InfoCase forNumber(int value) {
+        public static EndCase forNumber(int value) {
           switch (value) {
-            case 3: return ENTER;
-            case 4: return EXIT;
-            case 5: return EXCEPTION;
-            case 0: return INFO_NOT_SET;
+            case 9: return RETURN_VALUE;
+            case 10: return THROWABLE;
+            case 0: return END_NOT_SET;
             default: return null;
           }
         }
@@ -2637,10 +424,10 @@ public final class EventProtos {
         }
       };
 
-      public InfoCase
-      getInfoCase() {
-        return InfoCase.forNumber(
-            infoCase_);
+      public EndCase
+      getEndCase() {
+        return EndCase.forNumber(
+            endCase_);
       }
 
       public static final int THREAD_ID_FIELD_NUMBER = 1;
@@ -2652,73 +439,183 @@ public final class EventProtos {
         return threadId_;
       }
 
-      public static final int TIME_FIELD_NUMBER = 2;
-      private long time_;
+      public static final int CLASS_NAME_ID_FIELD_NUMBER = 2;
+      private long classNameId_;
       /**
-       * <code>int64 time = 2;</code>
+       * <code>int64 class_name_id = 2;</code>
        */
-      public long getTime() {
-        return time_;
+      public long getClassNameId() {
+        return classNameId_;
       }
 
-      public static final int ENTER_FIELD_NUMBER = 3;
+      public static final int START_TIME_FIELD_NUMBER = 3;
+      private long startTime_;
       /**
-       * <code>.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.Enter enter = 3;</code>
+       * <code>int64 start_time = 3;</code>
        */
-      public com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter getEnter() {
-        if (infoCase_ == 3) {
-           return (com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter) info_;
-        }
-        return com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter.getDefaultInstance();
-      }
-      /**
-       * <code>.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.Enter enter = 3;</code>
-       */
-      public com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.EnterOrBuilder getEnterOrBuilder() {
-        if (infoCase_ == 3) {
-           return (com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter) info_;
-        }
-        return com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter.getDefaultInstance();
+      public long getStartTime() {
+        return startTime_;
       }
 
-      public static final int EXIT_FIELD_NUMBER = 4;
+      public static final int DURATION_FIELD_NUMBER = 4;
+      private long duration_;
       /**
-       * <code>.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.Exit exit = 4;</code>
+       * <code>int64 duration = 4;</code>
        */
-      public com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit getExit() {
-        if (infoCase_ == 4) {
-           return (com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit) info_;
-        }
-        return com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit.getDefaultInstance();
-      }
-      /**
-       * <code>.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.Exit exit = 4;</code>
-       */
-      public com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.ExitOrBuilder getExitOrBuilder() {
-        if (infoCase_ == 4) {
-           return (com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit) info_;
-        }
-        return com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit.getDefaultInstance();
+      public long getDuration() {
+        return duration_;
       }
 
-      public static final int EXCEPTION_FIELD_NUMBER = 5;
+      public static final int METHOD_NAME_FIELD_NUMBER = 5;
+      private volatile java.lang.Object methodName_;
       /**
-       * <code>.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.Exception exception = 5;</code>
+       * <code>string method_name = 5;</code>
        */
-      public com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception getException() {
-        if (infoCase_ == 5) {
-           return (com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception) info_;
+      public java.lang.String getMethodName() {
+        java.lang.Object ref = methodName_;
+        if (ref instanceof java.lang.String) {
+          return (java.lang.String) ref;
+        } else {
+          com.github.kornilova_l.libs.com.google.protobuf.ByteString bs = 
+              (com.github.kornilova_l.libs.com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          methodName_ = s;
+          return s;
         }
-        return com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception.getDefaultInstance();
       }
       /**
-       * <code>.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.Exception exception = 5;</code>
+       * <code>string method_name = 5;</code>
        */
-      public com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.ExceptionOrBuilder getExceptionOrBuilder() {
-        if (infoCase_ == 5) {
-           return (com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception) info_;
+      public com.github.kornilova_l.libs.com.google.protobuf.ByteString
+          getMethodNameBytes() {
+        java.lang.Object ref = methodName_;
+        if (ref instanceof java.lang.String) {
+          com.github.kornilova_l.libs.com.google.protobuf.ByteString b = 
+              com.github.kornilova_l.libs.com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          methodName_ = b;
+          return b;
+        } else {
+          return (com.github.kornilova_l.libs.com.google.protobuf.ByteString) ref;
         }
-        return com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception.getDefaultInstance();
+      }
+
+      public static final int DESC_FIELD_NUMBER = 6;
+      private volatile java.lang.Object desc_;
+      /**
+       * <code>string desc = 6;</code>
+       */
+      public java.lang.String getDesc() {
+        java.lang.Object ref = desc_;
+        if (ref instanceof java.lang.String) {
+          return (java.lang.String) ref;
+        } else {
+          com.github.kornilova_l.libs.com.google.protobuf.ByteString bs = 
+              (com.github.kornilova_l.libs.com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          desc_ = s;
+          return s;
+        }
+      }
+      /**
+       * <code>string desc = 6;</code>
+       */
+      public com.github.kornilova_l.libs.com.google.protobuf.ByteString
+          getDescBytes() {
+        java.lang.Object ref = desc_;
+        if (ref instanceof java.lang.String) {
+          com.github.kornilova_l.libs.com.google.protobuf.ByteString b = 
+              com.github.kornilova_l.libs.com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          desc_ = b;
+          return b;
+        } else {
+          return (com.github.kornilova_l.libs.com.google.protobuf.ByteString) ref;
+        }
+      }
+
+      public static final int IS_STATIC_FIELD_NUMBER = 7;
+      private boolean isStatic_;
+      /**
+       * <code>bool is_static = 7;</code>
+       */
+      public boolean getIsStatic() {
+        return isStatic_;
+      }
+
+      public static final int PARAMETERS_FIELD_NUMBER = 8;
+      private java.util.List<com.github.kornilova_l.flamegraph.proto.EventProtos.Var> parameters_;
+      /**
+       * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 8;</code>
+       */
+      public java.util.List<com.github.kornilova_l.flamegraph.proto.EventProtos.Var> getParametersList() {
+        return parameters_;
+      }
+      /**
+       * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 8;</code>
+       */
+      public java.util.List<? extends com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder> 
+          getParametersOrBuilderList() {
+        return parameters_;
+      }
+      /**
+       * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 8;</code>
+       */
+      public int getParametersCount() {
+        return parameters_.size();
+      }
+      /**
+       * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 8;</code>
+       */
+      public com.github.kornilova_l.flamegraph.proto.EventProtos.Var getParameters(int index) {
+        return parameters_.get(index);
+      }
+      /**
+       * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 8;</code>
+       */
+      public com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder getParametersOrBuilder(
+          int index) {
+        return parameters_.get(index);
+      }
+
+      public static final int RETURN_VALUE_FIELD_NUMBER = 9;
+      /**
+       * <code>.com.github.kornilova_l.flamegraph.proto.Var return_value = 9;</code>
+       */
+      public com.github.kornilova_l.flamegraph.proto.EventProtos.Var getReturnValue() {
+        if (endCase_ == 9) {
+           return (com.github.kornilova_l.flamegraph.proto.EventProtos.Var) end_;
+        }
+        return com.github.kornilova_l.flamegraph.proto.EventProtos.Var.getDefaultInstance();
+      }
+      /**
+       * <code>.com.github.kornilova_l.flamegraph.proto.Var return_value = 9;</code>
+       */
+      public com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder getReturnValueOrBuilder() {
+        if (endCase_ == 9) {
+           return (com.github.kornilova_l.flamegraph.proto.EventProtos.Var) end_;
+        }
+        return com.github.kornilova_l.flamegraph.proto.EventProtos.Var.getDefaultInstance();
+      }
+
+      public static final int THROWABLE_FIELD_NUMBER = 10;
+      /**
+       * <code>.com.github.kornilova_l.flamegraph.proto.Var.Object throwable = 10;</code>
+       */
+      public com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object getThrowable() {
+        if (endCase_ == 10) {
+           return (com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object) end_;
+        }
+        return com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object.getDefaultInstance();
+      }
+      /**
+       * <code>.com.github.kornilova_l.flamegraph.proto.Var.Object throwable = 10;</code>
+       */
+      public com.github.kornilova_l.flamegraph.proto.EventProtos.Var.ObjectOrBuilder getThrowableOrBuilder() {
+        if (endCase_ == 10) {
+           return (com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object) end_;
+        }
+        return com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object.getDefaultInstance();
       }
 
       private byte memoizedIsInitialized = -1;
@@ -2736,17 +633,32 @@ public final class EventProtos {
         if (threadId_ != 0L) {
           output.writeInt64(1, threadId_);
         }
-        if (time_ != 0L) {
-          output.writeInt64(2, time_);
+        if (classNameId_ != 0L) {
+          output.writeInt64(2, classNameId_);
         }
-        if (infoCase_ == 3) {
-          output.writeMessage(3, (com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter) info_);
+        if (startTime_ != 0L) {
+          output.writeInt64(3, startTime_);
         }
-        if (infoCase_ == 4) {
-          output.writeMessage(4, (com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit) info_);
+        if (duration_ != 0L) {
+          output.writeInt64(4, duration_);
         }
-        if (infoCase_ == 5) {
-          output.writeMessage(5, (com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception) info_);
+        if (!getMethodNameBytes().isEmpty()) {
+          com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.writeString(output, 5, methodName_);
+        }
+        if (!getDescBytes().isEmpty()) {
+          com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.writeString(output, 6, desc_);
+        }
+        if (isStatic_ != false) {
+          output.writeBool(7, isStatic_);
+        }
+        for (int i = 0; i < parameters_.size(); i++) {
+          output.writeMessage(8, parameters_.get(i));
+        }
+        if (endCase_ == 9) {
+          output.writeMessage(9, (com.github.kornilova_l.flamegraph.proto.EventProtos.Var) end_);
+        }
+        if (endCase_ == 10) {
+          output.writeMessage(10, (com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object) end_);
         }
       }
 
@@ -2759,21 +671,39 @@ public final class EventProtos {
           size += com.github.kornilova_l.libs.com.google.protobuf.CodedOutputStream
             .computeInt64Size(1, threadId_);
         }
-        if (time_ != 0L) {
+        if (classNameId_ != 0L) {
           size += com.github.kornilova_l.libs.com.google.protobuf.CodedOutputStream
-            .computeInt64Size(2, time_);
+            .computeInt64Size(2, classNameId_);
         }
-        if (infoCase_ == 3) {
+        if (startTime_ != 0L) {
           size += com.github.kornilova_l.libs.com.google.protobuf.CodedOutputStream
-            .computeMessageSize(3, (com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter) info_);
+            .computeInt64Size(3, startTime_);
         }
-        if (infoCase_ == 4) {
+        if (duration_ != 0L) {
           size += com.github.kornilova_l.libs.com.google.protobuf.CodedOutputStream
-            .computeMessageSize(4, (com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit) info_);
+            .computeInt64Size(4, duration_);
         }
-        if (infoCase_ == 5) {
+        if (!getMethodNameBytes().isEmpty()) {
+          size += com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.computeStringSize(5, methodName_);
+        }
+        if (!getDescBytes().isEmpty()) {
+          size += com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.computeStringSize(6, desc_);
+        }
+        if (isStatic_ != false) {
           size += com.github.kornilova_l.libs.com.google.protobuf.CodedOutputStream
-            .computeMessageSize(5, (com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception) info_);
+            .computeBoolSize(7, isStatic_);
+        }
+        for (int i = 0; i < parameters_.size(); i++) {
+          size += com.github.kornilova_l.libs.com.google.protobuf.CodedOutputStream
+            .computeMessageSize(8, parameters_.get(i));
+        }
+        if (endCase_ == 9) {
+          size += com.github.kornilova_l.libs.com.google.protobuf.CodedOutputStream
+            .computeMessageSize(9, (com.github.kornilova_l.flamegraph.proto.EventProtos.Var) end_);
+        }
+        if (endCase_ == 10) {
+          size += com.github.kornilova_l.libs.com.google.protobuf.CodedOutputStream
+            .computeMessageSize(10, (com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object) end_);
         }
         memoizedSize = size;
         return size;
@@ -2793,23 +723,31 @@ public final class EventProtos {
         boolean result = true;
         result = result && (getThreadId()
             == other.getThreadId());
-        result = result && (getTime()
-            == other.getTime());
-        result = result && getInfoCase().equals(
-            other.getInfoCase());
+        result = result && (getClassNameId()
+            == other.getClassNameId());
+        result = result && (getStartTime()
+            == other.getStartTime());
+        result = result && (getDuration()
+            == other.getDuration());
+        result = result && getMethodName()
+            .equals(other.getMethodName());
+        result = result && getDesc()
+            .equals(other.getDesc());
+        result = result && (getIsStatic()
+            == other.getIsStatic());
+        result = result && getParametersList()
+            .equals(other.getParametersList());
+        result = result && getEndCase().equals(
+            other.getEndCase());
         if (!result) return false;
-        switch (infoCase_) {
-          case 3:
-            result = result && getEnter()
-                .equals(other.getEnter());
+        switch (endCase_) {
+          case 9:
+            result = result && getReturnValue()
+                .equals(other.getReturnValue());
             break;
-          case 4:
-            result = result && getExit()
-                .equals(other.getExit());
-            break;
-          case 5:
-            result = result && getException()
-                .equals(other.getException());
+          case 10:
+            result = result && getThrowable()
+                .equals(other.getThrowable());
             break;
           case 0:
           default:
@@ -2827,21 +765,34 @@ public final class EventProtos {
         hash = (37 * hash) + THREAD_ID_FIELD_NUMBER;
         hash = (53 * hash) + com.github.kornilova_l.libs.com.google.protobuf.Internal.hashLong(
             getThreadId());
-        hash = (37 * hash) + TIME_FIELD_NUMBER;
+        hash = (37 * hash) + CLASS_NAME_ID_FIELD_NUMBER;
         hash = (53 * hash) + com.github.kornilova_l.libs.com.google.protobuf.Internal.hashLong(
-            getTime());
-        switch (infoCase_) {
-          case 3:
-            hash = (37 * hash) + ENTER_FIELD_NUMBER;
-            hash = (53 * hash) + getEnter().hashCode();
+            getClassNameId());
+        hash = (37 * hash) + START_TIME_FIELD_NUMBER;
+        hash = (53 * hash) + com.github.kornilova_l.libs.com.google.protobuf.Internal.hashLong(
+            getStartTime());
+        hash = (37 * hash) + DURATION_FIELD_NUMBER;
+        hash = (53 * hash) + com.github.kornilova_l.libs.com.google.protobuf.Internal.hashLong(
+            getDuration());
+        hash = (37 * hash) + METHOD_NAME_FIELD_NUMBER;
+        hash = (53 * hash) + getMethodName().hashCode();
+        hash = (37 * hash) + DESC_FIELD_NUMBER;
+        hash = (53 * hash) + getDesc().hashCode();
+        hash = (37 * hash) + IS_STATIC_FIELD_NUMBER;
+        hash = (53 * hash) + com.github.kornilova_l.libs.com.google.protobuf.Internal.hashBoolean(
+            getIsStatic());
+        if (getParametersCount() > 0) {
+          hash = (37 * hash) + PARAMETERS_FIELD_NUMBER;
+          hash = (53 * hash) + getParametersList().hashCode();
+        }
+        switch (endCase_) {
+          case 9:
+            hash = (37 * hash) + RETURN_VALUE_FIELD_NUMBER;
+            hash = (53 * hash) + getReturnValue().hashCode();
             break;
-          case 4:
-            hash = (37 * hash) + EXIT_FIELD_NUMBER;
-            hash = (53 * hash) + getExit().hashCode();
-            break;
-          case 5:
-            hash = (37 * hash) + EXCEPTION_FIELD_NUMBER;
-            hash = (53 * hash) + getException().hashCode();
+          case 10:
+            hash = (37 * hash) + THROWABLE_FIELD_NUMBER;
+            hash = (53 * hash) + getThrowable().hashCode();
             break;
           case 0:
           default:
@@ -2971,16 +922,33 @@ public final class EventProtos {
         private void maybeForceBuilderInitialization() {
           if (com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
                   .alwaysUseFieldBuilders) {
+            getParametersFieldBuilder();
           }
         }
         public Builder clear() {
           super.clear();
           threadId_ = 0L;
 
-          time_ = 0L;
+          classNameId_ = 0L;
 
-          infoCase_ = 0;
-          info_ = null;
+          startTime_ = 0L;
+
+          duration_ = 0L;
+
+          methodName_ = "";
+
+          desc_ = "";
+
+          isStatic_ = false;
+
+          if (parametersBuilder_ == null) {
+            parameters_ = java.util.Collections.emptyList();
+            bitField0_ = (bitField0_ & ~0x00000080);
+          } else {
+            parametersBuilder_.clear();
+          }
+          endCase_ = 0;
+          end_ = null;
           return this;
         }
 
@@ -3003,30 +971,40 @@ public final class EventProtos {
 
         public com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent buildPartial() {
           com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent result = new com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent(this);
+          int from_bitField0_ = bitField0_;
+          int to_bitField0_ = 0;
           result.threadId_ = threadId_;
-          result.time_ = time_;
-          if (infoCase_ == 3) {
-            if (enterBuilder_ == null) {
-              result.info_ = info_;
+          result.classNameId_ = classNameId_;
+          result.startTime_ = startTime_;
+          result.duration_ = duration_;
+          result.methodName_ = methodName_;
+          result.desc_ = desc_;
+          result.isStatic_ = isStatic_;
+          if (parametersBuilder_ == null) {
+            if (((bitField0_ & 0x00000080) == 0x00000080)) {
+              parameters_ = java.util.Collections.unmodifiableList(parameters_);
+              bitField0_ = (bitField0_ & ~0x00000080);
+            }
+            result.parameters_ = parameters_;
+          } else {
+            result.parameters_ = parametersBuilder_.build();
+          }
+          if (endCase_ == 9) {
+            if (returnValueBuilder_ == null) {
+              result.end_ = end_;
             } else {
-              result.info_ = enterBuilder_.build();
+              result.end_ = returnValueBuilder_.build();
             }
           }
-          if (infoCase_ == 4) {
-            if (exitBuilder_ == null) {
-              result.info_ = info_;
+          if (endCase_ == 10) {
+            if (throwableBuilder_ == null) {
+              result.end_ = end_;
             } else {
-              result.info_ = exitBuilder_.build();
+              result.end_ = throwableBuilder_.build();
             }
           }
-          if (infoCase_ == 5) {
-            if (exceptionBuilder_ == null) {
-              result.info_ = info_;
-            } else {
-              result.info_ = exceptionBuilder_.build();
-            }
-          }
-          result.infoCase_ = infoCase_;
+          result.bitField0_ = to_bitField0_;
+          result.endCase_ = endCase_;
           onBuilt();
           return result;
         }
@@ -3071,23 +1049,62 @@ public final class EventProtos {
           if (other.getThreadId() != 0L) {
             setThreadId(other.getThreadId());
           }
-          if (other.getTime() != 0L) {
-            setTime(other.getTime());
+          if (other.getClassNameId() != 0L) {
+            setClassNameId(other.getClassNameId());
           }
-          switch (other.getInfoCase()) {
-            case ENTER: {
-              mergeEnter(other.getEnter());
+          if (other.getStartTime() != 0L) {
+            setStartTime(other.getStartTime());
+          }
+          if (other.getDuration() != 0L) {
+            setDuration(other.getDuration());
+          }
+          if (!other.getMethodName().isEmpty()) {
+            methodName_ = other.methodName_;
+            onChanged();
+          }
+          if (!other.getDesc().isEmpty()) {
+            desc_ = other.desc_;
+            onChanged();
+          }
+          if (other.getIsStatic() != false) {
+            setIsStatic(other.getIsStatic());
+          }
+          if (parametersBuilder_ == null) {
+            if (!other.parameters_.isEmpty()) {
+              if (parameters_.isEmpty()) {
+                parameters_ = other.parameters_;
+                bitField0_ = (bitField0_ & ~0x00000080);
+              } else {
+                ensureParametersIsMutable();
+                parameters_.addAll(other.parameters_);
+              }
+              onChanged();
+            }
+          } else {
+            if (!other.parameters_.isEmpty()) {
+              if (parametersBuilder_.isEmpty()) {
+                parametersBuilder_.dispose();
+                parametersBuilder_ = null;
+                parameters_ = other.parameters_;
+                bitField0_ = (bitField0_ & ~0x00000080);
+                parametersBuilder_ = 
+                  com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
+                     getParametersFieldBuilder() : null;
+              } else {
+                parametersBuilder_.addAllMessages(other.parameters_);
+              }
+            }
+          }
+          switch (other.getEndCase()) {
+            case RETURN_VALUE: {
+              mergeReturnValue(other.getReturnValue());
               break;
             }
-            case EXIT: {
-              mergeExit(other.getExit());
+            case THROWABLE: {
+              mergeThrowable(other.getThrowable());
               break;
             }
-            case EXCEPTION: {
-              mergeException(other.getException());
-              break;
-            }
-            case INFO_NOT_SET: {
+            case END_NOT_SET: {
               break;
             }
           }
@@ -3116,21 +1133,22 @@ public final class EventProtos {
           }
           return this;
         }
-        private int infoCase_ = 0;
-        private java.lang.Object info_;
-        public InfoCase
-            getInfoCase() {
-          return InfoCase.forNumber(
-              infoCase_);
+        private int endCase_ = 0;
+        private java.lang.Object end_;
+        public EndCase
+            getEndCase() {
+          return EndCase.forNumber(
+              endCase_);
         }
 
-        public Builder clearInfo() {
-          infoCase_ = 0;
-          info_ = null;
+        public Builder clearEnd() {
+          endCase_ = 0;
+          end_ = null;
           onChanged();
           return this;
         }
 
+        private int bitField0_;
 
         private long threadId_ ;
         /**
@@ -3158,420 +1176,746 @@ public final class EventProtos {
           return this;
         }
 
-        private long time_ ;
+        private long classNameId_ ;
         /**
-         * <code>int64 time = 2;</code>
+         * <code>int64 class_name_id = 2;</code>
          */
-        public long getTime() {
-          return time_;
+        public long getClassNameId() {
+          return classNameId_;
         }
         /**
-         * <code>int64 time = 2;</code>
+         * <code>int64 class_name_id = 2;</code>
          */
-        public Builder setTime(long value) {
+        public Builder setClassNameId(long value) {
           
-          time_ = value;
+          classNameId_ = value;
           onChanged();
           return this;
         }
         /**
-         * <code>int64 time = 2;</code>
+         * <code>int64 class_name_id = 2;</code>
          */
-        public Builder clearTime() {
+        public Builder clearClassNameId() {
           
-          time_ = 0L;
+          classNameId_ = 0L;
           onChanged();
           return this;
         }
 
-        private com.github.kornilova_l.libs.com.google.protobuf.SingleFieldBuilderV3<
-            com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter, com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter.Builder, com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.EnterOrBuilder> enterBuilder_;
+        private long startTime_ ;
         /**
-         * <code>.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.Enter enter = 3;</code>
+         * <code>int64 start_time = 3;</code>
          */
-        public com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter getEnter() {
-          if (enterBuilder_ == null) {
-            if (infoCase_ == 3) {
-              return (com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter) info_;
-            }
-            return com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter.getDefaultInstance();
+        public long getStartTime() {
+          return startTime_;
+        }
+        /**
+         * <code>int64 start_time = 3;</code>
+         */
+        public Builder setStartTime(long value) {
+          
+          startTime_ = value;
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>int64 start_time = 3;</code>
+         */
+        public Builder clearStartTime() {
+          
+          startTime_ = 0L;
+          onChanged();
+          return this;
+        }
+
+        private long duration_ ;
+        /**
+         * <code>int64 duration = 4;</code>
+         */
+        public long getDuration() {
+          return duration_;
+        }
+        /**
+         * <code>int64 duration = 4;</code>
+         */
+        public Builder setDuration(long value) {
+          
+          duration_ = value;
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>int64 duration = 4;</code>
+         */
+        public Builder clearDuration() {
+          
+          duration_ = 0L;
+          onChanged();
+          return this;
+        }
+
+        private java.lang.Object methodName_ = "";
+        /**
+         * <code>string method_name = 5;</code>
+         */
+        public java.lang.String getMethodName() {
+          java.lang.Object ref = methodName_;
+          if (!(ref instanceof java.lang.String)) {
+            com.github.kornilova_l.libs.com.google.protobuf.ByteString bs =
+                (com.github.kornilova_l.libs.com.google.protobuf.ByteString) ref;
+            java.lang.String s = bs.toStringUtf8();
+            methodName_ = s;
+            return s;
           } else {
-            if (infoCase_ == 3) {
-              return enterBuilder_.getMessage();
-            }
-            return com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter.getDefaultInstance();
+            return (java.lang.String) ref;
           }
         }
         /**
-         * <code>.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.Enter enter = 3;</code>
+         * <code>string method_name = 5;</code>
          */
-        public Builder setEnter(com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter value) {
-          if (enterBuilder_ == null) {
+        public com.github.kornilova_l.libs.com.google.protobuf.ByteString
+            getMethodNameBytes() {
+          java.lang.Object ref = methodName_;
+          if (ref instanceof String) {
+            com.github.kornilova_l.libs.com.google.protobuf.ByteString b = 
+                com.github.kornilova_l.libs.com.google.protobuf.ByteString.copyFromUtf8(
+                    (java.lang.String) ref);
+            methodName_ = b;
+            return b;
+          } else {
+            return (com.github.kornilova_l.libs.com.google.protobuf.ByteString) ref;
+          }
+        }
+        /**
+         * <code>string method_name = 5;</code>
+         */
+        public Builder setMethodName(
+            java.lang.String value) {
+          if (value == null) {
+    throw new NullPointerException();
+  }
+  
+          methodName_ = value;
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>string method_name = 5;</code>
+         */
+        public Builder clearMethodName() {
+          
+          methodName_ = getDefaultInstance().getMethodName();
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>string method_name = 5;</code>
+         */
+        public Builder setMethodNameBytes(
+            com.github.kornilova_l.libs.com.google.protobuf.ByteString value) {
+          if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+          
+          methodName_ = value;
+          onChanged();
+          return this;
+        }
+
+        private java.lang.Object desc_ = "";
+        /**
+         * <code>string desc = 6;</code>
+         */
+        public java.lang.String getDesc() {
+          java.lang.Object ref = desc_;
+          if (!(ref instanceof java.lang.String)) {
+            com.github.kornilova_l.libs.com.google.protobuf.ByteString bs =
+                (com.github.kornilova_l.libs.com.google.protobuf.ByteString) ref;
+            java.lang.String s = bs.toStringUtf8();
+            desc_ = s;
+            return s;
+          } else {
+            return (java.lang.String) ref;
+          }
+        }
+        /**
+         * <code>string desc = 6;</code>
+         */
+        public com.github.kornilova_l.libs.com.google.protobuf.ByteString
+            getDescBytes() {
+          java.lang.Object ref = desc_;
+          if (ref instanceof String) {
+            com.github.kornilova_l.libs.com.google.protobuf.ByteString b = 
+                com.github.kornilova_l.libs.com.google.protobuf.ByteString.copyFromUtf8(
+                    (java.lang.String) ref);
+            desc_ = b;
+            return b;
+          } else {
+            return (com.github.kornilova_l.libs.com.google.protobuf.ByteString) ref;
+          }
+        }
+        /**
+         * <code>string desc = 6;</code>
+         */
+        public Builder setDesc(
+            java.lang.String value) {
+          if (value == null) {
+    throw new NullPointerException();
+  }
+  
+          desc_ = value;
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>string desc = 6;</code>
+         */
+        public Builder clearDesc() {
+          
+          desc_ = getDefaultInstance().getDesc();
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>string desc = 6;</code>
+         */
+        public Builder setDescBytes(
+            com.github.kornilova_l.libs.com.google.protobuf.ByteString value) {
+          if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+          
+          desc_ = value;
+          onChanged();
+          return this;
+        }
+
+        private boolean isStatic_ ;
+        /**
+         * <code>bool is_static = 7;</code>
+         */
+        public boolean getIsStatic() {
+          return isStatic_;
+        }
+        /**
+         * <code>bool is_static = 7;</code>
+         */
+        public Builder setIsStatic(boolean value) {
+          
+          isStatic_ = value;
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>bool is_static = 7;</code>
+         */
+        public Builder clearIsStatic() {
+          
+          isStatic_ = false;
+          onChanged();
+          return this;
+        }
+
+        private java.util.List<com.github.kornilova_l.flamegraph.proto.EventProtos.Var> parameters_ =
+          java.util.Collections.emptyList();
+        private void ensureParametersIsMutable() {
+          if (!((bitField0_ & 0x00000080) == 0x00000080)) {
+            parameters_ = new java.util.ArrayList<com.github.kornilova_l.flamegraph.proto.EventProtos.Var>(parameters_);
+            bitField0_ |= 0x00000080;
+           }
+        }
+
+        private com.github.kornilova_l.libs.com.google.protobuf.RepeatedFieldBuilderV3<
+            com.github.kornilova_l.flamegraph.proto.EventProtos.Var, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder, com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder> parametersBuilder_;
+
+        /**
+         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 8;</code>
+         */
+        public java.util.List<com.github.kornilova_l.flamegraph.proto.EventProtos.Var> getParametersList() {
+          if (parametersBuilder_ == null) {
+            return java.util.Collections.unmodifiableList(parameters_);
+          } else {
+            return parametersBuilder_.getMessageList();
+          }
+        }
+        /**
+         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 8;</code>
+         */
+        public int getParametersCount() {
+          if (parametersBuilder_ == null) {
+            return parameters_.size();
+          } else {
+            return parametersBuilder_.getCount();
+          }
+        }
+        /**
+         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 8;</code>
+         */
+        public com.github.kornilova_l.flamegraph.proto.EventProtos.Var getParameters(int index) {
+          if (parametersBuilder_ == null) {
+            return parameters_.get(index);
+          } else {
+            return parametersBuilder_.getMessage(index);
+          }
+        }
+        /**
+         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 8;</code>
+         */
+        public Builder setParameters(
+            int index, com.github.kornilova_l.flamegraph.proto.EventProtos.Var value) {
+          if (parametersBuilder_ == null) {
             if (value == null) {
               throw new NullPointerException();
             }
-            info_ = value;
+            ensureParametersIsMutable();
+            parameters_.set(index, value);
             onChanged();
           } else {
-            enterBuilder_.setMessage(value);
+            parametersBuilder_.setMessage(index, value);
           }
-          infoCase_ = 3;
           return this;
         }
         /**
-         * <code>.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.Enter enter = 3;</code>
+         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 8;</code>
          */
-        public Builder setEnter(
-            com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter.Builder builderForValue) {
-          if (enterBuilder_ == null) {
-            info_ = builderForValue.build();
+        public Builder setParameters(
+            int index, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder builderForValue) {
+          if (parametersBuilder_ == null) {
+            ensureParametersIsMutable();
+            parameters_.set(index, builderForValue.build());
             onChanged();
           } else {
-            enterBuilder_.setMessage(builderForValue.build());
+            parametersBuilder_.setMessage(index, builderForValue.build());
           }
-          infoCase_ = 3;
           return this;
         }
         /**
-         * <code>.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.Enter enter = 3;</code>
+         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 8;</code>
          */
-        public Builder mergeEnter(com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter value) {
-          if (enterBuilder_ == null) {
-            if (infoCase_ == 3 &&
-                info_ != com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter.getDefaultInstance()) {
-              info_ = com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter.newBuilder((com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter) info_)
-                  .mergeFrom(value).buildPartial();
-            } else {
-              info_ = value;
+        public Builder addParameters(com.github.kornilova_l.flamegraph.proto.EventProtos.Var value) {
+          if (parametersBuilder_ == null) {
+            if (value == null) {
+              throw new NullPointerException();
             }
+            ensureParametersIsMutable();
+            parameters_.add(value);
             onChanged();
           } else {
-            if (infoCase_ == 3) {
-              enterBuilder_.mergeFrom(value);
-            }
-            enterBuilder_.setMessage(value);
-          }
-          infoCase_ = 3;
-          return this;
-        }
-        /**
-         * <code>.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.Enter enter = 3;</code>
-         */
-        public Builder clearEnter() {
-          if (enterBuilder_ == null) {
-            if (infoCase_ == 3) {
-              infoCase_ = 0;
-              info_ = null;
-              onChanged();
-            }
-          } else {
-            if (infoCase_ == 3) {
-              infoCase_ = 0;
-              info_ = null;
-            }
-            enterBuilder_.clear();
+            parametersBuilder_.addMessage(value);
           }
           return this;
         }
         /**
-         * <code>.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.Enter enter = 3;</code>
+         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 8;</code>
          */
-        public com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter.Builder getEnterBuilder() {
-          return getEnterFieldBuilder().getBuilder();
+        public Builder addParameters(
+            int index, com.github.kornilova_l.flamegraph.proto.EventProtos.Var value) {
+          if (parametersBuilder_ == null) {
+            if (value == null) {
+              throw new NullPointerException();
+            }
+            ensureParametersIsMutable();
+            parameters_.add(index, value);
+            onChanged();
+          } else {
+            parametersBuilder_.addMessage(index, value);
+          }
+          return this;
         }
         /**
-         * <code>.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.Enter enter = 3;</code>
+         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 8;</code>
          */
-        public com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.EnterOrBuilder getEnterOrBuilder() {
-          if ((infoCase_ == 3) && (enterBuilder_ != null)) {
-            return enterBuilder_.getMessageOrBuilder();
+        public Builder addParameters(
+            com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder builderForValue) {
+          if (parametersBuilder_ == null) {
+            ensureParametersIsMutable();
+            parameters_.add(builderForValue.build());
+            onChanged();
           } else {
-            if (infoCase_ == 3) {
-              return (com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter) info_;
-            }
-            return com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter.getDefaultInstance();
+            parametersBuilder_.addMessage(builderForValue.build());
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 8;</code>
+         */
+        public Builder addParameters(
+            int index, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder builderForValue) {
+          if (parametersBuilder_ == null) {
+            ensureParametersIsMutable();
+            parameters_.add(index, builderForValue.build());
+            onChanged();
+          } else {
+            parametersBuilder_.addMessage(index, builderForValue.build());
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 8;</code>
+         */
+        public Builder addAllParameters(
+            java.lang.Iterable<? extends com.github.kornilova_l.flamegraph.proto.EventProtos.Var> values) {
+          if (parametersBuilder_ == null) {
+            ensureParametersIsMutable();
+            com.github.kornilova_l.libs.com.google.protobuf.AbstractMessageLite.Builder.addAll(
+                values, parameters_);
+            onChanged();
+          } else {
+            parametersBuilder_.addAllMessages(values);
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 8;</code>
+         */
+        public Builder clearParameters() {
+          if (parametersBuilder_ == null) {
+            parameters_ = java.util.Collections.emptyList();
+            bitField0_ = (bitField0_ & ~0x00000080);
+            onChanged();
+          } else {
+            parametersBuilder_.clear();
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 8;</code>
+         */
+        public Builder removeParameters(int index) {
+          if (parametersBuilder_ == null) {
+            ensureParametersIsMutable();
+            parameters_.remove(index);
+            onChanged();
+          } else {
+            parametersBuilder_.remove(index);
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 8;</code>
+         */
+        public com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder getParametersBuilder(
+            int index) {
+          return getParametersFieldBuilder().getBuilder(index);
+        }
+        /**
+         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 8;</code>
+         */
+        public com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder getParametersOrBuilder(
+            int index) {
+          if (parametersBuilder_ == null) {
+            return parameters_.get(index);  } else {
+            return parametersBuilder_.getMessageOrBuilder(index);
           }
         }
         /**
-         * <code>.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.Enter enter = 3;</code>
+         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 8;</code>
          */
-        private com.github.kornilova_l.libs.com.google.protobuf.SingleFieldBuilderV3<
-            com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter, com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter.Builder, com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.EnterOrBuilder> 
-            getEnterFieldBuilder() {
-          if (enterBuilder_ == null) {
-            if (!(infoCase_ == 3)) {
-              info_ = com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter.getDefaultInstance();
-            }
-            enterBuilder_ = new com.github.kornilova_l.libs.com.google.protobuf.SingleFieldBuilderV3<
-                com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter, com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter.Builder, com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.EnterOrBuilder>(
-                    (com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Enter) info_,
+        public java.util.List<? extends com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder> 
+             getParametersOrBuilderList() {
+          if (parametersBuilder_ != null) {
+            return parametersBuilder_.getMessageOrBuilderList();
+          } else {
+            return java.util.Collections.unmodifiableList(parameters_);
+          }
+        }
+        /**
+         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 8;</code>
+         */
+        public com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder addParametersBuilder() {
+          return getParametersFieldBuilder().addBuilder(
+              com.github.kornilova_l.flamegraph.proto.EventProtos.Var.getDefaultInstance());
+        }
+        /**
+         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 8;</code>
+         */
+        public com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder addParametersBuilder(
+            int index) {
+          return getParametersFieldBuilder().addBuilder(
+              index, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.getDefaultInstance());
+        }
+        /**
+         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 8;</code>
+         */
+        public java.util.List<com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder> 
+             getParametersBuilderList() {
+          return getParametersFieldBuilder().getBuilderList();
+        }
+        private com.github.kornilova_l.libs.com.google.protobuf.RepeatedFieldBuilderV3<
+            com.github.kornilova_l.flamegraph.proto.EventProtos.Var, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder, com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder> 
+            getParametersFieldBuilder() {
+          if (parametersBuilder_ == null) {
+            parametersBuilder_ = new com.github.kornilova_l.libs.com.google.protobuf.RepeatedFieldBuilderV3<
+                com.github.kornilova_l.flamegraph.proto.EventProtos.Var, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder, com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder>(
+                    parameters_,
+                    ((bitField0_ & 0x00000080) == 0x00000080),
                     getParentForChildren(),
                     isClean());
-            info_ = null;
+            parameters_ = null;
           }
-          infoCase_ = 3;
-          onChanged();;
-          return enterBuilder_;
+          return parametersBuilder_;
         }
 
         private com.github.kornilova_l.libs.com.google.protobuf.SingleFieldBuilderV3<
-            com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit, com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit.Builder, com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.ExitOrBuilder> exitBuilder_;
+            com.github.kornilova_l.flamegraph.proto.EventProtos.Var, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder, com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder> returnValueBuilder_;
         /**
-         * <code>.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.Exit exit = 4;</code>
+         * <code>.com.github.kornilova_l.flamegraph.proto.Var return_value = 9;</code>
          */
-        public com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit getExit() {
-          if (exitBuilder_ == null) {
-            if (infoCase_ == 4) {
-              return (com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit) info_;
+        public com.github.kornilova_l.flamegraph.proto.EventProtos.Var getReturnValue() {
+          if (returnValueBuilder_ == null) {
+            if (endCase_ == 9) {
+              return (com.github.kornilova_l.flamegraph.proto.EventProtos.Var) end_;
             }
-            return com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit.getDefaultInstance();
+            return com.github.kornilova_l.flamegraph.proto.EventProtos.Var.getDefaultInstance();
           } else {
-            if (infoCase_ == 4) {
-              return exitBuilder_.getMessage();
+            if (endCase_ == 9) {
+              return returnValueBuilder_.getMessage();
             }
-            return com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit.getDefaultInstance();
+            return com.github.kornilova_l.flamegraph.proto.EventProtos.Var.getDefaultInstance();
           }
         }
         /**
-         * <code>.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.Exit exit = 4;</code>
+         * <code>.com.github.kornilova_l.flamegraph.proto.Var return_value = 9;</code>
          */
-        public Builder setExit(com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit value) {
-          if (exitBuilder_ == null) {
+        public Builder setReturnValue(com.github.kornilova_l.flamegraph.proto.EventProtos.Var value) {
+          if (returnValueBuilder_ == null) {
             if (value == null) {
               throw new NullPointerException();
             }
-            info_ = value;
+            end_ = value;
             onChanged();
           } else {
-            exitBuilder_.setMessage(value);
+            returnValueBuilder_.setMessage(value);
           }
-          infoCase_ = 4;
+          endCase_ = 9;
           return this;
         }
         /**
-         * <code>.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.Exit exit = 4;</code>
+         * <code>.com.github.kornilova_l.flamegraph.proto.Var return_value = 9;</code>
          */
-        public Builder setExit(
-            com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit.Builder builderForValue) {
-          if (exitBuilder_ == null) {
-            info_ = builderForValue.build();
+        public Builder setReturnValue(
+            com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder builderForValue) {
+          if (returnValueBuilder_ == null) {
+            end_ = builderForValue.build();
             onChanged();
           } else {
-            exitBuilder_.setMessage(builderForValue.build());
+            returnValueBuilder_.setMessage(builderForValue.build());
           }
-          infoCase_ = 4;
+          endCase_ = 9;
           return this;
         }
         /**
-         * <code>.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.Exit exit = 4;</code>
+         * <code>.com.github.kornilova_l.flamegraph.proto.Var return_value = 9;</code>
          */
-        public Builder mergeExit(com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit value) {
-          if (exitBuilder_ == null) {
-            if (infoCase_ == 4 &&
-                info_ != com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit.getDefaultInstance()) {
-              info_ = com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit.newBuilder((com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit) info_)
+        public Builder mergeReturnValue(com.github.kornilova_l.flamegraph.proto.EventProtos.Var value) {
+          if (returnValueBuilder_ == null) {
+            if (endCase_ == 9 &&
+                end_ != com.github.kornilova_l.flamegraph.proto.EventProtos.Var.getDefaultInstance()) {
+              end_ = com.github.kornilova_l.flamegraph.proto.EventProtos.Var.newBuilder((com.github.kornilova_l.flamegraph.proto.EventProtos.Var) end_)
                   .mergeFrom(value).buildPartial();
             } else {
-              info_ = value;
+              end_ = value;
             }
             onChanged();
           } else {
-            if (infoCase_ == 4) {
-              exitBuilder_.mergeFrom(value);
+            if (endCase_ == 9) {
+              returnValueBuilder_.mergeFrom(value);
             }
-            exitBuilder_.setMessage(value);
+            returnValueBuilder_.setMessage(value);
           }
-          infoCase_ = 4;
+          endCase_ = 9;
           return this;
         }
         /**
-         * <code>.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.Exit exit = 4;</code>
+         * <code>.com.github.kornilova_l.flamegraph.proto.Var return_value = 9;</code>
          */
-        public Builder clearExit() {
-          if (exitBuilder_ == null) {
-            if (infoCase_ == 4) {
-              infoCase_ = 0;
-              info_ = null;
+        public Builder clearReturnValue() {
+          if (returnValueBuilder_ == null) {
+            if (endCase_ == 9) {
+              endCase_ = 0;
+              end_ = null;
               onChanged();
             }
           } else {
-            if (infoCase_ == 4) {
-              infoCase_ = 0;
-              info_ = null;
+            if (endCase_ == 9) {
+              endCase_ = 0;
+              end_ = null;
             }
-            exitBuilder_.clear();
+            returnValueBuilder_.clear();
           }
           return this;
         }
         /**
-         * <code>.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.Exit exit = 4;</code>
+         * <code>.com.github.kornilova_l.flamegraph.proto.Var return_value = 9;</code>
          */
-        public com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit.Builder getExitBuilder() {
-          return getExitFieldBuilder().getBuilder();
+        public com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder getReturnValueBuilder() {
+          return getReturnValueFieldBuilder().getBuilder();
         }
         /**
-         * <code>.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.Exit exit = 4;</code>
+         * <code>.com.github.kornilova_l.flamegraph.proto.Var return_value = 9;</code>
          */
-        public com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.ExitOrBuilder getExitOrBuilder() {
-          if ((infoCase_ == 4) && (exitBuilder_ != null)) {
-            return exitBuilder_.getMessageOrBuilder();
+        public com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder getReturnValueOrBuilder() {
+          if ((endCase_ == 9) && (returnValueBuilder_ != null)) {
+            return returnValueBuilder_.getMessageOrBuilder();
           } else {
-            if (infoCase_ == 4) {
-              return (com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit) info_;
+            if (endCase_ == 9) {
+              return (com.github.kornilova_l.flamegraph.proto.EventProtos.Var) end_;
             }
-            return com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit.getDefaultInstance();
+            return com.github.kornilova_l.flamegraph.proto.EventProtos.Var.getDefaultInstance();
           }
         }
         /**
-         * <code>.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.Exit exit = 4;</code>
+         * <code>.com.github.kornilova_l.flamegraph.proto.Var return_value = 9;</code>
          */
         private com.github.kornilova_l.libs.com.google.protobuf.SingleFieldBuilderV3<
-            com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit, com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit.Builder, com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.ExitOrBuilder> 
-            getExitFieldBuilder() {
-          if (exitBuilder_ == null) {
-            if (!(infoCase_ == 4)) {
-              info_ = com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit.getDefaultInstance();
+            com.github.kornilova_l.flamegraph.proto.EventProtos.Var, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder, com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder> 
+            getReturnValueFieldBuilder() {
+          if (returnValueBuilder_ == null) {
+            if (!(endCase_ == 9)) {
+              end_ = com.github.kornilova_l.flamegraph.proto.EventProtos.Var.getDefaultInstance();
             }
-            exitBuilder_ = new com.github.kornilova_l.libs.com.google.protobuf.SingleFieldBuilderV3<
-                com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit, com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit.Builder, com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.ExitOrBuilder>(
-                    (com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exit) info_,
+            returnValueBuilder_ = new com.github.kornilova_l.libs.com.google.protobuf.SingleFieldBuilderV3<
+                com.github.kornilova_l.flamegraph.proto.EventProtos.Var, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder, com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder>(
+                    (com.github.kornilova_l.flamegraph.proto.EventProtos.Var) end_,
                     getParentForChildren(),
                     isClean());
-            info_ = null;
+            end_ = null;
           }
-          infoCase_ = 4;
+          endCase_ = 9;
           onChanged();;
-          return exitBuilder_;
+          return returnValueBuilder_;
         }
 
         private com.github.kornilova_l.libs.com.google.protobuf.SingleFieldBuilderV3<
-            com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception, com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception.Builder, com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.ExceptionOrBuilder> exceptionBuilder_;
+            com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object.Builder, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.ObjectOrBuilder> throwableBuilder_;
         /**
-         * <code>.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.Exception exception = 5;</code>
+         * <code>.com.github.kornilova_l.flamegraph.proto.Var.Object throwable = 10;</code>
          */
-        public com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception getException() {
-          if (exceptionBuilder_ == null) {
-            if (infoCase_ == 5) {
-              return (com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception) info_;
+        public com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object getThrowable() {
+          if (throwableBuilder_ == null) {
+            if (endCase_ == 10) {
+              return (com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object) end_;
             }
-            return com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception.getDefaultInstance();
+            return com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object.getDefaultInstance();
           } else {
-            if (infoCase_ == 5) {
-              return exceptionBuilder_.getMessage();
+            if (endCase_ == 10) {
+              return throwableBuilder_.getMessage();
             }
-            return com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception.getDefaultInstance();
+            return com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object.getDefaultInstance();
           }
         }
         /**
-         * <code>.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.Exception exception = 5;</code>
+         * <code>.com.github.kornilova_l.flamegraph.proto.Var.Object throwable = 10;</code>
          */
-        public Builder setException(com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception value) {
-          if (exceptionBuilder_ == null) {
+        public Builder setThrowable(com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object value) {
+          if (throwableBuilder_ == null) {
             if (value == null) {
               throw new NullPointerException();
             }
-            info_ = value;
+            end_ = value;
             onChanged();
           } else {
-            exceptionBuilder_.setMessage(value);
+            throwableBuilder_.setMessage(value);
           }
-          infoCase_ = 5;
+          endCase_ = 10;
           return this;
         }
         /**
-         * <code>.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.Exception exception = 5;</code>
+         * <code>.com.github.kornilova_l.flamegraph.proto.Var.Object throwable = 10;</code>
          */
-        public Builder setException(
-            com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception.Builder builderForValue) {
-          if (exceptionBuilder_ == null) {
-            info_ = builderForValue.build();
+        public Builder setThrowable(
+            com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object.Builder builderForValue) {
+          if (throwableBuilder_ == null) {
+            end_ = builderForValue.build();
             onChanged();
           } else {
-            exceptionBuilder_.setMessage(builderForValue.build());
+            throwableBuilder_.setMessage(builderForValue.build());
           }
-          infoCase_ = 5;
+          endCase_ = 10;
           return this;
         }
         /**
-         * <code>.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.Exception exception = 5;</code>
+         * <code>.com.github.kornilova_l.flamegraph.proto.Var.Object throwable = 10;</code>
          */
-        public Builder mergeException(com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception value) {
-          if (exceptionBuilder_ == null) {
-            if (infoCase_ == 5 &&
-                info_ != com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception.getDefaultInstance()) {
-              info_ = com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception.newBuilder((com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception) info_)
+        public Builder mergeThrowable(com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object value) {
+          if (throwableBuilder_ == null) {
+            if (endCase_ == 10 &&
+                end_ != com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object.getDefaultInstance()) {
+              end_ = com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object.newBuilder((com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object) end_)
                   .mergeFrom(value).buildPartial();
             } else {
-              info_ = value;
+              end_ = value;
             }
             onChanged();
           } else {
-            if (infoCase_ == 5) {
-              exceptionBuilder_.mergeFrom(value);
+            if (endCase_ == 10) {
+              throwableBuilder_.mergeFrom(value);
             }
-            exceptionBuilder_.setMessage(value);
+            throwableBuilder_.setMessage(value);
           }
-          infoCase_ = 5;
+          endCase_ = 10;
           return this;
         }
         /**
-         * <code>.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.Exception exception = 5;</code>
+         * <code>.com.github.kornilova_l.flamegraph.proto.Var.Object throwable = 10;</code>
          */
-        public Builder clearException() {
-          if (exceptionBuilder_ == null) {
-            if (infoCase_ == 5) {
-              infoCase_ = 0;
-              info_ = null;
+        public Builder clearThrowable() {
+          if (throwableBuilder_ == null) {
+            if (endCase_ == 10) {
+              endCase_ = 0;
+              end_ = null;
               onChanged();
             }
           } else {
-            if (infoCase_ == 5) {
-              infoCase_ = 0;
-              info_ = null;
+            if (endCase_ == 10) {
+              endCase_ = 0;
+              end_ = null;
             }
-            exceptionBuilder_.clear();
+            throwableBuilder_.clear();
           }
           return this;
         }
         /**
-         * <code>.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.Exception exception = 5;</code>
+         * <code>.com.github.kornilova_l.flamegraph.proto.Var.Object throwable = 10;</code>
          */
-        public com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception.Builder getExceptionBuilder() {
-          return getExceptionFieldBuilder().getBuilder();
+        public com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object.Builder getThrowableBuilder() {
+          return getThrowableFieldBuilder().getBuilder();
         }
         /**
-         * <code>.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.Exception exception = 5;</code>
+         * <code>.com.github.kornilova_l.flamegraph.proto.Var.Object throwable = 10;</code>
          */
-        public com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.ExceptionOrBuilder getExceptionOrBuilder() {
-          if ((infoCase_ == 5) && (exceptionBuilder_ != null)) {
-            return exceptionBuilder_.getMessageOrBuilder();
+        public com.github.kornilova_l.flamegraph.proto.EventProtos.Var.ObjectOrBuilder getThrowableOrBuilder() {
+          if ((endCase_ == 10) && (throwableBuilder_ != null)) {
+            return throwableBuilder_.getMessageOrBuilder();
           } else {
-            if (infoCase_ == 5) {
-              return (com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception) info_;
+            if (endCase_ == 10) {
+              return (com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object) end_;
             }
-            return com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception.getDefaultInstance();
+            return com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object.getDefaultInstance();
           }
         }
         /**
-         * <code>.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.Exception exception = 5;</code>
+         * <code>.com.github.kornilova_l.flamegraph.proto.Var.Object throwable = 10;</code>
          */
         private com.github.kornilova_l.libs.com.google.protobuf.SingleFieldBuilderV3<
-            com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception, com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception.Builder, com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.ExceptionOrBuilder> 
-            getExceptionFieldBuilder() {
-          if (exceptionBuilder_ == null) {
-            if (!(infoCase_ == 5)) {
-              info_ = com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception.getDefaultInstance();
+            com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object.Builder, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.ObjectOrBuilder> 
+            getThrowableFieldBuilder() {
+          if (throwableBuilder_ == null) {
+            if (!(endCase_ == 10)) {
+              end_ = com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object.getDefaultInstance();
             }
-            exceptionBuilder_ = new com.github.kornilova_l.libs.com.google.protobuf.SingleFieldBuilderV3<
-                com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception, com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception.Builder, com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.ExceptionOrBuilder>(
-                    (com.github.kornilova_l.flamegraph.proto.EventProtos.Event.MethodEvent.Exception) info_,
+            throwableBuilder_ = new com.github.kornilova_l.libs.com.google.protobuf.SingleFieldBuilderV3<
+                com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object.Builder, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.ObjectOrBuilder>(
+                    (com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object) end_,
                     getParentForChildren(),
                     isClean());
-            info_ = null;
+            end_ = null;
           }
-          infoCase_ = 5;
+          endCase_ = 10;
           onChanged();;
-          return exceptionBuilder_;
+          return throwableBuilder_;
         }
         public final Builder setUnknownFields(
             final com.github.kornilova_l.libs.com.google.protobuf.UnknownFieldSet unknownFields) {
@@ -7255,21 +5599,6 @@ public final class EventProtos {
     com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_com_github_kornilova_l_flamegraph_proto_Event_MethodEvent_fieldAccessorTable;
   private static final com.github.kornilova_l.libs.com.google.protobuf.Descriptors.Descriptor
-    internal_static_com_github_kornilova_l_flamegraph_proto_Event_MethodEvent_Enter_descriptor;
-  private static final 
-    com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_com_github_kornilova_l_flamegraph_proto_Event_MethodEvent_Enter_fieldAccessorTable;
-  private static final com.github.kornilova_l.libs.com.google.protobuf.Descriptors.Descriptor
-    internal_static_com_github_kornilova_l_flamegraph_proto_Event_MethodEvent_Exit_descriptor;
-  private static final 
-    com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_com_github_kornilova_l_flamegraph_proto_Event_MethodEvent_Exit_fieldAccessorTable;
-  private static final com.github.kornilova_l.libs.com.google.protobuf.Descriptors.Descriptor
-    internal_static_com_github_kornilova_l_flamegraph_proto_Event_MethodEvent_Exception_descriptor;
-  private static final 
-    com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_com_github_kornilova_l_flamegraph_proto_Event_MethodEvent_Exception_fieldAccessorTable;
-  private static final com.github.kornilova_l.libs.com.google.protobuf.Descriptors.Descriptor
     internal_static_com_github_kornilova_l_flamegraph_proto_Event_Map_descriptor;
   private static final 
     com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
@@ -7295,36 +5624,29 @@ public final class EventProtos {
     java.lang.String[] descriptorData = {
       "\n3com/github/kornilova_l/flamegraph/prot" +
       "o/event.proto\022\'com.github.kornilova_l.fl" +
-      "amegraph.proto\"\212\007\n\005Event\022Q\n\013methodEvent\030" +
+      "amegraph.proto\"\203\005\n\005Event\022Q\n\013methodEvent\030" +
       "\001 \001(\0132:.com.github.kornilova_l.flamegrap" +
       "h.proto.Event.MethodEventH\000\022F\n\010newClass\030" +
       "\002 \001(\01322.com.github.kornilova_l.flamegrap" +
       "h.proto.Event.MapH\000\022G\n\tnewThread\030\003 \001(\01322" +
       ".com.github.kornilova_l.flamegraph.proto" +
-      ".Event.MapH\000\032\363\004\n\013MethodEvent\022\021\n\tthread_i" +
-      "d\030\001 \001(\003\022\014\n\004time\030\002 \001(\003\022Q\n\005enter\030\003 \001(\0132@.c",
-      "om.github.kornilova_l.flamegraph.proto.E" +
-      "vent.MethodEvent.EnterH\000\022O\n\004exit\030\004 \001(\0132?" +
-      ".com.github.kornilova_l.flamegraph.proto" +
-      ".Event.MethodEvent.ExitH\000\022Y\n\texception\030\005" +
-      " \001(\0132D.com.github.kornilova_l.flamegraph" +
-      ".proto.Event.MethodEvent.ExceptionH\000\032\235\001\n" +
-      "\005Enter\022\025\n\rclass_name_id\030\001 \001(\003\022\023\n\013method_" +
-      "name\030\002 \001(\t\022\021\n\tis_static\030\003 \001(\010\022@\n\nparamet" +
-      "ers\030\004 \003(\0132,.com.github.kornilova_l.flame" +
-      "graph.proto.Var\022\023\n\013description\030\005 \001(\t\032J\n\004",
-      "Exit\022B\n\014return_value\030\001 \001(\0132,.com.github." +
-      "kornilova_l.flamegraph.proto.Var\032P\n\tExce" +
-      "ption\022C\n\006object\030\001 \001(\01323.com.github.korni" +
-      "lova_l.flamegraph.proto.Var.ObjectB\006\n\004in" +
-      "fo\032\037\n\003Map\022\n\n\002id\030\001 \001(\003\022\014\n\004name\030\002 \001(\tB\006\n\004t" +
-      "ype\"\344\001\n\003Var\022\013\n\001I\030\001 \001(\021H\000\022\013\n\001J\030\002 \001(\022H\000\022\013\n" +
-      "\001Z\030\003 \001(\010H\000\022\013\n\001C\030\004 \001(\rH\000\022\013\n\001S\030\005 \001(\021H\000\022\013\n\001" +
-      "B\030\006 \001(\021H\000\022\013\n\001F\030\007 \001(\002H\000\022\013\n\001D\030\010 \001(\001H\000\022E\n\006o" +
-      "bject\030\t \001(\01323.com.github.kornilova_l.fla" +
-      "megraph.proto.Var.ObjectH\000\032%\n\006Object\022\014\n\004",
-      "type\030\001 \001(\t\022\r\n\005value\030\002 \001(\tB\007\n\005valueB\rB\013Ev" +
-      "entProtosb\006proto3"
+      ".Event.MapH\000\032\354\002\n\013MethodEvent\022\021\n\tthread_i" +
+      "d\030\001 \001(\003\022\025\n\rclass_name_id\030\002 \001(\003\022\022\n\nstart_",
+      "time\030\003 \001(\003\022\020\n\010duration\030\004 \001(\003\022\023\n\013method_n" +
+      "ame\030\005 \001(\t\022\014\n\004desc\030\006 \001(\t\022\021\n\tis_static\030\007 \001" +
+      "(\010\022@\n\nparameters\030\010 \003(\0132,.com.github.korn" +
+      "ilova_l.flamegraph.proto.Var\022D\n\014return_v" +
+      "alue\030\t \001(\0132,.com.github.kornilova_l.flam" +
+      "egraph.proto.VarH\000\022H\n\tthrowable\030\n \001(\01323." +
+      "com.github.kornilova_l.flamegraph.proto." +
+      "Var.ObjectH\000B\005\n\003end\032\037\n\003Map\022\n\n\002id\030\001 \001(\003\022\014" +
+      "\n\004name\030\002 \001(\tB\006\n\004type\"\344\001\n\003Var\022\013\n\001I\030\001 \001(\021H" +
+      "\000\022\013\n\001J\030\002 \001(\022H\000\022\013\n\001Z\030\003 \001(\010H\000\022\013\n\001C\030\004 \001(\rH\000",
+      "\022\013\n\001S\030\005 \001(\021H\000\022\013\n\001B\030\006 \001(\021H\000\022\013\n\001F\030\007 \001(\002H\000\022" +
+      "\013\n\001D\030\010 \001(\001H\000\022E\n\006object\030\t \001(\01323.com.githu" +
+      "b.kornilova_l.flamegraph.proto.Var.Objec" +
+      "tH\000\032%\n\006Object\022\014\n\004type\030\001 \001(\t\022\r\n\005value\030\002 \001" +
+      "(\tB\007\n\005valueB\rB\013EventProtosb\006proto3"
     };
     com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -7349,25 +5671,7 @@ public final class EventProtos {
     internal_static_com_github_kornilova_l_flamegraph_proto_Event_MethodEvent_fieldAccessorTable = new
       com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_github_kornilova_l_flamegraph_proto_Event_MethodEvent_descriptor,
-        new java.lang.String[] { "ThreadId", "Time", "Enter", "Exit", "Exception", "Info", });
-    internal_static_com_github_kornilova_l_flamegraph_proto_Event_MethodEvent_Enter_descriptor =
-      internal_static_com_github_kornilova_l_flamegraph_proto_Event_MethodEvent_descriptor.getNestedTypes().get(0);
-    internal_static_com_github_kornilova_l_flamegraph_proto_Event_MethodEvent_Enter_fieldAccessorTable = new
-      com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_com_github_kornilova_l_flamegraph_proto_Event_MethodEvent_Enter_descriptor,
-        new java.lang.String[] { "ClassNameId", "MethodName", "IsStatic", "Parameters", "Description", });
-    internal_static_com_github_kornilova_l_flamegraph_proto_Event_MethodEvent_Exit_descriptor =
-      internal_static_com_github_kornilova_l_flamegraph_proto_Event_MethodEvent_descriptor.getNestedTypes().get(1);
-    internal_static_com_github_kornilova_l_flamegraph_proto_Event_MethodEvent_Exit_fieldAccessorTable = new
-      com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_com_github_kornilova_l_flamegraph_proto_Event_MethodEvent_Exit_descriptor,
-        new java.lang.String[] { "ReturnValue", });
-    internal_static_com_github_kornilova_l_flamegraph_proto_Event_MethodEvent_Exception_descriptor =
-      internal_static_com_github_kornilova_l_flamegraph_proto_Event_MethodEvent_descriptor.getNestedTypes().get(2);
-    internal_static_com_github_kornilova_l_flamegraph_proto_Event_MethodEvent_Exception_fieldAccessorTable = new
-      com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_com_github_kornilova_l_flamegraph_proto_Event_MethodEvent_Exception_descriptor,
-        new java.lang.String[] { "Object", });
+        new java.lang.String[] { "ThreadId", "ClassNameId", "StartTime", "Duration", "MethodName", "Desc", "IsStatic", "Parameters", "ReturnValue", "Throwable", "End", });
     internal_static_com_github_kornilova_l_flamegraph_proto_Event_Map_descriptor =
       internal_static_com_github_kornilova_l_flamegraph_proto_Event_descriptor.getNestedTypes().get(1);
     internal_static_com_github_kornilova_l_flamegraph_proto_Event_Map_fieldAccessorTable = new

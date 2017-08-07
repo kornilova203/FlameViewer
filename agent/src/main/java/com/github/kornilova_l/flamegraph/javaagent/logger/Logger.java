@@ -1,7 +1,7 @@
 package com.github.kornilova_l.flamegraph.javaagent.logger;
 
 import com.github.kornilova_l.flamegraph.javaagent.AgentFileManager;
-import com.github.kornilova_l.flamegraph.javaagent.logger.events.EventData;
+import com.github.kornilova_l.flamegraph.javaagent.logger.event_data_storage.MethodEventData;
 import com.github.kornilova_l.flamegraph.proto.EventProtos;
 
 import java.io.*;
@@ -76,7 +76,7 @@ public class Logger implements Runnable {
         }
     }
 
-    private void logEvent(EventData eventData) {
+    private void logEvent(MethodEventData eventData) {
         isDone = false;
         writeToFile(eventData.getEvents());
         if (queue.size() == 0) {

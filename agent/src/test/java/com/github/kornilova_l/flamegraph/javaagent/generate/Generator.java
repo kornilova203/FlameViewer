@@ -1,7 +1,7 @@
 package com.github.kornilova_l.flamegraph.javaagent.generate;
 
 import com.github.kornilova_l.flamegraph.javaagent.TestHelper;
-import com.github.kornilova_l.flamegraph.javaagent.generate.test_classes.OneMethod;
+import com.github.kornilova_l.flamegraph.javaagent.generate.test_classes.UsesThreadPool;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.util.TraceClassVisitor;
@@ -14,7 +14,7 @@ import java.io.*;
  * Get readable representation and save to file
  */
 public class Generator {
-    private static final Class testedClass = OneMethod.class;
+    private static final Class testedClass = UsesThreadPool.class;
 
     public static void main(String[] args) {
         TestHelper.createDir("expected");
@@ -28,7 +28,7 @@ public class Generator {
             ClassWriter cw = new ClassWriter(cr, 0);
             OutputStream outputStream = new FileOutputStream(
                     new File("agent/src/test/resources/expected/" +
-                            fullName.substring(fullName.lastIndexOf('.') + 1, fullName.length()) +
+                            TestHelper.removePackage(fullName) +
                             ".txt"));
             cr.accept(
                     new TraceClassVisitor(cw, new PrintWriter(outputStream)),

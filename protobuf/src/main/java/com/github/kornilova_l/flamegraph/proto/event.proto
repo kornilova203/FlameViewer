@@ -13,27 +13,16 @@ message Event {
 
     message MethodEvent {
         int64 thread_id = 1;
-        int64 time = 2;
-        oneof info {
-            Enter enter = 3;
-            Exit exit = 4;
-            Exception exception = 5;
-        }
-
-        message Enter {
-            int64 class_name_id = 1;
-            string method_name = 2;
-            bool is_static = 3;
-            repeated Var parameters = 4;
-            string description = 5;
-        }
-
-        message Exit {
-            Var return_value = 1;
-        }
-
-        message Exception {
-            Var.Object object = 1;
+        int64 class_name_id = 2;
+        int64 start_time = 3;
+        int64 duration = 4;
+        string method_name = 5;
+        string desc = 6;
+        bool is_static = 7;
+        repeated Var parameters = 8;
+        oneof end {
+            Var return_value = 9;
+            Var.Object throwable = 10;
         }
     }
 
