@@ -1,16 +1,8 @@
 package com.github.kornilova_l.flamegraph.javaagent.logger;
 
-import com.github.kornilova_l.flamegraph.javaagent.AgentFileManager;
-import com.github.kornilova_l.flamegraph.javaagent.logger.test_application.Main;
-import com.github.kornilova_l.flamegraph.proto.EventProtos;
 import org.junit.Test;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Optional;
 
 public class LoggerTest {
     private static final File logDir = new File("src/test/out");
@@ -37,7 +29,7 @@ public class LoggerTest {
             // because time and thread ids are always different
             // order of events also may be different if more than one thread
             // to check if logger is correct uncomment this lines and check this test manually
-//            TestHelper.compare(res.toString(),
+//            com.github.kornilova_l.flamegraph.javaagent.TestHelper.compare(res.toString(),
 //                    new File("src/test/resources/01-result.txt"));
 //        }
     }

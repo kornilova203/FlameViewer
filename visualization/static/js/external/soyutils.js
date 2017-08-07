@@ -806,7 +806,7 @@ goog.soy.data.SanitizedContentKind = {
  *
  * IMPORTANT! Do not create these directly, nor instantiate the subclasses.
  * Instead, use a trusted, centrally reviewed library as endorsed by your team
- * to generate these objects. Otherwise, you risk accidentally creating
+ * to com.github.kornilova_l.flamegraph.javaagent.generate these objects. Otherwise, you risk accidentally creating
  * SanitizedContent that is attacker-controlled and gets evaluated unescaped in
  * templates.
  *
