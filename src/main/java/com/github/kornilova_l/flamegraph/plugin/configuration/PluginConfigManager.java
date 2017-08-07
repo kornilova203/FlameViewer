@@ -19,6 +19,7 @@ import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Objects;
 
 public class PluginConfigManager {
     private static final Map<Project, Configuration> states = new HashMap<>();
@@ -76,6 +77,9 @@ public class PluginConfigManager {
             psiClass = nextClass;
         }
         String string = stringBuilder.toString();
+        if (Objects.equals(packageName, "")) {
+            return string.substring(0, string.length() - 1);
+        }
         return packageName + "." + string.substring(0, string.length() - 1);
     }
 

@@ -1,8 +1,8 @@
 package com.github.kornilova_l.flamegraph.javaagent.agent;
 
 import com.github.kornilova_l.flamegraph.configuration.MethodConfig;
+import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
-import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.commons.AdviceAdapter;
 
 import java.util.List;
@@ -17,6 +17,13 @@ class ProfilingMethodVisitor extends AdviceAdapter {
     private final String className;
     private final boolean hasSystemCL;
     private final MethodConfig methodConfig;
+    private final int startData = newLocal(org.objectweb.asm.Type.getType(
+            "Lcom/github/kornilova_l/flamegraph/javaagent/logger/event_data_storage/StartData;"
+    ));
+    private Label end = new Label();
+    private Label handler = new Label();
+    private boolean isTryCatchBlockFinished = false;
+
 
     ProfilingMethodVisitor(int access, String methodName, String desc,
                            MethodVisitor mv, String className, boolean hasSystemCL, MethodConfig methodConfig) {
@@ -35,13 +42,26 @@ class ProfilingMethodVisitor extends AdviceAdapter {
         return 1;
     }
 
+    private static int getObjSize(String paramDesc) {
+        switch (paramDesc) {
+            case "Z": // boolean
+            case "I": // int
+            case "C": // char
+            case "S": // short
+            case "B": // byte
+            case "F": // float
+                return 1;
+            case "J": // long
+            case "D": // double
+                return 2;
+            default: // object
+                return 1;
+        }
+    }
+
     @Override
     protected void onMethodEnter() {
-        getThread();
         getTime();
-        getClassNameAndMethodName();
-        mv.visitLdcInsn(methodDesc);
-        getIsStatic();
         int countEnabledParams = (int) methodConfig.getParameters().stream()
                 .filter((MethodConfig.Parameter::isEnabled))
                 .count();
@@ -50,20 +70,61 @@ class ProfilingMethodVisitor extends AdviceAdapter {
         } else {
             loadNull();
         }
-        addToQueue(Type.Enter);
+        createStartData();
+        saveStartData();
+    }
+
+    private void saveStartData() {
+        visitVarInsn(ASTORE, startData);
+    }
+
+    private void createStartData() {
+        visitMethodInsn(INVOKESTATIC, "com/github/kornilova_l/flamegraph/javaagent/logger/LoggerQueue",
+                "createStartData",
+                "(J[Ljava/lang/Object;)Lcom/github/kornilova_l/flamegraph/javaagent/logger/event_data_storage/StartData;",
+                false);
+    }
+
+    private void addTryCatchBeginning() {
+        Label start = new Label();
+        visitTryCatchBlock(start, end, handler, "java/lang/Throwable");
+        visitLabel(start);
+    }
+
+    @Override
+    public void visitLocalVariable(String name, String desc, String signature, Label start, Label end, int index) {
+        if (index == 0) {
+            isTryCatchBlockFinished = true;
+            endTryCatch();
+        }
+        super.visitLocalVariable(name, desc, signature, start, end, index);
+    }
+
+    private void endTryCatch() {
+//        visitLabel(end);
+//        Label farEnd = new Label();
+//        visitJumpInsn(Opcodes.GOTO, farEnd);
+//        visitLabel(handler);
+//
+//        visitLabel(farEnd);
+    }
+
+    @Override
+    public void visitMaxs(int maxStack, int maxLocals) {
+        if (!isTryCatchBlockFinished) {
+            endTryCatch();
+        }
+        super.visitMaxs(maxStack, maxLocals);
     }
 
     private void addToQueue(Type type) {
         String description = null;
         switch (type) {
-            case Enter:
-                description = "(Ljava/lang/Thread;JLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Z[Ljava/lang/Object;)V";
+            case RetVal:
+                description = "(Ljava/lang/Object;Lcom/github/kornilova_l/flamegraph/javaagent/logger/event_data_storage/StartData;Ljava/lang/Thread;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Z)V";
                 break;
-            case Exit:
-                description = "(Ljava/lang/Object;Ljava/lang/Thread;J)V";
-                break;
-            case Exception:
-                description = "(Ljava/lang/Thread;Ljava/lang/Throwable;J)V";
+            case Throwable:
+                description = "addToQueue(Lcom/github/kornilova_l/flamegraph/javaagent/logger/event_data_storage/StartData;Ljava/lang/Throwable;Ljava/lang/Thread;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Z)V";
                 break;
         }
         if (hasSystemCL) {
@@ -152,23 +213,6 @@ class ProfilingMethodVisitor extends AdviceAdapter {
         }
     }
 
-    private static int getObjSize(String paramDesc) {
-        switch (paramDesc) {
-            case "Z": // boolean
-            case "I": // int
-            case "C": // char
-            case "S": // short
-            case "B": // byte
-            case "F": // float
-                return 1;
-            case "J": // long
-            case "D": // double
-                return 2;
-            default: // object
-                return 1;
-        }
-    }
-
     private void doubleToObj() {
         mv.visitMethodInsn(INVOKESTATIC, "java/lang/Double", "valueOf",
                 "(D)Ljava/lang/Double;", false);
@@ -246,18 +290,28 @@ class ProfilingMethodVisitor extends AdviceAdapter {
 
     @Override
     protected void onMethodExit(int opcode) {
-        if (opcode == ATHROW) { // Thread, Throwable, long
-            if (methodConfig.isSaveReturnValue()) {
-                dup();
-            } else {
-                loadNull();
-            }
-            getThread();
-            mv.visitInsn(Opcodes.SWAP);
-            getTime();
-            addToQueue(Type.Exception);
-            return;
+//        saveExitTime();
+//        getIfTimeIsMoreOneMs();
+//        maybeAddToQueue(opcode);
+    }
+
+    private void maybeAddToQueue(int opcode) {
+        Label label = new Label();
+        visitJumpInsn(IFLE, label);
+        if (opcode == ATHROW) {
+            formThrowableExit();
+        } else {
+            formRetValExit(opcode);
         }
+        visitLabel(label);
+    }
+
+    @Override
+    public void visitFrame(int type, int nLocal, Object[] local, int nStack, Object[] stack) {
+        super.visitFrame(type, nLocal, local, nStack, stack);
+    }
+
+    private void formRetValExit(int opcode) {
         if (opcode != RETURN) { // return some value
             if (methodConfig.isSaveReturnValue()) {
                 int sizeOfRetVal = getSizeOfRetVal(opcode);
@@ -269,9 +323,57 @@ class ProfilingMethodVisitor extends AdviceAdapter {
         } else {
             retValToObj();
         }
+        getStartData();
+        getCommonExitData();
+        addToQueue(Type.RetVal);
+    }
+
+    private void formThrowableExit() {
+        if (methodConfig.isSaveReturnValue()) {
+            dup();
+        } else {
+            loadNull();
+        }
+        getStartData();
+        visitInsn(SWAP); // swap retVal and throwable
+        getCommonExitData();
+        addToQueue(Type.Throwable);
+    }
+
+    private void getCommonExitData() {
         getThread();
+        mv.visitLdcInsn(className);
+        mv.visitLdcInsn(methodName);
+        mv.visitLdcInsn(methodDesc);
+        getIsStatic();
+    }
+
+    private void saveExitTime() {
+        getStartData();
         getTime();
-        addToQueue(Type.Exit);
+        visitMethodInsn(INVOKEVIRTUAL,
+                "com/github/kornilova_l/flamegraph/javaagent/logger/event_data_storage/StartData",
+                "setDuration",
+                "(J)V",
+                false);
+    }
+
+    private void getStartData() {
+        visitVarInsn(ALOAD, startData);
+        checkCast(org.objectweb.asm.Type.getType(
+                "com/github/kornilova_l/flamegraph/javaagent/logger/event_data_storage/StartData"
+        ));
+    }
+
+    private void getIfTimeIsMoreOneMs() {
+        getStartData();
+        visitMethodInsn(INVOKEVIRTUAL,
+                "com/github/kornilova_l/flamegraph/javaagent/logger/event_data_storage/StartData",
+                "getDuration",
+                "()J",
+                false);
+        visitInsn(LCONST_1);
+        visitInsn(LCMP);
     }
 
     private void retValToObj() {
@@ -326,8 +428,7 @@ class ProfilingMethodVisitor extends AdviceAdapter {
     }
 
     private enum Type {
-        Exit,
-        Enter,
-        Exception
+        RetVal,
+        Throwable
     }
 }

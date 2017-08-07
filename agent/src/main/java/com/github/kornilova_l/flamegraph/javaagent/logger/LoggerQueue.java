@@ -1,6 +1,9 @@
 package com.github.kornilova_l.flamegraph.javaagent.logger;
 
-import com.github.kornilova_l.flamegraph.javaagent.logger.events.*;
+import com.github.kornilova_l.flamegraph.javaagent.logger.event_data_storage.MethodEventData;
+import com.github.kornilova_l.flamegraph.javaagent.logger.event_data_storage.RetValEventData;
+import com.github.kornilova_l.flamegraph.javaagent.logger.event_data_storage.StartData;
+import com.github.kornilova_l.flamegraph.javaagent.logger.event_data_storage.ThrowableEventData;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -12,29 +15,34 @@ public class LoggerQueue {
     public static volatile long classNamesId = 0;
     public static volatile long threadNamesId = 0;
 
-    static final LinkedBlockingDeque<EventData> queue = new LinkedBlockingDeque<>();
+    static final LinkedBlockingDeque<MethodEventData> queue = new LinkedBlockingDeque<>();
     static int countEventsAdded = 0;
 
-    public static void addToQueue(Thread thread,
-                                  long startTime,
+    public static StartData createStartData(long startTime, Object[] parameters) {
+        return new StartData(startTime, parameters);
+    }
+
+    public static void addToQueue(Object retVal,
+                                  StartData startData,
+                                  Thread thread,
                                   String className,
                                   String methodName,
-                                  String description,
-                                  boolean isStatic,
-                                  Object[] parameters) {
+                                  String desc,
+                                  boolean isStatic) {
         countEventsAdded++;
-        queue.add(new EnterEventData(thread.getName(), startTime, className, methodName,
-                description, isStatic, parameters));
+        queue.add(new RetValEventData(thread, className, startData.getStartTime(), startData.getDuration(),
+                methodName, desc, isStatic, startData.getParameters(), retVal));
     }
 
-    public static void addToQueue(Object returnValue, Thread thread, long exitTime) {
+    public static void addToQueue(StartData startData,
+                                  Throwable throwable,
+                                  Thread thread,
+                                  String className,
+                                  String methodName,
+                                  String desc,
+                                  boolean isStatic) {
         countEventsAdded++;
-        queue.add(new ExitEventData(returnValue, thread.getName(), exitTime));
+        queue.add(new ThrowableEventData(thread, className, startData.getStartTime(), startData.getDuration(),
+                methodName, desc, isStatic, startData.getParameters(), throwable));
     }
-
-    public static void addToQueue(Thread thread, Throwable throwable, long exitTime) {
-        countEventsAdded++;
-        queue.add(new ExceptionEventData(throwable, thread.getName(), exitTime));
-    }
-
 }

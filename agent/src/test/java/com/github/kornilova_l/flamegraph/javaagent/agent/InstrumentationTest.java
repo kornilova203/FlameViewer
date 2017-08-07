@@ -2,6 +2,7 @@ package com.github.kornilova_l.flamegraph.javaagent.agent;
 
 import com.github.kornilova_l.flamegraph.configuration.MethodConfig;
 import com.github.kornilova_l.flamegraph.javaagent.TestHelper;
+import com.github.kornilova_l.flamegraph.javaagent.generate.test_classes.UsesThreadPool;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.objectweb.asm.ClassReader;
@@ -13,6 +14,8 @@ import java.lang.instrument.Instrumentation;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+
+import static com.github.kornilova_l.flamegraph.javaagent.TestHelper.removePackage;
 
 
 public class InstrumentationTest {
@@ -32,27 +35,34 @@ public class InstrumentationTest {
     }
 
     @Test
-    public void oneMethodTest() {
+    public void instrumentationTest() {
+//        classTest(OneMethod.class);
+        classTest(UsesThreadPool.class);
+    }
+
+    private void classTest(Class testedClass) {
         try {
+            String fullName = testedClass.getName();
+            String fileName = removePackage(fullName);
             InputStream inputStream = Instrumentation.class.getResourceAsStream(
-                    "/com/github/kornilova_l/flamegraph/javaagent/generate/test_classes/OneMethod.class");
+                    "/" + fullName.replace('.', '/') + ".class");
             byte[] bytes = TestHelper.getBytes(inputStream);
             ClassReader cr = new ClassReader(bytes);
-            ClassWriter cw = new ClassWriter(cr, 0);
-            File outFile = new File("src/test/resources/actual/OneMethod.txt");
+            ClassWriter cw = new ClassWriter(cr, ClassWriter.COMPUTE_FRAMES);
+            File outFile = new File("src/test/resources/actual/" + fileName + ".txt");
             TraceClassVisitor tcv = new TraceClassVisitor(cw, new PrintWriter(
                     new FileOutputStream(outFile)
             ));
             cr.accept(
                     new ProfilingClassVisitor(
                             tcv,
-                            "com/github/kornilova_l/flamegraph/javaagent/generate/test_classes/OneMethod",
+                            fullName.replace('.', '/'),
                             true,
                             methodConfigs,
                             configurationManager
-                    ), ClassReader.SKIP_DEBUG
+                    ), ClassReader.SKIP_FRAMES | ClassReader.SKIP_DEBUG
             );
-            TestHelper.compareFiles(new File("src/test/resources/expected/OneMethod.txt"),
+            TestHelper.compareFiles(new File("src/test/resources/expected/" + fileName + ".txt"),
                     outFile);
         } catch (FileNotFoundException e) {
             e.printStackTrace();

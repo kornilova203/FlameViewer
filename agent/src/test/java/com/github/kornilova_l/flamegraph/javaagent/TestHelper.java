@@ -43,4 +43,12 @@ public class TestHelper {
             assert res;
         }
     }
+
+    public static String removePackage(String fullName) {
+        int dot = fullName.lastIndexOf('.');
+        if (dot == -1) {
+            return fullName;
+        }
+        return fullName.substring(dot + 1, fullName.length());
+    }
 }
