@@ -73,14 +73,14 @@ class ProfilingMethodVisitor extends AdviceAdapter {
     }
 
     private void saveStartData() {
-        visitVarInsn(ASTORE, startData);
+        mv.visitVarInsn(ASTORE, startData);
     }
 
     private void createStartData() {
         startData = newLocal(org.objectweb.asm.Type.getType(
                 "Lcom/github/kornilova_l/flamegraph/javaagent/logger/event_data_storage/StartData;"
         ));
-        visitMethodInsn(INVOKESTATIC, "com/github/kornilova_l/flamegraph/javaagent/logger/LoggerQueue",
+        mv.visitMethodInsn(INVOKESTATIC, "com/github/kornilova_l/flamegraph/javaagent/logger/LoggerQueue",
                 "createStartData",
                 "(J[Ljava/lang/Object;)Lcom/github/kornilova_l/flamegraph/javaagent/logger/event_data_storage/StartData;",
                 false);
@@ -88,17 +88,17 @@ class ProfilingMethodVisitor extends AdviceAdapter {
 
     private void addTryCatchBeginning() {
         Label start = new Label();
-        visitTryCatchBlock(start, end, handler, "java/lang/Throwable");
-        visitLabel(start);
+        mv.visitTryCatchBlock(start, end, handler, "java/lang/Throwable");
+        mv.visitLabel(start);
     }
 
     private void endTryCatch() {
-//        visitLabel(end);
+//        mv.visitLabel(end);
 //        Label farEnd = new Label();
-//        visitJumpInsn(Opcodes.GOTO, farEnd);
-//        visitLabel(handler);
+//        mv.visitJumpInsn(Opcodes.GOTO, farEnd);
+//        mv.visitLabel(handler);
 //
-//        visitLabel(farEnd);
+//        mv.visitLabel(farEnd);
     }
 
     private void addToQueue(Type type) {
@@ -112,10 +112,10 @@ class ProfilingMethodVisitor extends AdviceAdapter {
                 break;
         }
         if (hasSystemCL) {
-            visitMethodInsn(INVOKESTATIC, LOGGER_PACKAGE_NAME + "LoggerQueue", "addToQueue",
+            mv.visitMethodInsn(INVOKESTATIC, LOGGER_PACKAGE_NAME + "LoggerQueue", "addToQueue",
                     description, false);
         } else {
-            visitMethodInsn(INVOKESTATIC, LOGGER_PACKAGE_NAME + "Proxy", "addToQueue",
+            mv.visitMethodInsn(INVOKESTATIC, LOGGER_PACKAGE_NAME + "Proxy", "addToQueue",
                     description, false);
         }
     }
@@ -133,133 +133,133 @@ class ProfilingMethodVisitor extends AdviceAdapter {
         );
         for (int i = 0; i < countParams; i++) {
             if (methodConfig.getParameters().get(i).isEnabled()) {
-                visitInsn(DUP); // array reference
+                mv.visitInsn(DUP); // array reference
                 getIConst(index++); // index of element
                 paramToObj(jvmParameters.get(i), posOfParam);
-                visitInsn(AASTORE); // load obj to array
+                mv.visitInsn(AASTORE); // load obj to array
             }
             posOfParam = getObjSize(jvmParameters.get(i));
         }
     }
 
     private void loadNull() {
-        visitInsn(ACONST_NULL);
+        mv.visitInsn(ACONST_NULL);
     }
 
     private void createObjArray(int arraySize) {
         getIConst(arraySize);
-        visitTypeInsn(ANEWARRAY, "java/lang/Object");
+        mv.visitTypeInsn(ANEWARRAY, "java/lang/Object");
     }
 
     private void loadThisToArr() {
-        visitInsn(DUP); // array reference
+        mv.visitInsn(DUP); // array reference
         getIConst(0); // index of element
-        visitVarInsn(ALOAD, 0);
-        visitInsn(AASTORE); // load obj to array
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitInsn(AASTORE); // load obj to array
     }
 
     private void paramToObj(String paramDesc, int pos) {
         switch (paramDesc) {
             case "I": // int
-                visitVarInsn(ILOAD, pos);
+                mv.visitVarInsn(ILOAD, pos);
                 intToObj();
                 break;
             case "J": // long
-                visitVarInsn(LLOAD, pos);
+                mv.visitVarInsn(LLOAD, pos);
                 longToObj();
                 break;
             case "Z": // boolean
-                visitVarInsn(ILOAD, pos);
+                mv.visitVarInsn(ILOAD, pos);
                 booleanToObj();
                 break;
             case "C": // char
-                visitVarInsn(ILOAD, pos);
+                mv.visitVarInsn(ILOAD, pos);
                 charToObj();
                 break;
             case "S": // short
-                visitVarInsn(ILOAD, pos);
+                mv.visitVarInsn(ILOAD, pos);
                 shortToObj();
                 break;
             case "B": // byte
-                visitVarInsn(ILOAD, pos);
+                mv.visitVarInsn(ILOAD, pos);
                 byteToObj();
                 break;
             case "F": // float
-                visitVarInsn(FLOAD, pos);
+                mv.visitVarInsn(FLOAD, pos);
                 floatToObj();
                 break;
             case "D": // double
-                visitVarInsn(DLOAD, pos);
+                mv.visitVarInsn(DLOAD, pos);
                 doubleToObj();
                 break;
             default: // object
-                visitVarInsn(ALOAD, pos);
+                mv.visitVarInsn(ALOAD, pos);
         }
     }
 
     private void doubleToObj() {
-        visitMethodInsn(INVOKESTATIC, "java/lang/Double", "valueOf",
+        mv.visitMethodInsn(INVOKESTATIC, "java/lang/Double", "valueOf",
                 "(D)Ljava/lang/Double;", false);
     }
 
     private void floatToObj() {
-        visitMethodInsn(INVOKESTATIC, "java/lang/Float", "valueOf",
+        mv.visitMethodInsn(INVOKESTATIC, "java/lang/Float", "valueOf",
                 "(F)Ljava/lang/Float;", false);
     }
 
     private void byteToObj() {
-        visitMethodInsn(INVOKESTATIC, "java/lang/Byte", "valueOf",
+        mv.visitMethodInsn(INVOKESTATIC, "java/lang/Byte", "valueOf",
                 "(B)Ljava/lang/Byte;", false);
     }
 
     private void shortToObj() {
-        visitMethodInsn(INVOKESTATIC, "java/lang/Short", "valueOf",
+        mv.visitMethodInsn(INVOKESTATIC, "java/lang/Short", "valueOf",
                 "(S)Ljava/lang/Short;", false);
     }
 
     private void charToObj() {
-        visitMethodInsn(INVOKESTATIC, "java/lang/Character", "valueOf",
+        mv.visitMethodInsn(INVOKESTATIC, "java/lang/Character", "valueOf",
                 "(C)Ljava/lang/Character;", false);
     }
 
     private void booleanToObj() {
-        visitMethodInsn(INVOKESTATIC, "java/lang/Boolean", "valueOf",
+        mv.visitMethodInsn(INVOKESTATIC, "java/lang/Boolean", "valueOf",
                 "(Z)Ljava/lang/Boolean;", false);
     }
 
     private void longToObj() {
-        visitMethodInsn(INVOKESTATIC, "java/lang/Long", "valueOf",
+        mv.visitMethodInsn(INVOKESTATIC, "java/lang/Long", "valueOf",
                 "(J)Ljava/lang/Long;", false);
     }
 
     private void intToObj() {
-        visitMethodInsn(INVOKESTATIC, "java/lang/Integer", "valueOf",
+        mv.visitMethodInsn(INVOKESTATIC, "java/lang/Integer", "valueOf",
                 "(I)Ljava/lang/Integer;", false);
     }
 
     private void getIConst(int i) {
         if (i < 6) {
-            visitInsn(ICONST_0 + i);
+            mv.visitInsn(ICONST_0 + i);
         } else {
-            visitIntInsn(BIPUSH, i);
+            mv.visitIntInsn(BIPUSH, i);
         }
     }
 
     private void getIsStatic() {
         if (isStatic()) {
-            visitInsn(ICONST_1);
+            mv.visitInsn(ICONST_1);
         } else {
-            visitInsn(ICONST_0);
+            mv.visitInsn(ICONST_0);
         }
     }
 
     private void getTime() {
-        visitMethodInsn(INVOKESTATIC, "java/lang/System",
+        mv.visitMethodInsn(INVOKESTATIC, "java/lang/System",
                 "currentTimeMillis", "()J", false);
     }
 
     private void getThread() {
-        visitMethodInsn(INVOKESTATIC, "java/lang/Thread", "currentThread",
+        mv.visitMethodInsn(INVOKESTATIC, "java/lang/Thread", "currentThread",
                 "()Ljava/lang/Thread;", false);
     }
 
@@ -276,13 +276,13 @@ class ProfilingMethodVisitor extends AdviceAdapter {
 
     private void maybeAddToQueue(int opcode) {
         Label label = new Label();
-        visitJumpInsn(IFLE, label);
+        mv.visitJumpInsn(IFLE, label);
         if (opcode == ATHROW) {
             formThrowableExit();
         } else {
             formRetValExit(opcode);
         }
-        visitLabel(label);
+        mv.visitLabel(label);
     }
 
     private void formRetValExit(int opcode) {
@@ -309,23 +309,23 @@ class ProfilingMethodVisitor extends AdviceAdapter {
             loadNull();
         }
         getStartData();
-        visitInsn(SWAP); // swap retVal and throwable
+        mv.visitInsn(SWAP); // swap retVal and throwable
         getCommonExitData();
         addToQueue(Type.Throwable);
     }
 
     private void getCommonExitData() {
         getThread();
-        visitLdcInsn(className);
-        visitLdcInsn(methodName);
-        visitLdcInsn(methodDesc);
+        mv.visitLdcInsn(className);
+        mv.visitLdcInsn(methodName);
+        mv.visitLdcInsn(methodDesc);
         getIsStatic();
     }
 
     private void saveExitTime() {
         getStartData();
         getTime();
-        visitMethodInsn(INVOKEVIRTUAL,
+        mv.visitMethodInsn(INVOKEVIRTUAL,
                 "com/github/kornilova_l/flamegraph/javaagent/logger/event_data_storage/StartData",
                 "setDuration",
                 "(J)V",
@@ -333,21 +333,18 @@ class ProfilingMethodVisitor extends AdviceAdapter {
     }
 
     private void getStartData() {
-        visitVarInsn(ALOAD, startData);
-        checkCast(org.objectweb.asm.Type.getType(
-                "com/github/kornilova_l/flamegraph/javaagent/logger/event_data_storage/StartData"
-        ));
+        mv.visitVarInsn(ALOAD, startData);
     }
 
     private void getIfTimeIsMoreOneMs() {
         getStartData();
-        visitMethodInsn(INVOKEVIRTUAL,
+        mv.visitMethodInsn(INVOKEVIRTUAL,
                 "com/github/kornilova_l/flamegraph/javaagent/logger/event_data_storage/StartData",
                 "getDuration",
                 "()J",
                 false);
-        visitInsn(LCONST_1);
-        visitInsn(LCMP);
+        mv.visitInsn(LCONST_1);
+        mv.visitInsn(LCMP);
     }
 
     private void retValToObj() {
