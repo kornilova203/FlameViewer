@@ -53,11 +53,14 @@ public class InstrumentationTest {
     @Test
     public void basicInstrumentation() {
         classTest(OneMethod.class, configurationManager, methodConfigs);
+        classTest(ThrowsException.class, configurationManager, methodConfigs);
         // next test fails because TraceClassVisitor inserts spaces to end of lines
 //        classTest(UsesThreadPool.class, configurationManager, methodConfigs);
         classTest(SeveralReturns.class, configurationManager, methodConfigs);
         classTest(TwoMethods.class, configurationManager, methodConfigs);
     }
+
+    // TODO: check other tests
 
     @Test
     public void saveParameters() {

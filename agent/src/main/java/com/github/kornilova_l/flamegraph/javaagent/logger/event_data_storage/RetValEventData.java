@@ -2,10 +2,9 @@ package com.github.kornilova_l.flamegraph.javaagent.logger.event_data_storage;
 
 import com.github.kornilova_l.flamegraph.proto.EventProtos;
 
-import java.util.LinkedList;
-import java.util.List;
-
 public class RetValEventData extends MethodEventData {
+    private Object retVal;
+
     public RetValEventData(Thread thread,
                            String className,
                            long startTime,
@@ -19,20 +18,12 @@ public class RetValEventData extends MethodEventData {
         this.retVal = retVal;
     }
 
-    private Object retVal;
-
     @Override
-    public List<EventProtos.Event> getEvents() {
-        List<EventProtos.Event> events = new LinkedList<>();
-        EventProtos.Event.Builder eventBuilder = EventProtos.Event.newBuilder();
-        EventProtos.Event.MethodEvent.Builder methodEventBuilder = EventProtos.Event.MethodEvent.newBuilder();
-        setCommonInfo(methodEventBuilder, events);
-
-        methodEventBuilder.setReturnValue(objectToVar(retVal));
-
-        eventBuilder.setMethodEvent(methodEventBuilder);
-        events.add(eventBuilder.build());
-
-        return events;
+    void setResult(EventProtos.Event.MethodEvent.Builder methodEventBuilder) {
+        if (retVal != null) {
+            methodEventBuilder.setReturnValue(objectToVar(retVal));
+        } else {
+            methodEventBuilder.setReturnValue(EventProtos.Var.newBuilder());
+        }
     }
 }

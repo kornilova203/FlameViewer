@@ -19,8 +19,6 @@ class ProfilingMethodVisitor extends AdviceAdapter {
     private final MethodConfig methodConfig;
     private int startData;
     private Label end = new Label();
-    private Label handler = new Label();
-    private boolean isTryCatchBlockFinished = false;
 
 
     ProfilingMethodVisitor(int access, String methodName, String desc,
@@ -70,6 +68,7 @@ class ProfilingMethodVisitor extends AdviceAdapter {
         }
         createStartData();
         saveStartData();
+        addTryCatchBeginning();
     }
 
     private void saveStartData() {
@@ -88,17 +87,43 @@ class ProfilingMethodVisitor extends AdviceAdapter {
 
     private void addTryCatchBeginning() {
         Label start = new Label();
-        mv.visitTryCatchBlock(start, end, handler, "java/lang/Throwable");
+        mv.visitTryCatchBlock(start, end, end, "java/lang/Throwable");
         mv.visitLabel(start);
     }
 
     private void endTryCatch() {
-//        mv.visitLabel(end);
-//        Label farEnd = new Label();
-//        mv.visitJumpInsn(Opcodes.GOTO, farEnd);
-//        mv.visitLabel(handler);
-//
-//        mv.visitLabel(farEnd);
+        mv.visitLabel(end);
+        getIfWasThrownByMethod();
+        Label ifLabel = new Label();
+        mv.visitJumpInsn(IFNE, ifLabel);
+        maybeAddThrowableToQueue(ifLabel);
+
+        mv.visitLabel(ifLabel);
+        mv.visitInsn(ATHROW);
+    }
+
+    private void maybeAddThrowableToQueue(Label ifLabel) {
+        saveExitTime();
+        getIfTimeIsMoreOneMs();
+        mv.visitJumpInsn(IFLE, ifLabel);
+        formThrowableExit();
+    }
+
+    private void getIfWasThrownByMethod() {
+        getStartData();
+        mv.visitMethodInsn(
+                INVOKEVIRTUAL,
+                "com/github/kornilova_l/flamegraph/javaagent/logger/event_data_storage/StartData",
+                "isThrownByMethod",
+                "()Z",
+                false
+        );
+    }
+
+    @Override
+    public void visitMaxs(int maxStack, int maxLocals) {
+        endTryCatch();
+        super.visitMaxs(maxStack, maxLocals);
     }
 
     private void addToQueue(Type type) {
@@ -108,7 +133,7 @@ class ProfilingMethodVisitor extends AdviceAdapter {
                 description = "(Ljava/lang/Object;Lcom/github/kornilova_l/flamegraph/javaagent/logger/event_data_storage/StartData;Ljava/lang/Thread;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Z)V";
                 break;
             case Throwable:
-                description = "addToQueue(Lcom/github/kornilova_l/flamegraph/javaagent/logger/event_data_storage/StartData;Ljava/lang/Throwable;Ljava/lang/Thread;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Z)V";
+                description = "(Ljava/lang/Throwable;Lcom/github/kornilova_l/flamegraph/javaagent/logger/event_data_storage/StartData;Ljava/lang/Thread;Ljava/lang/String;Ljava/lang/String;ZLjava/lang/String;)V";
                 break;
         }
         if (hasSystemCL) {
@@ -121,6 +146,7 @@ class ProfilingMethodVisitor extends AdviceAdapter {
     }
 
     private void getArrayWithParameters(int arraySize) {
+        // TODO: refactor
         createObjArray(arraySize);
         int posOfParam = 0;
         if (!isStatic()) {
@@ -270,19 +296,38 @@ class ProfilingMethodVisitor extends AdviceAdapter {
     @Override
     protected void onMethodExit(int opcode) {
         saveExitTime();
+        if (opcode == ATHROW) {
+            setThrownByMethod(); // ignore this throwable in catch block
+        }
         getIfTimeIsMoreOneMs();
+        Label ifLabel = addIfLess();
         maybeAddToQueue(opcode);
+        mv.visitLabel(ifLabel);
+    }
+
+    private Label addIfLess() {
+        Label label = new Label();
+        mv.visitJumpInsn(IFLE, label);
+        return label;
     }
 
     private void maybeAddToQueue(int opcode) {
-        Label label = new Label();
-        mv.visitJumpInsn(IFLE, label);
         if (opcode == ATHROW) {
             formThrowableExit();
         } else {
             formRetValExit(opcode);
         }
-        mv.visitLabel(label);
+    }
+
+    private void setThrownByMethod() {
+        getStartData();
+        mv.visitMethodInsn(
+                INVOKEVIRTUAL,
+                "com/github/kornilova_l/flamegraph/javaagent/logger/event_data_storage/StartData",
+                "setThrownByMethod",
+                "()V",
+                false
+        );
     }
 
     private void formRetValExit(int opcode) {
@@ -309,8 +354,9 @@ class ProfilingMethodVisitor extends AdviceAdapter {
             loadNull();
         }
         getStartData();
-        mv.visitInsn(SWAP); // swap retVal and throwable
         getCommonExitData();
+        // last two parameters is swapped to avoid ambiguous call
+        mv.visitInsn(SWAP);
         addToQueue(Type.Throwable);
     }
 

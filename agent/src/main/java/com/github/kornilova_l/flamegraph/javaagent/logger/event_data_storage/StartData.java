@@ -4,6 +4,7 @@ public class StartData {
     private final long startTime;
     private final Object[] parameters;
     private long duration;
+    private boolean thrownByMethod = false;
 
     public StartData(long startTime, Object[] parameters) {
         this.startTime = startTime;
@@ -16,6 +17,14 @@ public class StartData {
 
     public long getStartTime() {
         return startTime;
+    }
+
+    public void setThrownByMethod() {
+        thrownByMethod = true;
+    }
+
+    public boolean isThrownByMethod() {
+        return thrownByMethod;
     }
 
     public Object[] getParameters() {

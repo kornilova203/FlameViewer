@@ -35,6 +35,9 @@ public class Logger implements Runnable {
     }
 
     private void writeToFile(List<EventProtos.Event> events) {
+        for (EventProtos.Event event : events) {
+            System.out.println(event.toString());
+        }
         try {
             for (EventProtos.Event event : events) {
                 event.writeDelimitedTo(outputStream);

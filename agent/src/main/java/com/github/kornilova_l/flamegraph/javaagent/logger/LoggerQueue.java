@@ -10,12 +10,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingDeque;
 
 public class LoggerQueue {
+    static final LinkedBlockingDeque<MethodEventData> queue = new LinkedBlockingDeque<>();
     public static Map<String, Long> registeredThreadNames = new ConcurrentHashMap<>();
     public static Map<String, Long> registeredClassNames = new ConcurrentHashMap<>();
     public static volatile long classNamesId = 0;
     public static volatile long threadNamesId = 0;
-
-    static final LinkedBlockingDeque<MethodEventData> queue = new LinkedBlockingDeque<>();
     static int countEventsAdded = 0;
 
     public static StartData createStartData(long startTime, Object[] parameters) {
@@ -34,13 +33,13 @@ public class LoggerQueue {
                 methodName, desc, isStatic, startData.getParameters(), retVal));
     }
 
-    public static void addToQueue(StartData startData,
-                                  Throwable throwable,
+    public static void addToQueue(Throwable throwable,
+                                  StartData startData,
                                   Thread thread,
                                   String className,
                                   String methodName,
-                                  String desc,
-                                  boolean isStatic) {
+                                  boolean isStatic,
+                                  String desc) {
         countEventsAdded++;
         queue.add(new ThrowableEventData(thread, className, startData.getStartTime(), startData.getDuration(),
                 methodName, desc, isStatic, startData.getParameters(), throwable));

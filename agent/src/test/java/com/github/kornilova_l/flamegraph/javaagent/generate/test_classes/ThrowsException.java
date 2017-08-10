@@ -1,22 +1,21 @@
 package com.github.kornilova_l.flamegraph.javaagent.generate.test_classes;
 
-
-public class OneMethod {
-    public static int main(String[] args) {
+public class ThrowsException {
+    public static void main(String[] args) {
 //        StartData startData = LoggerQueue.createStartData(System.currentTimeMillis(), null);
 //        try {
-        System.out.println("Hello, world!");
 //            startData.setDuration(System.currentTimeMillis());
+//            startData.setThrownByMethod();
 //            if (startData.getDuration() > 1) {
 //                LoggerQueue.addToQueue(null,
 //                        startData,
 //                        Thread.currentThread(),
-//                        "com/github/kornilova_l/flamegraph/javaagent/generate/test_classes/OneMethod",
+//                        "com/github/kornilova_l/flamegraph/javaagent/generate/test_classes/ThrowsException",
 //                        "main",
-//                        "([Ljava/lang/String;)I",
-//                        true);
+//                        true,
+//                        "([Ljava/lang/String;)V");
 //            }
-        return 23;
+        throw new AssertionError("error");
 //        } catch (Throwable throwable) {
 //            if (!startData.isThrownByMethod()) {
 //                startData.setDuration(System.currentTimeMillis());
@@ -24,10 +23,10 @@ public class OneMethod {
 //                    LoggerQueue.addToQueue(null,
 //                            startData,
 //                            Thread.currentThread(),
-//                            "com/github/kornilova_l/flamegraph/javaagent/generate/test_classes/OneMethod",
+//                            "com/github/kornilova_l/flamegraph/javaagent/generate/test_classes/ThrowsException",
 //                            "main",
 //                            true,
-//                            "([Ljava/lang/String;)I");
+//                            "([Ljava/lang/String;)V");
 //                }
 //            }
 //            throw throwable;

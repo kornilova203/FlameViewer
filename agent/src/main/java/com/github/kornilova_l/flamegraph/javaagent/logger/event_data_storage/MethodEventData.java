@@ -3,6 +3,7 @@ package com.github.kornilova_l.flamegraph.javaagent.logger.event_data_storage;
 import com.github.kornilova_l.flamegraph.javaagent.logger.LoggerQueue;
 import com.github.kornilova_l.flamegraph.proto.EventProtos;
 
+import java.util.LinkedList;
 import java.util.List;
 
 abstract public class MethodEventData {
@@ -33,9 +34,23 @@ abstract public class MethodEventData {
         this.parameters = parameters;
     }
 
-    abstract public List<EventProtos.Event> getEvents();
+    public List<EventProtos.Event> getEvents() {
+        List<EventProtos.Event> events = new LinkedList<>();
+        EventProtos.Event.Builder eventBuilder = EventProtos.Event.newBuilder();
+        EventProtos.Event.MethodEvent.Builder methodEventBuilder = EventProtos.Event.MethodEvent.newBuilder();
+        setCommonInfo(methodEventBuilder, events);
 
-    Long getClassNameId(List<EventProtos.Event> events) {
+        setResult(methodEventBuilder);
+
+        eventBuilder.setMethodEvent(methodEventBuilder);
+        events.add(eventBuilder.build());
+
+        return events;
+    }
+
+    abstract void setResult(EventProtos.Event.MethodEvent.Builder methodEventBuilder);
+
+    private Long getClassNameId(List<EventProtos.Event> events) {
         Long classNameId = LoggerQueue.registeredClassNames.get(className);
         if (classNameId == null) {
             classNameId = ++LoggerQueue.classNamesId;
@@ -54,7 +69,7 @@ abstract public class MethodEventData {
                 ).build();
     }
 
-    Long getThreadNameId(List<EventProtos.Event> events) {
+    private Long getThreadNameId(List<EventProtos.Event> events) {
         Long threadNameId = LoggerQueue.registeredThreadNames.get(threadName);
         if (threadNameId == null) {
             threadNameId = ++LoggerQueue.threadNamesId;
@@ -119,7 +134,7 @@ abstract public class MethodEventData {
         varBuilder.setObject(objectBuilder.build());
     }
 
-    void setCommonInfo(EventProtos.Event.MethodEvent.Builder methodEventBuilder, List<EventProtos.Event> events) {
+    private void setCommonInfo(EventProtos.Event.MethodEvent.Builder methodEventBuilder, List<EventProtos.Event> events) {
         Long classNameId = getClassNameId(events);
         Long threadNameId = getThreadNameId(events);
 
@@ -135,7 +150,7 @@ abstract public class MethodEventData {
 
     }
 
-    void setParameters(EventProtos.Event.MethodEvent.Builder methodEventBuilder) {
+    private void setParameters(EventProtos.Event.MethodEvent.Builder methodEventBuilder) {
         if (parameters != null) {
             for (Object parameter : parameters) {
                 methodEventBuilder.addParameters(objectToVar(parameter));

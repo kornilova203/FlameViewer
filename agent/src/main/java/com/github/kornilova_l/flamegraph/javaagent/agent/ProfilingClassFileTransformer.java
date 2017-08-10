@@ -34,11 +34,10 @@ class ProfilingClassFileTransformer implements ClassFileTransformer {
                             Class<?> classBeingRedefined,
                             ProtectionDomain protectionDomain,
                             byte[] classfileBuffer) throws IllegalClassFormatException {
-        if (!className.startsWith("java") &&
-                !className.startsWith("sun") &&
-                !className.startsWith("com/github/kornilova_l") &&
-                !className.startsWith("jdk") &&
-                !className.startsWith("com/sun")) {
+        if (loader == null) { // if rt.jar
+            return classfileBuffer;
+        }
+        if (!className.startsWith("com/github/kornilova_l")) {
             Set<MethodConfig> methodConfigs = configurationManager.findIncludingConfigs(className);
             if (methodConfigs.size() != 0) {
                 ClassReader cr = new ClassReader(classfileBuffer);
