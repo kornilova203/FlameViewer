@@ -3,6 +3,7 @@ package com.github.kornilova_l.flamegraph.javaagent.agent;
 import com.github.kornilova_l.flamegraph.configuration.MethodConfig;
 import com.github.kornilova_l.flamegraph.javaagent.TestHelper;
 import com.github.kornilova_l.flamegraph.javaagent.generate.test_classes.OneMethod;
+import com.github.kornilova_l.flamegraph.javaagent.generate.test_classes.SaveParameters;
 import com.github.kornilova_l.flamegraph.javaagent.generate.test_classes.SeveralReturns;
 import com.github.kornilova_l.flamegraph.javaagent.generate.test_classes.TwoMethods;
 import org.junit.BeforeClass;
@@ -13,6 +14,7 @@ import org.objectweb.asm.util.TraceClassVisitor;
 
 import java.io.*;
 import java.lang.instrument.Instrumentation;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -22,30 +24,46 @@ import static com.github.kornilova_l.flamegraph.javaagent.TestHelper.removePacka
 
 public class InstrumentationTest {
     private static AgentConfigurationManager configurationManager;
-    private static Set<MethodConfig> methodConfigs;
+    private static Set<MethodConfig> methodConfigs = new HashSet<>();
+    private static AgentConfigurationManager configurationManagerSaveParams;
+    private static Set<MethodConfig> methodConfigsSaveParams = new HashSet<>();
 
     @BeforeClass
     public static void setup() {
+        configurationManager = createConfig("*.*(*)", methodConfigs);
+        configurationManagerSaveParams = createConfig("*.*(*+)", methodConfigsSaveParams);
+    }
+
+    private static AgentConfigurationManager createConfig(String config,
+                                                          Set<MethodConfig> methodConfigs) {
         TestHelper.createDir("actual");
         List<String> methodConfigsStrings = new LinkedList<>();
-        methodConfigsStrings.add("*.*(*)");
-        configurationManager = new AgentConfigurationManager(
+        methodConfigsStrings.add(config);
+        AgentConfigurationManager configurationManager = new AgentConfigurationManager(
                 methodConfigsStrings
         );
-        methodConfigs = configurationManager.findIncludingConfigs(
-                "com/github/kornilova_l/flamegraph/javaagent/generate/test_classes/OneMethod");
+        methodConfigs.addAll(configurationManager.findIncludingConfigs(
+                "com/github/kornilova_l/flamegraph/javaagent/generate/test_classes/OneMethod"));
+        return configurationManager;
     }
 
     @Test
     public void instrumentationTest() {
-        classTest(OneMethod.class);
+        classTest(OneMethod.class, configurationManager, methodConfigs);
         // next test fails because TraceClassVisitor inserts spaces to end of lines
-//        classTest(UsesThreadPool.class);
-        classTest(SeveralReturns.class);
-        classTest(TwoMethods.class);
+//        classTest(UsesThreadPool.class, configurationManager, methodConfigs);
+        classTest(SeveralReturns.class, configurationManager, methodConfigs);
+        classTest(TwoMethods.class, configurationManager, methodConfigs);
     }
 
-    private void classTest(Class testedClass) {
+    @Test
+    public void instrumentationSaveParameters() {
+        classTest(SaveParameters.class, configurationManagerSaveParams, methodConfigsSaveParams);
+    }
+
+    private void classTest(Class testedClass,
+                           AgentConfigurationManager configurationManager,
+                           Set<MethodConfig> methodConfigs) {
         try {
             String fullName = testedClass.getName();
             String fileName = removePackage(fullName);

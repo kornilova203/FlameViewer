@@ -126,7 +126,7 @@ class ProfilingMethodVisitor extends AdviceAdapter {
         if (!isStatic()) {
             posOfParam = 1;
         }
-        int index = 0;
+        int index = 0; // index of parameter in array
         int countParams = methodConfig.getParameters().size();
         List<String> jvmParameters = MethodConfig.splitDesc(
                 methodDesc.substring(methodDesc.indexOf("(") + 1, methodDesc.indexOf(")"))
@@ -138,7 +138,7 @@ class ProfilingMethodVisitor extends AdviceAdapter {
                 paramToObj(jvmParameters.get(i), posOfParam);
                 mv.visitInsn(AASTORE); // load obj to array
             }
-            posOfParam = getObjSize(jvmParameters.get(i));
+            posOfParam += getObjSize(jvmParameters.get(i));
         }
     }
 
