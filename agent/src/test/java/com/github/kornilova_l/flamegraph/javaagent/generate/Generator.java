@@ -1,7 +1,7 @@
 package com.github.kornilova_l.flamegraph.javaagent.generate;
 
 import com.github.kornilova_l.flamegraph.javaagent.TestHelper;
-import com.github.kornilova_l.flamegraph.javaagent.generate.test_classes.SaveParameters;
+import com.github.kornilova_l.flamegraph.javaagent.generate.test_classes.SaveReturnValue;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.util.TraceClassVisitor;
@@ -14,7 +14,7 @@ import java.io.*;
  * Get readable representation and save to file
  */
 public class Generator {
-    private static final Class testedClass = SaveParameters.class;
+    private static final Class testedClass = SaveReturnValue.class;
 
     public static void main(String[] args) {
         TestHelper.createDir("expected");

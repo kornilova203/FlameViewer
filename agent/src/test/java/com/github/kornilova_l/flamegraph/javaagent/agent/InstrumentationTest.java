@@ -2,10 +2,7 @@ package com.github.kornilova_l.flamegraph.javaagent.agent;
 
 import com.github.kornilova_l.flamegraph.configuration.MethodConfig;
 import com.github.kornilova_l.flamegraph.javaagent.TestHelper;
-import com.github.kornilova_l.flamegraph.javaagent.generate.test_classes.OneMethod;
-import com.github.kornilova_l.flamegraph.javaagent.generate.test_classes.SaveParameters;
-import com.github.kornilova_l.flamegraph.javaagent.generate.test_classes.SeveralReturns;
-import com.github.kornilova_l.flamegraph.javaagent.generate.test_classes.TwoMethods;
+import com.github.kornilova_l.flamegraph.javaagent.generate.test_classes.*;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.objectweb.asm.ClassReader;
@@ -27,11 +24,17 @@ public class InstrumentationTest {
     private static Set<MethodConfig> methodConfigs = new HashSet<>();
     private static AgentConfigurationManager configurationManagerSaveParams;
     private static Set<MethodConfig> methodConfigsSaveParams = new HashSet<>();
+    private static AgentConfigurationManager configurationManagerSaveSecondParam;
+    private static Set<MethodConfig> methodConfigsSaveSecondParam = new HashSet<>();
+    private static AgentConfigurationManager configurationManagerSaveReturn;
+    private static Set<MethodConfig> methodConfigsSaveReturn = new HashSet<>();
 
     @BeforeClass
     public static void setup() {
         configurationManager = createConfig("*.*(*)", methodConfigs);
         configurationManagerSaveParams = createConfig("*.*(*+)", methodConfigsSaveParams);
+        configurationManagerSaveSecondParam = createConfig("*.*(long, *+)", methodConfigsSaveSecondParam);
+        configurationManagerSaveReturn = createConfig("*.*(*)+", methodConfigsSaveReturn);
     }
 
     private static AgentConfigurationManager createConfig(String config,
@@ -48,7 +51,7 @@ public class InstrumentationTest {
     }
 
     @Test
-    public void instrumentationTest() {
+    public void basicInstrumentation() {
         classTest(OneMethod.class, configurationManager, methodConfigs);
         // next test fails because TraceClassVisitor inserts spaces to end of lines
 //        classTest(UsesThreadPool.class, configurationManager, methodConfigs);
@@ -57,8 +60,14 @@ public class InstrumentationTest {
     }
 
     @Test
-    public void instrumentationSaveParameters() {
+    public void saveParameters() {
         classTest(SaveParameters.class, configurationManagerSaveParams, methodConfigsSaveParams);
+        classTest(SaveSecondParam.class, configurationManagerSaveSecondParam, methodConfigsSaveSecondParam);
+    }
+
+    @Test
+    public void saveReturnValue() {
+        classTest(SaveReturnValue.class, configurationManagerSaveReturn, methodConfigsSaveReturn);
     }
 
     private void classTest(Class testedClass,
@@ -92,7 +101,7 @@ public class InstrumentationTest {
             cr.accept(
                     new TraceClassVisitor(cw, new PrintWriter(
                             new FileOutputStream(outFile)
-                    )), 0
+                    )), ClassReader.SKIP_DEBUG
             );
 
             TestHelper.compareFiles(new File("src/test/resources/expected/" + fileName + ".txt"),
