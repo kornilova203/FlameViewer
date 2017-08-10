@@ -3,6 +3,7 @@ package com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees.accumula
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeBuilder;
 import com.github.kornilova_l.flamegraph.proto.TreeProtos;
 
+import static com.github.kornilova_l.flamegraph.plugin.server.trees.TreesSet.setTreeWidth;
 import static com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees.accumulative_trees.AccumulativeTreesHelper.*;
 
 public class MethodAccumulativeTreeBuilder implements TreeBuilder {

@@ -12,7 +12,8 @@ import org.jetbrains.annotations.Nullable;
 import java.io.File;
 import java.util.*;
 
-import static com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees.accumulative_trees.AccumulativeTreesHelper.*;
+import static com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees.accumulative_trees.AccumulativeTreesHelper.setNodesOffsetRecursively;
+import static com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees.accumulative_trees.AccumulativeTreesHelper.updateNodeList;
 
 public abstract class TreesSet {
     protected final File logFile;
@@ -267,5 +268,13 @@ public abstract class TreesSet {
             default:
                 throw new IllegalArgumentException("Tree type is not supported");
         }
+    }
+
+    public static void setTreeWidth(TreeProtos.Tree.Builder treeBuilder) {
+        long treeWidth = 0;
+        for (TreeProtos.Tree.Node.Builder node : treeBuilder.getBaseNodeBuilder().getNodesBuilderList()) {
+            treeWidth += node.getWidth();
+        }
+        treeBuilder.setWidth(treeWidth);
     }
 }

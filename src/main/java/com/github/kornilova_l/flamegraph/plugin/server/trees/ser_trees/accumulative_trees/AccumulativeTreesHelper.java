@@ -140,12 +140,4 @@ public class AccumulativeTreesHelper {
             offset += childNode.getWidth();
         }
     }
-
-    public static void setTreeWidth(TreeProtos.Tree.Builder treeBuilder) {
-        long treeWidth = 0;
-        for (TreeProtos.Tree.Node.Builder node : treeBuilder.getBaseNodeBuilder().getNodesBuilderList()) {
-            treeWidth += node.getWidth();
-        }
-        treeBuilder.setWidth(treeWidth);
-    }
 }
