@@ -1,15 +1,27 @@
+const PIX_IN_MS = 0.5;
+
+/**
+ * @param {{css: Function}} $element
+ * @param {String} property
+ * @param {Number} startOffset
+ */
+function scrollHorizontally($element, property, startOffset) {
+    const $window = $(window);
+    $window.scroll(() => {
+        $element.css(property, $window.scrollLeft() + startOffset);
+    });
+}
+
 class CallTreeDrawer extends AccumulativeTreeDrawer {
     /**
      * @param tree
-     * @param {Number} maxDuration
      * @param {Number} id
      */
-    constructor(tree, maxDuration, id) {
+    constructor(tree, id) {
         super(tree);
-        const fullDuration = maxDuration;
-        this.canvasWidth = Math.ceil(this.treeWidth / fullDuration * MAIN_WIDTH);
+        this.canvasWidth = Math.ceil(this.treeWidth * PIX_IN_MS);
         this.threadName = this.tree.getTreeInfo().getThreadName();
-        this.canvasOffset = this.tree.getTreeInfo().getStartTime() / fullDuration * MAIN_WIDTH;
+        this.canvasOffset = this.tree.getTreeInfo().getStartTime() * PIX_IN_MS;
         this.id = id;
     }
 
@@ -17,7 +29,7 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
         this._prepareDraw();
 
         console.log("draw");
-        this.section = this._createSection(this.canvasOffset);
+        this.section = this._createSection();
         this.stage = new createjs.Stage("canvas-" + this.id);
         this.stage.id = "canvas-" + this.id;
         this.stage.enableMouseOver(20);
@@ -38,18 +50,27 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
         this._moveCanvas(maxDepth);
     };
 
-    _createSection(canvasOffset) {
+    _createSection() {
         const sectionContent = templates.tree.getCallTreeSection(
             {
                 id: this.id,
                 threadName: this.threadName,
                 canvasHeight: this.canvasHeight,
                 canvasWidth: this.canvasWidth,
-                canvasOffset: canvasOffset
+                canvasOffset: this.canvasOffset
             }
         ).content;
-        return $(sectionContent).appendTo($("main"));
+        const $section = $(sectionContent);
+        scrollHorizontally($section.find(".call-tree-header"), "padding-left", 20);
+        if (this.id === 0) {
+            CallTreeDrawer.removeSeparateLine($section);
+        }
+        return $section.appendTo($("main"));
     };
+
+    static removeSeparateLine($section) {
+        $section.find('h2').css("border", "none");
+    }
 
     _createPopup() {
         const popupContent = templates.tree.accumulativeTreePopup().content;

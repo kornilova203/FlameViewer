@@ -1,19 +1,21 @@
-/**
- * Main function
- */
 const TreesProto = require('../generated/trees_pb');
 
-function drawTrees(trees) {
-    let maxDuration = trees[0].getTreeInfo().getStartTime() + trees[0].getWidth();
-    for (let i = 1; i < trees.length; i++) {
-        const startTime = trees[i].getTreeInfo().getStartTime();
-        if (startTime + trees[i].getWidth() > maxDuration) {
-            maxDuration = startTime + trees[i].getWidth();
+$(window).on("load", function () {
+    if (fileName !== undefined) {
+        const extension = getExtension(fileName);
+        if (extension !== "jfr") {
+            console.log("not jfr");
+            getAndDrawTrees();
+        } else {
+            showMessage("This type of tree is unavailable for .jfr files")
         }
     }
-    console.log("full duration: " + maxDuration);
+    scrollHorizontally($("nav"), "margin-left", 0);
+});
+
+function drawTrees(trees) {
     for (let i = 0; i < trees.length; i++) {
-        const drawer = new CallTreeDrawer(trees[i], maxDuration, i);
+        const drawer = new CallTreeDrawer(trees[i], i);
         drawer.draw();
     }
 }
@@ -50,16 +52,3 @@ function getAndDrawTrees() {
         request.send();
     });
 }
-
-$(window).on("load", function () {
-    console.log("loaded");
-    if (fileName !== undefined) {
-        const extension = getExtension(fileName);
-        if (extension !== "jfr") {
-            console.log("not jfr");
-            getAndDrawTrees();
-        } else {
-            showMessage("This type of tree is unavailable for .jfr files")
-        }
-    }
-});

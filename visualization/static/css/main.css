@@ -24,7 +24,6 @@ body {
 }
 
 main {
-    width: 1200px;
     display: block;
     margin-top: 0;
     margin-left: calc((100vw - 250px - 1200px) / 2 + 250px);
@@ -39,12 +38,6 @@ h1 {
     text-align: center;
     font-family: "Gotham Pro", sans-serif;
     font-weight: bold;
-}
-
-.call-tree-header {
-    padding-top: 20px;
-    border-top: 2px solid #ddd;
-    margin-bottom: 40px;
 }
 
 .accumulative-tree-header {
@@ -152,6 +145,7 @@ nav {
     padding: 0;
     height: 60px;
     background-color: #f3f3f3;
+    width: 100vw;
 }
 
 nav ul {
