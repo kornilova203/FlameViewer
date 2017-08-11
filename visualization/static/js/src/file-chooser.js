@@ -24,7 +24,7 @@ function showFilesList(projectsDropdown, searchForm, arrowRight, arrowLeft, vert
     projectsDropdown.css("opacity", 1);
     projectsDropdown.css("pointer-events", "auto");
     projectsDropdown.css("position", "relative");
-    $("main").css("margin-left", 250);
+    expandMain();
     // projectsDropdown.show();
     searchForm.show();
     $(".file-form").show();
@@ -46,7 +46,7 @@ function unableHideFilesList() {
     arrowLeft.click(() => { // hide
         projectsDropdown.css("opacity", 0);
         $(".file-menu").css("width", 40);
-        $("main").css("margin-left", 40);
+        shrinkMain();
         projectsDropdown.css("transition", "opacity 50ms");
         projectsDropdown.css("pointer-events", "none");
         projectsDropdown.css("position", "absolute");
@@ -253,4 +253,20 @@ function getFilesList(projectName) {
         }
     };
     request.send();
+}
+
+function expandMain() {
+    if (getPageName() === "call-tree") {
+        $("main").css("margin-left", 250);
+    } else {
+        $("main").css("margin-left", "calc((100vw - 250px - 1200px) / 2 + 250px)");
+    }
+}
+
+function shrinkMain() {
+    if (getPageName() === "call-tree") {
+        $("main").css("margin-left", 40);
+    } else {
+        $("main").css("margin-left", "calc((100vw - 40px - 1200px) / 2 + 40px)");
+    }
 }

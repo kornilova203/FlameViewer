@@ -58,7 +58,7 @@ public class CallTreesBuilder {
                     addMethodEvent(event);
                     break;
                 case NEWCLASS:
-                    classNames.put(event.getNewClass().getId(), event.getNewClass().getName());
+                    registerClass(event);
                     break;
                 case NEWTHREAD:
                     threadsNames.put(event.getNewThread().getId(), event.getNewThread().getName());
@@ -69,6 +69,13 @@ public class CallTreesBuilder {
             }
             event = EventProtos.Event.parseDelimitedFrom(inputStream);
         }
+    }
+
+    private void registerClass(EventProtos.Event event) {
+        String className = event.getNewClass().getName();
+        classNames.put(
+                event.getNewClass().getId(),
+                className.replace('/', '.'));
     }
 
     private void addMethodEvent(EventProtos.Event event) {

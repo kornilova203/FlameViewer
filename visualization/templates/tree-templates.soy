@@ -7,10 +7,11 @@
  * @param canvasWidth
  * @param canvasOffset
  * @param threadName
+ * @param nodesCount
  */
 {template .getCallTreeSection}
 <section>
-    <h2 class="call-tree-header">{$threadName}</h2>
+    <h2 class="call-tree-header">{$threadName} <span>{$nodesCount} {if $nodesCount > 1}calls{else}call{/if}</span></h2>
     <canvas
         id="canvas-{$id}"
         width="{$canvasWidth}"

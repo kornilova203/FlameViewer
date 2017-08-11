@@ -1,9 +1,25 @@
 main {
     margin-left: 250px;
+    padding-left: 20px;
 }
 
 .call-tree-header {
-    padding: 20px;
-    border-top: 2px solid #ddd;
     margin-bottom: 40px;
+    font-weight: normal;
+    font-size: 16px;
+    width: 900px;
+    line-height: 18px;
+}
+
+.call-tree-header span {
+    color: #666;
+    font-style: italic;
+}
+
+section {
+    border-top: 2px solid #ddd;
+}
+
+main:first-child {
+    border-top: 0 solid white;
 }

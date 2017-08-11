@@ -6,6 +6,7 @@ const ZOOMED_PARENT_COLOR = "#94bcff";
 const RESET_ZOOM_BUTTON_COLOR = "#9da1ff";
 const HIGHLIGHT_NOT_SET_COLOR = "#e4e4e4";
 const $window = $(window);
+const SPACE_ABOVE_TREE = 40;
 
 /**
  * Draws tree without:
@@ -17,7 +18,7 @@ class AccumulativeTreeDrawer {
         this.tree = tree;
         this.treeWidth = this.tree.getWidth();
         this.canvasWidth = MAIN_WIDTH;
-        this.canvasHeight = (LAYER_HEIGHT + LAYER_GAP) * this.tree.getDepth() + 70;
+        this.canvasHeight = (LAYER_HEIGHT + LAYER_GAP) * this.tree.getDepth() + SPACE_ABOVE_TREE;
         this.section = null;
         this.stage = null;
         this.zoomedStage = null;
@@ -32,6 +33,19 @@ class AccumulativeTreeDrawer {
         this.currentlyShownNodes = [];
         this.baseNode.fillCommand = {};
         this.wasMainStageHighlighted = false;
+        this.nodesCount = 0;
+    }
+
+    /**
+     * @param node
+     * @public
+     */
+    _countNodesRecursively(node) {
+        this.nodesCount++;
+        const children = node.getNodesList();
+        for (let i = 0; i < children.length; i++) {
+            this._countNodesRecursively(children[i]);
+        }
     }
 
     setHeader(newHeader) {
@@ -203,7 +217,7 @@ class AccumulativeTreeDrawer {
     /**
      * @param {Number} offsetX
      * @param depth
-     * @private
+     * @protected
      */
     _setPopupPosition(offsetX, depth) {
         this.popup
@@ -302,6 +316,7 @@ class AccumulativeTreeDrawer {
         for (let i = 0; i < children.length; i++) {
             children[i].parent = node;
             this._assignParentsAndDepthRecursively(children[i], depth + 1);
+            this.countNodes++;
         }
     }
 

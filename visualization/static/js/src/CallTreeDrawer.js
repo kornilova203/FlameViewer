@@ -3,11 +3,10 @@ const PIX_IN_MS = 0.5;
 /**
  * @param {{css: Function}} $element
  * @param {String} property
- * @param {Number} startOffset
  */
-function scrollHorizontally($element, property, startOffset) {
+function scrollHorizontally($element, property) {
     $window.scroll(() => {
-        $element.css(property, $window.scrollLeft() + startOffset);
+        $element.css(property, $window.scrollLeft());
     });
 }
 
@@ -22,22 +21,23 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
         this.threadName = this.tree.getTreeInfo().getThreadName();
         this.canvasOffset = this.tree.getTreeInfo().getStartTime() * PIX_IN_MS;
         this.id = id;
+        this._countNodesRecursively(this.baseNode);
     }
 
     /**
      * @param {Number} offsetX
      * @param depth
-     * @private
+     * @override
      */
     _setPopupPosition(offsetX, depth) {
         //noinspection JSValidateTypes
         if (offsetX < $window.scrollLeft()) {
             //noinspection JSValidateTypes
             offsetX = $window.scrollLeft();
+        } else {
+            offsetX += 20;
         }
-        this.popup
-            .css("left", offsetX)
-            .css("margin-top", -AccumulativeTreeDrawer._calcNormaOffsetY(depth + 2) + POPUP_MARGIN)
+        super._setPopupPosition(offsetX, depth);
     }
 
     draw() {
@@ -70,22 +70,19 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
             {
                 id: this.id,
                 threadName: this.threadName,
+                nodesCount: this.nodesCount,
                 canvasHeight: this.canvasHeight,
                 canvasWidth: this.canvasWidth,
                 canvasOffset: this.canvasOffset
             }
         ).content;
         const $section = $(sectionContent);
-        scrollHorizontally($section.find(".call-tree-header"), "padding-left", 20);
+        scrollHorizontally($section.find(".call-tree-header"), "padding-left");
         if (this.id === 0) {
-            CallTreeDrawer.removeSeparateLine($section);
+            $section.css("border", "none");
         }
         return $section.appendTo($("main"));
     };
-
-    static removeSeparateLine($section) {
-        $section.find('h2').css("border", "none");
-    }
 
     _createPopup() {
         const popupContent = templates.tree.accumulativeTreePopup().content;
