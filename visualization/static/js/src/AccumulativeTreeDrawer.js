@@ -1,10 +1,11 @@
 const MAIN_WIDTH = 1200;
 const LAYER_HEIGHT = 19;
 const LAYER_GAP = 1;
-const POPUP_MARGIN = 4; // have no idea why there is a gap between popup and canvas
+const POPUP_MARGIN = 6; // have no idea why there is a gap between popup and canvas
 const ZOOMED_PARENT_COLOR = "#94bcff";
 const RESET_ZOOM_BUTTON_COLOR = "#9da1ff";
 const HIGHLIGHT_NOT_SET_COLOR = "#e4e4e4";
+const $window = $(window);
 
 /**
  * Draws tree without:
@@ -25,6 +26,7 @@ class AccumulativeTreeDrawer {
         this.baseNode = this.tree.getBaseNode();
         this.baseNode.depth = 0;
         this.popup = null;
+        this.canvasOffset = 0;
         // for search:
         this.searchVal = "";
         this.currentlyShownNodes = [];
@@ -103,7 +105,7 @@ class AccumulativeTreeDrawer {
      */
     _drawNode(node, color, scaleX, offsetX, isMostFirst, stage) {
         const shape = this._drawRectangle(node, color, scaleX, offsetX, isMostFirst, stage);
-        this._addShowPopupEvent(shape, offsetX, node.depth, node);
+        this._addShowPopupEvent(shape, offsetX + this.canvasOffset, node.depth, node);
         if (scaleX * this.canvasWidth > 5) {
             this._drawLabel(AccumulativeTreeDrawer._getLabelText(node), shape, scaleX, offsetX, node.depth, stage);
         }
@@ -206,7 +208,7 @@ class AccumulativeTreeDrawer {
     _setPopupPosition(offsetX, depth) {
         this.popup
             .css("left", offsetX)
-            .css("margin-top", -AccumulativeTreeDrawer._calcNormaOffsetY(depth) - POPUP_MARGIN)
+            .css("margin-top", -AccumulativeTreeDrawer._calcNormaOffsetY(depth) - POPUP_MARGIN + 1)
     }
 
     static _calcNormaOffsetY(depth) {

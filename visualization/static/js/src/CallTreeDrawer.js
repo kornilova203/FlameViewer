@@ -6,7 +6,6 @@ const PIX_IN_MS = 0.5;
  * @param {Number} startOffset
  */
 function scrollHorizontally($element, property, startOffset) {
-    const $window = $(window);
     $window.scroll(() => {
         $element.css(property, $window.scrollLeft() + startOffset);
     });
@@ -23,6 +22,22 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
         this.threadName = this.tree.getTreeInfo().getThreadName();
         this.canvasOffset = this.tree.getTreeInfo().getStartTime() * PIX_IN_MS;
         this.id = id;
+    }
+
+    /**
+     * @param {Number} offsetX
+     * @param depth
+     * @private
+     */
+    _setPopupPosition(offsetX, depth) {
+        //noinspection JSValidateTypes
+        if (offsetX < $window.scrollLeft()) {
+            //noinspection JSValidateTypes
+            offsetX = $window.scrollLeft();
+        }
+        this.popup
+            .css("left", offsetX)
+            .css("margin-top", -AccumulativeTreeDrawer._calcNormaOffsetY(depth + 2) + POPUP_MARGIN)
     }
 
     draw() {

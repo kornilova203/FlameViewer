@@ -24,7 +24,7 @@ function showFilesList(projectsDropdown, searchForm, arrowRight, arrowLeft, vert
     projectsDropdown.css("opacity", 1);
     projectsDropdown.css("pointer-events", "auto");
     projectsDropdown.css("position", "relative");
-    $("main").css("margin-left", "calc((100vw - 250px - 1200px) / 2 + 250px)");
+    $("main").css("margin-left", 250);
     // projectsDropdown.show();
     searchForm.show();
     $(".file-form").show();
@@ -40,13 +40,13 @@ function unableHideFilesList() {
     const arrowLeft = $("#arrow-left");
     const arrowRight = $("#arrow-right");
     const projectsDropdown = $(".projects-dropdown");
-    const searchForm = $(".search-form");
+    const searchForm = $("#search-file-form");
     const verticalProjectName = $(".vertical-project-name");
     verticalProjectName.html(projectName === "uploaded-files" ? "Uploaded files" : projectName);
     arrowLeft.click(() => { // hide
         projectsDropdown.css("opacity", 0);
         $(".file-menu").css("width", 40);
-        $("main").css("margin-left", "calc((100vw - 40px - 1200px) / 2 + 40px)");
+        $("main").css("margin-left", 40);
         projectsDropdown.css("transition", "opacity 50ms");
         projectsDropdown.css("pointer-events", "none");
         projectsDropdown.css("position", "absolute");

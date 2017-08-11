@@ -39,4 +39,16 @@ class IncomingCallsDrawer extends AccumulativeTreeDrawer {
         }
     }
 
+    /**
+     * @param {Number} offsetX
+     * @param depth
+     * @private
+     * @override
+     */
+    _setPopupPosition(offsetX, depth) {
+        this.popup
+            .css("left", offsetX)
+            .css("margin-top", -this.canvasHeight + AccumulativeTreeDrawer._calcNormaOffsetY(depth + 3) - POPUP_MARGIN)
+    }
+
 }
