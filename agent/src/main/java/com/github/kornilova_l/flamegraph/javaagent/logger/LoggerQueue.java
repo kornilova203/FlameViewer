@@ -22,26 +22,30 @@ public class LoggerQueue {
     }
 
     public static void addToQueue(Object retVal,
-                                  StartData startData,
+                                  long startTime,
+                                  long duration,
+                                  Object[] parameters,
                                   Thread thread,
                                   String className,
                                   String methodName,
                                   String desc,
                                   boolean isStatic) {
         countEventsAdded++;
-        queue.add(new RetValEventData(thread, className, startData.getStartTime(), startData.getDuration(),
-                methodName, desc, isStatic, startData.getParameters(), retVal));
+        queue.add(new RetValEventData(thread, className, startTime, duration,
+                methodName, desc, isStatic, parameters, retVal));
     }
 
     public static void addToQueue(Throwable throwable,
-                                  StartData startData,
+                                  long startTime,
+                                  long duration,
+                                  Object[] parameters,
                                   Thread thread,
                                   String className,
                                   String methodName,
                                   boolean isStatic,
                                   String desc) {
         countEventsAdded++;
-        queue.add(new ThrowableEventData(thread, className, startData.getStartTime(), startData.getDuration(),
-                methodName, desc, isStatic, startData.getParameters(), throwable));
+        queue.add(new ThrowableEventData(thread, className, startTime, duration,
+                methodName, desc, isStatic, parameters, throwable));
     }
 }

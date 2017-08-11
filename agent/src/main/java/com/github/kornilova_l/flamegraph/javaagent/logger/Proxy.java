@@ -1,98 +1,92 @@
 package com.github.kornilova_l.flamegraph.javaagent.logger;
 
+import com.github.kornilova_l.flamegraph.javaagent.logger.event_data_storage.StartData;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-@SuppressWarnings("unused")
 public class Proxy {
     private static final String loggerQueueClassName = "com.github.kornilova_l.flamegraph.javaagent.logger.LoggerQueue";
     private static Class<?> loggerQueue = null;
-    private static Method addEnter = null;
-    private static Method addExit = null;
+    private static Method addRetVal = null;
     private static Method addException = null;
 
+    public static StartData createStartData(long startTime, Object[] parameters) {
+        return new StartData(startTime, parameters);
+    }
+
     @SuppressWarnings("unused")
-    public static void addToQueue(Thread thread,
+    public static void addToQueue(Object retVal,
                                   long startTime,
+                                  long duration,
+                                  Object[] parameters,
+                                  Thread thread,
                                   String className,
                                   String methodName,
-                                  String description,
-                                  boolean isStatic,
-                                  Object[] parameters) {
-        if (addEnter == null) {
+                                  String desc,
+                                  boolean isStatic) {
+        if (addRetVal == null) {
             try {
-                if (loggerQueue == null) {
-                    loggerQueue = ClassLoader.getSystemClassLoader()
-                            .loadClass(loggerQueueClassName);
-                }
-                addEnter = loggerQueue.getMethod("addToQueue",
-                        Thread.class,
+                getLoggerQueueIfNotCached();
+                addRetVal = loggerQueue.getMethod("addToQueue",
+                        Object.class,
                         long.class,
+                        long.class,
+                        Object[].class,
+                        Thread.class,
                         String.class,
+                        String.class,
+                        String.class,
+                        boolean.class);
+            } catch (NoSuchMethodException | ExceptionInInitializerError | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+        try {
+            addRetVal.invoke(null, retVal, startTime, duration, parameters, thread, className, methodName, desc, isStatic);
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void getLoggerQueueIfNotCached() throws ClassNotFoundException {
+        if (loggerQueue == null) {
+            loggerQueue = ClassLoader.getSystemClassLoader()
+                    .loadClass(loggerQueueClassName);
+        }
+    }
+
+    public static void addToQueue(Throwable throwable,
+                                  long startTime,
+                                  long duration,
+                                  Object[] parameters,
+                                  Thread thread,
+                                  String className,
+                                  String methodName,
+                                  boolean isStatic,
+                                  String desc) {
+        if (addException == null) {
+            try {
+                getLoggerQueueIfNotCached();
+                addException = loggerQueue.getMethod("addToQueue",
+                        Throwable.class,
+                        long.class,
+                        long.class,
+                        Object[].class,
+                        Thread.class,
                         String.class,
                         String.class,
                         boolean.class,
-                        Object[].class);
-            } catch (ClassNotFoundException |
-                    NoSuchMethodException |
-                    ExceptionInInitializerError e) {
+                        String.class);
+            } catch (NoSuchMethodException | ExceptionInInitializerError | ClassNotFoundException e) {
                 e.printStackTrace();
             }
         }
         try {
-            addEnter.invoke(null, thread, startTime, className, methodName, description, isStatic, parameters);
+            addException.invoke(null, throwable, startTime, duration, parameters, thread, className, methodName, isStatic, desc);
         } catch (IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
     }
 
-    @SuppressWarnings("unused")
-    public static void addToQueue(Object returnValue, Thread thread, long exitTime) {
-        if (addExit == null) {
-            try {
-                if (loggerQueue == null) {
-                    loggerQueue = ClassLoader.getSystemClassLoader()
-                            .loadClass(loggerQueueClassName);
-                }
-                addExit = loggerQueue.getMethod("addToQueue",
-                        Object.class,
-                        Thread.class,
-                        long.class);
-            } catch (ClassNotFoundException |
-                    NoSuchMethodException |
-                    ExceptionInInitializerError e) {
-                e.printStackTrace();
-            }
-        }
-        try {
-            addExit.invoke(null, returnValue, thread, exitTime);
-        } catch (IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @SuppressWarnings("unused")
-    public static void addToQueue(Thread thread, Throwable throwable, long exitTime) {
-        if (addException == null) {
-            try {
-                if (loggerQueue == null) {
-                    loggerQueue = ClassLoader.getSystemClassLoader()
-                            .loadClass(loggerQueueClassName);
-                }
-                addException = loggerQueue.getMethod("addToQueue",
-                        Thread.class,
-                        Throwable.class,
-                        long.class);
-            } catch (ClassNotFoundException |
-                    NoSuchMethodException |
-                    ExceptionInInitializerError e) {
-                e.printStackTrace();
-            }
-        }
-        try {
-            addException.invoke(null, thread, throwable, exitTime);
-        } catch (IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
-    }
 }

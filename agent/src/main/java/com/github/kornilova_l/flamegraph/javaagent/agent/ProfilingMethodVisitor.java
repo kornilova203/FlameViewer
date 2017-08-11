@@ -18,7 +18,7 @@ class ProfilingMethodVisitor extends AdviceAdapter {
     private final boolean hasSystemCL;
     private final MethodConfig methodConfig;
     private int startData;
-    private Label end = new Label();
+    private Label start;
 
 
     ProfilingMethodVisitor(int access, String methodName, String desc,
@@ -79,19 +79,27 @@ class ProfilingMethodVisitor extends AdviceAdapter {
         startData = newLocal(org.objectweb.asm.Type.getType(
                 "Lcom/github/kornilova_l/flamegraph/javaagent/logger/event_data_storage/StartData;"
         ));
-        mv.visitMethodInsn(INVOKESTATIC, "com/github/kornilova_l/flamegraph/javaagent/logger/LoggerQueue",
-                "createStartData",
-                "(J[Ljava/lang/Object;)Lcom/github/kornilova_l/flamegraph/javaagent/logger/event_data_storage/StartData;",
-                false);
+        if (hasSystemCL) {
+            mv.visitMethodInsn(INVOKESTATIC, LOGGER_PACKAGE_NAME + "LoggerQueue",
+                    "createStartData",
+                    "(J[Ljava/lang/Object;)Lcom/github/kornilova_l/flamegraph/javaagent/logger/event_data_storage/StartData;",
+                    false);
+        } else {
+            mv.visitMethodInsn(INVOKESTATIC, LOGGER_PACKAGE_NAME + "Proxy",
+                    "createStartData",
+                    "(J[Ljava/lang/Object;)Lcom/github/kornilova_l/flamegraph/javaagent/logger/event_data_storage/StartData;",
+                    false);
+        }
     }
 
     private void addTryCatchBeginning() {
-        Label start = new Label();
-        mv.visitTryCatchBlock(start, end, end, "java/lang/Throwable");
+        start = new Label();
         mv.visitLabel(start);
     }
 
     private void endTryCatch() {
+        Label end = new Label();
+        mv.visitTryCatchBlock(start, end, end, "java/lang/Throwable");
         mv.visitLabel(end);
         getIfWasThrownByMethod();
         Label ifLabel = new Label();
@@ -130,10 +138,10 @@ class ProfilingMethodVisitor extends AdviceAdapter {
         String description = null;
         switch (type) {
             case RetVal:
-                description = "(Ljava/lang/Object;Lcom/github/kornilova_l/flamegraph/javaagent/logger/event_data_storage/StartData;Ljava/lang/Thread;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Z)V";
+                description = "(Ljava/lang/Object;JJ[Ljava/lang/Object;Ljava/lang/Thread;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Z)V";
                 break;
             case Throwable:
-                description = "(Ljava/lang/Throwable;Lcom/github/kornilova_l/flamegraph/javaagent/logger/event_data_storage/StartData;Ljava/lang/Thread;Ljava/lang/String;Ljava/lang/String;ZLjava/lang/String;)V";
+                description = "(Ljava/lang/Throwable;JJ[Ljava/lang/Object;Ljava/lang/Thread;Ljava/lang/String;Ljava/lang/String;ZLjava/lang/String;)V";
                 break;
         }
         if (hasSystemCL) {
@@ -342,7 +350,6 @@ class ProfilingMethodVisitor extends AdviceAdapter {
         } else {
             retValToObj();
         }
-        getStartData();
         getCommonExitData();
         addToQueue(Type.RetVal);
     }
@@ -353,7 +360,6 @@ class ProfilingMethodVisitor extends AdviceAdapter {
         } else {
             loadNull();
         }
-        getStartData();
         getCommonExitData();
         // last two parameters is swapped to avoid ambiguous call
         mv.visitInsn(SWAP);
@@ -361,6 +367,15 @@ class ProfilingMethodVisitor extends AdviceAdapter {
     }
 
     private void getCommonExitData() {
+        getStartData();
+        mv.visitMethodInsn(INVOKEVIRTUAL, "com/github/kornilova_l/flamegraph/javaagent/logger/event_data_storage/StartData",
+                "getStartTime", "()J", false);
+        getStartData();
+        mv.visitMethodInsn(INVOKEVIRTUAL, "com/github/kornilova_l/flamegraph/javaagent/logger/event_data_storage/StartData",
+                "getDuration", "()J", false);
+        getStartData();
+        mv.visitMethodInsn(INVOKEVIRTUAL, "com/github/kornilova_l/flamegraph/javaagent/logger/event_data_storage/StartData",
+                "getParameters", "()[Ljava/lang/Object;", false);
         getThread();
         mv.visitLdcInsn(className);
         mv.visitLdcInsn(methodName);

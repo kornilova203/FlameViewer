@@ -7,7 +7,7 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
     constructor(tree, maxDuration, id) {
         super(tree);
         const fullDuration = maxDuration;
-        this.canvasWidth = this.treeWidth / fullDuration * MAIN_WIDTH;
+        this.canvasWidth = Math.ceil(this.treeWidth / fullDuration * MAIN_WIDTH);
         this.threadName = this.tree.getTreeInfo().getThreadName();
         this.canvasOffset = this.tree.getTreeInfo().getStartTime() / fullDuration * MAIN_WIDTH;
         this.id = id;

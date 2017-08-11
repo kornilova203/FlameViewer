@@ -35,9 +35,9 @@ public class Logger implements Runnable {
     }
 
     private void writeToFile(List<EventProtos.Event> events) {
-        for (EventProtos.Event event : events) {
-            System.out.println(event.toString());
-        }
+//        for (EventProtos.Event event : events) {
+//            System.out.println(event.toString());
+//        }
         try {
             for (EventProtos.Event event : events) {
                 event.writeDelimitedTo(outputStream);
@@ -61,6 +61,7 @@ public class Logger implements Runnable {
 
     public void closeOutputStream() {
         try {
+            System.out.println("close output stream");
             outputStream.close();
         } catch (IOException e) {
             e.printStackTrace();

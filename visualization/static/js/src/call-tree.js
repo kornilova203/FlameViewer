@@ -11,6 +11,7 @@ function drawTrees(trees) {
             maxDuration = startTime + trees[i].getWidth();
         }
     }
+    console.log("full duration: " + maxDuration);
     for (let i = 0; i < trees.length; i++) {
         const drawer = new CallTreeDrawer(trees[i], maxDuration, i);
         drawer.draw();
@@ -62,14 +63,3 @@ $(window).on("load", function () {
         }
     }
 });
-
-function getProjectName() {
-    const parameters = window.location.href.split("?")[1]
-        .split("&");
-    for (let i = 0; i < parameters.length; i++) {
-        if (parameters[i].startsWith("project")) {
-            return parameters[i].substring(parameters[i].indexOf("=") + 1, parameters[i].length);
-        }
-    }
-    return "";
-}

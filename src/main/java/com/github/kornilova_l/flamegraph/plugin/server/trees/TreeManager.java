@@ -16,46 +16,45 @@ import java.util.List;
 public class TreeManager {
     private static final Logger LOG = Logger.getInstance(TreeManager.class);
     private final HashMap<String, TreesSet> treesSets = new HashMap<>();
+    private File currentFile = null;
+    private TreesSet currentTreesSet = null;
 
     public TreeManager() {
     }
 
     @Nullable
     public TreesProtos.Trees getCallTree(File logFile, @Nullable Configuration configuration) {
-        Extension extension = ProfilerHttpRequestHandler.getExtension(logFile.getName());
-        TreesSet treesSet;
-        switch (extension) {
-            case JFR:
-                treesSet = treesSets.computeIfAbsent(logFile.getAbsolutePath(),
-                        n -> new JfrTreesSet(logFile));
-                return treesSet.getCallTree(configuration);
-            case SER:
-                treesSet = treesSets.computeIfAbsent(logFile.getAbsolutePath(),
-                        n -> new SerTreesSet(logFile));
-                return treesSet.getCallTree(configuration);
-            case UNSUPPORTED:
-            default:
-                throw new IllegalArgumentException("Extension is unsupported");
+        updateTreesSet(logFile);
+
+        return currentTreesSet.getCallTree(configuration);
+
+    }
+
+    private void updateTreesSet(File logFile) {
+        if (logFile != currentFile) {
+            currentFile = logFile;
+            Extension extension = ProfilerHttpRequestHandler.getExtension(logFile.getName());
+            switch (extension) {
+                case JFR:
+                    currentTreesSet = treesSets.computeIfAbsent(logFile.getAbsolutePath(),
+                            n -> new JfrTreesSet(logFile));
+                    break;
+                case SER:
+                    currentTreesSet = treesSets.computeIfAbsent(logFile.getAbsolutePath(),
+                            n -> new SerTreesSet(logFile));
+                    break;
+                case UNSUPPORTED:
+                default:
+                    throw new IllegalArgumentException("Extension is unsupported");
+            }
         }
     }
 
     @Nullable
     public TreeProtos.Tree getTree(File logFile, TreeType treeType, @Nullable Configuration configuration) {
-        Extension extension = ProfilerHttpRequestHandler.getExtension(logFile.getName());
-        TreesSet treesSet;
-        switch (extension) {
-            case JFR:
-                treesSet = treesSets.computeIfAbsent(logFile.getAbsolutePath(),
-                        n -> new JfrTreesSet(logFile));
-                return treesSet.getTree(treeType, configuration);
-            case SER:
-                treesSet = treesSets.computeIfAbsent(logFile.getAbsolutePath(),
-                        n -> new SerTreesSet(logFile));
-                return treesSet.getTree(treeType, configuration);
-            case UNSUPPORTED:
-            default:
-                throw new IllegalArgumentException("Extension is unsupported");
-        }
+        updateTreesSet(logFile);
+
+        return currentTreesSet.getTree(treeType, configuration);
     }
 
     @Nullable
@@ -66,39 +65,14 @@ public class TreeManager {
                                    String desc,
                                    boolean isStatic,
                                    @Nullable Configuration configuration) {
-        Extension extension = ProfilerHttpRequestHandler.getExtension(logFile.getName());
-        TreesSet treesSet;
-        switch (extension) {
-            case JFR:
-                treesSet = treesSets.computeIfAbsent(logFile.getAbsolutePath(),
-                        n -> new JfrTreesSet(logFile));
-                return treesSet.getTree(treeType, className, methodName, desc, isStatic, configuration);
-            case SER:
-                treesSet = treesSets.computeIfAbsent(logFile.getAbsolutePath(),
-                        n -> new SerTreesSet(logFile));
-                return treesSet.getTree(treeType, className, methodName, desc, isStatic, configuration);
-            case UNSUPPORTED:
-            default:
-                throw new IllegalArgumentException("Extension is unsupported");
-        }
+        updateTreesSet(logFile);
+        return currentTreesSet.getTree(treeType, className, methodName, desc, isStatic, configuration);
+
     }
 
     public List<TreesSet.HotSpot> getHotSpots(File logFile) {
-        Extension extension = ProfilerHttpRequestHandler.getExtension(logFile.getName());
-        TreesSet treesSet;
-        switch (extension) {
-            case JFR:
-                treesSet = treesSets.computeIfAbsent(logFile.getAbsolutePath(),
-                        n -> new JfrTreesSet(logFile));
-                return treesSet.getHotSpots();
-            case SER:
-                treesSet = treesSets.computeIfAbsent(logFile.getAbsolutePath(),
-                        n -> new SerTreesSet(logFile));
-                return treesSet.getHotSpots();
-            case UNSUPPORTED:
-            default:
-                throw new IllegalArgumentException("Extension is unsupported");
-        }
+        updateTreesSet(logFile);
+        return currentTreesSet.getHotSpots();
     }
 
     public enum TreeType {

@@ -52,30 +52,41 @@ public class InstrumentationTest {
 
     @Test
     public void basicInstrumentation() {
-        classTest(OneMethod.class, configurationManager, methodConfigs);
-        classTest(ThrowsException.class, configurationManager, methodConfigs);
+        classTest(OneMethod.class, configurationManager, methodConfigs, true);
+        classTest(ThrowsException.class, configurationManager, methodConfigs, true);
         // next test fails because TraceClassVisitor inserts spaces to end of lines
 //        classTest(UsesThreadPool.class, configurationManager, methodConfigs);
-        classTest(SeveralReturns.class, configurationManager, methodConfigs);
-        classTest(TwoMethods.class, configurationManager, methodConfigs);
+        classTest(SeveralReturns.class, configurationManager, methodConfigs, true);
+        classTest(TwoMethods.class, configurationManager, methodConfigs, true);
     }
 
     // TODO: check other tests
 
     @Test
     public void saveParameters() {
-        classTest(SaveParameters.class, configurationManagerSaveParams, methodConfigsSaveParams);
-        classTest(SaveSecondParam.class, configurationManagerSaveSecondParam, methodConfigsSaveSecondParam);
+        classTest(SaveParameters.class, configurationManagerSaveParams, methodConfigsSaveParams, true);
+        classTest(SaveSecondParam.class, configurationManagerSaveSecondParam, methodConfigsSaveSecondParam, true);
     }
 
     @Test
     public void saveReturnValue() {
-        classTest(SaveReturnValue.class, configurationManagerSaveReturn, methodConfigsSaveReturn);
+        classTest(SaveReturnValue.class, configurationManagerSaveReturn, methodConfigsSaveReturn, true);
+    }
+
+    @Test
+    public void useProxy() {
+        classTest(UseProxy.class, configurationManagerSaveReturn, methodConfigsSaveReturn, false);
+    }
+
+    @Test
+    public void hasCatch() {
+        classTest(HasCatch.class, configurationManagerSaveReturn, methodConfigsSaveReturn, true);
     }
 
     private void classTest(Class testedClass,
                            AgentConfigurationManager configurationManager,
-                           Set<MethodConfig> methodConfigs) {
+                           Set<MethodConfig> methodConfigs,
+                           boolean hasSystemCL) {
         try {
             String fullName = testedClass.getName();
             String fileName = removePackage(fullName);
@@ -88,7 +99,7 @@ public class InstrumentationTest {
                     new ProfilingClassVisitor(
                             cw,
                             fullName.replace('.', '/'),
-                            true,
+                            hasSystemCL,
                             methodConfigs,
                             configurationManager
                     ), ClassReader.SKIP_FRAMES | ClassReader.SKIP_DEBUG
