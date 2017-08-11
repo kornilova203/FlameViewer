@@ -26,7 +26,7 @@ class AccumulativeTreeDrawer {
         this.biggestSelfTime = 0;
         this.baseNode = this.tree.getBaseNode();
         this.baseNode.depth = 0;
-        this.popup = null;
+        this.$popup = null;
         this.canvasOffset = 0;
         // for search:
         this.searchVal = "";
@@ -185,7 +185,7 @@ class AccumulativeTreeDrawer {
 
     _createPopup() {
         const popupContent = templates.tree.accumulativeTreePopup().content;
-        this.popup = $(popupContent).appendTo(this.section);
+        this.$popup = $(popupContent).appendTo(this.section);
     }
 
     /**
@@ -220,7 +220,7 @@ class AccumulativeTreeDrawer {
      * @protected
      */
     _setPopupPosition(offsetX, depth) {
-        this.popup
+        this.$popup
             .css("left", offsetX)
             .css("margin-top", -AccumulativeTreeDrawer._calcNormaOffsetY(depth) - POPUP_MARGIN + 1)
     }
@@ -239,28 +239,28 @@ class AccumulativeTreeDrawer {
     _addShowPopupEvent(shape, offsetX, depth, node) {
         let isPopupHovered = false;
         let isMethodHovered = false;
-        this.popup.hover(
+        this.$popup.hover(
             () => {
                 isPopupHovered = true;
             },
             () => {
                 isPopupHovered = false;
                 if (!isMethodHovered) {
-                    this.popup.hide();
+                    this.$popup.hide();
                 }
             });
         // noinspection JSUnresolvedFunction
         shape.addEventListener("mouseover", () => {
             isMethodHovered = true;
-            AccumulativeTreeDrawer._setPopupContent(node);
+            this._setPopupContent(node);
             this._setPopupPosition(offsetX, depth);
-            this.popup.show();
+            this.$popup.show();
         });
         // noinspection JSUnresolvedFunction
         shape.addEventListener("mouseout", () => {
             isMethodHovered = false;
             if (!isPopupHovered) {
-                this.popup.hide();
+                this.$popup.hide();
             }
         });
     }
@@ -482,16 +482,16 @@ class AccumulativeTreeDrawer {
 
     /**
      * @param node
-     * @private
+     * @protected
      */
-    static _setPopupContent(node) {
+    _setPopupContent(node) {
         const desc = node.getNodeInfo().getDescription()
             .split("/").join("%2F")
             .split("(").join("%28")
             .split(")").join("%29")
             .split(";").join("%3B");
-        $(".popup h3").text(`${node.getNodeInfo().getClassName()}.${node.getNodeInfo().getMethodName()}`);
-        $(".popup .outgoing-link").attr("href", `/flamegraph-profiler/outgoing-calls?` +
+        this.$popup.find("h3").text(`${node.getNodeInfo().getClassName()}.${node.getNodeInfo().getMethodName()}`);
+        this.$popup.find(".outgoing-link").attr("href", `/flamegraph-profiler/outgoing-calls?` +
             `file=${fileName}&` +
             `project=${projectName}&` +
             `method=${node.getNodeInfo().getMethodName()}&` +
@@ -499,7 +499,7 @@ class AccumulativeTreeDrawer {
             `desc=${desc}&` +
             `isStatic=${node.getNodeInfo().getIsStatic() === true ? "true" : "false"}`
         );
-        $(".popup .incoming-link").attr("href", `/flamegraph-profiler/incoming-calls?` +
+        this.$popup.find(".incoming-link").attr("href", `/flamegraph-profiler/incoming-calls?` +
             `file=${fileName}&` +
             `project=${projectName}&` +
             `method=${node.getNodeInfo().getMethodName()}&` +

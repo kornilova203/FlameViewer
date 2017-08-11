@@ -51,16 +51,15 @@
 
 /**
  * Generate popup for method in call tree
- * @param duration
- * @param startTime
- * @param methodName
- * @param className
  */
 {template .callTreePopup}
 <div class="popup">
-    <h3>{$className}.<b>{$methodName}</b></h3>
-    <p>Start time: {$startTime}ms</p>
-    <p>Duration: {$duration}ms</p>
+    <ul>
+        <li><a class="outgoing-link">Outgoing Calls</a></li>
+        <li><a class="incoming-link">Incoming Calls</a></li>
+    </ul>
+    <h3></h3>
+    <p class="duration"></p>
 </div>
 {/template}
 

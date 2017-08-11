@@ -25,6 +25,16 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
     }
 
     /**
+     * @param node
+     * @private
+     * @override
+     */
+    _setPopupContent(node) {
+        super._setPopupContent(node);
+        this.$popup.find(".duration").text("duration: " + node.getWidth() + " ms")
+    }
+
+    /**
      * @param {Number} offsetX
      * @param depth
      * @override
@@ -85,7 +95,7 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
     };
 
     _createPopup() {
-        const popupContent = templates.tree.accumulativeTreePopup().content;
-        this.popup = $(popupContent).appendTo($("main"));
+        const popupContent = templates.tree.callTreePopup().content;
+        this.$popup = $(popupContent).appendTo($("main"));
     }
 }
