@@ -27,7 +27,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class AddMethodToConfigAction extends AnAction {
     @Nullable
-    protected static Editor getEditor(@NotNull AnActionEvent event, @NotNull Project project) {
+    static Editor getEditor(@NotNull AnActionEvent event, @NotNull Project project) {
         Editor editor = event.getData(CommonDataKeys.EDITOR);
         if (editor == null) {
             return FileEditorManager.getInstance(project).getSelectedTextEditor();
@@ -36,9 +36,9 @@ public class AddMethodToConfigAction extends AnAction {
     }
 
     @Nullable
-    protected static PsiMethod getMethod(@NotNull AnActionEvent event,
-                                       @NotNull Editor editor,
-                                       @NotNull Project project) {
+    static PsiMethod getMethod(@NotNull AnActionEvent event,
+                               @NotNull Editor editor,
+                               @NotNull Project project) {
         PsiMethod method = null;
 
         if (ActionPlaces.PROJECT_VIEW_POPUP.equals(event.getPlace()) ||
@@ -67,7 +67,7 @@ public class AddMethodToConfigAction extends AnAction {
     }
 
     @Nullable
-    protected static PsiMethod findMethod(Project project, Editor editor) {
+    private static PsiMethod findMethod(Project project, Editor editor) {
         if (editor == null) {
             return null;
         }

@@ -5,10 +5,7 @@ import com.github.kornilova_l.flamegraph.configuration.MethodConfig;
 import com.github.kornilova_l.flamegraph.proto.TreeProtos;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiParameter;
-import com.intellij.psi.PsiTypeElement;
+import com.intellij.psi.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -40,23 +37,50 @@ public class PluginConfigManager {
 
     @NotNull
     public static MethodConfig newMethodConfig(@NotNull PsiMethod psiMethod) {
-        String classPatternString;
+        String classPatternString = "";
         String methodPatternString;
-        if (psiMethod.getContainingClass() == null ||
-                psiMethod.getContainingClass().getQualifiedName() == null) {
-            classPatternString = "";
+        PsiClass psiClass = psiMethod.getContainingClass();
+        if (psiClass instanceof PsiAnonymousClass) {
+            PsiClass outerClass = getOuterClass((PsiAnonymousClass) psiClass);
+            if (outerClass != null) {
+                classPatternString = formClassString(outerClass) +
+                        "$*";
+            }
         } else {
-            classPatternString = formClassString(psiMethod);
+            classPatternString = formClassString(psiClass);
         }
         methodPatternString = psiMethod.getName();
+        if (isInit(psiMethod, methodPatternString)) {
+            methodPatternString = "<init>";
+        }
         LinkedList<MethodConfig.Parameter> parameters = getParametersList(psiMethod.getParameterList().getParameters());
         return new MethodConfig(classPatternString, methodPatternString, parameters, true, false);
     }
 
-    @NotNull
-    private static String formClassString(@NotNull PsiMethod psiMethod) {
-        StringBuilder stringBuilder = new StringBuilder();
+    @Nullable
+    private static PsiClass getOuterClass(@NotNull PsiAnonymousClass psiClass) {
+        PsiElement psiElement = psiClass.getParent();
+        while (psiElement != null) {
+            if (psiElement instanceof PsiClass) {
+                return ((PsiClass) psiElement);
+            }
+            psiElement = psiElement.getParent();
+        }
+        return null;
+    }
+
+    private static boolean isInit(PsiMethod psiMethod, String methodPatternString) {
         PsiClass psiClass = psiMethod.getContainingClass();
+        return psiClass != null &&
+                Objects.equals(psiClass.getName(), methodPatternString);
+    }
+
+    @NotNull
+    private static String formClassString(@Nullable PsiClass psiClass) {
+        if (psiClass == null) {
+            return "";
+        }
+        StringBuilder stringBuilder = new StringBuilder();
         String packageName = "";
         while (psiClass != null) {
             stringBuilder.insert(0, psiClass.getName() + "$");

@@ -37,13 +37,13 @@ public class Configuration implements Cloneable {
     @NotNull
     private static Set<MethodConfig> getApplicableMethodConfigs(@NotNull Set<MethodConfig> methodConfigs,
                                                                 @NotNull MethodConfig testedConfig) {
-        Set<MethodConfig> excludingConfigs = new TreeSet<>();
+        Set<MethodConfig> applicableMethodConfigs = new TreeSet<>();
         for (MethodConfig methodConfig : methodConfigs) {
             if (methodConfig.isApplicableTo(testedConfig)) {
-                excludingConfigs.add(methodConfig);
+                applicableMethodConfigs.add(methodConfig);
             }
         }
-        return excludingConfigs;
+        return applicableMethodConfigs;
     }
 
     public Set<MethodConfig> getIncludingMethodConfigs() {
