@@ -10,7 +10,6 @@ $(window).on("load", function () {
             showMessage("This type of tree is unavailable for .jfr files")
         }
     }
-    scrollHorizontally($("nav"), "margin-left");
 });
 
 function drawTrees(trees) {

@@ -1,6 +1,15 @@
+body {
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
 main {
     margin-left: 250px;
     padding-left: 20px;
+    width: calc(100vw - 250px);
+    box-sizing: border-box;
+    overflow: scroll;
+    height: calc(100vh - 60px);
 }
 
 .call-tree-header {

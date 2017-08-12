@@ -5,7 +5,6 @@ const POPUP_MARGIN = 6; // have no idea why there is a gap between popup and can
 const ZOOMED_PARENT_COLOR = "#94bcff";
 const RESET_ZOOM_BUTTON_COLOR = "#9da1ff";
 const HIGHLIGHT_NOT_SET_COLOR = "#e4e4e4";
-const $window = $(window);
 const SPACE_ABOVE_TREE = 40;
 
 /**
@@ -316,7 +315,6 @@ class AccumulativeTreeDrawer {
         for (let i = 0; i < children.length; i++) {
             children[i].parent = node;
             this._assignParentsAndDepthRecursively(children[i], depth + 1);
-            this.countNodes++;
         }
     }
 

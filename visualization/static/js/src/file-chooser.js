@@ -1,6 +1,7 @@
 const KEYCODE_ESC = 27;
 const KEYCODE_ENTER = 13;
 const projectName = getParameter("project");
+let $main = null;
 if (projectName === undefined) {
     console.log("project is not defined");
 }
@@ -10,6 +11,7 @@ if (fileName === undefined) {
 }
 
 $(window).on("load", () => {
+    $main = $("main");
     getFilesList(projectName);
     showProjectsList();
     if (fileName === undefined) {
@@ -257,7 +259,8 @@ function getFilesList(projectName) {
 
 function expandMain() {
     if (getPageName() === "call-tree") {
-        $("main").css("margin-left", 250);
+        $main.css("margin-left", 250);
+        $main.css("width", "calc(100vw - 250px)")
     } else {
         $("main").css("margin-left", "calc((100vw - 250px - 1200px) / 2 + 250px)");
     }
@@ -265,7 +268,8 @@ function expandMain() {
 
 function shrinkMain() {
     if (getPageName() === "call-tree") {
-        $("main").css("margin-left", 40);
+        $main.css("margin-left", 40);
+        $main.css("width", "calc(100vw - 40px)")
     } else {
         $("main").css("margin-left", "calc((100vw - 40px - 1200px) / 2 + 40px)");
     }

@@ -5,8 +5,11 @@ const PIX_IN_MS = 0.5;
  * @param {String} property
  */
 function scrollHorizontally($element, property) {
-    $window.scroll(() => {
-        $element.css(property, $window.scrollLeft());
+    const $main = $("main");
+    $main.scroll(() => {
+        console.log("main scroll");
+        //noinspection JSValidateTypes
+        $element.css(property, $main.scrollLeft());
     });
 }
 
@@ -24,6 +27,7 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
         this._countNodesRecursively(this.baseNode);
     }
 
+    //noinspection JSUnusedGlobalSymbols
     /**
      * @param node
      * @private
@@ -34,16 +38,15 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
         this.$popup.find(".duration").text("duration: " + node.getWidth() + " ms")
     }
 
+    //noinspection JSUnusedGlobalSymbols
     /**
      * @param {Number} offsetX
      * @param depth
      * @override
      */
     _setPopupPosition(offsetX, depth) {
-        //noinspection JSValidateTypes
-        if (offsetX < $window.scrollLeft()) {
-            //noinspection JSValidateTypes
-            offsetX = $window.scrollLeft();
+        if (offsetX < $main.scrollLeft()) {
+            offsetX = $main.scrollLeft();
         } else {
             offsetX += 20;
         }
