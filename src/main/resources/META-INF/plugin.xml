@@ -1,14 +1,23 @@
 <idea-plugin>
     <id>com.github.com.kornilovaL</id>
     <name>java-profiling-plugin</name>
-    <version>0.0.1</version>
+    <version>1.1</version>
 
     <description><![CDATA[
       Java Profiling Plugin<br>
     ]]></description>
 
     <change-notes><![CDATA[
-      Release 0.0.1: Initial release.<br>
+      * fixed drawing of incoming calls<br>
+      * width of call tree depends on time<br>
+      * show stages of building and drawing trees<br>
+      * check file extension of uploaded file on client side<br>
+      * convert .jfr files when it's uploaded<br>
+      * fixed counting width of call tree<br>
+      * show line markers for methods of anonymous classes<br>
+      * reimplemented instrumentation: log event is added only if method took >1ms<br>
+      * fixed bug when saving parameters<br>
+      * keep in memory only latest tree<br>
     ]]>
     </change-notes>
 
