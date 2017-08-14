@@ -1,0 +1,162 @@
+// class version 52.0 (52)
+// access flags 0x21
+public class com/github/kornilova_l/flamegraph/javaagent/generate/test_classes/TwoMethods {
+
+
+  // access flags 0x1
+  public <init>()V
+    ALOAD 0
+    INVOKESPECIAL java/lang/Object.<init> ()V
+    RETURN
+    MAXSTACK = 1
+    MAXLOCALS = 1
+
+  // access flags 0x9
+  public static main([Ljava/lang/String;)V
+    TRYCATCHBLOCK L0 L1 L1 java/lang/Throwable
+    INVOKESTATIC java/lang/System.currentTimeMillis ()J
+    ACONST_NULL
+    INVOKESTATIC com/github/kornilova_l/flamegraph/javaagent/logger/LoggerQueue.createStartData (J[Ljava/lang/Object;)Lcom/github/kornilova_l/flamegraph/javaagent/logger/event_data_storage/StartData;
+    ASTORE 1
+   L0
+    NEW com/github/kornilova_l/flamegraph/javaagent/generate/test_classes/TwoMethods
+    DUP
+    INVOKESPECIAL com/github/kornilova_l/flamegraph/javaagent/generate/test_classes/TwoMethods.<init> ()V
+    INVOKESPECIAL com/github/kornilova_l/flamegraph/javaagent/generate/test_classes/TwoMethods.returnString ()Ljava/lang/String;
+    ASTORE 2
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    ALOAD 2
+    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/String;)V
+    ALOAD 1
+    INVOKESTATIC java/lang/System.currentTimeMillis ()J
+    INVOKEVIRTUAL com/github/kornilova_l/flamegraph/javaagent/logger/event_data_storage/StartData.setDuration (J)V
+    ALOAD 1
+    INVOKEVIRTUAL com/github/kornilova_l/flamegraph/javaagent/logger/event_data_storage/StartData.getDuration ()J
+    LCONST_1
+    LCMP
+    IFLE L2
+    ACONST_NULL
+    ALOAD 1
+    INVOKESTATIC java/lang/Thread.currentThread ()Ljava/lang/Thread;
+    LDC "com/github/kornilova_l/flamegraph/javaagent/generate/test_classes/TwoMethods"
+    LDC "main"
+    LDC "([Ljava/lang/String;)V"
+    ICONST_1
+    INVOKESTATIC com/github/kornilova_l/flamegraph/javaagent/logger/LoggerQueue.addToQueue (Ljava/lang/Object;Lcom/github/kornilova_l/flamegraph/javaagent/logger/event_data_storage/StartData;Ljava/lang/Thread;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Z)V
+   L2
+   FRAME APPEND [com/github/kornilova_l/flamegraph/javaagent/logger/event_data_storage/StartData java/lang/String]
+    RETURN
+   L1
+   FRAME FULL [[Ljava/lang/String; com/github/kornilova_l/flamegraph/javaagent/logger/event_data_storage/StartData] [java/lang/Throwable]
+    ALOAD 1
+    INVOKEVIRTUAL com/github/kornilova_l/flamegraph/javaagent/logger/event_data_storage/StartData.isThrownByMethod ()Z
+    IFNE L3
+    ALOAD 1
+    INVOKESTATIC java/lang/System.currentTimeMillis ()J
+    INVOKEVIRTUAL com/github/kornilova_l/flamegraph/javaagent/logger/event_data_storage/StartData.setDuration (J)V
+    ALOAD 1
+    INVOKEVIRTUAL com/github/kornilova_l/flamegraph/javaagent/logger/event_data_storage/StartData.getDuration ()J
+    LCONST_1
+    LCMP
+    IFLE L3
+    ACONST_NULL
+    ALOAD 1
+    INVOKESTATIC java/lang/Thread.currentThread ()Ljava/lang/Thread;
+    LDC "com/github/kornilova_l/flamegraph/javaagent/generate/test_classes/TwoMethods"
+    LDC "main"
+    LDC "([Ljava/lang/String;)V"
+    ICONST_1
+    SWAP
+    INVOKESTATIC com/github/kornilova_l/flamegraph/javaagent/logger/LoggerQueue.addToQueue (Ljava/lang/Throwable;Lcom/github/kornilova_l/flamegraph/javaagent/logger/event_data_storage/StartData;Ljava/lang/Thread;Ljava/lang/String;Ljava/lang/String;ZLjava/lang/String;)V
+   L3
+   FRAME SAME1 java/lang/Throwable
+    ATHROW
+    MAXSTACK = 8
+    MAXLOCALS = 3
+
+  // access flags 0x2
+  private returnString()Ljava/lang/String;
+    TRYCATCHBLOCK L0 L1 L1 java/lang/Throwable
+    INVOKESTATIC java/lang/System.currentTimeMillis ()J
+    ACONST_NULL
+    INVOKESTATIC com/github/kornilova_l/flamegraph/javaagent/logger/LoggerQueue.createStartData (J[Ljava/lang/Object;)Lcom/github/kornilova_l/flamegraph/javaagent/logger/event_data_storage/StartData;
+    ASTORE 1
+   L0
+    NEW java/util/Random
+    DUP
+    INVOKESTATIC java/lang/System.currentTimeMillis ()J
+    INVOKESPECIAL java/util/Random.<init> (J)V
+    ASTORE 2
+    ALOAD 2
+    INVOKEVIRTUAL java/util/Random.nextBoolean ()Z
+    IFNE L2
+    ACONST_NULL
+    ALOAD 1
+    INVOKESTATIC java/lang/System.currentTimeMillis ()J
+    INVOKEVIRTUAL com/github/kornilova_l/flamegraph/javaagent/logger/event_data_storage/StartData.setDuration (J)V
+    ALOAD 1
+    INVOKEVIRTUAL com/github/kornilova_l/flamegraph/javaagent/logger/event_data_storage/StartData.getDuration ()J
+    LCONST_1
+    LCMP
+    IFLE L3
+    ACONST_NULL
+    ALOAD 1
+    INVOKESTATIC java/lang/Thread.currentThread ()Ljava/lang/Thread;
+    LDC "com/github/kornilova_l/flamegraph/javaagent/generate/test_classes/TwoMethods"
+    LDC "returnString"
+    LDC "()Ljava/lang/String;"
+    ICONST_0
+    INVOKESTATIC com/github/kornilova_l/flamegraph/javaagent/logger/LoggerQueue.addToQueue (Ljava/lang/Object;Lcom/github/kornilova_l/flamegraph/javaagent/logger/event_data_storage/StartData;Ljava/lang/Thread;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Z)V
+   L3
+   FRAME FULL [com/github/kornilova_l/flamegraph/javaagent/generate/test_classes/TwoMethods com/github/kornilova_l/flamegraph/javaagent/logger/event_data_storage/StartData java/util/Random] [N]
+    ARETURN
+   L2
+   FRAME SAME
+    LDC "Lucinda"
+    ALOAD 1
+    INVOKESTATIC java/lang/System.currentTimeMillis ()J
+    INVOKEVIRTUAL com/github/kornilova_l/flamegraph/javaagent/logger/event_data_storage/StartData.setDuration (J)V
+    ALOAD 1
+    INVOKEVIRTUAL com/github/kornilova_l/flamegraph/javaagent/logger/event_data_storage/StartData.getDuration ()J
+    LCONST_1
+    LCMP
+    IFLE L4
+    ACONST_NULL
+    ALOAD 1
+    INVOKESTATIC java/lang/Thread.currentThread ()Ljava/lang/Thread;
+    LDC "com/github/kornilova_l/flamegraph/javaagent/generate/test_classes/TwoMethods"
+    LDC "returnString"
+    LDC "()Ljava/lang/String;"
+    ICONST_0
+    INVOKESTATIC com/github/kornilova_l/flamegraph/javaagent/logger/LoggerQueue.addToQueue (Ljava/lang/Object;Lcom/github/kornilova_l/flamegraph/javaagent/logger/event_data_storage/StartData;Ljava/lang/Thread;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Z)V
+   L4
+   FRAME SAME1 java/lang/String
+    ARETURN
+   L1
+   FRAME FULL [com/github/kornilova_l/flamegraph/javaagent/generate/test_classes/TwoMethods com/github/kornilova_l/flamegraph/javaagent/logger/event_data_storage/StartData] [java/lang/Throwable]
+    ALOAD 1
+    INVOKEVIRTUAL com/github/kornilova_l/flamegraph/javaagent/logger/event_data_storage/StartData.isThrownByMethod ()Z
+    IFNE L5
+    ALOAD 1
+    INVOKESTATIC java/lang/System.currentTimeMillis ()J
+    INVOKEVIRTUAL com/github/kornilova_l/flamegraph/javaagent/logger/event_data_storage/StartData.setDuration (J)V
+    ALOAD 1
+    INVOKEVIRTUAL com/github/kornilova_l/flamegraph/javaagent/logger/event_data_storage/StartData.getDuration ()J
+    LCONST_1
+    LCMP
+    IFLE L5
+    ACONST_NULL
+    ALOAD 1
+    INVOKESTATIC java/lang/Thread.currentThread ()Ljava/lang/Thread;
+    LDC "com/github/kornilova_l/flamegraph/javaagent/generate/test_classes/TwoMethods"
+    LDC "returnString"
+    LDC "()Ljava/lang/String;"
+    ICONST_0
+    SWAP
+    INVOKESTATIC com/github/kornilova_l/flamegraph/javaagent/logger/LoggerQueue.addToQueue (Ljava/lang/Throwable;Lcom/github/kornilova_l/flamegraph/javaagent/logger/event_data_storage/StartData;Ljava/lang/Thread;Ljava/lang/String;Ljava/lang/String;ZLjava/lang/String;)V
+   L5
+   FRAME SAME1 java/lang/Throwable
+    ATHROW
+    MAXSTACK = 8
+    MAXLOCALS = 3
+}

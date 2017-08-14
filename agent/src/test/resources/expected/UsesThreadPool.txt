@@ -1,0 +1,86 @@
+// class version 52.0 (52)
+// access flags 0x21
+public class com/github/kornilova_l/flamegraph/javaagent/generate/test_classes/UsesThreadPool {
+
+  // access flags 0x19
+  public final static INNERCLASS java/lang/invoke/MethodHandles$Lookup java/lang/invoke/MethodHandles Lookup
+
+  // access flags 0x1
+  public <init>()V
+   L0
+    LINENUMBER 10 L0
+    ALOAD 0
+    INVOKESPECIAL java/lang/Object.<init> ()V
+    RETURN
+   L1
+    LOCALVARIABLE this Lcom/github/kornilova_l/flamegraph/javaagent/generate/test_classes/UsesThreadPool; L0 L1 0
+    MAXSTACK = 1
+    MAXLOCALS = 1
+
+  // access flags 0x9
+  public static main([Ljava/lang/String;)V throws java/io/IOException java/lang/InterruptedException
+    INVOKESTATIC java/lang/System.currentTimeMillis ()J
+    ACONST_NULL
+    INVOKESTATIC com/github/kornilova_l/flamegraph/javaagent/logger/LoggerQueue.createStartData (J[Ljava/lang/Object;)Lcom/github/kornilova_l/flamegraph/javaagent/logger/event_data_storage/StartData;
+    ASTORE 1
+    ICONST_3
+    INVOKESTATIC java/util/concurrent/Executors.newFixedThreadPool (I)Ljava/util/concurrent/ExecutorService;
+    ASTORE 2
+    ICONST_0
+    ISTORE 3
+   L0
+   FRAME APPEND [com/github/kornilova_l/flamegraph/javaagent/logger/event_data_storage/StartData java/util/concurrent/ExecutorService I]
+    ILOAD 3
+    ICONST_5
+    IF_ICMPGE L1
+    ALOAD 2
+    INVOKEDYNAMIC run()Ljava/lang/Runnable; [
+      // handle kind 0x6 : INVOKESTATIC
+      java/lang/invoke/LambdaMetafactory.metafactory(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodHandle;Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/CallSite;
+      // arguments:
+      ()V,
+      // handle kind 0x6 : INVOKESTATIC
+      com/github/kornilova_l/flamegraph/javaagent/generate/test_classes/UsesThreadPool.lambda$main$0()V,
+      ()V
+    ]
+    INVOKEINTERFACE java/util/concurrent/ExecutorService.submit (Ljava/lang/Runnable;)Ljava/util/concurrent/Future;
+    POP
+    IINC 3 1
+    GOTO L0
+   L1
+   FRAME SAME
+    ALOAD 2
+    INVOKEINTERFACE java/util/concurrent/ExecutorService.shutdown ()V
+    ALOAD 1
+    INVOKESTATIC java/lang/System.currentTimeMillis ()J
+    INVOKEVIRTUAL com/github/kornilova_l/flamegraph/javaagent/logger/event_data_storage/StartData.setDuration (J)V
+    ALOAD 1
+    INVOKEVIRTUAL com/github/kornilova_l/flamegraph/javaagent/logger/event_data_storage/StartData.getDuration ()J
+    LCONST_1
+    LCMP
+    IFLE L2
+    ACONST_NULL
+    ALOAD 1
+    INVOKESTATIC java/lang/Thread.currentThread ()Ljava/lang/Thread;
+    LDC "com/github/kornilova_l/flamegraph/javaagent/generate/test_classes/UsesThreadPool"
+    LDC "main"
+    LDC "([Ljava/lang/String;)V"
+    ICONST_1
+    INVOKESTATIC com/github/kornilova_l/flamegraph/javaagent/logger/LoggerQueue.addToQueue (Ljava/lang/Object;Lcom/github/kornilova_l/flamegraph/javaagent/logger/event_data_storage/StartData;Ljava/lang/Thread;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Z)V
+   L2
+   FRAME SAME
+    RETURN
+    MAXSTACK = 7
+    MAXLOCALS = 4
+
+  // access flags 0x100A
+  private static synthetic lambda$main$0()V
+   L0
+    LINENUMBER 15 L0
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    LDC "hello"
+    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/String;)V
+    RETURN
+    MAXSTACK = 2
+    MAXLOCALS = 0
+}
