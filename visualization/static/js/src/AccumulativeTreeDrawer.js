@@ -52,9 +52,8 @@ class AccumulativeTreeDrawer {
     }
 
     draw() {
-        this._prepareDraw();
-
         console.log("start drawing");
+        this._prepareDraw();
         const startTime = new Date().getTime();
         this.section = this._createSectionWithCanvas();
         this.stage = new createjs.Stage("canvas");
@@ -80,7 +79,6 @@ class AccumulativeTreeDrawer {
      */
     _prepareDraw() {
         this._assignParentsAndDepthRecursively(this.baseNode, 0);
-        this.biggestSelfTime = this._findBiggestSelfTimeRecursively(this.baseNode, 0);
         console.log("biggest self time: " + this.biggestSelfTime);
         this._setOriginalColorRecursively(this.baseNode);
         this._enableSearch();
@@ -326,22 +324,11 @@ class AccumulativeTreeDrawer {
         }
     }
 
-    /**
-     * @param {Function} callback
-     */
-    static showLoader(callback) {
-        $(".loader-background").fadeIn(200, callback);
-    }
-
-    static hideLoader() {
-        $(".loader-background").fadeOut();
-    }
-
     _setNodeZoomed(node) {
         let maxDepth = 0;
         this.currentlyShownNodes = [];
         if (node !== this.baseNode) {
-            AccumulativeTreeDrawer.showLoader(() => {
+            common.showLoader(constants.loaderMessages.drawing, () => {
                 this.zoomedStage.removeAllChildren();
                 this._expandParents(node);
                 maxDepth = this._drawNodesRecursively(
@@ -363,8 +350,8 @@ class AccumulativeTreeDrawer {
                 }
                 $("#" + this.stage.id).hide();
                 $("#" + this.zoomedStage.id).show();
+                common.hideLoader()
             });
-            AccumulativeTreeDrawer.hideLoader()
         } else { // if reset zoom
             if (this.searchVal !== "") {
                 this._setHighlightOnMainStage(this.searchVal);
@@ -490,16 +477,16 @@ class AccumulativeTreeDrawer {
             .split(";").join("%3B");
         this.$popup.find("h3").text(`${node.getNodeInfo().getClassName()}.${node.getNodeInfo().getMethodName()}`);
         this.$popup.find(".outgoing-link").attr("href", `/flamegraph-profiler/outgoing-calls?` +
-            `file=${fileName}&` +
-            `project=${projectName}&` +
+            `file=${constants.fileName}&` +
+            `project=${constants.projectName}&` +
             `method=${node.getNodeInfo().getMethodName()}&` +
             `class=${node.getNodeInfo().getClassName()}&` +
             `desc=${desc}&` +
             `isStatic=${node.getNodeInfo().getIsStatic() === true ? "true" : "false"}`
         );
         this.$popup.find(".incoming-link").attr("href", `/flamegraph-profiler/incoming-calls?` +
-            `file=${fileName}&` +
-            `project=${projectName}&` +
+            `file=${constants.fileName}&` +
+            `project=${constants.projectName}&` +
             `method=${node.getNodeInfo().getMethodName()}&` +
             `class=${node.getNodeInfo().getClassName()}&` +
             `desc=${desc}&` +
@@ -613,35 +600,12 @@ class AccumulativeTreeDrawer {
     }
 
     _setOriginalColorRecursively(node) {
-        const lightness = 70 - (node.selfTime / this.biggestSelfTime) * 30;
+        const lightness = 50;
         node.originalColor = `hsl(205, 94%, ${lightness}%)`;
         const children = node.getNodesList();
         for (let i = 0; i < children.length; i++) {
             this._setOriginalColorRecursively(children[i]);
         }
 
-    }
-
-    /**
-     * @param node
-     * @param biggestSelfTime
-     * @return {Number}
-     * @private
-     */
-    _findBiggestSelfTimeRecursively(node, biggestSelfTime) {
-        let thisNodeSelfTime = node.getWidth();
-        const children = node.getNodesList();
-        for (let i = 0; i < children.length; i++) {
-            thisNodeSelfTime -= children[i].getWidth();
-            const returnedBiggestSelfTime = this._findBiggestSelfTimeRecursively(children[i], biggestSelfTime);
-            if (returnedBiggestSelfTime > biggestSelfTime) {
-                biggestSelfTime = returnedBiggestSelfTime;
-            }
-        }
-        node.selfTime = thisNodeSelfTime;
-        if (thisNodeSelfTime > biggestSelfTime) {
-            return thisNodeSelfTime;
-        }
-        return biggestSelfTime;
     }
 }

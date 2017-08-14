@@ -2,9 +2,11 @@ package com.github.kornilova_l.flamegraph.plugin.server.trees;
 
 import com.github.kornilova_l.flamegraph.configuration.Configuration;
 import com.github.kornilova_l.flamegraph.plugin.configuration.PluginConfigManager;
+import com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees.accumulative_trees.AccumulativeTreesHelper;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees.accumulative_trees.MethodAccumulativeTreeBuilder;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees.accumulative_trees.incoming_calls.IncomingCallsBuilder;
 import com.github.kornilova_l.flamegraph.proto.TreeProtos;
+import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node;
 import com.github.kornilova_l.flamegraph.proto.TreesProtos;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -88,7 +90,7 @@ public abstract class TreesSet {
                 return new LinkedList<>();
             }
             TreeMap<HotSpot, HotSpot> hotSpotTreeMap = new TreeMap<>();
-            for (TreeProtos.Tree.Node node : outgoingCalls.getBaseNode().getNodesList()) { // avoid baseNode
+            for (Node node : outgoingCalls.getBaseNode().getNodesList()) { // avoid baseNode
                 getHotSpotsRecursively(node, hotSpotTreeMap);
             }
             hotSpots.addAll(hotSpotTreeMap.values());
@@ -97,7 +99,7 @@ public abstract class TreesSet {
         return hotSpots;
     }
 
-    private void getHotSpotsRecursively(TreeProtos.Tree.Node node, TreeMap<HotSpot, HotSpot> hotSpotTreeMap) {
+    private void getHotSpotsRecursively(Node node, TreeMap<HotSpot, HotSpot> hotSpotTreeMap) {
         HotSpot hotSpot = new HotSpot(
                 node.getNodeInfo().getClassName(),
                 node.getNodeInfo().getMethodName(),
@@ -106,14 +108,14 @@ public abstract class TreesSet {
         hotSpot = hotSpotTreeMap.computeIfAbsent(hotSpot, k -> k);
         assert outgoingCalls != null;
         hotSpot.addTime((float) getSelfTime(node) / outgoingCalls.getWidth());
-        for (TreeProtos.Tree.Node child : node.getNodesList()) {
+        for (Node child : node.getNodesList()) {
             getHotSpotsRecursively(child, hotSpotTreeMap);
         }
     }
 
-    private long getSelfTime(TreeProtos.Tree.Node node) {
+    private long getSelfTime(Node node) {
         long childTime = 0;
-        for (TreeProtos.Tree.Node child : node.getNodesList()) {
+        for (Node child : node.getNodesList()) {
             childTime += child.getWidth();
         }
         return node.getWidth() - childTime;
@@ -151,7 +153,7 @@ public abstract class TreesSet {
                                          @NotNull Configuration configuration,
                                          boolean isCallTree) {
         TreeProtos.Tree.Builder filteredTree = TreeProtos.Tree.newBuilder();
-        filteredTree.setBaseNode(TreeProtos.Tree.Node.newBuilder());
+        filteredTree.setBaseNode(Node.newBuilder());
         if (isCallTree) {
             filteredTree.setTreeInfo(tree.getTreeInfo());
         }
@@ -183,21 +185,21 @@ public abstract class TreesSet {
         if (offset == 0) {
             return;
         }
-        for (TreeProtos.Tree.Node.Builder node : filteredTree.getBaseNodeBuilder().getNodesBuilderList()) {
+        for (Node.Builder node : filteredTree.getBaseNodeBuilder().getNodesBuilderList()) {
             updateOffsetRecursively(node, offset);
         }
     }
 
-    private void updateOffsetRecursively(TreeProtos.Tree.Node.Builder node, long offset) {
+    private void updateOffsetRecursively(Node.Builder node, long offset) {
         node.setOffset(node.getOffset() - offset);
-        for (TreeProtos.Tree.Node.Builder child : node.getNodesBuilderList()) {
+        for (Node.Builder child : node.getNodesBuilderList()) {
             updateOffsetRecursively(child, offset);
         }
     }
 
-    public static int getMaxDepthRecursively(TreeProtos.Tree.Node.Builder nodeBuilder, int currentDepth) {
+    public static int getMaxDepthRecursively(Node.Builder nodeBuilder, int currentDepth) {
         int maxDepth = currentDepth;
-        for (TreeProtos.Tree.Node.Builder child : nodeBuilder.getNodesBuilderList()) {
+        for (Node.Builder child : nodeBuilder.getNodesBuilderList()) {
             int newDepth = getMaxDepthRecursively(child, currentDepth + 1);
             if (newDepth > maxDepth) {
                 maxDepth = newDepth;
@@ -212,14 +214,14 @@ public abstract class TreesSet {
      * @param configuration decides if child will be added
      * @param isCallTree    if it is a call tree
      */
-    private void buildFilteredTreeRecursively(TreeProtos.Tree.Node.Builder nodeBuilder,
-                                              TreeProtos.Tree.Node node,
+    private void buildFilteredTreeRecursively(Node.Builder nodeBuilder,
+                                              Node node,
                                               @NotNull Configuration configuration,
                                               boolean isCallTree) {
 
-        for (TreeProtos.Tree.Node child : node.getNodesList()) {
+        for (Node child : node.getNodesList()) {
             if (configuration.isMethodInstrumented(PluginConfigManager.newMethodConfig(child))) {
-                TreeProtos.Tree.Node.Builder newNode;
+                Node.Builder newNode;
                 if (isCallTree) {
                     newNode = copyNode(child);
                     newNode.setOffset(child.getOffset());
@@ -240,8 +242,8 @@ public abstract class TreesSet {
     }
 
     @NotNull
-    private TreeProtos.Tree.Node.Builder copyNode(TreeProtos.Tree.Node node) {
-        TreeProtos.Tree.Node.Builder nodeBuilder = TreeProtos.Tree.Node.newBuilder();
+    private Node.Builder copyNode(Node node) {
+        Node.Builder nodeBuilder = Node.newBuilder();
         nodeBuilder.setWidth(node.getWidth());
         nodeBuilder.setNodeInfo(node.getNodeInfo());
         return nodeBuilder;
@@ -270,11 +272,17 @@ public abstract class TreesSet {
         }
     }
 
+    /**
+     * This method must be called after offset of nodes is set
+     * {@link AccumulativeTreesHelper#setNodesOffsetRecursively}
+     *
+     * @param treeBuilder set width to this tree
+     */
     public static void setTreeWidth(TreeProtos.Tree.Builder treeBuilder) {
-        long treeWidth = 0;
-        for (TreeProtos.Tree.Node.Builder node : treeBuilder.getBaseNodeBuilder().getNodesBuilderList()) {
-            treeWidth += node.getWidth();
-        }
-        treeBuilder.setWidth(treeWidth);
+        Node.Builder baseNode = treeBuilder.getBaseNodeBuilder();
+        Node.Builder lastNode = baseNode.getNodesBuilder(baseNode.getNodesCount() - 1);
+        treeBuilder.setWidth(
+                lastNode.getOffset() + lastNode.getWidth()
+        );
     }
 }

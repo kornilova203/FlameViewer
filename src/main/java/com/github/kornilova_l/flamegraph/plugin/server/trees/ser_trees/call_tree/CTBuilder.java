@@ -133,8 +133,8 @@ class CTBuilder {
             baseNode.addNodes(child);
         }
         treeBuilder.setBaseNode(baseNode);
-        setTreeWidth(treeBuilder);
         subtractOffsetRecursively(treeBuilder.getBaseNodeBuilder(), threadStartTime);
+        setTreeWidth(treeBuilder);
         treeBuilder.getTreeInfoBuilder().setStartTime(
                 threadStartTime - startTimeOfFirstThread
         );

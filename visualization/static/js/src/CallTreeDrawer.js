@@ -5,11 +5,10 @@ const PIX_IN_MS = 0.5;
  * @param {String} property
  */
 function scrollHorizontally($element, property) {
-    const $main = $("main");
-    $main.scroll(() => {
-        console.log("main scroll");
+    //noinspection JSUnresolvedFunction
+    constants.$main.scroll(() => {
         //noinspection JSValidateTypes
-        $element.css(property, $main.scrollLeft());
+        $element.css(property, constants.$main.scrollLeft());
     });
 }
 
@@ -45,8 +44,8 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
      * @override
      */
     _setPopupPosition(offsetX, depth) {
-        if (offsetX < $main.scrollLeft()) {
-            offsetX = $main.scrollLeft();
+        if (offsetX < constants.$main.scrollLeft()) {
+            offsetX = constants.$main.scrollLeft();
         } else {
             offsetX += 20;
         }
@@ -92,7 +91,7 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
         const $section = $(sectionContent);
         scrollHorizontally($section.find(".call-tree-header"), "padding-left");
         if (this.id === 0) {
-            $section.css("border", "none");
+            $section.find("h2").css("border", "none");
         }
         return $section.appendTo($("main"));
     };

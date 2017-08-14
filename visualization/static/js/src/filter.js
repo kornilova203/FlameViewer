@@ -9,8 +9,8 @@ $(window).on("load", () => {
     const $includedTextarea = $filterContent.find("#included-textarea");
     const $excludedTextarea = $filterContent.find("#excluded-textarea");
 
-    const currentIncluded = getParameter("include");
-    const currentExcluded = getParameter("exclude");
+    const currentIncluded = common.getParameter("include");
+    const currentExcluded = common.getParameter("exclude");
     if (currentIncluded !== undefined && currentIncluded !== "[]") {
         $includedTextarea.val(currentIncluded.split(",").join("\n"));
     }

@@ -1,72 +1,68 @@
 const KEYCODE_ESC = 27;
 const KEYCODE_ENTER = 13;
-const projectName = getParameter("project");
-let $main = null;
-if (projectName === undefined) {
-    console.log("project is not defined");
-}
-const fileName = getParameter("file");
-if (fileName === undefined) {
-    console.log("file is not defined");
-}
 
 $(window).on("load", () => {
-    $main = $("main");
-    getFilesList(projectName);
+    getFilesList(constants.projectName);
     showProjectsList();
-    if (fileName === undefined) {
+    if (constants.fileName === undefined) {
         showChooseFile();
     }
     unableHideFilesList();
 });
 
-function showFilesList(projectsDropdown, searchForm, arrowRight, arrowLeft, verticalProjectName) {
+function showFilesList($projectsDropdown, $searchForm, $arrowRight, $arrowLeft,
+                       $verticalProjectName, $loaderBackground) {
+    $loaderBackground.css("left", "calc((100vw - 250px) / 2 + 250px - 80px)");
     $(".file-menu").css("width", 250);
-    projectsDropdown.css("transition", "opacity 300ms");
-    projectsDropdown.css("opacity", 1);
-    projectsDropdown.css("pointer-events", "auto");
-    projectsDropdown.css("position", "relative");
+    $projectsDropdown.css("transition", "opacity 300ms");
+    $projectsDropdown.css("opacity", 1);
+    $projectsDropdown.css("pointer-events", "auto");
+    $projectsDropdown.css("position", "relative");
     expandMain();
-    // projectsDropdown.show();
-    searchForm.show();
+    $searchForm.show();
     $(".file-form").show();
-    arrowLeft.show();
-    arrowRight.hide();
-    verticalProjectName.css("transition", "");
-    verticalProjectName.css("opacity", 0);
-    verticalProjectName.css("pointer-events", "none");
+    $arrowLeft.show();
+    $arrowRight.hide();
+    $verticalProjectName.css("transition", "");
+    $verticalProjectName.css("opacity", 0);
+    $verticalProjectName.css("pointer-events", "none");
     $(".file-list").show();
+
 }
 
 function unableHideFilesList() {
-    const arrowLeft = $("#arrow-left");
-    const arrowRight = $("#arrow-right");
-    const projectsDropdown = $(".projects-dropdown");
-    const searchForm = $("#search-file-form");
-    const verticalProjectName = $(".vertical-project-name");
-    verticalProjectName.html(projectName === "uploaded-files" ? "Uploaded files" : projectName);
-    arrowLeft.click(() => { // hide
-        projectsDropdown.css("opacity", 0);
+    const $arrowLeft = $("#arrow-left");
+    const $arrowRight = $("#arrow-right");
+    const $projectsDropdown = $(".projects-dropdown");
+    const $searchForm = $("#search-file-form");
+    const $verticalProjectName = $(".vertical-project-name");
+    const $loaderBackground = $(".loader-background");
+    $verticalProjectName.html(constants.projectName === "uploaded-files" ? "Uploaded files" : constants.projectName);
+    $arrowLeft.click(() => { // hide
+        $loaderBackground.css("left", "calc((100vw - 40px) / 2 + 40px - 80px)");
+        $projectsDropdown.css("opacity", 0);
         $(".file-menu").css("width", 40);
         shrinkMain();
-        projectsDropdown.css("transition", "opacity 50ms");
-        projectsDropdown.css("pointer-events", "none");
-        projectsDropdown.css("position", "absolute");
+        $projectsDropdown.css("transition", "opacity 50ms");
+        $projectsDropdown.css("pointer-events", "none");
+        $projectsDropdown.css("position", "absolute");
         // projectsDropdown.hide();
-        searchForm.hide();
+        $searchForm.hide();
         $(".file-form").hide();
-        arrowLeft.hide();
-        arrowRight.show();
-        verticalProjectName.css("transition", "opacity 300ms");
-        verticalProjectName.css("pointer-events", "auto");
-        verticalProjectName.css("opacity", 1);
+        $arrowLeft.hide();
+        $arrowRight.show();
+        $verticalProjectName.css("transition", "opacity 300ms");
+        $verticalProjectName.css("pointer-events", "auto");
+        $verticalProjectName.css("opacity", 1);
         $(".file-list").hide();
     });
-    arrowRight.click(() => { // show
-        showFilesList(projectsDropdown, searchForm, arrowRight, arrowLeft, verticalProjectName);
+    $arrowRight.click(() => { // show
+        showFilesList($projectsDropdown, $searchForm, $arrowRight, $arrowLeft,
+            $verticalProjectName, $loaderBackground);
     });
-    verticalProjectName.click(() => {
-        showFilesList(projectsDropdown, searchForm, arrowRight, arrowLeft, verticalProjectName);
+    $verticalProjectName.click(() => {
+        showFilesList($projectsDropdown, $searchForm, $arrowRight, $arrowLeft,
+            $verticalProjectName, $loaderBackground);
     });
 }
 
@@ -75,33 +71,11 @@ function getPageName() {
 }
 
 function showChooseFile() {
-    if (projectName === "uploaded-files") {
+    if (constants.projectName === "uploaded-files") {
         showMessage("Choose or upload file");
     } else {
         showMessage("Choose file");
     }
-}
-
-/**
- * @param {String} parameterName
- * @return {undefined|string}
- */
-function getParameter(parameterName) {
-    const parametersString = window.location.href.split("?")[1];
-    if (parametersString === undefined) {
-        return undefined;
-    } else {
-        const parameters = parametersString.split("&");
-        for (let i = 0; i < parameters.length; i++) {
-            if (parameters[i].startsWith(parameterName + "=")) {
-                return parameters[i].substring(
-                    parameters[i].indexOf("=") + 1,
-                    parameters[i].length
-                );
-            }
-        }
-    }
-    return undefined;
 }
 
 function showNoDataFound() {
@@ -126,7 +100,7 @@ function deleteFile(popup, li, liFileName) {
     const request = new XMLHttpRequest();
     request.open("POST", "/flamegraph-profiler/delete-file", true);
     request.setRequestHeader('File-Name', liFileName);
-    request.setRequestHeader('Project-Name', projectName);
+    request.setRequestHeader('Project-Name', constants.projectName);
     request.send();
     li.remove();
     $(document).unbind("keyup");
@@ -152,8 +126,8 @@ function createDeleteFilePopup(li, liFileName) {
     const popup = $(popupText);
     $("body").append(popup);
     let wasPopupClicked = false;
-    if (liFileName === fileName) {
-        popup.find("a").attr("href", "/flamegraph-profiler/" + getPageName() + "?project=" + projectName);
+    if (liFileName === constants.fileName) {
+        popup.find("a").attr("href", "/flamegraph-profiler/" + getPageName() + "?project=" + constants.projectName);
     }
     popup.find(".do-delete").click(() => {
         deleteFile(popup, li, liFileName);
@@ -182,7 +156,7 @@ function updateFilesList(filesList) {
     } else {
         const listString = templates.tree.listOfFiles({
             fileNames: filesList,
-            projectName: projectName,
+            projectName: constants.projectName,
             pageName: getPageName()
         }).content;
         const list = $(listString);
@@ -195,19 +169,19 @@ function updateFilesList(filesList) {
                 createDeleteFilePopup(li, liFileName);
             })
         });
-        if (fileName !== undefined) {
-            $("#" + fileName.replace(/\./, "\\.")).addClass("current-file");
+        if (constants.fileName !== undefined) {
+            $("#" + constants.fileName.replace(/\./, "\\.")).addClass("current-file");
         }
     }
-    if (projectName === "uploaded-files") {
+    if (constants.projectName === "uploaded-files") {
         appendInput();
         listenInput();
     }
 }
 
 function appendProject(project) {
-    if (project === projectName ||
-        (project === "Uploaded files" && projectName === "uploaded-files")) {
+    if (project === constants.projectName ||
+        (project === "Uploaded files" && constants.projectName === "uploaded-files")) {
         return;
     }
     const link = "/flamegraph-profiler/" +
@@ -222,10 +196,10 @@ function appendProject(project) {
 }
 
 function showProjectsList() {
-    if (projectName === "uploaded-files") {
+    if (constants.projectName === "uploaded-files") {
         $(".project-name").text("Uploaded files");
     } else {
-        $(".project-name").text(projectName);
+        $(".project-name").text(constants.projectName);
     }
     const request = new XMLHttpRequest();
     request.open("GET", "/flamegraph-profiler/list-projects", true);
@@ -259,8 +233,8 @@ function getFilesList(projectName) {
 
 function expandMain() {
     if (getPageName() === "call-tree") {
-        $main.css("margin-left", 250);
-        $main.css("width", "calc(100vw - 250px)")
+        constants.$main.css("margin-left", 250);
+        constants.$main.css("width", "calc(100vw - 250px)")
     } else {
         $("main").css("margin-left", "calc((100vw - 250px - 1200px) / 2 + 250px)");
     }
@@ -268,8 +242,8 @@ function expandMain() {
 
 function shrinkMain() {
     if (getPageName() === "call-tree") {
-        $main.css("margin-left", 40);
-        $main.css("width", "calc(100vw - 40px)")
+        constants.$main.css("margin-left", 40);
+        constants.$main.css("width", "calc(100vw - 40px)")
     } else {
         $("main").css("margin-left", "calc((100vw - 40px - 1200px) / 2 + 40px)");
     }

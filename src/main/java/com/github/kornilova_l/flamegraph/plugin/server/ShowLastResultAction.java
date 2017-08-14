@@ -4,7 +4,6 @@ import com.github.kornilova_l.flamegraph.plugin.PluginFileManager;
 import com.intellij.ide.BrowserUtil;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.application.PathManager;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
@@ -22,7 +21,7 @@ public class ShowLastResultAction extends AnAction implements DumbAware {
 
     @NotNull
     private static String getUri(@NotNull Project project) {
-        String fileName = new PluginFileManager(PathManager.getSystemPath()).getLatestFileName(project.getName());
+        String fileName = PluginFileManager.getInstance().getLatestFileName(project.getName());
         if (fileName != null) {
             return ServerNames.CALL_TREE +
                     "?project=" +

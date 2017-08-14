@@ -13,7 +13,6 @@ import org.jetbrains.annotations.Nullable;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Stack;
 import java.util.zip.GZIPInputStream;
 
@@ -22,7 +21,7 @@ import java.util.zip.GZIPInputStream;
  * Converts it to <a href="https://github.com/brendangregg/FlameGraph">FlameGraph</a> format
  * Saves to /stacks dir in profiler dir
  */
-class FlightRecorderConverter {
+public class FlightRecorderConverter {
     private static final String EVENT_TYPE = "Method Profiling Sample";
     private static final String EVENT_VALUE_STACK = "(stackTrace)";
     private static final boolean showReturnValue = true;
@@ -31,33 +30,18 @@ class FlightRecorderConverter {
     private static final boolean ignoreLineNumbers = true;
     private final Map<String, Integer> stacks = new HashMap<>();
 
-    FlightRecorderConverter(@NotNull File file) throws IllegalArgumentException {
-        if (!file.exists()) {
-            throw new IllegalArgumentException("File does not exist");
-        }
-        if (!Objects.equals(getExtension(file), "jfr")) {
-            throw new IllegalArgumentException("Wrong file extension");
-        }
-        FlightRecording recording = getRecording(file);
+    public FlightRecorderConverter(byte[] bytes) throws IllegalArgumentException {
+        FlightRecording recording = getRecording(bytes);
         buildStacks(recording);
     }
 
     @NotNull
-    private static FlightRecording getRecording(@NotNull File file) {
-        try (GZIPInputStream gzipStream = new GZIPInputStream(new FileInputStream(file))) {
+    private static FlightRecording getRecording(byte[] bytes) {
+        try (GZIPInputStream gzipStream = new GZIPInputStream(new ByteArrayInputStream(bytes))) {
             return FlightRecordingLoader.loadStream(gzipStream);
         } catch (IOException e) {
             throw new IllegalArgumentException("File cannot be opened");
         }
-    }
-
-    @NotNull
-    private static String getExtension(@NotNull File file) {
-        int dot = file.getName().lastIndexOf(".");
-        if (dot != -1) {
-            return file.getName().substring(dot + 1, file.getName().length());
-        }
-        return "";
     }
 
     private static Stack<String> getStack(FLRStackTrace flrStackTrace) {
@@ -119,7 +103,7 @@ class FlightRecorderConverter {
         stacks.put(stackTrace, count);
     }
 
-    void writeTo(File file) {
+    public void writeTo(File file) {
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file))) {
             for (Map.Entry<String, Integer> entry : stacks.entrySet()) {
                 bufferedWriter.write(String.format("%s %d%n", entry.getKey(), entry.getValue()));

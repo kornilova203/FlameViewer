@@ -7,7 +7,6 @@ import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeManager;
 import com.github.kornilova_l.flamegraph.proto.TreeProtos;
 import com.github.kornilova_l.flamegraph.proto.TreesProtos;
 import com.google.gson.Gson;
-import com.intellij.openapi.application.PathManager;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -28,7 +27,7 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
 
     private static final com.intellij.openapi.diagnostic.Logger LOG =
             com.intellij.openapi.diagnostic.Logger.getInstance(ProfilerHttpRequestHandler.class);
-    private final PluginFileManager fileManager = new PluginFileManager(PathManager.getSystemPath());
+    private final PluginFileManager fileManager = PluginFileManager.getInstance();
     private final TreeManager treeManager = new TreeManager();
 
     private static void sendTrees(ChannelHandlerContext context,
@@ -89,6 +88,8 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
         switch (extension) {
             case "jfr":
                 return TreeManager.Extension.JFR;
+            case "jfr.converted":
+                return TreeManager.Extension.JFR_CONVERTED;
             case "ser":
                 return TreeManager.Extension.SER;
             default:
@@ -150,11 +151,7 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
         LOG.info("Got filename: " + fileUri);
         String filePath = fileManager.getStaticFilePath(fileUri);
         LOG.info("This file will be sent: " + filePath);
-        try (
-                InputStream inputStream = new FileInputStream(
-                        new File(filePath)
-                )
-        ) {
+        try (InputStream inputStream = new FileInputStream(new File(filePath))) {
             sendBytes(context, contentType, IOUtils.toByteArray(inputStream));
         }
     }
@@ -163,17 +160,10 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
         String uri = urlDecoder.path(); // without get parameters
         switch (uri) {
             case ServerNames.UPLOAD_FILE:
-                String fileName = fullHttpRequest.headers().get("File-Name");
-                LOG.info("Got file: " + fileName);
-                if (getExtension(fileName) != TreeManager.Extension.UNSUPPORTED) {
-                    fileManager.saveFile(fullHttpRequest.content(), fileName);
-                    sendStatus(HttpResponseStatus.OK, context.channel());
-                } else {
-                    sendStatus(HttpResponseStatus.NOT_FOUND, context.channel());
-                }
+                uploadFile(fullHttpRequest, context);
                 return true;
             case ServerNames.DELETE_FILE:
-                fileName = fullHttpRequest.headers().get("File-Name");
+                String fileName = fullHttpRequest.headers().get("File-Name");
                 String projectName = fullHttpRequest.headers().get("Project-Name");
                 if (fileName == null || projectName == null) {
                     return true;
@@ -185,6 +175,26 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
         }
         return false;
     }
+
+    private void uploadFile(FullHttpRequest fullHttpRequest, ChannelHandlerContext context) {
+        String fileName = fullHttpRequest.headers().get("File-Name");
+        LOG.info("Got file: " + fileName);
+        switch (getExtension(fileName)) {
+            case JFR:
+                fileManager.convertAndSave(fullHttpRequest.content(), fileName);
+                break;
+            case SER:
+                fileManager.save(fullHttpRequest.content(), fileName);
+                break;
+            case UNSUPPORTED:
+            default:
+                sendStatus(HttpResponseStatus.BAD_REQUEST, context.channel());
+                return;
+
+        }
+        sendStatus(HttpResponseStatus.OK, context.channel());
+    }
+
 
     @Override
     public boolean process(QueryStringDecoder urlDecoder,
@@ -217,8 +227,9 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
                 return true;
             case ServerNames.FILE_LIST:
                 LOG.info("file list");
-                if (urlDecoder.parameters().containsKey("project")) {
-                    sendFileList(context, urlDecoder.parameters().get("project").get(0));
+                String project = getParameter(urlDecoder, "project");
+                if (project != null) {
+                    sendFileList(context, project);
                 }
                 return true;
             case ServerNames.HOT_SPOTS_JS_REQUEST:
@@ -308,12 +319,7 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
     }
 
     private void processTreeRequest(String uri, QueryStringDecoder urlDecoder, ChannelHandlerContext context) {
-        @Nullable File logFile = null;
-        if (urlDecoder.parameters().containsKey("file") && urlDecoder.parameters().containsKey("project")) {
-            String projectName = urlDecoder.parameters().get("project").get(0);
-            String fileName = urlDecoder.parameters().get("file").get(0);
-            logFile = fileManager.getConfigFile(projectName, fileName);
-        }
+        @Nullable File logFile = getLogFile(urlDecoder);
         if (logFile == null) {
             return;
         }
@@ -332,10 +338,6 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
             configuration = PluginConfigManager.newConfiguration(includingConfigs, excludingConfigs);
 
         }
-        TreeManager.Extension extension = getExtension(logFile.getName());
-        if (extension == TreeManager.Extension.UNSUPPORTED) {
-            return;
-        }
         switch (uri) {
             case ServerNames.OUTGOING_CALLS_JS_REQUEST:
             case ServerNames.INCOMING_CALLS_JS_REQUEST:
@@ -347,6 +349,16 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
                 break;
         }
 
+    }
+
+    @Nullable
+    private File getLogFile(QueryStringDecoder urlDecoder) {
+        String projectName = getParameter(urlDecoder, "project");
+        String fileName = getParameter(urlDecoder, "file");
+        if (projectName == null || fileName == null) {
+            return null;
+        }
+        return fileManager.getConfigFile(projectName, fileName);
     }
 
     private void processAccumulativeTreeRequest(String uri,

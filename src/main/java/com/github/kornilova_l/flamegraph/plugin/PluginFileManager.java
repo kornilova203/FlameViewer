@@ -1,17 +1,19 @@
 package com.github.kornilova_l.flamegraph.plugin;
 
+import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeManager;
+import com.github.kornilova_l.flamegraph.plugin.server.trees.jfr_trees.FlightRecorderConverter;
+import com.intellij.openapi.application.PathManager;
 import io.netty.buffer.ByteBuf;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static com.github.kornilova_l.flamegraph.plugin.server.ProfilerHttpRequestHandler.getExtension;
 
 public class PluginFileManager {
     private static final boolean isWindows = System.getProperty("os.name").startsWith("Windows");
@@ -21,6 +23,7 @@ public class PluginFileManager {
     private static final String STATIC_DIR_NAME = "static";
     private static final String REQUEST_PREFIX = "/flamegraph-profiler/";
     private static final String UPLOADED_FILES = "uploaded-files";
+    private static PluginFileManager pluginFileManager;
     @NotNull
     private final Path logDirPath;
     @NotNull
@@ -29,10 +32,8 @@ public class PluginFileManager {
     private final Path staticDirPath;
     @NotNull
     private final Path uploadedFilesPath;
-    @NotNull
-    private final Path convertedFilesPath;
 
-    public PluginFileManager(@NotNull String systemDirPath) {
+    private PluginFileManager(@NotNull String systemDirPath) {
         Path systemDir = Paths.get(systemDirPath);
         Path pluginDir = Paths.get(systemDir.toString(), PLUGIN_DIR_NAME);
         createDirIfNotExist(pluginDir);
@@ -47,8 +48,13 @@ public class PluginFileManager {
         );
         uploadedFilesPath = Paths.get(logDirPath.toString(), UPLOADED_FILES);
         createDirIfNotExist(uploadedFilesPath);
-        convertedFilesPath = Paths.get(uploadedFilesPath.toString(), "converted");
-        createDirIfNotExist(convertedFilesPath);
+    }
+
+    public static PluginFileManager getInstance() {
+        if (pluginFileManager == null) {
+            pluginFileManager = new PluginFileManager(PathManager.getSystemPath());
+        }
+        return pluginFileManager;
     }
 
     private static void createDirIfNotExist(@NotNull Path path) {
@@ -72,6 +78,7 @@ public class PluginFileManager {
         return maxFile.orElse(null);
     }
 
+
     public File getConfigFile(String projectName) {
         Path path = Paths.get(configDirPath.toString(), projectName + ".config");
         return new File(path.toString());
@@ -86,21 +93,27 @@ public class PluginFileManager {
                     .filter(file -> !file.isDirectory())
                     .sorted((f1, f2) -> Long.compare(f2.lastModified(), f1.lastModified()))
                     .map(File::getName)
+                    .map((fileName) -> {
+                        int convertedIndex = fileName.indexOf(".converted");
+                        if (convertedIndex != -1) {
+                            return fileName.substring(0, convertedIndex);
+                        }
+                        return fileName;
+                    })
                     .collect(Collectors.toList());
         }
         return list;
     }
 
-    public void saveFile(ByteBuf content, String fileName) {
-        Path filePath = Paths.get(uploadedFilesPath.toString(), fileName);
-        File file = new File(filePath.toString());
-        try (OutputStream outputStream = new FileOutputStream(file)) {
-            byte[] bytes = new byte[content.readableBytes()];
-            content.readBytes(bytes);
-            outputStream.write(bytes);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void convertAndSave(ByteBuf content, String fileName) {
+        Path filePath = Paths.get(uploadedFilesPath.toString(), getConvertedName(fileName));
+        byte[] bytes = new byte[content.readableBytes()];
+        content.readBytes(bytes);
+        new FlightRecorderConverter(bytes).writeTo(new File(filePath.toString()));
+    }
+
+    private String getConvertedName(String fileName) {
+        return fileName + ".converted";
     }
 
     public String getStaticFilePath(String staticFileUri) {
@@ -132,6 +145,10 @@ public class PluginFileManager {
     @Nullable
     public File getConfigFile(String projectName, String fileName) {
         String projectLogDirPath = getLogDirPath(projectName);
+        if (Objects.equals(projectName, "uploaded-files") &&
+                getExtension(fileName) == TreeManager.Extension.JFR) {
+            fileName = getConvertedName(fileName);
+        }
         Path path = Paths.get(projectLogDirPath, fileName);
         File file = new File(path.toString());
         if (file.exists()) {
@@ -170,33 +187,6 @@ public class PluginFileManager {
         return new ArrayList<>();
     }
 
-    @Nullable
-    public File getConvertedFile(String name) {
-        File dir = new File(convertedFilesPath.toString());
-        assert dir.exists() && dir.isDirectory();
-        File[] files = dir.listFiles();
-        if (files == null) {
-            return null;
-        }
-        name = getFileName(name);
-        for (File file : files) {
-            if (Objects.equals(getFileName(file.getName()), name)) {
-                return file;
-            }
-        }
-        return null;
-    }
-
-    private static String getFileName(String name) {
-        return name.substring(0, name.indexOf("."));
-    }
-
-    public File createdFileForConverted(File logFile) {
-        String name = getFileName(logFile.getName());
-        Path path = Paths.get(convertedFilesPath.toString(), name + ".converted");
-        return new File(path.toString());
-    }
-
     public void deleteFile(@NotNull String fileName, @NotNull String projectName) {
         Path path = Paths.get(logDirPath.toString(), projectName, fileName);
         File file = new File(path.toString());
@@ -205,5 +195,9 @@ public class PluginFileManager {
         }
         //noinspection ResultOfMethodCallIgnored
         file.delete();
+    }
+
+    public void save(ByteBuf content, String fileName) {
+        // TODO: implement
     }
 }

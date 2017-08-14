@@ -10,12 +10,10 @@ import com.intellij.openapi.diagnostic.Logger;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.List;
 
 public class TreeManager {
     private static final Logger LOG = Logger.getInstance(TreeManager.class);
-    private final HashMap<String, TreesSet> treesSets = new HashMap<>();
     private File currentFile = null;
     private TreesSet currentTreesSet = null;
 
@@ -35,13 +33,11 @@ public class TreeManager {
             currentFile = logFile;
             Extension extension = ProfilerHttpRequestHandler.getExtension(logFile.getName());
             switch (extension) {
-                case JFR:
-                    currentTreesSet = treesSets.computeIfAbsent(logFile.getAbsolutePath(),
-                            n -> new JfrTreesSet(logFile));
+                case JFR_CONVERTED:
+                    currentTreesSet = new JfrTreesSet(logFile);
                     break;
                 case SER:
-                    currentTreesSet = treesSets.computeIfAbsent(logFile.getAbsolutePath(),
-                            n -> new SerTreesSet(logFile));
+                    currentTreesSet = new SerTreesSet(logFile);
                     break;
                 case UNSUPPORTED:
                 default:
@@ -53,7 +49,6 @@ public class TreeManager {
     @Nullable
     public TreeProtos.Tree getTree(File logFile, TreeType treeType, @Nullable Configuration configuration) {
         updateTreesSet(logFile);
-
         return currentTreesSet.getTree(treeType, configuration);
     }
 
@@ -83,6 +78,7 @@ public class TreeManager {
     public enum Extension {
         JFR,
         SER,
+        JFR_CONVERTED,
         UNSUPPORTED
     }
 }

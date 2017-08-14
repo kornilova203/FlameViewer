@@ -232,7 +232,7 @@ nav ul li:hover a, .current-link a {
 .file-list li:hover {
     transition: background 300ms;
     display: inline-block;
-    /*padding-right: 10px;*/
+    padding-right: 10px;
     background-color: #0e8fdf;
     min-width: 100%;
     box-sizing: border-box;
@@ -376,14 +376,13 @@ nav ul li:hover a, .current-link a {
 }
 
 .loader-background {
-    width: 50px;
-    height: 50px;
     background-color: white;
     border-radius: 5px;
     position: fixed;
     top: calc(50% - 25px);
-    left: calc((100vw - 250px) / 2 + 250px - 25px);
-    padding: 10px;
+    width: 280px;
+    left: calc((100vw - 250px) / 2 + 250px - 140px);
+    padding: 15px;
     box-sizing: border-box;
     opacity: 0.9;
     display: none;
@@ -397,6 +396,7 @@ nav ul li:hover a, .current-link a {
     width: 30px;
     height: 30px;
     box-sizing: border-box;
+    margin-left: calc(50% - 15px);
 }
 
 @keyframes spin {
@@ -666,4 +666,11 @@ button:focus {
 .filter-content label {
     display: block;
     margin: 10px 0 5px;
+}
+
+.loader-message p {
+    text-align: center;
+    color: #333;
+    margin-bottom: 0;
+    line-height: 18px;
 }

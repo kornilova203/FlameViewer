@@ -1,32 +1,37 @@
 $(window).on("load", () => {
-    if (fileName !== undefined &&
-        projectName !== undefined) {
+    if (constants.fileName !== undefined &&
+        constants.projectName !== undefined) {
         showHotSpots();
     }
 });
 
-function showHotSpots() {
-    const request = new XMLHttpRequest();
-    request.open("GET", "/flamegraph-profiler/hot-spots-json?project=" +
-        projectName +
+function getRequestAddress() {
+    return "/flamegraph-profiler/hot-spots-json?project=" +
+        constants.projectName +
         "&" +
         "file=" +
-        fileName,
-        true);
-    request.responseType = "json";
+        constants.fileName;
+}
 
-    request.onload = function () {
-        const hotSpots = request.response;
-        console.log(hotSpots);
-        if (hotSpots !== undefined && hotSpots.length > 0) {
-            const biggestRelativeTime = hotSpots[0].relativeTime;
-            for (let i = 0; i < hotSpots.length && i < 200; i++) {
-                appendHotSpot(hotSpots[i], biggestRelativeTime);
+function showHotSpots() {
+    common.showLoader(constants.loaderMessages.countingTime, () => {
+        const request = new XMLHttpRequest();
+        request.open("GET", getRequestAddress(), true);
+        request.responseType = "json";
+
+        request.onload = function () {
+            const hotSpots = request.response;
+            if (hotSpots !== undefined && hotSpots.length > 0) {
+                const biggestRelativeTime = hotSpots[0].relativeTime;
+                for (let i = 0; i < hotSpots.length && i < 200; i++) {
+                    appendHotSpot(hotSpots[i], biggestRelativeTime);
+                }
             }
-        }
-    };
-    request.send();
-    console.log("request was sent");
+            common.hideLoader();
+        };
+        request.send();
+        console.log("request was sent");
+    });
 }
 
 /**
@@ -48,8 +53,8 @@ function appendHotSpot(hotSpot, biggestRelativeTime) {
             parameters: hotSpot.parameters,
             doBreak: (hotSpot.retVal + hotSpot.className + hotSpot.methodName).length > 80,
             relativeTime: Math.round(hotSpot.relativeTime * 1000) / 10,
-            fileName: fileName,
-            projectName: projectName,
+            fileName: constants.fileName,
+            projectName: constants.projectName,
             desc: "(" + hotSpot.parameters.join(', ') + ")" + hotSpot.retVal
         }
     ).content);

@@ -9,7 +9,6 @@ import com.intellij.execution.configurations.RunProfile;
 import com.intellij.execution.configurations.RunnerSettings;
 import com.intellij.execution.impl.DefaultJavaProgramRunner;
 import com.intellij.execution.runners.ExecutionEnvironment;
-import com.intellij.openapi.application.PathManager;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
@@ -43,7 +42,7 @@ public class ProfilerProgramRunner extends DefaultJavaProgramRunner {
                       boolean beforeExecution) throws ExecutionException {
         assert (configuration != null);
         assert (project != null);
-        PluginFileManager fileManager = new PluginFileManager(PathManager.getSystemPath());
+        PluginFileManager fileManager = PluginFileManager.getInstance();
         File configFile = fileManager.getConfigFile(project.getName());
         PluginConfigManager.exportConfig(configFile, configuration);
         String pathToAgent = fileManager.getPathToAgent();

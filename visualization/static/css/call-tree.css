@@ -16,17 +16,16 @@ main {
     margin-bottom: 40px;
     font-weight: normal;
     font-size: 16px;
-    width: 900px;
     line-height: 18px;
+    border-top: 2px solid #ddd;
+    padding-top: 10px;
+    margin-top: 0;
+    width: 100%;
 }
 
 .call-tree-header span {
     color: #666;
     font-style: italic;
-}
-
-section {
-    border-top: 2px solid #ddd;
 }
 
 main:first-child {
