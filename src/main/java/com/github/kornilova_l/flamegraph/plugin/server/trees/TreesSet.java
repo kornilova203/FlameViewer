@@ -12,15 +12,16 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.TreeMap;
 
 import static com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees.accumulative_trees.AccumulativeTreesHelper.setNodesOffsetRecursively;
 import static com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees.accumulative_trees.AccumulativeTreesHelper.updateNodeList;
 
 public abstract class TreesSet {
     protected final File logFile;
-    private final HashMap<String, TreeProtos.Tree> methodOutgoingCalls = new HashMap<>();
-    private final HashMap<String, TreeProtos.Tree> methodIncomingCalls = new HashMap<>();
     private final List<HotSpot> hotSpots = new ArrayList<>();
     @Nullable
     protected TreesProtos.Trees callTree;
@@ -36,7 +37,6 @@ public abstract class TreesSet {
 
     @Nullable
     private static TreeProtos.Tree getTreeForMethod(TreeProtos.Tree sourceTree,
-                                                    HashMap<String, TreeProtos.Tree> map,
                                                     String className,
                                                     String methodName,
                                                     String desc,
@@ -44,16 +44,9 @@ public abstract class TreesSet {
         if (sourceTree == null) {
             return null;
         }
-        return map.computeIfAbsent(
-                className + methodName + desc,
-                n -> new MethodAccumulativeTreeBuilder(
-                        sourceTree,
-                        className,
-                        methodName,
-                        desc,
-                        isStatic
-                ).getTree()
-        );
+        return new MethodAccumulativeTreeBuilder(
+                sourceTree, className, methodName, desc, isStatic
+        ).getTree();
     }
 
     protected abstract void validateExtension();
@@ -70,10 +63,10 @@ public abstract class TreesSet {
         switch (treeType) {
             case OUTGOING_CALLS:
                 getTree(TreeManager.TreeType.OUTGOING_CALLS, configuration);
-                return getTreeForMethod(outgoingCalls, methodOutgoingCalls, className, methodName, desc, isStatic);
+                return getTreeForMethod(outgoingCalls, className, methodName, desc, isStatic);
             case INCOMING_CALLS:
                 getTree(TreeManager.TreeType.INCOMING_CALLS, configuration);
-                return getTreeForMethod(incomingCalls, methodIncomingCalls, className, methodName, desc, isStatic);
+                return getTreeForMethod(incomingCalls, className, methodName, desc, isStatic);
             default:
                 throw new IllegalArgumentException("Tree type is not supported");
         }
@@ -228,7 +221,7 @@ public abstract class TreesSet {
                     nodeBuilder.addNodes(newNode);
                     newNode = nodeBuilder.getNodesBuilderList().get(nodeBuilder.getNodesBuilderList().size() - 1);
                 } else {
-                    newNode = updateNodeList(nodeBuilder, child, -1, false);
+                    newNode = updateNodeList(nodeBuilder, child, -1);
                 }
                 buildFilteredTreeRecursively(
                         newNode,

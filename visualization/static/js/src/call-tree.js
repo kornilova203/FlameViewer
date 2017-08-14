@@ -7,7 +7,7 @@ $(window).on("load", function () {
             console.log("not jfr");
             getAndDrawTrees();
         } else {
-            showMessage("This type of tree is unavailable for .jfr files")
+            common.showMessage("This type of tree is unavailable for .jfr files")
         }
     }
 });

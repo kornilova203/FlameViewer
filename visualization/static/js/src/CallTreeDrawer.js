@@ -23,6 +23,7 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
         this.threadName = this.tree.getTreeInfo().getThreadName();
         this.canvasOffset = this.tree.getTreeInfo().getStartTime() * PIX_IN_MS;
         this.id = id;
+        this.enableZoom = false;
         this._countNodesRecursively(this.baseNode);
     }
 

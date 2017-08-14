@@ -7,20 +7,20 @@ import static com.github.kornilova_l.flamegraph.plugin.server.trees.TreesSet.set
 import static com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees.accumulative_trees.AccumulativeTreesHelper.*;
 
 public class MethodAccumulativeTreeBuilder implements TreeBuilder {
-    private TreeProtos.Tree.Builder treeBuilder;
     private final TreeProtos.Tree tree;
-    private TreeProtos.Tree.Node.Builder wantedMethodNode;
-    private int maxDepth = 0;
     private final String className;
     private final String methodName;
     private final String desc;
     private final boolean isStatic;
+    private TreeProtos.Tree.Builder treeBuilder;
+    private TreeProtos.Tree.Node.Builder wantedMethodNode;
+    private int maxDepth = 0;
 
     public MethodAccumulativeTreeBuilder(TreeProtos.Tree sourceTree,
-                                      String className,
-                                      String methodName,
-                                      String desc,
-                                      boolean isStatic) {
+                                         String className,
+                                         String methodName,
+                                         String desc,
+                                         boolean isStatic) {
         this.className = className;
         this.methodName = methodName;
         this.desc = desc;
@@ -54,7 +54,7 @@ public class MethodAccumulativeTreeBuilder implements TreeBuilder {
         if (depth > maxDepth) {
             maxDepth = depth;
         }
-        nodeBuilder = updateNodeList(nodeBuilder, node, -1, false);
+        nodeBuilder = updateNodeList(nodeBuilder, node, -1);
         for (TreeProtos.Tree.Node childNode : node.getNodesList()) {
             addNodesRecursively(nodeBuilder, childNode, depth);
         }
@@ -69,12 +69,11 @@ public class MethodAccumulativeTreeBuilder implements TreeBuilder {
                                         methodName,
                                         desc,
                                         isStatic,
-                                        0,
-                                        null
+                                        0
                                 )
                         ));
-        wantedMethodNode = baseNode.getNodesBuilder(0);
         treeBuilder = TreeProtos.Tree.newBuilder()
                 .setBaseNode(baseNode);
+        wantedMethodNode = treeBuilder.getBaseNodeBuilder().getNodesBuilder(0);
     }
 }

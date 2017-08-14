@@ -17,22 +17,22 @@ class AccumulativeTreeDrawer {
         this.tree = tree;
         this.treeWidth = this.tree.getWidth();
         this.canvasWidth = MAIN_WIDTH;
-        this.canvasHeight = (LAYER_HEIGHT + LAYER_GAP) * this.tree.getDepth() + SPACE_ABOVE_TREE;
+        this.canvasHeight = (LAYER_HEIGHT + LAYER_GAP) * (this.tree.getDepth() + 1) + SPACE_ABOVE_TREE;
         this.section = null;
         this.stage = null;
         this.zoomedStage = null;
         this.header = null;
-        this.biggestSelfTime = 0;
         this.baseNode = this.tree.getBaseNode();
         this.baseNode.depth = 0;
         this.$popup = null;
         this.canvasOffset = 0;
+        this.enableZoom = true;
+        this.nodesCount = -1;
         // for search:
         this.searchVal = "";
         this.currentlyShownNodes = [];
         this.baseNode.fillCommand = {};
         this.wasMainStageHighlighted = false;
-        this.nodesCount = 0;
     }
 
     /**
@@ -79,7 +79,6 @@ class AccumulativeTreeDrawer {
      */
     _prepareDraw() {
         this._assignParentsAndDepthRecursively(this.baseNode, 0);
-        console.log("biggest self time: " + this.biggestSelfTime);
         this._setOriginalColorRecursively(this.baseNode);
         this._enableSearch();
     }
@@ -115,6 +114,10 @@ class AccumulativeTreeDrawer {
      * @private
      */
     _drawNode(node, color, scaleX, offsetX, isMostFirst, stage) {
+        console.log("draw node: " + node.getNodeInfo().getMethodName());
+        console.log("depth: " + node.depth);
+        console.log("offset: " + offsetX);
+        console.log("scale: " + scaleX);
         const shape = this._drawRectangle(node, color, scaleX, offsetX, isMostFirst, stage);
         this._addShowPopupEvent(shape, offsetX + this.canvasOffset, node.depth, node);
         if (scaleX * this.canvasWidth > 5) {
@@ -166,10 +169,12 @@ class AccumulativeTreeDrawer {
      * @param {createjs.Shape} shape
      */
     listenScale(node, shape) {
-        //noinspection JSUnresolvedFunction
-        shape.addEventListener("click", () => {
-            this._setNodeZoomed(node);
-        })
+        if (this.enableZoom) {
+            //noinspection JSUnresolvedFunction
+            shape.addEventListener("click", () => {
+                this._setNodeZoomed(node);
+            })
+        }
     }
 
     _countOffsetXForNode(node) {

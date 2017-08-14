@@ -22,11 +22,12 @@ common.hideLoader = (time = 0) => {
 
 /**
  * Shrink loader background because it will show only "Drawing tree..." message
+ * @param {Number} [width]
  */
-common.shrinkLoaderBackground = () => {
+common.resizeLoaderBackground = (width = 160) => {
     $(".loader-background").css({
-        "width": 160,
-        "left": "calc((100vw - 250px) / 2 + 250px - 80px)"
+        "width": width,
+        "left": "calc((100vw - 250px) / 2 + 250px - " + (width / 2) + "px)"
     })
 };
 
@@ -52,6 +53,17 @@ common.getParameter = (parameterName) => {
     return undefined;
 };
 
+/**
+ * @param {string} message
+ */
+common.showMessage = (message) => {
+    $("body").append(`<p class='message'>${message}</p>`);
+};
+
+common.hideMessage = () => {
+    $('.message').remove();
+};
+
 const constants = {};
 constants.$main = null;
 constants.$loaderBackground = null;
@@ -64,7 +76,7 @@ constants.loaderMessages = {
     buildingTree: "Building tree...",
     buildingTrees: "Building trees...",
     countingTime: "Counting self-time of methods...",
-    convertingFile: "Converting file..."
+    convertingFile: "Converting file: "
 };
 
 $(window).on("load", () => {

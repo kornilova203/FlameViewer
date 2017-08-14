@@ -72,21 +72,14 @@ function getPageName() {
 
 function showChooseFile() {
     if (constants.projectName === "uploaded-files") {
-        showMessage("Choose or upload file");
+        common.showMessage("Choose or upload file");
     } else {
-        showMessage("Choose file");
+        common.showMessage("Choose file");
     }
 }
 
 function showNoDataFound() {
-    showMessage("No call was registered or all methods took <1ms");
-}
-
-/**
- * @param {string} message
- */
-function showMessage(message) {
-    $("body").append(`<p class='message'>${message}</p>`);
+    common.showMessage("No call was registered or all methods took <1ms");
 }
 
 function appendInput() {

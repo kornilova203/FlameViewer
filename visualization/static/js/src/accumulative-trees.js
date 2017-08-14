@@ -45,7 +45,7 @@ function drawIncomingCalls(tree, className, methodName, desc) {
     const drawer = new IncomingCallsDrawer(tree);
     if (className === undefined && // if common tree
         drawer.getNodesCount() > 20000) {
-        showMessage("Tree has more than 20 000 nodes. " +
+        common.showMessage("Tree has more than 20 000 nodes. " +
             "You can see incoming calls for particular method (for this go to Hot spots page)");
         common.hideLoader();
         return;
@@ -97,7 +97,7 @@ $(window).on("load", function () {
                         common.hideLoader();
                         showNoDataFound();
                     }
-                    common.shrinkLoaderBackground();
+                    common.resizeLoaderBackground();
                 });
             };
             console.log("send request");

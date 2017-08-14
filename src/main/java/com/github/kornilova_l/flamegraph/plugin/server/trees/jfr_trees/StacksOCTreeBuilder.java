@@ -99,7 +99,7 @@ public class StacksOCTreeBuilder implements TreeBuilder {
                                     .setIsStatic(false)
                     )
                     .build();
-            nodeBuilder = updateNodeList(nodeBuilder, callNode, -1, false);
+            nodeBuilder = updateNodeList(nodeBuilder, callNode, -1);
         }
     }
 

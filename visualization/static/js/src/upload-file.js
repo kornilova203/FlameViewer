@@ -10,9 +10,10 @@ function appendWrongExtension() {
  * @param {File} file
  */
 function sendToServer(file) {
-    common.showLoader(constants.loaderMessages.convertingFile, () => {
+    common.resizeLoaderBackground(700);
+    common.showLoader(constants.loaderMessages.convertingFile + file.name, () => {
         const request = new XMLHttpRequest();
-        request.onreadystatechange = () => {
+        request.onload = () => {
             location.reload(); // TODO: reload to uploaded file
         };
         request.open("POST", "/flamegraph-profiler/upload-file", true);
@@ -28,6 +29,7 @@ function listenInput() {
         const theFile = e.target.files[0];
         reader.onload = ((file) => {
             if (isValidExtension(file.name)) {
+                common.hideMessage();
                 sendToServer(file);
             } else {
                 common.hideLoader();

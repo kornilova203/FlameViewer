@@ -31,7 +31,9 @@ public class FlightRecorderConverter {
     private final Map<String, Integer> stacks = new HashMap<>();
 
     public FlightRecorderConverter(byte[] bytes) throws IllegalArgumentException {
+        System.out.println("start converting");
         FlightRecording recording = getRecording(bytes);
+        System.out.println("get recording");
         buildStacks(recording);
     }
 
