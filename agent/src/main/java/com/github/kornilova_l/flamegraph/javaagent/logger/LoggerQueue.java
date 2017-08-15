@@ -5,17 +5,24 @@ import com.github.kornilova_l.flamegraph.javaagent.logger.event_data_storage.Ret
 import com.github.kornilova_l.flamegraph.javaagent.logger.event_data_storage.StartData;
 import com.github.kornilova_l.flamegraph.javaagent.logger.event_data_storage.ThrowableEventData;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class LoggerQueue {
-    static final LinkedBlockingDeque<MethodEventData> queue = new LinkedBlockingDeque<>();
-    public static Map<String, Long> registeredThreadNames = new ConcurrentHashMap<>();
-    public static Map<String, Long> registeredClassNames = new ConcurrentHashMap<>();
-    public static volatile long classNamesId = 0;
-    public static volatile long threadNamesId = 0;
-    static int countEventsAdded = 0;
+    private static LoggerQueue loggerQueue;
+    private final ConcurrentLinkedQueue<MethodEventData> queue = new ConcurrentLinkedQueue<>();
+    private int countEventsAdded = 0;
+
+    /**
+     * Method is called by javaagent.
+     * It is needed for loading LoggerQueue by system classLoader
+     */
+    public static void initLoggerQueue() {
+        loggerQueue = new LoggerQueue();
+    }
+
+    static LoggerQueue getInstance() {
+        return loggerQueue;
+    }
 
     public static StartData createStartData(long startTime, Object[] parameters) {
         return new StartData(startTime, parameters);
@@ -30,8 +37,7 @@ public class LoggerQueue {
                                   String methodName,
                                   String desc,
                                   boolean isStatic) {
-        countEventsAdded++;
-        queue.add(new RetValEventData(thread, className, startTime, duration,
+        loggerQueue.addToQueue(new RetValEventData(thread, className, startTime, duration,
                 methodName, desc, isStatic, parameters, retVal));
     }
 
@@ -44,8 +50,20 @@ public class LoggerQueue {
                                   String methodName,
                                   boolean isStatic,
                                   String desc) {
-        countEventsAdded++;
-        queue.add(new ThrowableEventData(thread, className, startTime, duration,
+        loggerQueue.addToQueue(new ThrowableEventData(thread, className, startTime, duration,
                 methodName, desc, isStatic, parameters, throwable));
+    }
+
+    ConcurrentLinkedQueue<MethodEventData> getQueue() {
+        return queue;
+    }
+
+    public void addToQueue(MethodEventData methodEventData) {
+        countEventsAdded++;
+        queue.add(methodEventData);
+    }
+
+    int getEventsAdded() {
+        return countEventsAdded;
     }
 }

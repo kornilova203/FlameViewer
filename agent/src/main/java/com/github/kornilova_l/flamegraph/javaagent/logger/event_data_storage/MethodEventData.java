@@ -1,7 +1,10 @@
 package com.github.kornilova_l.flamegraph.javaagent.logger.event_data_storage;
 
-import com.github.kornilova_l.flamegraph.javaagent.logger.LoggerQueue;
+import com.github.kornilova_l.flamegraph.javaagent.logger.event_data_storage.name_maps.ClassNamesMap;
+import com.github.kornilova_l.flamegraph.javaagent.logger.event_data_storage.name_maps.NamesMap;
+import com.github.kornilova_l.flamegraph.javaagent.logger.event_data_storage.name_maps.ThreadNamesMap;
 import com.github.kornilova_l.flamegraph.proto.EventProtos;
+import com.github.kornilova_l.flamegraph.proto.EventProtos.Event;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -15,6 +18,8 @@ abstract public class MethodEventData {
     private String desc;
     private boolean isStatic;
     private Object[] parameters;
+    private static ClassNamesMap classNamesMap = new ClassNamesMap();
+    private static ThreadNamesMap threadNamesMap = new ThreadNamesMap();
 
     MethodEventData(String threadName,
                     String className,
@@ -34,10 +39,21 @@ abstract public class MethodEventData {
         this.parameters = parameters;
     }
 
-    public List<EventProtos.Event> getEvents() {
-        List<EventProtos.Event> events = new LinkedList<>();
-        EventProtos.Event.Builder eventBuilder = EventProtos.Event.newBuilder();
-        EventProtos.Event.MethodEvent.Builder methodEventBuilder = EventProtos.Event.MethodEvent.newBuilder();
+    private static void addObject(EventProtos.Var.Builder varBuilder, Object o) {
+        EventProtos.Var.Object.Builder objectBuilder = EventProtos.Var.Object.newBuilder();
+        objectBuilder.setType(o.getClass().toString());
+        try {
+            objectBuilder.setValue(o.toString());
+        } catch (Throwable throwable) {
+            objectBuilder.setValue("");
+        }
+        varBuilder.setObject(objectBuilder.build());
+    }
+
+    public List<Event> getEvents() {
+        List<Event> events = new LinkedList<>();
+        Event.Builder eventBuilder = Event.newBuilder();
+        Event.MethodEvent.Builder methodEventBuilder = Event.MethodEvent.newBuilder();
         setCommonInfo(methodEventBuilder, events);
 
         setResult(methodEventBuilder);
@@ -48,45 +64,7 @@ abstract public class MethodEventData {
         return events;
     }
 
-    abstract void setResult(EventProtos.Event.MethodEvent.Builder methodEventBuilder);
-
-    private Long getClassNameId(List<EventProtos.Event> events) {
-        Long classNameId = LoggerQueue.registeredClassNames.get(className);
-        if (classNameId == null) {
-            classNameId = ++LoggerQueue.classNamesId;
-            LoggerQueue.registeredClassNames.put(className, classNameId);
-            events.add(createNewClassEvent(classNameId, className));
-        }
-        return classNameId;
-    }
-
-    private EventProtos.Event createNewClassEvent(Long id, String name) {
-        return EventProtos.Event.newBuilder()
-                .setNewClass(EventProtos.Event.Map.newBuilder()
-                        .setId(id)
-                        .setName(name)
-                        .build()
-                ).build();
-    }
-
-    private Long getThreadNameId(List<EventProtos.Event> events) {
-        Long threadNameId = LoggerQueue.registeredThreadNames.get(threadName);
-        if (threadNameId == null) {
-            threadNameId = ++LoggerQueue.threadNamesId;
-            LoggerQueue.registeredThreadNames.put(threadName, threadNameId);
-            events.add(createNewThreadEvent(threadNameId, threadName));
-        }
-        return threadNameId;
-    }
-
-    private EventProtos.Event createNewThreadEvent(Long id, String name) {
-        return EventProtos.Event.newBuilder()
-                .setNewThread(EventProtos.Event.Map.newBuilder()
-                        .setId(id)
-                        .setName(name)
-                        .build()
-                ).build();
-    }
+    abstract void setResult(Event.MethodEvent.Builder methodEventBuilder);
 
     EventProtos.Var objectToVar(Object o) {
         EventProtos.Var.Builder varBuilder = EventProtos.Var.newBuilder();
@@ -123,20 +101,9 @@ abstract public class MethodEventData {
         return varBuilder.build();
     }
 
-    private static void addObject(EventProtos.Var.Builder varBuilder, Object o) {
-        EventProtos.Var.Object.Builder objectBuilder = EventProtos.Var.Object.newBuilder();
-        objectBuilder.setType(o.getClass().toString());
-        try {
-            objectBuilder.setValue(o.toString());
-        } catch (Throwable throwable) {
-            objectBuilder.setValue("");
-        }
-        varBuilder.setObject(objectBuilder.build());
-    }
-
-    private void setCommonInfo(EventProtos.Event.MethodEvent.Builder methodEventBuilder, List<EventProtos.Event> events) {
-        Long classNameId = getClassNameId(events);
-        Long threadNameId = getThreadNameId(events);
+    private void setCommonInfo(Event.MethodEvent.Builder methodEventBuilder, List<Event> events) {
+        long classNameId = getClassNameId(events);
+        long threadNameId = getThreadNameId(events);
 
         methodEventBuilder.setStartTime(startTime)
                 .setDuration(duration)
@@ -150,7 +117,26 @@ abstract public class MethodEventData {
 
     }
 
-    private void setParameters(EventProtos.Event.MethodEvent.Builder methodEventBuilder) {
+    private long getThreadNameId(List<Event> events) {
+        return getIdAndRegister(events, threadNamesMap, threadName);
+    }
+
+    private static long getIdAndRegister(List<Event> events,
+                                         NamesMap namesMap,
+                                         String name) {
+        boolean isRegistered = namesMap.isRegistered(name);
+        long id = namesMap.getId(name);
+        if (!isRegistered) {
+            events.add(namesMap.getRegistrationEvent(id, name));
+        }
+        return id;
+    }
+
+    private long getClassNameId(List<Event> events) {
+        return getIdAndRegister(events, classNamesMap, className);
+    }
+
+    private void setParameters(Event.MethodEvent.Builder methodEventBuilder) {
         if (parameters != null) {
             for (Object parameter : parameters) {
                 methodEventBuilder.addParameters(objectToVar(parameter));

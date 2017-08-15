@@ -13,14 +13,6 @@ public class WaitingLoggingToFinish extends Thread {
 
     @Override
     public void run() {
-        logger.printStatus();
-        while (!logger.isDone) { // wait for logger to log all events
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                System.out.println("Output stream was closed");
-            }
-        }
-        logger.closeOutputStream();
+        logger.finish();
     }
 }

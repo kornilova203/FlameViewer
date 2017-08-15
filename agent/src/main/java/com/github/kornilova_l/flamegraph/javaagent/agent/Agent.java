@@ -2,6 +2,7 @@ package com.github.kornilova_l.flamegraph.javaagent.agent;
 
 import com.github.kornilova_l.flamegraph.javaagent.AgentFileManager;
 import com.github.kornilova_l.flamegraph.javaagent.logger.Logger;
+import com.github.kornilova_l.flamegraph.javaagent.logger.LoggerQueue;
 import com.github.kornilova_l.flamegraph.javaagent.logger.WaitingLoggingToFinish;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,6 +20,7 @@ public class Agent {
 
     public static void premain(String config, Instrumentation inst) throws IOException {
         System.out.println("I am an agent");
+        LoggerQueue.initLoggerQueue();
         String[] parameters = config.split("&");
         List<String> methods = getMethodsList(new File(parameters[1]));
         if (methods == null) {

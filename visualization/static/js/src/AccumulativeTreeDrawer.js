@@ -114,10 +114,6 @@ class AccumulativeTreeDrawer {
      * @private
      */
     _drawNode(node, color, scaleX, offsetX, isMostFirst, stage) {
-        console.log("draw node: " + node.getNodeInfo().getMethodName());
-        console.log("depth: " + node.depth);
-        console.log("offset: " + offsetX);
-        console.log("scale: " + scaleX);
         const shape = this._drawRectangle(node, color, scaleX, offsetX, isMostFirst, stage);
         this._addShowPopupEvent(shape, offsetX + this.canvasOffset, node.depth, node);
         if (scaleX * this.canvasWidth > 5) {

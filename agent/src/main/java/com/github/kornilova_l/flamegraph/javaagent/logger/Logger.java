@@ -6,35 +6,32 @@ import com.github.kornilova_l.flamegraph.proto.EventProtos;
 
 import java.io.*;
 import java.util.List;
-
-import static com.github.kornilova_l.flamegraph.javaagent.logger.LoggerQueue.countEventsAdded;
-import static com.github.kornilova_l.flamegraph.javaagent.logger.LoggerQueue.queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * Thread which writes all events from loggingQueue to file
  */
 public class Logger implements Runnable {
-    public boolean isDone = true; // changes to false when queue is enqueued
     private File file;
-    private OutputStream outputStream;
+    private LoggerQueue loggerQueue = LoggerQueue.getInstance();
+    private long lastLogTime;
 
     public Logger(AgentFileManager agentFileManager) {
         file = agentFileManager.createLogFile();
         System.out.println("Output file: " + file);
-        OutputStream temp;
-        try {
-            temp = new FileOutputStream(file);
-            outputStream = temp;
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException("Log file cannot be opened or created");
-        }
+        lastLogTime = System.currentTimeMillis();
     }
 
-    public void printStatus() {
-        System.out.println("Events added: " + countEventsAdded);
+    void finish() {
+        logEvents();
+        printStatus();
     }
 
-    private void writeToFile(List<EventProtos.Event> events) {
+    private void printStatus() {
+        System.out.println("Events added: " + loggerQueue.getEventsAdded());
+    }
+
+    private void writeToFile(List<EventProtos.Event> events, OutputStream outputStream) {
         try {
             for (EventProtos.Event event : events) {
                 event.writeDelimitedTo(outputStream);
@@ -56,32 +53,38 @@ public class Logger implements Runnable {
         }
     }
 
-    public void closeOutputStream() {
-        try {
-            System.out.println("close output stream");
-            outputStream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     @Override
     public void run() {
-        //noinspection InfiniteLoopStatement
         while (true) {
             try {
-                logEvent(queue.take());
+                long sleepTime = getSleepTime();
+                System.out.println(sleepTime);
+                Thread.sleep(sleepTime);
+                lastLogTime = System.currentTimeMillis();
+                logEvents();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    private void logEvent(MethodEventData eventData) {
-        isDone = false;
-        writeToFile(eventData.getEvents());
-        if (queue.size() == 0) {
-            isDone = true;
+    private long getSleepTime() {
+        long delta = 1000 - (System.currentTimeMillis() - lastLogTime);
+        if (delta <= 0) {
+            return 0;
+        }
+        return delta;
+    }
+
+
+    private synchronized void logEvents() {
+        try (OutputStream outputStream = new FileOutputStream(file, true)) {
+            ConcurrentLinkedQueue<MethodEventData> queue = loggerQueue.getQueue();
+            while (!queue.isEmpty()) {
+                writeToFile(queue.remove().getEvents(), outputStream);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

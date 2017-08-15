@@ -31,7 +31,6 @@ class ProfilingClassVisitor extends ClassVisitor {
         MethodVisitor mv = cv.visitMethod(access, methodName, desc, signature, exceptions);
         if (mv != null &&
                 !methodName.equals("<clinit>") &&
-                !methodName.equals("<init>") &&
                 !methodName.equals("toString") &&
                 (access & Opcodes.ACC_SYNTHETIC) == 0) { // exclude synthetic includingMethodConfigs
             MethodConfig trueMethodConfig = AgentConfigurationManager.newMethodConfig(className, methodName, desc);
