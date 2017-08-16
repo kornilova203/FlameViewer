@@ -13,6 +13,7 @@ class ServerNames {
     static final String OUTGOING_CALLS_JS_REQUEST = MAIN_NAME + "/trees/outgoing-calls";
     static final String INCOMING_CALLS = MAIN_NAME + "/incoming-calls";
     static final String INCOMING_CALLS_JS_REQUEST = MAIN_NAME + "/trees/incoming-calls";
+    static final String CONNECTION_ALIVE = MAIN_NAME + "/trees/alive";
     static final String HOT_SPOTS = MAIN_NAME + "/hot-spots";
     static final String HOT_SPOTS_JS_REQUEST = MAIN_NAME + "/hot-spots-json";
     static final String UPLOAD_FILE = MAIN_NAME + "/upload-file";

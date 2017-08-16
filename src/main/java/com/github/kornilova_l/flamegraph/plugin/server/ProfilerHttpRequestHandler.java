@@ -159,6 +159,9 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
     private boolean processPostMethod(QueryStringDecoder urlDecoder, FullHttpRequest fullHttpRequest, ChannelHandlerContext context) {
         String uri = urlDecoder.path(); // without get parameters
         switch (uri) {
+            case ServerNames.CONNECTION_ALIVE:
+                sendStatus(HttpResponseStatus.OK, context.channel());
+                return true;
             case ServerNames.UPLOAD_FILE:
                 uploadFile(fullHttpRequest, context);
                 return true;
@@ -204,7 +207,7 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
         if (!urlDecoder.uri().startsWith(ServerNames.MAIN_NAME)) {
             return false;
         }
-        LOG.info("It is profiler request");
+        treeManager.updateLastTime();
         if (fullHttpRequest.method() == HttpMethod.POST) {
             return processPostMethod(urlDecoder, fullHttpRequest, context);
         } else {

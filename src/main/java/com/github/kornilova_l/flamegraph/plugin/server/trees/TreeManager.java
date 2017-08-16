@@ -11,20 +11,61 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class TreeManager {
     private static final Logger LOG = Logger.getInstance(TreeManager.class);
     private File currentFile = null;
-    private TreesSet currentTreesSet = null;
+    private volatile TreesSet currentTreesSet = null;
+    private AtomicLong lastUpdate = new AtomicLong(System.currentTimeMillis());
+    private AtomicBoolean isBusy = new AtomicBoolean(false);
 
     public TreeManager() {
+        TreeManager thisTreeManager = this;
+        Thread watchLastUpdate = new Thread(() -> {
+            //noinspection InfiniteLoopStatement
+            while (true) {
+                try {
+                    Thread.sleep(10000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                if (!thisTreeManager.isBusy() &&
+                        thisTreeManager.longTimePassedSinceUpdate()) {
+                    thisTreeManager.removeTreesSet();
+                }
+            }
+        });
+        watchLastUpdate.setDaemon(true);
+        watchLastUpdate.start();
     }
+
+    private boolean isBusy() {
+        return isBusy.get();
+    }
+
+    private void removeTreesSet() {
+        currentTreesSet = null;
+        currentFile = null;
+        lastUpdate.set(System.currentTimeMillis());
+    }
+
+    private boolean longTimePassedSinceUpdate() {
+        return System.currentTimeMillis() - lastUpdate.get() >= 30000;
+    }
+
 
     @Nullable
     public TreesProtos.Trees getCallTree(File logFile, @Nullable Configuration configuration) {
+        isBusy.set(true);
         updateTreesSet(logFile);
 
-        return currentTreesSet.getCallTree(configuration);
+        TreesProtos.Trees callTree = currentTreesSet.getCallTree(configuration);
+
+        isBusy.set(false);
+
+        return callTree;
 
     }
 
@@ -48,8 +89,13 @@ public class TreeManager {
 
     @Nullable
     public TreeProtos.Tree getTree(File logFile, TreeType treeType, @Nullable Configuration configuration) {
+        isBusy.set(true);
         updateTreesSet(logFile);
-        return currentTreesSet.getTree(treeType, configuration);
+        TreeProtos.Tree tree = currentTreesSet.getTree(treeType, configuration);
+
+        isBusy.set(false);
+
+        return tree;
     }
 
     @Nullable
@@ -60,14 +106,24 @@ public class TreeManager {
                                    String desc,
                                    boolean isStatic,
                                    @Nullable Configuration configuration) {
+        isBusy.set(true);
         updateTreesSet(logFile);
-        return currentTreesSet.getTree(treeType, className, methodName, desc, isStatic, configuration);
+        TreeProtos.Tree tree = currentTreesSet.getTree(treeType, className, methodName, desc, isStatic, configuration);
+        isBusy.set(false);
+        return tree;
 
     }
 
     public List<TreesSet.HotSpot> getHotSpots(File logFile) {
+        isBusy.set(true);
         updateTreesSet(logFile);
-        return currentTreesSet.getHotSpots();
+        List<TreesSet.HotSpot> hotSpots = currentTreesSet.getHotSpots();
+        isBusy.set(false);
+        return hotSpots;
+    }
+
+    public void updateLastTime() {
+        lastUpdate.set(System.currentTimeMillis());
     }
 
     public enum TreeType {

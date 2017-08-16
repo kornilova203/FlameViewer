@@ -56,7 +56,6 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
     draw() {
         this._prepareDraw();
 
-        console.log("draw");
         this.section = this._createSection();
         this.stage = new createjs.Stage("canvas-" + this.id);
         this.stage.id = "canvas-" + this.id;

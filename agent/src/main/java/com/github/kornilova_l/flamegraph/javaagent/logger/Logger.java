@@ -55,10 +55,10 @@ public class Logger implements Runnable {
 
     @Override
     public void run() {
+        //noinspection InfiniteLoopStatement
         while (true) {
             try {
                 long sleepTime = getSleepTime();
-                System.out.println(sleepTime);
                 Thread.sleep(sleepTime);
                 lastLogTime = System.currentTimeMillis();
                 logEvents();

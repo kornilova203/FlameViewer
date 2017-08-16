@@ -7,7 +7,6 @@ const common = {};
  */
 common.showLoader = (message, callback, time = 100) => {
     setTimeout(() => {
-        console.log("show loader " + time + " " + message);
         constants.$loaderMessageP.text(message);
         constants.$loaderBackground.fadeIn(time, callback);
     }, 5);
@@ -84,3 +83,16 @@ $(window).on("load", () => {
     constants.$loaderBackground = $(".loader-background");
     constants.$loaderMessageP = $('.loader-message p');
 });
+
+/**
+ * Each 10 seconds tell server that
+ * it should not remove trees from memory
+ */
+setInterval(() => {
+    const request = new XMLHttpRequest();
+    request.open("POST", "/flamegraph-profiler/trees/alive", true);
+    request.onload = () => {
+        console.log("alive");
+    };
+    request.send();
+}, 10000);
