@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package com.github.kornilova_l.flamegraph.proto;
+
+option java_outer_classname = "TreePreviewProtos";
+
+import "com/github/kornilova_l/flamegraph/proto/tree.proto";
+
+message TreePreview {
+    Tree.TreeInfo tree_info = 1;
+    uint32 depth = 2;
+    int64 width = 3;
+    repeated Vector vectors = 4;
+
+    message Vector {
+        oneof vector {
+            uint64 x = 1;
+            int32 y = 2;
+        }
+    }
+}

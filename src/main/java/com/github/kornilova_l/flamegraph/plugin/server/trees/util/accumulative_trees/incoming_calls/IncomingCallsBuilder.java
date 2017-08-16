@@ -1,4 +1,4 @@
-package com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees.accumulative_trees.incoming_calls;
+package com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumulative_trees.incoming_calls;
 
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeBuilder;
 import com.github.kornilova_l.flamegraph.proto.TreeProtos;
@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.github.kornilova_l.flamegraph.plugin.server.trees.TreesSet.setTreeWidth;
-import static com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees.accumulative_trees.AccumulativeTreesHelper.setNodesOffsetRecursively;
-import static com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees.accumulative_trees.AccumulativeTreesHelper.updateNodeList;
+import static com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumulative_trees.AccumulativeTreesHelper.setNodesOffsetRecursively;
+import static com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumulative_trees.AccumulativeTreesHelper.updateNodeList;
 
 public final class IncomingCallsBuilder implements TreeBuilder {
     private TreeProtos.Tree.Builder treeBuilder;

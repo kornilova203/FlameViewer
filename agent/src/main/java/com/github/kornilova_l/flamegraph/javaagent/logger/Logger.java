@@ -22,7 +22,7 @@ public class Logger implements Runnable {
         lastLogTime = System.currentTimeMillis();
     }
 
-    void finish() {
+    public void finish() {
         logEvents();
         printStatus();
     }

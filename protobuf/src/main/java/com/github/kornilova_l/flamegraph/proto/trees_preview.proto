@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package com.github.kornilova_l.flamegraph.proto;
+
+option java_outer_classname = "TreesPreviewProtos";
+
+import "com/github/kornilova_l/flamegraph/proto/tree_preview.proto";
+
+message TreesPreview {
+    repeated com.github.kornilova_l.flamegraph.proto.TreePreview trees_preview = 1;
+    uint64 fullDuration = 2;
+}

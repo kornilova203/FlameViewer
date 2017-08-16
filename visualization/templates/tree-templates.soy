@@ -37,15 +37,17 @@
     {if $header}
     <h2 class="accumulative-tree-header">{$header}</h2>
     {/if}
-    <canvas id="canvas"
-        width="{$canvasWidth}"
-        height="{$canvasHeight}">
-    </canvas>
-    <canvas id="canvas-zoomed"
+    <div class="canvas-wrapper">
+        <canvas id="canvas"
+            width="{$canvasWidth}"
+            height="{$canvasHeight}">
+        </canvas>
+        <canvas id="canvas-zoomed"
             width="{$canvasWidth}"
             height="{$canvasHeight}"
             style="display: none;">
-    </canvas>
+        </canvas>
+    </div>
 </section>
 {/template}
 
@@ -87,8 +89,7 @@
 <ol class="file-list">
   {foreach $fileName in $fileNames}
     <li id="{$fileName}">
-        <img class="delete-file-black delete-file" src="img/close-black.png"/>
-        <img class="delete-file-white delete-file" src="img/close-white.png"/>
+        <img class="delete-file" src="img/close-white.png"/>
         <a href="/flamegraph-profiler/{$pageName}?file={$fileName}&amp;project={$projectName}">{$fileName}</a>
     </li>
   {/foreach}
@@ -163,4 +164,24 @@
         <div class="do-not-delete"><p>Cancel</p></div>
     </div>
 </div>
+{/template}
+
+/**
+ * Get section template for base tree
+ * @param canvasHeight
+ * @param threadName
+ * @param id
+ * @param canvasWidth
+ */
+{template .getTreePreviewSection}
+<section class="tree-preview">
+    <h2>{$threadName}</h2>
+    <canvas id="canvas-{$id}"
+        height="{$canvasHeight}"
+        width="{$canvasWidth}">
+    </canvas>
+    <button class="show-call-tree-button">
+        <img src="img/expand.png"/>
+    </button>
+</section>
 {/template}

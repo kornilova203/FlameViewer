@@ -91,7 +91,14 @@ public class CallTreesBuilder {
     private CTBuilder getCTBuilder(EventProtos.Event.MethodEvent methodEvent) {
         String threadName = threadsNames.get(methodEvent.getThreadId());
         if (threadName == null) {
-            throw new RuntimeException("Thread name is not known");
+            LOG.debug("Thread name is not known. MethodEvent: " + methodEvent.toString());
+            return treesMap.computeIfAbsent(
+                    methodEvent.getThreadId(),
+                    k -> new CTBuilder(
+                            methodEvent.getStartTime(),
+                            ""
+                    )
+            );
         }
         return treesMap.computeIfAbsent(
                 methodEvent.getThreadId(),

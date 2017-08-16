@@ -9,8 +9,8 @@ import java.util.Arrays;
 import java.util.Map;
 
 import static com.github.kornilova_l.flamegraph.plugin.server.trees.TreesSet.setTreeWidth;
-import static com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees.accumulative_trees.AccumulativeTreesHelper.setNodesOffsetRecursively;
-import static com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees.accumulative_trees.AccumulativeTreesHelper.updateNodeList;
+import static com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumulative_trees.AccumulativeTreesHelper.setNodesOffsetRecursively;
+import static com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumulative_trees.AccumulativeTreesHelper.updateNodeList;
 
 public class StacksOCTreeBuilder implements TreeBuilder {
     private final TreeProtos.Tree.Builder treeBuilder = TreeProtos.Tree.newBuilder();

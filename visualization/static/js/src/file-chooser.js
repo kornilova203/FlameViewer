@@ -7,7 +7,7 @@ $(window).on("load", () => {
     if (constants.fileName === undefined) {
         showChooseFile();
     }
-    unableHideFilesList();
+    enableHideFilesList();
 });
 
 function showFilesList($projectsDropdown, $searchForm, $arrowRight, $arrowLeft,
@@ -18,7 +18,6 @@ function showFilesList($projectsDropdown, $searchForm, $arrowRight, $arrowLeft,
     $projectsDropdown.css("opacity", 1);
     $projectsDropdown.css("pointer-events", "auto");
     $projectsDropdown.css("position", "relative");
-    expandMain();
     $searchForm.show();
     $(".file-form").show();
     $arrowLeft.show();
@@ -27,10 +26,10 @@ function showFilesList($projectsDropdown, $searchForm, $arrowRight, $arrowLeft,
     $verticalProjectName.css("opacity", 0);
     $verticalProjectName.css("pointer-events", "none");
     $(".file-list").show();
-
+    $(".tree-preview-wrapper").removeClass("tree-preview-wrapper-without-files");
 }
 
-function unableHideFilesList() {
+function enableHideFilesList() {
     const $arrowLeft = $("#arrow-left");
     const $arrowRight = $("#arrow-right");
     const $projectsDropdown = $(".projects-dropdown");
@@ -42,11 +41,9 @@ function unableHideFilesList() {
         $loaderBackground.css("left", "calc((100vw - 40px) / 2 + 40px - 80px)");
         $projectsDropdown.css("opacity", 0);
         $(".file-menu").css("width", 40);
-        shrinkMain();
         $projectsDropdown.css("transition", "opacity 50ms");
         $projectsDropdown.css("pointer-events", "none");
         $projectsDropdown.css("position", "absolute");
-        // projectsDropdown.hide();
         $searchForm.hide();
         $(".file-form").hide();
         $arrowLeft.hide();
@@ -54,6 +51,7 @@ function unableHideFilesList() {
         $verticalProjectName.css("transition", "opacity 300ms");
         $verticalProjectName.css("pointer-events", "auto");
         $verticalProjectName.css("opacity", 1);
+        $(".tree-preview-wrapper").addClass("tree-preview-wrapper-without-files");
         $(".file-list").hide();
     });
     $arrowRight.click(() => { // show
@@ -86,6 +84,7 @@ function appendInput() {
     const input = templates.tree.fileInput().content;
     // noinspection all
     $(input).insertBefore("#search-file-form");
+    $(".file-list").css("height", "calc(100vh - 233px)")
 }
 
 function deleteFile(popup, li, liFileName) {
@@ -169,6 +168,8 @@ function updateFilesList(filesList) {
     if (constants.projectName === "uploaded-files") {
         appendInput();
         listenInput();
+    } else {
+        $(".file-list").css("height", "calc(100vh - 145px)")
     }
 }
 
@@ -222,22 +223,4 @@ function getFilesList(projectName) {
         }
     };
     request.send();
-}
-
-function expandMain() {
-    if (getPageName() === "call-tree") {
-        constants.$main.css("margin-left", 250);
-        constants.$main.css("width", "calc(100vw - 250px)")
-    } else {
-        $("main").css("margin-left", "calc((100vw - 250px - 1200px) / 2 + 250px)");
-    }
-}
-
-function shrinkMain() {
-    if (getPageName() === "call-tree") {
-        constants.$main.css("margin-left", 40);
-        constants.$main.css("width", "calc(100vw - 40px)")
-    } else {
-        $("main").css("margin-left", "calc((100vw - 40px - 1200px) / 2 + 40px)");
-    }
 }

@@ -3,14 +3,19 @@ package com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees;
 import com.github.kornilova_l.flamegraph.configuration.Configuration;
 import com.github.kornilova_l.flamegraph.plugin.server.ProfilerHttpRequestHandler;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeManager;
+import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeManager.TreeType;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TreesSet;
-import com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees.accumulative_trees.outgoing_calls.OutgoingCallsBuilder;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees.call_tree.CallTreesBuilder;
-import com.github.kornilova_l.flamegraph.proto.TreeProtos;
-import com.github.kornilova_l.flamegraph.proto.TreesProtos;
+import com.github.kornilova_l.flamegraph.plugin.server.trees.util.TreePreviewBuilder;
+import com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumulative_trees.outgoing_calls.OutgoingCallsBuilder;
+import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree;
+import com.github.kornilova_l.flamegraph.proto.TreesPreviewProtos.TreesPreview;
+import com.github.kornilova_l.flamegraph.proto.TreesProtos.Trees;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
+import java.util.List;
 
 public class SerTreesSet extends TreesSet {
     public SerTreesSet(File logFile) {
@@ -28,8 +33,18 @@ public class SerTreesSet extends TreesSet {
 
     @Nullable
     @Override
-    public TreeProtos.Tree getTree(TreeManager.TreeType treeType,
-                                   @Nullable Configuration configuration) {
+    public TreesPreview getTreesPreview(@Nullable Configuration configuration) {
+        Trees callTree = getCallTree(configuration);
+        if (callTree == null) {
+            return null;
+        }
+        return new TreePreviewBuilder(callTree).getTreesPreview();
+    }
+
+    @Nullable
+    @Override
+    public Tree getTree(TreeType treeType,
+                        @Nullable Configuration configuration) {
         if (callTree == null) {
             return null;
         }
@@ -41,17 +56,31 @@ public class SerTreesSet extends TreesSet {
 
     @Nullable
     @Override
-    public TreesProtos.Trees getCallTree(@Nullable Configuration configuration) {
+    public Trees getCallTree(@Nullable Configuration configuration) {
         if (callTree == null) {
             return null;
         }
         if (configuration == null) {
             return callTree;
         }
-        TreesProtos.Trees.Builder filteredTrees = TreesProtos.Trees.newBuilder();
-        for (TreeProtos.Tree tree : callTree.getTreesList()) {
+        Trees.Builder filteredTrees = Trees.newBuilder();
+        for (Tree tree : callTree.getTreesList()) {
             filteredTrees.addTrees(filterTree(tree, configuration, true));
         }
         return filteredTrees.build();
+    }
+
+    @Override
+    @Nullable
+    public Trees getCallTree(@Nullable Configuration configuration, @NotNull List<Integer> threadsIds) {
+        Trees trees = getCallTree(configuration);
+        if (trees == null) {
+            return null;
+        }
+        Trees.Builder wantedTrees = Trees.newBuilder();
+        for (Integer threadsId : threadsIds) {
+            wantedTrees.addTrees(trees.getTrees(threadsId));
+        }
+        return wantedTrees.build();
     }
 }

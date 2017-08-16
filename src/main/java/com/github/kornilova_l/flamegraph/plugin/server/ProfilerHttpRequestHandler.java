@@ -4,8 +4,7 @@ import com.github.kornilova_l.flamegraph.configuration.Configuration;
 import com.github.kornilova_l.flamegraph.plugin.PluginFileManager;
 import com.github.kornilova_l.flamegraph.plugin.configuration.PluginConfigManager;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeManager;
-import com.github.kornilova_l.flamegraph.proto.TreeProtos;
-import com.github.kornilova_l.flamegraph.proto.TreesProtos;
+import com.github.kornilova_l.libs.com.google.protobuf.Message;
 import com.google.gson.Gson;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
@@ -20,8 +19,10 @@ import org.jetbrains.ide.HttpRequestHandler;
 import org.jetbrains.io.Responses;
 
 import java.io.*;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class ProfilerHttpRequestHandler extends HttpRequestHandler {
 
@@ -30,30 +31,15 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
     private final PluginFileManager fileManager = PluginFileManager.getInstance();
     private final TreeManager treeManager = new TreeManager();
 
-    private static void sendTrees(ChannelHandlerContext context,
-                                  @Nullable TreesProtos.Trees trees) {
-        if (trees == null) {
+    private static void sendProto(ChannelHandlerContext context,
+                                  @Nullable Message message) {
+        if (message == null) {
             sendBytes(context, "application/octet-stream", new byte[0]);
             return;
         }
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         try {
-            trees.writeTo(outputStream);
-            sendBytes(context, "application/octet-stream", outputStream.toByteArray());
-        } catch (IOException e) {
-            LOG.error(e);
-        }
-    }
-
-    private static void sendTree(ChannelHandlerContext context,
-                                 @Nullable TreeProtos.Tree tree) {
-        if (tree == null) {
-            sendBytes(context, "application/octet-stream", new byte[0]);
-            return;
-        }
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        try {
-            tree.writeTo(outputStream);
+            message.writeTo(outputStream);
             sendBytes(context, "application/octet-stream", outputStream.toByteArray());
         } catch (IOException e) {
             LOG.error(e);
@@ -244,6 +230,7 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
             case ServerNames.OUTGOING_CALLS_JS_REQUEST:
             case ServerNames.INCOMING_CALLS_JS_REQUEST:
             case ServerNames.CALL_TREE_JS_REQUEST:
+            case ServerNames.CALL_TREE_PREVIEW_JS_REQUEST:
                 processTreeRequest(uri, urlDecoder, context);
                 return true;
         }
@@ -348,10 +335,24 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
                 break;
             case ServerNames.CALL_TREE_JS_REQUEST:
                 LOG.info("CALL_TREE_JS_REQUEST");
-                sendTrees(context, treeManager.getCallTree(logFile, configuration));
+                sendProto(
+                        context,
+                        treeManager.getCallTree(logFile, configuration, getThreadsIds(urlDecoder))
+                );
                 break;
+            case ServerNames.CALL_TREE_PREVIEW_JS_REQUEST:
+                LOG.info("CALL_TREE_PREVIEW_JS_REQUEST");
+                sendProto(context, treeManager.getCallTreesPreview(logFile, configuration));
+                break;
+
         }
 
+    }
+
+    private List<Integer> getThreadsIds(QueryStringDecoder urlDecoder) {
+        return urlDecoder.parameters().get("threads").stream()
+                .map(Integer::parseInt)
+                .collect(Collectors.toList());
     }
 
     @Nullable
@@ -378,22 +379,22 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
             switch (uri) {
                 case ServerNames.OUTGOING_CALLS_JS_REQUEST:
                     LOG.info("outgoing calls for method js request");
-                    sendTree(context, treeManager.getTree(logFile, TreeManager.TreeType.OUTGOING_CALLS, className, methodName,
+                    sendProto(context, treeManager.getTree(logFile, TreeManager.TreeType.OUTGOING_CALLS, className, methodName,
                             desc, isStatic, configuration));
                     return;
                 case ServerNames.INCOMING_CALLS_JS_REQUEST:
                     LOG.info("incoming calls for method js request");
-                    sendTree(context, treeManager.getTree(logFile, TreeManager.TreeType.INCOMING_CALLS, className, methodName,
+                    sendProto(context, treeManager.getTree(logFile, TreeManager.TreeType.INCOMING_CALLS, className, methodName,
                             desc, isStatic, configuration));
             }
         } else {
             switch (uri) {
                 case ServerNames.OUTGOING_CALLS_JS_REQUEST:
                     LOG.info("OUTGOING_CALLS_JS_REQUEST");
-                    sendTree(context, treeManager.getTree(logFile, TreeManager.TreeType.OUTGOING_CALLS, configuration));
+                    sendProto(context, treeManager.getTree(logFile, TreeManager.TreeType.OUTGOING_CALLS, configuration));
                     return;
                 case ServerNames.INCOMING_CALLS_JS_REQUEST:
-                    sendTree(context, treeManager.getTree(logFile, TreeManager.TreeType.INCOMING_CALLS, configuration));
+                    sendProto(context, treeManager.getTree(logFile, TreeManager.TreeType.INCOMING_CALLS, configuration));
             }
         }
     }

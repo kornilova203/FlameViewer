@@ -21,7 +21,7 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
         super(tree);
         this.canvasWidth = Math.ceil(this.treeWidth * PIX_IN_MS);
         this.threadName = this.tree.getTreeInfo().getThreadName();
-        this.canvasOffset = this.tree.getTreeInfo().getStartTime() * PIX_IN_MS;
+        this.canvasOffset = 0;
         this.id = id;
         this.enableZoom = false;
         this._countNodesRecursively(this.baseNode);
@@ -45,10 +45,12 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
      * @override
      */
     _setPopupPosition(offsetX, depth) {
-        if (offsetX < constants.$main.scrollLeft()) {
-            offsetX = constants.$main.scrollLeft();
+        //noinspection JSValidateTypes
+        if (offsetX < $(".call-tree-wrapper").scrollLeft()) {
+            //noinspection JSValidateTypes
+            offsetX = $(".call-tree-wrapper").scrollLeft();
         } else {
-            offsetX += 20;
+            offsetX += 30;
         }
         super._setPopupPosition(offsetX, depth);
     }
@@ -56,7 +58,7 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
     draw() {
         this._prepareDraw();
 
-        this.section = this._createSection();
+        this.$section = this._createSection();
         this.stage = new createjs.Stage("canvas-" + this.id);
         this.stage.id = "canvas-" + this.id;
         this.stage.enableMouseOver(20);
@@ -71,10 +73,7 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
         if (childNodes.length === 0) {
             return;
         }
-        const maxDepth = this._drawFullTree();
-
-        this.stage.update();
-        this._moveCanvas(maxDepth);
+        this._drawFullTree();
     };
 
     _createSection() {
@@ -89,15 +88,15 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
             }
         ).content;
         const $section = $(sectionContent);
-        scrollHorizontally($section.find(".call-tree-header"), "padding-left");
+        // scrollHorizontally($section.find(".call-tree-header"), "padding-left");
         if (this.id === 0) {
             $section.find("h2").css("border", "none");
         }
-        return $section.appendTo($("main"));
+        return $section.appendTo($(".call-tree-wrapper"));
     };
 
     _createPopup() {
         const popupContent = templates.tree.callTreePopup().content;
-        this.$popup = $(popupContent).appendTo($("main"));
+        this.$popup = $(popupContent).appendTo(this.$section);
     }
 }

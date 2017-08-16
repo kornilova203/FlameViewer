@@ -1,0 +1,29 @@
+main {
+    height: calc(100vh - 45px);
+    overflow: scroll;
+    transition: width 300ms;
+}
+
+main::-webkit-scrollbar {
+    width: 12px;
+}
+
+main::-webkit-scrollbar-track {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+main::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.15);
+}
+
+section {
+    margin-bottom: 100px;
+    min-width: 1260px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+canvas {
+    position: relative;
+}

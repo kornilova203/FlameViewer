@@ -2,11 +2,13 @@ package com.github.kornilova_l.flamegraph.plugin.server.trees;
 
 import com.github.kornilova_l.flamegraph.configuration.Configuration;
 import com.github.kornilova_l.flamegraph.plugin.configuration.PluginConfigManager;
-import com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees.accumulative_trees.AccumulativeTreesHelper;
-import com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees.accumulative_trees.MethodAccumulativeTreeBuilder;
-import com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees.accumulative_trees.incoming_calls.IncomingCallsBuilder;
-import com.github.kornilova_l.flamegraph.proto.TreeProtos;
+import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeManager.TreeType;
+import com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumulative_trees.AccumulativeTreesHelper;
+import com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumulative_trees.MethodAccumulativeTreeBuilder;
+import com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumulative_trees.incoming_calls.IncomingCallsBuilder;
+import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree;
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node;
+import com.github.kornilova_l.flamegraph.proto.TreesPreviewProtos.TreesPreview;
 import com.github.kornilova_l.flamegraph.proto.TreesProtos;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -17,8 +19,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.TreeMap;
 
-import static com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees.accumulative_trees.AccumulativeTreesHelper.setNodesOffsetRecursively;
-import static com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees.accumulative_trees.AccumulativeTreesHelper.updateNodeList;
+import static com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumulative_trees.AccumulativeTreesHelper.setNodesOffsetRecursively;
+import static com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumulative_trees.AccumulativeTreesHelper.updateNodeList;
 
 public abstract class TreesSet {
     protected final File logFile;
@@ -26,9 +28,9 @@ public abstract class TreesSet {
     @Nullable
     protected TreesProtos.Trees callTree;
     @Nullable
-    protected TreeProtos.Tree outgoingCalls;
+    protected Tree outgoingCalls;
     @Nullable
-    private TreeProtos.Tree incomingCalls;
+    private Tree incomingCalls;
 
     public TreesSet(File logFile) {
         this.logFile = logFile;
@@ -36,11 +38,11 @@ public abstract class TreesSet {
     }
 
     @Nullable
-    private static TreeProtos.Tree getTreeForMethod(TreeProtos.Tree sourceTree,
-                                                    String className,
-                                                    String methodName,
-                                                    String desc,
-                                                    boolean isStatic) {
+    private static Tree getTreeForMethod(Tree sourceTree,
+                                         String className,
+                                         String methodName,
+                                         String desc,
+                                         boolean isStatic) {
         if (sourceTree == null) {
             return null;
         }
@@ -49,23 +51,50 @@ public abstract class TreesSet {
         ).getTree();
     }
 
+    public static int getMaxDepthRecursively(Node.Builder nodeBuilder, int currentDepth) {
+        int maxDepth = currentDepth;
+        for (Node.Builder child : nodeBuilder.getNodesBuilderList()) {
+            int newDepth = getMaxDepthRecursively(child, currentDepth + 1);
+            if (newDepth > maxDepth) {
+                maxDepth = newDepth;
+            }
+        }
+        return maxDepth;
+    }
+
+    /**
+     * This method must be called after offset of nodes is set
+     * {@link AccumulativeTreesHelper#setNodesOffsetRecursively}
+     *
+     * @param treeBuilder set width to this tree
+     */
+    public static void setTreeWidth(Tree.Builder treeBuilder) {
+        Node.Builder baseNode = treeBuilder.getBaseNodeBuilder();
+        Node.Builder lastNode = baseNode.getNodesBuilder(baseNode.getNodesCount() - 1);
+        treeBuilder.setWidth(
+                lastNode.getOffset() + lastNode.getWidth()
+        );
+    }
+
     protected abstract void validateExtension();
 
-    public abstract TreeProtos.Tree getTree(TreeManager.TreeType treeType,
-                                            @Nullable Configuration configuration);
+    public abstract TreesPreview getTreesPreview(@Nullable Configuration configuration);
 
-    public final TreeProtos.Tree getTree(TreeManager.TreeType treeType,
-                                         String className,
-                                         String methodName,
-                                         String desc,
-                                         boolean isStatic,
-                                         @Nullable Configuration configuration) {
+    public abstract Tree getTree(TreeType treeType,
+                                 @Nullable Configuration configuration);
+
+    public final Tree getTree(TreeType treeType,
+                              String className,
+                              String methodName,
+                              String desc,
+                              boolean isStatic,
+                              @Nullable Configuration configuration) {
         switch (treeType) {
             case OUTGOING_CALLS:
-                getTree(TreeManager.TreeType.OUTGOING_CALLS, configuration);
+                getTree(TreeType.OUTGOING_CALLS, configuration);
                 return getTreeForMethod(outgoingCalls, className, methodName, desc, isStatic);
             case INCOMING_CALLS:
-                getTree(TreeManager.TreeType.INCOMING_CALLS, configuration);
+                getTree(TreeType.INCOMING_CALLS, configuration);
                 return getTreeForMethod(incomingCalls, className, methodName, desc, isStatic);
             default:
                 throw new IllegalArgumentException("Tree type is not supported");
@@ -74,10 +103,12 @@ public abstract class TreesSet {
 
     public abstract TreesProtos.Trees getCallTree(@Nullable Configuration configuration);
 
+    public abstract TreesProtos.Trees getCallTree(@Nullable Configuration configuration, @NotNull List<Integer> threadsIds);
+
     @NotNull List<HotSpot> getHotSpots() {
         if (hotSpots.size() == 0) {
             if (outgoingCalls == null) {
-                outgoingCalls = getTree(TreeManager.TreeType.OUTGOING_CALLS, null);
+                outgoingCalls = getTree(TreeType.OUTGOING_CALLS, null);
             }
             if (outgoingCalls == null) {
                 return new LinkedList<>();
@@ -114,38 +145,11 @@ public abstract class TreesSet {
         return node.getWidth() - childTime;
     }
 
-    public static class HotSpot implements Comparable<HotSpot> {
-        private final String methodName;
-        private final String className;
-        private final String[] parameters;
-        @SuppressWarnings("unused")
-        private final String retVal;
-        private float relativeTime = 0;
-
-        HotSpot(String className, String methodName, String description) {
-            this.className = className;
-            this.methodName = methodName;
-            String params = description.substring(1, description.indexOf(")"));
-            parameters = params.split(", ");
-            retVal = description.substring(description.indexOf(")") + 1, description.length());
-        }
-
-        @Override
-        public int compareTo(@NotNull TreesSet.HotSpot hotSpot) {
-            return (className + methodName + String.join("", parameters)).compareTo(
-                    hotSpot.className + hotSpot.methodName + String.join("", hotSpot.parameters));
-        }
-
-        void addTime(float callRelativeTime) {
-            relativeTime += callRelativeTime;
-        }
-    }
-
     @NotNull
-    protected TreeProtos.Tree filterTree(TreeProtos.Tree tree,
-                                         @NotNull Configuration configuration,
-                                         boolean isCallTree) {
-        TreeProtos.Tree.Builder filteredTree = TreeProtos.Tree.newBuilder();
+    protected Tree filterTree(Tree tree,
+                              @NotNull Configuration configuration,
+                              boolean isCallTree) {
+        Tree.Builder filteredTree = Tree.newBuilder();
         filteredTree.setBaseNode(Node.newBuilder());
         if (isCallTree) {
             filteredTree.setTreeInfo(tree.getTreeInfo());
@@ -170,7 +174,7 @@ public abstract class TreesSet {
      *
      * @param filteredTree tree
      */
-    private void updateOffset(TreeProtos.Tree.Builder filteredTree) {
+    private void updateOffset(Tree.Builder filteredTree) {
         if (filteredTree.getBaseNodeBuilder().getNodesBuilderList().size() == 0) {
             return;
         }
@@ -188,17 +192,6 @@ public abstract class TreesSet {
         for (Node.Builder child : node.getNodesBuilderList()) {
             updateOffsetRecursively(child, offset);
         }
-    }
-
-    public static int getMaxDepthRecursively(Node.Builder nodeBuilder, int currentDepth) {
-        int maxDepth = currentDepth;
-        for (Node.Builder child : nodeBuilder.getNodesBuilderList()) {
-            int newDepth = getMaxDepthRecursively(child, currentDepth + 1);
-            if (newDepth > maxDepth) {
-                maxDepth = newDepth;
-            }
-        }
-        return maxDepth;
     }
 
     /**
@@ -242,7 +235,7 @@ public abstract class TreesSet {
         return nodeBuilder;
     }
 
-    protected TreeProtos.Tree getTreeMaybeFilter(TreeManager.TreeType treeType, @Nullable Configuration configuration) {
+    protected Tree getTreeMaybeFilter(TreeType treeType, @Nullable Configuration configuration) {
         switch (treeType) {
             case OUTGOING_CALLS:
                 if (configuration == null) {
@@ -265,17 +258,30 @@ public abstract class TreesSet {
         }
     }
 
-    /**
-     * This method must be called after offset of nodes is set
-     * {@link AccumulativeTreesHelper#setNodesOffsetRecursively}
-     *
-     * @param treeBuilder set width to this tree
-     */
-    public static void setTreeWidth(TreeProtos.Tree.Builder treeBuilder) {
-        Node.Builder baseNode = treeBuilder.getBaseNodeBuilder();
-        Node.Builder lastNode = baseNode.getNodesBuilder(baseNode.getNodesCount() - 1);
-        treeBuilder.setWidth(
-                lastNode.getOffset() + lastNode.getWidth()
-        );
+    public static class HotSpot implements Comparable<HotSpot> {
+        private final String methodName;
+        private final String className;
+        private final String[] parameters;
+        @SuppressWarnings("unused")
+        private final String retVal;
+        private float relativeTime = 0;
+
+        HotSpot(String className, String methodName, String description) {
+            this.className = className;
+            this.methodName = methodName;
+            String params = description.substring(1, description.indexOf(")"));
+            parameters = params.split(", ");
+            retVal = description.substring(description.indexOf(")") + 1, description.length());
+        }
+
+        @Override
+        public int compareTo(@NotNull TreesSet.HotSpot hotSpot) {
+            return (className + methodName + String.join("", parameters)).compareTo(
+                    hotSpot.className + hotSpot.methodName + String.join("", hotSpot.parameters));
+        }
+
+        void addTime(float callRelativeTime) {
+            relativeTime += callRelativeTime;
+        }
     }
 }

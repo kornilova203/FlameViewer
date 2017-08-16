@@ -14,9 +14,25 @@
   <script src="js/src/hot-spots.js"></script>
 
   <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/hot-spots.css">
   <title>Flamegraph</title>
 </head>
 <body>
+<div class="file-menu">
+  <div class="projects-dropdown">
+    <div class="dropButton"><p class="project-name"></p></div>
+    <img src="img/drop-down-black.png" class="drop-down-arrow">
+    <div class="projects-dropdown-content"></div>
+  </div>
+  <form class="search-form" id="search-file-form">
+    <input size="40" placeholder="Search file"/>
+  </form>
+  <div class="vertical-project-name"></div>
+  <button id="hide-file-list-button">
+    <img id="arrow-left" src="img/arrow-left-black.png"/>
+    <img id="arrow-right" src="img/arrow-right-black.png"/>
+  </button>
+</div>
 <nav>
   <ul>
     <li><!--suppress HtmlUnknownTarget -->
@@ -41,21 +57,6 @@
 </nav>
 <main>
 </main>
-<div class="file-menu">
-  <div class="projects-dropdown">
-    <div class="dropButton"><p class="project-name"></p></div>
-    <img src="img/drop-down-black.png" class="drop-down-arrow">
-    <div class="projects-dropdown-content"></div>
-  </div>
-  <form class="search-form" id="search-file-form">
-    <input size="40" placeholder="Search file"/>
-  </form>
-  <div class="vertical-project-name"></div>
-  <button id="hide-file-list-button">
-    <img id="arrow-left" src="img/arrow-left-black.png"/>
-    <img id="arrow-right" src="img/arrow-right-black.png"/>
-  </button>
-</div>
 <div class="loader-background">
   <div class="loader"></div>
   <div class="loader-message"><p></p></div>

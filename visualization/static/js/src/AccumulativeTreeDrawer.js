@@ -69,8 +69,7 @@ class AccumulativeTreeDrawer {
         if (childNodes.length === 0) {
             return;
         }
-        const maxDepth = this._drawFullTree();
-        this._moveCanvas(maxDepth);
+        this._drawFullTree();
         console.log("Drawing took " + (new Date().getTime() - startTime));
     };
 
@@ -154,7 +153,7 @@ class AccumulativeTreeDrawer {
             offsetX = offsetX - 1;
         }
         shape.setTransform(offsetX, offsetY, scaleX);
-        // noinspection JSUnresolvedFunction
+        //noinspection JSUnresolvedFunction
         stage.addChild(shape);
         this.listenScale(node, shape);
         return shape;
@@ -183,7 +182,7 @@ class AccumulativeTreeDrawer {
 
     _createPopup() {
         const popupContent = templates.tree.accumulativeTreePopup().content;
-        this.$popup = $(popupContent).appendTo(this.section);
+        this.$popup = $(popupContent).appendTo(this.section.find(".canvas-wrapper"));
     }
 
     /**
@@ -326,18 +325,16 @@ class AccumulativeTreeDrawer {
     }
 
     _setNodeZoomed(node) {
-        let maxDepth = 0;
         this.currentlyShownNodes = [];
         if (node !== this.baseNode) {
             common.showLoader(constants.loaderMessages.drawing, () => {
                 this.zoomedStage.removeAllChildren();
                 this._expandParents(node);
-                maxDepth = this._drawNodesRecursively(
+                this._drawNodesRecursively(
                     node,
                     0,
                     this._countScaleXForNode(node),
                     this._countOffsetXForNode(node),
-                    node.depth,
                     true,
                     this.zoomedStage,
                     true,
@@ -369,7 +366,6 @@ class AccumulativeTreeDrawer {
      * @param {Number} drawnLayerCount
      * @param {Number} newFullScaleX
      * @param {Number} newOffsetX
-     * @param {Number} maxDepth
      * @param {Boolean} isMostFirst
      * @param {createjs.Stage} stage
      * @param {Boolean} saveNodesToList
@@ -381,7 +377,6 @@ class AccumulativeTreeDrawer {
                           drawnLayerCount,
                           newFullScaleX,
                           newOffsetX,
-                          maxDepth,
                           isMostFirst,
                           stage,
                           saveNodesToList,
@@ -398,35 +393,17 @@ class AccumulativeTreeDrawer {
             stage
         );
         const children = node.getNodesList();
-        let newMaxDepth = maxDepth;
         for (let i = 0; i < children.length; i++) {
-            const depth = this._drawNodesRecursively(
+            this._drawNodesRecursively(
                 children[i],
                 drawnLayerCount + 1,
                 newFullScaleX,
                 newOffsetX,
-                maxDepth + 1,
                 i === 0 && isMostFirst,
                 stage,
                 saveNodesToList,
                 saveOriginalColor
             );
-            if (depth > newMaxDepth) {
-                newMaxDepth = depth;
-            }
-        }
-        return newMaxDepth;
-    }
-
-    _moveCanvas(maxDepth) {
-        const main = $("main");
-        let oldTopString = main.css("top");
-        oldTopString = oldTopString.substring(0, oldTopString.indexOf("p"));
-        const oldTop = parseInt(oldTopString);
-        const newY = AccumulativeTreeDrawer._calcNormaOffsetY(maxDepth) + 300;
-        main.css("top", -this.canvasHeight + newY);
-        if (oldTop < 0) {
-            window.scrollBy(0, -oldTop - this.canvasHeight + newY);
         }
     }
 
@@ -445,23 +422,18 @@ class AccumulativeTreeDrawer {
     }
 
     _drawFullTree() {
-        let maxDepth = 0;
         const children = this.baseNode.getNodesList();
         for (let i = 0; i < children.length; i++) {
-            const depth = this._drawNodesRecursively(
+            this._drawNodesRecursively(
                 children[i],
                 0,
                 1,
-                0,
                 0,
                 true,
                 this.stage,
                 false,
                 true
             );
-            if (depth > maxDepth) {
-                maxDepth = depth;
-            }
         }
         this.stage.update();
     }

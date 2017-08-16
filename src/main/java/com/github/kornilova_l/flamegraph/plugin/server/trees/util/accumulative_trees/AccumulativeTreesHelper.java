@@ -1,4 +1,4 @@
-package com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees.accumulative_trees;
+package com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumulative_trees;
 
 import com.github.kornilova_l.flamegraph.proto.TreeProtos;
 import org.jetbrains.annotations.NotNull;

@@ -3,24 +3,67 @@ body {
     overflow: hidden;
 }
 
-main {
-    margin-left: 250px;
-    padding-left: 20px;
-    width: calc(100vw - 250px);
+.tree-preview-wrapper {
     box-sizing: border-box;
-    overflow: scroll;
-    height: calc(100vh - 60px);
+    overflow-y: scroll;
+    overflow-x: hidden;
+    height: calc(100vh - 45px);
+    width: calc(100vw - 250px);
+    transition: width 300ms;
 }
 
-.call-tree-header {
+.tree-preview-wrapper #expand-preview-button {
+    display: none;
+}
+
+.tree-preview-wrapper-without-files {
+    width: calc(100vw - 40px);
+}
+
+.tree-preview-wrapper::-webkit-scrollbar, .call-tree-wrapper::-webkit-scrollbar {
+    width: 12px;
+}
+
+.tree-preview-wrapper::-webkit-scrollbar-track, .call-tree-wrapper::-webkit-scrollbar-track {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.tree-preview-wrapper::-webkit-scrollbar-thumb, .call-tree-wrapper::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+section {
+    background-color: white;
+    position: relative;
+    padding: 0 30px;
+    transition: margin 300ms;
+}
+
+.call-tree-wrapper section {
+    min-height: calc(100vh - 45px);
+}
+
+.tree-preview-wrapper section {
+    border-top: 1px solid #ddd;
+    padding: 0 40px 0 20px;
+}
+
+.tree-preview-wrapper h2 {
+    cursor: pointer;
+}
+
+.call-tree-header, .tree-preview h2 {
     margin-bottom: 40px;
     font-weight: normal;
     font-size: 16px;
     line-height: 18px;
-    border-top: 2px solid #ddd;
     padding-top: 10px;
     margin-top: 0;
     width: 100%;
+}
+
+.tree-preview h2 {
+    margin-bottom: 5px;
 }
 
 .call-tree-header span {
@@ -28,6 +71,81 @@ main {
     font-style: italic;
 }
 
-main:first-child {
-    border-top: 0 solid white;
+.show-call-tree-button {
+    position: absolute;
+    bottom: calc(50% - 15px);
+    right: 10px;
+    background: none;
+    border: 0;
+    color: inherit;
+    font: inherit;
+    line-height: normal;
+    overflow: visible;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+
+.show-call-tree-button img {
+    width: 100%;
+}
+
+.call-tree-wrapper {
+    height: calc(100vh - 45px);
+    display: none;
+    overflow: scroll;
+}
+
+canvas {
+    margin-right: 30px;
+}
+
+.hidden-tree-preview {
+    width: 40px;
+    overflow-y: hidden;
+    background-color: #d0d0d0;
+    float: left;
+    cursor: pointer;
+}
+
+.hidden-tree-preview * {
+    display: none;
+}
+
+.hidden-tree-preview #expand-preview-button {
+    display: block;
+}
+
+.hidden-tree-preview #expand-preview-button * {
+    display: block;
+}
+
+#expand-preview-button {
+    background: none;
+    border: 0;
+    color: inherit;
+    font: inherit;
+    line-height: normal;
+    overflow: visible;
+    padding: 0;
+    position: absolute;
+    top: 50%;
+}
+
+#expand-preview-button img {
+    width: 40px;
+}
+
+#hide-file-list-button img {
+    position: absolute;
+    margin-left: -45%;
+    margin-top: -50%;
+    opacity: 0.5;
+    transition: opacity 300ms;
+}
+
+#hide-file-list-button img:hover {
+    cursor: pointer;
+    opacity: 0.9;
 }

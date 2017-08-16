@@ -15,6 +15,8 @@
   <script src="js/src/AccumulativeTreeDrawer.js"></script>
   <script src="js/src/CallTreeDrawer.js"></script>
   <script src="js/out/call-tree.js"></script>
+  <script src="js/src/PreviewDrawer.js"></script>
+  <script src="js/out/trees-preview.js"></script>
 
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/call-tree.css">
@@ -38,6 +40,21 @@
     <button class="cancel-filter">Cancel</button>
   </div>
 </aside>
+<div class="file-menu">
+  <div class="projects-dropdown">
+    <div class="dropButton"><p class="project-name"></p></div>
+    <img src="img/drop-down-black.png" class="drop-down-arrow">
+    <div class="projects-dropdown-content"></div>
+  </div>
+  <form class="search-form" id="search-file-form">
+    <input size="40" placeholder="Search file"/>
+  </form>
+  <div class="vertical-project-name"></div>
+  <button id="hide-file-list-button">
+    <img id="arrow-left" src="img/arrow-left-black.png"/>
+    <img id="arrow-right" src="img/arrow-right-black.png"/>
+  </button>
+</div>
 <nav>
   <ul>
     <li class="current-link"><!--suppress HtmlUnknownTarget -->
@@ -60,22 +77,12 @@
     </li>
   </ul>
 </nav>
-<main>
-</main>
-<div class="file-menu">
-  <div class="projects-dropdown">
-    <div class="dropButton"><p class="project-name"></p></div>
-    <img src="img/drop-down-black.png" class="drop-down-arrow">
-    <div class="projects-dropdown-content"></div>
-  </div>
-  <form class="search-form" id="search-file-form">
-    <input size="40" placeholder="Search file"/>
-  </form>
-  <div class="vertical-project-name"></div>
-  <button id="hide-file-list-button">
-    <img id="arrow-left" src="img/arrow-left-black.png"/>
-    <img id="arrow-right" src="img/arrow-right-black.png"/>
+<div class="tree-preview-wrapper">
+  <button id="expand-preview-button">
+    <img id="preview-arrow-right" src="img/arrow-right-white.png"/>
   </button>
+</div>
+<div class="call-tree-wrapper">
 </div>
 <div class="loader-background">
   <div class="loader"></div>

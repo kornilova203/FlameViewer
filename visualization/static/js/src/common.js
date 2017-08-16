@@ -65,6 +65,7 @@ common.hideMessage = () => {
 
 const constants = {};
 constants.$main = null;
+constants.$treePreviewWrapper = null;
 constants.$loaderBackground = null;
 constants.$loaderMessageP = null;
 constants.projectName = common.getParameter("project");
@@ -82,6 +83,7 @@ $(window).on("load", () => {
     constants.$main = $("main");
     constants.$loaderBackground = $(".loader-background");
     constants.$loaderMessageP = $('.loader-message p');
+    constants.$treePreviewWrapper = $('.tree-preview-wrapper');
 });
 
 /**
@@ -92,7 +94,7 @@ setInterval(() => {
     const request = new XMLHttpRequest();
     request.open("POST", "/flamegraph-profiler/trees/alive", true);
     request.onload = () => {
-        console.log("alive");
+
     };
     request.send();
 }, 10000);

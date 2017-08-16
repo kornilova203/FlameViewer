@@ -21,16 +21,9 @@ body {
     padding: 0;
     font-family: "Gotham Pro", sans-serif;
     font-weight: normal;
-}
-
-main {
-    display: block;
-    margin-top: 0;
-    margin-left: calc((100vw - 250px - 1200px) / 2 + 250px);
-    margin-bottom: 300px;
-    z-index: -2;
-    position: absolute;
-    transition: margin 300ms;
+    width: 100vw;
+    height:100vh;
+    overflow: hidden;
 }
 
 h1 {
@@ -49,19 +42,14 @@ h1 {
 
 .file-form {
     width: 100%;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .file-form p {
     text-align: center;
     margin-top: 10px;
+    margin-bottom: 0;
     opacity: 0.7;
-}
-
-section {
-    background-color: white;
-    padding: 0;
-    position: relative;
 }
 
 .call-tree {
@@ -88,6 +76,7 @@ section {
     position: absolute;
     z-index: 100;
     padding: 10px 15px 15px;
+    text-align: left;
 }
 
 .popup h3 {
@@ -117,15 +106,14 @@ section {
 .inputfile + label {
     color: white;
     background-color: #0887d7;
-    width: 150px;
-    height: 50px;
+    width: 120px;
+    height: 35px;
     font-size: 14px;
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 25px;
     font-weight: bold;
-    margin: 7px auto 10px;
+    margin: 0 auto 10px;
 }
 
 .inputfile + label:hover {
@@ -142,7 +130,7 @@ section {
 
 nav {
     padding: 0;
-    height: 60px;
+    height: 45px;
     background-color: #f3f3f3;
     width: 100vw;
 }
@@ -153,6 +141,8 @@ nav ul {
     padding: 0;
     margin: 0;
     height: 100%;
+    position: relative;
+    right: 80px;
 }
 
 nav ul li {
@@ -161,10 +151,16 @@ nav ul li {
     vertical-align: baseline;
     padding: 0;
     margin: 0;
+    transition: background-color 300ms;
+}
+
+.current-link a {
+    color: white;
+    font-weight: bold;
 }
 
 nav ul li a, .choose-file-header a {
-    color: black;
+    color: #111;
     text-transform: uppercase;
     font-family: "Gotham Pro", sans-serif;
     font-weight: normal;
@@ -174,21 +170,27 @@ nav ul li a, .choose-file-header a {
     height: 100%;
     vertical-align: baseline;
     align-items: center;
-    transition: background 300ms, color 300ms;
     padding: 0 40px;
-    justify-content: center;
 }
 
-nav ul li:hover, .current-link {
+nav ul li:hover {
+    background-color: #baddf2;
+}
+
+nav ul li:active {
     background-color: #0e8fdf;
 }
 
-.current-link a {
-    font-weight: bold;
+nav ul li a:focus {
+    color: white;
 }
 
-nav ul li:hover a, .current-link a {
-    color: white;
+.current-link:hover {
+    background-color: #0e8fdf;
+}
+
+.current-link {
+    background-color: #0e8fdf;
 }
 
 .popup ul {
@@ -217,6 +219,28 @@ nav ul li:hover a, .current-link a {
     list-style: none;
     padding: 0;
     margin-top: 21px;
+    overflow-y: scroll;
+    height: calc(100vh - 145px);
+    border-top: solid 1px #bbb;
+    border-bottom: solid 1px #bbb;
+}
+
+.file-list li {
+    display: flex;
+    align-items: center;
+    height: 40px;
+}
+
+.file-list::-webkit-scrollbar {
+    width: 10px;
+}
+
+.file-list::-webkit-scrollbar-track {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.file-list::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.1);
 }
 
 .file-list li a {
@@ -224,18 +248,21 @@ nav ul li:hover a, .current-link a {
     width: calc(100% - 40px);
     text-overflow: ellipsis;
     overflow: hidden;
-    padding: 14px 0 7px 40px;
     text-decoration: none;
     color: #282828;
+    position: relative;
+    margin-top: 5px;
 }
 
 .file-list li:hover {
-    transition: background 300ms;
-    display: inline-block;
     padding-right: 10px;
-    background-color: #0e8fdf;
+    background-color: rgba(14, 160, 243, 0.8);
     min-width: 100%;
     box-sizing: border-box;
+}
+
+.file-list li:hover {
+    transition: background-color 300ms;
 }
 
 .file-list li:hover a {
@@ -254,14 +281,15 @@ nav ul li:hover a, .current-link a {
 }
 
 .file-menu {
-    position: fixed;
+    float: left;
     height: 100%;
     width: 250px;
     top: 0;
     left: 0;
-    background-color: #dadada;
+    background-color: #e5e5e5;
     color: #282828;
     transition: width 200ms;
+    position: relative;
 }
 
 .search-form {
@@ -279,7 +307,6 @@ nav ul li:hover a, .current-link a {
     pointer-events: initial;
     border-width: 0;
     border-bottom: solid black 1px;
-    margin-top: 10px;
 }
 
 .search-form input:focus {
@@ -304,11 +331,11 @@ nav ul li:hover a, .current-link a {
 }
 
 .dropButton {
-    height: 60px;
+    height: 45px;
     font-size: 16px;
     border: none;
     cursor: pointer;
-    background-color: #bcbcbc;
+    background-color: #d0d0d0;
     color: #111;
 }
 
@@ -344,26 +371,28 @@ nav ul li:hover a, .current-link a {
 }
 
 .projects-dropdown:hover .dropButton {
-    background-color: rgba(152, 152, 152, 0.91);
+    background-color: #c4c4c4;
 }
 
 .projects-dropdown p {
     width: 200px;
     overflow: hidden;
-    padding: 22px 20px 10px;
+    padding: 15px 20px 10px;
     margin: 0;
 }
 
 .drop-down-arrow {
     position: absolute;
-    margin-top: -40px;
+    margin-top: -35px;
     margin-left: 220px;
 }
 
 .message {
     text-align: center;
     color: #6a6a6a;
-    margin-top: 100px;
+    position: fixed;
+    top: 50%;
+    width: 100%;
 }
 
 .dim {
@@ -428,8 +457,8 @@ nav ul li:hover a, .current-link a {
 
 #hide-file-list-button {
     position: absolute;
-    bottom: 30px;
-    right: 10px;
+    bottom: 6px;
+    right: 15px;
     background: none;
     border: 0;
     color: inherit;
@@ -536,28 +565,21 @@ button:focus {
     margin-right: 10px;
 }
 
-.delete-file-white {
-    display: none;
-}
-
-.current-file .delete-file-white, .file-list li:hover .delete-file-white {
-    display: inline-block;
-}
-
-.current-file .delete-file-black, .file-list li:hover .delete-file-black {
-    display: none;
+.file-list li:hover .delete-file {
+    opacity: 0.8;
 }
 
 .delete-file {
-    opacity: 0.8;
+    opacity: 0;
+    display: inline-block;
     cursor: pointer;
-    position: absolute;
     height: 40px;
     box-sizing: border-box;
     padding: 11px;
+    transition: opacity 300ms;
 }
 
-.delete-file:hover {
+.file-list li .delete-file:hover {
     opacity: 1;
 }
 
@@ -618,8 +640,8 @@ button:focus {
 .filter {
     position: fixed;
     width: 80px;
-    height: 60px;
-    background-color: rgba(172, 172, 172, 0.91);
+    height: 45px;
+    background-color: #d0d0d0;
     right: 0;
     top: 0;
     display: flex;
@@ -673,4 +695,8 @@ button:focus {
     color: #333;
     margin-bottom: 0;
     line-height: 18px;
+}
+
+#search-method-form input {
+    margin-top: 5px;
 }

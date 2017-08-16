@@ -5,10 +5,13 @@ import com.github.kornilova_l.flamegraph.plugin.server.ProfilerHttpRequestHandle
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeManager;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TreesSet;
 import com.github.kornilova_l.flamegraph.proto.TreeProtos;
+import com.github.kornilova_l.flamegraph.proto.TreesPreviewProtos;
 import com.github.kornilova_l.flamegraph.proto.TreesProtos;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
+import java.util.List;
 import java.util.Map;
 
 import static com.github.kornilova_l.flamegraph.plugin.server.trees.jfr_trees.FlightRecorderConverter.getStacks;
@@ -36,6 +39,11 @@ public class JfrTreesSet extends TreesSet {
         }
     }
 
+    @Override
+    public TreesPreviewProtos.TreesPreview getTreesPreview(@Nullable Configuration configuration) {
+        throw new UnsupportedOperationException("Call tree is not supported for .jfr");
+    }
+
     @Nullable
     @Override
     public TreeProtos.Tree getTree(TreeManager.TreeType treeType, Configuration configuration) {
@@ -45,6 +53,11 @@ public class JfrTreesSet extends TreesSet {
     @Nullable
     @Override
     public TreesProtos.Trees getCallTree(@Nullable Configuration configuration) {
+        throw new UnsupportedOperationException("Call tree is not supported for .jfr");
+    }
+
+    @Override
+    public TreesProtos.Trees getCallTree(@Nullable Configuration configuration, @NotNull List<Integer> threadsIds) {
         throw new UnsupportedOperationException("Call tree is not supported for .jfr");
     }
 }

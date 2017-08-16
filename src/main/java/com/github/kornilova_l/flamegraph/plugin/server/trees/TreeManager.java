@@ -5,12 +5,15 @@ import com.github.kornilova_l.flamegraph.plugin.server.ProfilerHttpRequestHandle
 import com.github.kornilova_l.flamegraph.plugin.server.trees.jfr_trees.JfrTreesSet;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees.SerTreesSet;
 import com.github.kornilova_l.flamegraph.proto.TreeProtos;
+import com.github.kornilova_l.flamegraph.proto.TreesPreviewProtos.TreesPreview;
 import com.github.kornilova_l.flamegraph.proto.TreesProtos;
 import com.intellij.openapi.diagnostic.Logger;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -56,12 +59,13 @@ public class TreeManager {
     }
 
 
-    @Nullable
-    public TreesProtos.Trees getCallTree(File logFile, @Nullable Configuration configuration) {
+    public TreesProtos.@Nullable Trees getCallTree(File logFile,
+                                                   @Nullable Configuration configuration,
+                                                   @NotNull List<Integer> threadsIds) {
         isBusy.set(true);
         updateTreesSet(logFile);
 
-        TreesProtos.Trees callTree = currentTreesSet.getCallTree(configuration);
+        TreesProtos.Trees callTree = currentTreesSet.getCallTree(configuration, threadsIds);
 
         isBusy.set(false);
 
@@ -70,7 +74,8 @@ public class TreeManager {
     }
 
     private void updateTreesSet(File logFile) {
-        if (logFile != currentFile) {
+        if (currentFile == null ||
+                !Objects.equals(logFile.getAbsolutePath(), currentFile.getAbsolutePath())) {
             currentFile = logFile;
             Extension extension = ProfilerHttpRequestHandler.getExtension(logFile.getName());
             switch (extension) {
@@ -124,6 +129,15 @@ public class TreeManager {
 
     public void updateLastTime() {
         lastUpdate.set(System.currentTimeMillis());
+    }
+
+    @Nullable
+    public TreesPreview getCallTreesPreview(@Nullable File logFile, Configuration configuration) {
+        isBusy.set(true);
+        updateTreesSet(logFile);
+        TreesPreview treesPreview = currentTreesSet.getTreesPreview(configuration);
+        isBusy.set(false);
+        return treesPreview;
     }
 
     public enum TreeType {

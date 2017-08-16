@@ -1,0 +1,19 @@
+main {
+    overflow: scroll;
+    height: calc(100vh - 45px);
+    padding: 20px;
+    transition: width 300ms;
+    box-sizing: border-box;
+}
+
+main::-webkit-scrollbar, .call-tree-wrapper::-webkit-scrollbar {
+    width: 12px;
+}
+
+main::-webkit-scrollbar-track, .call-tree-wrapper::-webkit-scrollbar-track {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+main::-webkit-scrollbar-thumb, .call-tree-wrapper::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.1);
+}
