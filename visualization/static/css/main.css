@@ -22,8 +22,9 @@ body {
     font-family: "Gotham Pro", sans-serif;
     font-weight: normal;
     width: 100vw;
-    height:100vh;
+    height: 100vh;
     overflow: hidden;
+    color: #111;
 }
 
 h1 {
@@ -307,6 +308,7 @@ nav ul li a:focus {
     pointer-events: initial;
     border-width: 0;
     border-bottom: solid black 1px;
+    margin-top: 10px;
 }
 
 .search-form input:focus {
@@ -444,6 +446,7 @@ nav ul li a:focus {
 #search-method-form {
     position: fixed;
     right: 100px;
+    z-index: 10;
 }
 
 .search-white-bg {
@@ -557,10 +560,6 @@ button:focus {
     text-align: right;
 }
 
-.outer-time-div {
-    position: absolute;
-}
-
 .hot-spot a {
     margin-right: 10px;
 }
@@ -650,18 +649,40 @@ button:focus {
     cursor: pointer;
 }
 
+.filter:hover {
+    background-color: #ababab;
+}
+
+.filter:active {
+    background-color: #8a8a8a;
+}
+
+.filter-applied {
+    color: white;
+    background-color: #0e8fdf;
+}
+
 .filter-content {
     position: fixed;
     background-color: #f3f3f3;
     width: 300px;
-    height: 310px;
-    top: 60px;
+    height: 170px;
+    top: 45px;
     right: 0;
     display: none;
     padding: 20px;
+    z-index: 1;
+    border: solid 1px #888;
 }
 
-.apply-filter, .cancel-filter {
+.filter-content input {
+    width: 100%;
+    box-sizing: border-box;
+    height: 22px;
+    padding-right: 60px;
+}
+
+.apply-filter, .cancel-filter, .clear-filter {
     position: absolute;
     background: none;
     border: 0;
@@ -669,25 +690,63 @@ button:focus {
     justify-content: center;
     text-align: center;
     width: 70px;
-    height: 40px;
+    height: 30px;
     color: white;
     bottom: 10px;
     cursor: pointer;
+    font-size: 14px;
+    transition: background-color 300ms;
 }
 
 .apply-filter {
+    background-color: rgba(14, 143, 223, 0.66);
+    right: 170px;
+    cursor: default;
+}
+
+.active-apply:hover, .filter-applied:hover {
+    background-color: #086ead;
+}
+
+.active-apply:active, .filter-applied:active {
+    background-color: #064e7a;
+}
+
+.active-apply {
     background-color: #0e8fdf;
+    cursor: pointer;
+}
+
+.cancel-filter, .clear-filter {
+    background-color: #ababab;
     right: 90px;
 }
 
 .cancel-filter {
-    background-color: rgba(172, 172, 172, 0.91);
     right: 10px;
+}
+
+.cancel-filter:hover, .clear-filter:hover {
+    background-color: #8a8a8a;
+}
+
+.cancel-filter:active, .clear-filter:active {
+    background-color: #696969;
 }
 
 .filter-content label {
     display: block;
     margin: 10px 0 5px;
+    font-size: 14px;
+}
+
+.filtered-methods-count {
+    font-size: 14px;
+}
+
+.filtered-methods-count span {
+    opacity: 0.8;
+    font-style: italic;
 }
 
 .loader-message p {

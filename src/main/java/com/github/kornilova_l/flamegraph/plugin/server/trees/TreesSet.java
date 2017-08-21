@@ -1,7 +1,5 @@
 package com.github.kornilova_l.flamegraph.plugin.server.trees;
 
-import com.github.kornilova_l.flamegraph.configuration.Configuration;
-import com.github.kornilova_l.flamegraph.plugin.configuration.PluginConfigManager;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeManager.TreeType;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumulative_trees.AccumulativeTreesHelper;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumulative_trees.MethodAccumulativeTreeBuilder;
@@ -78,32 +76,39 @@ public abstract class TreesSet {
 
     protected abstract void validateExtension();
 
-    public abstract TreesPreview getTreesPreview(@Nullable Configuration configuration);
+    public abstract TreesPreview getTreesPreview(@Nullable Filter filter);
 
     public abstract Tree getTree(TreeType treeType,
-                                 @Nullable Configuration configuration);
+                                 @Nullable Filter filter);
 
     public final Tree getTree(TreeType treeType,
                               String className,
                               String methodName,
                               String desc,
                               boolean isStatic,
-                              @Nullable Configuration configuration) {
+                              @Nullable Filter filter) {
+        Tree tree;
         switch (treeType) {
             case OUTGOING_CALLS:
-                getTree(TreeType.OUTGOING_CALLS, configuration);
-                return getTreeForMethod(outgoingCalls, className, methodName, desc, isStatic);
+                getTree(TreeType.OUTGOING_CALLS, null);
+                tree = getTreeForMethod(outgoingCalls, className, methodName, desc, isStatic);
+                break;
             case INCOMING_CALLS:
-                getTree(TreeType.INCOMING_CALLS, configuration);
-                return getTreeForMethod(incomingCalls, className, methodName, desc, isStatic);
+                getTree(TreeType.INCOMING_CALLS, null);
+                tree = getTreeForMethod(incomingCalls, className, methodName, desc, isStatic);
+                break;
             default:
                 throw new IllegalArgumentException("Tree type is not supported");
         }
+        if (filter == null) {
+            return tree;
+        }
+        return filterTree(tree, filter, false);
     }
 
-    public abstract TreesProtos.Trees getCallTree(@Nullable Configuration configuration);
+    public abstract TreesProtos.Trees getCallTree(@Nullable Filter filter);
 
-    public abstract TreesProtos.Trees getCallTree(@Nullable Configuration configuration, @NotNull List<Integer> threadsIds);
+    public abstract TreesProtos.Trees getCallTree(@Nullable Filter filter, @Nullable List<Integer> threadsIds);
 
     @NotNull List<HotSpot> getHotSpots() {
         if (hotSpots.size() == 0) {
@@ -145,9 +150,9 @@ public abstract class TreesSet {
         return node.getWidth() - childTime;
     }
 
-    @NotNull
+    @Nullable
     protected Tree filterTree(Tree tree,
-                              @NotNull Configuration configuration,
+                              @NotNull Filter filter,
                               boolean isCallTree) {
         Tree.Builder filteredTree = Tree.newBuilder();
         filteredTree.setBaseNode(Node.newBuilder());
@@ -156,8 +161,11 @@ public abstract class TreesSet {
         }
         buildFilteredTreeRecursively(filteredTree.getBaseNodeBuilder(),
                 tree.getBaseNode(),
-                configuration,
+                filter,
                 isCallTree);
+        if (filteredTree.getBaseNodeBuilder().getNodesCount() == 0) {
+            return null;
+        }
         int maxDepth = getMaxDepthRecursively(filteredTree.getBaseNodeBuilder(), 0);
         if (!isCallTree) {
             setNodesOffsetRecursively(filteredTree.getBaseNodeBuilder(), 0);
@@ -195,18 +203,18 @@ public abstract class TreesSet {
     }
 
     /**
-     * @param nodeBuilder   to this node children will be added
-     * @param node          children of this node will be added to nodeBuilder
-     * @param configuration decides if child will be added
-     * @param isCallTree    if it is a call tree
+     * @param nodeBuilder to this node children will be added
+     * @param node        children of this node will be added to nodeBuilder
+     * @param filter      decides if child will be added
+     * @param isCallTree  if it is a call tree
      */
     private void buildFilteredTreeRecursively(Node.Builder nodeBuilder,
                                               Node node,
-                                              @NotNull Configuration configuration,
+                                              @NotNull Filter filter,
                                               boolean isCallTree) {
 
         for (Node child : node.getNodesList()) {
-            if (configuration.isMethodInstrumented(PluginConfigManager.newMethodConfig(child))) {
+            if (filter.isNodeIncluded(child)) {
                 Node.Builder newNode;
                 if (isCallTree) {
                     newNode = copyNode(child);
@@ -219,10 +227,10 @@ public abstract class TreesSet {
                 buildFilteredTreeRecursively(
                         newNode,
                         child,
-                        configuration,
+                        filter,
                         isCallTree);
             } else {
-                buildFilteredTreeRecursively(nodeBuilder, child, configuration, isCallTree);
+                buildFilteredTreeRecursively(nodeBuilder, child, filter, isCallTree);
             }
         }
     }
@@ -235,13 +243,13 @@ public abstract class TreesSet {
         return nodeBuilder;
     }
 
-    protected Tree getTreeMaybeFilter(TreeType treeType, @Nullable Configuration configuration) {
+    protected Tree getTreeMaybeFilter(TreeType treeType, @Nullable Filter filter) {
         switch (treeType) {
             case OUTGOING_CALLS:
-                if (configuration == null) {
+                if (filter == null) {
                     return outgoingCalls;
                 }
-                return filterTree(outgoingCalls, configuration, false);
+                return filterTree(outgoingCalls, filter, false);
             case INCOMING_CALLS:
                 if (outgoingCalls == null) {
                     return null;
@@ -249,10 +257,10 @@ public abstract class TreesSet {
                 if (incomingCalls == null) {
                     incomingCalls = new IncomingCallsBuilder(outgoingCalls).getTree();
                 }
-                if (configuration == null) {
+                if (filter == null) {
                     return incomingCalls;
                 }
-                return filterTree(incomingCalls, configuration, false);
+                return filterTree(incomingCalls, filter, false);
             default:
                 throw new IllegalArgumentException("Tree type is not supported");
         }

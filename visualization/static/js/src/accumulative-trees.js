@@ -26,7 +26,7 @@ function drawAccumulativeTree(tree, className, methodName, desc) {
 function drawAndShowLoader(drawer, className, methodName, desc) {
     common.showLoader(constants.loaderMessages.drawing, () => {
         if (className !== undefined && methodName !== undefined && desc !== undefined) {
-            drawer.setHeader(className.split("%2F").join(".") + "." +
+            drawer.setHeader(decodeURIComponent(className) + "." +
                 methodName +
                 desc);
         }
@@ -79,7 +79,7 @@ $(window).on("load", function () {
                 request.open("GET", `/flamegraph-profiler/trees/${treeType}?${parameters}`, true);
                 className = common.getParameter("class");
                 methodName = common.getParameter("method");
-                desc = common.getParameter("desc").split("%2F").join(".").split("%28").join("(").split("%29").join(")").split("%3B").join(";");
+                desc = decodeURIComponent(common.getParameter("desc"));
             }
             request.responseType = "arraybuffer";
 

@@ -85,6 +85,12 @@ section {
     width: 30px;
     height: 30px;
     cursor: pointer;
+    opacity: 0;
+    transition: opacity 300ms;
+}
+
+.tree-preview-wrapper section:hover .show-call-tree-button {
+    opacity: 0.6;
 }
 
 .show-call-tree-button img {

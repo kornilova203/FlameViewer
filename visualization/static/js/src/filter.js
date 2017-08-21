@@ -1,53 +1,170 @@
+let parametersWithoutFilter;
+let CURRENT_PREFIX;
+let $callTreeA;
+let $outgoingCallsA;
+let $incomingCallsA;
+let $filteredNodesCountSpan;
+let CURRENT_INCLUDED = common.getParameter("include");
+CURRENT_INCLUDED = CURRENT_INCLUDED === undefined ? "" : CURRENT_INCLUDED;
+let CURRENT_EXCLUDED = common.getParameter("exclude");
+CURRENT_EXCLUDED = CURRENT_EXCLUDED === undefined ? "" : CURRENT_EXCLUDED;
+let methodsCountInCurrentTree = null;
+
 $(window).on("load", () => {
     const $filterContent = $(".filter-content");
     const $applyAnchor = $filterContent.find("a");
-    const locationWithoutFilter = getLocationWithoutFilter();
+    $callTreeA = $(".call-tree-a");
+    $outgoingCallsA = $(".outgoing-calls-a");
+    $incomingCallsA = $(".incoming-calls-a");
+    $filteredNodesCountSpan = $(".filtered-methods-count span");
+    parametersWithoutFilter = getParametersWithoutFilter();
+    setCurrentPrefix();
 
     $(".filter").click(() => {
         $filterContent.toggle();
+        if (methodsCountInCurrentTree === null) {
+            countMethodsInCurrentTree();
+        } else {
+            setMethodsCount(methodsCountInCurrentTree);
+        }
     });
-    const $includedTextarea = $filterContent.find("#included-textarea");
-    const $excludedTextarea = $filterContent.find("#excluded-textarea");
 
-    const currentIncluded = common.getParameter("include");
-    const currentExcluded = common.getParameter("exclude");
-    if (currentIncluded !== undefined && currentIncluded !== "[]") {
-        $includedTextarea.val(currentIncluded.split(",").join("\n"));
-    }
-    if (currentExcluded !== undefined && currentExcluded !== "[]") {
-        $excludedTextarea.val(currentExcluded.split(",").join("\n"));
-    }
+    $filterContent.find(".cancel-filter").click(() => {
+        setValueFromParameters($includedInput, $excludedInput);
+        $filterContent.toggle();
+        setButtonInactive($applyAnchor);
+    });
 
-    $includedTextarea.on('change keyup copy paste cut', () => {
-        updateFilterLink($applyAnchor, $includedTextarea.val(), $excludedTextarea.val(), locationWithoutFilter);
+    const $includedInput = $filterContent.find("#included-input");
+    const $excludedInput = $filterContent.find("#excluded-input");
+
+    setValueFromParameters($includedInput, $excludedInput);
+    updateFilterButton();
+
+    $includedInput.on('change keyup copy paste cut', () => {
+        updateFilterLink($applyAnchor, $includedInput.val(), $excludedInput.val());
 
     });
-    $excludedTextarea.on('change keyup copy paste cut', () => {
-        updateFilterLink($applyAnchor, $includedTextarea.val(), $excludedTextarea.val(), locationWithoutFilter);
+    $excludedInput.on('change keyup copy paste cut', () => {
+        updateFilterLink($applyAnchor, $includedInput.val(), $excludedInput.val());
     });
+
+    setClearAction($filterContent.find(".clear-filter"), $includedInput, $excludedInput, $applyAnchor);
 });
+
+function setCurrentPrefix() {
+    CURRENT_PREFIX = "/flamegraph-profiler/" + getPageName();
+}
+
+/**
+ * @param $clearFilterButton
+ * @param $includedInput
+ * @param $excludedInput
+ * @param $applyAnchor
+ */
+function setClearAction($clearFilterButton, $includedInput, $excludedInput, $applyAnchor) {
+    $clearFilterButton.click(() => {
+        $includedInput.val("");
+        $excludedInput.val("");
+        updateFilterLink($applyAnchor, $includedInput.val(), $excludedInput.val());
+    })
+}
+
+function setValueFromParameters($includedInput, $excludedInput) {
+    $includedInput.val(decodeURIComponent(CURRENT_INCLUDED));
+    $excludedInput.val(decodeURIComponent(CURRENT_EXCLUDED));
+}
+
+function updateFilterButton() {
+    if (CURRENT_INCLUDED !== "" ||
+        CURRENT_EXCLUDED !== "") {
+        $(".filter").addClass("filter-applied");
+    }
+}
+
+function isApplyActive(includingInputText, excludingInputText) {
+    return CURRENT_INCLUDED !== includingInputText ||
+        CURRENT_EXCLUDED !== excludingInputText
+}
+
+function setButtonInactive($applyAnchor) {
+    $applyAnchor.removeAttr("href");
+    $applyAnchor.find("button").removeClass("active-apply")
+}
+
+/**
+ * @param {String} include
+ * @param {String} exclude
+ * @return {String}
+ */
+function getParametersWithFilter(include, exclude) {
+    let link = parametersWithoutFilter;
+    if (include !== "" && include !== undefined) {
+        link += "&include=" + encodeURIComponent(include);
+    }
+    if (exclude !== "" && exclude !== undefined) {
+        link += "&exclude=" + encodeURIComponent(exclude);
+    }
+    return link;
+}
+
+function setMethodsCount(nodesCount) {
+    $filteredNodesCountSpan.text(nodesCount);
+}
+
+/**
+ * Send request to server to count how much nodes will be in tree with filter
+ * @param {String} includingInputText
+ * @param {String} excludingInputText
+ */
+function countMethodsForFilter(includingInputText, excludingInputText) {
+    const request = new XMLHttpRequest();
+    request.open("GET",
+        "/flamegraph-profiler/trees/" + getPageName() + "/count?" +
+        getParametersWithFilter(includingInputText, excludingInputText), true);
+    request.responseType = "json";
+    request.onload = () => {
+        const nodesCount = request.response.nodesCount;
+        setMethodsCount(nodesCount);
+    };
+    request.send();
+}
+
+
+function countMethodsInCurrentTree() {
+    const request = new XMLHttpRequest();
+    request.open("GET",
+        "/flamegraph-profiler/trees/" + getPageName() + "/count?" +
+        getParametersWithFilter(CURRENT_INCLUDED, CURRENT_EXCLUDED), true);
+    request.responseType = "json";
+    request.onload = () => {
+        const nodesCount = request.response.nodesCount;
+        methodsCountInCurrentTree = nodesCount;
+        setMethodsCount(nodesCount);
+    };
+    request.send();
+}
 
 /**
  * @param {Object} $applyAnchor
  * @param {String} includingInputText
  * @param {String} excludingInputText
- * @param {String} locationWithoutFilter
  */
-function updateFilterLink($applyAnchor, includingInputText, excludingInputText, locationWithoutFilter) {
-    let link = locationWithoutFilter;
-    if (includingInputText !== "") {
-        link += "&include=" + includingInputText.split("\n").join(",");
+function updateFilterLink($applyAnchor, includingInputText, excludingInputText) {
+    countMethodsForFilter(includingInputText, excludingInputText);
+    if (isApplyActive(includingInputText, excludingInputText)) {
+        let link = CURRENT_PREFIX + "?" + getParametersWithFilter(includingInputText, excludingInputText);
+        $applyAnchor.attr("href", link);
+        $applyAnchor.find("button").addClass("active-apply")
+    } else {
+        setButtonInactive($applyAnchor);
     }
-    if (excludingInputText !== "") {
-        link += "&exclude=" + excludingInputText.split("\n").join(",");
-    }
-    $applyAnchor.attr("href", link);
 }
 
 /**
  * @return {String}
  */
-function getLocationWithoutFilter() {
+function getParametersWithoutFilter() {
     const parametersString = window.location.href.split("?")[1];
     const parameters = parametersString.split("&");
     for (let i = 0; i < parameters.length; i++) {
@@ -57,5 +174,5 @@ function getLocationWithoutFilter() {
             i--;
         }
     }
-    return window.location.href.split("?")[0] + "?" + parameters.join("&");
+    return parameters.join("&");
 }

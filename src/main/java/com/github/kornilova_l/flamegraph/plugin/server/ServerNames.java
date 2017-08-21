@@ -2,18 +2,21 @@ package com.github.kornilova_l.flamegraph.plugin.server;
 
 import java.util.regex.Pattern;
 
-class ServerNames {
+public class ServerNames {
     private static final String NAME = "flamegraph-profiler";
     static final String MAIN_NAME = "/" + NAME;
     static final String FILE_LIST = MAIN_NAME + "/file-list";
     static final String CALL_TREE = MAIN_NAME + "/call-tree";
     static final String LIST_PROJECTS = MAIN_NAME + "/list-projects";
-    static final String CALL_TREE_JS_REQUEST = MAIN_NAME + "/trees/call-tree";
-    static final String CALL_TREE_PREVIEW_JS_REQUEST = CALL_TREE_JS_REQUEST + "/preview";
+    public static final String CALL_TREE_JS_REQUEST = MAIN_NAME + "/trees/call-tree";
+    public static final String CALL_TREE_COUNT = CALL_TREE_JS_REQUEST + "/count";
+    public static final String CALL_TREE_PREVIEW_JS_REQUEST = CALL_TREE_JS_REQUEST + "/preview";
     static final String OUTGOING_CALLS = MAIN_NAME + "/outgoing-calls";
-    static final String OUTGOING_CALLS_JS_REQUEST = MAIN_NAME + "/trees/outgoing-calls";
+    public static final String OUTGOING_CALLS_JS_REQUEST = MAIN_NAME + "/trees/outgoing-calls";
+    public static final String OUTGOING_CALLS_COUNT = OUTGOING_CALLS_JS_REQUEST + "/count";
     static final String INCOMING_CALLS = MAIN_NAME + "/incoming-calls";
-    static final String INCOMING_CALLS_JS_REQUEST = MAIN_NAME + "/trees/incoming-calls";
+    public static final String INCOMING_CALLS_JS_REQUEST = MAIN_NAME + "/trees/incoming-calls";
+    public static final String INCOMING_CALLS_COUNT = INCOMING_CALLS_JS_REQUEST + "/count";
     static final String CONNECTION_ALIVE = MAIN_NAME + "/trees/alive";
     static final String HOT_SPOTS = MAIN_NAME + "/hot-spots";
     static final String HOT_SPOTS_JS_REQUEST = MAIN_NAME + "/hot-spots-json";

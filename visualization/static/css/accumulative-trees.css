@@ -27,3 +27,7 @@ section {
 canvas {
     position: relative;
 }
+
+.canvas-wrapper {
+    position: relative;
+}

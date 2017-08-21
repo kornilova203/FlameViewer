@@ -1,0 +1,67 @@
+trees {
+  tree_info {
+    thread_name: "main"
+  }
+  base_node {
+    nodes {
+      width: 35
+      node_info {
+        method_name: "fun1"
+        class_name: "com.github.kornilova_l.flamegraph.plugin.server.trees.generate_test_data.SimpleTree"
+        return_value {
+        }
+        description: "()void"
+        count: 1
+      }
+      nodes {
+        width: 5
+        node_info {
+          method_name: "fun2"
+          class_name: "com.github.kornilova_l.flamegraph.plugin.server.trees.generate_test_data.SimpleTree"
+          return_value {
+          }
+          description: "()void"
+          count: 1
+        }
+      }
+      nodes {
+        offset: 20
+        width: 5
+        node_info {
+          method_name: "fun3"
+          class_name: "com.github.kornilova_l.flamegraph.plugin.server.trees.generate_test_data.SimpleTree"
+          return_value {
+          }
+          description: "()void"
+          count: 1
+        }
+      }
+    }
+    nodes {
+      offset: 60
+      width: 5
+      node_info {
+        method_name: "fun4"
+        class_name: "com.github.kornilova_l.flamegraph.plugin.server.trees.generate_test_data.SimpleTree"
+        return_value {
+        }
+        description: "()void"
+        count: 1
+      }
+    }
+    nodes {
+      offset: 90
+      width: 5
+      node_info {
+        method_name: "fun5"
+        class_name: "com.github.kornilova_l.flamegraph.plugin.server.trees.generate_test_data.SimpleTree"
+        return_value {
+        }
+        description: "()void"
+        count: 1
+      }
+    }
+  }
+  depth: 2
+  width: 95
+}

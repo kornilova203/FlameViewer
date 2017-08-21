@@ -443,11 +443,7 @@ class AccumulativeTreeDrawer {
      * @protected
      */
     _setPopupContent(node) {
-        const desc = node.getNodeInfo().getDescription()
-            .split("/").join("%2F")
-            .split("(").join("%28")
-            .split(")").join("%29")
-            .split(";").join("%3B");
+        const desc = encodeURIComponent(node.getNodeInfo().getDescription());
         this.$popup.find("h3").text(`${node.getNodeInfo().getClassName()}.${node.getNodeInfo().getMethodName()}`);
         this.$popup.find(".outgoing-link").attr("href", `/flamegraph-profiler/outgoing-calls?` +
             `file=${constants.fileName}&` +
@@ -535,9 +531,6 @@ class AccumulativeTreeDrawer {
             return;
         }
         let className = nodeInfo.getClassName();
-        if (className.indexOf("/") !== -1) {
-            className = className.split("/").join(".");
-        }
         node.normalizedName = (className + "." + nodeInfo.getMethodName()).toLowerCase();
     }
 

@@ -4,6 +4,7 @@ import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeManager;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.jfr_trees.FlightRecorderConverter;
 import com.intellij.openapi.application.PathManager;
 import io.netty.buffer.ByteBuf;
+import io.netty.handler.codec.http.QueryStringDecoder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,6 +15,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.github.kornilova_l.flamegraph.plugin.server.ProfilerHttpRequestHandler.getExtension;
+import static com.github.kornilova_l.flamegraph.plugin.server.ProfilerHttpRequestHandler.getParameter;
 
 public class PluginFileManager {
     private static final boolean isWindows = System.getProperty("os.name").startsWith("Windows");
@@ -48,6 +50,16 @@ public class PluginFileManager {
         );
         uploadedFilesPath = Paths.get(logDirPath.toString(), UPLOADED_FILES);
         createDirIfNotExist(uploadedFilesPath);
+    }
+
+    @Nullable
+    public File getLogFile(QueryStringDecoder urlDecoder) {
+        String projectName = getParameter(urlDecoder, "project");
+        String fileName = getParameter(urlDecoder, "file");
+        if (projectName == null || fileName == null) {
+            return null;
+        }
+        return getConfigFile(projectName, fileName);
     }
 
     public static PluginFileManager getInstance() {

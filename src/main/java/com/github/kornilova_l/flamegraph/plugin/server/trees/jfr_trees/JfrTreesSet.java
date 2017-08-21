@@ -1,13 +1,12 @@
 package com.github.kornilova_l.flamegraph.plugin.server.trees.jfr_trees;
 
-import com.github.kornilova_l.flamegraph.configuration.Configuration;
 import com.github.kornilova_l.flamegraph.plugin.server.ProfilerHttpRequestHandler;
+import com.github.kornilova_l.flamegraph.plugin.server.trees.Filter;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeManager;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TreesSet;
 import com.github.kornilova_l.flamegraph.proto.TreeProtos;
 import com.github.kornilova_l.flamegraph.proto.TreesPreviewProtos;
 import com.github.kornilova_l.flamegraph.proto.TreesProtos;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
@@ -40,24 +39,24 @@ public class JfrTreesSet extends TreesSet {
     }
 
     @Override
-    public TreesPreviewProtos.TreesPreview getTreesPreview(@Nullable Configuration configuration) {
+    public TreesPreviewProtos.TreesPreview getTreesPreview(@Nullable Filter filter) {
         throw new UnsupportedOperationException("Call tree is not supported for .jfr");
     }
 
     @Nullable
     @Override
-    public TreeProtos.Tree getTree(TreeManager.TreeType treeType, Configuration configuration) {
-        return getTreeMaybeFilter(treeType, configuration);
+    public TreeProtos.Tree getTree(TreeManager.TreeType treeType, Filter filter) {
+        return getTreeMaybeFilter(treeType, filter);
     }
 
     @Nullable
     @Override
-    public TreesProtos.Trees getCallTree(@Nullable Configuration configuration) {
+    public TreesProtos.Trees getCallTree(@Nullable Filter filter) {
         throw new UnsupportedOperationException("Call tree is not supported for .jfr");
     }
 
     @Override
-    public TreesProtos.Trees getCallTree(@Nullable Configuration configuration, @NotNull List<Integer> threadsIds) {
+    public TreesProtos.Trees getCallTree(@Nullable Filter filter, @Nullable List<Integer> threadsIds) {
         throw new UnsupportedOperationException("Call tree is not supported for .jfr");
     }
 }

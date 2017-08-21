@@ -1,6 +1,5 @@
 package com.github.kornilova_l.flamegraph.plugin.server.trees;
 
-import com.github.kornilova_l.flamegraph.configuration.Configuration;
 import com.github.kornilova_l.flamegraph.plugin.server.ProfilerHttpRequestHandler;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.jfr_trees.JfrTreesSet;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees.SerTreesSet;
@@ -8,7 +7,6 @@ import com.github.kornilova_l.flamegraph.proto.TreeProtos;
 import com.github.kornilova_l.flamegraph.proto.TreesPreviewProtos.TreesPreview;
 import com.github.kornilova_l.flamegraph.proto.TreesProtos;
 import com.intellij.openapi.diagnostic.Logger;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
@@ -23,8 +21,13 @@ public class TreeManager {
     private volatile TreesSet currentTreesSet = null;
     private AtomicLong lastUpdate = new AtomicLong(System.currentTimeMillis());
     private AtomicBoolean isBusy = new AtomicBoolean(false);
+    private static TreeManager treeManager = new TreeManager();
 
-    public TreeManager() {
+    public static TreeManager getInstance() {
+        return treeManager;
+    }
+
+    private TreeManager() {
         TreeManager thisTreeManager = this;
         Thread watchLastUpdate = new Thread(() -> {
             //noinspection InfiniteLoopStatement
@@ -60,12 +63,12 @@ public class TreeManager {
 
 
     public TreesProtos.@Nullable Trees getCallTree(File logFile,
-                                                   @Nullable Configuration configuration,
-                                                   @NotNull List<Integer> threadsIds) {
+                                                   @Nullable Filter filter,
+                                                   @Nullable List<Integer> threadsIds) {
         isBusy.set(true);
         updateTreesSet(logFile);
 
-        TreesProtos.Trees callTree = currentTreesSet.getCallTree(configuration, threadsIds);
+        TreesProtos.Trees callTree = currentTreesSet.getCallTree(filter, threadsIds);
 
         isBusy.set(false);
 
@@ -93,10 +96,10 @@ public class TreeManager {
     }
 
     @Nullable
-    public TreeProtos.Tree getTree(File logFile, TreeType treeType, @Nullable Configuration configuration) {
+    public TreeProtos.Tree getTree(File logFile, TreeType treeType, @Nullable Filter filter) {
         isBusy.set(true);
         updateTreesSet(logFile);
-        TreeProtos.Tree tree = currentTreesSet.getTree(treeType, configuration);
+        TreeProtos.Tree tree = currentTreesSet.getTree(treeType, filter);
 
         isBusy.set(false);
 
@@ -110,10 +113,10 @@ public class TreeManager {
                                    String methodName,
                                    String desc,
                                    boolean isStatic,
-                                   @Nullable Configuration configuration) {
+                                   @Nullable Filter filter) {
         isBusy.set(true);
         updateTreesSet(logFile);
-        TreeProtos.Tree tree = currentTreesSet.getTree(treeType, className, methodName, desc, isStatic, configuration);
+        TreeProtos.Tree tree = currentTreesSet.getTree(treeType, className, methodName, desc, isStatic, filter);
         isBusy.set(false);
         return tree;
 
@@ -132,10 +135,10 @@ public class TreeManager {
     }
 
     @Nullable
-    public TreesPreview getCallTreesPreview(@Nullable File logFile, Configuration configuration) {
+    public TreesPreview getCallTreesPreview(@Nullable File logFile, Filter filter) {
         isBusy.set(true);
         updateTreesSet(logFile);
-        TreesPreview treesPreview = currentTreesSet.getTreesPreview(configuration);
+        TreesPreview treesPreview = currentTreesSet.getTreesPreview(filter);
         isBusy.set(false);
         return treesPreview;
     }

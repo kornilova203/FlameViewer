@@ -1,9 +1,15 @@
 package com.github.kornilova_l.flamegraph.plugin.server;
 
-import com.github.kornilova_l.flamegraph.configuration.Configuration;
 import com.github.kornilova_l.flamegraph.plugin.PluginFileManager;
-import com.github.kornilova_l.flamegraph.plugin.configuration.PluginConfigManager;
+import com.github.kornilova_l.flamegraph.plugin.server.methods_count_handlers.AccumulativeTreesMethodCounter;
+import com.github.kornilova_l.flamegraph.plugin.server.methods_count_handlers.CallTreeMethodsCounter;
+import com.github.kornilova_l.flamegraph.plugin.server.tree_request_handlers.CallTreeRequestHandler;
+import com.github.kornilova_l.flamegraph.plugin.server.tree_request_handlers.HotSpotsRequestHandler;
+import com.github.kornilova_l.flamegraph.plugin.server.tree_request_handlers.IncomingCallsRequestHandler;
+import com.github.kornilova_l.flamegraph.plugin.server.tree_request_handlers.OutgoingCallsRequestHandler;
+import com.github.kornilova_l.flamegraph.plugin.server.trees.Filter;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeManager;
+import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeManager.TreeType;
 import com.github.kornilova_l.libs.com.google.protobuf.Message;
 import com.google.gson.Gson;
 import io.netty.buffer.Unpooled;
@@ -19,20 +25,16 @@ import org.jetbrains.ide.HttpRequestHandler;
 import org.jetbrains.io.Responses;
 
 import java.io.*;
-import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 public class ProfilerHttpRequestHandler extends HttpRequestHandler {
 
     private static final com.intellij.openapi.diagnostic.Logger LOG =
             com.intellij.openapi.diagnostic.Logger.getInstance(ProfilerHttpRequestHandler.class);
     private final PluginFileManager fileManager = PluginFileManager.getInstance();
-    private final TreeManager treeManager = new TreeManager();
 
-    private static void sendProto(ChannelHandlerContext context,
-                                  @Nullable Message message) {
+    public static void sendProto(ChannelHandlerContext context,
+                                 @Nullable Message message) {
         if (message == null) {
             sendBytes(context, "application/octet-stream", new byte[0]);
             return;
@@ -84,7 +86,7 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
     }
 
     @Nullable
-    private static String getParameter(QueryStringDecoder urlDecoder, String key) {
+    public static String getParameter(QueryStringDecoder urlDecoder, String key) {
         Map<String, java.util.List<String>> parameters = urlDecoder.parameters();
         if (parameters.containsKey(key)) {
             return parameters.get(key).get(0);
@@ -92,19 +94,42 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
         return null;
     }
 
+    public static void sendJson(ChannelHandlerContext context, String json) {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        try {
+            outputStream.write(json.getBytes());
+            sendBytes(context, "application/json", outputStream.toByteArray());
+        } catch (IOException e) {
+            LOG.error(e);
+        }
+    }
+
+    @Nullable
+    public static Filter getFilter(QueryStringDecoder urlDecoder) {
+        if (urlDecoder.parameters().containsKey("include") || urlDecoder.parameters().containsKey("exclude")) {
+            String includingConfigsString = getParameter(urlDecoder, "include");
+            String excludingConfigsString = getParameter(urlDecoder, "exclude");
+            return new Filter(includingConfigsString, excludingConfigsString);
+        }
+        return null;
+    }
+
     private byte[] renderPage(String htmlFilePath,
                               @Nullable String fileName,
-                              @NotNull String projectName) {
+                              @NotNull String projectName,
+                              @Nullable String include,
+                              @Nullable String exclude) {
         htmlFilePath = fileManager.getStaticFilePath(htmlFilePath);
+        String filterParameters = getFilterAsGetParameters(include, exclude);
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(new File(htmlFilePath)))) {
             return String.join("", bufferedReader.lines()
                     .map((line) -> {
                                 String replacement = fileName == null ?
                                         "" :
                                         "file=" + fileName + "&";
-                        line = line.replace(
-                                "{{ fileParam }}", replacement);
-                        return line.replace("{{ projectName }}", projectName);
+                        return line.replace("{{ projectName }}", projectName)
+                                .replace("{{ fileParam }}", replacement)
+                                .replace("{{ filter }}", filterParameters);
                             }
                     )
                     .toArray(String[]::new)).getBytes();
@@ -112,6 +137,17 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
             e.printStackTrace();
         }
         return null;
+    }
+
+    private String getFilterAsGetParameters(@Nullable String include, @Nullable String exclude) {
+        String res = "";
+        if (include != null) {
+            res += "&include=" + include;
+        }
+        if (exclude != null) {
+            res += "&exclude=" + exclude;
+        }
+        return res;
     }
 
     private void sendFileList(ChannelHandlerContext context, String projectName) {
@@ -184,7 +220,6 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
         sendStatus(HttpResponseStatus.OK, context.channel());
     }
 
-
     @Override
     public boolean process(QueryStringDecoder urlDecoder,
                            FullHttpRequest fullHttpRequest,
@@ -193,7 +228,7 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
         if (!urlDecoder.uri().startsWith(ServerNames.MAIN_NAME)) {
             return false;
         }
-        treeManager.updateLastTime();
+        TreeManager.getInstance().updateLastTime();
         if (fullHttpRequest.method() == HttpMethod.POST) {
             return processPostMethod(urlDecoder, fullHttpRequest, context);
         } else {
@@ -223,15 +258,28 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
                 return true;
             case ServerNames.HOT_SPOTS_JS_REQUEST:
                 LOG.info("hot spots js request");
-                sendHotSpots(urlDecoder, context);
+                new HotSpotsRequestHandler(urlDecoder, context).process();
                 return true;
         }
         switch (uri) {
-            case ServerNames.OUTGOING_CALLS_JS_REQUEST:
-            case ServerNames.INCOMING_CALLS_JS_REQUEST:
             case ServerNames.CALL_TREE_JS_REQUEST:
             case ServerNames.CALL_TREE_PREVIEW_JS_REQUEST:
-                processTreeRequest(uri, urlDecoder, context);
+                new CallTreeRequestHandler(urlDecoder, context).process();
+                return true;
+            case ServerNames.OUTGOING_CALLS_JS_REQUEST:
+                new OutgoingCallsRequestHandler(urlDecoder, context).process();
+                return true;
+            case ServerNames.INCOMING_CALLS_JS_REQUEST:
+                new IncomingCallsRequestHandler(urlDecoder, context).process();
+                return true;
+            case ServerNames.CALL_TREE_COUNT:
+                new CallTreeMethodsCounter(urlDecoder, context).sendJson();
+                return true;
+            case ServerNames.OUTGOING_CALLS_COUNT:
+                new AccumulativeTreesMethodCounter(urlDecoder, context, TreeType.OUTGOING_CALLS).sendJson();
+                return true;
+            case ServerNames.INCOMING_CALLS_COUNT:
+                new AccumulativeTreesMethodCounter(urlDecoder, context, TreeType.INCOMING_CALLS).sendJson();
                 return true;
         }
         switch (uri) {
@@ -239,7 +287,7 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
             case ServerNames.OUTGOING_CALLS:
             case ServerNames.INCOMING_CALLS:
             case ServerNames.HOT_SPOTS:
-                processHtmlRequest(uri, urlDecoder, context);
+                processHtmlRequest(uri, context, urlDecoder);
                 return true;
         }
         try {
@@ -261,141 +309,23 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
         }
     }
 
-    private void sendHotSpots(QueryStringDecoder urlDecoder, ChannelHandlerContext context) {
+    private void processHtmlRequest(String uri,
+                                    ChannelHandlerContext context,
+                                    QueryStringDecoder urlDecoder) {
         String projectName = getParameter(urlDecoder, "project");
-        String fileName = getParameter(urlDecoder, "file");
-        if (projectName == null ||
-                fileName == null) {
-            return;
+        if (projectName == null) {
+            projectName = "";
         }
-        File logFile = fileManager.getConfigFile(projectName, fileName);
-        if (logFile == null) {
-            return;
-        }
-        sendJson(context, new Gson().toJson(treeManager.getHotSpots(logFile)));
-    }
-
-    private void sendJson(ChannelHandlerContext context, String json) {
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        try {
-            outputStream.write(json.getBytes());
-            sendBytes(context, "application/json", outputStream.toByteArray());
-        } catch (IOException e) {
-            LOG.error(e);
-        }
-    }
-
-    private void processHtmlRequest(String uri, QueryStringDecoder urlDecoder, ChannelHandlerContext context) {
-        @Nullable String projectName;
-        @Nullable String fileName = null;
-        if (urlDecoder.parameters().containsKey("project")) {
-            projectName = urlDecoder.parameters().get("project").get(0);
-        } else {
-            return;
-        }
-        if (urlDecoder.parameters().containsKey("file")) {
-            fileName = urlDecoder.parameters().get("file").get(0);
-        }
-        LOG.info(uri + ".html");
         sendBytes(
                 context,
                 "text/html",
                 renderPage(
                         uri + ".html",
-                        fileName,
-                        projectName
+                        getParameter(urlDecoder, "file"),
+                        projectName,
+                        getParameter(urlDecoder, "include"),
+                        getParameter(urlDecoder, "exclude")
                 )
         );
-    }
-
-    private void processTreeRequest(String uri, QueryStringDecoder urlDecoder, ChannelHandlerContext context) {
-        @Nullable File logFile = getLogFile(urlDecoder);
-        if (logFile == null) {
-            return;
-        }
-        Configuration configuration = null;
-        if (urlDecoder.parameters().containsKey("include") || urlDecoder.parameters().containsKey("exclude")) {
-            String includingConfigsString = getParameter(urlDecoder, "include");
-            String[] includingConfigs = null;
-            if (includingConfigsString != null) {
-                includingConfigs = includingConfigsString.split(",");
-            }
-            String excludingConfigsString = getParameter(urlDecoder, "exclude");
-            String[] excludingConfigs = null;
-            if (excludingConfigsString != null) {
-                excludingConfigs = excludingConfigsString.split(",");
-            }
-            configuration = PluginConfigManager.newConfiguration(includingConfigs, excludingConfigs);
-
-        }
-        switch (uri) {
-            case ServerNames.OUTGOING_CALLS_JS_REQUEST:
-            case ServerNames.INCOMING_CALLS_JS_REQUEST:
-                processAccumulativeTreeRequest(uri, urlDecoder, context, logFile, configuration);
-                break;
-            case ServerNames.CALL_TREE_JS_REQUEST:
-                LOG.info("CALL_TREE_JS_REQUEST");
-                sendProto(
-                        context,
-                        treeManager.getCallTree(logFile, configuration, getThreadsIds(urlDecoder))
-                );
-                break;
-            case ServerNames.CALL_TREE_PREVIEW_JS_REQUEST:
-                LOG.info("CALL_TREE_PREVIEW_JS_REQUEST");
-                sendProto(context, treeManager.getCallTreesPreview(logFile, configuration));
-                break;
-
-        }
-
-    }
-
-    private List<Integer> getThreadsIds(QueryStringDecoder urlDecoder) {
-        return urlDecoder.parameters().get("threads").stream()
-                .map(Integer::parseInt)
-                .collect(Collectors.toList());
-    }
-
-    @Nullable
-    private File getLogFile(QueryStringDecoder urlDecoder) {
-        String projectName = getParameter(urlDecoder, "project");
-        String fileName = getParameter(urlDecoder, "file");
-        if (projectName == null || fileName == null) {
-            return null;
-        }
-        return fileManager.getConfigFile(projectName, fileName);
-    }
-
-    private void processAccumulativeTreeRequest(String uri,
-                                                QueryStringDecoder urlDecoder,
-                                                ChannelHandlerContext context,
-                                                @Nullable File logFile, Configuration configuration) {
-        String methodName = getParameter(urlDecoder, "method");
-        String className = getParameter(urlDecoder, "class");
-        String desc = getParameter(urlDecoder, "desc");
-        String isStaticString = getParameter(urlDecoder, "isStatic");
-        if (methodName != null && className != null && desc != null) {
-            boolean isStatic;
-            isStatic = isStaticString != null && Objects.equals(isStaticString, "true");
-            switch (uri) {
-                case ServerNames.OUTGOING_CALLS_JS_REQUEST:
-                    LOG.info("outgoing calls for method js request");
-                    sendProto(context, treeManager.getTree(logFile, TreeManager.TreeType.OUTGOING_CALLS, className, methodName,
-                            desc, isStatic, configuration));
-                    return;
-                case ServerNames.INCOMING_CALLS_JS_REQUEST:
-                    LOG.info("incoming calls for method js request");
-                    sendProto(context, treeManager.getTree(logFile, TreeManager.TreeType.INCOMING_CALLS, className, methodName,
-                            desc, isStatic, configuration));
-            }
-        } else {
-            switch (uri) {
-                case ServerNames.OUTGOING_CALLS_JS_REQUEST:
-                    LOG.info("OUTGOING_CALLS_JS_REQUEST");
-                    sendProto(context, treeManager.getTree(logFile, TreeManager.TreeType.OUTGOING_CALLS, configuration));
-                    return;
-                case ServerNames.INCOMING_CALLS_JS_REQUEST:
-                    sendProto(context, treeManager.getTree(logFile, TreeManager.TreeType.INCOMING_CALLS, configuration));
-            }
-        }
     }
 }

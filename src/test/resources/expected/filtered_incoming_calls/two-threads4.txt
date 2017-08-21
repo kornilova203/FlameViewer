@@ -1,0 +1,13 @@
+base_node {
+  nodes {
+    width: 10
+    node_info {
+      method_name: "fun4"
+      class_name: "com.github.kornilova_l.flamegraph.plugin.server.trees.generate_test_data.MyTask"
+      description: "()void"
+      count: 2
+    }
+  }
+}
+depth: 1
+width: 10

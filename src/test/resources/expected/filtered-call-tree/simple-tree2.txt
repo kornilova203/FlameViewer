@@ -1,0 +1,20 @@
+trees {
+  tree_info {
+    thread_name: "main"
+  }
+  base_node {
+    nodes {
+      width: 95
+      node_info {
+        method_name: "run"
+        class_name: "com.github.kornilova_l.flamegraph.plugin.server.trees.generate_test_data.SimpleTree"
+        return_value {
+        }
+        description: "()void"
+        count: 1
+      }
+    }
+  }
+  depth: 1
+  width: 95
+}

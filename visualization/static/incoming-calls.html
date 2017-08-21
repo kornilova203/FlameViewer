@@ -28,13 +28,15 @@
   </form>
   <div class="filter"><p>Filter</p></div>
   <div class="filter-content">
-    <label for="included-textarea">Include:</label>
-    <textarea id="included-textarea" rows="6" cols="35"></textarea>
-    <label for="excluded-textarea">Exclude:</label>
-    <textarea id="excluded-textarea" rows="6" cols="35"></textarea>
+    <label for="included-input">Include:</label>
+    <input type="text" id="included-input"/>
+    <label for="excluded-input">Exclude:</label>
+    <input type="text" id="excluded-input"/>
+    <div class="filtered-methods-count"><p>Methods count: <span>-</span></p></div>
     <a>
       <button class="apply-filter">Apply</button>
     </a>
+    <button class="clear-filter">Clear</button>
     <button class="cancel-filter">Cancel</button>
   </div>
 </aside>
@@ -56,15 +58,15 @@
 <nav>
   <ul>
     <li><!--suppress HtmlUnknownTarget -->
-      <a href="/flamegraph-profiler/call-tree?{{ fileParam }}project={{ projectName }}">Call Tree</a>
+      <a href="/flamegraph-profiler/call-tree?{{ fileParam }}project={{ projectName }}{{ filter }}">Call Tree</a>
     </li>
     <li><!--suppress HtmlUnknownTarget -->
-      <a href="/flamegraph-profiler/outgoing-calls?{{ fileParam }}project={{ projectName }}">
+      <a href="/flamegraph-profiler/outgoing-calls?{{ fileParam }}project={{ projectName }}{{ filter }}">
         Outgoing Calls
       </a>
     </li>
     <li class="current-link"><!--suppress HtmlUnknownTarget -->
-      <a href="/flamegraph-profiler/incoming-calls?{{ fileParam }}project={{ projectName }}">
+      <a href="/flamegraph-profiler/incoming-calls?{{ fileParam }}project={{ projectName }}{{ filter }}">
         Incoming Calls
       </a>
     </li>
