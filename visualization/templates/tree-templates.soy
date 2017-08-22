@@ -56,10 +56,8 @@
  */
 {template .callTreePopup}
 <div class="popup">
-    <ul>
-        <li><a class="outgoing-link">Outgoing Calls</a></li>
-        <li><a class="incoming-link">Incoming Calls</a></li>
-    </ul>
+    <a class="outgoing-link"><img src="img/outgoing.png"/></a>
+    <a class="incoming-link"><img src="img/incoming.png"/></a>
     <h3></h3>
     <p class="duration"></p>
 </div>
@@ -70,10 +68,8 @@
  */
 {template .accumulativeTreePopup}
 <div class="popup">
-    <ul>
-        <li><a class="outgoing-link">Outgoing Calls</a></li>
-        <li><a class="incoming-link">Incoming Calls</a></li>
-    </ul>
+    <a class="outgoing-link"><img src="img/outgoing.png"/></a>
+    <a class="incoming-link"><img src="img/incoming.png"/></a>
     <h3></h3>
     <p class="p-calls-num"></p>
 </div>
@@ -181,7 +177,7 @@
         width="{$canvasWidth}">
     </canvas>
     <button class="show-call-tree-button">
-        <img src="img/expand.png"/>
+        <img src="img/view-details-icon.png"/>
     </button>
 </section>
 {/template}

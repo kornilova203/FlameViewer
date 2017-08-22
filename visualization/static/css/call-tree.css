@@ -9,7 +9,7 @@ body {
     overflow-x: hidden;
     height: calc(100vh - 45px);
     width: calc(100vw - 250px);
-    transition: width 300ms;
+    transition: width, background-color 300ms;
 }
 
 .tree-preview-wrapper #expand-preview-button {
@@ -45,7 +45,7 @@ section {
 
 .tree-preview-wrapper section {
     border-top: 1px solid #ddd;
-    padding: 0 40px 0 20px;
+    padding: 0 20px 0 40px;
 }
 
 .tree-preview-wrapper h2 {
@@ -73,8 +73,8 @@ section {
 
 .show-call-tree-button {
     position: absolute;
-    bottom: calc(50% - 15px);
-    right: 10px;
+    top: 4px;
+    left: 5px;
     background: none;
     border: 0;
     color: inherit;
@@ -90,7 +90,7 @@ section {
 }
 
 .tree-preview-wrapper section:hover .show-call-tree-button {
-    opacity: 0.6;
+    opacity: 1;
 }
 
 .show-call-tree-button img {

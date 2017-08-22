@@ -27,7 +27,7 @@ if (goog.DEBUG) {
 
 
 templates.tree.callTreePopup = function(opt_data, opt_ignored) {
-  return soydata.VERY_UNSAFE.ordainSanitizedHtml('<div class="popup"><ul><li><a class="outgoing-link">Outgoing Calls</a></li><li><a class="incoming-link">Incoming Calls</a></li></ul><h3></h3><p class="duration"></p></div>');
+    return soydata.VERY_UNSAFE.ordainSanitizedHtml('<div class="popup"><a class="outgoing-link"><img src="img/outgoing.png"/></a><a class="incoming-link"><img src="img/incoming.png"/></a><h3></h3><p class="duration"></p></div>');
 };
 if (goog.DEBUG) {
   templates.tree.callTreePopup.soyTemplateName = 'templates.tree.callTreePopup';
@@ -35,7 +35,7 @@ if (goog.DEBUG) {
 
 
 templates.tree.accumulativeTreePopup = function(opt_data, opt_ignored) {
-  return soydata.VERY_UNSAFE.ordainSanitizedHtml('<div class="popup"><ul><li><a class="outgoing-link">Outgoing Calls</a></li><li><a class="incoming-link">Incoming Calls</a></li></ul><h3></h3><p class="p-calls-num"></p></div>');
+    return soydata.VERY_UNSAFE.ordainSanitizedHtml('<div class="popup"><a class="outgoing-link"><img src="img/outgoing.png"/></a><a class="incoming-link"><img src="img/incoming.png"/></a><h3></h3><p class="p-calls-num"></p></div>');
 };
 if (goog.DEBUG) {
   templates.tree.accumulativeTreePopup.soyTemplateName = 'templates.tree.accumulativeTreePopup';
@@ -91,7 +91,7 @@ if (goog.DEBUG) {
 
 
 templates.tree.getTreePreviewSection = function(opt_data, opt_ignored) {
-  return soydata.VERY_UNSAFE.ordainSanitizedHtml('<section class="tree-preview"><h2>' + soy.$$escapeHtml(opt_data.threadName) + '</h2><canvas id="canvas-' + soy.$$escapeHtmlAttribute(opt_data.id) + '" height="' + soy.$$escapeHtmlAttribute(opt_data.canvasHeight) + '" width="' + soy.$$escapeHtmlAttribute(opt_data.canvasWidth) + '"></canvas><button class="show-call-tree-button"><img src="img/expand.png"/></button></section>');
+    return soydata.VERY_UNSAFE.ordainSanitizedHtml('<section class="tree-preview"><h2>' + soy.$$escapeHtml(opt_data.threadName) + '</h2><canvas id="canvas-' + soy.$$escapeHtmlAttribute(opt_data.id) + '" height="' + soy.$$escapeHtmlAttribute(opt_data.canvasHeight) + '" width="' + soy.$$escapeHtmlAttribute(opt_data.canvasWidth) + '"></canvas><button class="show-call-tree-button"><img src="img/view-details-icon.png"/></button></section>');
 };
 if (goog.DEBUG) {
   templates.tree.getTreePreviewSection.soyTemplateName = 'templates.tree.getTreePreviewSection';

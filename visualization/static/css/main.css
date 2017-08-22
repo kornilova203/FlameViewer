@@ -10,12 +10,6 @@
     src: url(../font/GothamProRegular.ttf);
 }
 
-@font-face {
-    font-family: "Menlo";
-    font-weight: normal;
-    src: url(../font/Menlo-Regular.ttf);
-}
-
 body {
     margin: 0;
     padding: 0;
@@ -69,30 +63,29 @@ h1 {
 }
 
 .popup {
-    background-color: #222;
-    font-family: "Menlo", "Gotham Pro", sans-serif;
+    background-color: #e5e5e5;
     font-weight: normal;
-    color: white;
-    display: none;
     position: absolute;
     z-index: 100;
     padding: 10px 15px 15px;
     text-align: left;
+    display: none;
 }
 
 .popup h3 {
     font-size: 14px;
     margin-top: 10px;
     margin-bottom: 5px;
+    font-weight: normal;
 }
 
-.popup p, .popup a {
+.popup p {
     margin: 0;
     font-size: 12px;
 }
 
-.popup a {
-    color: rgb(209, 253, 255);
+.popup a img {
+    margin-right: 10px;
 }
 
 .inputfile {
@@ -223,7 +216,7 @@ nav ul li a:focus {
     overflow-y: scroll;
     height: calc(100vh - 145px);
     border-top: solid 1px #bbb;
-    border-bottom: solid 1px #bbb;
+    border-bottom: solid 1px #ccc;
 }
 
 .file-list li {
@@ -664,7 +657,7 @@ button:focus {
 
 .filter-content {
     position: fixed;
-    background-color: #f3f3f3;
+    background-color: #e3e3e3;
     width: 300px;
     height: 170px;
     top: 45px;
@@ -672,7 +665,6 @@ button:focus {
     display: none;
     padding: 20px;
     z-index: 1;
-    border: solid 1px #888;
 }
 
 .filter-content input {
@@ -680,6 +672,7 @@ button:focus {
     box-sizing: border-box;
     height: 22px;
     padding-right: 60px;
+    border: solid 1px #c8c8c8;
 }
 
 .apply-filter, .cancel-filter, .clear-filter {
