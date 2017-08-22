@@ -5,61 +5,145 @@ import java.util.ArrayList;
 public class SaveParameters {
     void noParams() {
 //        StartData startData = LoggerQueue.createStartData(System.currentTimeMillis(), null);
-        System.out.println("Hello, world!");
-//        startData.setDuration(System.currentTimeMillis());
-//        if (startData.getDuration() > 1) {
-//            LoggerQueue.addToQueue(null,
-//                    startData,
-//                    Thread.currentThread(),
-//                    "com/github/kornilova_l/flamegraph/javaagent/generate/test_classes/SaveParameters",
-//                    "noParams",
-//                    "()V",
-//                    false);
+//        try {
+            System.out.println("Hello, world!");
+//            startData.setDuration(System.currentTimeMillis());
+//            if (startData.getDuration() > 1) {
+//                LoggerQueue.addToQueue(null,
+//                        startData.getStartTime(),
+//                        startData.getDuration(),
+//                        startData.getParameters(),
+//                        Thread.currentThread(),
+//                        "com/github/kornilova_l/flamegraph/javaagent/generate/test_classes/SaveParameters",
+//                        "noParams",
+//                        "()V",
+//                        false,
+//                        "");
+//            }
+//        } catch (Throwable throwable) {
+//            if (!startData.isThrownByMethod()) {
+//                startData.setDuration(System.currentTimeMillis());
+//                if (startData.getDuration() > 1) {
+//                    LoggerQueue.addToQueue(null,
+//                            startData.getStartTime(),
+//                            startData.getDuration(),
+//                            startData.getParameters(),
+//                            Thread.currentThread(),
+//                            "com/github/kornilova_l/flamegraph/javaagent/generate/test_classes/SaveParameters",
+//                            "noParams",
+//                            false,
+//                            "()V",
+//                            "");
+//                }
+//            }
 //        }
     }
 
     void oneParam(int i) {
 //        StartData startData = LoggerQueue.createStartData(System.currentTimeMillis(), new Object[]{i});
-        System.out.println("Hello, world!");
-//        startData.setDuration(System.currentTimeMillis());
-//        if (startData.getDuration() > 1) {
-//            LoggerQueue.addToQueue(null,
-//                    startData,
-//                    Thread.currentThread(),
-//                    "com/github/kornilova_l/flamegraph/javaagent/generate/test_classes/SaveParameters",
-//                    "oneParam",
-//                    "(I)V",
-//                    false);
+//        try {
+            System.out.println("Hello, world!");
+//            startData.setDuration(System.currentTimeMillis());
+//            if (startData.getDuration() > 1) {
+//                LoggerQueue.addToQueue(null,
+//                        startData.getStartTime(),
+//                        startData.getDuration(),
+//                        startData.getParameters(),
+//                        Thread.currentThread(),
+//                        "com/github/kornilova_l/flamegraph/javaagent/generate/test_classes/SaveParameters",
+//                        "oneParam",
+//                        "(I)V",
+//                        false,
+//                        "1");
+//            }
+//        } catch (Throwable throwable) {
+//            if (!startData.isThrownByMethod()) {
+//                startData.setDuration(System.currentTimeMillis());
+//                if (startData.getDuration() > 1) {
+//                    LoggerQueue.addToQueue(null,
+//                            startData.getStartTime(),
+//                            startData.getDuration(),
+//                            startData.getParameters(),
+//                            Thread.currentThread(),
+//                            "com/github/kornilova_l/flamegraph/javaagent/generate/test_classes/SaveParameters",
+//                            "noParams",
+//                            false,
+//                            "()V",
+//                            "1");
+//                }
+//            }
 //        }
     }
 
     void twoParams(int i, ArrayList<String> list) {
 //        StartData startData = LoggerQueue.createStartData(System.currentTimeMillis(), new Object[]{i, list});
-        System.out.println("Hello, world!");
-//        startData.setDuration(System.currentTimeMillis());
-//        if (startData.getDuration() > 1) {
-//            LoggerQueue.addToQueue(null,
-//                    startData,
-//                    Thread.currentThread(),
-//                    "com/github/kornilova_l/flamegraph/javaagent/generate/test_classes/SaveParameters",
-//                    "twoParams",
-//                    "(Ljava/lang/ArrayList;)V",
-//                    false);
+//        try {
+            System.out.println("Hello, world!");
+//            startData.setDuration(System.currentTimeMillis());
+//            if (startData.getDuration() > 1) {
+//                LoggerQueue.addToQueue(null,
+//                        startData.getStartTime(),
+//                        startData.getDuration(),
+//                        startData.getParameters(),
+//                        Thread.currentThread(),
+//                        "com/github/kornilova_l/flamegraph/javaagent/generate/test_classes/SaveParameters",
+//                        "twoParams",
+//                        "(Ljava/lang/ArrayList;)V",
+//                        false,
+//                        "1,2");
+//            }
+//        } catch (Throwable throwable) {
+//            if (!startData.isThrownByMethod()) {
+//                startData.setDuration(System.currentTimeMillis());
+//                if (startData.getDuration() > 1) {
+//                    LoggerQueue.addToQueue(null,
+//                            startData.getStartTime(),
+//                            startData.getDuration(),
+//                            startData.getParameters(),
+//                            Thread.currentThread(),
+//                            "com/github/kornilova_l/flamegraph/javaagent/generate/test_classes/SaveParameters",
+//                            "noParams",
+//                            false,
+//                            "()V",
+//                            "1,2");
+//                }
+//            }
 //        }
     }
 
     static void threeParams(boolean b, long l, String s) {
 //        StartData startData = LoggerQueue.createStartData(System.currentTimeMillis(), new Object[]{b, l, s});
+//        try {
         System.out.println("Hello, world!");
 //        startData.setDuration(System.currentTimeMillis());
 //        if (startData.getDuration() > 1) {
 //            LoggerQueue.addToQueue(null,
-//                    startData,
+//                    startData.getStartTime(),
+//                    startData.getDuration(),
+//                    startData.getParameters(),
 //                    Thread.currentThread(),
 //                    "com/github/kornilova_l/flamegraph/javaagent/generate/test_classes/SaveParameters",
 //                    "threeParams",
 //                    "(ZJLjava/lang/String;)V",
-//                    true);
+//                    true,
+//                    "1,2,3");
+//        }
+//        } catch (Throwable throwable) {
+//            if (!startData.isThrownByMethod()) {
+//                startData.setDuration(System.currentTimeMillis());
+//                if (startData.getDuration() > 1) {
+//                    LoggerQueue.addToQueue(null,
+//                            startData.getStartTime(),
+//                            startData.getDuration(),
+//                            startData.getParameters(),
+//                            Thread.currentThread(),
+//                            "com/github/kornilova_l/flamegraph/javaagent/generate/test_classes/SaveParameters",
+//                            "noParams",
+//                            false,
+//                            "()V",
+//                            "1,2,3");
+//                }
+//            }
 //        }
     }
 }

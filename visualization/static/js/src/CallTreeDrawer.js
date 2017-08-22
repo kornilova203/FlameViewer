@@ -35,7 +35,63 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
      */
     _setPopupContent(node) {
         super._setPopupContent(node);
-        this.$popup.find(".duration").text("duration: " + node.getWidth() + " ms")
+        this.$popup.find(".duration").text("duration: " + node.getWidth() + " ms");
+    }
+
+    /**
+     * @override
+     * @param node
+     */
+    _setPopupTable(node) {
+        const parametersList = AccumulativeTreeDrawer.getParametersTypesList(node.getNodeInfo().getDescription());
+        this.$popupTable.find(".parameter-tr").remove();
+
+        if (parametersList !== null) {
+            for (let i = 0; i < parametersList.length; i++) {
+                this.$popupTable.append($(`<tr class='parameter-tr'><td><p>${parametersList[i]}</p></td><td><p>${CallTreeDrawer.getValueForParameter(i + 1, node.getNodeInfo().getParametersList())}</p></td></tr>`))
+            }
+        }
+    }
+
+    /**
+     * @param {Number} index of parameter (0 is `this`)
+     * @param {Array} parameters
+     */
+    static getValueForParameter(index, parameters) {
+        console.log("wanted index " + index);
+        for (let i = 0; i < parameters.length; i++) {
+            console.log("index: " + parameters[i].getIndex());
+            console.log("value: " + parameters[i].getVar().getValueCase());
+            if (parameters[i].getIndex() === index) {
+                return CallTreeDrawer.getParameterVal(parameters[i])
+            }
+        }
+        return "-";
+    }
+
+    static getParameterVal(parameter) {
+        switch (parameter.getVar().getValueCase()) {
+            case 1: // int
+                return parameter.getVar().getI();
+            case 2: // long
+                return parameter.getVar().getJ();
+            case 3: // boolean
+                return parameter.getVar().getZ();
+            case 4: // char
+                return parameter.getVar().getC();
+            case 5: // short
+                return parameter.getVar().getS();
+            case 6: // byte
+                return parameter.getVar().getB();
+            case 7: // float
+                return parameter.getVar().getF();
+            case 8: // double
+                return parameter.getVar().getD();
+            case 9: // object
+                return parameter.getVar().getObject().getValue();
+            default:
+                return "-";
+        }
     }
 
     //noinspection JSUnusedGlobalSymbols
@@ -98,5 +154,6 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
     _createPopup() {
         const popupContent = templates.tree.callTreePopup().content;
         this.$popup = $(popupContent).appendTo(this.$section);
+        this.$popupTable = this.$popup.find("table");
     }
 }

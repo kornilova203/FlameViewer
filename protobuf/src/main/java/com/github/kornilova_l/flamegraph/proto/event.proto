@@ -19,7 +19,7 @@ message Event {
         string method_name = 5;
         string desc = 6;
         bool is_static = 7;
-        repeated Var parameters = 8;
+        repeated Parameter parameters = 8;
         oneof end {
             Var return_value = 9;
             Var.Object throwable = 10;
@@ -30,6 +30,11 @@ message Event {
         int64 id = 1;
         string name = 2;
     }
+}
+
+message Parameter {
+    Var var = 1;
+    uint32 index = 2;
 }
 
 message Var {
@@ -44,6 +49,7 @@ message Var {
         double D = 8; // double
         Object object = 9; // object
     }
+    uint32 index = 10;
 
     message Object {
         string type = 1;

@@ -5,6 +5,7 @@ import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.commons.AdviceAdapter;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -19,6 +20,7 @@ class ProfilingMethodVisitor extends AdviceAdapter {
     private final MethodConfig methodConfig;
     private int startData;
     private Label start;
+    private final String savedParameters;
 
 
     ProfilingMethodVisitor(int access, String methodName, String desc,
@@ -28,6 +30,27 @@ class ProfilingMethodVisitor extends AdviceAdapter {
         this.methodName = methodName;
         this.hasSystemCL = hasSystemCL;
         this.methodConfig = methodConfig;
+        this.savedParameters = getSavedParameters();
+    }
+
+    private String getSavedParameters() {
+        List<Integer> indexes = new LinkedList<>();
+        List<MethodConfig.Parameter> parameters = methodConfig.getParameters();
+        int length = parameters.size();
+        for (int i = 0; i < length; i++) {
+            if (parameters.get(i).isEnabled()) {
+                indexes.add(i + 1);
+            }
+        }
+        StringBuilder stringBuilder = new StringBuilder();
+        length = indexes.size();
+        for (int i = 0; i < length; i++) {
+            stringBuilder.append(indexes.get(i));
+            if (i < length - 1) {
+                stringBuilder.append(",");
+            }
+        }
+        return stringBuilder.toString();
     }
 
     private static int getSizeOfRetVal(int opcode) {
@@ -138,10 +161,10 @@ class ProfilingMethodVisitor extends AdviceAdapter {
         String description = null;
         switch (type) {
             case RetVal:
-                description = "(Ljava/lang/Object;JJ[Ljava/lang/Object;Ljava/lang/Thread;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Z)V";
+                description = "(Ljava/lang/Object;JJ[Ljava/lang/Object;Ljava/lang/Thread;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ZLjava/lang/String;)V";
                 break;
             case Throwable:
-                description = "(Ljava/lang/Throwable;JJ[Ljava/lang/Object;Ljava/lang/Thread;Ljava/lang/String;Ljava/lang/String;ZLjava/lang/String;)V";
+                description = "(Ljava/lang/Throwable;JJ[Ljava/lang/Object;Ljava/lang/Thread;Ljava/lang/String;Ljava/lang/String;ZLjava/lang/String;Ljava/lang/String;)V";
                 break;
         }
         if (hasSystemCL) {
@@ -351,6 +374,7 @@ class ProfilingMethodVisitor extends AdviceAdapter {
             retValToObj();
         }
         getCommonExitData();
+        mv.visitLdcInsn(savedParameters);
         addToQueue(Type.RetVal);
     }
 
@@ -363,6 +387,7 @@ class ProfilingMethodVisitor extends AdviceAdapter {
         getCommonExitData();
         // last two parameters is swapped to avoid ambiguous call
         mv.visitInsn(SWAP);
+        mv.visitLdcInsn(savedParameters);
         addToQueue(Type.Throwable);
     }
 

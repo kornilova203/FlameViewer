@@ -201,27 +201,27 @@ public final class EventProtos {
       boolean getIsStatic();
 
       /**
-       * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 8;</code>
+       * <code>repeated .com.github.kornilova_l.flamegraph.proto.Parameter parameters = 8;</code>
        */
-      java.util.List<com.github.kornilova_l.flamegraph.proto.EventProtos.Var> 
+      java.util.List<com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter> 
           getParametersList();
       /**
-       * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 8;</code>
+       * <code>repeated .com.github.kornilova_l.flamegraph.proto.Parameter parameters = 8;</code>
        */
-      com.github.kornilova_l.flamegraph.proto.EventProtos.Var getParameters(int index);
+      com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter getParameters(int index);
       /**
-       * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 8;</code>
+       * <code>repeated .com.github.kornilova_l.flamegraph.proto.Parameter parameters = 8;</code>
        */
       int getParametersCount();
       /**
-       * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 8;</code>
+       * <code>repeated .com.github.kornilova_l.flamegraph.proto.Parameter parameters = 8;</code>
        */
-      java.util.List<? extends com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder> 
+      java.util.List<? extends com.github.kornilova_l.flamegraph.proto.EventProtos.ParameterOrBuilder> 
           getParametersOrBuilderList();
       /**
-       * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 8;</code>
+       * <code>repeated .com.github.kornilova_l.flamegraph.proto.Parameter parameters = 8;</code>
        */
-      com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder getParametersOrBuilder(
+      com.github.kornilova_l.flamegraph.proto.EventProtos.ParameterOrBuilder getParametersOrBuilder(
           int index);
 
       /**
@@ -329,12 +329,12 @@ public final class EventProtos {
                 break;
               }
               case 66: {
-                if (!((mutable_bitField0_ & 0x00000080) == 0x00000080)) {
-                  parameters_ = new java.util.ArrayList<com.github.kornilova_l.flamegraph.proto.EventProtos.Var>();
-                  mutable_bitField0_ |= 0x00000080;
+                  if (!((mutable_bitField0_ & 0x00000080) == 0x00000080)) {
+                      parameters_ = new java.util.ArrayList<com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter>();
+                      mutable_bitField0_ |= 0x00000080;
                 }
                 parameters_.add(
-                    input.readMessage(com.github.kornilova_l.flamegraph.proto.EventProtos.Var.parser(), extensionRegistry));
+                        input.readMessage(com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter.parser(), extensionRegistry));
                 break;
               }
               case 74: {
@@ -357,7 +357,7 @@ public final class EventProtos {
                   subBuilder = ((com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object) end_).toBuilder();
                 }
                 end_ =
-                    input.readMessage(com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object.parser(), extensionRegistry);
+                        input.readMessage(com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object.parser(), extensionRegistry);
                 if (subBuilder != null) {
                   subBuilder.mergeFrom((com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object) end_);
                   end_ = subBuilder.buildPartial();
@@ -371,9 +371,9 @@ public final class EventProtos {
           throw e.setUnfinishedMessage(this);
         } catch (java.io.IOException e) {
           throw new com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException(
-              e).setUnfinishedMessage(this);
+                  e).setUnfinishedMessage(this);
         } finally {
-          if (((mutable_bitField0_ & 0x00000080) == 0x00000080)) {
+            if (((mutable_bitField0_ & 0x00000080) == 0x00000080)) {
             parameters_ = java.util.Collections.unmodifiableList(parameters_);
           }
           makeExtensionsImmutable();
@@ -521,12 +521,12 @@ public final class EventProtos {
        * <code>string desc = 6;</code>
        */
       public com.github.kornilova_l.libs.com.google.protobuf.ByteString
-          getDescBytes() {
+      getDescBytes() {
         java.lang.Object ref = desc_;
         if (ref instanceof java.lang.String) {
-          com.github.kornilova_l.libs.com.google.protobuf.ByteString b = 
-              com.github.kornilova_l.libs.com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
+            com.github.kornilova_l.libs.com.google.protobuf.ByteString b =
+                    com.github.kornilova_l.libs.com.google.protobuf.ByteString.copyFromUtf8(
+                            (java.lang.String) ref);
           desc_ = b;
           return b;
         } else {
@@ -544,36 +544,36 @@ public final class EventProtos {
       }
 
       public static final int PARAMETERS_FIELD_NUMBER = 8;
-      private java.util.List<com.github.kornilova_l.flamegraph.proto.EventProtos.Var> parameters_;
+        private java.util.List<com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter> parameters_;
       /**
-       * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 8;</code>
+       * <code>repeated .com.github.kornilova_l.flamegraph.proto.Parameter parameters = 8;</code>
        */
-      public java.util.List<com.github.kornilova_l.flamegraph.proto.EventProtos.Var> getParametersList() {
+      public java.util.List<com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter> getParametersList() {
         return parameters_;
       }
       /**
-       * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 8;</code>
+       * <code>repeated .com.github.kornilova_l.flamegraph.proto.Parameter parameters = 8;</code>
        */
-      public java.util.List<? extends com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder> 
+      public java.util.List<? extends com.github.kornilova_l.flamegraph.proto.EventProtos.ParameterOrBuilder> 
           getParametersOrBuilderList() {
         return parameters_;
       }
       /**
-       * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 8;</code>
+       * <code>repeated .com.github.kornilova_l.flamegraph.proto.Parameter parameters = 8;</code>
        */
       public int getParametersCount() {
         return parameters_.size();
       }
       /**
-       * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 8;</code>
+       * <code>repeated .com.github.kornilova_l.flamegraph.proto.Parameter parameters = 8;</code>
        */
-      public com.github.kornilova_l.flamegraph.proto.EventProtos.Var getParameters(int index) {
+      public com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter getParameters(int index) {
         return parameters_.get(index);
       }
       /**
-       * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 8;</code>
+       * <code>repeated .com.github.kornilova_l.flamegraph.proto.Parameter parameters = 8;</code>
        */
-      public com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder getParametersOrBuilder(
+      public com.github.kornilova_l.flamegraph.proto.EventProtos.ParameterOrBuilder getParametersOrBuilder(
           int index) {
         return parameters_.get(index);
       }
@@ -703,7 +703,7 @@ public final class EventProtos {
         }
         if (endCase_ == 10) {
           size += com.github.kornilova_l.libs.com.google.protobuf.CodedOutputStream
-            .computeMessageSize(10, (com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object) end_);
+                  .computeMessageSize(10, (com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object) end_);
         }
         memoizedSize = size;
         return size;
@@ -730,7 +730,7 @@ public final class EventProtos {
         result = result && (getDuration()
             == other.getDuration());
         result = result && getMethodName()
-            .equals(other.getMethodName());
+                .equals(other.getMethodName());
         result = result && getDesc()
             .equals(other.getDesc());
         result = result && (getIsStatic()
@@ -943,7 +943,7 @@ public final class EventProtos {
 
           if (parametersBuilder_ == null) {
             parameters_ = java.util.Collections.emptyList();
-            bitField0_ = (bitField0_ & ~0x00000080);
+              bitField0_ = (bitField0_ & ~0x00000080);
           } else {
             parametersBuilder_.clear();
           }
@@ -981,9 +981,9 @@ public final class EventProtos {
           result.desc_ = desc_;
           result.isStatic_ = isStatic_;
           if (parametersBuilder_ == null) {
-            if (((bitField0_ & 0x00000080) == 0x00000080)) {
+              if (((bitField0_ & 0x00000080) == 0x00000080)) {
               parameters_ = java.util.Collections.unmodifiableList(parameters_);
-              bitField0_ = (bitField0_ & ~0x00000080);
+                  bitField0_ = (bitField0_ & ~0x00000080);
             }
             result.parameters_ = parameters_;
           } else {
@@ -1073,7 +1073,7 @@ public final class EventProtos {
             if (!other.parameters_.isEmpty()) {
               if (parameters_.isEmpty()) {
                 parameters_ = other.parameters_;
-                bitField0_ = (bitField0_ & ~0x00000080);
+                  bitField0_ = (bitField0_ & ~0x00000080);
               } else {
                 ensureParametersIsMutable();
                 parameters_.addAll(other.parameters_);
@@ -1086,7 +1086,7 @@ public final class EventProtos {
                 parametersBuilder_.dispose();
                 parametersBuilder_ = null;
                 parameters_ = other.parameters_;
-                bitField0_ = (bitField0_ & ~0x00000080);
+                  bitField0_ = (bitField0_ & ~0x00000080);
                 parametersBuilder_ = 
                   com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
                      getParametersFieldBuilder() : null;
@@ -1381,11 +1381,11 @@ public final class EventProtos {
          * <code>string desc = 6;</code>
          */
         public Builder setDescBytes(
-            com.github.kornilova_l.libs.com.google.protobuf.ByteString value) {
+                com.github.kornilova_l.libs.com.google.protobuf.ByteString value) {
           if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
+              throw new NullPointerException();
+          }
+            checkByteStringIsUtf8(value);
           
           desc_ = value;
           onChanged();
@@ -1418,22 +1418,22 @@ public final class EventProtos {
           return this;
         }
 
-        private java.util.List<com.github.kornilova_l.flamegraph.proto.EventProtos.Var> parameters_ =
+          private java.util.List<com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter> parameters_ =
           java.util.Collections.emptyList();
         private void ensureParametersIsMutable() {
-          if (!((bitField0_ & 0x00000080) == 0x00000080)) {
-            parameters_ = new java.util.ArrayList<com.github.kornilova_l.flamegraph.proto.EventProtos.Var>(parameters_);
-            bitField0_ |= 0x00000080;
+            if (!((bitField0_ & 0x00000080) == 0x00000080)) {
+                parameters_ = new java.util.ArrayList<com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter>(parameters_);
+                bitField0_ |= 0x00000080;
            }
         }
 
         private com.github.kornilova_l.libs.com.google.protobuf.RepeatedFieldBuilderV3<
-            com.github.kornilova_l.flamegraph.proto.EventProtos.Var, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder, com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder> parametersBuilder_;
+                com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter, com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter.Builder, com.github.kornilova_l.flamegraph.proto.EventProtos.ParameterOrBuilder> parametersBuilder_;
 
         /**
-         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 8;</code>
+         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Parameter parameters = 8;</code>
          */
-        public java.util.List<com.github.kornilova_l.flamegraph.proto.EventProtos.Var> getParametersList() {
+        public java.util.List<com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter> getParametersList() {
           if (parametersBuilder_ == null) {
             return java.util.Collections.unmodifiableList(parameters_);
           } else {
@@ -1441,7 +1441,7 @@ public final class EventProtos {
           }
         }
         /**
-         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 8;</code>
+         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Parameter parameters = 8;</code>
          */
         public int getParametersCount() {
           if (parametersBuilder_ == null) {
@@ -1451,9 +1451,9 @@ public final class EventProtos {
           }
         }
         /**
-         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 8;</code>
+         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Parameter parameters = 8;</code>
          */
-        public com.github.kornilova_l.flamegraph.proto.EventProtos.Var getParameters(int index) {
+        public com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter getParameters(int index) {
           if (parametersBuilder_ == null) {
             return parameters_.get(index);
           } else {
@@ -1461,10 +1461,10 @@ public final class EventProtos {
           }
         }
         /**
-         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 8;</code>
+         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Parameter parameters = 8;</code>
          */
         public Builder setParameters(
-            int index, com.github.kornilova_l.flamegraph.proto.EventProtos.Var value) {
+                int index, com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter value) {
           if (parametersBuilder_ == null) {
             if (value == null) {
               throw new NullPointerException();
@@ -1478,10 +1478,10 @@ public final class EventProtos {
           return this;
         }
         /**
-         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 8;</code>
+         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Parameter parameters = 8;</code>
          */
         public Builder setParameters(
-            int index, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder builderForValue) {
+                int index, com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter.Builder builderForValue) {
           if (parametersBuilder_ == null) {
             ensureParametersIsMutable();
             parameters_.set(index, builderForValue.build());
@@ -1492,9 +1492,9 @@ public final class EventProtos {
           return this;
         }
         /**
-         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 8;</code>
+         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Parameter parameters = 8;</code>
          */
-        public Builder addParameters(com.github.kornilova_l.flamegraph.proto.EventProtos.Var value) {
+        public Builder addParameters(com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter value) {
           if (parametersBuilder_ == null) {
             if (value == null) {
               throw new NullPointerException();
@@ -1508,10 +1508,10 @@ public final class EventProtos {
           return this;
         }
         /**
-         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 8;</code>
+         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Parameter parameters = 8;</code>
          */
         public Builder addParameters(
-            int index, com.github.kornilova_l.flamegraph.proto.EventProtos.Var value) {
+                int index, com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter value) {
           if (parametersBuilder_ == null) {
             if (value == null) {
               throw new NullPointerException();
@@ -1525,10 +1525,10 @@ public final class EventProtos {
           return this;
         }
         /**
-         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 8;</code>
+         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Parameter parameters = 8;</code>
          */
         public Builder addParameters(
-            com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder builderForValue) {
+                com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter.Builder builderForValue) {
           if (parametersBuilder_ == null) {
             ensureParametersIsMutable();
             parameters_.add(builderForValue.build());
@@ -1539,10 +1539,10 @@ public final class EventProtos {
           return this;
         }
         /**
-         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 8;</code>
+         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Parameter parameters = 8;</code>
          */
         public Builder addParameters(
-            int index, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder builderForValue) {
+                int index, com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter.Builder builderForValue) {
           if (parametersBuilder_ == null) {
             ensureParametersIsMutable();
             parameters_.add(index, builderForValue.build());
@@ -1553,10 +1553,10 @@ public final class EventProtos {
           return this;
         }
         /**
-         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 8;</code>
+         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Parameter parameters = 8;</code>
          */
         public Builder addAllParameters(
-            java.lang.Iterable<? extends com.github.kornilova_l.flamegraph.proto.EventProtos.Var> values) {
+                java.lang.Iterable<? extends com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter> values) {
           if (parametersBuilder_ == null) {
             ensureParametersIsMutable();
             com.github.kornilova_l.libs.com.google.protobuf.AbstractMessageLite.Builder.addAll(
@@ -1568,12 +1568,12 @@ public final class EventProtos {
           return this;
         }
         /**
-         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 8;</code>
+         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Parameter parameters = 8;</code>
          */
         public Builder clearParameters() {
           if (parametersBuilder_ == null) {
             parameters_ = java.util.Collections.emptyList();
-            bitField0_ = (bitField0_ & ~0x00000080);
+              bitField0_ = (bitField0_ & ~0x00000080);
             onChanged();
           } else {
             parametersBuilder_.clear();
@@ -1581,7 +1581,7 @@ public final class EventProtos {
           return this;
         }
         /**
-         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 8;</code>
+         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Parameter parameters = 8;</code>
          */
         public Builder removeParameters(int index) {
           if (parametersBuilder_ == null) {
@@ -1594,16 +1594,16 @@ public final class EventProtos {
           return this;
         }
         /**
-         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 8;</code>
+         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Parameter parameters = 8;</code>
          */
-        public com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder getParametersBuilder(
+        public com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter.Builder getParametersBuilder(
             int index) {
           return getParametersFieldBuilder().getBuilder(index);
         }
         /**
-         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 8;</code>
+         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Parameter parameters = 8;</code>
          */
-        public com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder getParametersOrBuilder(
+        public com.github.kornilova_l.flamegraph.proto.EventProtos.ParameterOrBuilder getParametersOrBuilder(
             int index) {
           if (parametersBuilder_ == null) {
             return parameters_.get(index);  } else {
@@ -1611,9 +1611,9 @@ public final class EventProtos {
           }
         }
         /**
-         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 8;</code>
+         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Parameter parameters = 8;</code>
          */
-        public java.util.List<? extends com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder> 
+        public java.util.List<? extends com.github.kornilova_l.flamegraph.proto.EventProtos.ParameterOrBuilder> 
              getParametersOrBuilderList() {
           if (parametersBuilder_ != null) {
             return parametersBuilder_.getMessageOrBuilderList();
@@ -1622,33 +1622,33 @@ public final class EventProtos {
           }
         }
         /**
-         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 8;</code>
+         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Parameter parameters = 8;</code>
          */
-        public com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder addParametersBuilder() {
+        public com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter.Builder addParametersBuilder() {
           return getParametersFieldBuilder().addBuilder(
-              com.github.kornilova_l.flamegraph.proto.EventProtos.Var.getDefaultInstance());
+                  com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter.getDefaultInstance());
         }
         /**
-         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 8;</code>
+         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Parameter parameters = 8;</code>
          */
-        public com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder addParametersBuilder(
+        public com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter.Builder addParametersBuilder(
             int index) {
           return getParametersFieldBuilder().addBuilder(
-              index, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.getDefaultInstance());
+                  index, com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter.getDefaultInstance());
         }
         /**
-         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 8;</code>
+         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Parameter parameters = 8;</code>
          */
-        public java.util.List<com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder> 
+        public java.util.List<com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter.Builder> 
              getParametersBuilderList() {
           return getParametersFieldBuilder().getBuilderList();
         }
         private com.github.kornilova_l.libs.com.google.protobuf.RepeatedFieldBuilderV3<
-            com.github.kornilova_l.flamegraph.proto.EventProtos.Var, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder, com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder> 
+                com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter, com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter.Builder, com.github.kornilova_l.flamegraph.proto.EventProtos.ParameterOrBuilder>
             getParametersFieldBuilder() {
           if (parametersBuilder_ == null) {
             parametersBuilder_ = new com.github.kornilova_l.libs.com.google.protobuf.RepeatedFieldBuilderV3<
-                com.github.kornilova_l.flamegraph.proto.EventProtos.Var, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder, com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder>(
+                    com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter, com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter.Builder, com.github.kornilova_l.flamegraph.proto.EventProtos.ParameterOrBuilder>(
                     parameters_,
                     ((bitField0_ & 0x00000080) == 0x00000080),
                     getParentForChildren(),
@@ -3457,6 +3457,692 @@ public final class EventProtos {
 
   }
 
+    public interface ParameterOrBuilder extends
+            // @@protoc_insertion_point(interface_extends:com.github.kornilova_l.flamegraph.proto.Parameter)
+            com.github.kornilova_l.libs.com.google.protobuf.MessageOrBuilder {
+
+        /**
+         * <code>.com.github.kornilova_l.flamegraph.proto.Var var = 1;</code>
+         */
+        boolean hasVar();
+
+        /**
+         * <code>.com.github.kornilova_l.flamegraph.proto.Var var = 1;</code>
+         */
+        com.github.kornilova_l.flamegraph.proto.EventProtos.Var getVar();
+
+        /**
+         * <code>.com.github.kornilova_l.flamegraph.proto.Var var = 1;</code>
+         */
+        com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder getVarOrBuilder();
+
+        /**
+         * <code>uint32 index = 2;</code>
+         */
+        int getIndex();
+    }
+
+    /**
+     * Protobuf type {@code com.github.kornilova_l.flamegraph.proto.Parameter}
+     */
+    public static final class Parameter extends
+            com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3 implements
+            // @@protoc_insertion_point(message_implements:com.github.kornilova_l.flamegraph.proto.Parameter)
+            ParameterOrBuilder {
+        // Use Parameter.newBuilder() to construct.
+        private Parameter(com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+            super(builder);
+        }
+
+        private Parameter() {
+            index_ = 0;
+        }
+
+        @java.lang.Override
+        public final com.github.kornilova_l.libs.com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+            return com.github.kornilova_l.libs.com.google.protobuf.UnknownFieldSet.getDefaultInstance();
+        }
+
+        private Parameter(
+                com.github.kornilova_l.libs.com.google.protobuf.CodedInputStream input,
+                com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
+            this();
+            int mutable_bitField0_ = 0;
+            try {
+                boolean done = false;
+                while (!done) {
+                    int tag = input.readTag();
+                    switch (tag) {
+                        case 0:
+                            done = true;
+                            break;
+                        default: {
+                            if (!input.skipField(tag)) {
+                                done = true;
+                            }
+                            break;
+                        }
+                        case 10: {
+                            com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder subBuilder = null;
+                            if (var_ != null) {
+                                subBuilder = var_.toBuilder();
+                            }
+                            var_ = input.readMessage(com.github.kornilova_l.flamegraph.proto.EventProtos.Var.parser(), extensionRegistry);
+                            if (subBuilder != null) {
+                                subBuilder.mergeFrom(var_);
+                                var_ = subBuilder.buildPartial();
+                            }
+
+                            break;
+                        }
+                        case 16: {
+
+                            index_ = input.readUInt32();
+                            break;
+                        }
+                    }
+                }
+            } catch (com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException e) {
+                throw e.setUnfinishedMessage(this);
+            } catch (java.io.IOException e) {
+                throw new com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException(
+                        e).setUnfinishedMessage(this);
+            } finally {
+                makeExtensionsImmutable();
+            }
+        }
+
+        public static final com.github.kornilova_l.libs.com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+            return com.github.kornilova_l.flamegraph.proto.EventProtos.internal_static_com_github_kornilova_l_flamegraph_proto_Parameter_descriptor;
+        }
+
+        protected com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+            return com.github.kornilova_l.flamegraph.proto.EventProtos.internal_static_com_github_kornilova_l_flamegraph_proto_Parameter_fieldAccessorTable
+                    .ensureFieldAccessorsInitialized(
+                            com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter.class, com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter.Builder.class);
+        }
+
+        public static final int VAR_FIELD_NUMBER = 1;
+        private com.github.kornilova_l.flamegraph.proto.EventProtos.Var var_;
+
+        /**
+         * <code>.com.github.kornilova_l.flamegraph.proto.Var var = 1;</code>
+         */
+        public boolean hasVar() {
+            return var_ != null;
+        }
+
+        /**
+         * <code>.com.github.kornilova_l.flamegraph.proto.Var var = 1;</code>
+         */
+        public com.github.kornilova_l.flamegraph.proto.EventProtos.Var getVar() {
+            return var_ == null ? com.github.kornilova_l.flamegraph.proto.EventProtos.Var.getDefaultInstance() : var_;
+        }
+
+        /**
+         * <code>.com.github.kornilova_l.flamegraph.proto.Var var = 1;</code>
+         */
+        public com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder getVarOrBuilder() {
+            return getVar();
+        }
+
+        public static final int INDEX_FIELD_NUMBER = 2;
+        private int index_;
+
+        /**
+         * <code>uint32 index = 2;</code>
+         */
+        public int getIndex() {
+            return index_;
+        }
+
+        private byte memoizedIsInitialized = -1;
+
+        public final boolean isInitialized() {
+            byte isInitialized = memoizedIsInitialized;
+            if (isInitialized == 1) return true;
+            if (isInitialized == 0) return false;
+
+            memoizedIsInitialized = 1;
+            return true;
+        }
+
+        public void writeTo(com.github.kornilova_l.libs.com.google.protobuf.CodedOutputStream output)
+                throws java.io.IOException {
+            if (var_ != null) {
+                output.writeMessage(1, getVar());
+            }
+            if (index_ != 0) {
+                output.writeUInt32(2, index_);
+            }
+        }
+
+        public int getSerializedSize() {
+            int size = memoizedSize;
+            if (size != -1) return size;
+
+            size = 0;
+            if (var_ != null) {
+                size += com.github.kornilova_l.libs.com.google.protobuf.CodedOutputStream
+                        .computeMessageSize(1, getVar());
+            }
+            if (index_ != 0) {
+                size += com.github.kornilova_l.libs.com.google.protobuf.CodedOutputStream
+                        .computeUInt32Size(2, index_);
+            }
+            memoizedSize = size;
+            return size;
+        }
+
+        private static final long serialVersionUID = 0L;
+
+        @java.lang.Override
+        public boolean equals(final java.lang.Object obj) {
+            if (obj == this) {
+                return true;
+            }
+            if (!(obj instanceof com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter)) {
+                return super.equals(obj);
+            }
+            com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter other = (com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter) obj;
+
+            boolean result = true;
+            result = result && (hasVar() == other.hasVar());
+            if (hasVar()) {
+                result = result && getVar()
+                        .equals(other.getVar());
+            }
+            result = result && (getIndex()
+                    == other.getIndex());
+            return result;
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            if (memoizedHashCode != 0) {
+                return memoizedHashCode;
+            }
+            int hash = 41;
+            hash = (19 * hash) + getDescriptor().hashCode();
+            if (hasVar()) {
+                hash = (37 * hash) + VAR_FIELD_NUMBER;
+                hash = (53 * hash) + getVar().hashCode();
+            }
+            hash = (37 * hash) + INDEX_FIELD_NUMBER;
+            hash = (53 * hash) + getIndex();
+            hash = (29 * hash) + unknownFields.hashCode();
+            memoizedHashCode = hash;
+            return hash;
+        }
+
+        public static com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter parseFrom(
+                java.nio.ByteBuffer data)
+                throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data);
+        }
+
+        public static com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter parseFrom(
+                java.nio.ByteBuffer data,
+                com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data, extensionRegistry);
+        }
+
+        public static com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter parseFrom(
+                com.github.kornilova_l.libs.com.google.protobuf.ByteString data)
+                throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data);
+        }
+
+        public static com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter parseFrom(
+                com.github.kornilova_l.libs.com.google.protobuf.ByteString data,
+                com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data, extensionRegistry);
+        }
+
+        public static com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter parseFrom(byte[] data)
+                throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data);
+        }
+
+        public static com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter parseFrom(
+                byte[] data,
+                com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data, extensionRegistry);
+        }
+
+        public static com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter parseFrom(java.io.InputStream input)
+                throws java.io.IOException {
+            return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
+                    .parseWithIOException(PARSER, input);
+        }
+
+        public static com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter parseFrom(
+                java.io.InputStream input,
+                com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws java.io.IOException {
+            return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
+                    .parseWithIOException(PARSER, input, extensionRegistry);
+        }
+
+        public static com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter parseDelimitedFrom(java.io.InputStream input)
+                throws java.io.IOException {
+            return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
+                    .parseDelimitedWithIOException(PARSER, input);
+        }
+
+        public static com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter parseDelimitedFrom(
+                java.io.InputStream input,
+                com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws java.io.IOException {
+            return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
+                    .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+        }
+
+        public static com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter parseFrom(
+                com.github.kornilova_l.libs.com.google.protobuf.CodedInputStream input)
+                throws java.io.IOException {
+            return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
+                    .parseWithIOException(PARSER, input);
+        }
+
+        public static com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter parseFrom(
+                com.github.kornilova_l.libs.com.google.protobuf.CodedInputStream input,
+                com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws java.io.IOException {
+            return com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
+                    .parseWithIOException(PARSER, input, extensionRegistry);
+        }
+
+        public Builder newBuilderForType() {
+            return newBuilder();
+        }
+
+        public static Builder newBuilder() {
+            return DEFAULT_INSTANCE.toBuilder();
+        }
+
+        public static Builder newBuilder(com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter prototype) {
+            return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+        }
+
+        public Builder toBuilder() {
+            return this == DEFAULT_INSTANCE
+                    ? new Builder() : new Builder().mergeFrom(this);
+        }
+
+        @java.lang.Override
+        protected Builder newBuilderForType(
+                com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+            Builder builder = new Builder(parent);
+            return builder;
+        }
+
+        /**
+         * Protobuf type {@code com.github.kornilova_l.flamegraph.proto.Parameter}
+         */
+        public static final class Builder extends
+                com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+                // @@protoc_insertion_point(builder_implements:com.github.kornilova_l.flamegraph.proto.Parameter)
+                com.github.kornilova_l.flamegraph.proto.EventProtos.ParameterOrBuilder {
+            public static final com.github.kornilova_l.libs.com.google.protobuf.Descriptors.Descriptor
+            getDescriptor() {
+                return com.github.kornilova_l.flamegraph.proto.EventProtos.internal_static_com_github_kornilova_l_flamegraph_proto_Parameter_descriptor;
+            }
+
+            protected com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+            internalGetFieldAccessorTable() {
+                return com.github.kornilova_l.flamegraph.proto.EventProtos.internal_static_com_github_kornilova_l_flamegraph_proto_Parameter_fieldAccessorTable
+                        .ensureFieldAccessorsInitialized(
+                                com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter.class, com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter.Builder.class);
+            }
+
+            // Construct using com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter.newBuilder()
+            private Builder() {
+                maybeForceBuilderInitialization();
+            }
+
+            private Builder(
+                    com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+                super(parent);
+                maybeForceBuilderInitialization();
+            }
+
+            private void maybeForceBuilderInitialization() {
+                if (com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3
+                        .alwaysUseFieldBuilders) {
+                }
+            }
+
+            public Builder clear() {
+                super.clear();
+                if (varBuilder_ == null) {
+                    var_ = null;
+                } else {
+                    var_ = null;
+                    varBuilder_ = null;
+                }
+                index_ = 0;
+
+                return this;
+            }
+
+            public com.github.kornilova_l.libs.com.google.protobuf.Descriptors.Descriptor
+            getDescriptorForType() {
+                return com.github.kornilova_l.flamegraph.proto.EventProtos.internal_static_com_github_kornilova_l_flamegraph_proto_Parameter_descriptor;
+            }
+
+            public com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter getDefaultInstanceForType() {
+                return com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter.getDefaultInstance();
+            }
+
+            public com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter build() {
+                com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter result = buildPartial();
+                if (!result.isInitialized()) {
+                    throw newUninitializedMessageException(result);
+                }
+                return result;
+            }
+
+            public com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter buildPartial() {
+                com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter result = new com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter(this);
+                if (varBuilder_ == null) {
+                    result.var_ = var_;
+                } else {
+                    result.var_ = varBuilder_.build();
+                }
+                result.index_ = index_;
+                onBuilt();
+                return result;
+            }
+
+            public Builder clone() {
+                return (Builder) super.clone();
+            }
+
+            public Builder setField(
+                    com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FieldDescriptor field,
+                    Object value) {
+                return (Builder) super.setField(field, value);
+            }
+
+            public Builder clearField(
+                    com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FieldDescriptor field) {
+                return (Builder) super.clearField(field);
+            }
+
+            public Builder clearOneof(
+                    com.github.kornilova_l.libs.com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+                return (Builder) super.clearOneof(oneof);
+            }
+
+            public Builder setRepeatedField(
+                    com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FieldDescriptor field,
+                    int index, Object value) {
+                return (Builder) super.setRepeatedField(field, index, value);
+            }
+
+            public Builder addRepeatedField(
+                    com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FieldDescriptor field,
+                    Object value) {
+                return (Builder) super.addRepeatedField(field, value);
+            }
+
+            public Builder mergeFrom(com.github.kornilova_l.libs.com.google.protobuf.Message other) {
+                if (other instanceof com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter) {
+                    return mergeFrom((com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter) other);
+                } else {
+                    super.mergeFrom(other);
+                    return this;
+                }
+            }
+
+            public Builder mergeFrom(com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter other) {
+                if (other == com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter.getDefaultInstance())
+                    return this;
+                if (other.hasVar()) {
+                    mergeVar(other.getVar());
+                }
+                if (other.getIndex() != 0) {
+                    setIndex(other.getIndex());
+                }
+                onChanged();
+                return this;
+            }
+
+            public final boolean isInitialized() {
+                return true;
+            }
+
+            public Builder mergeFrom(
+                    com.github.kornilova_l.libs.com.google.protobuf.CodedInputStream input,
+                    com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                    throws java.io.IOException {
+                com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter parsedMessage = null;
+                try {
+                    parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+                } catch (com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException e) {
+                    parsedMessage = (com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter) e.getUnfinishedMessage();
+                    throw e.unwrapIOException();
+                } finally {
+                    if (parsedMessage != null) {
+                        mergeFrom(parsedMessage);
+                    }
+                }
+                return this;
+            }
+
+            private com.github.kornilova_l.flamegraph.proto.EventProtos.Var var_ = null;
+            private com.github.kornilova_l.libs.com.google.protobuf.SingleFieldBuilderV3<
+                    com.github.kornilova_l.flamegraph.proto.EventProtos.Var, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder, com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder> varBuilder_;
+
+            /**
+             * <code>.com.github.kornilova_l.flamegraph.proto.Var var = 1;</code>
+             */
+            public boolean hasVar() {
+                return varBuilder_ != null || var_ != null;
+            }
+
+            /**
+             * <code>.com.github.kornilova_l.flamegraph.proto.Var var = 1;</code>
+             */
+            public com.github.kornilova_l.flamegraph.proto.EventProtos.Var getVar() {
+                if (varBuilder_ == null) {
+                    return var_ == null ? com.github.kornilova_l.flamegraph.proto.EventProtos.Var.getDefaultInstance() : var_;
+                } else {
+                    return varBuilder_.getMessage();
+                }
+            }
+
+            /**
+             * <code>.com.github.kornilova_l.flamegraph.proto.Var var = 1;</code>
+             */
+            public Builder setVar(com.github.kornilova_l.flamegraph.proto.EventProtos.Var value) {
+                if (varBuilder_ == null) {
+                    if (value == null) {
+                        throw new NullPointerException();
+                    }
+                    var_ = value;
+                    onChanged();
+                } else {
+                    varBuilder_.setMessage(value);
+                }
+
+                return this;
+            }
+
+            /**
+             * <code>.com.github.kornilova_l.flamegraph.proto.Var var = 1;</code>
+             */
+            public Builder setVar(
+                    com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder builderForValue) {
+                if (varBuilder_ == null) {
+                    var_ = builderForValue.build();
+                    onChanged();
+                } else {
+                    varBuilder_.setMessage(builderForValue.build());
+                }
+
+                return this;
+            }
+
+            /**
+             * <code>.com.github.kornilova_l.flamegraph.proto.Var var = 1;</code>
+             */
+            public Builder mergeVar(com.github.kornilova_l.flamegraph.proto.EventProtos.Var value) {
+                if (varBuilder_ == null) {
+                    if (var_ != null) {
+                        var_ =
+                                com.github.kornilova_l.flamegraph.proto.EventProtos.Var.newBuilder(var_).mergeFrom(value).buildPartial();
+                    } else {
+                        var_ = value;
+                    }
+                    onChanged();
+                } else {
+                    varBuilder_.mergeFrom(value);
+                }
+
+                return this;
+            }
+
+            /**
+             * <code>.com.github.kornilova_l.flamegraph.proto.Var var = 1;</code>
+             */
+            public Builder clearVar() {
+                if (varBuilder_ == null) {
+                    var_ = null;
+                    onChanged();
+                } else {
+                    var_ = null;
+                    varBuilder_ = null;
+                }
+
+                return this;
+            }
+
+            /**
+             * <code>.com.github.kornilova_l.flamegraph.proto.Var var = 1;</code>
+             */
+            public com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder getVarBuilder() {
+
+                onChanged();
+                return getVarFieldBuilder().getBuilder();
+            }
+
+            /**
+             * <code>.com.github.kornilova_l.flamegraph.proto.Var var = 1;</code>
+             */
+            public com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder getVarOrBuilder() {
+                if (varBuilder_ != null) {
+                    return varBuilder_.getMessageOrBuilder();
+                } else {
+                    return var_ == null ?
+                            com.github.kornilova_l.flamegraph.proto.EventProtos.Var.getDefaultInstance() : var_;
+                }
+            }
+
+            /**
+             * <code>.com.github.kornilova_l.flamegraph.proto.Var var = 1;</code>
+             */
+            private com.github.kornilova_l.libs.com.google.protobuf.SingleFieldBuilderV3<
+                    com.github.kornilova_l.flamegraph.proto.EventProtos.Var, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder, com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder>
+            getVarFieldBuilder() {
+                if (varBuilder_ == null) {
+                    varBuilder_ = new com.github.kornilova_l.libs.com.google.protobuf.SingleFieldBuilderV3<
+                            com.github.kornilova_l.flamegraph.proto.EventProtos.Var, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder, com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder>(
+                            getVar(),
+                            getParentForChildren(),
+                            isClean());
+                    var_ = null;
+                }
+                return varBuilder_;
+            }
+
+            private int index_;
+
+            /**
+             * <code>uint32 index = 2;</code>
+             */
+            public int getIndex() {
+                return index_;
+            }
+
+            /**
+             * <code>uint32 index = 2;</code>
+             */
+            public Builder setIndex(int value) {
+
+                index_ = value;
+                onChanged();
+                return this;
+            }
+
+            /**
+             * <code>uint32 index = 2;</code>
+             */
+            public Builder clearIndex() {
+
+                index_ = 0;
+                onChanged();
+                return this;
+            }
+
+            public final Builder setUnknownFields(
+                    final com.github.kornilova_l.libs.com.google.protobuf.UnknownFieldSet unknownFields) {
+                return this;
+            }
+
+            public final Builder mergeUnknownFields(
+                    final com.github.kornilova_l.libs.com.google.protobuf.UnknownFieldSet unknownFields) {
+                return this;
+            }
+
+
+            // @@protoc_insertion_point(builder_scope:com.github.kornilova_l.flamegraph.proto.Parameter)
+        }
+
+        // @@protoc_insertion_point(class_scope:com.github.kornilova_l.flamegraph.proto.Parameter)
+        private static final com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter DEFAULT_INSTANCE;
+
+        static {
+            DEFAULT_INSTANCE = new com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter();
+        }
+
+        public static com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter getDefaultInstance() {
+            return DEFAULT_INSTANCE;
+        }
+
+        private static final com.github.kornilova_l.libs.com.google.protobuf.Parser<Parameter>
+                PARSER = new com.github.kornilova_l.libs.com.google.protobuf.AbstractParser<Parameter>() {
+            public Parameter parsePartialFrom(
+                    com.github.kornilova_l.libs.com.google.protobuf.CodedInputStream input,
+                    com.github.kornilova_l.libs.com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                    throws com.github.kornilova_l.libs.com.google.protobuf.InvalidProtocolBufferException {
+                return new Parameter(input, extensionRegistry);
+            }
+        };
+
+        public static com.github.kornilova_l.libs.com.google.protobuf.Parser<Parameter> parser() {
+            return PARSER;
+        }
+
+        @java.lang.Override
+        public com.github.kornilova_l.libs.com.google.protobuf.Parser<Parameter> getParserForType() {
+            return PARSER;
+        }
+
+        public com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter getDefaultInstanceForType() {
+            return DEFAULT_INSTANCE;
+        }
+
+    }
+
   public interface VarOrBuilder extends
       // @@protoc_insertion_point(interface_extends:com.github.kornilova_l.flamegraph.proto.Var)
       com.github.kornilova_l.libs.com.google.protobuf.MessageOrBuilder {
@@ -3550,6 +4236,11 @@ public final class EventProtos {
      */
     com.github.kornilova_l.flamegraph.proto.EventProtos.Var.ObjectOrBuilder getObjectOrBuilder();
 
+    /**
+     * <code>uint32 index = 10;</code>
+     */
+    int getIndex();
+
     public com.github.kornilova_l.flamegraph.proto.EventProtos.Var.ValueCase getValueCase();
   }
   /**
@@ -3558,12 +4249,13 @@ public final class EventProtos {
   public  static final class Var extends
       com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:com.github.kornilova_l.flamegraph.proto.Var)
-      VarOrBuilder {
+          VarOrBuilder {
     // Use Var.newBuilder() to construct.
     private Var(com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
     private Var() {
+      index_ = 0;
     }
 
     @java.lang.Override
@@ -3640,9 +4332,14 @@ public final class EventProtos {
                   input.readMessage(com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object.parser(), extensionRegistry);
               if (subBuilder != null) {
                 subBuilder.mergeFrom((com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object) value_);
-                value_ = subBuilder.buildPartial();
+                  value_ = subBuilder.buildPartial();
               }
               valueCase_ = 9;
+              break;
+            }
+            case 80: {
+
+              index_ = input.readUInt32();
               break;
             }
           }
@@ -4514,9 +5211,18 @@ public final class EventProtos {
      */
     public com.github.kornilova_l.flamegraph.proto.EventProtos.Var.ObjectOrBuilder getObjectOrBuilder() {
       if (valueCase_ == 9) {
-         return (com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object) value_;
+          return (com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object) value_;
       }
-      return com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object.getDefaultInstance();
+        return com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object.getDefaultInstance();
+    }
+
+    public static final int INDEX_FIELD_NUMBER = 10;
+    private int index_;
+    /**
+     * <code>uint32 index = 10;</code>
+     */
+    public int getIndex() {
+      return index_;
     }
 
     private byte memoizedIsInitialized = -1;
@@ -4561,10 +5267,13 @@ public final class EventProtos {
       }
       if (valueCase_ == 8) {
         output.writeDouble(
-            8, (double)((java.lang.Double) value_));
+                8, (double) ((java.lang.Double) value_));
       }
       if (valueCase_ == 9) {
         output.writeMessage(9, (com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object) value_);
+      }
+      if (index_ != 0) {
+        output.writeUInt32(10, index_);
       }
     }
 
@@ -4613,9 +5322,13 @@ public final class EventProtos {
           .computeDoubleSize(
               8, (double)((java.lang.Double) value_));
       }
-      if (valueCase_ == 9) {
+        if (valueCase_ == 9) {
+            size += com.github.kornilova_l.libs.com.google.protobuf.CodedOutputStream
+                    .computeMessageSize(9, (com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object) value_);
+      }
+      if (index_ != 0) {
         size += com.github.kornilova_l.libs.com.google.protobuf.CodedOutputStream
-          .computeMessageSize(9, (com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object) value_);
+          .computeUInt32Size(10, index_);
       }
       memoizedSize = size;
       return size;
@@ -4628,11 +5341,13 @@ public final class EventProtos {
        return true;
       }
       if (!(obj instanceof com.github.kornilova_l.flamegraph.proto.EventProtos.Var)) {
-        return super.equals(obj);
+          return super.equals(obj);
       }
-      com.github.kornilova_l.flamegraph.proto.EventProtos.Var other = (com.github.kornilova_l.flamegraph.proto.EventProtos.Var) obj;
+        com.github.kornilova_l.flamegraph.proto.EventProtos.Var other = (com.github.kornilova_l.flamegraph.proto.EventProtos.Var) obj;
 
       boolean result = true;
+      result = result && (getIndex()
+          == other.getIndex());
       result = result && getValueCase().equals(
           other.getValueCase());
       if (!result) return false;
@@ -4683,13 +5398,15 @@ public final class EventProtos {
       return result;
     }
 
-    @java.lang.Override
-    public int hashCode() {
-      if (memoizedHashCode != 0) {
+      @java.lang.Override
+      public int hashCode() {
+          if (memoizedHashCode != 0) {
         return memoizedHashCode;
       }
       int hash = 41;
       hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + INDEX_FIELD_NUMBER;
+      hash = (53 * hash) + getIndex();
       switch (valueCase_) {
         case 1:
           hash = (37 * hash) + I_FIELD_NUMBER;
@@ -4863,6 +5580,8 @@ public final class EventProtos {
       }
       public Builder clear() {
         super.clear();
+        index_ = 0;
+
         valueCase_ = 0;
         value_ = null;
         return this;
@@ -4911,13 +5630,14 @@ public final class EventProtos {
         if (valueCase_ == 8) {
           result.value_ = value_;
         }
-        if (valueCase_ == 9) {
+          if (valueCase_ == 9) {
           if (objectBuilder_ == null) {
             result.value_ = value_;
           } else {
             result.value_ = objectBuilder_.build();
           }
         }
+        result.index_ = index_;
         result.valueCase_ = valueCase_;
         onBuilt();
         return result;
@@ -4958,8 +5678,11 @@ public final class EventProtos {
         }
       }
 
-      public Builder mergeFrom(com.github.kornilova_l.flamegraph.proto.EventProtos.Var other) {
+        public Builder mergeFrom(com.github.kornilova_l.flamegraph.proto.EventProtos.Var other) {
         if (other == com.github.kornilova_l.flamegraph.proto.EventProtos.Var.getDefaultInstance()) return this;
+        if (other.getIndex() != 0) {
+          setIndex(other.getIndex());
+        }
         switch (other.getValueCase()) {
           case I: {
             setI(other.getI());
@@ -5533,11 +6256,40 @@ public final class EventProtos {
                   (com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Object) value_,
                   getParentForChildren(),
                   isClean());
-          value_ = null;
+            value_ = null;
         }
-        valueCase_ = 9;
-        onChanged();;
-        return objectBuilder_;
+          valueCase_ = 9;
+          onChanged();
+          ;
+          return objectBuilder_;
+      }
+
+        private int index_;
+
+        /**
+         * <code>uint32 index = 10;</code>
+         */
+        public int getIndex() {
+            return index_;
+        }
+
+        /**
+         * <code>uint32 index = 10;</code>
+         */
+        public Builder setIndex(int value) {
+
+            index_ = value;
+            onChanged();
+            return this;
+        }
+      /**
+       * <code>uint32 index = 10;</code>
+       */
+      public Builder clearIndex() {
+        
+        index_ = 0;
+        onChanged();
+        return this;
       }
       public final Builder setUnknownFields(
           final com.github.kornilova_l.libs.com.google.protobuf.UnknownFieldSet unknownFields) {
@@ -5602,7 +6354,12 @@ public final class EventProtos {
     internal_static_com_github_kornilova_l_flamegraph_proto_Event_Map_descriptor;
   private static final 
     com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_com_github_kornilova_l_flamegraph_proto_Event_Map_fieldAccessorTable;
+          internal_static_com_github_kornilova_l_flamegraph_proto_Event_Map_fieldAccessorTable;
+    private static final com.github.kornilova_l.libs.com.google.protobuf.Descriptors.Descriptor
+            internal_static_com_github_kornilova_l_flamegraph_proto_Parameter_descriptor;
+    private static final
+    com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+            internal_static_com_github_kornilova_l_flamegraph_proto_Parameter_fieldAccessorTable;
   private static final com.github.kornilova_l.libs.com.google.protobuf.Descriptors.Descriptor
     internal_static_com_github_kornilova_l_flamegraph_proto_Var_descriptor;
   private static final 
@@ -5619,34 +6376,37 @@ public final class EventProtos {
     return descriptor;
   }
   private static  com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FileDescriptor
-      descriptor;
+          descriptor;
   static {
     java.lang.String[] descriptorData = {
       "\n3com/github/kornilova_l/flamegraph/prot" +
       "o/event.proto\022\'com.github.kornilova_l.fl" +
-      "amegraph.proto\"\203\005\n\005Event\022Q\n\013methodEvent\030" +
-      "\001 \001(\0132:.com.github.kornilova_l.flamegrap" +
-      "h.proto.Event.MethodEventH\000\022F\n\010newClass\030" +
-      "\002 \001(\01322.com.github.kornilova_l.flamegrap" +
-      "h.proto.Event.MapH\000\022G\n\tnewThread\030\003 \001(\01322" +
-      ".com.github.kornilova_l.flamegraph.proto" +
-      ".Event.MapH\000\032\354\002\n\013MethodEvent\022\021\n\tthread_i" +
-      "d\030\001 \001(\003\022\025\n\rclass_name_id\030\002 \001(\003\022\022\n\nstart_",
-      "time\030\003 \001(\003\022\020\n\010duration\030\004 \001(\003\022\023\n\013method_n" +
-      "ame\030\005 \001(\t\022\014\n\004desc\030\006 \001(\t\022\021\n\tis_static\030\007 \001" +
-      "(\010\022@\n\nparameters\030\010 \003(\0132,.com.github.korn" +
-      "ilova_l.flamegraph.proto.Var\022D\n\014return_v" +
-      "alue\030\t \001(\0132,.com.github.kornilova_l.flam" +
-      "egraph.proto.VarH\000\022H\n\tthrowable\030\n \001(\01323." +
-      "com.github.kornilova_l.flamegraph.proto." +
-      "Var.ObjectH\000B\005\n\003end\032\037\n\003Map\022\n\n\002id\030\001 \001(\003\022\014" +
-      "\n\004name\030\002 \001(\tB\006\n\004type\"\344\001\n\003Var\022\013\n\001I\030\001 \001(\021H" +
-      "\000\022\013\n\001J\030\002 \001(\022H\000\022\013\n\001Z\030\003 \001(\010H\000\022\013\n\001C\030\004 \001(\rH\000",
-      "\022\013\n\001S\030\005 \001(\021H\000\022\013\n\001B\030\006 \001(\021H\000\022\013\n\001F\030\007 \001(\002H\000\022" +
-      "\013\n\001D\030\010 \001(\001H\000\022E\n\006object\030\t \001(\01323.com.githu" +
-      "b.kornilova_l.flamegraph.proto.Var.Objec" +
-      "tH\000\032%\n\006Object\022\014\n\004type\030\001 \001(\t\022\r\n\005value\030\002 \001" +
-      "(\tB\007\n\005valueB\rB\013EventProtosb\006proto3"
+      "amegraph.proto\"\211\005\n\005Event\022Q\n\013methodEvent\030" +
+              "\001 \001(\0132:.com.github.kornilova_l.flamegrap" +
+              "h.proto.Event.MethodEventH\000\022F\n\010newClass\030" +
+              "\002 \001(\01322.com.github.kornilova_l.flamegrap" +
+              "h.proto.Event.MapH\000\022G\n\tnewThread\030\003 \001(\01322" +
+              ".com.github.kornilova_l.flamegraph.proto" +
+              ".Event.MapH\000\032\362\002\n\013MethodEvent\022\021\n\tthread_i" +
+              "d\030\001 \001(\003\022\025\n\rclass_name_id\030\002 \001(\003\022\022\n\nstart_",
+            "time\030\003 \001(\003\022\020\n\010duration\030\004 \001(\003\022\023\n\013method_n" +
+                    "ame\030\005 \001(\t\022\014\n\004desc\030\006 \001(\t\022\021\n\tis_static\030\007 \001" +
+                    "(\010\022F\n\nparameters\030\010 \003(\01322.com.github.korn" +
+                    "ilova_l.flamegraph.proto.Parameter\022D\n\014re" +
+                    "turn_value\030\t \001(\0132,.com.github.kornilova_" +
+                    "l.flamegraph.proto.VarH\000\022H\n\tthrowable\030\n " +
+                    "\001(\01323.com.github.kornilova_l.flamegraph." +
+                    "proto.Var.ObjectH\000B\005\n\003end\032\037\n\003Map\022\n\n\002id\030\001" +
+                    " \001(\003\022\014\n\004name\030\002 \001(\tB\006\n\004type\"U\n\tParameter\022" +
+                    "9\n\003var\030\001 \001(\0132,.com.github.kornilova_l.fl",
+            "amegraph.proto.Var\022\r\n\005index\030\002 \001(\r\"\363\001\n\003Va" +
+                    "r\022\013\n\001I\030\001 \001(\021H\000\022\013\n\001J\030\002 \001(\022H\000\022\013\n\001Z\030\003 \001(\010H\000" +
+                    "\022\013\n\001C\030\004 \001(\rH\000\022\013\n\001S\030\005 \001(\021H\000\022\013\n\001B\030\006 \001(\021H\000\022" +
+                    "\013\n\001F\030\007 \001(\002H\000\022\013\n\001D\030\010 \001(\001H\000\022E\n\006object\030\t \001(" +
+                    "\01323.com.github.kornilova_l.flamegraph.pr" +
+      "oto.Var.ObjectH\000\022\r\n\005index\030\n \001(\r\032%\n\006Objec" +
+      "t\022\014\n\004type\030\001 \001(\t\022\r\n\005value\030\002 \001(\tB\007\n\005valueB" +
+      "\rB\013EventProtosb\006proto3"
     };
     com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -5665,25 +6425,31 @@ public final class EventProtos {
     internal_static_com_github_kornilova_l_flamegraph_proto_Event_fieldAccessorTable = new
       com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_github_kornilova_l_flamegraph_proto_Event_descriptor,
-        new java.lang.String[] { "MethodEvent", "NewClass", "NewThread", "Type", });
+            new java.lang.String[]{"MethodEvent", "NewClass", "NewThread", "Type", });
     internal_static_com_github_kornilova_l_flamegraph_proto_Event_MethodEvent_descriptor =
       internal_static_com_github_kornilova_l_flamegraph_proto_Event_descriptor.getNestedTypes().get(0);
     internal_static_com_github_kornilova_l_flamegraph_proto_Event_MethodEvent_fieldAccessorTable = new
-      com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_com_github_kornilova_l_flamegraph_proto_Event_MethodEvent_descriptor,
+            com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+            internal_static_com_github_kornilova_l_flamegraph_proto_Event_MethodEvent_descriptor,
         new java.lang.String[] { "ThreadId", "ClassNameId", "StartTime", "Duration", "MethodName", "Desc", "IsStatic", "Parameters", "ReturnValue", "Throwable", "End", });
     internal_static_com_github_kornilova_l_flamegraph_proto_Event_Map_descriptor =
       internal_static_com_github_kornilova_l_flamegraph_proto_Event_descriptor.getNestedTypes().get(1);
     internal_static_com_github_kornilova_l_flamegraph_proto_Event_Map_fieldAccessorTable = new
-      com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+            com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_github_kornilova_l_flamegraph_proto_Event_Map_descriptor,
-        new java.lang.String[] { "Id", "Name", });
+            new java.lang.String[]{"Id", "Name",});
+      internal_static_com_github_kornilova_l_flamegraph_proto_Parameter_descriptor =
+              getDescriptor().getMessageTypes().get(1);
+      internal_static_com_github_kornilova_l_flamegraph_proto_Parameter_fieldAccessorTable = new
+              com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+              internal_static_com_github_kornilova_l_flamegraph_proto_Parameter_descriptor,
+              new java.lang.String[] { "Var", "Index", });
     internal_static_com_github_kornilova_l_flamegraph_proto_Var_descriptor =
-      getDescriptor().getMessageTypes().get(1);
+      getDescriptor().getMessageTypes().get(2);
     internal_static_com_github_kornilova_l_flamegraph_proto_Var_fieldAccessorTable = new
-      com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+            com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_github_kornilova_l_flamegraph_proto_Var_descriptor,
-        new java.lang.String[] { "I", "J", "Z", "C", "S", "B", "F", "D", "Object", "Value", });
+        new java.lang.String[] { "I", "J", "Z", "C", "S", "B", "F", "D", "Object", "Index", "Value", });
     internal_static_com_github_kornilova_l_flamegraph_proto_Var_Object_descriptor =
       internal_static_com_github_kornilova_l_flamegraph_proto_Var_descriptor.getNestedTypes().get(0);
     internal_static_com_github_kornilova_l_flamegraph_proto_Var_Object_fieldAccessorTable = new

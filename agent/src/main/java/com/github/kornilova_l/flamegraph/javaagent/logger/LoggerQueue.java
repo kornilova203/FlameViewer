@@ -36,9 +36,10 @@ public class LoggerQueue {
                                   String className,
                                   String methodName,
                                   String desc,
-                                  boolean isStatic) {
+                                  boolean isStatic,
+                                  String savedParameters) {
         loggerQueue.addToQueue(new RetValEventData(thread, className, startTime, duration,
-                methodName, desc, isStatic, parameters, retVal));
+                methodName, desc, isStatic, parameters, retVal, savedParameters));
     }
 
     public static void addToQueue(Throwable throwable,
@@ -49,9 +50,10 @@ public class LoggerQueue {
                                   String className,
                                   String methodName,
                                   boolean isStatic,
-                                  String desc) {
+                                  String desc,
+                                  String savedParameters) {
         loggerQueue.addToQueue(new ThrowableEventData(thread, className, startTime, duration,
-                methodName, desc, isStatic, parameters, throwable));
+                methodName, desc, isStatic, parameters, throwable, savedParameters));
     }
 
     ConcurrentLinkedQueue<MethodEventData> getQueue() {

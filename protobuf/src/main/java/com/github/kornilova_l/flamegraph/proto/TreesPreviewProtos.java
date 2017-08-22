@@ -492,7 +492,7 @@ public final class TreesPreviewProtos {
 
             public Builder mergeFrom(com.github.kornilova_l.libs.com.google.protobuf.Message other) {
                 if (other instanceof com.github.kornilova_l.flamegraph.proto.TreesPreviewProtos.TreesPreview) {
-                    return mergeFrom((com.github.kornilova_l.flamegraph.proto.TreesPreviewProtos.TreesPreview) other);
+                    return mergeFrom((com.github.kornilova_l.flamegraph.proto.TreesPreviewProtos.TreesPreview)other);
                 } else {
                     super.mergeFrom(other);
                     return this;
@@ -931,15 +931,15 @@ public final class TreesPreviewProtos {
                         return null;
                     }
                 };
-        com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FileDescriptor
-                .internalBuildGeneratedFileFrom(descriptorData,
-                        new com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FileDescriptor[]{
-                                com.github.kornilova_l.flamegraph.proto.TreePreviewProtos.getDescriptor(),
-                        }, assigner);
-        internal_static_com_github_kornilova_l_flamegraph_proto_TreesPreview_descriptor =
-                getDescriptor().getMessageTypes().get(0);
-        internal_static_com_github_kornilova_l_flamegraph_proto_TreesPreview_fieldAccessorTable = new
-                com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+    com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FileDescriptor
+      .internalBuildGeneratedFileFrom(descriptorData,
+        new com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FileDescriptor[] {
+          com.github.kornilova_l.flamegraph.proto.TreePreviewProtos.getDescriptor(),
+        }, assigner);
+    internal_static_com_github_kornilova_l_flamegraph_proto_TreesPreview_descriptor =
+      getDescriptor().getMessageTypes().get(0);
+    internal_static_com_github_kornilova_l_flamegraph_proto_TreesPreview_fieldAccessorTable = new
+      com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_github_kornilova_l_flamegraph_proto_TreesPreview_descriptor,
         new java.lang.String[] { "TreesPreview", "FullDuration", });
     com.github.kornilova_l.flamegraph.proto.TreePreviewProtos.getDescriptor();

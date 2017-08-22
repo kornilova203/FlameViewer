@@ -13,8 +13,9 @@ public class RetValEventData extends MethodEventData {
                            String desc,
                            boolean isStatic,
                            Object[] parameters,
-                           Object retVal) {
-        super(thread.getName(), className, startTime, duration, methodName, desc, isStatic, parameters);
+                           Object retVal,
+                           String savedParameters) {
+        super(thread.getName(), className, startTime, duration, methodName, desc, isStatic, parameters, savedParameters);
         this.retVal = retVal;
     }
 

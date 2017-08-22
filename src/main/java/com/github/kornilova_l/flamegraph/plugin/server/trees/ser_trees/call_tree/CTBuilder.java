@@ -101,6 +101,7 @@ class CTBuilder {
                                 .setDescription(
                                         getBeautifulDesc(methodEvent.getDesc())
                                 )
+                                .addAllParameters(methodEvent.getParametersList())
                                 .setIsStatic(methodEvent.getIsStatic())
                                 .setCount(1)
                                 .addAllParameters(methodEvent.getParametersList())

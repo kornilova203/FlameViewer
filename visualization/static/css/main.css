@@ -67,16 +67,41 @@ h1 {
     font-weight: normal;
     position: absolute;
     z-index: 100;
-    padding: 10px 15px 15px;
+    padding: 6px 15px 8px;
     text-align: left;
     display: none;
 }
 
 .popup h3 {
     font-size: 14px;
-    margin-top: 10px;
+    margin-top: 2px;
     margin-bottom: 5px;
     font-weight: normal;
+}
+
+.popup h4 {
+    margin: 10px 0 5px;
+    font-size: 14px;
+}
+
+.popup table td, .popup table th {
+    width: 150px;
+    overflow: hidden;
+    display: inline-block;
+    white-space: nowrap;
+}
+
+.popup table p {
+    display: inline-block;
+    text-overflow: ellipsis;
+    width: 100%;
+    overflow: hidden;
+}
+
+.popup table {
+    font-size: 14px;
+    position: relative;
+    right: 4px;
 }
 
 .popup p {
@@ -86,6 +111,7 @@ h1 {
 
 .popup a img {
     margin-right: 10px;
+    width: 25px;
 }
 
 .inputfile {

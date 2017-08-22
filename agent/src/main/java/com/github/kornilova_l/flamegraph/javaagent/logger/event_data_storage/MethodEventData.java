@@ -3,23 +3,28 @@ package com.github.kornilova_l.flamegraph.javaagent.logger.event_data_storage;
 import com.github.kornilova_l.flamegraph.javaagent.logger.event_data_storage.name_maps.ClassNamesMap;
 import com.github.kornilova_l.flamegraph.javaagent.logger.event_data_storage.name_maps.NamesMap;
 import com.github.kornilova_l.flamegraph.javaagent.logger.event_data_storage.name_maps.ThreadNamesMap;
-import com.github.kornilova_l.flamegraph.proto.EventProtos;
 import com.github.kornilova_l.flamegraph.proto.EventProtos.Event;
+import com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter;
+import com.github.kornilova_l.flamegraph.proto.EventProtos.Var;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 abstract public class MethodEventData {
-    private String threadName;
-    private String className;
-    private long startTime;
-    private long duration;
-    private String methodName;
-    private String desc;
-    private boolean isStatic;
-    private Object[] parameters;
-    private static ClassNamesMap classNamesMap = new ClassNamesMap();
-    private static ThreadNamesMap threadNamesMap = new ThreadNamesMap();
+    private final String threadName;
+    private final String className;
+    private final long startTime;
+    private final long duration;
+    private final String methodName;
+    private final String desc;
+    private final String savedParameters;
+    private List<Integer> savedParametersList;
+    private final boolean isStatic;
+    private final Object[] parameters;
+    private final static ClassNamesMap classNamesMap = new ClassNamesMap();
+    private final static ThreadNamesMap threadNamesMap = new ThreadNamesMap();
 
     MethodEventData(String threadName,
                     String className,
@@ -28,7 +33,8 @@ abstract public class MethodEventData {
                     String methodName,
                     String desc,
                     boolean isStatic,
-                    Object[] parameters) {
+                    Object[] parameters,
+                    String savedParameters) {
         this.threadName = threadName;
         this.className = className;
         this.startTime = startTime;
@@ -37,10 +43,11 @@ abstract public class MethodEventData {
         this.desc = desc;
         this.isStatic = isStatic;
         this.parameters = parameters;
+        this.savedParameters = savedParameters;
     }
 
-    private static void addObject(EventProtos.Var.Builder varBuilder, Object o) {
-        EventProtos.Var.Object.Builder objectBuilder = EventProtos.Var.Object.newBuilder();
+    private static void addObject(Var.Builder varBuilder, Object o) {
+        Var.Object.Builder objectBuilder = Var.Object.newBuilder();
         objectBuilder.setType(o.getClass().toString());
         try {
             objectBuilder.setValue(o.toString());
@@ -51,6 +58,7 @@ abstract public class MethodEventData {
     }
 
     public List<Event> getEvents() {
+        initSaveParametersList();
         List<Event> events = new LinkedList<>();
         Event.Builder eventBuilder = Event.newBuilder();
         Event.MethodEvent.Builder methodEventBuilder = Event.MethodEvent.newBuilder();
@@ -64,13 +72,24 @@ abstract public class MethodEventData {
         return events;
     }
 
+    private void initSaveParametersList() {
+        savedParametersList = new ArrayList<>();
+        if (Objects.equals(savedParameters, "")) {
+            return;
+        }
+        String[] indexes = savedParameters.split(",");
+        for (String index : indexes) {
+            savedParametersList.add(Integer.parseInt(index));
+        }
+    }
+
     abstract void setResult(Event.MethodEvent.Builder methodEventBuilder);
 
-    EventProtos.Var objectToVar(Object o) {
-        EventProtos.Var.Builder varBuilder = EventProtos.Var.newBuilder();
+    Var objectToVar(Object o) {
+        Var.Builder varBuilder = Var.newBuilder();
         if (o == null) {
             varBuilder.setObject(
-                    EventProtos.Var.Object.newBuilder()
+                    Var.Object.newBuilder()
                             .setValue("")
                             .setType("null")
                             .build()
@@ -138,9 +157,16 @@ abstract public class MethodEventData {
 
     private void setParameters(Event.MethodEvent.Builder methodEventBuilder) {
         if (parameters != null) {
-            for (Object parameter : parameters) {
-                methodEventBuilder.addParameters(objectToVar(parameter));
+            for (int i = 0; i < parameters.length; i++) {
+                methodEventBuilder.addParameters(createParameter(objectToVar(parameters[i]), i));
             }
         }
+    }
+
+    private Parameter createParameter(Var var, int i) {
+        return Parameter.newBuilder()
+                .setVar(var)
+                .setIndex(savedParametersList.get(i))
+                .build();
     }
 }

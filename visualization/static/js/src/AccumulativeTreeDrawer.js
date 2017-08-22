@@ -25,6 +25,7 @@ class AccumulativeTreeDrawer {
         this.baseNode = this.tree.getBaseNode();
         this.baseNode.depth = 0;
         this.$popup = null;
+        this.$popupTable = null;
         this.canvasOffset = 0;
         this.enableZoom = true;
         this.nodesCount = -1;
@@ -183,6 +184,7 @@ class AccumulativeTreeDrawer {
     _createPopup() {
         const popupContent = templates.tree.accumulativeTreePopup().content;
         this.$popup = $(popupContent).appendTo(this.section.find(".canvas-wrapper"));
+        this.$popupTable = this.$popup.find("table");
     }
 
     /**
@@ -461,6 +463,33 @@ class AccumulativeTreeDrawer {
             `desc=${desc}&` +
             `isStatic=${node.getNodeInfo().getIsStatic() === true ? "true" : "false"}`
         );
+        this._setPopupTable(node);
+    }
+
+    /**
+     * @param {String} fullDescription
+     * @return {null|Array<String>}
+     */
+    static getParametersTypesList(fullDescription) {
+        const parameters = fullDescription.substring(fullDescription.indexOf("(") + 1, fullDescription.lastIndexOf(")"));
+        if (parameters === "") {
+            return null;
+        }
+        return parameters.split(", ");
+    }
+
+    /**
+     * @param node
+     */
+    _setPopupTable(node) {
+        const parametersList = AccumulativeTreeDrawer.getParametersTypesList(node.getNodeInfo().getDescription());
+        this.$popupTable.find("*").remove();
+        if (parametersList !== null) {
+            console.log(parametersList);
+            for (let i = 0; i < parametersList.length; i++) {
+                this.$popupTable.append($("<tr><td><p>" + parametersList[i] + "</p></td></tr>"))
+            }
+        }
     }
 
     /**

@@ -27,7 +27,7 @@ if (goog.DEBUG) {
 
 
 templates.tree.callTreePopup = function(opt_data, opt_ignored) {
-    return soydata.VERY_UNSAFE.ordainSanitizedHtml('<div class="popup"><a class="outgoing-link"><img src="img/outgoing.png"/></a><a class="incoming-link"><img src="img/incoming.png"/></a><h3></h3><p class="duration"></p></div>');
+    return soydata.VERY_UNSAFE.ordainSanitizedHtml('<div class="popup"><a class="outgoing-link"><img src="img/outgoing.png"/></a><a class="incoming-link"><img src="img/incoming.png"/></a><h3></h3><p class="duration"></p><h4 class="parameters-header">Parameters:</h4><table><tr><th>Type</th><th>Value</th></tr></table></div>');
 };
 if (goog.DEBUG) {
   templates.tree.callTreePopup.soyTemplateName = 'templates.tree.callTreePopup';
@@ -35,7 +35,7 @@ if (goog.DEBUG) {
 
 
 templates.tree.accumulativeTreePopup = function(opt_data, opt_ignored) {
-    return soydata.VERY_UNSAFE.ordainSanitizedHtml('<div class="popup"><a class="outgoing-link"><img src="img/outgoing.png"/></a><a class="incoming-link"><img src="img/incoming.png"/></a><h3></h3><p class="p-calls-num"></p></div>');
+    return soydata.VERY_UNSAFE.ordainSanitizedHtml('<div class="popup"><a class="outgoing-link"><img src="img/outgoing.png"/></a><a class="incoming-link"><img src="img/incoming.png"/></a><h3></h3><p class="p-calls-num"></p><h4 class="parameters-header">Parameters:</h4><table></table></div>');
 };
 if (goog.DEBUG) {
   templates.tree.accumulativeTreePopup.soyTemplateName = 'templates.tree.accumulativeTreePopup';

@@ -13,8 +13,9 @@ public class ThrowableEventData extends MethodEventData {
                               String desc,
                               boolean isStatic,
                               Object[] parameters,
-                              Throwable throwable) {
-        super(thread.getName(), className, startTime, duration, methodName, desc, isStatic, parameters);
+                              Throwable throwable,
+                              String savedParameters) {
+        super(thread.getName(), className, startTime, duration, methodName, desc, isStatic, parameters, savedParameters);
         this.throwable = throwable;
     }
 

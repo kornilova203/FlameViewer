@@ -437,7 +437,7 @@ proto.com.github.kornilova_l.flamegraph.proto.Tree.Node.NodeInfo.toObject = func
     isStatic: jspb.Message.getFieldWithDefault(msg, 3, false),
     count: jspb.Message.getFieldWithDefault(msg, 8, 0),
     parametersList: jspb.Message.toObjectList(msg.getParametersList(),
-    com_github_kornilova_l_flamegraph_proto_event_pb.Var.toObject, includeInstance),
+    com_github_kornilova_l_flamegraph_proto_event_pb.Parameter.toObject, includeInstance),
     returnValue: (f = msg.getReturnValue()) && com_github_kornilova_l_flamegraph_proto_event_pb.Var.toObject(includeInstance, f),
     exception: (f = msg.getException()) && com_github_kornilova_l_flamegraph_proto_event_pb.Var.Object.toObject(includeInstance, f)
   };
@@ -497,8 +497,8 @@ proto.com.github.kornilova_l.flamegraph.proto.Tree.Node.NodeInfo.deserializeBina
       msg.setCount(value);
       break;
     case 4:
-      var value = new com_github_kornilova_l_flamegraph_proto_event_pb.Var;
-      reader.readMessage(value,com_github_kornilova_l_flamegraph_proto_event_pb.Var.deserializeBinaryFromReader);
+      var value = new com_github_kornilova_l_flamegraph_proto_event_pb.Parameter;
+      reader.readMessage(value,com_github_kornilova_l_flamegraph_proto_event_pb.Parameter.deserializeBinaryFromReader);
       msg.addParameters(value);
       break;
     case 5:
@@ -579,7 +579,7 @@ proto.com.github.kornilova_l.flamegraph.proto.Tree.Node.NodeInfo.serializeBinary
     writer.writeRepeatedMessage(
       4,
       f,
-      com_github_kornilova_l_flamegraph_proto_event_pb.Var.serializeBinaryToWriter
+      com_github_kornilova_l_flamegraph_proto_event_pb.Parameter.serializeBinaryToWriter
     );
   }
   f = message.getReturnValue();
@@ -679,30 +679,30 @@ proto.com.github.kornilova_l.flamegraph.proto.Tree.Node.NodeInfo.prototype.setCo
 
 
 /**
- * repeated Var parameters = 4;
+ * repeated Parameter parameters = 4;
  * If you change this array by adding, removing or replacing elements, or if you
  * replace the array itself, then you must call the setter to update it.
- * @return {!Array.<!proto.com.github.kornilova_l.flamegraph.proto.Var>}
+ * @return {!Array.<!proto.com.github.kornilova_l.flamegraph.proto.Parameter>}
  */
 proto.com.github.kornilova_l.flamegraph.proto.Tree.Node.NodeInfo.prototype.getParametersList = function() {
-  return /** @type{!Array.<!proto.com.github.kornilova_l.flamegraph.proto.Var>} */ (
-    jspb.Message.getRepeatedWrapperField(this, com_github_kornilova_l_flamegraph_proto_event_pb.Var, 4));
+  return /** @type{!Array.<!proto.com.github.kornilova_l.flamegraph.proto.Parameter>} */ (
+    jspb.Message.getRepeatedWrapperField(this, com_github_kornilova_l_flamegraph_proto_event_pb.Parameter, 4));
 };
 
 
-/** @param {!Array.<!proto.com.github.kornilova_l.flamegraph.proto.Var>} value */
+/** @param {!Array.<!proto.com.github.kornilova_l.flamegraph.proto.Parameter>} value */
 proto.com.github.kornilova_l.flamegraph.proto.Tree.Node.NodeInfo.prototype.setParametersList = function(value) {
   jspb.Message.setRepeatedWrapperField(this, 4, value);
 };
 
 
 /**
- * @param {!proto.com.github.kornilova_l.flamegraph.proto.Var=} opt_value
+ * @param {!proto.com.github.kornilova_l.flamegraph.proto.Parameter=} opt_value
  * @param {number=} opt_index
- * @return {!proto.com.github.kornilova_l.flamegraph.proto.Var}
+ * @return {!proto.com.github.kornilova_l.flamegraph.proto.Parameter}
  */
 proto.com.github.kornilova_l.flamegraph.proto.Tree.Node.NodeInfo.prototype.addParameters = function(opt_value, opt_index) {
-  return jspb.Message.addToRepeatedWrapperField(this, 4, opt_value, proto.com.github.kornilova_l.flamegraph.proto.Var, opt_index);
+  return jspb.Message.addToRepeatedWrapperField(this, 4, opt_value, proto.com.github.kornilova_l.flamegraph.proto.Parameter, opt_index);
 };
 
 

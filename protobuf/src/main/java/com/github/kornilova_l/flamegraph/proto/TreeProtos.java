@@ -338,10 +338,18 @@ public final class TreeProtos {
             getClassNameBytes();
 
         /**
+         * <pre>
+         * for building tree
+         * </pre>
+         *
          * <code>string description = 7;</code>
          */
         java.lang.String getDescription();
         /**
+         * <pre>
+         * for building tree
+         * </pre>
+         *
          * <code>string description = 7;</code>
          */
         com.github.kornilova_l.libs.com.google.protobuf.ByteString
@@ -362,47 +370,27 @@ public final class TreeProtos {
         int getCount();
 
         /**
-         * <pre>
-         * only for ser_trees which save original call structure
-         * </pre>
-         *
-         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 4;</code>
+         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Parameter parameters = 4;</code>
          */
-        java.util.List<com.github.kornilova_l.flamegraph.proto.EventProtos.Var> 
+        java.util.List<com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter> 
             getParametersList();
         /**
-         * <pre>
-         * only for ser_trees which save original call structure
-         * </pre>
-         *
-         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 4;</code>
+         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Parameter parameters = 4;</code>
          */
-        com.github.kornilova_l.flamegraph.proto.EventProtos.Var getParameters(int index);
+        com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter getParameters(int index);
         /**
-         * <pre>
-         * only for ser_trees which save original call structure
-         * </pre>
-         *
-         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 4;</code>
+         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Parameter parameters = 4;</code>
          */
         int getParametersCount();
         /**
-         * <pre>
-         * only for ser_trees which save original call structure
-         * </pre>
-         *
-         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 4;</code>
+         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Parameter parameters = 4;</code>
          */
-        java.util.List<? extends com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder> 
+        java.util.List<? extends com.github.kornilova_l.flamegraph.proto.EventProtos.ParameterOrBuilder> 
             getParametersOrBuilderList();
         /**
-         * <pre>
-         * only for ser_trees which save original call structure
-         * </pre>
-         *
-         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 4;</code>
+         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Parameter parameters = 4;</code>
          */
-        com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder getParametersOrBuilder(
+        com.github.kornilova_l.flamegraph.proto.EventProtos.ParameterOrBuilder getParametersOrBuilder(
             int index);
 
         /**
@@ -489,11 +477,11 @@ public final class TreeProtos {
                 }
                 case 34: {
                   if (!((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
-                    parameters_ = new java.util.ArrayList<com.github.kornilova_l.flamegraph.proto.EventProtos.Var>();
+                    parameters_ = new java.util.ArrayList<com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter>();
                     mutable_bitField0_ |= 0x00000020;
                   }
                   parameters_.add(
-                      input.readMessage(com.github.kornilova_l.flamegraph.proto.EventProtos.Var.parser(), extensionRegistry));
+                      input.readMessage(com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter.parser(), extensionRegistry));
                   break;
                 }
                 case 42: {
@@ -671,6 +659,10 @@ public final class TreeProtos {
         public static final int DESCRIPTION_FIELD_NUMBER = 7;
         private volatile java.lang.Object description_;
         /**
+         * <pre>
+         * for building tree
+         * </pre>
+         *
          * <code>string description = 7;</code>
          */
         public java.lang.String getDescription() {
@@ -686,6 +678,10 @@ public final class TreeProtos {
           }
         }
         /**
+         * <pre>
+         * for building tree
+         * </pre>
+         *
          * <code>string description = 7;</code>
          */
         public com.github.kornilova_l.libs.com.google.protobuf.ByteString
@@ -725,56 +721,36 @@ public final class TreeProtos {
         }
 
         public static final int PARAMETERS_FIELD_NUMBER = 4;
-        private java.util.List<com.github.kornilova_l.flamegraph.proto.EventProtos.Var> parameters_;
+        private java.util.List<com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter> parameters_;
         /**
-         * <pre>
-         * only for ser_trees which save original call structure
-         * </pre>
-         *
-         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 4;</code>
+         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Parameter parameters = 4;</code>
          */
-        public java.util.List<com.github.kornilova_l.flamegraph.proto.EventProtos.Var> getParametersList() {
+        public java.util.List<com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter> getParametersList() {
           return parameters_;
         }
         /**
-         * <pre>
-         * only for ser_trees which save original call structure
-         * </pre>
-         *
-         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 4;</code>
+         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Parameter parameters = 4;</code>
          */
-        public java.util.List<? extends com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder> 
+        public java.util.List<? extends com.github.kornilova_l.flamegraph.proto.EventProtos.ParameterOrBuilder> 
             getParametersOrBuilderList() {
           return parameters_;
         }
         /**
-         * <pre>
-         * only for ser_trees which save original call structure
-         * </pre>
-         *
-         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 4;</code>
+         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Parameter parameters = 4;</code>
          */
         public int getParametersCount() {
           return parameters_.size();
         }
         /**
-         * <pre>
-         * only for ser_trees which save original call structure
-         * </pre>
-         *
-         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 4;</code>
+         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Parameter parameters = 4;</code>
          */
-        public com.github.kornilova_l.flamegraph.proto.EventProtos.Var getParameters(int index) {
+        public com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter getParameters(int index) {
           return parameters_.get(index);
         }
         /**
-         * <pre>
-         * only for ser_trees which save original call structure
-         * </pre>
-         *
-         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 4;</code>
+         * <code>repeated .com.github.kornilova_l.flamegraph.proto.Parameter parameters = 4;</code>
          */
-        public com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder getParametersOrBuilder(
+        public com.github.kornilova_l.flamegraph.proto.EventProtos.ParameterOrBuilder getParametersOrBuilder(
             int index) {
           return parameters_.get(index);
         }
@@ -1453,6 +1429,10 @@ public final class TreeProtos {
 
           private java.lang.Object description_ = "";
           /**
+           * <pre>
+           * for building tree
+           * </pre>
+           *
            * <code>string description = 7;</code>
            */
           public java.lang.String getDescription() {
@@ -1468,6 +1448,10 @@ public final class TreeProtos {
             }
           }
           /**
+           * <pre>
+           * for building tree
+           * </pre>
+           *
            * <code>string description = 7;</code>
            */
           public com.github.kornilova_l.libs.com.google.protobuf.ByteString
@@ -1484,6 +1468,10 @@ public final class TreeProtos {
             }
           }
           /**
+           * <pre>
+           * for building tree
+           * </pre>
+           *
            * <code>string description = 7;</code>
            */
           public Builder setDescription(
@@ -1497,6 +1485,10 @@ public final class TreeProtos {
             return this;
           }
           /**
+           * <pre>
+           * for building tree
+           * </pre>
+           *
            * <code>string description = 7;</code>
            */
           public Builder clearDescription() {
@@ -1506,6 +1498,10 @@ public final class TreeProtos {
             return this;
           }
           /**
+           * <pre>
+           * for building tree
+           * </pre>
+           *
            * <code>string description = 7;</code>
            */
           public Builder setDescriptionBytes(
@@ -1584,26 +1580,22 @@ public final class TreeProtos {
             return this;
           }
 
-          private java.util.List<com.github.kornilova_l.flamegraph.proto.EventProtos.Var> parameters_ =
+          private java.util.List<com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter> parameters_ =
             java.util.Collections.emptyList();
           private void ensureParametersIsMutable() {
             if (!((bitField0_ & 0x00000020) == 0x00000020)) {
-              parameters_ = new java.util.ArrayList<com.github.kornilova_l.flamegraph.proto.EventProtos.Var>(parameters_);
+              parameters_ = new java.util.ArrayList<com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter>(parameters_);
               bitField0_ |= 0x00000020;
              }
           }
 
           private com.github.kornilova_l.libs.com.google.protobuf.RepeatedFieldBuilderV3<
-              com.github.kornilova_l.flamegraph.proto.EventProtos.Var, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder, com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder> parametersBuilder_;
+              com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter, com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter.Builder, com.github.kornilova_l.flamegraph.proto.EventProtos.ParameterOrBuilder> parametersBuilder_;
 
           /**
-           * <pre>
-           * only for ser_trees which save original call structure
-           * </pre>
-           *
-           * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 4;</code>
+           * <code>repeated .com.github.kornilova_l.flamegraph.proto.Parameter parameters = 4;</code>
            */
-          public java.util.List<com.github.kornilova_l.flamegraph.proto.EventProtos.Var> getParametersList() {
+          public java.util.List<com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter> getParametersList() {
             if (parametersBuilder_ == null) {
               return java.util.Collections.unmodifiableList(parameters_);
             } else {
@@ -1611,11 +1603,7 @@ public final class TreeProtos {
             }
           }
           /**
-           * <pre>
-           * only for ser_trees which save original call structure
-           * </pre>
-           *
-           * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 4;</code>
+           * <code>repeated .com.github.kornilova_l.flamegraph.proto.Parameter parameters = 4;</code>
            */
           public int getParametersCount() {
             if (parametersBuilder_ == null) {
@@ -1625,13 +1613,9 @@ public final class TreeProtos {
             }
           }
           /**
-           * <pre>
-           * only for ser_trees which save original call structure
-           * </pre>
-           *
-           * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 4;</code>
+           * <code>repeated .com.github.kornilova_l.flamegraph.proto.Parameter parameters = 4;</code>
            */
-          public com.github.kornilova_l.flamegraph.proto.EventProtos.Var getParameters(int index) {
+          public com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter getParameters(int index) {
             if (parametersBuilder_ == null) {
               return parameters_.get(index);
             } else {
@@ -1639,14 +1623,10 @@ public final class TreeProtos {
             }
           }
           /**
-           * <pre>
-           * only for ser_trees which save original call structure
-           * </pre>
-           *
-           * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 4;</code>
+           * <code>repeated .com.github.kornilova_l.flamegraph.proto.Parameter parameters = 4;</code>
            */
           public Builder setParameters(
-              int index, com.github.kornilova_l.flamegraph.proto.EventProtos.Var value) {
+              int index, com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter value) {
             if (parametersBuilder_ == null) {
               if (value == null) {
                 throw new NullPointerException();
@@ -1660,14 +1640,10 @@ public final class TreeProtos {
             return this;
           }
           /**
-           * <pre>
-           * only for ser_trees which save original call structure
-           * </pre>
-           *
-           * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 4;</code>
+           * <code>repeated .com.github.kornilova_l.flamegraph.proto.Parameter parameters = 4;</code>
            */
           public Builder setParameters(
-              int index, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder builderForValue) {
+              int index, com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter.Builder builderForValue) {
             if (parametersBuilder_ == null) {
               ensureParametersIsMutable();
               parameters_.set(index, builderForValue.build());
@@ -1678,13 +1654,9 @@ public final class TreeProtos {
             return this;
           }
           /**
-           * <pre>
-           * only for ser_trees which save original call structure
-           * </pre>
-           *
-           * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 4;</code>
+           * <code>repeated .com.github.kornilova_l.flamegraph.proto.Parameter parameters = 4;</code>
            */
-          public Builder addParameters(com.github.kornilova_l.flamegraph.proto.EventProtos.Var value) {
+          public Builder addParameters(com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter value) {
             if (parametersBuilder_ == null) {
               if (value == null) {
                 throw new NullPointerException();
@@ -1698,14 +1670,10 @@ public final class TreeProtos {
             return this;
           }
           /**
-           * <pre>
-           * only for ser_trees which save original call structure
-           * </pre>
-           *
-           * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 4;</code>
+           * <code>repeated .com.github.kornilova_l.flamegraph.proto.Parameter parameters = 4;</code>
            */
           public Builder addParameters(
-              int index, com.github.kornilova_l.flamegraph.proto.EventProtos.Var value) {
+              int index, com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter value) {
             if (parametersBuilder_ == null) {
               if (value == null) {
                 throw new NullPointerException();
@@ -1719,14 +1687,10 @@ public final class TreeProtos {
             return this;
           }
           /**
-           * <pre>
-           * only for ser_trees which save original call structure
-           * </pre>
-           *
-           * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 4;</code>
+           * <code>repeated .com.github.kornilova_l.flamegraph.proto.Parameter parameters = 4;</code>
            */
           public Builder addParameters(
-              com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder builderForValue) {
+              com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter.Builder builderForValue) {
             if (parametersBuilder_ == null) {
               ensureParametersIsMutable();
               parameters_.add(builderForValue.build());
@@ -1737,14 +1701,10 @@ public final class TreeProtos {
             return this;
           }
           /**
-           * <pre>
-           * only for ser_trees which save original call structure
-           * </pre>
-           *
-           * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 4;</code>
+           * <code>repeated .com.github.kornilova_l.flamegraph.proto.Parameter parameters = 4;</code>
            */
           public Builder addParameters(
-              int index, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder builderForValue) {
+              int index, com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter.Builder builderForValue) {
             if (parametersBuilder_ == null) {
               ensureParametersIsMutable();
               parameters_.add(index, builderForValue.build());
@@ -1755,14 +1715,10 @@ public final class TreeProtos {
             return this;
           }
           /**
-           * <pre>
-           * only for ser_trees which save original call structure
-           * </pre>
-           *
-           * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 4;</code>
+           * <code>repeated .com.github.kornilova_l.flamegraph.proto.Parameter parameters = 4;</code>
            */
           public Builder addAllParameters(
-              java.lang.Iterable<? extends com.github.kornilova_l.flamegraph.proto.EventProtos.Var> values) {
+              java.lang.Iterable<? extends com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter> values) {
             if (parametersBuilder_ == null) {
               ensureParametersIsMutable();
               com.github.kornilova_l.libs.com.google.protobuf.AbstractMessageLite.Builder.addAll(
@@ -1774,11 +1730,7 @@ public final class TreeProtos {
             return this;
           }
           /**
-           * <pre>
-           * only for ser_trees which save original call structure
-           * </pre>
-           *
-           * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 4;</code>
+           * <code>repeated .com.github.kornilova_l.flamegraph.proto.Parameter parameters = 4;</code>
            */
           public Builder clearParameters() {
             if (parametersBuilder_ == null) {
@@ -1791,11 +1743,7 @@ public final class TreeProtos {
             return this;
           }
           /**
-           * <pre>
-           * only for ser_trees which save original call structure
-           * </pre>
-           *
-           * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 4;</code>
+           * <code>repeated .com.github.kornilova_l.flamegraph.proto.Parameter parameters = 4;</code>
            */
           public Builder removeParameters(int index) {
             if (parametersBuilder_ == null) {
@@ -1808,24 +1756,16 @@ public final class TreeProtos {
             return this;
           }
           /**
-           * <pre>
-           * only for ser_trees which save original call structure
-           * </pre>
-           *
-           * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 4;</code>
+           * <code>repeated .com.github.kornilova_l.flamegraph.proto.Parameter parameters = 4;</code>
            */
-          public com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder getParametersBuilder(
+          public com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter.Builder getParametersBuilder(
               int index) {
             return getParametersFieldBuilder().getBuilder(index);
           }
           /**
-           * <pre>
-           * only for ser_trees which save original call structure
-           * </pre>
-           *
-           * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 4;</code>
+           * <code>repeated .com.github.kornilova_l.flamegraph.proto.Parameter parameters = 4;</code>
            */
-          public com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder getParametersOrBuilder(
+          public com.github.kornilova_l.flamegraph.proto.EventProtos.ParameterOrBuilder getParametersOrBuilder(
               int index) {
             if (parametersBuilder_ == null) {
               return parameters_.get(index);  } else {
@@ -1833,13 +1773,9 @@ public final class TreeProtos {
             }
           }
           /**
-           * <pre>
-           * only for ser_trees which save original call structure
-           * </pre>
-           *
-           * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 4;</code>
+           * <code>repeated .com.github.kornilova_l.flamegraph.proto.Parameter parameters = 4;</code>
            */
-          public java.util.List<? extends com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder> 
+          public java.util.List<? extends com.github.kornilova_l.flamegraph.proto.EventProtos.ParameterOrBuilder> 
                getParametersOrBuilderList() {
             if (parametersBuilder_ != null) {
               return parametersBuilder_.getMessageOrBuilderList();
@@ -1848,45 +1784,33 @@ public final class TreeProtos {
             }
           }
           /**
-           * <pre>
-           * only for ser_trees which save original call structure
-           * </pre>
-           *
-           * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 4;</code>
+           * <code>repeated .com.github.kornilova_l.flamegraph.proto.Parameter parameters = 4;</code>
            */
-          public com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder addParametersBuilder() {
+          public com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter.Builder addParametersBuilder() {
             return getParametersFieldBuilder().addBuilder(
-                com.github.kornilova_l.flamegraph.proto.EventProtos.Var.getDefaultInstance());
+                com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter.getDefaultInstance());
           }
           /**
-           * <pre>
-           * only for ser_trees which save original call structure
-           * </pre>
-           *
-           * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 4;</code>
+           * <code>repeated .com.github.kornilova_l.flamegraph.proto.Parameter parameters = 4;</code>
            */
-          public com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder addParametersBuilder(
+          public com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter.Builder addParametersBuilder(
               int index) {
             return getParametersFieldBuilder().addBuilder(
-                index, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.getDefaultInstance());
+                index, com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter.getDefaultInstance());
           }
           /**
-           * <pre>
-           * only for ser_trees which save original call structure
-           * </pre>
-           *
-           * <code>repeated .com.github.kornilova_l.flamegraph.proto.Var parameters = 4;</code>
+           * <code>repeated .com.github.kornilova_l.flamegraph.proto.Parameter parameters = 4;</code>
            */
-          public java.util.List<com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder> 
+          public java.util.List<com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter.Builder> 
                getParametersBuilderList() {
             return getParametersFieldBuilder().getBuilderList();
           }
           private com.github.kornilova_l.libs.com.google.protobuf.RepeatedFieldBuilderV3<
-              com.github.kornilova_l.flamegraph.proto.EventProtos.Var, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder, com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder> 
+              com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter, com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter.Builder, com.github.kornilova_l.flamegraph.proto.EventProtos.ParameterOrBuilder> 
               getParametersFieldBuilder() {
             if (parametersBuilder_ == null) {
               parametersBuilder_ = new com.github.kornilova_l.libs.com.google.protobuf.RepeatedFieldBuilderV3<
-                  com.github.kornilova_l.flamegraph.proto.EventProtos.Var, com.github.kornilova_l.flamegraph.proto.EventProtos.Var.Builder, com.github.kornilova_l.flamegraph.proto.EventProtos.VarOrBuilder>(
+                  com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter, com.github.kornilova_l.flamegraph.proto.EventProtos.Parameter.Builder, com.github.kornilova_l.flamegraph.proto.EventProtos.ParameterOrBuilder>(
                       parameters_,
                       ((bitField0_ & 0x00000020) == 0x00000020),
                       getParentForChildren(),
@@ -4526,27 +4450,27 @@ public final class TreeProtos {
       "\n2com/github/kornilova_l/flamegraph/prot" +
       "o/tree.proto\022\'com.github.kornilova_l.fla" +
       "megraph.proto\0323com/github/kornilova_l/fl" +
-      "amegraph/proto/event.proto\"\357\005\n\004Tree\022I\n\tt" +
+      "amegraph/proto/event.proto\"\365\005\n\004Tree\022I\n\tt" +
       "ree_info\030\001 \001(\01326.com.github.kornilova_l." +
       "flamegraph.proto.Tree.TreeInfo\022E\n\tbase_n" +
       "ode\030\002 \001(\01322.com.github.kornilova_l.flame" +
       "graph.proto.Tree.Node\022\r\n\005depth\030\003 \001(\r\022\r\n\005" +
-      "width\030\004 \001(\003\032\201\004\n\004Node\022\016\n\006offset\030\001 \001(\003\022\r\n\005" +
+      "width\030\004 \001(\003\032\207\004\n\004Node\022\016\n\006offset\030\001 \001(\003\022\r\n\005" +
       "width\030\002 \001(\003\022N\n\tnode_info\030\003 \001(\0132;.com.git",
       "hub.kornilova_l.flamegraph.proto.Tree.No" +
       "de.NodeInfo\022A\n\005nodes\030\004 \003(\01322.com.github." +
-      "kornilova_l.flamegraph.proto.Tree.Node\032\306" +
+      "kornilova_l.flamegraph.proto.Tree.Node\032\314" +
       "\002\n\010NodeInfo\022\023\n\013method_name\030\001 \001(\t\022\022\n\nclas" +
       "s_name\030\002 \001(\t\022\023\n\013description\030\007 \001(\t\022\021\n\tis_" +
-      "static\030\003 \001(\010\022\r\n\005count\030\010 \001(\005\022@\n\nparameter" +
-      "s\030\004 \003(\0132,.com.github.kornilova_l.flamegr" +
-      "aph.proto.Var\022D\n\014return_value\030\005 \001(\0132,.co" +
-      "m.github.kornilova_l.flamegraph.proto.Va" +
-      "rH\000\022H\n\texception\030\006 \001(\01323.com.github.korn",
-      "ilova_l.flamegraph.proto.Var.ObjectH\000B\010\n" +
-      "\006result\0323\n\010TreeInfo\022\022\n\nstart_time\030\002 \001(\003\022" +
-      "\023\n\013thread_name\030\004 \001(\tB\014B\nTreeProtosb\006prot" +
-      "o3"
+      "static\030\003 \001(\010\022\r\n\005count\030\010 \001(\005\022F\n\nparameter" +
+      "s\030\004 \003(\01322.com.github.kornilova_l.flamegr" +
+      "aph.proto.Parameter\022D\n\014return_value\030\005 \001(" +
+      "\0132,.com.github.kornilova_l.flamegraph.pr" +
+      "oto.VarH\000\022H\n\texception\030\006 \001(\01323.com.githu",
+      "b.kornilova_l.flamegraph.proto.Var.Objec" +
+      "tH\000B\010\n\006result\0323\n\010TreeInfo\022\022\n\nstart_time\030" +
+      "\002 \001(\003\022\023\n\013thread_name\030\004 \001(\tB\014B\nTreeProtos" +
+      "b\006proto3"
     };
     com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {

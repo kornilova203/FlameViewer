@@ -12,6 +12,7 @@ var global = Function('return this')();
 goog.exportSymbol('proto.com.github.kornilova_l.flamegraph.proto.Event', null, global);
 goog.exportSymbol('proto.com.github.kornilova_l.flamegraph.proto.Event.Map', null, global);
 goog.exportSymbol('proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent', null, global);
+goog.exportSymbol('proto.com.github.kornilova_l.flamegraph.proto.Parameter', null, global);
 goog.exportSymbol('proto.com.github.kornilova_l.flamegraph.proto.Var', null, global);
 goog.exportSymbol('proto.com.github.kornilova_l.flamegraph.proto.Var.Object', null, global);
 
@@ -208,7 +209,7 @@ proto.com.github.kornilova_l.flamegraph.proto.Event.serializeBinaryToWriter = fu
  * @constructor
  */
 proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent = function(opt_data) {
-    jspb.Message.initialize(this, opt_data, 0, -1, proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.repeatedFields_, proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.oneofGroups_);
+  jspb.Message.initialize(this, opt_data, 0, -1, proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.repeatedFields_, proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.oneofGroups_);
 };
 goog.inherits(proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent, jspb.Message);
 if (goog.DEBUG && !COMPILED) {
@@ -229,22 +230,22 @@ proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.repeatedFields_ 
  * @private {!Array<!Array<number>>}
  * @const
  */
-proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.oneofGroups_ = [[9, 10]];
+proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.oneofGroups_ = [[9,10]];
 
 /**
  * @enum {number}
  */
 proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.EndCase = {
-    END_NOT_SET: 0,
-    RETURN_VALUE: 9,
-    THROWABLE: 10
+  END_NOT_SET: 0,
+  RETURN_VALUE: 9,
+  THROWABLE: 10
 };
 
 /**
  * @return {proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.EndCase}
  */
-proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.getEndCase = function () {
-    return /** @type {proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.EndCase} */(jspb.Message.computeOneofCase(this, proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.oneofGroups_[0]));
+proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.getEndCase = function() {
+  return /** @type {proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.EndCase} */(jspb.Message.computeOneofCase(this, proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.oneofGroups_[0]));
 };
 
 
@@ -276,16 +277,16 @@ proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.toObje
 proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.toObject = function(includeInstance, msg) {
   var f, obj = {
     threadId: jspb.Message.getFieldWithDefault(msg, 1, 0),
-      classNameId: jspb.Message.getFieldWithDefault(msg, 2, 0),
-      startTime: jspb.Message.getFieldWithDefault(msg, 3, 0),
-      duration: jspb.Message.getFieldWithDefault(msg, 4, 0),
-      methodName: jspb.Message.getFieldWithDefault(msg, 5, ""),
-      desc: jspb.Message.getFieldWithDefault(msg, 6, ""),
-      isStatic: jspb.Message.getFieldWithDefault(msg, 7, false),
-      parametersList: jspb.Message.toObjectList(msg.getParametersList(),
-          proto.com.github.kornilova_l.flamegraph.proto.Var.toObject, includeInstance),
-      returnValue: (f = msg.getReturnValue()) && proto.com.github.kornilova_l.flamegraph.proto.Var.toObject(includeInstance, f),
-      throwable: (f = msg.getThrowable()) && proto.com.github.kornilova_l.flamegraph.proto.Var.Object.toObject(includeInstance, f)
+    classNameId: jspb.Message.getFieldWithDefault(msg, 2, 0),
+    startTime: jspb.Message.getFieldWithDefault(msg, 3, 0),
+    duration: jspb.Message.getFieldWithDefault(msg, 4, 0),
+    methodName: jspb.Message.getFieldWithDefault(msg, 5, ""),
+    desc: jspb.Message.getFieldWithDefault(msg, 6, ""),
+    isStatic: jspb.Message.getFieldWithDefault(msg, 7, false),
+    parametersList: jspb.Message.toObjectList(msg.getParametersList(),
+    proto.com.github.kornilova_l.flamegraph.proto.Parameter.toObject, includeInstance),
+    returnValue: (f = msg.getReturnValue()) && proto.com.github.kornilova_l.flamegraph.proto.Var.toObject(includeInstance, f),
+    throwable: (f = msg.getThrowable()) && proto.com.github.kornilova_l.flamegraph.proto.Var.Object.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -328,42 +329,42 @@ proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.deserializeBinar
       break;
     case 2:
       var value = /** @type {number} */ (reader.readInt64());
-        msg.setClassNameId(value);
+      msg.setClassNameId(value);
       break;
     case 3:
-        var value = /** @type {number} */ (reader.readInt64());
-        msg.setStartTime(value);
+      var value = /** @type {number} */ (reader.readInt64());
+      msg.setStartTime(value);
       break;
     case 4:
       var value = /** @type {number} */ (reader.readInt64());
-        msg.setDuration(value);
+      msg.setDuration(value);
       break;
-        case 5:
+    case 5:
       var value = /** @type {string} */ (reader.readString());
       msg.setMethodName(value);
       break;
-        case 6:
-            var value = /** @type {string} */ (reader.readString());
-            msg.setDesc(value);
-            break;
-        case 7:
+    case 6:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setDesc(value);
+      break;
+    case 7:
       var value = /** @type {boolean} */ (reader.readBool());
       msg.setIsStatic(value);
       break;
-        case 8:
-      var value = new proto.com.github.kornilova_l.flamegraph.proto.Var;
-      reader.readMessage(value,proto.com.github.kornilova_l.flamegraph.proto.Var.deserializeBinaryFromReader);
+    case 8:
+      var value = new proto.com.github.kornilova_l.flamegraph.proto.Parameter;
+      reader.readMessage(value,proto.com.github.kornilova_l.flamegraph.proto.Parameter.deserializeBinaryFromReader);
       msg.addParameters(value);
       break;
-        case 9:
-            var value = new proto.com.github.kornilova_l.flamegraph.proto.Var;
-            reader.readMessage(value, proto.com.github.kornilova_l.flamegraph.proto.Var.deserializeBinaryFromReader);
-            msg.setReturnValue(value);
-            break;
-        case 10:
-            var value = new proto.com.github.kornilova_l.flamegraph.proto.Var.Object;
-            reader.readMessage(value, proto.com.github.kornilova_l.flamegraph.proto.Var.Object.deserializeBinaryFromReader);
-            msg.setThrowable(value);
+    case 9:
+      var value = new proto.com.github.kornilova_l.flamegraph.proto.Var;
+      reader.readMessage(value,proto.com.github.kornilova_l.flamegraph.proto.Var.deserializeBinaryFromReader);
+      msg.setReturnValue(value);
+      break;
+    case 10:
+      var value = new proto.com.github.kornilova_l.flamegraph.proto.Var.Object;
+      reader.readMessage(value,proto.com.github.kornilova_l.flamegraph.proto.Var.Object.deserializeBinaryFromReader);
+      msg.setThrowable(value);
       break;
     default:
       reader.skipField();
@@ -378,9 +379,9 @@ proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.deserializeBinar
  * Serializes the message to binary data (in protobuf wire format).
  * @return {!Uint8Array}
  */
-proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.serializeBinary = function () {
+proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.serializeBinary = function() {
   var writer = new jspb.BinaryWriter();
-    proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.serializeBinaryToWriter(this, writer);
+  proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.serializeBinaryToWriter(this, writer);
   return writer.getResultBuffer();
 };
 
@@ -391,79 +392,79 @@ proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.serial
  * @param {!proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent} message
  * @param {!jspb.BinaryWriter} writer
  */
-proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.serializeBinaryToWriter = function (message, writer) {
+proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-    f = message.getThreadId();
-    if (f !== 0) {
-        writer.writeInt64(
-            1,
-            f
-        );
-    }
+  f = message.getThreadId();
+  if (f !== 0) {
+    writer.writeInt64(
+      1,
+      f
+    );
+  }
   f = message.getClassNameId();
   if (f !== 0) {
     writer.writeInt64(
-        2,
-        f
+      2,
+      f
     );
   }
-    f = message.getStartTime();
-    if (f !== 0) {
-        writer.writeInt64(
-            3,
-            f
-        );
-    }
-    f = message.getDuration();
-    if (f !== 0) {
-        writer.writeInt64(
-            4,
+  f = message.getStartTime();
+  if (f !== 0) {
+    writer.writeInt64(
+      3,
+      f
+    );
+  }
+  f = message.getDuration();
+  if (f !== 0) {
+    writer.writeInt64(
+      4,
       f
     );
   }
   f = message.getMethodName();
   if (f.length > 0) {
     writer.writeString(
-        5,
-        f
+      5,
+      f
     );
   }
-    f = message.getDesc();
-    if (f.length > 0) {
-        writer.writeString(
-            6,
+  f = message.getDesc();
+  if (f.length > 0) {
+    writer.writeString(
+      6,
       f
     );
   }
   f = message.getIsStatic();
   if (f) {
     writer.writeBool(
-        7,
+      7,
       f
     );
   }
   f = message.getParametersList();
   if (f.length > 0) {
     writer.writeRepeatedMessage(
-        8,
+      8,
+      f,
+      proto.com.github.kornilova_l.flamegraph.proto.Parameter.serializeBinaryToWriter
+    );
+  }
+  f = message.getReturnValue();
+  if (f != null) {
+    writer.writeMessage(
+      9,
       f,
       proto.com.github.kornilova_l.flamegraph.proto.Var.serializeBinaryToWriter
     );
   }
-    f = message.getReturnValue();
-    if (f != null) {
-        writer.writeMessage(
-            9,
-            f,
-            proto.com.github.kornilova_l.flamegraph.proto.Var.serializeBinaryToWriter
-        );
-    }
-    f = message.getThrowable();
-    if (f != null) {
-        writer.writeMessage(
-            10,
-            f,
-            proto.com.github.kornilova_l.flamegraph.proto.Var.Object.serializeBinaryToWriter
+  f = message.getThrowable();
+  if (f != null) {
+    writer.writeMessage(
+      10,
+      f,
+      proto.com.github.kornilova_l.flamegraph.proto.Var.Object.serializeBinaryToWriter
     );
   }
 };
@@ -473,13 +474,13 @@ proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.serializeBinaryT
  * optional int64 thread_id = 1;
  * @return {number}
  */
-proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.getThreadId = function () {
+proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.getThreadId = function() {
   return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
 };
 
 
 /** @param {number} value */
-proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.setThreadId = function (value) {
+proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.setThreadId = function(value) {
   jspb.Message.setField(this, 1, value);
 };
 
@@ -488,14 +489,14 @@ proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.setThr
  * optional int64 class_name_id = 2;
  * @return {number}
  */
-proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.getClassNameId = function () {
-    return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.getClassNameId = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
 };
 
 
 /** @param {number} value */
-proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.setClassNameId = function (value) {
-    jspb.Message.setField(this, 2, value);
+proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.setClassNameId = function(value) {
+  jspb.Message.setField(this, 2, value);
 };
 
 
@@ -503,14 +504,14 @@ proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.setCla
  * optional int64 start_time = 3;
  * @return {number}
  */
-proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.getStartTime = function () {
-    return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
+proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.getStartTime = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
 };
 
 
 /** @param {number} value */
-proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.setStartTime = function (value) {
-    jspb.Message.setField(this, 3, value);
+proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.setStartTime = function(value) {
+  jspb.Message.setField(this, 3, value);
 };
 
 
@@ -518,14 +519,14 @@ proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.setSta
  * optional int64 duration = 4;
  * @return {number}
  */
-proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.getDuration = function () {
-    return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 4, 0));
+proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.getDuration = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 4, 0));
 };
 
 
 /** @param {number} value */
-proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.setDuration = function (value) {
-    jspb.Message.setField(this, 4, value);
+proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.setDuration = function(value) {
+  jspb.Message.setField(this, 4, value);
 };
 
 
@@ -533,14 +534,14 @@ proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.setDur
  * optional string method_name = 5;
  * @return {string}
  */
-proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.getMethodName = function () {
-    return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 5, ""));
+proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.getMethodName = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 5, ""));
 };
 
 
 /** @param {string} value */
-proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.setMethodName = function (value) {
-    jspb.Message.setField(this, 5, value);
+proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.setMethodName = function(value) {
+  jspb.Message.setField(this, 5, value);
 };
 
 
@@ -548,14 +549,14 @@ proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.setMet
  * optional string desc = 6;
  * @return {string}
  */
-proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.getDesc = function () {
-    return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 6, ""));
+proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.getDesc = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 6, ""));
 };
 
 
 /** @param {string} value */
-proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.setDesc = function (value) {
-    jspb.Message.setField(this, 6, value);
+proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.setDesc = function(value) {
+  jspb.Message.setField(this, 6, value);
 };
 
 
@@ -565,46 +566,46 @@ proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.setDes
  * You should avoid comparisons like {@code val === true/false} in those cases.
  * @return {boolean}
  */
-proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.getIsStatic = function () {
-    return /** @type {boolean} */ (jspb.Message.getFieldWithDefault(this, 7, false));
+proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.getIsStatic = function() {
+  return /** @type {boolean} */ (jspb.Message.getFieldWithDefault(this, 7, false));
 };
 
 
 /** @param {boolean} value */
-proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.setIsStatic = function (value) {
-    jspb.Message.setField(this, 7, value);
+proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.setIsStatic = function(value) {
+  jspb.Message.setField(this, 7, value);
 };
 
 
 /**
- * repeated Var parameters = 8;
+ * repeated Parameter parameters = 8;
  * If you change this array by adding, removing or replacing elements, or if you
  * replace the array itself, then you must call the setter to update it.
- * @return {!Array.<!proto.com.github.kornilova_l.flamegraph.proto.Var>}
+ * @return {!Array.<!proto.com.github.kornilova_l.flamegraph.proto.Parameter>}
  */
-proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.getParametersList = function () {
-  return /** @type{!Array.<!proto.com.github.kornilova_l.flamegraph.proto.Var>} */ (
-      jspb.Message.getRepeatedWrapperField(this, proto.com.github.kornilova_l.flamegraph.proto.Var, 8));
+proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.getParametersList = function() {
+  return /** @type{!Array.<!proto.com.github.kornilova_l.flamegraph.proto.Parameter>} */ (
+    jspb.Message.getRepeatedWrapperField(this, proto.com.github.kornilova_l.flamegraph.proto.Parameter, 8));
 };
 
 
-/** @param {!Array.<!proto.com.github.kornilova_l.flamegraph.proto.Var>} value */
-proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.setParametersList = function (value) {
-    jspb.Message.setRepeatedWrapperField(this, 8, value);
+/** @param {!Array.<!proto.com.github.kornilova_l.flamegraph.proto.Parameter>} value */
+proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.setParametersList = function(value) {
+  jspb.Message.setRepeatedWrapperField(this, 8, value);
 };
 
 
 /**
- * @param {!proto.com.github.kornilova_l.flamegraph.proto.Var=} opt_value
+ * @param {!proto.com.github.kornilova_l.flamegraph.proto.Parameter=} opt_value
  * @param {number=} opt_index
- * @return {!proto.com.github.kornilova_l.flamegraph.proto.Var}
+ * @return {!proto.com.github.kornilova_l.flamegraph.proto.Parameter}
  */
-proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.addParameters = function (opt_value, opt_index) {
-    return jspb.Message.addToRepeatedWrapperField(this, 8, opt_value, proto.com.github.kornilova_l.flamegraph.proto.Var, opt_index);
+proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.addParameters = function(opt_value, opt_index) {
+  return jspb.Message.addToRepeatedWrapperField(this, 8, opt_value, proto.com.github.kornilova_l.flamegraph.proto.Parameter, opt_index);
 };
 
 
-proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.clearParametersList = function () {
+proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.clearParametersList = function() {
   this.setParametersList([]);
 };
 
@@ -613,19 +614,19 @@ proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.clearP
  * optional Var return_value = 9;
  * @return {?proto.com.github.kornilova_l.flamegraph.proto.Var}
  */
-proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.getReturnValue = function () {
+proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.getReturnValue = function() {
   return /** @type{?proto.com.github.kornilova_l.flamegraph.proto.Var} */ (
-      jspb.Message.getWrapperField(this, proto.com.github.kornilova_l.flamegraph.proto.Var, 9));
+    jspb.Message.getWrapperField(this, proto.com.github.kornilova_l.flamegraph.proto.Var, 9));
 };
 
 
 /** @param {?proto.com.github.kornilova_l.flamegraph.proto.Var|undefined} value */
-proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.setReturnValue = function (value) {
-    jspb.Message.setOneofWrapperField(this, 9, proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.oneofGroups_[0], value);
+proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.setReturnValue = function(value) {
+  jspb.Message.setOneofWrapperField(this, 9, proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.oneofGroups_[0], value);
 };
 
 
-proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.clearReturnValue = function () {
+proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.clearReturnValue = function() {
   this.setReturnValue(undefined);
 };
 
@@ -634,8 +635,8 @@ proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.clearR
  * Returns whether this field is set.
  * @return {!boolean}
  */
-proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.hasReturnValue = function () {
-    return jspb.Message.getField(this, 9) != null;
+proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.hasReturnValue = function() {
+  return jspb.Message.getField(this, 9) != null;
 };
 
 
@@ -643,20 +644,20 @@ proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.hasRet
  * optional Var.Object throwable = 10;
  * @return {?proto.com.github.kornilova_l.flamegraph.proto.Var.Object}
  */
-proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.getThrowable = function () {
+proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.getThrowable = function() {
   return /** @type{?proto.com.github.kornilova_l.flamegraph.proto.Var.Object} */ (
-      jspb.Message.getWrapperField(this, proto.com.github.kornilova_l.flamegraph.proto.Var.Object, 10));
+    jspb.Message.getWrapperField(this, proto.com.github.kornilova_l.flamegraph.proto.Var.Object, 10));
 };
 
 
 /** @param {?proto.com.github.kornilova_l.flamegraph.proto.Var.Object|undefined} value */
-proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.setThrowable = function (value) {
-    jspb.Message.setOneofWrapperField(this, 10, proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.oneofGroups_[0], value);
+proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.setThrowable = function(value) {
+  jspb.Message.setOneofWrapperField(this, 10, proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.oneofGroups_[0], value);
 };
 
 
-proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.clearThrowable = function () {
-    this.setThrowable(undefined);
+proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.clearThrowable = function() {
+  this.setThrowable(undefined);
 };
 
 
@@ -664,8 +665,8 @@ proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.clearT
  * Returns whether this field is set.
  * @return {!boolean}
  */
-proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.hasThrowable = function () {
-    return jspb.Message.getField(this, 10) != null;
+proto.com.github.kornilova_l.flamegraph.proto.Event.MethodEvent.prototype.hasThrowable = function() {
+  return jspb.Message.getField(this, 10) != null;
 };
 
 
@@ -937,6 +938,190 @@ proto.com.github.kornilova_l.flamegraph.proto.Event.prototype.hasNewthread = fun
  * @extends {jspb.Message}
  * @constructor
  */
+proto.com.github.kornilova_l.flamegraph.proto.Parameter = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+};
+goog.inherits(proto.com.github.kornilova_l.flamegraph.proto.Parameter, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  proto.com.github.kornilova_l.flamegraph.proto.Parameter.displayName = 'proto.com.github.kornilova_l.flamegraph.proto.Parameter';
+}
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto suitable for use in Soy templates.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     com.google.apps.jspb.JsClassTemplate.JS_RESERVED_WORDS.
+ * @param {boolean=} opt_includeInstance Whether to include the JSPB instance
+ *     for transitional soy proto support: http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.com.github.kornilova_l.flamegraph.proto.Parameter.prototype.toObject = function(opt_includeInstance) {
+  return proto.com.github.kornilova_l.flamegraph.proto.Parameter.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Whether to include the JSPB
+ *     instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.com.github.kornilova_l.flamegraph.proto.Parameter} msg The msg instance to transform.
+ * @return {!Object}
+ */
+proto.com.github.kornilova_l.flamegraph.proto.Parameter.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    pb_var: (f = msg.getVar()) && proto.com.github.kornilova_l.flamegraph.proto.Var.toObject(includeInstance, f),
+    index: jspb.Message.getFieldWithDefault(msg, 2, 0)
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.com.github.kornilova_l.flamegraph.proto.Parameter}
+ */
+proto.com.github.kornilova_l.flamegraph.proto.Parameter.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.com.github.kornilova_l.flamegraph.proto.Parameter;
+  return proto.com.github.kornilova_l.flamegraph.proto.Parameter.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.com.github.kornilova_l.flamegraph.proto.Parameter} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.com.github.kornilova_l.flamegraph.proto.Parameter}
+ */
+proto.com.github.kornilova_l.flamegraph.proto.Parameter.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = new proto.com.github.kornilova_l.flamegraph.proto.Var;
+      reader.readMessage(value,proto.com.github.kornilova_l.flamegraph.proto.Var.deserializeBinaryFromReader);
+      msg.setVar(value);
+      break;
+    case 2:
+      var value = /** @type {number} */ (reader.readUint32());
+      msg.setIndex(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.com.github.kornilova_l.flamegraph.proto.Parameter.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.com.github.kornilova_l.flamegraph.proto.Parameter.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.com.github.kornilova_l.flamegraph.proto.Parameter} message
+ * @param {!jspb.BinaryWriter} writer
+ */
+proto.com.github.kornilova_l.flamegraph.proto.Parameter.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getVar();
+  if (f != null) {
+    writer.writeMessage(
+      1,
+      f,
+      proto.com.github.kornilova_l.flamegraph.proto.Var.serializeBinaryToWriter
+    );
+  }
+  f = message.getIndex();
+  if (f !== 0) {
+    writer.writeUint32(
+      2,
+      f
+    );
+  }
+};
+
+
+/**
+ * optional Var var = 1;
+ * @return {?proto.com.github.kornilova_l.flamegraph.proto.Var}
+ */
+proto.com.github.kornilova_l.flamegraph.proto.Parameter.prototype.getVar = function() {
+  return /** @type{?proto.com.github.kornilova_l.flamegraph.proto.Var} */ (
+    jspb.Message.getWrapperField(this, proto.com.github.kornilova_l.flamegraph.proto.Var, 1));
+};
+
+
+/** @param {?proto.com.github.kornilova_l.flamegraph.proto.Var|undefined} value */
+proto.com.github.kornilova_l.flamegraph.proto.Parameter.prototype.setVar = function(value) {
+  jspb.Message.setWrapperField(this, 1, value);
+};
+
+
+proto.com.github.kornilova_l.flamegraph.proto.Parameter.prototype.clearVar = function() {
+  this.setVar(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.com.github.kornilova_l.flamegraph.proto.Parameter.prototype.hasVar = function() {
+  return jspb.Message.getField(this, 1) != null;
+};
+
+
+/**
+ * optional uint32 index = 2;
+ * @return {number}
+ */
+proto.com.github.kornilova_l.flamegraph.proto.Parameter.prototype.getIndex = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+};
+
+
+/** @param {number} value */
+proto.com.github.kornilova_l.flamegraph.proto.Parameter.prototype.setIndex = function(value) {
+  jspb.Message.setField(this, 2, value);
+};
+
+
+
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
 proto.com.github.kornilova_l.flamegraph.proto.Var = function(opt_data) {
   jspb.Message.initialize(this, opt_data, 0, -1, null, proto.com.github.kornilova_l.flamegraph.proto.Var.oneofGroups_);
 };
@@ -1013,7 +1198,8 @@ proto.com.github.kornilova_l.flamegraph.proto.Var.toObject = function(includeIns
     b: jspb.Message.getFieldWithDefault(msg, 6, 0),
     f: +jspb.Message.getFieldWithDefault(msg, 7, 0.0),
     d: +jspb.Message.getFieldWithDefault(msg, 8, 0.0),
-    object: (f = msg.getObject()) && proto.com.github.kornilova_l.flamegraph.proto.Var.Object.toObject(includeInstance, f)
+    object: (f = msg.getObject()) && proto.com.github.kornilova_l.flamegraph.proto.Var.Object.toObject(includeInstance, f),
+    index: jspb.Message.getFieldWithDefault(msg, 10, 0)
   };
 
   if (includeInstance) {
@@ -1086,6 +1272,10 @@ proto.com.github.kornilova_l.flamegraph.proto.Var.deserializeBinaryFromReader = 
       var value = new proto.com.github.kornilova_l.flamegraph.proto.Var.Object;
       reader.readMessage(value,proto.com.github.kornilova_l.flamegraph.proto.Var.Object.deserializeBinaryFromReader);
       msg.setObject(value);
+      break;
+    case 10:
+      var value = /** @type {number} */ (reader.readUint32());
+      msg.setIndex(value);
       break;
     default:
       reader.skipField();
@@ -1177,6 +1367,13 @@ proto.com.github.kornilova_l.flamegraph.proto.Var.serializeBinaryToWriter = func
       9,
       f,
       proto.com.github.kornilova_l.flamegraph.proto.Var.Object.serializeBinaryToWriter
+    );
+  }
+  f = message.getIndex();
+  if (f !== 0) {
+    writer.writeUint32(
+      10,
+      f
     );
   }
 };
@@ -1610,6 +1807,21 @@ proto.com.github.kornilova_l.flamegraph.proto.Var.prototype.clearObject = functi
  */
 proto.com.github.kornilova_l.flamegraph.proto.Var.prototype.hasObject = function() {
   return jspb.Message.getField(this, 9) != null;
+};
+
+
+/**
+ * optional uint32 index = 10;
+ * @return {number}
+ */
+proto.com.github.kornilova_l.flamegraph.proto.Var.prototype.getIndex = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 10, 0));
+};
+
+
+/** @param {number} value */
+proto.com.github.kornilova_l.flamegraph.proto.Var.prototype.setIndex = function(value) {
+  jspb.Message.setField(this, 10, value);
 };
 
 
