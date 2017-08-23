@@ -20,8 +20,8 @@ public class Filter {
     private Pattern compilePattern(@Nullable String patternString) {
         if (patternString != null) {
             return Pattern.compile(
-                    patternString.replaceAll("\\*", ".*")
-                            .replaceAll("\\.", "\\.")
+                    patternString.replaceAll("\\.", "\\\\.")
+                            .replaceAll("\\*", ".*")
             );
         }
         return null;
