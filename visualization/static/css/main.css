@@ -155,6 +155,7 @@ nav {
 }
 
 nav ul {
+    z-index: 0;
     display: flex;
     justify-content: center;
     padding: 0;
@@ -300,6 +301,7 @@ nav ul li a:focus {
 }
 
 .file-menu {
+    z-index: 1;
     float: left;
     height: 100%;
     width: 250px;
