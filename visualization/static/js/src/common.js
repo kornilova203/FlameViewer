@@ -13,6 +13,15 @@ common.showLoader = (message, callback, time = 100) => {
 };
 
 /**
+ * Get extension of file
+ * @param {string} fileName
+ * @returns {string}
+ */
+common.getExtension = (fileName) => {
+    return fileName.substring(fileName.indexOf(".") + 1, fileName.length);
+};
+
+/**
  * @param {Number} [time]
  */
 common.hideLoader = (time = 0) => {
@@ -76,7 +85,8 @@ constants.loaderMessages = {
     buildingTree: "Building tree...",
     buildingTrees: "Building trees...",
     countingTime: "Counting self-time of methods...",
-    convertingFile: "Converting file: "
+    convertingFile: "Converting file: ",
+    uploadingFile: "Uploading file: "
 };
 
 $(window).on("load", () => {

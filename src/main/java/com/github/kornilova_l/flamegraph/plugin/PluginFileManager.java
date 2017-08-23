@@ -9,6 +9,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -155,7 +158,7 @@ public class PluginFileManager {
     }
 
     @Nullable
-    public File getConfigFile(String projectName, String fileName) {
+    private File getConfigFile(String projectName, String fileName) {
         String projectLogDirPath = getLogDirPath(projectName);
         if (Objects.equals(projectName, "uploaded-files") &&
                 getExtension(fileName) == TreeManager.Extension.JFR) {
@@ -210,6 +213,13 @@ public class PluginFileManager {
     }
 
     public void save(ByteBuf content, String fileName) {
-        // TODO: implement
+        Path filePath = Paths.get(uploadedFilesPath.toString(), fileName);
+        byte[] bytes = new byte[content.readableBytes()];
+        content.readBytes(bytes);
+        try (OutputStream outputStream = new FileOutputStream(new File(filePath.toString()))) {
+            outputStream.write(bytes);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

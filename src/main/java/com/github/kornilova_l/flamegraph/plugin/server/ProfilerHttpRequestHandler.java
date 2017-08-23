@@ -201,7 +201,8 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
         return false;
     }
 
-    private void uploadFile(FullHttpRequest fullHttpRequest, ChannelHandlerContext context) {
+    private void uploadFile(FullHttpRequest fullHttpRequest,
+                            ChannelHandlerContext context) {
         String fileName = fullHttpRequest.headers().get("File-Name");
         LOG.info("Got file: " + fileName);
         switch (getExtension(fileName)) {

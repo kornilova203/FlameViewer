@@ -9,7 +9,7 @@ const TreePreviewProtos = require('../generated/tree_preview_pb');
 
 $(window).on("load", function () {
     if (constants.fileName !== undefined) {
-        const extension = getExtension(constants.fileName);
+        const extension = common.getExtension(constants.fileName);
         if (extension !== "jfr") {
             getAndShowTreesPreview();
         } else {
@@ -61,13 +61,4 @@ function drawTreesPreview(treesPreview) {
         }
         common.hideLoader(0);
     });
-}
-
-/**
- * Get extension of file
- * @param {string} fileName
- * @returns {string}
- */
-function getExtension(fileName) {
-    return fileName.substring(fileName.indexOf(".") + 1, fileName.length);
 }

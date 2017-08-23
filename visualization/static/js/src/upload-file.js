@@ -11,10 +11,16 @@ function appendWrongExtension() {
  */
 function sendToServer(file) {
     common.resizeLoaderBackground(700);
-    common.showLoader(constants.loaderMessages.convertingFile + file.name, () => {
+    let message;
+    if (common.getExtension(file.name) === "jfr") {
+        message = constants.loaderMessages.convertingFile;
+    } else {
+        message = constants.loaderMessages.uploadingFile;
+    }
+    common.showLoader(message + file.name, () => {
         const request = new XMLHttpRequest();
         request.onload = () => {
-            location.reload(); // TODO: reload to uploaded file
+            location.reload();
         };
         request.open("POST", "/flamegraph-profiler/upload-file", true);
         request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
