@@ -83,3 +83,26 @@ main::-webkit-scrollbar-thumb, .call-tree-wrapper::-webkit-scrollbar-thumb {
 .hot-spot a {
     margin-right: 10px;
 }
+
+main button {
+    border: 0;
+    font: inherit;
+    line-height: normal;
+    overflow: visible;
+    background-color: #0e8fdf;
+    color: white;
+    padding: 8px 10px 5px;
+    position: relative;
+    left: 108px;
+    top: 20px;
+    margin-bottom: 30px;
+    cursor: pointer;
+}
+
+main button:hover {
+    background-color: #086ead;
+}
+
+main button:active {
+    background-color: #064e7a;
+}

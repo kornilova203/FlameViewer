@@ -1,7 +1,10 @@
+let hotSpots = null;
+let iteration = 0;
+
 $(window).on("load", () => {
     if (constants.fileName !== undefined &&
         constants.projectName !== undefined) {
-        showHotSpots();
+        loadHotSpots();
     }
 });
 
@@ -13,25 +16,42 @@ function getRequestAddress() {
         constants.fileName;
 }
 
-function showHotSpots() {
+function loadHotSpots() {
     common.showLoader(constants.loaderMessages.countingTime, () => {
         const request = new XMLHttpRequest();
         request.open("GET", getRequestAddress(), true);
         request.responseType = "json";
 
         request.onload = function () {
-            const hotSpots = request.response;
+            hotSpots = request.response;
             if (hotSpots !== undefined && hotSpots.length > 0) {
-                const biggestRelativeTime = hotSpots[0].relativeTime;
-                for (let i = 0; i < hotSpots.length && i < 200; i++) {
-                    appendHotSpot(hotSpots[i], biggestRelativeTime);
-                }
+                appendHotSpots();
             }
             common.hideLoader();
         };
         request.send();
-        console.log("request was sent");
     });
+}
+
+function appendHotSpots() {
+    removeShowMore();
+    const biggestRelativeTime = hotSpots[0].relativeTime;
+    for (let i = iteration * 200; i < hotSpots.length && i < (iteration * 200 + 200); i++) {
+        appendHotSpot(hotSpots[i], biggestRelativeTime);
+    }
+    iteration++;
+    if (hotSpots.length > iteration * 200) {
+        appendShowMore();
+    }
+}
+
+function appendShowMore() {
+    const $showMoreButton = $("main").append($("<button>Show more</button>"))
+    $showMoreButton.click(appendHotSpots);
+}
+
+function removeShowMore() {
+    $("main").find("button").remove();
 }
 
 /**
@@ -45,6 +65,12 @@ function showHotSpots() {
  * @param {Number} biggestRelativeTime
  */
 function appendHotSpot(hotSpot, biggestRelativeTime) {
+    let relativeTime;
+    if (hotSpot.relativeTime * 100 > 1) {
+        relativeTime = Math.round(hotSpot.relativeTime * 1000) / 10;
+    } else {
+        relativeTime = Math.round(hotSpot.relativeTime * 10000) / 100;
+    }
     const hotSpotBlock = $(templates.tree.hotSpot(
         {
             methodName: hotSpot.methodName,
@@ -52,7 +78,7 @@ function appendHotSpot(hotSpot, biggestRelativeTime) {
             retVal: hotSpot.retVal,
             parameters: hotSpot.parameters,
             doBreak: (hotSpot.retVal + hotSpot.className + hotSpot.methodName).length > 80,
-            relativeTime: Math.round(hotSpot.relativeTime * 1000) / 10,
+            relativeTime: relativeTime,
             fileName: constants.fileName,
             projectName: constants.projectName,
             desc: "(" + hotSpot.parameters.join(', ') + ")" + hotSpot.retVal
