@@ -19,11 +19,16 @@ main::-webkit-scrollbar-thumb, .call-tree-wrapper::-webkit-scrollbar-thumb {
 }
 
 .hot-spot a img {
-    width: 25px;
     float: left;
     padding-right: 8px;
     position: relative;
     top: 10px;
+    opacity: 0;
+    transition: opacity 300ms;
+}
+
+.hot-spot:hover a img {
+    opacity: 1;
 }
 
 .return-value {
