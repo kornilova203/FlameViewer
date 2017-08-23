@@ -24,7 +24,8 @@ public class Proxy {
                                   String className,
                                   String methodName,
                                   String desc,
-                                  boolean isStatic) {
+                                  boolean isStatic,
+                                  String savedParameters) {
         if (addRetVal == null) {
             try {
                 getLoggerQueueIfNotCached();
@@ -37,13 +38,14 @@ public class Proxy {
                         String.class,
                         String.class,
                         String.class,
-                        boolean.class);
+                        boolean.class,
+                        String.class);
             } catch (NoSuchMethodException | ExceptionInInitializerError | ClassNotFoundException e) {
                 e.printStackTrace();
             }
         }
         try {
-            addRetVal.invoke(null, retVal, startTime, duration, parameters, thread, className, methodName, desc, isStatic);
+            addRetVal.invoke(null, retVal, startTime, duration, parameters, thread, className, methodName, desc, isStatic, savedParameters);
         } catch (IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
@@ -64,7 +66,8 @@ public class Proxy {
                                   String className,
                                   String methodName,
                                   boolean isStatic,
-                                  String desc) {
+                                  String desc,
+                                  String savedParameters) {
         if (addException == null) {
             try {
                 getLoggerQueueIfNotCached();
@@ -77,13 +80,14 @@ public class Proxy {
                         String.class,
                         String.class,
                         boolean.class,
+                        String.class,
                         String.class);
             } catch (NoSuchMethodException | ExceptionInInitializerError | ClassNotFoundException e) {
                 e.printStackTrace();
             }
         }
         try {
-            addException.invoke(null, throwable, startTime, duration, parameters, thread, className, methodName, isStatic, desc);
+            addException.invoke(null, throwable, startTime, duration, parameters, thread, className, methodName, isStatic, desc, savedParameters);
         } catch (IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
