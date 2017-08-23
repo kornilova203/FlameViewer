@@ -10,6 +10,7 @@ body {
     height: calc(100vh - 45px);
     width: calc(100vw - 250px);
     transition: width, background-color 300ms;
+    padding-bottom: 100px;
 }
 
 .tree-preview-wrapper #expand-preview-button {
