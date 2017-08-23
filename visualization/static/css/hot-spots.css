@@ -17,3 +17,64 @@ main::-webkit-scrollbar-track, .call-tree-wrapper::-webkit-scrollbar-track {
 main::-webkit-scrollbar-thumb, .call-tree-wrapper::-webkit-scrollbar-thumb {
     background-color: rgba(0, 0, 0, 0.1);
 }
+
+.hot-spot a img {
+    width: 25px;
+    float: left;
+    padding-right: 8px;
+    position: relative;
+    top: 10px;
+}
+
+.return-value {
+    color: #000080;
+}
+
+.method-name {
+    color: black;
+}
+
+.class-name {
+    color: #df7300;
+}
+
+.parameter {
+    color: #660E82;
+}
+
+.total-time {
+    width: 200px;
+    height: 17px;
+    float: left;
+    border: solid #ccc 1px;
+    margin-left: 20px;
+    padding: 2px;
+    box-sizing: border-box;
+}
+
+.method-time {
+    height: 100%;
+    background-color: #0e8fdf;
+}
+
+.method {
+    margin-left: 320px;
+    margin-top: 0;
+}
+
+.code-margin {
+    margin: 0;
+    display: inline-block;
+}
+
+.relative-time {
+    float: left;
+    margin: 0;
+    font-size: 12px;
+    width: 20px;
+    text-align: right;
+}
+
+.hot-spot a {
+    margin-right: 10px;
+}

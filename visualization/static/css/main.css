@@ -531,58 +531,6 @@ button:focus {
     cursor: pointer;
 }
 
-.return-value {
-    color: #000080;
-}
-
-.method-name {
-    color: black;
-}
-
-.class-name {
-    color: #df7300;
-}
-
-.parameter {
-    color: #660E82;
-}
-
-.total-time {
-    width: 200px;
-    height: 17px;
-    float: left;
-    border: solid #ccc 1px;
-    margin-left: 20px;
-    padding: 2px;
-    box-sizing: border-box;
-}
-
-.method-time {
-    height: 100%;
-    background-color: #0e8fdf;
-}
-
-.method {
-    margin-left: 260px;
-}
-
-.code-margin {
-    margin: 0;
-    display: inline-block;
-}
-
-.relative-time {
-    float: left;
-    margin: 0;
-    font-size: 12px;
-    width: 20px;
-    text-align: right;
-}
-
-.hot-spot a {
-    margin-right: 10px;
-}
-
 .file-list li:hover .delete-file {
     opacity: 0.8;
 }

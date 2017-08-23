@@ -125,6 +125,8 @@
  */
 {template .hotSpot}
 <div class="hot-spot">
+    <a href="/flamegraph-profiler/outgoing-calls?file={$fileName}&amp;project={$projectName}&amp;method={$methodName}&amp;class={$className}&amp;desc={$desc}"><img src="img/outgoing.png"/></a>
+    <a href="/flamegraph-profiler/incoming-calls?file={$fileName}&amp;project={$projectName}&amp;method={$methodName}&amp;class={$className}&amp;desc={$desc}"><img src="img/incoming.png"/></a>
     <div class="outer-time-div">
         <p class="relative-time">{$relativeTime}%</p>
         <div class="total-time"><div class="method-time"></div></div>
@@ -150,10 +152,7 @@
     {/foreach}
     )
     </p>
-    <a href="/flamegraph-profiler/outgoing-calls?file={$fileName}&amp;project={$projectName}&amp;method={$methodName}&amp;class={$className}&amp;desc={$desc}">Outgoing calls</a>
-    <a href="/flamegraph-profiler/incoming-calls?file={$fileName}&amp;project={$projectName}&amp;method={$methodName}&amp;class={$className}&amp;desc={$desc}">Incoming calls</a>
-
-</div>
+    </div>
 {/template}
 
 /**
