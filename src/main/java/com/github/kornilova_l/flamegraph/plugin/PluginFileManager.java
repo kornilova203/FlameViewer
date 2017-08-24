@@ -8,14 +8,13 @@ import io.netty.handler.codec.http.QueryStringDecoder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.ZipException;
 
 import static com.github.kornilova_l.flamegraph.plugin.server.ProfilerHttpRequestHandler.getExtension;
 import static com.github.kornilova_l.flamegraph.plugin.server.ProfilerHttpRequestHandler.getParameter;
@@ -28,6 +27,7 @@ public class PluginFileManager {
     private static final String STATIC_DIR_NAME = "static";
     private static final String REQUEST_PREFIX = "/flamegraph-profiler/";
     private static final String UPLOADED_FILES = "uploaded-files";
+    private static final String NOT_CONVERTED = "not-converted";
     private static PluginFileManager pluginFileManager;
     @NotNull
     private final Path logDirPath;
@@ -37,6 +37,8 @@ public class PluginFileManager {
     private final Path staticDirPath;
     @NotNull
     private final Path uploadedFilesPath;
+    @NotNull
+    private final Path notConvertedFiles;
 
     private PluginFileManager(@NotNull String systemDirPath) {
         Path systemDir = Paths.get(systemDirPath);
@@ -53,6 +55,8 @@ public class PluginFileManager {
         );
         uploadedFilesPath = Paths.get(logDirPath.toString(), UPLOADED_FILES);
         createDirIfNotExist(uploadedFilesPath);
+        notConvertedFiles = Paths.get(logDirPath.toString(), NOT_CONVERTED);
+        createDirIfNotExist(notConvertedFiles);
     }
 
     @Nullable
@@ -120,11 +124,12 @@ public class PluginFileManager {
         return list;
     }
 
-    public void convertAndSave(ByteBuf content, String fileName) {
+    public void convertAndSave(ByteBuf byteBuf, String fileName) {
         Path filePath = Paths.get(uploadedFilesPath.toString(), getConvertedName(fileName));
-        byte[] bytes = new byte[content.readableBytes()];
-        content.readBytes(bytes);
-        new FlightRecorderConverter(bytes).writeTo(new File(filePath.toString()));
+        byte[] arr = new byte[byteBuf.readableBytes()];
+        byteBuf.readBytes(arr);
+        new FlightRecorderConverter(unzip(arr))
+                .writeTo(new File(filePath.toString()));
     }
 
     private String getConvertedName(String fileName) {
@@ -212,6 +217,11 @@ public class PluginFileManager {
         file.delete();
     }
 
+    @NotNull
+    public Path getNotConvertedFiles() {
+        return notConvertedFiles;
+    }
+
     public void save(ByteBuf content, String fileName) {
         Path filePath = Paths.get(uploadedFilesPath.toString(), fileName);
         byte[] bytes = new byte[content.readableBytes()];
@@ -221,5 +231,35 @@ public class PluginFileManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public File unzip(byte[] bytes) {
+        byte[] unzippedBytes = getUnzippedBytes(bytes);
+        File file = new File(
+                Paths.get(notConvertedFiles.toString(), "temp.jfr").toString());
+        try (OutputStream outputStream = new FileOutputStream(file)) {
+            outputStream.write(unzippedBytes);
+//            outputStream.write(bytes);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return file;
+    }
+
+    private byte[] getUnzippedBytes(byte[] bytes) {
+        try (InputStream inputStream = new GZIPInputStream(new ByteArrayInputStream(bytes));
+             ByteArrayOutputStream bout = new ByteArrayOutputStream()) {
+            byte[] buffer = new byte[1024];
+            int len;
+            while ((len = inputStream.read(buffer)) > 0) {
+                bout.write(buffer, 0, len);
+            }
+            return bout.toByteArray();
+        } catch (ZipException exception) {
+            return bytes;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new byte[0];
     }
 }

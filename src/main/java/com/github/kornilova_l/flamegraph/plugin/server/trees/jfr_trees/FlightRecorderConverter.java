@@ -1,20 +1,20 @@
 package com.github.kornilova_l.flamegraph.plugin.server.trees.jfr_trees;
 
-import com.jrockit.mc.common.IMCFrame;
-import com.jrockit.mc.common.IMCMethod;
-import com.jrockit.mc.flightrecorder.FlightRecording;
-import com.jrockit.mc.flightrecorder.FlightRecordingLoader;
-import com.jrockit.mc.flightrecorder.internal.model.FLRStackTrace;
-import com.jrockit.mc.flightrecorder.spi.IEvent;
-import com.jrockit.mc.flightrecorder.spi.IView;
-import org.jetbrains.annotations.NotNull;
+import com.github.kornilova_l.flamegraph.plugin.PluginFileManager;
+import oracle.jrockit.jfr.parser.ChunkParser;
+import oracle.jrockit.jfr.parser.FLREvent;
+import oracle.jrockit.jfr.parser.FLRStruct;
+import oracle.jrockit.jfr.parser.Parser;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Stack;
-import java.util.zip.GZIPInputStream;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static com.github.kornilova_l.flamegraph.plugin.server.trees.DescriptionConverter.getBeautifulParameters;
+import static com.github.kornilova_l.flamegraph.plugin.server.trees.DescriptionConverter.getBeautifulReturnValue;
 
 /**
  * FlightRecorderConverter takes .jfr file
@@ -22,97 +22,16 @@ import java.util.zip.GZIPInputStream;
  * Saves to /stacks dir in profiler dir
  */
 public class FlightRecorderConverter {
-    private static final String EVENT_TYPE = "Method Profiling Sample";
-    private static final String EVENT_VALUE_STACK = "(stackTrace)";
-    private static final boolean showReturnValue = true;
-    private static final boolean useSimpleNames = false;
-    private static final boolean hideArguments = false;
-    private static final boolean ignoreLineNumbers = true;
     private final Map<String, Integer> stacks = new HashMap<>();
+    private static Pattern classNamePattern = Pattern.compile("(?<=ClassLoader = null\\n {12}Name = ).*(?=\\n)");
+    private static Pattern methodNamePattern = Pattern.compile("(?<=}\\n {9}Name = ).*(?=\\n)");
+    private static Pattern signaturePattern = Pattern.compile("(?<=Signature = ).*(?=\\n)");
 
-    public FlightRecorderConverter(byte[] bytes) throws IllegalArgumentException {
+
+    public FlightRecorderConverter(File unzippedFile) throws IllegalArgumentException {
+        // TODO: beautify desc at the end
         System.out.println("start converting");
-        FlightRecording recording = getRecording(bytes);
-        System.out.println("get recording");
-        buildStacks(recording);
-    }
-
-    @NotNull
-    private static FlightRecording getRecording(byte[] bytes) {
-        try (GZIPInputStream gzipStream = new GZIPInputStream(new ByteArrayInputStream(bytes))) {
-            return FlightRecordingLoader.loadStream(gzipStream);
-        } catch (IOException e) {
-            throw new IllegalArgumentException("File cannot be opened");
-        }
-    }
-
-    private static Stack<String> getStack(FLRStackTrace flrStackTrace) {
-        Stack<String> stack = new Stack<>();
-        for (IMCFrame frame : flrStackTrace.getFrames()) {
-            // Push method to a stack
-            stack.push(getFrameName(frame));
-        }
-        return stack;
-    }
-
-    private static String getFrameName(IMCFrame frame) {
-        StringBuilder methodBuilder = new StringBuilder();
-        IMCMethod method = frame.getMethod();
-        methodBuilder.append(method.getHumanReadable(showReturnValue, !useSimpleNames, true, !useSimpleNames,
-                !hideArguments, !useSimpleNames));
-        if (!ignoreLineNumbers) {
-            methodBuilder.append(":");
-            methodBuilder.append(frame.getFrameLineNumber());
-        }
-        return methodBuilder.toString();
-    }
-
-    private void buildStacks(FlightRecording recording) {
-        IView view = recording.createView();
-        for (IEvent event : view) {
-            // Filter for Method Profiling Sample Events
-            if (EVENT_TYPE.equals(event.getEventType().getName())) {
-//                long eventStartTimestamp = event.getStartTimestamp();
-//                long eventEndTimestamp = event.getEndTimestamp();
-
-                // Get Stack Trace from the event. Field ID was identified from
-                // event.getEventType().getFieldIdentifiers()
-                FLRStackTrace flrStackTrace = (FLRStackTrace) event.getValue(EVENT_VALUE_STACK);
-                Stack<String> stack = getStack(flrStackTrace);
-                processStack(stack);
-            }
-        }
-    }
-
-    private void processStack(Stack<String> stack) {
-        StringBuilder stackTraceBuilder = new StringBuilder();
-        boolean appendSemicolon = false;
-        while (!stack.empty()) {
-            if (appendSemicolon) {
-                stackTraceBuilder.append(";");
-            } else {
-                appendSemicolon = true;
-            }
-            stackTraceBuilder.append(stack.pop());
-        }
-        String stackTrace = stackTraceBuilder.toString();
-        Integer count = stacks.get(stackTrace);
-        if (count == null) {
-            count = 1;
-        } else {
-            count++;
-        }
-        stacks.put(stackTrace, count);
-    }
-
-    public void writeTo(File file) {
-        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file))) {
-            for (Map.Entry<String, Integer> entry : stacks.entrySet()) {
-                bufferedWriter.write(String.format("%s %d%n", entry.getKey(), entry.getValue()));
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        buildStacks(unzippedFile);
     }
 
     @Nullable
@@ -133,5 +52,93 @@ public class FlightRecorderConverter {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @SuppressWarnings("deprecation")
+    private void buildStacks(File file) {
+        try {
+            Parser parser = new Parser(file);
+            for (ChunkParser chunkParser : parser) {
+                for (FLREvent event : chunkParser) {
+                    FLRStruct stackTrace = event.getStackTrace();
+                    if (stackTrace != null) {
+                        addStack(getStack(stackTrace));
+                    }
+                }
+            }
+            parser.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void writeTo(File file) {
+        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file))) {
+            for (Map.Entry<String, Integer> entry : stacks.entrySet()) {
+                bufferedWriter.write(String.format("%s %d%n", convertToNeededFormat(entry.getKey()), entry.getValue()));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private String convertToNeededFormat(String stack) {
+        String[] methods = stack.split(" ");
+        StringBuilder stringBuilder = new StringBuilder();
+        for (String method : methods) {
+            int bracket = method.lastIndexOf("(");
+            String classAndMethod = method.substring(0, bracket);
+            String fullDesc = method.substring(bracket, method.length());
+            stringBuilder.append(getBeautifulReturnValue(fullDesc))
+                    .append(" ")
+                    .append(classAndMethod)
+                    .append(getBeautifulParameters(fullDesc))
+                    .append(";");
+        }
+        stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+        return stringBuilder.toString();
+    }
+
+    private void addStack(String stack) {
+        Integer count = stacks.get(stack);
+        if (count == null) {
+            count = 1;
+        } else {
+            count++;
+        }
+        stacks.put(stack, count);
+    }
+
+    @SuppressWarnings("deprecation")
+    private static String getStack(FLRStruct savedStackTrace) {
+        String fullString = savedStackTrace.toString();
+        Matcher classNameMatcher = classNamePattern.matcher(fullString);
+        Matcher methodNameMatcher = methodNamePattern.matcher(fullString);
+        Matcher signatureMatcher = signaturePattern.matcher(fullString);
+        StringBuilder stack = new StringBuilder();
+        while (classNameMatcher.find() && methodNameMatcher.find() && signatureMatcher.find()) {
+            stack.append(classNameMatcher.group())
+                    .append(".")
+                    .append(methodNameMatcher.group())
+                    .append(signatureMatcher.group())
+                    .append(" ");
+        }
+        stack.deleteCharAt(stack.length() - 1);
+        return stack.toString();
+    }
+
+    @SuppressWarnings("deprecation")
+    public static void main(String[] args) {
+        new FlightRecorderConverter(new File("/home/lk/Downloads/flightRecording.jfr"));
+        try (InputStream inputStream = new FileInputStream(
+                new File("/home/lk/Downloads/flight_recording_180121comintellijideaMain14552.jfr"
+                ))) {
+            byte[] bytes = new byte[inputStream.available()];
+            inputStream.read(bytes);
+            File unzippedFile = PluginFileManager.getInstance().unzip(bytes);
+            new FlightRecorderConverter(unzippedFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -1,6 +1,5 @@
 package com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees.call_tree;
 
-import com.github.kornilova_l.flamegraph.configuration.MethodConfig;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TreesSet;
 import com.github.kornilova_l.flamegraph.proto.EventProtos;
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree;
@@ -10,9 +9,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import static com.github.kornilova_l.flamegraph.configuration.MethodConfig.splitDesc;
+import static com.github.kornilova_l.flamegraph.plugin.server.trees.DescriptionConverter.getBeautifulDesc;
 import static com.github.kornilova_l.flamegraph.plugin.server.trees.TreesSet.setTreeWidth;
 
 class CTBuilder {
@@ -25,36 +23,6 @@ class CTBuilder {
     CTBuilder(long threadStartTime, String threadName) {
         this.threadStartTime = threadStartTime;
         this.threadName = threadName;
-    }
-
-    /**
-     * @param desc file specific description
-     * @return (Ljava...lang...String...Z)V -> (String, boolean)void
-     */
-    @NotNull
-    private static String getBeautifulDesc(String desc) {
-        List<String> jvmParams = splitDesc(desc.substring(1, desc.indexOf(")")));
-        List<String> parameters = jvmParams.stream()
-                .map(parameter -> {
-                    int lastArr = parameter.lastIndexOf('[');
-                    lastArr++;
-                    StringBuilder parameterBuilder = new StringBuilder(
-                            MethodConfig.jvmTypeToParam(parameter.substring(lastArr, parameter.length()))
-                    );
-                    for (int i = 0; i < lastArr; i++) {
-                        parameterBuilder.append("[]");
-                    }
-                    parameter = parameterBuilder.toString();
-                    return parameter;
-                })
-                .collect(Collectors.toList());
-
-        String jvmRetVal = desc.substring(desc.indexOf(")") + 1, desc.length());
-
-        return "(" +
-                String.join(", ", parameters) +
-                ")" +
-                MethodConfig.jvmTypeToParam(jvmRetVal);
     }
 
     long getThreadStartTime() {
