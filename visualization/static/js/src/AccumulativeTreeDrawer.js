@@ -485,7 +485,6 @@ class AccumulativeTreeDrawer {
         const parametersList = AccumulativeTreeDrawer.getParametersTypesList(node.getNodeInfo().getDescription());
         this.$popupTable.find("*").remove();
         if (parametersList !== null) {
-            console.log(parametersList);
             for (let i = 0; i < parametersList.length; i++) {
                 this.$popupTable.append($("<tr><td><p>" + parametersList[i] + "</p></td></tr>"))
             }

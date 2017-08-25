@@ -1,7 +1,7 @@
 package com.github.kornilova_l.flamegraph.plugin;
 
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeManager;
-import com.github.kornilova_l.flamegraph.plugin.server.trees.jfr_trees.FlightRecorderConverter;
+import com.github.kornilova_l.flamegraph.plugin.server.trees.jfr_trees.JMCFlightRecorderConverter;
 import com.intellij.openapi.application.PathManager;
 import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.http.QueryStringDecoder;
@@ -126,9 +126,9 @@ public class PluginFileManager {
 
     public void convertAndSave(ByteBuf byteBuf, String fileName) {
         Path filePath = Paths.get(uploadedFilesPath.toString(), getConvertedName(fileName));
-        byte[] arr = new byte[byteBuf.readableBytes()];
-        byteBuf.readBytes(arr);
-        new FlightRecorderConverter(unzip(arr))
+        byte[] bytes = new byte[byteBuf.readableBytes()];
+        byteBuf.readBytes(bytes);
+        new JMCFlightRecorderConverter(unzip(bytes))
                 .writeTo(new File(filePath.toString()));
     }
 
@@ -208,6 +208,9 @@ public class PluginFileManager {
     }
 
     public void deleteFile(@NotNull String fileName, @NotNull String projectName) {
+        if (Objects.equals(projectName, "uploaded-files")) {
+            fileName = getConvertedName(fileName);
+        }
         Path path = Paths.get(logDirPath.toString(), projectName, fileName);
         File file = new File(path.toString());
         if (!file.exists()) {
@@ -215,11 +218,6 @@ public class PluginFileManager {
         }
         //noinspection ResultOfMethodCallIgnored
         file.delete();
-    }
-
-    @NotNull
-    public Path getNotConvertedFiles() {
-        return notConvertedFiles;
     }
 
     public void save(ByteBuf content, String fileName) {

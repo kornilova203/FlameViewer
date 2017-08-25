@@ -1,14 +1,16 @@
 package com.github.kornilova_l.flamegraph.plugin.server.trees.jfr_trees;
 
 import com.github.kornilova_l.flamegraph.plugin.PluginFileManager;
+import com.google.common.collect.Lists;
 import oracle.jrockit.jfr.parser.ChunkParser;
 import oracle.jrockit.jfr.parser.FLREvent;
 import oracle.jrockit.jfr.parser.FLRStruct;
 import oracle.jrockit.jfr.parser.Parser;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -17,41 +19,21 @@ import static com.github.kornilova_l.flamegraph.plugin.server.trees.DescriptionC
 import static com.github.kornilova_l.flamegraph.plugin.server.trees.DescriptionConverter.getBeautifulReturnValue;
 
 /**
- * FlightRecorderConverter takes .jfr file
+ * ParserFlightRecorderConverter takes .jfr file
  * Converts it to <a href="https://github.com/brendangregg/FlameGraph">FlameGraph</a> format
  * Saves to /stacks dir in profiler dir
  */
-public class FlightRecorderConverter {
+public class ParserFlightRecorderConverter {
     private final Map<String, Integer> stacks = new HashMap<>();
     private static Pattern classNamePattern = Pattern.compile("(?<=ClassLoader = null\\n {12}Name = ).*(?=\\n)");
     private static Pattern methodNamePattern = Pattern.compile("(?<=}\\n {9}Name = ).*(?=\\n)");
     private static Pattern signaturePattern = Pattern.compile("(?<=Signature = ).*(?=\\n)");
 
 
-    public FlightRecorderConverter(File unzippedFile) throws IllegalArgumentException {
+    public ParserFlightRecorderConverter(File unzippedFile) throws IllegalArgumentException {
         // TODO: beautify desc at the end
         System.out.println("start converting");
         buildStacks(unzippedFile);
-    }
-
-    @Nullable
-    static Map<String, Integer> getStacks(File convertedFile) {
-        try (BufferedReader reader = new BufferedReader(
-                new FileReader(convertedFile)
-        )) {
-            Map<String, Integer> stacks = new HashMap<>();
-            reader.lines()
-                    .forEach(line -> stacks.put(
-                            line.substring(0, line.lastIndexOf(" ")),
-                            Integer.parseInt(line.substring(
-                                    line.lastIndexOf(" ") + 1,
-                                    line.length()
-                            ))));
-            return stacks;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
     @SuppressWarnings("deprecation")
@@ -115,28 +97,26 @@ public class FlightRecorderConverter {
         Matcher classNameMatcher = classNamePattern.matcher(fullString);
         Matcher methodNameMatcher = methodNamePattern.matcher(fullString);
         Matcher signatureMatcher = signaturePattern.matcher(fullString);
-        StringBuilder stack = new StringBuilder();
+        List<String> calls = new ArrayList<>();
         while (classNameMatcher.find() && methodNameMatcher.find() && signatureMatcher.find()) {
-            stack.append(classNameMatcher.group())
-                    .append(".")
-                    .append(methodNameMatcher.group())
-                    .append(signatureMatcher.group())
-                    .append(" ");
+            calls.add(classNameMatcher.group() +
+                    "." +
+                    methodNameMatcher.group() +
+                    signatureMatcher.group());
         }
-        stack.deleteCharAt(stack.length() - 1);
-        return stack.toString();
+        return String.join(" ", Lists.reverse(calls));
     }
 
     @SuppressWarnings("deprecation")
     public static void main(String[] args) {
-        new FlightRecorderConverter(new File("/home/lk/Downloads/flightRecording.jfr"));
+        new ParserFlightRecorderConverter(new File("/home/lk/Downloads/flightRecording.jfr"));
         try (InputStream inputStream = new FileInputStream(
                 new File("/home/lk/Downloads/flight_recording_180121comintellijideaMain14552.jfr"
                 ))) {
             byte[] bytes = new byte[inputStream.available()];
             inputStream.read(bytes);
             File unzippedFile = PluginFileManager.getInstance().unzip(bytes);
-            new FlightRecorderConverter(unzippedFile);
+            new ParserFlightRecorderConverter(unzippedFile);
         } catch (IOException e) {
             e.printStackTrace();
         }

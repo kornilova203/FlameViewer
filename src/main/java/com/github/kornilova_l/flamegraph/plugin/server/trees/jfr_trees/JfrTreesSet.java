@@ -13,7 +13,7 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 
-import static com.github.kornilova_l.flamegraph.plugin.server.trees.jfr_trees.FlightRecorderConverter.getStacks;
+import static com.github.kornilova_l.flamegraph.plugin.server.trees.jfr_trees.JMCFlightRecorderConverter.getStacks;
 
 public class JfrTreesSet extends TreesSet {
     private static final com.intellij.openapi.diagnostic.Logger LOG =
