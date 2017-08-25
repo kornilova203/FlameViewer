@@ -1,6 +1,5 @@
-package com.github.kornilova_l.flamegraph.plugin.server.trees.jfr_trees;
+package com.github.kornilova_l.flamegraph.plugin.server.trees.flamegraph_format_trees;
 
-import com.github.kornilova_l.flamegraph.plugin.server.ProfilerHttpRequestHandler;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.Filter;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeManager;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TreesSet;
@@ -13,13 +12,13 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 
-import static com.github.kornilova_l.flamegraph.plugin.server.trees.jfr_trees.JMCFlightRecorderConverter.getStacks;
+import static com.github.kornilova_l.flamegraph.plugin.server.jfr_converter.StacksParser.getStacks;
 
-public class JfrTreesSet extends TreesSet {
+public class FlamegraphFormatTreesSet extends TreesSet {
     private static final com.intellij.openapi.diagnostic.Logger LOG =
-            com.intellij.openapi.diagnostic.Logger.getInstance(JfrTreesSet.class);
+            com.intellij.openapi.diagnostic.Logger.getInstance(FlamegraphFormatTreesSet.class);
 
-    public JfrTreesSet(File convertedFile) {
+    public FlamegraphFormatTreesSet(File convertedFile) {
         super(convertedFile);
         Map<String, Integer> stacks = getStacks(convertedFile);
         if (stacks == null) {
@@ -28,13 +27,6 @@ public class JfrTreesSet extends TreesSet {
             long startTime = System.currentTimeMillis();
             outgoingCalls = new StacksOCTreeBuilder(stacks).getTree();
             LOG.info("Building outgoing calls for: " + convertedFile.getName() + " took " + (System.currentTimeMillis() - startTime) + "ms");
-        }
-    }
-
-    @Override
-    protected void validateExtension() {
-        if (ProfilerHttpRequestHandler.getExtension(logFile.getName()) != TreeManager.Extension.JFR_CONVERTED) {
-            throw new IllegalArgumentException("Type is not .jfr");
         }
     }
 

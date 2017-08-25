@@ -10,10 +10,10 @@ const TreePreviewProtos = require('../generated/tree_preview_pb');
 $(window).on("load", function () {
     if (constants.fileName !== undefined) {
         const extension = common.getExtension(constants.fileName);
-        if (extension !== "jfr") {
+        if (extension === "ser") {
             getAndShowTreesPreview();
         } else {
-            common.showMessage("This type of tree is unavailable for .jfr files")
+            common.showMessage("Call tree is unavailable for this file")
         }
     }
 });

@@ -1,4 +1,4 @@
-package com.github.kornilova_l.flamegraph.plugin.server.trees.jfr_trees;
+package com.github.kornilova_l.flamegraph.plugin.server.jfr_converter;
 
 import com.github.kornilova_l.flamegraph.plugin.PluginFileManager;
 import com.google.common.collect.Lists;

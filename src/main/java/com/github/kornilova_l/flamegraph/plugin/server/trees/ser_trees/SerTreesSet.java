@@ -1,8 +1,6 @@
 package com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees;
 
-import com.github.kornilova_l.flamegraph.plugin.server.ProfilerHttpRequestHandler;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.Filter;
-import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeManager;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeManager.TreeType;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TreesSet;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees.call_tree.CallTreesBuilder;
@@ -21,13 +19,6 @@ public class SerTreesSet extends TreesSet {
         super(logFile);
 
         callTree = new CallTreesBuilder(logFile).getTrees();
-    }
-
-    @Override
-    protected void validateExtension() {
-        if (ProfilerHttpRequestHandler.getExtension(logFile.getName()) != TreeManager.Extension.SER) {
-            throw new IllegalArgumentException("Type is not .ser");
-        }
     }
 
     @Nullable

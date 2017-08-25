@@ -32,7 +32,6 @@ public abstract class TreesSet {
 
     public TreesSet(File logFile) {
         this.logFile = logFile;
-        validateExtension();
     }
 
     @Nullable
@@ -73,8 +72,6 @@ public abstract class TreesSet {
                 lastNode.getOffset() + lastNode.getWidth()
         );
     }
-
-    protected abstract void validateExtension();
 
     public abstract TreesPreview getTreesPreview(@Nullable Filter filter);
 

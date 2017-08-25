@@ -1,7 +1,7 @@
 package com.github.kornilova_l.flamegraph.plugin;
 
-import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeManager;
-import com.github.kornilova_l.flamegraph.plugin.server.trees.jfr_trees.JMCFlightRecorderConverter;
+import com.github.kornilova_l.flamegraph.plugin.server.jfr_converter.JMCFlightRecorderConverter;
+import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeManager.Extension;
 import com.intellij.openapi.application.PathManager;
 import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.http.QueryStringDecoder;
@@ -28,6 +28,8 @@ public class PluginFileManager {
     private static final String REQUEST_PREFIX = "/flamegraph-profiler/";
     private static final String UPLOADED_FILES = "uploaded-files";
     private static final String NOT_CONVERTED = "not-converted";
+    private static final String SER_FILES = "ser";
+    private static final String FLAMEGRAPH_FILES = "flamegraph";
     private static PluginFileManager pluginFileManager;
     @NotNull
     private final Path logDirPath;
@@ -36,9 +38,11 @@ public class PluginFileManager {
     @NotNull
     private final Path staticDirPath;
     @NotNull
-    private final Path uploadedFilesPath;
-    @NotNull
     private final Path notConvertedFiles;
+    @NotNull
+    private final Path serFiles;
+    @NotNull
+    private final Path flamegraphFiles;
 
     private PluginFileManager(@NotNull String systemDirPath) {
         Path systemDir = Paths.get(systemDirPath);
@@ -53,10 +57,14 @@ public class PluginFileManager {
                         getClass().getResource("/" + STATIC_DIR_NAME).getPath()
                 ).getAbsolutePath()
         );
-        uploadedFilesPath = Paths.get(logDirPath.toString(), UPLOADED_FILES);
+        @NotNull Path uploadedFilesPath = Paths.get(logDirPath.toString(), UPLOADED_FILES);
         createDirIfNotExist(uploadedFilesPath);
-        notConvertedFiles = Paths.get(logDirPath.toString(), NOT_CONVERTED);
+        notConvertedFiles = Paths.get(uploadedFilesPath.toString(), NOT_CONVERTED);
         createDirIfNotExist(notConvertedFiles);
+        serFiles = Paths.get(uploadedFilesPath.toString(), SER_FILES);
+        createDirIfNotExist(serFiles);
+        flamegraphFiles = Paths.get(uploadedFilesPath.toString(), FLAMEGRAPH_FILES);
+        createDirIfNotExist(flamegraphFiles);
     }
 
     @Nullable
@@ -66,7 +74,7 @@ public class PluginFileManager {
         if (projectName == null || fileName == null) {
             return null;
         }
-        return getConfigFile(projectName, fileName);
+        return getLogFile(projectName, fileName);
     }
 
     public static PluginFileManager getInstance() {
@@ -98,42 +106,42 @@ public class PluginFileManager {
     }
 
 
-    public File getConfigFile(String projectName) {
+    public File getLogFile(String projectName) {
         Path path = Paths.get(configDirPath.toString(), projectName + ".config");
         return new File(path.toString());
     }
 
+    @NotNull
     public List<String> getFileNameList(@NotNull String projectName) {
-        List<String> list = new LinkedList<>();
-        File projectLogDir = new File(getLogDirPath(projectName));
+        File projectLogDir = new File(getLogDirPath(projectName).toString());
+        if (!Objects.equals(projectName, UPLOADED_FILES)) {
+            return getFileNameList(projectLogDir);
+        }
+        List<String> fileNames = new ArrayList<>();
+        fileNames.addAll(getFileNameList(new File(serFiles.toString())));
+        fileNames.addAll(getFileNameList(new File(flamegraphFiles.toString())));
+        return fileNames;
+    }
+
+    @NotNull
+    private List<String> getFileNameList(File projectLogDir) {
         File[] files = projectLogDir.listFiles();
         if (files != null) {
-            list = Arrays.stream(files)
+            return Arrays.stream(files)
                     .filter(file -> !file.isDirectory())
                     .sorted((f1, f2) -> Long.compare(f2.lastModified(), f1.lastModified()))
                     .map(File::getName)
-                    .map((fileName) -> {
-                        int convertedIndex = fileName.indexOf(".converted");
-                        if (convertedIndex != -1) {
-                            return fileName.substring(0, convertedIndex);
-                        }
-                        return fileName;
-                    })
                     .collect(Collectors.toList());
         }
-        return list;
+        return new LinkedList<>();
     }
 
     public void convertAndSave(ByteBuf byteBuf, String fileName) {
-        Path filePath = Paths.get(uploadedFilesPath.toString(), getConvertedName(fileName));
+        Path filePath = Paths.get(flamegraphFiles.toString(), fileName);
         byte[] bytes = new byte[byteBuf.readableBytes()];
         byteBuf.readBytes(bytes);
         new JMCFlightRecorderConverter(unzip(bytes))
                 .writeTo(new File(filePath.toString()));
-    }
-
-    private String getConvertedName(String fileName) {
-        return fileName + ".converted";
     }
 
     public String getStaticFilePath(String staticFileUri) {
@@ -145,10 +153,10 @@ public class PluginFileManager {
     }
 
     @NotNull
-    public String getLogDirPath(@NotNull String projectName) {
+    public Path getLogDirPath(@NotNull String projectName) {
         Path path = Paths.get(logDirPath.toString(), projectName);
         createDirIfNotExist(path);
-        return path.toString();
+        return path;
     }
 
     @NotNull
@@ -163,14 +171,19 @@ public class PluginFileManager {
     }
 
     @Nullable
-    private File getConfigFile(String projectName, String fileName) {
-        String projectLogDirPath = getLogDirPath(projectName);
-        if (Objects.equals(projectName, "uploaded-files") &&
-                getExtension(fileName) == TreeManager.Extension.JFR) {
-            fileName = getConvertedName(fileName);
+    private File getLogFile(String projectName, String fileName) {
+        Path dirPath;
+        if (!Objects.equals(projectName, UPLOADED_FILES)) {
+            dirPath = getLogDirPath(projectName);
+        } else {
+            if (getExtension(fileName) == Extension.SER) {
+                dirPath = serFiles;
+            } else {
+                dirPath = flamegraphFiles;
+            }
         }
-        Path path = Paths.get(projectLogDirPath, fileName);
-        File file = new File(path.toString());
+
+        File file = new File(Paths.get(dirPath.toString(), fileName).toString());
         if (file.exists()) {
             return file;
         }
@@ -208,22 +221,21 @@ public class PluginFileManager {
     }
 
     public void deleteFile(@NotNull String fileName, @NotNull String projectName) {
-        if (Objects.equals(projectName, "uploaded-files")) {
-            fileName = getConvertedName(fileName);
-        }
-        Path path = Paths.get(logDirPath.toString(), projectName, fileName);
-        File file = new File(path.toString());
-        if (!file.exists()) {
+        File file = getLogFile(projectName, fileName);
+        if (file == null || !file.exists()) {
             return;
         }
         //noinspection ResultOfMethodCallIgnored
         file.delete();
     }
 
-    public void save(ByteBuf content, String fileName) {
-        Path filePath = Paths.get(uploadedFilesPath.toString(), fileName);
-        byte[] bytes = new byte[content.readableBytes()];
-        content.readBytes(bytes);
+    public void save(byte[] bytes, String fileName) {
+        Path filePath;
+        if (getExtension(fileName) == Extension.SER) {
+            filePath = Paths.get(serFiles.toString(), fileName);
+        } else {
+            filePath = Paths.get(flamegraphFiles.toString(), fileName);
+        }
         try (OutputStream outputStream = new FileOutputStream(new File(filePath.toString()))) {
             outputStream.write(bytes);
         } catch (IOException e) {
@@ -237,7 +249,6 @@ public class PluginFileManager {
                 Paths.get(notConvertedFiles.toString(), "temp.jfr").toString());
         try (OutputStream outputStream = new FileOutputStream(file)) {
             outputStream.write(unzippedBytes);
-//            outputStream.write(bytes);
         } catch (IOException e) {
             e.printStackTrace();
         }

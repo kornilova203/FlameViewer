@@ -1,4 +1,4 @@
-package com.github.kornilova_l.flamegraph.plugin.server.trees.jfr_trees;
+package com.github.kornilova_l.flamegraph.plugin.server.jfr_converter;
 
 import com.jrockit.mc.common.IMCFrame;
 import com.jrockit.mc.common.IMCMethod;
@@ -7,9 +7,11 @@ import com.jrockit.mc.flightrecorder.FlightRecordingLoader;
 import com.jrockit.mc.flightrecorder.internal.model.FLRStackTrace;
 import com.jrockit.mc.flightrecorder.spi.IEvent;
 import com.jrockit.mc.flightrecorder.spi.IView;
-import org.jetbrains.annotations.Nullable;
 
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
@@ -102,26 +104,6 @@ public class JMCFlightRecorderConverter {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    @Nullable
-    static Map<String, Integer> getStacks(File convertedFile) {
-        try (BufferedReader reader = new BufferedReader(
-                new FileReader(convertedFile)
-        )) {
-            Map<String, Integer> stacks = new HashMap<>();
-            reader.lines()
-                    .forEach(line -> stacks.put(
-                            line.substring(0, line.lastIndexOf(" ")),
-                            Integer.parseInt(line.substring(
-                                    line.lastIndexOf(" ") + 1,
-                                    line.length()
-                            ))));
-            return stacks;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
     public static void main(String[] args) {

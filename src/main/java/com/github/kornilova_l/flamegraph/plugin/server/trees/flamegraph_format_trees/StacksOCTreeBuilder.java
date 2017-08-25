@@ -1,4 +1,4 @@
-package com.github.kornilova_l.flamegraph.plugin.server.trees.jfr_trees;
+package com.github.kornilova_l.flamegraph.plugin.server.trees.flamegraph_format_trees;
 
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeBuilder;
 import com.github.kornilova_l.flamegraph.proto.TreeProtos;

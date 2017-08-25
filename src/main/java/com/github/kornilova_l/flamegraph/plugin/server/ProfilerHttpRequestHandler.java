@@ -1,6 +1,7 @@
 package com.github.kornilova_l.flamegraph.plugin.server;
 
 import com.github.kornilova_l.flamegraph.plugin.PluginFileManager;
+import com.github.kornilova_l.flamegraph.plugin.server.jfr_converter.StacksParser;
 import com.github.kornilova_l.flamegraph.plugin.server.methods_count_handlers.AccumulativeTreesMethodCounter;
 import com.github.kornilova_l.flamegraph.plugin.server.methods_count_handlers.CallTreeMethodsCounter;
 import com.github.kornilova_l.flamegraph.plugin.server.tree_request_handlers.CallTreeRequestHandler;
@@ -9,9 +10,11 @@ import com.github.kornilova_l.flamegraph.plugin.server.tree_request_handlers.Inc
 import com.github.kornilova_l.flamegraph.plugin.server.tree_request_handlers.OutgoingCallsRequestHandler;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.Filter;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeManager;
+import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeManager.Extension;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeManager.TreeType;
 import com.github.kornilova_l.libs.com.google.protobuf.Message;
 import com.google.gson.Gson;
+import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -71,17 +74,15 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
     }
 
     @NotNull
-    public static TreeManager.Extension getExtension(@NotNull String fileName) {
+    public static Extension getExtension(@NotNull String fileName) {
         String extension = fileName.substring(fileName.indexOf(".") + 1, fileName.length());
         switch (extension) {
-            case "jfr":
-                return TreeManager.Extension.JFR;
-            case "jfr.converted":
-                return TreeManager.Extension.JFR_CONVERTED;
             case "ser":
-                return TreeManager.Extension.SER;
+                return Extension.SER;
+            case "jfr":
+                return Extension.JFR;
             default:
-                return TreeManager.Extension.UNSUPPORTED;
+                return Extension.OTHER;
         }
     }
 
@@ -205,20 +206,35 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
                             ChannelHandlerContext context) {
         String fileName = fullHttpRequest.headers().get("File-Name");
         LOG.info("Got file: " + fileName);
+        boolean isSupported = false;
         switch (getExtension(fileName)) {
             case JFR:
+                isSupported = true;
                 fileManager.convertAndSave(fullHttpRequest.content(), fileName);
                 break;
             case SER:
-                fileManager.save(fullHttpRequest.content(), fileName);
+                isSupported = true;
+                fileManager.save(getBytes(fullHttpRequest.content()), fileName);
                 break;
-            case UNSUPPORTED:
-            default:
-                sendStatus(HttpResponseStatus.BAD_REQUEST, context.channel());
-                return;
-
+            case OTHER:
+                byte[] bytes = getBytes(fullHttpRequest.content());
+                isSupported = StacksParser.isFlamegraph(bytes);
+                if (isSupported) {
+                    fileManager.save(bytes, fileName);
+                }
+                break;
         }
-        sendStatus(HttpResponseStatus.OK, context.channel());
+        if (isSupported) {
+            sendStatus(HttpResponseStatus.OK, context.channel());
+        } else {
+            sendStatus(HttpResponseStatus.BAD_REQUEST, context.channel());
+        }
+    }
+
+    private byte[] getBytes(ByteBuf byteBuf) {
+        byte[] bytes = new byte[byteBuf.readableBytes()];
+        byteBuf.readBytes(bytes);
+        return bytes;
     }
 
     @Override

@@ -20,7 +20,13 @@ function sendToServer(file) {
     common.showLoader(message + file.name, () => {
         const request = new XMLHttpRequest();
         request.onload = () => {
-            location.reload();
+            console.log(request.status);
+            if (request.status === 400) {
+                common.hideLoader();
+                appendWrongExtension();
+            } else {
+                location.reload();
+            }
         };
         request.open("POST", "/flamegraph-profiler/upload-file", true);
         request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -34,26 +40,8 @@ function listenInput() {
         const reader = new FileReader();
         const theFile = e.target.files[0];
         reader.onload = ((file) => {
-            if (isValidExtension(file.name)) {
-                common.hideMessage();
-                sendToServer(file);
-            } else {
-                common.hideLoader();
-                appendWrongExtension();
-            }
+            common.hideMessage();
+            sendToServer(file);
         })(theFile);
     });
-}
-
-/**
- * @param {String} fileName
- * @return {Boolean}
- */
-function isValidExtension(fileName) {
-    let dot = fileName.lastIndexOf('.');
-    if (dot === -1) {
-        return false;
-    }
-    const extension = fileName.substring(dot + 1, fileName.length);
-    return VALID_EXTENSION.some(validExtension => validExtension === extension);
 }

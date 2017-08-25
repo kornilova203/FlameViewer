@@ -43,7 +43,7 @@ public class ProfilerProgramRunner extends DefaultJavaProgramRunner {
         assert (configuration != null);
         assert (project != null);
         PluginFileManager fileManager = PluginFileManager.getInstance();
-        File configFile = fileManager.getConfigFile(project.getName());
+        File configFile = fileManager.getLogFile(project.getName());
         PluginConfigManager.exportConfig(configFile, configuration);
         String pathToAgent = fileManager.getPathToAgent();
         System.out.println(pathToAgent);

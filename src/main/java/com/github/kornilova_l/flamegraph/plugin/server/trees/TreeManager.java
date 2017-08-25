@@ -1,7 +1,7 @@
 package com.github.kornilova_l.flamegraph.plugin.server.trees;
 
 import com.github.kornilova_l.flamegraph.plugin.server.ProfilerHttpRequestHandler;
-import com.github.kornilova_l.flamegraph.plugin.server.trees.jfr_trees.JfrTreesSet;
+import com.github.kornilova_l.flamegraph.plugin.server.trees.flamegraph_format_trees.FlamegraphFormatTreesSet;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees.SerTreesSet;
 import com.github.kornilova_l.flamegraph.proto.TreeProtos;
 import com.github.kornilova_l.flamegraph.proto.TreesPreviewProtos.TreesPreview;
@@ -82,13 +82,13 @@ public class TreeManager {
             currentFile = logFile;
             Extension extension = ProfilerHttpRequestHandler.getExtension(logFile.getName());
             switch (extension) {
-                case JFR_CONVERTED:
-                    currentTreesSet = new JfrTreesSet(logFile);
+                case OTHER:
+                case JFR:
+                    currentTreesSet = new FlamegraphFormatTreesSet(logFile);
                     break;
                 case SER:
                     currentTreesSet = new SerTreesSet(logFile);
                     break;
-                case UNSUPPORTED:
                 default:
                     throw new IllegalArgumentException("Extension is unsupported");
             }
@@ -149,10 +149,9 @@ public class TreeManager {
     }
 
     public enum Extension {
-        JFR,
+        OTHER,
         SER,
-        JFR_CONVERTED,
-        UNSUPPORTED
+        JFR
     }
 }
 
