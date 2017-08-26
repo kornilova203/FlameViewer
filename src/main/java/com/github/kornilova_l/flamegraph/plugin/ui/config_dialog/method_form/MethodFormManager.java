@@ -2,10 +2,10 @@ package com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.method_form;
 
 import com.github.kornilova_l.flamegraph.configuration.MethodConfig;
 import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.ConfigCheckboxTree;
-import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.ConfigCheckedTreeNode;
 import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.ConfigurationForm;
 import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.ExcludedMethodForm;
 import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.add_remove.DialogHelper;
+import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.tree_nodes.ConfigCheckedTreeNode;
 import com.intellij.openapi.ui.ValidationInfo;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

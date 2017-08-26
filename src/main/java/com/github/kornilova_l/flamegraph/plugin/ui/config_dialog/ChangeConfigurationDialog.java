@@ -16,9 +16,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 public class ChangeConfigurationDialog extends DialogWrapper {
     @NotNull
@@ -82,11 +82,11 @@ public class ChangeConfigurationDialog extends DialogWrapper {
     }
 
     private JComponent createCheckboxTreeView(ConfigCheckboxTree tree,
-                                              Collection<MethodConfig> configs) {
+                                              Set<MethodConfig> configs) {
         ToolbarDecorator decorator = ToolbarDecorator.createDecorator(tree);
         decorator.setToolbarPosition(ActionToolbarPosition.RIGHT);
         decorator.setAddAction(new AddNodeActionButton(tree, tempConfiguration, project));
-        decorator.setRemoveAction(new RemoveNodeActionButton(tree, tempConfiguration));
+        decorator.setRemoveAction(new RemoveNodeActionButton(tree));
         JPanel panel = decorator.createPanel();
         tree.initTree(configs);
         initValidation();

@@ -2,6 +2,11 @@ package com.github.kornilova_l.flamegraph.plugin.ui.config_dialog;
 
 import com.github.kornilova_l.flamegraph.configuration.MethodConfig;
 import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.method_form.MethodFormManager;
+import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.tree_nodes.ClassTreeNode;
+import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.tree_nodes.ConfigCheckedTreeNode;
+import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.tree_nodes.ConfigCheckedTreeNode.TreeNodeType;
+import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.tree_nodes.MethodTreeNode;
+import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.tree_nodes.PackageAndClassTreeNode;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.ui.ValidationInfo;
 import com.intellij.ui.CheckboxTree;
@@ -16,7 +21,6 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -68,23 +72,28 @@ public class ConfigCheckboxTree extends CheckboxTree {
     }
 
     private ConfigCheckedTreeNode createChildIfNotPresent(CheckedTreeNode parent,
-                                                          String name,
-                                                          @Nullable MethodConfig methodConfig) {
+                                                          @NotNull Set<MethodConfig> methodConfigs,
+                                                          @NotNull MethodConfig methodConfig,
+                                                          TreeNodeType nodeType) {
         if (parent.getChildCount() == 0) {
-            return appendNode(parent, name, methodConfig);
+            return appendNode(parent, methodConfig, nodeType, methodConfigs);
         } else {
-            ConfigCheckedTreeNode node = maybeInsertOrFind(parent, name, methodConfig);
+            ConfigCheckedTreeNode node = maybeInsertOrFind(parent, methodConfigs, methodConfig, nodeType);
             if (node != null) {
                 return node;
             }
         }
-        return appendNode(parent, name, methodConfig);
+        return appendNode(parent, methodConfig, nodeType, methodConfigs);
     }
 
     @Nullable
-    private ConfigCheckedTreeNode maybeInsertOrFind(CheckedTreeNode parent, String name, @Nullable MethodConfig methodConfig) {
+    private ConfigCheckedTreeNode maybeInsertOrFind(CheckedTreeNode parent,
+                                                    @NotNull Set<MethodConfig> methodConfigs,
+                                                    @NotNull MethodConfig methodConfig,
+                                                    TreeNodeType nodeType) {
+        String name = getName(methodConfig, nodeType);
         if (name.compareTo(parent.getChildAt(0).toString()) < 0) {
-            return insertBefore(parent, parent.getChildAt(0), name, methodConfig);
+            return insertBefore(parent, parent.getChildAt(0), methodConfigs, methodConfig, nodeType);
         }
         for (int i = 0; i < parent.getChildCount(); i++) {
             ConfigCheckedTreeNode child = (ConfigCheckedTreeNode) parent.getChildAt(i);
@@ -92,7 +101,7 @@ public class ConfigCheckboxTree extends CheckboxTree {
             if (nextNode != null) {
                 if (name.compareTo(child.toString()) > 0 &&
                         name.compareTo(nextNode.toString()) < 0) {
-                    return insertBefore(parent, nextNode, name, methodConfig);
+                    return insertBefore(parent, nextNode, methodConfigs, methodConfig, nodeType);
                 }
             }
             if (Objects.equals(child.toString(), name)) {
@@ -102,25 +111,56 @@ public class ConfigCheckboxTree extends CheckboxTree {
         return null;
     }
 
-    private ConfigCheckedTreeNode appendNode(CheckedTreeNode parent, String name, @Nullable MethodConfig methodConfig) {
-        ConfigCheckedTreeNode node = new ConfigCheckedTreeNode(name, methodConfig);
-        if (methodConfig != null) {
-            node.setChecked(methodConfig.isEnabled());
+    @NotNull
+    private String getName(@NotNull MethodConfig methodConfig, TreeNodeType nodeType) {
+        switch (nodeType) {
+            case PACKAGE:
+                return methodConfig.getPackagePattern();
+            case CLASS:
+                return methodConfig.getClassPattern();
+            case METHOD:
+                return methodConfig.getMethodPatternString() + methodConfig.parametersToString();
         }
+        throw new AssertionError("NodeType is not known");
+    }
+
+    private ConfigCheckedTreeNode appendNode(CheckedTreeNode parent,
+                                             @NotNull MethodConfig methodConfig,
+                                             TreeNodeType nodeType,
+                                             Set<MethodConfig> methodConfigs) {
+        ConfigCheckedTreeNode node = createNode(methodConfigs, methodConfig, nodeType);
         model.insertNodeInto(node, parent, parent.getChildCount());
         model.nodeStructureChanged(parent);
         return node;
     }
 
     @NotNull
+    private ConfigCheckedTreeNode createNode(@NotNull Set<MethodConfig> methodConfigs,
+                                             @NotNull MethodConfig methodConfig,
+                                             TreeNodeType nodeType) {
+        String name = getName(methodConfig, nodeType);
+        switch (nodeType) {
+            case PACKAGE:
+                return new PackageAndClassTreeNode(name, methodConfigs);
+            case CLASS:
+                return new ClassTreeNode(name, methodConfigs, methodConfig.getPackagePattern());
+            case METHOD:
+                ConfigCheckedTreeNode node;
+                node = new MethodTreeNode(name, methodConfigs, methodConfig);
+                node.setChecked(methodConfig.isEnabled());
+                return node;
+            default:
+                return null;
+        }
+    }
+
+    @NotNull
     private ConfigCheckedTreeNode insertBefore(CheckedTreeNode parent,
                                                TreeNode child,
-                                               String name,
-                                               @Nullable MethodConfig methodConfig) {
-        ConfigCheckedTreeNode newNode = new ConfigCheckedTreeNode(name, methodConfig);
-        if (methodConfig != null) {
-            newNode.setChecked(methodConfig.isEnabled());
-        }
+                                               @NotNull Set<MethodConfig> methodConfigs,
+                                               @NotNull MethodConfig methodConfig,
+                                               TreeNodeType nodeType) {
+        ConfigCheckedTreeNode newNode = createNode(methodConfigs, methodConfig, nodeType);
         for (int i = 0; i < parent.getChildCount(); i++) {
             if (Objects.equals(parent.getChildAt(i).toString(), child.toString())) {
                 model.insertNodeInto(newNode, parent, i);
@@ -138,10 +178,10 @@ public class ConfigCheckboxTree extends CheckboxTree {
 
     public void updateTreeNodeNames(Object[] path) {
         ConfigCheckedTreeNode checkedTreeNode = (ConfigCheckedTreeNode) path[path.length - 1];
-        MethodConfig methodConfig = checkedTreeNode.getMethodConfig();
-        if (methodConfig == null) {
+        if (!(checkedTreeNode instanceof MethodTreeNode)) {
             return;
         }
+        MethodConfig methodConfig = ((MethodTreeNode) checkedTreeNode).getMethodConfig();
         checkedTreeNode.setName(methodConfig.getMethodPatternString() + methodConfig.parametersToString());
         model.nodeChanged(checkedTreeNode);
         ((ConfigCheckedTreeNode) path[path.length - 2]).setName(methodConfig.getClassPattern());
@@ -167,10 +207,10 @@ public class ConfigCheckboxTree extends CheckboxTree {
         }
     }
 
-    void initTree(@NotNull Collection<MethodConfig> including) {
+    void initTree(@NotNull Set<MethodConfig> methodConfigs) {
         root.removeAllChildren();
-        for (MethodConfig methodConfig : including) {
-            addMethodNode(methodConfig);
+        for (MethodConfig methodConfig : methodConfigs) {
+            addMethodNode(methodConfig, methodConfigs);
         }
         model.nodeStructureChanged(root);
         setNodesChecked(root);
@@ -193,9 +233,9 @@ public class ConfigCheckboxTree extends CheckboxTree {
     }
 
     private boolean hasAnyCheckedLeaf(@NotNull CheckedTreeNode node) {
-        if (node.isLeaf()) {
-            MethodConfig methodConfig = ((ConfigCheckedTreeNode) node).getMethodConfig();
-            return methodConfig != null && methodConfig.isEnabled();
+        if (node instanceof MethodTreeNode) {
+            MethodConfig methodConfig = ((MethodTreeNode) node).getMethodConfig();
+            return methodConfig.isEnabled();
         }
         int childCount = node.getChildCount();
         for (int i = 0; i < childCount; i++) {
@@ -206,22 +246,13 @@ public class ConfigCheckboxTree extends CheckboxTree {
         return false;
     }
 
-    private void addMethodNode(MethodConfig methodConfig) {
-        ConfigCheckedTreeNode packageNode = createChildIfNotPresent(root, methodConfig.getPackagePattern(), null);
-        ConfigCheckedTreeNode classNode = createChildIfNotPresent(packageNode, methodConfig.getClassPattern(), null);
+    private void addMethodNode(MethodConfig methodConfig, Set<MethodConfig> methodConfigs) {
+        ConfigCheckedTreeNode packageNode = createChildIfNotPresent(
+                root, methodConfigs, methodConfig, TreeNodeType.PACKAGE);
+        ConfigCheckedTreeNode classNode = createChildIfNotPresent(
+                packageNode, methodConfigs, methodConfig, TreeNodeType.CLASS);
         createChildIfNotPresent(classNode,
-                methodConfig.getMethodPatternString()
-                        + methodConfig.parametersToString(),
-                methodConfig);
-    }
-
-    @Nullable
-    public MethodConfig getSelectedConfig() {
-        ConfigCheckedTreeNode node = getSelectedNode();
-        if (node != null) {
-            return node.getMethodConfig();
-        }
-        return null;
+                methodConfigs, methodConfig, TreeNodeType.METHOD);
     }
 
     @Nullable
@@ -234,27 +265,39 @@ public class ConfigCheckboxTree extends CheckboxTree {
         return (ConfigCheckedTreeNode) path[path.length - 1];
     }
 
-    public void addNode(MethodConfig methodConfig) {
-        addMethodNode(methodConfig);
+    public void addNode(MethodConfig methodConfig, @NotNull Set<MethodConfig> methodConfigs) {
+        addMethodNode(methodConfig, methodConfigs);
         TreeUtil.expandAll(this);
     }
 
     public void removeNode(@NotNull ConfigCheckedTreeNode treeNode) {
-        CheckedTreeNode classNode = ((CheckedTreeNode) treeNode.getParent());
-        CheckedTreeNode packageNode = ((CheckedTreeNode) classNode.getParent());
-        if (packageNode.getChildCount() == 1 && classNode.getChildCount() == 1) {
-            int index = root.getIndex(packageNode);
-            if (index != -1) {
-                root.remove(index);
-            }
-        } else if (classNode.getChildCount() == 1) {
-            packageNode.remove(packageNode.getIndex(classNode));
-        } else {
-            classNode.remove(classNode.getIndex(treeNode));
+        CheckedTreeNode parent = (CheckedTreeNode) treeNode.getParent();
+        removeChild(treeNode);
+        while (parent != root && parent.getChildCount() == 0) {
+            CheckedTreeNode tempParent = ((CheckedTreeNode) parent.getParent());
+            removeChild(parent);
+            parent = tempParent;
         }
         model.nodeStructureChanged(root);
         methodFormManager.showChooseConfig();
         TreeUtil.expandAll(this);
+    }
+
+    private void removeChild(@NotNull CheckedTreeNode child) {
+        CheckedTreeNode parent = ((CheckedTreeNode) child.getParent());
+        int index = parent.getIndex(child);
+        if (index != -1) {
+            parent.remove(index);
+        }
+    }
+
+    @Nullable
+    public MethodConfig getSelectedConfig() {
+        ConfigCheckedTreeNode node = getSelectedNode();
+        if (!(node instanceof MethodTreeNode)) {
+            return null;
+        }
+        return ((MethodTreeNode) node).getMethodConfig();
     }
 
     public enum TreeType {

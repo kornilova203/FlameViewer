@@ -1,41 +1,24 @@
 package com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.add_remove;
 
-import com.github.kornilova_l.flamegraph.configuration.Configuration;
-import com.github.kornilova_l.flamegraph.configuration.MethodConfig;
 import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.ConfigCheckboxTree;
-import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.ConfigCheckedTreeNode;
+import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.tree_nodes.ConfigCheckedTreeNode;
 import com.intellij.ui.AnActionButton;
 import com.intellij.ui.AnActionButtonRunnable;
 import com.intellij.util.ui.tree.TreeUtil;
 
 public class RemoveNodeActionButton implements AnActionButtonRunnable {
     private ConfigCheckboxTree tree;
-    private Configuration tempConfiguration;
 
-    public RemoveNodeActionButton(ConfigCheckboxTree tree, Configuration tempConfiguration) {
+    public RemoveNodeActionButton(ConfigCheckboxTree tree) {
         this.tree = tree;
-        this.tempConfiguration = tempConfiguration;
     }
 
     @Override
     public void run(AnActionButton anActionButton) {
-        MethodConfig methodConfig = tree.getSelectedConfig();
-        if (methodConfig == null) {
-            return;
-        }
-        switch (tree.treeType) {
-            case EXCLUDING:
-                tempConfiguration.maybeRemoveExactExcludingConfig(methodConfig);
-                break;
-            case INCLUDING:
-                tempConfiguration.maybeRemoveExactIncludingConfig(methodConfig);
-                break;
-            default:
-                throw new RuntimeException("Not known tree type");
-        }
-        ConfigCheckedTreeNode node = tree.getSelectedNode();
-        if (node != null) {
-            tree.removeNode(node);
+        ConfigCheckedTreeNode selectedNode = tree.getSelectedNode();
+        if (selectedNode != null) {
+            selectedNode.removeItselfFromConfigsSet();
+            tree.removeNode(selectedNode);
             TreeUtil.expandAll(tree);
         }
     }

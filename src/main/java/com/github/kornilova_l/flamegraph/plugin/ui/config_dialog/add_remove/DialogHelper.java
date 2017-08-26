@@ -14,6 +14,7 @@ import java.awt.*;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 
 public class DialogHelper {
@@ -34,17 +35,20 @@ public class DialogHelper {
                 true,
                 saveRetVal
         );
+        Set<MethodConfig> methodConfigs;
         switch (tree.treeType) {
             case INCLUDING:
                 tempConfig.addMethodConfig(methodConfig, false);
+                methodConfigs = tempConfig.getIncludingMethodConfigs();
                 break;
             case EXCLUDING:
                 tempConfig.addMethodConfig(methodConfig, true);
+                methodConfigs = tempConfig.getExcludingMethodConfigs();
                 break;
             default:
                 throw new RuntimeException("Not known tree type");
         }
-        tree.addNode(methodConfig);
+        tree.addNode(methodConfig, methodConfigs);
     }
 
 

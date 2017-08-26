@@ -1,7 +1,7 @@
 package com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.method_form;
 
 import com.github.kornilova_l.flamegraph.configuration.MethodConfig;
-import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.ConfigCheckedTreeNode;
+import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.tree_nodes.ConfigCheckedTreeNode;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.event.DocumentEvent;
