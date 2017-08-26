@@ -2,15 +2,14 @@ package com.github.kornilova_l.flamegraph.configuration;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 public class Configuration implements Cloneable {
-    private Set<MethodConfig> includingMethodConfigs;
-    private Set<MethodConfig> excludingMethodConfigs;
+    private List<MethodConfig> includingMethodConfigs;
+    private List<MethodConfig> excludingMethodConfigs;
 
     public Configuration() {
-        this(new TreeSet<>(), new TreeSet<>());
+        this(new ArrayList<>(), new ArrayList<>());
     }
 
     /**
@@ -19,25 +18,25 @@ public class Configuration implements Cloneable {
      * @param configuration configuration to copy
      */
     public Configuration(Configuration configuration) {
-        includingMethodConfigs = new TreeSet<>();
+        includingMethodConfigs = new ArrayList<>();
         for (MethodConfig includingMethodConfig : configuration.includingMethodConfigs) {
             includingMethodConfigs.add(new MethodConfig(includingMethodConfig));
         }
-        excludingMethodConfigs = new TreeSet<>();
+        excludingMethodConfigs = new ArrayList<>();
         for (MethodConfig excludingMethodConfig : configuration.excludingMethodConfigs) {
             excludingMethodConfigs.add(new MethodConfig(excludingMethodConfig));
         }
     }
 
-    private Configuration(Set<MethodConfig> includingMethodConfigs, Set<MethodConfig> excludingMethodConfigs) {
+    private Configuration(List<MethodConfig> includingMethodConfigs, List<MethodConfig> excludingMethodConfigs) {
         this.includingMethodConfigs = includingMethodConfigs;
         this.excludingMethodConfigs = excludingMethodConfigs;
     }
 
     @NotNull
-    private static Set<MethodConfig> getApplicableMethodConfigs(@NotNull Set<MethodConfig> methodConfigs,
-                                                                @NotNull MethodConfig testedConfig) {
-        Set<MethodConfig> applicableMethodConfigs = new TreeSet<>();
+    private static List<MethodConfig> getApplicableMethodConfigs(@NotNull List<MethodConfig> methodConfigs,
+                                                                 @NotNull MethodConfig testedConfig) {
+        List<MethodConfig> applicableMethodConfigs = new ArrayList<>();
         for (MethodConfig methodConfig : methodConfigs) {
             if (methodConfig.isApplicableTo(testedConfig)) {
                 applicableMethodConfigs.add(methodConfig);
@@ -46,19 +45,19 @@ public class Configuration implements Cloneable {
         return applicableMethodConfigs;
     }
 
-    public Set<MethodConfig> getIncludingMethodConfigs() {
+    public List<MethodConfig> getIncludingMethodConfigs() {
         return includingMethodConfigs;
     }
 
-    public void setIncludingMethodConfigs(Set<MethodConfig> includingMethodConfigs) {
+    public void setIncludingMethodConfigs(List<MethodConfig> includingMethodConfigs) {
         this.includingMethodConfigs = includingMethodConfigs;
     }
 
-    public Set<MethodConfig> getExcludingMethodConfigs() {
+    public List<MethodConfig> getExcludingMethodConfigs() {
         return excludingMethodConfigs;
     }
 
-    public void setExcludingMethodConfigs(Set<MethodConfig> excludingMethodConfigs) {
+    public void setExcludingMethodConfigs(List<MethodConfig> excludingMethodConfigs) {
         this.excludingMethodConfigs = excludingMethodConfigs;
     }
 
@@ -119,12 +118,12 @@ public class Configuration implements Cloneable {
     }
 
     @NotNull
-    public Set<MethodConfig> getIncludingConfigs(@NotNull MethodConfig methodConfig) {
+    public List<MethodConfig> getIncludingConfigs(@NotNull MethodConfig methodConfig) {
         return getApplicableMethodConfigs(includingMethodConfigs, methodConfig);
     }
 
     @NotNull
-    public Set<MethodConfig> getExcludingConfigs(@NotNull MethodConfig methodConfig) {
+    public List<MethodConfig> getExcludingConfigs(@NotNull MethodConfig methodConfig) {
         return getApplicableMethodConfigs(excludingMethodConfigs, methodConfig);
     }
 
@@ -138,6 +137,7 @@ public class Configuration implements Cloneable {
      * @param tempConfiguration configuration from where links will be copied
      */
     public void assign(Configuration tempConfiguration) {
+        tempConfiguration.removeDuplicates();
         for (MethodConfig includingMethodConfig : tempConfiguration.includingMethodConfigs) {
             includingMethodConfig.removeEmptyParams();
             includingMethodConfig.clearPatterns();
@@ -148,5 +148,34 @@ public class Configuration implements Cloneable {
             excludingMethodConfig.clearPatterns();
         }
         excludingMethodConfigs = tempConfiguration.excludingMethodConfigs;
+    }
+
+    private void removeDuplicates() {
+        Set<MethodConfig> temp = new HashSet<>();
+        for (MethodConfig includingMethodConfig : includingMethodConfigs) {
+            if (!hasDuplicate(temp, includingMethodConfig)) {
+                temp.add(new MethodConfig(includingMethodConfig));
+            }
+        }
+        includingMethodConfigs = new ArrayList<>();
+        includingMethodConfigs.addAll(temp);
+        temp = new HashSet<>();
+        for (MethodConfig excludingMethodConfig : excludingMethodConfigs) {
+            if (!hasDuplicate(temp, excludingMethodConfig)) {
+                temp.add(new MethodConfig(excludingMethodConfig));
+            }
+        }
+        excludingMethodConfigs = new ArrayList<>();
+        excludingMethodConfigs.addAll(temp);
+    }
+
+    private boolean hasDuplicate(Set<MethodConfig> temp, MethodConfig methodConfig) {
+        boolean hasDuplicate = false;
+        for (MethodConfig tempConfig : temp) {
+            if (Objects.equals(tempConfig.toString(), methodConfig.toString())) {
+                hasDuplicate = true;
+            }
+        }
+        return hasDuplicate;
     }
 }

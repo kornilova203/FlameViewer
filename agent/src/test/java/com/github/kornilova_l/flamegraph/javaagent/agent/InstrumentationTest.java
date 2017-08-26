@@ -14,20 +14,19 @@ import java.lang.instrument.Instrumentation;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 import static com.github.kornilova_l.flamegraph.javaagent.TestHelper.removePackage;
 
 
 public class InstrumentationTest {
     private static AgentConfigurationManager configurationManager;
-    private static Set<MethodConfig> methodConfigs = new HashSet<>();
+    private static List<MethodConfig> methodConfigs = new HashSet<>();
     private static AgentConfigurationManager configurationManagerSaveParams;
-    private static Set<MethodConfig> methodConfigsSaveParams = new HashSet<>();
+    private static List<MethodConfig> methodConfigsSaveParams = new HashSet<>();
     private static AgentConfigurationManager configurationManagerSaveSecondParam;
-    private static Set<MethodConfig> methodConfigsSaveSecondParam = new HashSet<>();
+    private static List<MethodConfig> methodConfigsSaveSecondParam = new HashSet<>();
     private static AgentConfigurationManager configurationManagerSaveReturn;
-    private static Set<MethodConfig> methodConfigsSaveReturn = new HashSet<>();
+    private static List<MethodConfig> methodConfigsSaveReturn = new HashSet<>();
 
     @BeforeClass
     public static void setup() {
@@ -38,7 +37,7 @@ public class InstrumentationTest {
     }
 
     private static AgentConfigurationManager createConfig(String config,
-                                                          Set<MethodConfig> methodConfigs) {
+                                                          List<MethodConfig> methodConfigs) {
         TestHelper.createDir("actual");
         List<String> methodConfigsStrings = new LinkedList<>();
         methodConfigsStrings.add(config);
@@ -85,7 +84,7 @@ public class InstrumentationTest {
 
     private void classTest(Class testedClass,
                            AgentConfigurationManager configurationManager,
-                           Set<MethodConfig> methodConfigs,
+                           List<MethodConfig> methodConfigs,
                            boolean hasSystemCL) {
         try {
             String fullName = testedClass.getName();

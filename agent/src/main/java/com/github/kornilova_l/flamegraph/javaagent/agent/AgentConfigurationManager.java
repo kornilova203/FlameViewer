@@ -4,7 +4,10 @@ import com.github.kornilova_l.flamegraph.configuration.Configuration;
 import com.github.kornilova_l.flamegraph.configuration.MethodConfig;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
 
 import static com.github.kornilova_l.flamegraph.configuration.MethodConfig.jvmTypeToParam;
 import static com.github.kornilova_l.flamegraph.configuration.MethodConfig.splitDesc;
@@ -68,9 +71,9 @@ class AgentConfigurationManager {
     }
 
     @NotNull
-    static Set<MethodConfig> findIncludingConfigs(Set<MethodConfig> includingConfigs,
-                                                  @NotNull MethodConfig methodConfig) {
-        Set<MethodConfig> finalConfigs = new TreeSet<>();
+    static List<MethodConfig> findIncludingConfigs(List<MethodConfig> includingConfigs,
+                                                   @NotNull MethodConfig methodConfig) {
+        List<MethodConfig> finalConfigs = new ArrayList<>();
         for (MethodConfig includingConfig : includingConfigs) {
             if (includingConfig.isApplicableTo(methodConfig)) {
                 finalConfigs.add(includingConfig);
@@ -80,7 +83,7 @@ class AgentConfigurationManager {
     }
 
     static void setSaveParameters(@NotNull MethodConfig trueMethodConfig,
-                                  @NotNull Set<MethodConfig> methodConfigs) {
+                                  @NotNull List<MethodConfig> methodConfigs) {
         for (MethodConfig methodConfig : methodConfigs) {
             mergeSavingParameters(trueMethodConfig.getParameters(), methodConfig.getParameters());
             if (methodConfig.isSaveReturnValue()) {
@@ -112,9 +115,9 @@ class AgentConfigurationManager {
     }
 
     @NotNull
-    Set<MethodConfig> findIncludingConfigs(String className) {
+    List<MethodConfig> findIncludingConfigs(String className) {
         className = className.replace('/', '.');
-        Set<MethodConfig> applicableMethodConfigs = new TreeSet<>();
+        List<MethodConfig> applicableMethodConfigs = new ArrayList<>();
         for (MethodConfig methodConfig : configuration.getIncludingMethodConfigs()) {
             if (methodConfig.isApplicableTo(className)) {
                 applicableMethodConfigs.add(methodConfig);

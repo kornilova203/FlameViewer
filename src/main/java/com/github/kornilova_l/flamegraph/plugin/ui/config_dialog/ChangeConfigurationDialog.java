@@ -3,13 +3,15 @@ package com.github.kornilova_l.flamegraph.plugin.ui.config_dialog;
 import com.github.kornilova_l.flamegraph.configuration.Configuration;
 import com.github.kornilova_l.flamegraph.configuration.MethodConfig;
 import com.github.kornilova_l.flamegraph.plugin.configuration.PluginConfigManager;
-import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.add_remove.AddNodeActionButton;
-import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.add_remove.RemoveNodeActionButton;
+import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.decorator_actions.AddNodeActionButton;
+import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.decorator_actions.CopyAction;
+import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.decorator_actions.RemoveNodeActionButton;
 import com.github.kornilova_l.flamegraph.plugin.ui.line_markers.LineMarkersHolder;
 import com.intellij.openapi.actionSystem.ActionToolbarPosition;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.ValidationInfo;
+import com.intellij.ui.AnActionButton;
 import com.intellij.ui.ToolbarDecorator;
 import com.intellij.uiDesigner.core.GridConstraints;
 import org.jetbrains.annotations.NotNull;
@@ -18,7 +20,6 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 public class ChangeConfigurationDialog extends DialogWrapper {
     @NotNull
@@ -82,11 +83,12 @@ public class ChangeConfigurationDialog extends DialogWrapper {
     }
 
     private JComponent createCheckboxTreeView(ConfigCheckboxTree tree,
-                                              Set<MethodConfig> configs) {
+                                              List<MethodConfig> configs) {
         ToolbarDecorator decorator = ToolbarDecorator.createDecorator(tree);
         decorator.setToolbarPosition(ActionToolbarPosition.RIGHT);
         decorator.setAddAction(new AddNodeActionButton(tree, tempConfiguration, project));
         decorator.setRemoveAction(new RemoveNodeActionButton(tree));
+        decorator.addExtraAction(AnActionButton.fromAction(new CopyAction(tree)));
         JPanel panel = decorator.createPanel();
         tree.initTree(configs);
         initValidation();

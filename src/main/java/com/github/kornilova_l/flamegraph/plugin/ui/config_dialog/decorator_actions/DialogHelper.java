@@ -1,4 +1,4 @@
-package com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.add_remove;
+package com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.decorator_actions;
 
 import com.github.kornilova_l.flamegraph.configuration.Configuration;
 import com.github.kornilova_l.flamegraph.configuration.MethodConfig;
@@ -14,7 +14,6 @@ import java.awt.*;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 
 public class DialogHelper {
@@ -35,7 +34,7 @@ public class DialogHelper {
                 true,
                 saveRetVal
         );
-        Set<MethodConfig> methodConfigs;
+        List<MethodConfig> methodConfigs;
         switch (tree.treeType) {
             case INCLUDING:
                 tempConfig.addMethodConfig(methodConfig, false);

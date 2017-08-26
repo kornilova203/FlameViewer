@@ -6,7 +6,6 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.TreeSet;
 
 import static org.junit.Assert.*;
@@ -29,7 +28,7 @@ public class AgentConfigurationManagerTest {
 
     @Test
     public void findIncludingConfigsForClass() throws Exception {
-        Set<MethodConfig> config = new TreeSet<>();
+        List<MethodConfig> config = new TreeSet<>();
         config.add(new MethodConfig("samples.*", "main", "(*)"));
         config.add(new MethodConfig(
                 "samples.CheckIncomingCalls",
@@ -145,7 +144,7 @@ public class AgentConfigurationManagerTest {
 
     @Test
     public void findIncludingConfigsForMethod() throws Exception {
-        Set<MethodConfig> config = new TreeSet<>();
+        List<MethodConfig> config = new TreeSet<>();
         config.add(new MethodConfig(
                 "samples.CheckIncomingCalls",
                 "fun2",
@@ -169,7 +168,7 @@ public class AgentConfigurationManagerTest {
                 "samples.MyClass",
                 "fun",
                 "(int, MyClass$MyInnerClass, long, String, boolean)");
-        Set<MethodConfig> config = new TreeSet<>();
+        List<MethodConfig> config = new TreeSet<>();
         config.add(new MethodConfig(
                 "samples.*",
                 "*",

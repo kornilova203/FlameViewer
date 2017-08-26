@@ -7,7 +7,6 @@ import org.objectweb.asm.ClassWriter;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.security.ProtectionDomain;
-import java.util.Set;
 
 class ProfilingClassFileTransformer implements ClassFileTransformer {
 
@@ -38,7 +37,7 @@ class ProfilingClassFileTransformer implements ClassFileTransformer {
             return classfileBuffer;
         }
         if (!className.startsWith("com/github/kornilova_l")) {
-            Set<MethodConfig> methodConfigs = configurationManager.findIncludingConfigs(className);
+            List<MethodConfig> methodConfigs = configurationManager.findIncludingConfigs(className);
             if (methodConfigs.size() != 0) {
                 ClassReader cr = new ClassReader(classfileBuffer);
                 ClassWriter cw = new ClassWriter(cr, ClassWriter.COMPUTE_FRAMES);

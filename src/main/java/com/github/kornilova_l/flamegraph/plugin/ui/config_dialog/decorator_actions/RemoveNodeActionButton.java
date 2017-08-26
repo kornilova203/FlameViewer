@@ -1,4 +1,4 @@
-package com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.add_remove;
+package com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.decorator_actions;
 
 import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.ConfigCheckboxTree;
 import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.tree_nodes.ConfigCheckedTreeNode;

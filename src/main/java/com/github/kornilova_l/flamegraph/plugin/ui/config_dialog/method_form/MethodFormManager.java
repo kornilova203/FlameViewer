@@ -4,7 +4,7 @@ import com.github.kornilova_l.flamegraph.configuration.MethodConfig;
 import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.ConfigCheckboxTree;
 import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.ConfigurationForm;
 import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.ExcludedMethodForm;
-import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.add_remove.DialogHelper;
+import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.decorator_actions.DialogHelper;
 import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.tree_nodes.ConfigCheckedTreeNode;
 import com.intellij.openapi.ui.ValidationInfo;
 import org.jetbrains.annotations.NotNull;
@@ -23,7 +23,7 @@ public class MethodFormManager {
     private final JPanel cardPanel;
     @NotNull
     private final ExcludedMethodForm excludedMethodForm;
-    private final Set<MethodConfig> methodConfigs;
+    private final List<MethodConfig> methodConfigs;
     @Nullable
     private JCheckBox saveReturnValueCheckBox;
     private ConfigCheckboxTree tree;
@@ -39,7 +39,7 @@ public class MethodFormManager {
     public MethodFormManager(JPanel cardPanel,
                              @NotNull ExcludedMethodForm excludedMethodForm,
                              @Nullable JCheckBox saveReturnValueCheckBox,
-                             Set<MethodConfig> methodConfigs,
+                             List<MethodConfig> methodConfigs,
                              ConfigCheckboxTree tree) {
         this.cardPanel = cardPanel;
         this.excludedMethodForm = excludedMethodForm;

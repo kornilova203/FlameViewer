@@ -4,14 +4,14 @@ import com.github.kornilova_l.flamegraph.configuration.MethodConfig;
 import com.intellij.ui.CheckedTreeNode;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Set;
+import java.util.List;
 
 public abstract class ConfigCheckedTreeNode extends CheckedTreeNode {
     String name;
     @NotNull
-    final Set<MethodConfig> methodConfigs;
+    final List<MethodConfig> methodConfigs;
 
-    ConfigCheckedTreeNode(@NotNull String name, @NotNull Set<MethodConfig> methodConfigs) {
+    ConfigCheckedTreeNode(@NotNull String name, @NotNull List<MethodConfig> methodConfigs) {
         super(name);
         this.name = name;
         this.methodConfigs = methodConfigs;
