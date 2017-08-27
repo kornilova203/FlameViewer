@@ -23,6 +23,9 @@ class AccumulativeTreeDrawer {
         this.zoomedStage = null;
         this.header = null;
         this.baseNode = this.tree.getBaseNode();
+        this.packageList = {}; // map package name to color
+        this._buildPackageListRecursively(this.baseNode);
+        this._setPackageColorsRecursively();
         this.baseNode.depth = 0;
         this.$popup = null;
         this.$popupTable = null;
@@ -594,12 +597,59 @@ class AccumulativeTreeDrawer {
     }
 
     _setOriginalColorRecursively(node) {
-        const lightness = 50;
-        node.originalColor = `hsl(205, 94%, ${lightness}%)`;
+        const coefficient = this.packageList[AccumulativeTreeDrawer._getPackageName(node)];
+        const h = 195 + coefficient * 40;
+        const l = 50 + 10 * coefficient;
+        node.originalColor = `hsl(${h}, 94%, ${l}%)`;
         const children = node.getNodesList();
         for (let i = 0; i < children.length; i++) {
             this._setOriginalColorRecursively(children[i]);
         }
+    }
 
+    _buildPackageListRecursively(node) {
+        const children = node.getNodesList();
+        for (let i = 0; i < children.length; i++) {
+            const child = children[i];
+            this._addPackage(AccumulativeTreeDrawer._getPackageName(child));
+            this._buildPackageListRecursively(child);
+        }
+    }
+
+    /**
+     * @param {String} packageName
+     * @private
+     */
+    _addPackage(packageName) {
+        if (this.packageList[packageName] === undefined) {
+            this.packageList[packageName] = 0;
+        }
+    }
+
+    _setPackageColorsRecursively() {
+        const packages = Object.keys(this.packageList);
+        packages.sort();
+        const step = 1 / packages.length;
+        for (let i = 0; i < packages.length; i++) {
+            this.packageList[packages[i]] = i * step;
+        }
+    }
+
+    /**
+     * @param node
+     * @return {String}
+     * @private
+     */
+    static _getPackageName(node) {
+        if (node.getNodeInfo() === undefined) {
+            return "";
+        }
+        const className = node.getNodeInfo().getClassName();
+        const lastDot = className.lastIndexOf(".");
+        if (lastDot !== -1) {
+            return className.substring(0, lastDot);
+        } else {
+            return ""
+        }
     }
 }

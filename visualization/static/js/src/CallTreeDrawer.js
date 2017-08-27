@@ -101,10 +101,11 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
      * @override
      */
     _setPopupPosition(offsetX, depth) {
+        const callTreeWrapper = $(".call-tree-wrapper");
         //noinspection JSValidateTypes
-        if (offsetX < $(".call-tree-wrapper").scrollLeft()) {
+        if (offsetX < callTreeWrapper.scrollLeft()) {
             //noinspection JSValidateTypes
-            offsetX = $(".call-tree-wrapper").scrollLeft();
+            offsetX = callTreeWrapper.scrollLeft();
         } else {
             offsetX += 30;
         }
