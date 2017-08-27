@@ -331,6 +331,30 @@ public class ConfigCheckboxTree extends CheckboxTree {
         setSelectionPath(new TreePath(newNode.getPath()));
     }
 
+    public void setSelected(MethodConfig methodConfig) {
+        MethodTreeNode node = findNodeRecursively(root, methodConfig);
+        if (node == null) {
+            return;
+        }
+        setSelectionPath(new TreePath(node.getPath()));
+    }
+
+    private MethodTreeNode findNodeRecursively(@NotNull CheckedTreeNode node, MethodConfig methodConfig) {
+        int len = node.getChildCount();
+        if (node instanceof MethodTreeNode) {
+            if (Objects.equals(((MethodTreeNode) node).getMethodConfig().toString(), methodConfig.toString())) {
+                return ((MethodTreeNode) node);
+            }
+        }
+        for (int i = 0; i < len; i++) {
+            MethodTreeNode res = findNodeRecursively((CheckedTreeNode) node.getChildAt(i), methodConfig);
+            if (res != null) {
+                return res;
+            }
+        }
+        return null;
+    }
+
     public enum TreeType {
         INCLUDING,
         EXCLUDING

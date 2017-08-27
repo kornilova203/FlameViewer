@@ -33,7 +33,7 @@ public class ChangeConfigurationDialog extends DialogWrapper {
     private ConfigCheckboxTree includedTree;
     private ConfigCheckboxTree excludedTree;
 
-    ChangeConfigurationDialog(@NotNull Project project) {
+    public ChangeConfigurationDialog(@NotNull Project project) {
         super(project);
         this.project = project;
 

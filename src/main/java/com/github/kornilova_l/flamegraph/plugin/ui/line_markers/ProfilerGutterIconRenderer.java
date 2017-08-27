@@ -1,6 +1,7 @@
 package com.github.kornilova_l.flamegraph.plugin.ui.line_markers;
 
 import com.github.kornilova_l.flamegraph.configuration.MethodConfig;
+import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.ChangeConfigurationDialog;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.actionSystem.impl.SimpleDataContext;
 import com.intellij.openapi.editor.markup.GutterIconRenderer;
@@ -28,7 +29,11 @@ public class ProfilerGutterIconRenderer extends GutterIconRenderer {
             actionGroup.add(new AnAction() {
                 @Override
                 public void actionPerformed(AnActionEvent e) {
-
+                    if (e.getProject() != null) {
+                        ChangeConfigurationDialog dialog = new ChangeConfigurationDialog(e.getProject());
+                        dialog.show();
+                        dialog.getIncludedTree().setSelected(includingMethodConfig);
+                    }
                 }
 
                 @Override
