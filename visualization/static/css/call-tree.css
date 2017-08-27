@@ -152,3 +152,11 @@ canvas {
     cursor: pointer;
     opacity: 0.9;
 }
+
+.return-value {
+    max-width: 300px;
+    text-overflow: ellipsis;
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+}

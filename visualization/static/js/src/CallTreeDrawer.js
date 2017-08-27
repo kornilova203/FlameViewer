@@ -58,10 +58,7 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
      * @param {Array} parameters
      */
     static getValueForParameter(index, parameters) {
-        console.log("wanted index " + index);
         for (let i = 0; i < parameters.length; i++) {
-            console.log("index: " + parameters[i].getIndex());
-            console.log("value: " + parameters[i].getVar().getValueCase());
             if (parameters[i].getIndex() === index) {
                 return CallTreeDrawer.getParameterVal(parameters[i])
             }
@@ -156,5 +153,48 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
         const popupContent = templates.tree.callTreePopup().content;
         this.$popup = $(popupContent).appendTo(this.$section);
         this.$popupTable = this.$popup.find("table");
+    }
+
+    _setPopupReturnValue(node) {
+        const returnValueType = this.$popup.find(".return-value-type");
+        const returnValue = this.$popup.find(".return-value");
+        returnValueType.text("");
+        returnValue.text("");
+        switch (node.getNodeInfo().getResultCase()) {
+            case 5: // return value
+                returnValueType.text("Return value:");
+                let value = CallTreeDrawer._getType(node.getNodeInfo().getReturnValue());
+                console.log(value);
+                if (value !== undefined) {
+                    returnValue.text(value);
+                }
+                break;
+            case 6: // exception
+                returnValueType.text("Exception:");
+                returnValue.text(node.getNodeInfo().getException().getType() + ": " + node.getNodeInfo().getException().getValue())
+        }
+    }
+
+    static _getType(returnValue) {
+        switch (returnValue.getValueCase()) {
+            case 1: // int
+                return "int: " + returnValue.getI();
+            case 2: // long
+                return "long: " + returnValue.getJ();
+            case 3: // boolean
+                return "boolean: " + returnValue.getZ();
+            case 4: // char
+                return "char: " + returnValue.getC();
+            case 5: // short
+                return "short: " + returnValue.getS();
+            case 6: // byte
+                return "byte: " + returnValue.getB();
+            case 7: // float
+                return "float: " + returnValue.getF();
+            case 8: // double
+                return "double: " + returnValue.getD();
+            case 9: // object
+                return returnValue.getObject().getType() + ": " + returnValue.getObject().getValue();
+        }
     }
 }

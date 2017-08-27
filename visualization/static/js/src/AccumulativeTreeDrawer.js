@@ -467,6 +467,7 @@ class AccumulativeTreeDrawer {
             `isStatic=${node.getNodeInfo().getIsStatic() === true ? "true" : "false"}`
         );
         this._setPopupTable(node);
+        this._setPopupReturnValue(node);
     }
 
     /**
@@ -630,6 +631,10 @@ class AccumulativeTreeDrawer {
         const packages = Object.keys(this.packageList);
         packages.sort();
         const step = 1 / packages.length;
+        if (packages.length === 1) {
+            this.packageList[packages[0]] = 0.5;
+            return;
+        }
         for (let i = 0; i < packages.length; i++) {
             this.packageList[packages[i]] = i * step;
         }
@@ -651,5 +656,9 @@ class AccumulativeTreeDrawer {
         } else {
             return ""
         }
+    }
+
+    _setPopupReturnValue(node) {
+
     }
 }
