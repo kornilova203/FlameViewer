@@ -6,6 +6,8 @@ import com.github.kornilova_l.flamegraph.plugin.configuration.PluginConfigManage
 import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.decorator_actions.AddNodeActionButton;
 import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.decorator_actions.CopyAction;
 import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.decorator_actions.RemoveNodeActionButton;
+import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.export_import.ExportAction;
+import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.export_import.ImportAction;
 import com.github.kornilova_l.flamegraph.plugin.ui.line_markers.LineMarkersHolder;
 import com.intellij.openapi.actionSystem.ActionToolbarPosition;
 import com.intellij.openapi.project.Project;
@@ -18,6 +20,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -37,6 +41,28 @@ public class ChangeConfigurationDialog extends DialogWrapper {
         setModal(false);
         init();
         setOKButtonText("Done");
+    }
+
+    @NotNull
+    @Override
+    protected Action[] createActions() {
+        List<Action> actionList = new ArrayList<>();
+        actionList.add(new ExportAction(tempConfiguration));
+        actionList.add(new ImportAction(tempConfiguration, this));
+        Collections.addAll(actionList, super.createActions());
+        Action[] actions = new Action[actionList.size()];
+        for (int i = 0; i < actionList.size(); i++) {
+            actions[i] = actionList.get(i);
+        }
+        return actions;
+    }
+
+    public ConfigCheckboxTree getIncludedTree() {
+        return includedTree;
+    }
+
+    public ConfigCheckboxTree getExcludedTree() {
+        return excludedTree;
     }
 
     @Nullable

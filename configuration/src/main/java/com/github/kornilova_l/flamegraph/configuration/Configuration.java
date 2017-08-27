@@ -2,11 +2,17 @@ package com.github.kornilova_l.flamegraph.configuration;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.*;
+import java.util.regex.Pattern;
 
 public class Configuration implements Cloneable {
     private List<MethodConfig> includingMethodConfigs;
     private List<MethodConfig> excludingMethodConfigs;
+    private static final Pattern linePattern = Pattern.compile("!?[\\w.$<>]+\\((\\w|\\[]|\\$|\\.|\\+?, |\\+(?=\\)))*\\)\\+?");
 
     public Configuration() {
         this(new ArrayList<>(), new ArrayList<>());
@@ -31,6 +37,43 @@ public class Configuration implements Cloneable {
     private Configuration(List<MethodConfig> includingMethodConfigs, List<MethodConfig> excludingMethodConfigs) {
         this.includingMethodConfigs = includingMethodConfigs;
         this.excludingMethodConfigs = excludingMethodConfigs;
+    }
+
+    public Configuration(List<String> methodConfigLines) {
+        this(new ArrayList<>(), new ArrayList<>());
+        for (String methodConfigLine : methodConfigLines) {
+            addLine(methodConfigLine);
+        }
+    }
+
+    private void addLine(String methodConfigLine) {
+        boolean isExcluding = methodConfigLine.charAt(0) == '!';
+        if (isExcluding) {
+            methodConfigLine = methodConfigLine.substring(1, methodConfigLine.length());
+        }
+        addMethodConfig(methodConfigLine, isExcluding);
+    }
+
+    public Configuration(InputStream inputStream) {
+        this(new ArrayList<>(), new ArrayList<>());
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+            reader.lines()
+                    .filter(line -> !Objects.equals(line, ""))
+                    .forEach(this::addLine);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static boolean isValid(InputStream inputStream) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+            return reader.lines()
+                    .filter(line -> !Objects.equals(line, ""))
+                    .allMatch(line -> linePattern.matcher(line).matches());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     @NotNull
@@ -172,7 +215,8 @@ public class Configuration implements Cloneable {
     private boolean hasDuplicate(Set<MethodConfig> temp, MethodConfig methodConfig) {
         boolean hasDuplicate = false;
         for (MethodConfig tempConfig : temp) {
-            if (Objects.equals(tempConfig.toString(), methodConfig.toString())) {
+            if (Objects.equals(tempConfig.getQualifiedName() + tempConfig.parametersToString(),
+                    methodConfig.getQualifiedName() + methodConfig.parametersToString())) {
                 hasDuplicate = true;
             }
         }

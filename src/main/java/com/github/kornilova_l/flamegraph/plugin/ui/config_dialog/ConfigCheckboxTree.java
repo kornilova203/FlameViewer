@@ -111,10 +111,10 @@ public class ConfigCheckboxTree extends CheckboxTree {
     }
 
     @NotNull
-    private ConfigCheckedTreeNode inserNode(CheckedTreeNode parent,
-                                            @NotNull List<MethodConfig> methodConfigs,
-                                            @NotNull MethodConfig methodConfig,
-                                            TreeNodeType nodeType) {
+    private ConfigCheckedTreeNode insertNode(CheckedTreeNode parent,
+                                             @NotNull List<MethodConfig> methodConfigs,
+                                             @NotNull MethodConfig methodConfig,
+                                             TreeNodeType nodeType) {
         if (parent.getChildCount() == 0) {
             return appendNode(parent, methodConfig, nodeType, methodConfigs);
         }
@@ -231,7 +231,7 @@ public class ConfigCheckboxTree extends CheckboxTree {
         }
     }
 
-    void initTree(@NotNull List<MethodConfig> methodConfigs) {
+    public void initTree(@NotNull List<MethodConfig> methodConfigs) {
         root.removeAllChildren();
         for (MethodConfig methodConfig : methodConfigs) {
             addMethodNode(methodConfig, methodConfigs);
@@ -275,7 +275,7 @@ public class ConfigCheckboxTree extends CheckboxTree {
                 root, methodConfigs, methodConfig, TreeNodeType.PACKAGE);
         ConfigCheckedTreeNode classNode = createChildIfNotPresent(
                 packageNode, methodConfigs, methodConfig, TreeNodeType.CLASS);
-        return ((MethodTreeNode) inserNode(classNode, methodConfigs, methodConfig, TreeNodeType.METHOD));
+        return ((MethodTreeNode) insertNode(classNode, methodConfigs, methodConfig, TreeNodeType.METHOD));
     }
 
     @Nullable

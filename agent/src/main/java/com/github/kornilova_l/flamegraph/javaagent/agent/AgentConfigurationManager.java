@@ -13,16 +13,10 @@ import static com.github.kornilova_l.flamegraph.configuration.MethodConfig.jvmTy
 import static com.github.kornilova_l.flamegraph.configuration.MethodConfig.splitDesc;
 
 class AgentConfigurationManager {
-    private final Configuration configuration = new Configuration();
+    private final Configuration configuration;
 
     AgentConfigurationManager(List<String> methodConfigLines) {
-        for (String methodConfigLine : methodConfigLines) {
-            boolean isExcluding = methodConfigLine.charAt(0) == '!';
-            if (isExcluding) {
-                methodConfigLine = methodConfigLine.substring(1, methodConfigLine.length());
-            }
-            configuration.addMethodConfig(methodConfigLine, isExcluding);
-        }
+        configuration = new Configuration(methodConfigLines);
         System.out.println("Configuration:");
         System.out.println("Including methods: " + configuration.getIncludingMethodConfigs());
         System.out.println("Excluding methods: " + configuration.getExcludingMethodConfigs());

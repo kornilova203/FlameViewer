@@ -179,7 +179,7 @@ public class MethodConfig implements Comparable<MethodConfig>, Cloneable {
         return getQualifiedName() + parametersWithSaveToString() + (saveReturnValue ? "+" : "");
     }
 
-    private String getQualifiedName() {
+    String getQualifiedName() {
         return classPatternString + "." + methodPatternString;
     }
 
