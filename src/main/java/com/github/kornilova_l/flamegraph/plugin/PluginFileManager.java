@@ -11,7 +11,10 @@ import org.jetbrains.annotations.Nullable;
 import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.ZipException;
@@ -67,16 +70,6 @@ public class PluginFileManager {
         createDirIfNotExist(flamegraphFiles);
     }
 
-    @Nullable
-    public File getLogFile(QueryStringDecoder urlDecoder) {
-        String projectName = getParameter(urlDecoder, "project");
-        String fileName = getParameter(urlDecoder, "file");
-        if (projectName == null || fileName == null) {
-            return null;
-        }
-        return getLogFile(projectName, fileName);
-    }
-
     public static PluginFileManager getInstance() {
         if (pluginFileManager == null) {
             pluginFileManager = new PluginFileManager(PathManager.getSystemPath());
@@ -105,32 +98,48 @@ public class PluginFileManager {
         return maxFile.orElse(null);
     }
 
+    @Nullable
+    public File getLogFile(QueryStringDecoder urlDecoder) {
+        String projectName = getParameter(urlDecoder, "project");
+        String fileName = getParameter(urlDecoder, "file");
+        if (projectName == null || fileName == null) {
+            return null;
+        }
+        return getLogFile(projectName, fileName);
+    }
 
-    public File getLogFile(String projectName) {
+    public File getConfigurationFile(String projectName) {
         Path path = Paths.get(configDirPath.toString(), projectName + ".config");
         return new File(path.toString());
     }
 
+    public File createLogFile(String projectName, String configurationName) {
+        Path logDir = getLogDirPath(projectName);
+        Path logFile = Paths.get(logDir.toString(),
+                configurationName + "-" + new SimpleDateFormat("yyyy-MM-dd-HH:mm:ss").format(new Date()) + ".ser");
+        return new File(logFile.toString());
+    }
+
     @NotNull
-    public List<String> getFileNameList(@NotNull String projectName) {
+    public List<FileNameAndDate> getFileNameList(@NotNull String projectName) {
         File projectLogDir = new File(getLogDirPath(projectName).toString());
         if (!Objects.equals(projectName, UPLOADED_FILES)) {
             return getFileNameList(projectLogDir);
         }
-        List<String> fileNames = new ArrayList<>();
+        List<FileNameAndDate> fileNames = new ArrayList<>();
         fileNames.addAll(getFileNameList(new File(serFiles.toString())));
         fileNames.addAll(getFileNameList(new File(flamegraphFiles.toString())));
         return fileNames;
     }
 
     @NotNull
-    private List<String> getFileNameList(File projectLogDir) {
+    private List<FileNameAndDate> getFileNameList(File projectLogDir) {
         File[] files = projectLogDir.listFiles();
         if (files != null) {
             return Arrays.stream(files)
                     .filter(file -> !file.isDirectory())
                     .sorted((f1, f2) -> Long.compare(f2.lastModified(), f1.lastModified()))
-                    .map(File::getName)
+                    .map(FileNameAndDate::new)
                     .collect(Collectors.toList());
         }
         return new LinkedList<>();
@@ -153,7 +162,7 @@ public class PluginFileManager {
     }
 
     @NotNull
-    public Path getLogDirPath(@NotNull String projectName) {
+    private Path getLogDirPath(@NotNull String projectName) {
         Path path = Paths.get(logDirPath.toString(), projectName);
         createDirIfNotExist(path);
         return path;
@@ -270,5 +279,28 @@ public class PluginFileManager {
             e.printStackTrace();
         }
         return new byte[0];
+    }
+
+    static class FileNameAndDate {
+        private static final Pattern nameWithoutDate = Pattern.compile(".*(?=-\\d\\d\\d\\d-\\d\\d-\\d\\d-\\d\\d:\\d\\d:\\d\\d(.*)?)");
+        @SuppressWarnings("unused")
+        private final String name;
+        private final String fullName;
+        @SuppressWarnings("unused")
+        private final String date;
+        @SuppressWarnings("unused")
+        private final String id;
+
+        FileNameAndDate(@NotNull File file) {
+            this.fullName = file.getName();
+            this.id = this.fullName.replaceAll("\\.", "").replaceAll(":", "");
+            Matcher matcher = nameWithoutDate.matcher(this.fullName);
+            if (matcher.find()) {
+                this.name = matcher.group();
+            } else {
+                this.name = fullName;
+            }
+            this.date = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date(file.lastModified()));
+        }
     }
 }

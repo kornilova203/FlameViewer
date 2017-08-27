@@ -27,7 +27,7 @@ if (goog.DEBUG) {
 
 
 templates.tree.callTreePopup = function(opt_data, opt_ignored) {
-    return soydata.VERY_UNSAFE.ordainSanitizedHtml('<div class="popup"><a class="outgoing-link"><img src="img/outgoing.png"/></a><a class="incoming-link"><img src="img/incoming.png"/></a><h3></h3><p class="duration"></p><h4 class="parameters-header">Parameters:</h4><table><tr><th>Type</th><th>Value</th></tr></table></div>');
+  return soydata.VERY_UNSAFE.ordainSanitizedHtml('<div class="popup"><a class="outgoing-link"><img src="img/outgoing.png"/></a><a class="incoming-link"><img src="img/incoming.png"/></a><h3></h3><p class="duration"></p><h4 class="parameters-header">Parameters:</h4><table><tr><th>Type</th><th>Value</th></tr></table></div>');
 };
 if (goog.DEBUG) {
   templates.tree.callTreePopup.soyTemplateName = 'templates.tree.callTreePopup';
@@ -35,7 +35,7 @@ if (goog.DEBUG) {
 
 
 templates.tree.accumulativeTreePopup = function(opt_data, opt_ignored) {
-    return soydata.VERY_UNSAFE.ordainSanitizedHtml('<div class="popup"><a class="outgoing-link"><img src="img/outgoing.png"/></a><a class="incoming-link"><img src="img/incoming.png"/></a><h3></h3><p class="p-calls-num"></p><h4 class="parameters-header">Parameters:</h4><table></table></div>');
+  return soydata.VERY_UNSAFE.ordainSanitizedHtml('<div class="popup"><a class="outgoing-link"><img src="img/outgoing.png"/></a><a class="incoming-link"><img src="img/incoming.png"/></a><h3></h3><p class="p-calls-num"></p><h4 class="parameters-header">Parameters:</h4><table></table></div>');
 };
 if (goog.DEBUG) {
   templates.tree.accumulativeTreePopup.soyTemplateName = 'templates.tree.accumulativeTreePopup';
@@ -44,11 +44,11 @@ if (goog.DEBUG) {
 
 templates.tree.listOfFiles = function(opt_data, opt_ignored) {
   var output = '<ol class="file-list">';
-  var fileNameList61 = opt_data.fileNames;
-  var fileNameListLen61 = fileNameList61.length;
-  for (var fileNameIndex61 = 0; fileNameIndex61 < fileNameListLen61; fileNameIndex61++) {
-    var fileNameData61 = fileNameList61[fileNameIndex61];
-    output += '<li id="' + soy.$$escapeHtmlAttribute(fileNameData61) + '"><img class="delete-file" src="img/close-white.png"/><a href="/flamegraph-profiler/' + soy.$$escapeHtmlAttribute(opt_data.pageName) + '?file=' + soy.$$escapeUri(fileNameData61) + '&amp;project=' + soy.$$escapeUri(opt_data.projectName) + '">' + soy.$$escapeHtml(fileNameData61) + '</a></li>';
+  var fileList63 = opt_data.fileList;
+  var fileListLen63 = fileList63.length;
+  for (var fileIndex63 = 0; fileIndex63 < fileListLen63; fileIndex63++) {
+    var fileData63 = fileList63[fileIndex63];
+    output += '<li id="' + soy.$$escapeHtmlAttribute(fileData63.id) + '"><img class="delete-file" src="img/close-white.png"/><a href="/flamegraph-profiler/' + soy.$$escapeHtmlAttribute(opt_data.pageName) + '?file=' + soy.$$escapeUri(fileData63.fullName) + '&amp;project=' + soy.$$escapeUri(opt_data.projectName) + '"><p>' + soy.$$escapeHtml(fileData63.name) + '<br><span>' + soy.$$escapeHtml(fileData63.date) + '</span></p></a></li>';
   }
   output += '</ol>';
   return soydata.VERY_UNSAFE.ordainSanitizedHtml(output);
@@ -59,7 +59,7 @@ if (goog.DEBUG) {
 
 
 templates.tree.fileInput = function(opt_data, opt_ignored) {
-    return soydata.VERY_UNSAFE.ordainSanitizedHtml('<form class="file-form"><input type="file" name="file" id="file" class="inputfile"/><label for="file"><span>Upload file</span></label><p class="file-form-header">.jfr, .ser or flamegraph</p></form>');
+  return soydata.VERY_UNSAFE.ordainSanitizedHtml('<form class="file-form"><input type="file" name="file" id="file" class="inputfile"/><label for="file"><span>Upload file</span></label><p class="file-form-header">.jfr, .ser or flamegraph</p></form>');
 };
 if (goog.DEBUG) {
   templates.tree.fileInput.soyTemplateName = 'templates.tree.fileInput';
@@ -67,14 +67,14 @@ if (goog.DEBUG) {
 
 
 templates.tree.hotSpot = function(opt_data, opt_ignored) {
-    var output = '<div class="hot-spot"><a href="/flamegraph-profiler/outgoing-calls?file=' + soy.$$escapeUri(opt_data.fileName) + '&amp;project=' + soy.$$escapeUri(opt_data.projectName) + '&amp;method=' + soy.$$escapeUri(opt_data.methodName) + '&amp;class=' + soy.$$escapeUri(opt_data.className) + '&amp;desc=' + soy.$$escapeUri(opt_data.desc) + '"><img src="img/outgoing.png"/></a><a href="/flamegraph-profiler/incoming-calls?file=' + soy.$$escapeUri(opt_data.fileName) + '&amp;project=' + soy.$$escapeUri(opt_data.projectName) + '&amp;method=' + soy.$$escapeUri(opt_data.methodName) + '&amp;class=' + soy.$$escapeUri(opt_data.className) + '&amp;desc=' + soy.$$escapeUri(opt_data.desc) + '"><img src="img/incoming.png"/></a><div class="outer-time-div"><p class="relative-time">' + soy.$$escapeHtml(opt_data.relativeTime) + '%</p><div class="total-time"><div class="method-time"></div></div></div><p class="method"><code class="return-value">' + soy.$$escapeHtml(opt_data.retVal) + '</code><code> </code><code class="class-name">' + soy.$$escapeHtml(opt_data.className) + '</code><wbr>.<code class="method-name">' + soy.$$escapeHtml(opt_data.methodName) + '</code><wbr>(';
-    var parameterList110 = opt_data.parameters;
-    var parameterListLen110 = parameterList110.length;
-    for (var parameterIndex110 = 0; parameterIndex110 < parameterListLen110; parameterIndex110++) {
-        var parameterData110 = parameterList110[parameterIndex110];
-        output += (parameterData110) ? ((opt_data.doBreak) ? '<br/>' : '') + ((opt_data.doBreak) ? '<code>&#160&#160&#160&#160&#160&#160&#160&#160&#160&#160&#160&#160&#160&#160</code>' : '') + '<code class="parameter">' + soy.$$escapeHtml(parameterData110) + '</code>' + ((!(parameterIndex110 == parameterListLen110 - 1)) ? '<code>, </code>' : '') : '';
+  var output = '<div class="hot-spot"><a href="/flamegraph-profiler/outgoing-calls?file=' + soy.$$escapeUri(opt_data.fileName) + '&amp;project=' + soy.$$escapeUri(opt_data.projectName) + '&amp;method=' + soy.$$escapeUri(opt_data.methodName) + '&amp;class=' + soy.$$escapeUri(opt_data.className) + '&amp;desc=' + soy.$$escapeUri(opt_data.desc) + '"><img src="img/outgoing.png"/></a><a href="/flamegraph-profiler/incoming-calls?file=' + soy.$$escapeUri(opt_data.fileName) + '&amp;project=' + soy.$$escapeUri(opt_data.projectName) + '&amp;method=' + soy.$$escapeUri(opt_data.methodName) + '&amp;class=' + soy.$$escapeUri(opt_data.className) + '&amp;desc=' + soy.$$escapeUri(opt_data.desc) + '"><img src="img/incoming.png"/></a><div class="outer-time-div"><p class="relative-time">' + soy.$$escapeHtml(opt_data.relativeTime) + '%</p><div class="total-time"><div class="method-time"></div></div></div><p class="method"><code class="return-value">' + soy.$$escapeHtml(opt_data.retVal) + '</code><code> </code><code class="class-name">' + soy.$$escapeHtml(opt_data.className) + '</code><wbr>.<code class="method-name">' + soy.$$escapeHtml(opt_data.methodName) + '</code><wbr>(';
+  var parameterList112 = opt_data.parameters;
+  var parameterListLen112 = parameterList112.length;
+  for (var parameterIndex112 = 0; parameterIndex112 < parameterListLen112; parameterIndex112++) {
+    var parameterData112 = parameterList112[parameterIndex112];
+    output += (parameterData112) ? ((opt_data.doBreak) ? '<br/>' : '') + ((opt_data.doBreak) ? '<code>&#160&#160&#160&#160&#160&#160&#160&#160&#160&#160&#160&#160&#160&#160</code>' : '') + '<code class="parameter">' + soy.$$escapeHtml(parameterData112) + '</code>' + ((! (parameterIndex112 == parameterListLen112 - 1)) ? '<code>, </code>' : '') : '';
   }
-    output += ')</p></div>';
+  output += ')</p></div>';
   return soydata.VERY_UNSAFE.ordainSanitizedHtml(output);
 };
 if (goog.DEBUG) {
@@ -91,7 +91,7 @@ if (goog.DEBUG) {
 
 
 templates.tree.getTreePreviewSection = function(opt_data, opt_ignored) {
-    return soydata.VERY_UNSAFE.ordainSanitizedHtml('<section class="tree-preview"><h2>' + soy.$$escapeHtml(opt_data.threadName) + '</h2><canvas id="canvas-' + soy.$$escapeHtmlAttribute(opt_data.id) + '" height="' + soy.$$escapeHtmlAttribute(opt_data.canvasHeight) + '" width="' + soy.$$escapeHtmlAttribute(opt_data.canvasWidth) + '"></canvas><button class="show-call-tree-button"><img src="img/view-details-icon.png"/></button></section>');
+  return soydata.VERY_UNSAFE.ordainSanitizedHtml('<section class="tree-preview"><h2>' + soy.$$escapeHtml(opt_data.threadName) + '</h2><canvas id="canvas-' + soy.$$escapeHtmlAttribute(opt_data.id) + '" height="' + soy.$$escapeHtmlAttribute(opt_data.canvasHeight) + '" width="' + soy.$$escapeHtmlAttribute(opt_data.canvasWidth) + '"></canvas><button class="show-call-tree-button"><img src="img/view-details-icon.png"/></button></section>');
 };
 if (goog.DEBUG) {
   templates.tree.getTreePreviewSection.soyTemplateName = 'templates.tree.getTreePreviewSection';

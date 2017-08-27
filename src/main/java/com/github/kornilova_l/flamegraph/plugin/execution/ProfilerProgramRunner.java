@@ -21,7 +21,7 @@ import java.util.Objects;
  */
 public class ProfilerProgramRunner extends DefaultJavaProgramRunner {
     private static final String RUNNER_ID = "ProfileRunnerID";
-    Configuration configuration;
+    private Configuration configuration;
     private Project project;
 
     public ProfilerProgramRunner() {
@@ -43,7 +43,7 @@ public class ProfilerProgramRunner extends DefaultJavaProgramRunner {
         assert (configuration != null);
         assert (project != null);
         PluginFileManager fileManager = PluginFileManager.getInstance();
-        File configFile = fileManager.getLogFile(project.getName());
+        File configFile = fileManager.getConfigurationFile(project.getName());
         PluginConfigManager.exportConfig(configFile, configuration);
         String pathToAgent = fileManager.getPathToAgent();
         System.out.println(pathToAgent);
@@ -51,7 +51,7 @@ public class ProfilerProgramRunner extends DefaultJavaProgramRunner {
                 "-javaagent:" +
                         pathToAgent +
                         "=" +
-                        fileManager.getLogDirPath(project.getName()) +
+                        fileManager.createLogFile(project.getName(), runProfile.getName()).getAbsolutePath() +
                         "&" +
                         configFile.getAbsolutePath()
         );

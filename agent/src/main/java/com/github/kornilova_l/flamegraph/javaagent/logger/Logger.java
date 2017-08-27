@@ -1,6 +1,5 @@
 package com.github.kornilova_l.flamegraph.javaagent.logger;
 
-import com.github.kornilova_l.flamegraph.javaagent.AgentFileManager;
 import com.github.kornilova_l.flamegraph.javaagent.logger.event_data_storage.MethodEventData;
 import com.github.kornilova_l.flamegraph.proto.EventProtos;
 
@@ -16,8 +15,8 @@ public class Logger implements Runnable {
     private LoggerQueue loggerQueue = LoggerQueue.getInstance();
     private long lastLogTime;
 
-    public Logger(AgentFileManager agentFileManager) {
-        file = agentFileManager.createLogFile();
+    public Logger(File file) {
+        this.file = file;
         System.out.println("Output file: " + file);
         lastLogTime = System.currentTimeMillis();
     }

@@ -51,10 +51,10 @@ common.getParameter = (parameterName) => {
         const parameters = parametersString.split("&");
         for (let i = 0; i < parameters.length; i++) {
             if (parameters[i].startsWith(parameterName + "=")) {
-                return parameters[i].substring(
+                return decodeURIComponent(parameters[i].substring(
                     parameters[i].indexOf("=") + 1,
                     parameters[i].length
-                );
+                ));
             }
         }
     }

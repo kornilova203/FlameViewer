@@ -86,16 +86,18 @@
 
 /**
  * Generate list of files
- * @param fileNames list of files
+ * @param fileList list of files
  * @param projectName
  * @param pageName
  */
 {template .listOfFiles}
 <ol class="file-list">
-  {foreach $fileName in $fileNames}
-    <li id="{$fileName}">
+  {foreach $file in $fileList}
+    <li id="{$file.id}">
         <img class="delete-file" src="img/close-white.png"/>
-        <a href="/flamegraph-profiler/{$pageName}?file={$fileName}&amp;project={$projectName}">{$fileName}</a>
+        <a href="/flamegraph-profiler/{$pageName}?file={$file.fullName}&amp;project={$projectName}">
+            <p>{$file.name}<br><span>{$file.date}</span></p>
+        </a>
     </li>
   {/foreach}
   </ol>

@@ -1,6 +1,5 @@
 package com.github.kornilova_l.flamegraph.javaagent.agent;
 
-import com.github.kornilova_l.flamegraph.javaagent.AgentFileManager;
 import com.github.kornilova_l.flamegraph.javaagent.logger.Logger;
 import com.github.kornilova_l.flamegraph.javaagent.logger.LoggerQueue;
 import com.github.kornilova_l.flamegraph.javaagent.logger.WaitingLoggingToFinish;
@@ -26,13 +25,13 @@ public class Agent {
         if (methods == null) {
             return;
         }
-        createLogger(parameters[0]);
+        createLogger(new File(parameters[0]));
         AgentConfigurationManager configurationManager = new AgentConfigurationManager(methods);
         inst.addTransformer(new ProfilingClassFileTransformer(configurationManager));
     }
 
-    private static void createLogger(String logDirPath) {
-        Logger logger = new Logger(new AgentFileManager(logDirPath));
+    private static void createLogger(File logFile) {
+        Logger logger = new Logger(logFile);
 
         Thread loggerThread = new Thread(logger, "logging thread");
         loggerThread.setDaemon(true);

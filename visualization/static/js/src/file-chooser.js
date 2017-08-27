@@ -147,7 +147,7 @@ function updateFilesList(filesList) {
         $("<p class='no-file-found'>No file was found</p>").appendTo($(".file-menu"));
     } else {
         const listString = templates.tree.listOfFiles({
-            fileNames: filesList,
+            fileList: filesList,
             projectName: constants.projectName,
             pageName: getPageName()
         }).content;
@@ -162,7 +162,9 @@ function updateFilesList(filesList) {
             })
         });
         if (constants.fileName !== undefined) {
-            $("#" + constants.fileName.replace(/\./, "\\.")).addClass("current-file");
+            console.log(constants.fileName);
+            // get current file id. Like server forms id's
+            $("#" + constants.fileName.split(":").join("").split(".").join("")).addClass("current-file");
         }
     }
     if (constants.projectName === "uploaded-files") {
@@ -216,11 +218,7 @@ function getFilesList(projectName) {
 
     request.onload = function () {
         const fileNames = request.response;
-        if (fileNames.length === 0) {
-            updateFilesList([])
-        } else {
-            updateFilesList(fileNames);
-        }
+        updateFilesList(fileNames);
     };
     request.send();
 }

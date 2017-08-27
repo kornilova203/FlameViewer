@@ -7,6 +7,7 @@ import org.objectweb.asm.ClassWriter;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.security.ProtectionDomain;
+import java.util.List;
 
 class ProfilingClassFileTransformer implements ClassFileTransformer {
 

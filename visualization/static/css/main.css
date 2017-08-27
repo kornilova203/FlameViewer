@@ -248,7 +248,7 @@ nav ul li a:focus {
 .file-list li {
     display: flex;
     align-items: center;
-    height: 40px;
+    height: 45px;
 }
 
 .file-list::-webkit-scrollbar {
@@ -288,6 +288,15 @@ nav ul li a:focus {
 .file-list li:hover a {
     color: white;
     transition: color 300ms;
+}
+
+.file-list li p {
+    margin: 0;
+}
+
+.file-list li span {
+    font-size: 12px;
+    opacity: 0.9;
 }
 
 .no-file-found {
