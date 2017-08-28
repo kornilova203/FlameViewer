@@ -12,7 +12,10 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
         this.canvasOffset = 0;
         this.$callTreeWrapper = $(".call-tree-wrapper");
         this.zoomedCanvasMargin = 0;
+        this.zoomedNode = null;
         this.$zoomedCanvas = null;
+        this.$fileMenu = $(".file-menu");
+        this.$treePreviewWrapper = $(".tree-preview-wrapper");
         this.id = id;
         this.enableZoom = true;
         this._countNodesRecursively(this.baseNode);
@@ -109,10 +112,7 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
         this.stage.id = "canvas-" + this.id;
         this.stage.enableMouseOver(20);
 
-        this.zoomedStage = new createjs.Stage("canvas-zoomed-" + this.id);
-        this.$zoomedCanvas = $("#canvas-zoomed-" + this.id);
-        this.zoomedStage.id = "canvas-zoomed-" + this.id;
-        this.zoomedStage.enableMouseOver(20);
+        this._updateZoomedCanvasDecorator()();
 
         this._createPopup();
 
@@ -121,6 +121,7 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
             return;
         }
         this._drawFullTree();
+        this._enableResizeZoomedCanvas();
     };
 
     _createSection() {
@@ -191,14 +192,84 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
     }
 
     _resetZoom() {
+        this.zoomedNode = null;
         super._resetZoom();
         this.zoomedCanvasMargin = 0;
+        this.$callTreeWrapper.removeClass("call-tree-wrapper-zoomed");
     }
 
     _setNodeZoomed(node) {
+        this.zoomedNode = node;
         //noinspection JSValidateTypes
         this.zoomedCanvasMargin = this.$callTreeWrapper.scrollLeft();
         this.$zoomedCanvas.css("margin-left", this.zoomedCanvasMargin);
         super._setNodeZoomed(node);
+        this.$callTreeWrapper.addClass("call-tree-wrapper-zoomed");
+    }
+
+    /**
+     * @return {Function}
+     * @private
+     */
+    _updateZoomedCanvasDecorator() {
+        const that = this;
+        return () => {
+            setTimeout(() => {
+                that.$section.find(".canvas-zoomed").remove();
+
+                that._createZoomedCanvas();
+
+                that.zoomedStage = new createjs.Stage("canvas-zoomed-" + this.id);
+                that.$zoomedCanvas = $("#canvas-zoomed-" + this.id);
+                that.zoomedStage.id = "canvas-zoomed-" + this.id;
+                that.zoomedStage.enableMouseOver(20);
+
+                if (that.zoomedNode !== null) {
+                    this._changeZoom(that.zoomedNode);
+                }
+            }, 300)
+        }
+    }
+
+    _createZoomedCanvas() {
+        const zoomedCanvasContent = templates.tree.zoomedCanvas(
+            {
+                id: this.id,
+                canvasHeight: this.canvasHeight,
+                canvasWidth: this._getCanvasWidthForSection()
+            }
+        ).content;
+
+        $(zoomedCanvasContent).insertAfter(this.$section.find(".original-canvas"));
+    }
+
+    _enableResizeZoomedCanvas() {
+        constants.$arrowLeft.click(this._updateZoomedCanvasDecorator());
+        constants.$arrowRight.click(this._updateZoomedCanvasDecorator());
+        $(window).resize(this._updateZoomedCanvasDecorator());
+    }
+
+    /**
+     * @return {Number}
+     * @private
+     */
+    _getCanvasWidthForSection() {
+        return window.innerWidth -
+            CallTreeDrawer._getElementWidth(this.$fileMenu) -
+            CallTreeDrawer._getElementWidth(this.$treePreviewWrapper) -
+            70;
+    }
+
+    /**
+     * @param $element
+     * @return {number}
+     * @private
+     */
+    static _getElementWidth($element) {
+        /**
+         * @type {String}
+         */
+        const string = $element.css("width");
+        return Number.parseInt(string.substring(0, string.length - 2));
     }
 }

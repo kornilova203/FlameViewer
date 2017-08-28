@@ -10,7 +10,7 @@ $(window).on("load", () => {
     enableHideFilesList();
 });
 
-function showFilesList($projectsDropdown, $searchForm, $arrowRight, $arrowLeft,
+function showFilesList($projectsDropdown, $searchForm,
                        $verticalProjectName, $loaderBackground) {
     $loaderBackground.css("left", "calc((100vw - 250px) / 2 + 250px - 80px)");
     $(".file-menu").css("width", 250);
@@ -20,8 +20,8 @@ function showFilesList($projectsDropdown, $searchForm, $arrowRight, $arrowLeft,
     $projectsDropdown.css("position", "relative");
     $searchForm.show();
     $(".file-form").show();
-    $arrowLeft.show();
-    $arrowRight.hide();
+    constants.$arrowLeft.show();
+    constants.$arrowRight.hide();
     $verticalProjectName.css("transition", "");
     $verticalProjectName.css("opacity", 0);
     $verticalProjectName.css("pointer-events", "none");
@@ -30,14 +30,12 @@ function showFilesList($projectsDropdown, $searchForm, $arrowRight, $arrowLeft,
 }
 
 function enableHideFilesList() {
-    const $arrowLeft = $("#arrow-left");
-    const $arrowRight = $("#arrow-right");
     const $projectsDropdown = $(".projects-dropdown");
     const $searchForm = $("#search-file-form");
     const $verticalProjectName = $(".vertical-project-name");
     const $loaderBackground = $(".loader-background");
     $verticalProjectName.html(constants.projectName === "uploaded-files" ? "Uploaded files" : constants.projectName);
-    $arrowLeft.click(() => { // hide
+    constants.$arrowLeft.click(() => { // hide
         $loaderBackground.css("left", "calc((100vw - 40px) / 2 + 40px - 80px)");
         $projectsDropdown.css("opacity", 0);
         $(".file-menu").css("width", 40);
@@ -46,20 +44,20 @@ function enableHideFilesList() {
         $projectsDropdown.css("position", "absolute");
         $searchForm.hide();
         $(".file-form").hide();
-        $arrowLeft.hide();
-        $arrowRight.show();
+        constants.$arrowLeft.hide();
+        constants.$arrowRight.show();
         $verticalProjectName.css("transition", "opacity 300ms");
         $verticalProjectName.css("pointer-events", "auto");
         $verticalProjectName.css("opacity", 1);
         $(".tree-preview-wrapper").addClass("tree-preview-wrapper-without-files");
         $(".file-list").hide();
     });
-    $arrowRight.click(() => { // show
-        showFilesList($projectsDropdown, $searchForm, $arrowRight, $arrowLeft,
+    constants.$arrowRight.click(() => { // show
+        showFilesList($projectsDropdown, $searchForm,
             $verticalProjectName, $loaderBackground);
     });
     $verticalProjectName.click(() => {
-        showFilesList($projectsDropdown, $searchForm, $arrowRight, $arrowLeft,
+        showFilesList($projectsDropdown, $searchForm,
             $verticalProjectName, $loaderBackground);
     });
 }

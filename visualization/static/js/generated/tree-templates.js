@@ -11,15 +11,23 @@ if (typeof templates.tree == 'undefined') { templates.tree = {}; }
 
 
 templates.tree.getCallTreeSection = function(opt_data, opt_ignored) {
-  return soydata.VERY_UNSAFE.ordainSanitizedHtml('<section><h2 class="call-tree-header">' + soy.$$escapeHtml(opt_data.threadName) + ' <span>' + soy.$$escapeHtml(opt_data.nodesCount) + ' ' + ((opt_data.nodesCount > 1) ? 'calls' : 'call') + '</span></h2><canvas id="canvas-' + soy.$$escapeHtmlAttribute(opt_data.id) + '" width="' + soy.$$escapeHtmlAttribute(opt_data.canvasWidth) + '" height="' + soy.$$escapeHtmlAttribute(opt_data.canvasHeight) + '" style="margin-left:' + soy.$$escapeHtmlAttribute(soy.$$filterCssValue(opt_data.canvasOffset)) + 'px"></canvas><canvas id="canvas-zoomed-' + soy.$$escapeHtmlAttribute(opt_data.id) + '" class="canvas-zoomed" width="1200px" height="' + soy.$$escapeHtmlAttribute(opt_data.canvasHeight) + '" style="margin-top:-' + soy.$$escapeHtmlAttribute(soy.$$filterCssValue(opt_data.canvasHeight + 5)) + 'px"></canvas></section>');
+  return soydata.VERY_UNSAFE.ordainSanitizedHtml('<section><h2 class="call-tree-header">' + soy.$$escapeHtml(opt_data.threadName) + ' <span>' + soy.$$escapeHtml(opt_data.nodesCount) + ' ' + ((opt_data.nodesCount > 1) ? 'calls' : 'call') + '</span></h2><canvas class="original-canvas" id="canvas-' + soy.$$escapeHtmlAttribute(opt_data.id) + '" width="' + soy.$$escapeHtmlAttribute(opt_data.canvasWidth) + '" height="' + soy.$$escapeHtmlAttribute(opt_data.canvasHeight) + '" style="margin-left:' + soy.$$escapeHtmlAttribute(soy.$$filterCssValue(opt_data.canvasOffset)) + 'px"></canvas></section>');
 };
 if (goog.DEBUG) {
   templates.tree.getCallTreeSection.soyTemplateName = 'templates.tree.getCallTreeSection';
 }
 
 
+templates.tree.zoomedCanvas = function(opt_data, opt_ignored) {
+  return soydata.VERY_UNSAFE.ordainSanitizedHtml('<canvas id="canvas-zoomed-' + soy.$$escapeHtmlAttribute(opt_data.id) + '" class="canvas-zoomed" width="' + soy.$$escapeHtmlAttribute(opt_data.canvasWidth) + '" height="' + soy.$$escapeHtmlAttribute(opt_data.canvasHeight) + '"></canvas>');
+};
+if (goog.DEBUG) {
+  templates.tree.zoomedCanvas.soyTemplateName = 'templates.tree.zoomedCanvas';
+}
+
+
 templates.tree.getAccumulativeTreeSection = function(opt_data, opt_ignored) {
-  return soydata.VERY_UNSAFE.ordainSanitizedHtml('<section>' + ((opt_data.header) ? '<h2 class="accumulative-tree-header">' + soy.$$escapeHtml(opt_data.header) + '</h2>' : '') + '<div class="canvas-wrapper"><canvas id="canvas" width="' + soy.$$escapeHtmlAttribute(opt_data.canvasWidth) + '" height="' + soy.$$escapeHtmlAttribute(opt_data.canvasHeight) + '"></canvas><canvas id="canvas-zoomed" class="canvas-zoomed" width="' + soy.$$escapeHtmlAttribute(opt_data.canvasWidth) + '" height="' + soy.$$escapeHtmlAttribute(opt_data.canvasHeight) + '" style="margin-left:-' + soy.$$escapeHtmlAttribute(soy.$$filterCssValue(opt_data.canvasWidth)) + 'px"></canvas></div></section>');
+  return soydata.VERY_UNSAFE.ordainSanitizedHtml('<section>' + ((opt_data.header) ? '<h2 class="accumulative-tree-header">' + soy.$$escapeHtml(opt_data.header) + '</h2>' : '') + '<div class="canvas-wrapper"><canvas id="canvas" class="original-canvas" width="' + soy.$$escapeHtmlAttribute(opt_data.canvasWidth) + '" height="' + soy.$$escapeHtmlAttribute(opt_data.canvasHeight) + '"></canvas><canvas id="canvas-zoomed" class="canvas-zoomed" width="' + soy.$$escapeHtmlAttribute(opt_data.canvasWidth) + '" height="' + soy.$$escapeHtmlAttribute(opt_data.canvasHeight) + '"></canvas></div></section>');
 };
 if (goog.DEBUG) {
   templates.tree.getAccumulativeTreeSection.soyTemplateName = 'templates.tree.getAccumulativeTreeSection';
