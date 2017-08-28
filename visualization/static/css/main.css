@@ -736,3 +736,18 @@ button:focus {
 #search-method-form input {
     margin-top: 5px;
 }
+
+.canvas-zoomed {
+    opacity: 0;
+    position: absolute;
+    pointer-events: none;
+}
+
+.canvas-zoomed-show {
+    pointer-events: initial;
+    opacity: 1;
+}
+
+canvas {
+    transition: opacity 300ms;
+}

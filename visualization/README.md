@@ -24,9 +24,9 @@ npm run watch-call-tree
 # -------------------------------------------------------------------------
 
 # if template was changed
-java -jar node_modules/google-closure-templates/javascript/SoyToJsSrcCompiler.jar \
-    --outputPathFormat static/js/generated/tree-templates.js \
-    --srcs templates/tree-templates.soy 
+java -jar visualization/node_modules/google-closure-templates/javascript/SoyToJsSrcCompiler.jar \
+    --outputPathFormat visualization/static/js/generated/tree-templates.js \
+    --srcs visualization/templates/tree-templates.soy 
     
 cp -r static/* /home/lk/.flamegraph-profiler/static
 ```

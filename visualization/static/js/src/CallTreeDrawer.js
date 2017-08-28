@@ -1,17 +1,5 @@
 const PIX_IN_MS = 0.5;
 
-/**
- * @param {{css: Function}} $element
- * @param {String} property
- */
-function scrollHorizontally($element, property) {
-    //noinspection JSUnresolvedFunction
-    constants.$main.scroll(() => {
-        //noinspection JSValidateTypes
-        $element.css(property, constants.$main.scrollLeft());
-    });
-}
-
 class CallTreeDrawer extends AccumulativeTreeDrawer {
     /**
      * @param tree
@@ -22,8 +10,11 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
         this.canvasWidth = Math.ceil(this.treeWidth * PIX_IN_MS);
         this.threadName = this.tree.getTreeInfo().getThreadName();
         this.canvasOffset = 0;
+        this.$callTreeWrapper = $(".call-tree-wrapper");
+        this.zoomedCanvasMargin = 0;
+        this.$zoomedCanvas = null;
         this.id = id;
-        this.enableZoom = false;
+        this.enableZoom = true;
         this._countNodesRecursively(this.baseNode);
     }
 
@@ -99,6 +90,7 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
      */
     _setPopupPosition(offsetX, depth) {
         const callTreeWrapper = $(".call-tree-wrapper");
+        offsetX += this.zoomedCanvasMargin;
         //noinspection JSValidateTypes
         if (offsetX < callTreeWrapper.scrollLeft()) {
             //noinspection JSValidateTypes
@@ -118,8 +110,9 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
         this.stage.enableMouseOver(20);
 
         this.zoomedStage = new createjs.Stage("canvas-zoomed-" + this.id);
+        this.$zoomedCanvas = $("#canvas-zoomed-" + this.id);
         this.zoomedStage.id = "canvas-zoomed-" + this.id;
-        this.stage.enableMouseOver(20);
+        this.zoomedStage.enableMouseOver(20);
 
         this._createPopup();
 
@@ -164,7 +157,6 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
             case 5: // return value
                 returnValueType.text("Return value:");
                 let value = CallTreeDrawer._getType(node.getNodeInfo().getReturnValue());
-                console.log(value);
                 if (value !== undefined) {
                     returnValue.text(value);
                 }
@@ -196,5 +188,17 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
             case 9: // object
                 return returnValue.getObject().getType() + ": " + returnValue.getObject().getValue();
         }
+    }
+
+    _resetZoom() {
+        super._resetZoom();
+        this.zoomedCanvasMargin = 0;
+    }
+
+    _setNodeZoomed(node) {
+        //noinspection JSValidateTypes
+        this.zoomedCanvasMargin = this.$callTreeWrapper.scrollLeft();
+        this.$zoomedCanvas.css("margin-left", this.zoomedCanvasMargin);
+        super._setNodeZoomed(node);
     }
 }

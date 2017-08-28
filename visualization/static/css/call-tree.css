@@ -42,7 +42,8 @@ section {
 
 .call-tree-wrapper section {
     min-height: calc(100vh - 45px);
-    margin-bottom: 200px;
+    padding-bottom: 200px;
+    box-sizing: border-box;
 }
 
 .tree-preview-wrapper section {

@@ -171,7 +171,7 @@ class AccumulativeTreeDrawer {
         if (this.enableZoom) {
             //noinspection JSUnresolvedFunction
             shape.addEventListener("click", () => {
-                this._setNodeZoomed(node);
+                this._changeZoom(node);
             })
         }
     }
@@ -329,40 +329,12 @@ class AccumulativeTreeDrawer {
         }
     }
 
-    _setNodeZoomed(node) {
+    _changeZoom(node) {
         this.currentlyShownNodes = [];
         if (node !== this.baseNode) {
-            common.showLoader(constants.loaderMessages.drawing, () => {
-                this.zoomedStage.removeAllChildren();
-                this._expandParents(node);
-                this._drawNodesRecursively(
-                    node,
-                    0,
-                    this._countScaleXForNode(node),
-                    this._countOffsetXForNode(node),
-                    true,
-                    this.zoomedStage,
-                    true,
-                    false
-                );
-                this._addResetButton();
-                if (this.searchVal !== "") {
-                    this._setHighlightOnZoomedStage(this.searchVal);
-                } else {
-                    this.zoomedStage.update();
-                }
-                $("#" + this.stage.id).hide();
-                $("#" + this.zoomedStage.id).show();
-                common.hideLoader()
-            });
+            this._setNodeZoomed(node);
         } else { // if reset zoom
-            if (this.searchVal !== "") {
-                this._setHighlightOnMainStage(this.searchVal);
-            } else if (this.wasMainStageHighlighted) {
-                this._resetHighlight();
-            }
-            $("#" + this.zoomedStage.id).hide();
-            $("#" + this.stage.id).show();
+            this._resetZoom();
         }
     }
 
@@ -660,5 +632,41 @@ class AccumulativeTreeDrawer {
 
     _setPopupReturnValue(node) {
 
+    }
+
+    _resetZoom() {
+        if (this.searchVal !== "") {
+            this._setHighlightOnMainStage(this.searchVal);
+        } else if (this.wasMainStageHighlighted) {
+            this._resetHighlight();
+        }
+        $("#" + this.zoomedStage.id).removeClass("canvas-zoomed-show");
+        $("#" + this.stage.id).css("opacity", 1);
+    }
+
+    _setNodeZoomed(node) {
+        common.showLoader(constants.loaderMessages.drawing, () => {
+            this.zoomedStage.removeAllChildren();
+            this._expandParents(node);
+            this._drawNodesRecursively(
+                node,
+                0,
+                this._countScaleXForNode(node),
+                this._countOffsetXForNode(node),
+                true,
+                this.zoomedStage,
+                true,
+                false
+            );
+            this._addResetButton();
+            if (this.searchVal !== "") {
+                this._setHighlightOnZoomedStage(this.searchVal);
+            } else {
+                this.zoomedStage.update();
+            }
+            $("#" + this.stage.id).css("opacity", 0);
+            $("#" + this.zoomedStage.id).addClass("canvas-zoomed-show");
+            common.hideLoader()
+        });
     }
 }

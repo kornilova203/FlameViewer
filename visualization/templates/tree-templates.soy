@@ -18,10 +18,10 @@
         height="{$canvasHeight}"
         style="margin-left:{$canvasOffset}px">
     </canvas>
-    <canvas id="canvas-zoomed-{$id}"
-                width="{$canvasWidth}"
-                height="{$canvasHeight}"
-                style="display: none;">
+    <canvas id="canvas-zoomed-{$id}" class="canvas-zoomed"
+        width="1200px"
+        height="{$canvasHeight}"
+        style="margin-top:-{$canvasHeight + 5}px">
     </canvas>
 </section>
 {/template}
@@ -42,10 +42,10 @@
             width="{$canvasWidth}"
             height="{$canvasHeight}">
         </canvas>
-        <canvas id="canvas-zoomed"
+        <canvas id="canvas-zoomed" class="canvas-zoomed"
             width="{$canvasWidth}"
             height="{$canvasHeight}"
-            style="display: none;">
+            style="margin-left:-{$canvasWidth}px">
         </canvas>
     </div>
 </section>
