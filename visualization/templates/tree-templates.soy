@@ -12,18 +12,25 @@
 {template .getCallTreeSection}
 <section>
     <h2 class="call-tree-header">{$threadName} <span>{$nodesCount} {if $nodesCount > 1}calls{else}call{/if}</span></h2>
-    <canvas
+    <canvas class="original-canvas"
         id="canvas-{$id}"
         width="{$canvasWidth}"
         height="{$canvasHeight}"
         style="margin-left:{$canvasOffset}px">
     </canvas>
-    <canvas id="canvas-zoomed-{$id}" class="canvas-zoomed"
-        width="1200px"
-        height="{$canvasHeight}"
-        style="margin-top:-{$canvasHeight + 5}px">
-    </canvas>
 </section>
+{/template}
+
+/**
+ * @param id
+ * @param canvasHeight
+ * @param canvasWidth
+ */
+{template .zoomedCanvas}
+<canvas id="canvas-zoomed-{$id}" class="canvas-zoomed"
+        width="{$canvasWidth}"
+        height="{$canvasHeight}">
+    </canvas>
 {/template}
 
 /**
@@ -38,14 +45,13 @@
     <h2 class="accumulative-tree-header">{$header}</h2>
     {/if}
     <div class="canvas-wrapper">
-        <canvas id="canvas"
+        <canvas id="canvas" class="original-canvas"
             width="{$canvasWidth}"
             height="{$canvasHeight}">
         </canvas>
         <canvas id="canvas-zoomed" class="canvas-zoomed"
             width="{$canvasWidth}"
-            height="{$canvasHeight}"
-            style="margin-left:-{$canvasWidth}px">
+            height="{$canvasHeight}">
         </canvas>
     </div>
 </section>

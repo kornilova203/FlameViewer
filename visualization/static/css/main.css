@@ -739,8 +739,16 @@ button:focus {
 
 .canvas-zoomed {
     opacity: 0;
-    position: absolute;
     pointer-events: none;
+}
+
+.original-canvas {
+    position: absolute;
+}
+
+.original-canvas-zoomed {
+    pointer-events: none;
+    opacity: 0;
 }
 
 .canvas-zoomed-show {

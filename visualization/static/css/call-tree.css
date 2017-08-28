@@ -98,7 +98,12 @@ section {
 .call-tree-wrapper {
     height: calc(100vh - 45px);
     display: none;
-    overflow: scroll;
+    overflow-x: scroll;
+    overflow-y: scroll;
+}
+
+.call-tree-wrapper-zoomed {
+    overflow-x: hidden;
 }
 
 canvas {

@@ -77,6 +77,8 @@ constants.$main = null;
 constants.$treePreviewWrapper = null;
 constants.$loaderBackground = null;
 constants.$loaderMessageP = null;
+constants.$arrowLeft = null;
+constants.$arrowRight = null;
 constants.projectName = common.getParameter("project");
 constants.fileName = common.getParameter("file");
 constants.loaderMessages = {
@@ -94,6 +96,8 @@ $(window).on("load", () => {
     constants.$loaderBackground = $(".loader-background");
     constants.$loaderMessageP = $('.loader-message p');
     constants.$treePreviewWrapper = $('.tree-preview-wrapper');
+    constants.$arrowLeft = $("#arrow-left");
+    constants.$arrowRight = $("#arrow-right");
 });
 
 /**

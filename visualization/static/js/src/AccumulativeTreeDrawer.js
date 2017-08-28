@@ -17,8 +17,9 @@ class AccumulativeTreeDrawer {
         this.tree = tree;
         this.treeWidth = this.tree.getWidth();
         this.canvasWidth = MAIN_WIDTH;
+        this.currentCanvasWidth = 0;
         this.canvasHeight = (LAYER_HEIGHT + LAYER_GAP) * (this.tree.getDepth() + 1) + SPACE_ABOVE_TREE;
-        this.section = null;
+        this.$section = null;
         this.stage = null;
         this.zoomedStage = null;
         this.header = null;
@@ -59,7 +60,7 @@ class AccumulativeTreeDrawer {
         console.log("start drawing");
         this._prepareDraw();
         const startTime = new Date().getTime();
-        this.section = this._createSectionWithCanvas();
+        this.$section = this._createSectionWithCanvas();
         this.stage = new createjs.Stage("canvas");
         this.stage.id = "canvas";
         this.zoomedStage = new createjs.Stage("canvas-zoomed");
@@ -119,7 +120,7 @@ class AccumulativeTreeDrawer {
     _drawNode(node, color, scaleX, offsetX, isMostFirst, stage) {
         const shape = this._drawRectangle(node, color, scaleX, offsetX, isMostFirst, stage);
         this._addShowPopupEvent(shape, offsetX + this.canvasOffset, node.depth, node);
-        if (scaleX * this.canvasWidth > 5) {
+        if (scaleX * this.currentCanvasWidth > 5) {
             this._drawLabel(AccumulativeTreeDrawer._getLabelText(node), shape, scaleX, offsetX, node.depth, stage);
         }
     }
@@ -141,17 +142,17 @@ class AccumulativeTreeDrawer {
         } else {
             node.zoomedFillCommand = shape.graphics.beginFill(color).command;
         }
-        shape.graphics.drawRect(0, 0, this.canvasWidth, LAYER_HEIGHT);
+        shape.graphics.drawRect(0, 0, this.currentCanvasWidth, LAYER_HEIGHT);
         const offsetY = this.flipY(AccumulativeTreeDrawer._calcNormaOffsetY(node.depth));
-        const pixSizeX = Math.floor(scaleX * this.canvasWidth);
+        const pixSizeX = Math.floor(scaleX * this.currentCanvasWidth);
         if (!isMostFirst) {
             offsetX = offsetX + 1;
         }
         if (!(pixSizeX < 2 || isMostFirst)) {
-            scaleX = (pixSizeX - 1) / this.canvasWidth;
+            scaleX = (pixSizeX - 1) / this.currentCanvasWidth;
         }
         if (pixSizeX <= 2) {
-            scaleX = 1 / this.canvasWidth;
+            scaleX = 1 / this.currentCanvasWidth;
         }
         if (pixSizeX === 0) {
             offsetX = offsetX - 1;
@@ -177,7 +178,7 @@ class AccumulativeTreeDrawer {
     }
 
     _countOffsetXForNode(node) {
-        return (node.getOffset() / this.treeWidth) * this.canvasWidth;
+        return (node.getOffset() / this.treeWidth) * this.currentCanvasWidth;
     }
 
     _countScaleXForNode(node) {
@@ -186,7 +187,7 @@ class AccumulativeTreeDrawer {
 
     _createPopup() {
         const popupContent = templates.tree.accumulativeTreePopup().content;
-        this.$popup = $(popupContent).appendTo(this.section.find(".canvas-wrapper"));
+        this.$popup = $(popupContent).appendTo(this.$section.find(".canvas-wrapper"));
         this.$popupTable = this.$popup.find("table");
     }
 
@@ -302,8 +303,8 @@ class AccumulativeTreeDrawer {
 
     _setTextMask(text, shape, scaleX) {
         const newShape = shape.clone();
-        const nodeWidth = scaleX * this.canvasWidth;
-        newShape.scaleX = (nodeWidth - 4) / this.canvasWidth;
+        const nodeWidth = scaleX * this.currentCanvasWidth;
+        newShape.scaleX = (nodeWidth - 4) / this.currentCanvasWidth;
         text.mask = newShape;
     }
 
@@ -399,6 +400,7 @@ class AccumulativeTreeDrawer {
     }
 
     _drawFullTree() {
+        this.currentCanvasWidth = this._getCurrentCanvasWidth();
         const children = this.baseNode.getNodesList();
         for (let i = 0; i < children.length; i++) {
             this._drawNodesRecursively(
@@ -641,10 +643,11 @@ class AccumulativeTreeDrawer {
             this._resetHighlight();
         }
         $("#" + this.zoomedStage.id).removeClass("canvas-zoomed-show");
-        $("#" + this.stage.id).css("opacity", 1);
+        $("#" + this.stage.id).removeClass("original-canvas-zoomed");
     }
 
     _setNodeZoomed(node) {
+        this.currentCanvasWidth = this._getCurrentCanvasWidth();
         common.showLoader(constants.loaderMessages.drawing, () => {
             this.zoomedStage.removeAllChildren();
             this._expandParents(node);
@@ -664,9 +667,22 @@ class AccumulativeTreeDrawer {
             } else {
                 this.zoomedStage.update();
             }
-            $("#" + this.stage.id).css("opacity", 0);
+            $("#" + this.stage.id).addClass("original-canvas-zoomed");
             $("#" + this.zoomedStage.id).addClass("canvas-zoomed-show");
             common.hideLoader()
         });
+    }
+
+    _getCurrentCanvasWidth() {
+        const $originalCanvas = this.$section.find(".original-canvas");
+        if ($originalCanvas.css("opacity") === "1") {
+            return this._getCanvasWidth($originalCanvas);
+        } else {
+            return this._getCanvasWidth(this.$section.find(".canvas-zoomed"));
+        }
+    }
+
+    _getCanvasWidth($originalCanvas) {
+        return Number.parseInt($originalCanvas.attr("width"));
     }
 }
