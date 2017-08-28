@@ -47,7 +47,7 @@ public class ChangeConfigurationDialog extends DialogWrapper {
     @Override
     protected Action[] createActions() {
         List<Action> actionList = new ArrayList<>();
-        actionList.add(new ExportAction(tempConfiguration));
+        actionList.add(new ExportAction(tempConfiguration, project));
         actionList.add(new ImportAction(tempConfiguration, this));
         Collections.addAll(actionList, super.createActions());
         Action[] actions = new Action[actionList.size()];
