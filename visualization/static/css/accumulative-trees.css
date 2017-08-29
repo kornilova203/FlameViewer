@@ -18,7 +18,6 @@ main::-webkit-scrollbar-thumb {
 
 section {
     margin-bottom: 170px;
-    min-width: 1260px;
     display: flex;
     justify-content: center;
     flex-wrap: wrap;

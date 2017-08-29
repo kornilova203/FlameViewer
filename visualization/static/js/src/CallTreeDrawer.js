@@ -14,7 +14,6 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
         this.zoomedCanvasMargin = 0;
         this.zoomedNode = null;
         this.$zoomedCanvas = null;
-        this.$fileMenu = $(".file-menu");
         this.$treePreviewWrapper = $(".tree-preview-wrapper");
         this.id = id;
         this.enableZoom = true;
@@ -54,36 +53,12 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
     static getValueForParameter(index, parameters) {
         for (let i = 0; i < parameters.length; i++) {
             if (parameters[i].getIndex() === index) {
-                return CallTreeDrawer.getParameterVal(parameters[i])
+                return CallTreeDrawer._getParameterVal(parameters[i])
             }
         }
         return "-";
     }
 
-    static getParameterVal(parameter) {
-        switch (parameter.getVar().getValueCase()) {
-            case 1: // int
-                return parameter.getVar().getI();
-            case 2: // long
-                return parameter.getVar().getJ();
-            case 3: // boolean
-                return parameter.getVar().getZ();
-            case 4: // char
-                return parameter.getVar().getC();
-            case 5: // short
-                return parameter.getVar().getS();
-            case 6: // byte
-                return parameter.getVar().getB();
-            case 7: // float
-                return parameter.getVar().getF();
-            case 8: // double
-                return parameter.getVar().getD();
-            case 9: // object
-                return parameter.getVar().getObject().getValue();
-            default:
-                return "-";
-        }
-    }
 
     //noinspection JSUnusedGlobalSymbols
     /**
@@ -255,21 +230,62 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
      */
     _getCanvasWidthForSection() {
         return window.innerWidth -
-            CallTreeDrawer._getElementWidth(this.$fileMenu) -
-            CallTreeDrawer._getElementWidth(this.$treePreviewWrapper) -
+            AccumulativeTreeDrawer._getElementWidth(this.$fileMenu) -
+            AccumulativeTreeDrawer._getElementWidth(this.$treePreviewWrapper) -
             70;
     }
 
     /**
-     * @param $element
-     * @return {number}
-     * @private
+     * @param node
+     * @override
      */
-    static _getElementWidth($element) {
-        /**
-         * @type {String}
-         */
-        const string = $element.css("width");
-        return Number.parseInt(string.substring(0, string.length - 2));
+    _getNormalizedName(node) {
+        const nodeInfo = node.getNodeInfo();
+        if (nodeInfo === undefined) {
+            return "";
+        }
+        let className = nodeInfo.getClassName();
+        return (className + "." + nodeInfo.getMethodName()).toLowerCase() +
+            CallTreeDrawer._getParametersForNormalizedName(node);
+    }
+
+    /**
+     *
+     * @param node
+     * @private
+     * @return {String}
+     */
+    static _getParametersForNormalizedName(node) {
+        const parameters = node.getNodeInfo().getParametersList();
+        let parametersValues = [];
+        for (let i = 0; i < parameters.length; i++) {
+            parametersValues.push(this._getParameterVal(parameters[i]))
+        }
+        return ("(" + parametersValues.join(", ") + ")").toLowerCase();
+    }
+
+    static _getParameterVal(parameter) {
+        switch (parameter.getVar().getValueCase()) {
+            case 1: // int
+                return parameter.getVar().getI();
+            case 2: // long
+                return parameter.getVar().getJ();
+            case 3: // boolean
+                return parameter.getVar().getZ();
+            case 4: // char
+                return parameter.getVar().getC();
+            case 5: // short
+                return parameter.getVar().getS();
+            case 6: // byte
+                return parameter.getVar().getB();
+            case 7: // float
+                return parameter.getVar().getF();
+            case 8: // double
+                return parameter.getVar().getD();
+            case 9: // object
+                return parameter.getVar().getObject().getValue();
+            default:
+                return "-";
+        }
     }
 }

@@ -166,3 +166,7 @@ canvas {
     overflow: hidden;
     white-space: nowrap;
 }
+
+#search-method-form {
+    display: none;
+}

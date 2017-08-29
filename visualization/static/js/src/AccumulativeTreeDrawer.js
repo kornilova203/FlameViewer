@@ -1,4 +1,3 @@
-const MAIN_WIDTH = 1200;
 const LAYER_HEIGHT = 19;
 const LAYER_GAP = 1;
 const POPUP_MARGIN = 6; // have no idea why there is a gap between popup and canvas
@@ -16,13 +15,13 @@ class AccumulativeTreeDrawer {
     constructor(tree) {
         this.tree = tree;
         this.treeWidth = this.tree.getWidth();
-        this.canvasWidth = MAIN_WIDTH;
         this.currentCanvasWidth = 0;
         this.canvasHeight = (LAYER_HEIGHT + LAYER_GAP) * (this.tree.getDepth() + 1) + SPACE_ABOVE_TREE;
         this.$section = null;
         this.stage = null;
         this.zoomedStage = null;
         this.header = null;
+        this.$fileMenu = $(".file-menu");
         this.baseNode = this.tree.getBaseNode();
         this.packageList = {}; // map package name to color
         this._buildPackageListRecursively(this.baseNode);
@@ -34,7 +33,7 @@ class AccumulativeTreeDrawer {
         this.enableZoom = true;
         this.nodesCount = -1;
         // for search:
-        this.searchVal = "";
+        this.searchPattern = null;
         this.currentlyShownNodes = [];
         this.baseNode.fillCommand = {};
         this.wasMainStageHighlighted = false;
@@ -101,7 +100,7 @@ class AccumulativeTreeDrawer {
         const sectionContent = templates.tree.getAccumulativeTreeSection(
             {
                 canvasHeight: this.canvasHeight,
-                canvasWidth: this.canvasWidth,
+                canvasWidth: this._getCanvasWidthForSection(),
                 header: this.header
             }
         ).content;
@@ -273,15 +272,18 @@ class AccumulativeTreeDrawer {
         input.on('change keyup copy paste cut', () => {
             const val = input.val();
             if (!val) {
-                this.searchVal = "";
+                this.searchPattern = null;
                 this._resetHighlight();
             } else {
                 const lowercaseVal = val.toLowerCase();
-                this.searchVal = lowercaseVal;
+                const pattern = new RegExp(
+                    ".*" + common.escapeRegExp(lowercaseVal).split("*").join(".*") + ".*"
+                );
+                this.searchPattern = pattern;
                 if (this.currentlyShownNodes.length === 0) {
-                    this._setHighlightOnMainStage(lowercaseVal);
+                    this._setHighlightOnMainStage(pattern);
                 } else {
-                    this._setHighlightOnZoomedStage(lowercaseVal);
+                    this._setHighlightOnZoomedStage(pattern);
                 }
             }
         })
@@ -314,7 +316,7 @@ class AccumulativeTreeDrawer {
      */
     _assignParentsAndDepthRecursively(node, depth) {
         const children = node.getNodesList();
-        AccumulativeTreeDrawer._assignNormalizedName(node);
+        node.normalizedName = this._getNormalizedName(node);
         node.depth = depth;
         for (let i = 0; i < children.length; i++) {
             children[i].parent = node;
@@ -471,29 +473,29 @@ class AccumulativeTreeDrawer {
 
     /**
      * @param node
-     * @param {String} val string in lowercase
+     * @param {RegExp} pattern string in lowercase
      * @private
      */
-    _updateHighlightRecursively(node, val) {
-        if (AccumulativeTreeDrawer._isNodeHighlighted(node, val)) {
+    _updateHighlightRecursively(node, pattern) {
+        if (AccumulativeTreeDrawer._isNodeHighlighted(node, pattern)) {
             AccumulativeTreeDrawer._setHighlight(node, true, true);
         } else {
             AccumulativeTreeDrawer._setHighlight(node, false, true);
         }
         const children = node.getNodesList();
         for (let i = 0; i < children.length; i++) {
-            this._updateHighlightRecursively(children[i], val);
+            this._updateHighlightRecursively(children[i], pattern);
         }
     }
 
     /**
      * @param {Array} currentlyShownNodes
-     * @param {String} lowercaseVal
+     * @param {RegExp} pattern
      * @private
      */
-    static _updateHighlight(currentlyShownNodes, lowercaseVal) {
+    static _updateHighlight(currentlyShownNodes, pattern) {
         for (let i = 0; i < currentlyShownNodes.length; i++) {
-            if (AccumulativeTreeDrawer._isNodeHighlighted(currentlyShownNodes[i], lowercaseVal)) {
+            if (AccumulativeTreeDrawer._isNodeHighlighted(currentlyShownNodes[i], pattern)) {
                 AccumulativeTreeDrawer._setHighlight(currentlyShownNodes[i], true, false);
             } else {
                 AccumulativeTreeDrawer._setHighlight(currentlyShownNodes[i], false, false);
@@ -517,27 +519,24 @@ class AccumulativeTreeDrawer {
 
     /**
      * @param node
-     * @param {String} val
+     * @param {RegExp} pattern
      * @return {boolean}
      * @private
      */
-    static _isNodeHighlighted(node, val) {
-        if (node.normalizedName !== undefined) { // if not a baseNode
-            return node.normalizedName.indexOf(val) !== -1;
-        }
+    static _isNodeHighlighted(node, pattern) {
+        return pattern.test(node.normalizedName);
     }
 
     /**
      * @param node
-     * @private
      */
-    static _assignNormalizedName(node) {
+    _getNormalizedName(node) {
         const nodeInfo = node.getNodeInfo();
         if (nodeInfo === undefined) {
-            return;
+            return "";
         }
         let className = nodeInfo.getClassName();
-        node.normalizedName = (className + "." + nodeInfo.getMethodName()).toLowerCase();
+        return (className + "." + nodeInfo.getMethodName()).toLowerCase();
     }
 
     static _resetHighlightList(currentlyShownNodes) {
@@ -560,14 +559,22 @@ class AccumulativeTreeDrawer {
         }
     }
 
-    _setHighlightOnMainStage(lowercaseVal) {
+    /**
+     * @param {RegExp} pattern
+     * @private
+     */
+    _setHighlightOnMainStage(pattern) {
         this.wasMainStageHighlighted = true;
-        this._updateHighlightRecursively(this.baseNode, lowercaseVal);
+        this._updateHighlightRecursively(this.baseNode, pattern);
         this.stage.update();
     }
 
-    _setHighlightOnZoomedStage(lowercaseVal) {
-        AccumulativeTreeDrawer._updateHighlight(this.currentlyShownNodes, lowercaseVal);
+    /**
+     * @param {RegExp} pattern
+     * @private
+     */
+    _setHighlightOnZoomedStage(pattern) {
+        AccumulativeTreeDrawer._updateHighlight(this.currentlyShownNodes, pattern);
         this.zoomedStage.update();
     }
 
@@ -637,8 +644,8 @@ class AccumulativeTreeDrawer {
     }
 
     _resetZoom() {
-        if (this.searchVal !== "") {
-            this._setHighlightOnMainStage(this.searchVal);
+        if (this.searchPattern !== null) {
+            this._setHighlightOnMainStage(this.searchPattern);
         } else if (this.wasMainStageHighlighted) {
             this._resetHighlight();
         }
@@ -662,8 +669,8 @@ class AccumulativeTreeDrawer {
                 false
             );
             this._addResetButton();
-            if (this.searchVal !== "") {
-                this._setHighlightOnZoomedStage(this.searchVal);
+            if (this.searchPattern !== null) {
+                this._setHighlightOnZoomedStage(this.searchPattern);
             } else {
                 this.zoomedStage.update();
             }
@@ -675,5 +682,27 @@ class AccumulativeTreeDrawer {
 
     static _getCanvasWidth($canvas) {
         return Number.parseInt($canvas.attr("width"));
+    }
+
+    /**
+     * @return {Number}
+     * @private
+     */
+    _getCanvasWidthForSection() {
+        return window.innerWidth -
+            AccumulativeTreeDrawer._getElementWidth(this.$fileMenu) -
+            70;
+    }
+
+    /**
+     * @param $element
+     * @return {number}
+     */
+    static _getElementWidth($element) {
+        /**
+         * @type {String}
+         */
+        const string = $element.css("width");
+        return Number.parseInt(string.substring(0, string.length - 2));
     }
 }

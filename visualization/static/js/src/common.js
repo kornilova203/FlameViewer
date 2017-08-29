@@ -72,6 +72,10 @@ common.hideMessage = () => {
     $('.message').remove();
 };
 
+common.escapeRegExp = (text) => {
+    return text.replace(/[-[\]{}()+?.,\\^$|#\s]/g, '\\$&');
+};
+
 const constants = {};
 constants.$main = null;
 constants.$treePreviewWrapper = null;
