@@ -238,6 +238,8 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
             return "";
         }
         let className = nodeInfo.getClassName();
+        console.log((className + "." + nodeInfo.getMethodName()).toLowerCase() +
+            CallTreeDrawer._getParametersForNormalizedName(node));
         return (className + "." + nodeInfo.getMethodName()).toLowerCase() +
             CallTreeDrawer._getParametersForNormalizedName(node);
     }
