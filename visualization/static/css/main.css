@@ -655,8 +655,17 @@ button:focus {
     width: 100%;
     box-sizing: border-box;
     height: 22px;
-    padding-right: 60px;
+    padding: 0 5px 2px;
     border: solid 1px #c8c8c8;
+}
+
+.filter-content input::placeholder {
+    transition: all 0.7s ease 0s;
+    color: #888;
+}
+
+.filter-content input:focus::placeholder {
+    color: #bbb;
 }
 
 .apply-filter, .cancel-filter, .clear-filter {

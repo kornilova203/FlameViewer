@@ -107,7 +107,7 @@ section {
 }
 
 canvas {
-    margin-right: 30px;
+    padding-right: 30px;
 }
 
 .hidden-tree-preview {
