@@ -21,6 +21,7 @@ class AccumulativeTreeDrawer {
         this.stage = null;
         this.zoomedStage = null;
         this.header = null;
+        this.zoomedNode = null;
         this.$fileMenu = $(".file-menu");
         this.baseNode = this.tree.getBaseNode();
         this.packageList = {}; // map package name to color
@@ -59,13 +60,8 @@ class AccumulativeTreeDrawer {
         console.log("start drawing");
         this._prepareDraw();
         const startTime = new Date().getTime();
-        this.$section = this._createSectionWithCanvas();
-        this.stage = new createjs.Stage("canvas");
-        this.stage.id = "canvas";
-        this.zoomedStage = new createjs.Stage("canvas-zoomed");
-        this.zoomedStage.id = "canvas-zoomed";
-        this.stage.enableMouseOver(20);
-        this.zoomedStage.enableMouseOver(20);
+        this.$section = this._createSection();
+        this._createCanvas();
 
         this._createPopup(); // one for all nodes
 
@@ -75,6 +71,7 @@ class AccumulativeTreeDrawer {
         }
         this._drawFullTree();
         console.log("Drawing took " + (new Date().getTime() - startTime));
+        this._enableResizeZoomedCanvas();
     };
 
     /**
@@ -96,13 +93,9 @@ class AccumulativeTreeDrawer {
         return this.canvasHeight - y - LAYER_HEIGHT;
     };
 
-    _createSectionWithCanvas() {
+    _createSection() {
         const sectionContent = templates.tree.getAccumulativeTreeSection(
-            {
-                canvasHeight: this.canvasHeight,
-                canvasWidth: this._getCanvasWidthForSection(),
-                header: this.header
-            }
+            {header: this.header}
         ).content;
         return $(sectionContent).appendTo($("main"));
     };
@@ -644,6 +637,7 @@ class AccumulativeTreeDrawer {
     }
 
     _resetZoom() {
+        this.zoomedNode = null;
         if (this.searchPattern !== null) {
             this._setHighlightOnMainStage(this.searchPattern);
         } else if (this.wasMainStageHighlighted) {
@@ -654,6 +648,7 @@ class AccumulativeTreeDrawer {
     }
 
     _setNodeZoomed(node) {
+        this.zoomedNode = node;
         this.currentCanvasWidth = AccumulativeTreeDrawer._getCanvasWidth(this.$section.find(".canvas-zoomed"));
         common.showLoader(constants.loaderMessages.drawing, () => {
             this.zoomedStage.removeAllChildren();
@@ -704,5 +699,47 @@ class AccumulativeTreeDrawer {
          */
         const string = $element.css("width");
         return Number.parseInt(string.substring(0, string.length - 2));
+    }
+
+    _enableResizeZoomedCanvas() {
+        constants.$arrowLeft.click(this._updateCanvasWidthDecorator());
+        constants.$arrowRight.click(this._updateCanvasWidthDecorator());
+        $(window).resize(this._updateCanvasWidthDecorator());
+    }
+
+    /**
+     * @return {Function}
+     * @protected
+     */
+    _updateCanvasWidthDecorator() {
+        const that = this;
+        return () => {
+            setTimeout(() => {
+                that._createCanvas();
+                if (that.zoomedNode !== null) {
+                    this._changeZoom(that.zoomedNode);
+                }
+                that._drawFullTree();
+            }, 300)
+        }
+    }
+
+    _createCanvas() {
+        this.$section.find(".canvas-wrapper canvas").remove();
+        const canvasContent = templates.tree.getAccumulativeTreeCanvas(
+            {
+                isNodeZoomed: this.zoomedNode !== null,
+                canvasWidth: this._getCanvasWidthForSection(),
+                canvasHeight: this.canvasHeight
+            }
+        ).content;
+        this.$section.find(".canvas-wrapper").prepend($(canvasContent));
+
+        this.stage = new createjs.Stage("canvas");
+        this.stage.id = "canvas";
+        this.zoomedStage = new createjs.Stage("canvas-zoomed");
+        this.zoomedStage.id = "canvas-zoomed";
+        this.stage.enableMouseOver(20);
+        this.zoomedStage.enableMouseOver(20);
     }
 }

@@ -35,8 +35,6 @@
 
 /**
  * Get section template for base tree
- * @param canvasHeight Height of canvas
- * @param canvasWidth
  * @param header
  */
 {template .getAccumulativeTreeSection}
@@ -44,17 +42,25 @@
     {if $header}
     <h2 class="accumulative-tree-header">{$header}</h2>
     {/if}
-    <div class="canvas-wrapper">
-        <canvas id="canvas" class="original-canvas"
-            width="{$canvasWidth}"
-            height="{$canvasHeight}">
-        </canvas>
-        <canvas id="canvas-zoomed" class="canvas-zoomed"
-            width="{$canvasWidth}"
-            height="{$canvasHeight}">
-        </canvas>
-    </div>
+    <div class="canvas-wrapper"></div>
 </section>
+{/template}
+
+
+/**
+ * @param canvasWidth
+ * @param canvasHeight
+ * @param isNodeZoomed
+ */
+{template .getAccumulativeTreeCanvas}
+<canvas id="canvas" class="original-canvas{if $isNodeZoomed} original-canvas-zoomed{/if}"
+            width="{$canvasWidth}"
+            height="{$canvasHeight}">
+        </canvas>
+        <canvas id="canvas-zoomed" class="canvas-zoomed{if $isNodeZoomed} canvas-zoomed-show{/if}"
+            width="{$canvasWidth}"
+            height="{$canvasHeight}">
+        </canvas>
 {/template}
 
 /**
