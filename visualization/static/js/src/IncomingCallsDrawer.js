@@ -13,7 +13,7 @@ class IncomingCallsDrawer extends AccumulativeTreeDrawer {
      * @override
      */
     flipY(y) {
-        return y + 40;
+        return y;
     }
 
     /**
@@ -27,7 +27,6 @@ class IncomingCallsDrawer extends AccumulativeTreeDrawer {
     /**
      * @param {Number} offsetX
      * @param depth
-     * @private
      * @override
      */
     _setPopupPosition(offsetX, depth) {

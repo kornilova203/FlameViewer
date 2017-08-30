@@ -3,11 +3,18 @@
  */
 const TreeProto = require('../generated/tree_pb');
 
-function drawTree(tree, className, methodName, desc) {
+/**
+ * @param tree
+ * @param {String} className
+ * @param {String} methodName
+ * @param {String} desc
+ * @param {Number} percent
+ */
+function drawTree(tree, className, methodName, desc, percent) {
     if (getPageName() === "incoming-calls") {
-        drawIncomingCalls(tree, className, methodName, desc);
+        drawIncomingCalls(tree, className, methodName, desc, percent);
     } else {
-        drawAccumulativeTree(tree, className, methodName, desc);
+        drawAccumulativeTree(tree, className, methodName, desc, percent);
     }
 }
 
@@ -16,19 +23,30 @@ function drawTree(tree, className, methodName, desc) {
  * @param className
  * @param methodName
  * @param desc
+ * @param {Number} percent
  */
-function drawAccumulativeTree(tree, className, methodName, desc) {
+function drawAccumulativeTree(tree, className, methodName, desc, percent) {
     const drawer = new AccumulativeTreeDrawer(tree);
     common.hideLoader();
-    drawAndShowLoader(drawer, className, methodName, desc);
+    drawAndShowLoader(drawer, className, methodName, desc, percent);
 }
 
-function drawAndShowLoader(drawer, className, methodName, desc) {
+/**
+ * @param {AccumulativeTreeDrawer} drawer
+ * @param {String} className
+ * @param {String} methodName
+ * @param {String} desc
+ * @param {Number} percent
+ */
+function drawAndShowLoader(drawer, className, methodName, desc, percent) {
     common.showLoader(constants.loaderMessages.drawing, () => {
         if (className !== undefined && methodName !== undefined && desc !== undefined) {
-            drawer.setHeader(decodeURIComponent(className) + "." +
-                methodName +
-                desc);
+            drawer.setHeader(
+                decodeURIComponent(className),
+                decodeURIComponent(methodName),
+                decodeURIComponent(desc),
+                percent
+            );
         }
         drawer.draw();
         common.hideLoader();
@@ -40,8 +58,9 @@ function drawAndShowLoader(drawer, className, methodName, desc) {
  * @param className
  * @param methodName
  * @param desc
+ * @param {Number} percent
  */
-function drawIncomingCalls(tree, className, methodName, desc) {
+function drawIncomingCalls(tree, className, methodName, desc, percent) {
     const drawer = new IncomingCallsDrawer(tree);
     if (className === undefined && // if common tree
         drawer.getNodesCount() > 20000) {
@@ -51,7 +70,7 @@ function drawIncomingCalls(tree, className, methodName, desc) {
         return;
     }
     common.hideLoader();
-    drawAndShowLoader(drawer, className, methodName, desc);
+    drawAndShowLoader(drawer, className, methodName, desc, percent);
 }
 
 function treeIsEmpty(tree) {
@@ -92,7 +111,12 @@ $(window).on("load", function () {
                     //noinspection JSUnresolvedVariable
                     const tree = TreeProto.Tree.deserializeBinary(byteArray);
                     if (!treeIsEmpty(tree)) {
-                        drawTree(tree, className, methodName, desc);
+                        let percent = 0;
+                        if (tree.getTreeInfo() !== undefined && tree.getTreeInfo().getTimePercent()) {
+                            percent = common.roundRelativeTime(
+                                tree.getTreeInfo().getTimePercent());
+                        }
+                        drawTree(tree, className, methodName, desc, percent);
                     } else {
                         common.hideLoader();
                         showNoDataFound();

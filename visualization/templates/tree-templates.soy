@@ -35,12 +35,35 @@
 
 /**
  * Get section template for base tree
- * @param header
+ * @param className
+ * @param methodName
+ * @param returnValue
+ * @param parameters
+ * @param timePercent
  */
 {template .getAccumulativeTreeSection}
 <section>
-    {if $header}
-    <h2 class="accumulative-tree-header">{$header}</h2>
+    {if $className}
+        <header>
+            <div class="class-name"><img src="img/class.png"/><code>{$className}</code></div>
+            <h2>
+                <img src="img/method.png"/>
+                <code class="return-value">{$returnValue} </code>
+                <code class="method-name">{$methodName}</code>
+                <wbr>
+                    (
+                    {foreach $parameter in $parameters}
+                        {if $parameter}
+                            <code class="parameter">{$parameter}</code>
+                            {if not isLast($parameter)}
+                                <code>, </code>
+                            {/if}
+                        {/if}
+                    {/foreach}
+                    )
+            </h2>
+            <div class="time-percent"><p>time: {$timePercent}%</p></div>
+        </header>
     {/if}
     <div class="canvas-wrapper"></div>
 </section>
@@ -150,8 +173,7 @@
     </div>
     <div class="class-name"><code>{$className}</code></div>
     <p class="method">
-    <code class="return-value">{$retVal}</code>
-    <code> </code>
+    <code class="return-value">{$retVal} </code>
     <code class="method-name">{$methodName}</code>
     <wbr>
     (

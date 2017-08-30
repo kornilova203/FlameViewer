@@ -4,7 +4,6 @@ const POPUP_MARGIN = 6; // have no idea why there is a gap between popup and can
 const ZOOMED_PARENT_COLOR = "#94bcff";
 const RESET_ZOOM_BUTTON_COLOR = "#9da1ff";
 const HIGHLIGHT_NOT_SET_COLOR = "#d1d1d1";
-const SPACE_ABOVE_TREE = 40;
 
 /**
  * Draws tree without:
@@ -16,11 +15,15 @@ class AccumulativeTreeDrawer {
         this.tree = tree;
         this.treeWidth = this.tree.getWidth();
         this.currentCanvasWidth = 0;
-        this.canvasHeight = (LAYER_HEIGHT + LAYER_GAP) * (this.tree.getDepth() + 1) + SPACE_ABOVE_TREE;
+        this.canvasHeight = (LAYER_HEIGHT + LAYER_GAP) * (this.tree.getDepth() + 1);
         this.$section = null;
         this.stage = null;
         this.zoomedStage = null;
-        this.header = null;
+        this.className = "";
+        this.methodName = "";
+        this.returnValue = "";
+        this.timePercent = 0;
+        this.parameters = [];
         this.zoomedNode = null;
         this.$fileMenu = $(".file-menu");
         this.baseNode = this.tree.getBaseNode();
@@ -52,8 +55,18 @@ class AccumulativeTreeDrawer {
         }
     }
 
-    setHeader(newHeader) {
-        this.header = "for method " + newHeader;
+    /**
+     * @param {String} className
+     * @param {String} methodName
+     * @param {String} desc
+     * @param {Number} timePercent
+     */
+    setHeader(className, methodName, desc, timePercent) {
+        this.className = className;
+        this.methodName = methodName;
+        this.returnValue = AccumulativeTreeDrawer._getReturnValue(desc);
+        this.parameters = AccumulativeTreeDrawer._getParameters(desc);
+        this.timePercent = timePercent;
     }
 
     draw() {
@@ -95,7 +108,13 @@ class AccumulativeTreeDrawer {
 
     _createSection() {
         const sectionContent = templates.tree.getAccumulativeTreeSection(
-            {header: this.header}
+            {
+                className: this.className,
+                methodName: this.methodName,
+                returnValue: this.returnValue,
+                parameters: this.parameters,
+                timePercent: this.timePercent
+            }
         ).content;
         return $(sectionContent).appendTo($("main"));
     };
@@ -212,7 +231,6 @@ class AccumulativeTreeDrawer {
     /**
      * @param {Number} offsetX
      * @param depth
-     * @protected
      */
     _setPopupPosition(offsetX, depth) {
         this.$popup
@@ -762,5 +780,32 @@ class AccumulativeTreeDrawer {
         const h = 195 + coefficient * 40;
         const l = 50 + 10 * coefficient;
         return `hsl(${h}, 94%, ${l}%)`
+    }
+
+    /**
+     * @param {String} desc
+     * @return {String}
+     * @private
+     */
+    static _getReturnValue(desc) {
+        const bracket = desc.lastIndexOf(")");
+        if (bracket === -1) {
+            return "";
+        }
+        return desc.substring(bracket + 1, desc.length)
+    }
+
+    /**
+     * @param {String} desc
+     * @private
+     * @return {Array}
+     */
+    static _getParameters(desc) {
+        const openBracket = desc.indexOf("(");
+        const closeBracket = desc.lastIndexOf(")");
+        if (openBracket !== -1 && closeBracket !== -1) {
+            return desc.substring(openBracket + 1, closeBracket).split(", ");
+        }
+        return [];
     }
 }

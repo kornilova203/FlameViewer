@@ -3098,12 +3098,17 @@ public final class TreeProtos {
        */
       com.github.kornilova_l.libs.com.google.protobuf.ByteString
           getThreadNameBytes();
+
+      /**
+       * <pre>
+       * for method trees
+       * </pre>
+       *
+       * <code>float time_percent = 5;</code>
+       */
+      float getTimePercent();
     }
     /**
-     * <pre>
-     * only for ser_trees which save original call structure
-     * </pre>
-     *
      * Protobuf type {@code com.github.kornilova_l.flamegraph.proto.Tree.TreeInfo}
      */
     public  static final class TreeInfo extends
@@ -3117,6 +3122,7 @@ public final class TreeProtos {
       private TreeInfo() {
         startTime_ = 0L;
         threadName_ = "";
+        timePercent_ = 0F;
       }
 
       @java.lang.Override
@@ -3153,6 +3159,11 @@ public final class TreeProtos {
                 java.lang.String s = input.readStringRequireUtf8();
 
                 threadName_ = s;
+                break;
+              }
+              case 45: {
+
+                timePercent_ = input.readFloat();
                 break;
               }
             }
@@ -3221,6 +3232,19 @@ public final class TreeProtos {
         }
       }
 
+      public static final int TIME_PERCENT_FIELD_NUMBER = 5;
+      private float timePercent_;
+      /**
+       * <pre>
+       * for method trees
+       * </pre>
+       *
+       * <code>float time_percent = 5;</code>
+       */
+      public float getTimePercent() {
+        return timePercent_;
+      }
+
       private byte memoizedIsInitialized = -1;
       public final boolean isInitialized() {
         byte isInitialized = memoizedIsInitialized;
@@ -3239,6 +3263,9 @@ public final class TreeProtos {
         if (!getThreadNameBytes().isEmpty()) {
           com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.writeString(output, 4, threadName_);
         }
+        if (timePercent_ != 0F) {
+          output.writeFloat(5, timePercent_);
+        }
       }
 
       public int getSerializedSize() {
@@ -3252,6 +3279,10 @@ public final class TreeProtos {
         }
         if (!getThreadNameBytes().isEmpty()) {
           size += com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.computeStringSize(4, threadName_);
+        }
+        if (timePercent_ != 0F) {
+          size += com.github.kornilova_l.libs.com.google.protobuf.CodedOutputStream
+            .computeFloatSize(5, timePercent_);
         }
         memoizedSize = size;
         return size;
@@ -3273,6 +3304,10 @@ public final class TreeProtos {
             == other.getStartTime());
         result = result && getThreadName()
             .equals(other.getThreadName());
+        result = result && (
+            java.lang.Float.floatToIntBits(getTimePercent())
+            == java.lang.Float.floatToIntBits(
+                other.getTimePercent()));
         return result;
       }
 
@@ -3288,6 +3323,9 @@ public final class TreeProtos {
             getStartTime());
         hash = (37 * hash) + THREAD_NAME_FIELD_NUMBER;
         hash = (53 * hash) + getThreadName().hashCode();
+        hash = (37 * hash) + TIME_PERCENT_FIELD_NUMBER;
+        hash = (53 * hash) + java.lang.Float.floatToIntBits(
+            getTimePercent());
         hash = (29 * hash) + unknownFields.hashCode();
         memoizedHashCode = hash;
         return hash;
@@ -3382,10 +3420,6 @@ public final class TreeProtos {
         return builder;
       }
       /**
-       * <pre>
-       * only for ser_trees which save original call structure
-       * </pre>
-       *
        * Protobuf type {@code com.github.kornilova_l.flamegraph.proto.Tree.TreeInfo}
        */
       public static final class Builder extends
@@ -3425,6 +3459,8 @@ public final class TreeProtos {
 
           threadName_ = "";
 
+          timePercent_ = 0F;
+
           return this;
         }
 
@@ -3449,6 +3485,7 @@ public final class TreeProtos {
           com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfo result = new com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.TreeInfo(this);
           result.startTime_ = startTime_;
           result.threadName_ = threadName_;
+          result.timePercent_ = timePercent_;
           onBuilt();
           return result;
         }
@@ -3496,6 +3533,9 @@ public final class TreeProtos {
           if (!other.getThreadName().isEmpty()) {
             threadName_ = other.threadName_;
             onChanged();
+          }
+          if (other.getTimePercent() != 0F) {
+            setTimePercent(other.getTimePercent());
           }
           onChanged();
           return this;
@@ -3614,6 +3654,44 @@ public final class TreeProtos {
   checkByteStringIsUtf8(value);
           
           threadName_ = value;
+          onChanged();
+          return this;
+        }
+
+        private float timePercent_ ;
+        /**
+         * <pre>
+         * for method trees
+         * </pre>
+         *
+         * <code>float time_percent = 5;</code>
+         */
+        public float getTimePercent() {
+          return timePercent_;
+        }
+        /**
+         * <pre>
+         * for method trees
+         * </pre>
+         *
+         * <code>float time_percent = 5;</code>
+         */
+        public Builder setTimePercent(float value) {
+          
+          timePercent_ = value;
+          onChanged();
+          return this;
+        }
+        /**
+         * <pre>
+         * for method trees
+         * </pre>
+         *
+         * <code>float time_percent = 5;</code>
+         */
+        public Builder clearTimePercent() {
+          
+          timePercent_ = 0F;
           onChanged();
           return this;
         }
@@ -4450,7 +4528,7 @@ public final class TreeProtos {
       "\n2com/github/kornilova_l/flamegraph/prot" +
       "o/tree.proto\022\'com.github.kornilova_l.fla" +
       "megraph.proto\0323com/github/kornilova_l/fl" +
-      "amegraph/proto/event.proto\"\365\005\n\004Tree\022I\n\tt" +
+      "amegraph/proto/event.proto\"\213\006\n\004Tree\022I\n\tt" +
       "ree_info\030\001 \001(\01326.com.github.kornilova_l." +
       "flamegraph.proto.Tree.TreeInfo\022E\n\tbase_n" +
       "ode\030\002 \001(\01322.com.github.kornilova_l.flame" +
@@ -4468,9 +4546,9 @@ public final class TreeProtos {
       "\0132,.com.github.kornilova_l.flamegraph.pr" +
       "oto.VarH\000\022H\n\texception\030\006 \001(\01323.com.githu",
       "b.kornilova_l.flamegraph.proto.Var.Objec" +
-      "tH\000B\010\n\006result\0323\n\010TreeInfo\022\022\n\nstart_time\030" +
-      "\002 \001(\003\022\023\n\013thread_name\030\004 \001(\tB\014B\nTreeProtos" +
-      "b\006proto3"
+      "tH\000B\010\n\006result\032I\n\010TreeInfo\022\022\n\nstart_time\030" +
+      "\002 \001(\003\022\023\n\013thread_name\030\004 \001(\t\022\024\n\014time_perce" +
+      "nt\030\005 \001(\002B\014B\nTreeProtosb\006proto3"
     };
     com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.github.kornilova_l.libs.com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -4508,7 +4586,7 @@ public final class TreeProtos {
     internal_static_com_github_kornilova_l_flamegraph_proto_Tree_TreeInfo_fieldAccessorTable = new
       com.github.kornilova_l.libs.com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_github_kornilova_l_flamegraph_proto_Tree_TreeInfo_descriptor,
-        new java.lang.String[] { "StartTime", "ThreadName", });
+        new java.lang.String[] { "StartTime", "ThreadName", "TimePercent", });
     com.github.kornilova_l.flamegraph.proto.EventProtos.getDescriptor();
   }
 

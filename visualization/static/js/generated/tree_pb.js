@@ -911,7 +911,8 @@ proto.com.github.kornilova_l.flamegraph.proto.Tree.TreeInfo.prototype.toObject =
 proto.com.github.kornilova_l.flamegraph.proto.Tree.TreeInfo.toObject = function(includeInstance, msg) {
   var f, obj = {
     startTime: jspb.Message.getFieldWithDefault(msg, 2, 0),
-    threadName: jspb.Message.getFieldWithDefault(msg, 4, "")
+    threadName: jspb.Message.getFieldWithDefault(msg, 4, ""),
+    timePercent: +jspb.Message.getFieldWithDefault(msg, 5, 0.0)
   };
 
   if (includeInstance) {
@@ -956,6 +957,10 @@ proto.com.github.kornilova_l.flamegraph.proto.Tree.TreeInfo.deserializeBinaryFro
       var value = /** @type {string} */ (reader.readString());
       msg.setThreadName(value);
       break;
+    case 5:
+      var value = /** @type {number} */ (reader.readFloat());
+      msg.setTimePercent(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -998,6 +1003,13 @@ proto.com.github.kornilova_l.flamegraph.proto.Tree.TreeInfo.serializeBinaryToWri
       f
     );
   }
+  f = message.getTimePercent();
+  if (f !== 0.0) {
+    writer.writeFloat(
+      5,
+      f
+    );
+  }
 };
 
 
@@ -1028,6 +1040,21 @@ proto.com.github.kornilova_l.flamegraph.proto.Tree.TreeInfo.prototype.getThreadN
 /** @param {string} value */
 proto.com.github.kornilova_l.flamegraph.proto.Tree.TreeInfo.prototype.setThreadName = function(value) {
   jspb.Message.setField(this, 4, value);
+};
+
+
+/**
+ * optional float time_percent = 5;
+ * @return {number}
+ */
+proto.com.github.kornilova_l.flamegraph.proto.Tree.TreeInfo.prototype.getTimePercent = function() {
+  return /** @type {number} */ (+jspb.Message.getFieldWithDefault(this, 5, 0.0));
+};
+
+
+/** @param {number} value */
+proto.com.github.kornilova_l.flamegraph.proto.Tree.TreeInfo.prototype.setTimePercent = function(value) {
+  jspb.Message.setField(this, 5, value);
 };
 
 

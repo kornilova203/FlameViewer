@@ -31,10 +31,6 @@ main::-webkit-scrollbar-thumb, .call-tree-wrapper::-webkit-scrollbar-thumb {
     opacity: 1;
 }
 
-.return-value {
-    color: #000080;
-}
-
 .method-name {
     color: black;
 }
@@ -46,10 +42,6 @@ main::-webkit-scrollbar-thumb, .call-tree-wrapper::-webkit-scrollbar-thumb {
 .class-name code {
     padding-left: 12px;
     color: #666;
-}
-
-.parameter {
-    color: #660E82;
 }
 
 .total-time {

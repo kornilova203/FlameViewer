@@ -23,12 +23,12 @@ goog.exportSymbol('proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vec
  * @extends {jspb.Message}
  * @constructor
  */
-proto.com.github.kornilova_l.flamegraph.proto.TreePreview = function (opt_data) {
-    jspb.Message.initialize(this, opt_data, 0, -1, proto.com.github.kornilova_l.flamegraph.proto.TreePreview.repeatedFields_, null);
+proto.com.github.kornilova_l.flamegraph.proto.TreePreview = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, proto.com.github.kornilova_l.flamegraph.proto.TreePreview.repeatedFields_, null);
 };
 goog.inherits(proto.com.github.kornilova_l.flamegraph.proto.TreePreview, jspb.Message);
 if (goog.DEBUG && !COMPILED) {
-    proto.com.github.kornilova_l.flamegraph.proto.TreePreview.displayName = 'proto.com.github.kornilova_l.flamegraph.proto.TreePreview';
+  proto.com.github.kornilova_l.flamegraph.proto.TreePreview.displayName = 'proto.com.github.kornilova_l.flamegraph.proto.TreePreview';
 }
 /**
  * List of repeated fields within this message type.
@@ -40,43 +40,43 @@ proto.com.github.kornilova_l.flamegraph.proto.TreePreview.repeatedFields_ = [4];
 
 
 if (jspb.Message.GENERATE_TO_OBJECT) {
-    /**
-     * Creates an object representation of this proto suitable for use in Soy templates.
-     * Field names that are reserved in JavaScript and will be renamed to pb_name.
-     * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
-     * For the list of reserved names please see:
-     *     com.google.apps.jspb.JsClassTemplate.JS_RESERVED_WORDS.
-     * @param {boolean=} opt_includeInstance Whether to include the JSPB instance
-     *     for transitional soy proto support: http://goto/soy-param-migration
-     * @return {!Object}
-     */
-    proto.com.github.kornilova_l.flamegraph.proto.TreePreview.prototype.toObject = function (opt_includeInstance) {
-        return proto.com.github.kornilova_l.flamegraph.proto.TreePreview.toObject(opt_includeInstance, this);
-    };
+/**
+ * Creates an object representation of this proto suitable for use in Soy templates.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     com.google.apps.jspb.JsClassTemplate.JS_RESERVED_WORDS.
+ * @param {boolean=} opt_includeInstance Whether to include the JSPB instance
+ *     for transitional soy proto support: http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.com.github.kornilova_l.flamegraph.proto.TreePreview.prototype.toObject = function(opt_includeInstance) {
+  return proto.com.github.kornilova_l.flamegraph.proto.TreePreview.toObject(opt_includeInstance, this);
+};
 
 
-    /**
-     * Static version of the {@see toObject} method.
-     * @param {boolean|undefined} includeInstance Whether to include the JSPB
-     *     instance for transitional soy proto support:
-     *     http://goto/soy-param-migration
-     * @param {!proto.com.github.kornilova_l.flamegraph.proto.TreePreview} msg The msg instance to transform.
-     * @return {!Object}
-     */
-    proto.com.github.kornilova_l.flamegraph.proto.TreePreview.toObject = function (includeInstance, msg) {
-        var f, obj = {
-            treeInfo: (f = msg.getTreeInfo()) && com_github_kornilova_l_flamegraph_proto_tree_pb.Tree.TreeInfo.toObject(includeInstance, f),
-            depth: jspb.Message.getFieldWithDefault(msg, 2, 0),
-            width: jspb.Message.getFieldWithDefault(msg, 3, 0),
-            vectorsList: jspb.Message.toObjectList(msg.getVectorsList(),
-                proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.toObject, includeInstance)
-        };
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Whether to include the JSPB
+ *     instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.com.github.kornilova_l.flamegraph.proto.TreePreview} msg The msg instance to transform.
+ * @return {!Object}
+ */
+proto.com.github.kornilova_l.flamegraph.proto.TreePreview.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    treeInfo: (f = msg.getTreeInfo()) && com_github_kornilova_l_flamegraph_proto_tree_pb.Tree.TreeInfo.toObject(includeInstance, f),
+    depth: jspb.Message.getFieldWithDefault(msg, 2, 0),
+    width: jspb.Message.getFieldWithDefault(msg, 3, 0),
+    vectorsList: jspb.Message.toObjectList(msg.getVectorsList(),
+    proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.toObject, includeInstance)
+  };
 
-        if (includeInstance) {
-            obj.$jspbMessageInstance = msg;
-        }
-        return obj;
-    };
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
 }
 
 
@@ -85,10 +85,10 @@ if (jspb.Message.GENERATE_TO_OBJECT) {
  * @param {jspb.ByteSource} bytes The bytes to deserialize.
  * @return {!proto.com.github.kornilova_l.flamegraph.proto.TreePreview}
  */
-proto.com.github.kornilova_l.flamegraph.proto.TreePreview.deserializeBinary = function (bytes) {
-    var reader = new jspb.BinaryReader(bytes);
-    var msg = new proto.com.github.kornilova_l.flamegraph.proto.TreePreview;
-    return proto.com.github.kornilova_l.flamegraph.proto.TreePreview.deserializeBinaryFromReader(msg, reader);
+proto.com.github.kornilova_l.flamegraph.proto.TreePreview.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.com.github.kornilova_l.flamegraph.proto.TreePreview;
+  return proto.com.github.kornilova_l.flamegraph.proto.TreePreview.deserializeBinaryFromReader(msg, reader);
 };
 
 
@@ -99,37 +99,37 @@ proto.com.github.kornilova_l.flamegraph.proto.TreePreview.deserializeBinary = fu
  * @param {!jspb.BinaryReader} reader The BinaryReader to use.
  * @return {!proto.com.github.kornilova_l.flamegraph.proto.TreePreview}
  */
-proto.com.github.kornilova_l.flamegraph.proto.TreePreview.deserializeBinaryFromReader = function (msg, reader) {
-    while (reader.nextField()) {
-        if (reader.isEndGroup()) {
-            break;
-        }
-        var field = reader.getFieldNumber();
-        switch (field) {
-            case 1:
-                var value = new com_github_kornilova_l_flamegraph_proto_tree_pb.Tree.TreeInfo;
-                reader.readMessage(value, com_github_kornilova_l_flamegraph_proto_tree_pb.Tree.TreeInfo.deserializeBinaryFromReader);
-                msg.setTreeInfo(value);
-                break;
-            case 2:
-                var value = /** @type {number} */ (reader.readUint32());
-                msg.setDepth(value);
-                break;
-            case 3:
-                var value = /** @type {number} */ (reader.readInt64());
-                msg.setWidth(value);
-                break;
-            case 4:
-                var value = new proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector;
-                reader.readMessage(value, proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.deserializeBinaryFromReader);
-                msg.addVectors(value);
-                break;
-            default:
-                reader.skipField();
-                break;
-        }
+proto.com.github.kornilova_l.flamegraph.proto.TreePreview.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
     }
-    return msg;
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = new com_github_kornilova_l_flamegraph_proto_tree_pb.Tree.TreeInfo;
+      reader.readMessage(value,com_github_kornilova_l_flamegraph_proto_tree_pb.Tree.TreeInfo.deserializeBinaryFromReader);
+      msg.setTreeInfo(value);
+      break;
+    case 2:
+      var value = /** @type {number} */ (reader.readUint32());
+      msg.setDepth(value);
+      break;
+    case 3:
+      var value = /** @type {number} */ (reader.readInt64());
+      msg.setWidth(value);
+      break;
+    case 4:
+      var value = new proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector;
+      reader.readMessage(value,proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.deserializeBinaryFromReader);
+      msg.addVectors(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
 };
 
 
@@ -137,10 +137,10 @@ proto.com.github.kornilova_l.flamegraph.proto.TreePreview.deserializeBinaryFromR
  * Serializes the message to binary data (in protobuf wire format).
  * @return {!Uint8Array}
  */
-proto.com.github.kornilova_l.flamegraph.proto.TreePreview.prototype.serializeBinary = function () {
-    var writer = new jspb.BinaryWriter();
-    proto.com.github.kornilova_l.flamegraph.proto.TreePreview.serializeBinaryToWriter(this, writer);
-    return writer.getResultBuffer();
+proto.com.github.kornilova_l.flamegraph.proto.TreePreview.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.com.github.kornilova_l.flamegraph.proto.TreePreview.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
 };
 
 
@@ -150,38 +150,38 @@ proto.com.github.kornilova_l.flamegraph.proto.TreePreview.prototype.serializeBin
  * @param {!proto.com.github.kornilova_l.flamegraph.proto.TreePreview} message
  * @param {!jspb.BinaryWriter} writer
  */
-proto.com.github.kornilova_l.flamegraph.proto.TreePreview.serializeBinaryToWriter = function (message, writer) {
-    var f = undefined;
-    f = message.getTreeInfo();
-    if (f != null) {
-        writer.writeMessage(
-            1,
-            f,
-            com_github_kornilova_l_flamegraph_proto_tree_pb.Tree.TreeInfo.serializeBinaryToWriter
-        );
-    }
-    f = message.getDepth();
-    if (f !== 0) {
-        writer.writeUint32(
-            2,
-            f
-        );
-    }
-    f = message.getWidth();
-    if (f !== 0) {
-        writer.writeInt64(
-            3,
-            f
-        );
-    }
-    f = message.getVectorsList();
-    if (f.length > 0) {
-        writer.writeRepeatedMessage(
-            4,
-            f,
-            proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.serializeBinaryToWriter
-        );
-    }
+proto.com.github.kornilova_l.flamegraph.proto.TreePreview.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getTreeInfo();
+  if (f != null) {
+    writer.writeMessage(
+      1,
+      f,
+      com_github_kornilova_l_flamegraph_proto_tree_pb.Tree.TreeInfo.serializeBinaryToWriter
+    );
+  }
+  f = message.getDepth();
+  if (f !== 0) {
+    writer.writeUint32(
+      2,
+      f
+    );
+  }
+  f = message.getWidth();
+  if (f !== 0) {
+    writer.writeInt64(
+      3,
+      f
+    );
+  }
+  f = message.getVectorsList();
+  if (f.length > 0) {
+    writer.writeRepeatedMessage(
+      4,
+      f,
+      proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.serializeBinaryToWriter
+    );
+  }
 };
 
 
@@ -196,12 +196,12 @@ proto.com.github.kornilova_l.flamegraph.proto.TreePreview.serializeBinaryToWrite
  * @extends {jspb.Message}
  * @constructor
  */
-proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector = function (opt_data) {
-    jspb.Message.initialize(this, opt_data, 0, -1, null, proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.oneofGroups_);
+proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.oneofGroups_);
 };
 goog.inherits(proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector, jspb.Message);
 if (goog.DEBUG && !COMPILED) {
-    proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.displayName = 'proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector';
+  proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.displayName = 'proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector';
 }
 /**
  * Oneof group definitions for this message. Each group defines the field
@@ -211,61 +211,61 @@ if (goog.DEBUG && !COMPILED) {
  * @private {!Array<!Array<number>>}
  * @const
  */
-proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.oneofGroups_ = [[1, 2]];
+proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.oneofGroups_ = [[1,2]];
 
 /**
  * @enum {number}
  */
 proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.VectorCase = {
-    VECTOR_NOT_SET: 0,
-    X: 1,
-    Y: 2
+  VECTOR_NOT_SET: 0,
+  X: 1,
+  Y: 2
 };
 
 /**
  * @return {proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.VectorCase}
  */
-proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.prototype.getVectorCase = function () {
-    return /** @type {proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.VectorCase} */(jspb.Message.computeOneofCase(this, proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.oneofGroups_[0]));
+proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.prototype.getVectorCase = function() {
+  return /** @type {proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.VectorCase} */(jspb.Message.computeOneofCase(this, proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.oneofGroups_[0]));
 };
 
 
 
 if (jspb.Message.GENERATE_TO_OBJECT) {
-    /**
-     * Creates an object representation of this proto suitable for use in Soy templates.
-     * Field names that are reserved in JavaScript and will be renamed to pb_name.
-     * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
-     * For the list of reserved names please see:
-     *     com.google.apps.jspb.JsClassTemplate.JS_RESERVED_WORDS.
-     * @param {boolean=} opt_includeInstance Whether to include the JSPB instance
-     *     for transitional soy proto support: http://goto/soy-param-migration
-     * @return {!Object}
-     */
-    proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.prototype.toObject = function (opt_includeInstance) {
-        return proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.toObject(opt_includeInstance, this);
-    };
+/**
+ * Creates an object representation of this proto suitable for use in Soy templates.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     com.google.apps.jspb.JsClassTemplate.JS_RESERVED_WORDS.
+ * @param {boolean=} opt_includeInstance Whether to include the JSPB instance
+ *     for transitional soy proto support: http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.prototype.toObject = function(opt_includeInstance) {
+  return proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.toObject(opt_includeInstance, this);
+};
 
 
-    /**
-     * Static version of the {@see toObject} method.
-     * @param {boolean|undefined} includeInstance Whether to include the JSPB
-     *     instance for transitional soy proto support:
-     *     http://goto/soy-param-migration
-     * @param {!proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector} msg The msg instance to transform.
-     * @return {!Object}
-     */
-    proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.toObject = function (includeInstance, msg) {
-        var f, obj = {
-            x: jspb.Message.getFieldWithDefault(msg, 1, 0),
-            y: jspb.Message.getFieldWithDefault(msg, 2, 0)
-        };
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Whether to include the JSPB
+ *     instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector} msg The msg instance to transform.
+ * @return {!Object}
+ */
+proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    x: jspb.Message.getFieldWithDefault(msg, 1, 0),
+    y: jspb.Message.getFieldWithDefault(msg, 2, 0)
+  };
 
-        if (includeInstance) {
-            obj.$jspbMessageInstance = msg;
-        }
-        return obj;
-    };
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
 }
 
 
@@ -274,10 +274,10 @@ if (jspb.Message.GENERATE_TO_OBJECT) {
  * @param {jspb.ByteSource} bytes The bytes to deserialize.
  * @return {!proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector}
  */
-proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.deserializeBinary = function (bytes) {
-    var reader = new jspb.BinaryReader(bytes);
-    var msg = new proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector;
-    return proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.deserializeBinaryFromReader(msg, reader);
+proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector;
+  return proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.deserializeBinaryFromReader(msg, reader);
 };
 
 
@@ -288,27 +288,27 @@ proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.deserializeBina
  * @param {!jspb.BinaryReader} reader The BinaryReader to use.
  * @return {!proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector}
  */
-proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.deserializeBinaryFromReader = function (msg, reader) {
-    while (reader.nextField()) {
-        if (reader.isEndGroup()) {
-            break;
-        }
-        var field = reader.getFieldNumber();
-        switch (field) {
-            case 1:
-                var value = /** @type {number} */ (reader.readUint64());
-                msg.setX(value);
-                break;
-            case 2:
-                var value = /** @type {number} */ (reader.readInt32());
-                msg.setY(value);
-                break;
-            default:
-                reader.skipField();
-                break;
-        }
+proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
     }
-    return msg;
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = /** @type {number} */ (reader.readUint64());
+      msg.setX(value);
+      break;
+    case 2:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setY(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
 };
 
 
@@ -316,10 +316,10 @@ proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.deserializeBina
  * Serializes the message to binary data (in protobuf wire format).
  * @return {!Uint8Array}
  */
-proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.prototype.serializeBinary = function () {
-    var writer = new jspb.BinaryWriter();
-    proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.serializeBinaryToWriter(this, writer);
-    return writer.getResultBuffer();
+proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
 };
 
 
@@ -329,22 +329,22 @@ proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.prototype.seria
  * @param {!proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector} message
  * @param {!jspb.BinaryWriter} writer
  */
-proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.serializeBinaryToWriter = function (message, writer) {
-    var f = undefined;
-    f = /** @type {number} */ (jspb.Message.getField(message, 1));
-    if (f != null) {
-        writer.writeUint64(
-            1,
-            f
-        );
-    }
-    f = /** @type {number} */ (jspb.Message.getField(message, 2));
-    if (f != null) {
-        writer.writeInt32(
-            2,
-            f
-        );
-    }
+proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = /** @type {number} */ (jspb.Message.getField(message, 1));
+  if (f != null) {
+    writer.writeUint64(
+      1,
+      f
+    );
+  }
+  f = /** @type {number} */ (jspb.Message.getField(message, 2));
+  if (f != null) {
+    writer.writeInt32(
+      2,
+      f
+    );
+  }
 };
 
 
@@ -352,19 +352,19 @@ proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.serializeBinary
  * optional uint64 x = 1;
  * @return {number}
  */
-proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.prototype.getX = function () {
-    return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
+proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.prototype.getX = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
 };
 
 
 /** @param {number} value */
-proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.prototype.setX = function (value) {
-    jspb.Message.setOneofField(this, 1, proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.oneofGroups_[0], value);
+proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.prototype.setX = function(value) {
+  jspb.Message.setOneofField(this, 1, proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.oneofGroups_[0], value);
 };
 
 
-proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.prototype.clearX = function () {
-    jspb.Message.setOneofField(this, 1, proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.oneofGroups_[0], undefined);
+proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.prototype.clearX = function() {
+  jspb.Message.setOneofField(this, 1, proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.oneofGroups_[0], undefined);
 };
 
 
@@ -372,8 +372,8 @@ proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.prototype.clear
  * Returns whether this field is set.
  * @return {!boolean}
  */
-proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.prototype.hasX = function () {
-    return jspb.Message.getField(this, 1) != null;
+proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.prototype.hasX = function() {
+  return jspb.Message.getField(this, 1) != null;
 };
 
 
@@ -381,19 +381,19 @@ proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.prototype.hasX 
  * optional int32 y = 2;
  * @return {number}
  */
-proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.prototype.getY = function () {
-    return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.prototype.getY = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
 };
 
 
 /** @param {number} value */
-proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.prototype.setY = function (value) {
-    jspb.Message.setOneofField(this, 2, proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.oneofGroups_[0], value);
+proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.prototype.setY = function(value) {
+  jspb.Message.setOneofField(this, 2, proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.oneofGroups_[0], value);
 };
 
 
-proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.prototype.clearY = function () {
-    jspb.Message.setOneofField(this, 2, proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.oneofGroups_[0], undefined);
+proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.prototype.clearY = function() {
+  jspb.Message.setOneofField(this, 2, proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.oneofGroups_[0], undefined);
 };
 
 
@@ -401,8 +401,8 @@ proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.prototype.clear
  * Returns whether this field is set.
  * @return {!boolean}
  */
-proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.prototype.hasY = function () {
-    return jspb.Message.getField(this, 2) != null;
+proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.prototype.hasY = function() {
+  return jspb.Message.getField(this, 2) != null;
 };
 
 
@@ -410,20 +410,20 @@ proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector.prototype.hasY 
  * optional Tree.TreeInfo tree_info = 1;
  * @return {?proto.com.github.kornilova_l.flamegraph.proto.Tree.TreeInfo}
  */
-proto.com.github.kornilova_l.flamegraph.proto.TreePreview.prototype.getTreeInfo = function () {
-    return /** @type{?proto.com.github.kornilova_l.flamegraph.proto.Tree.TreeInfo} */ (
-        jspb.Message.getWrapperField(this, com_github_kornilova_l_flamegraph_proto_tree_pb.Tree.TreeInfo, 1));
+proto.com.github.kornilova_l.flamegraph.proto.TreePreview.prototype.getTreeInfo = function() {
+  return /** @type{?proto.com.github.kornilova_l.flamegraph.proto.Tree.TreeInfo} */ (
+    jspb.Message.getWrapperField(this, com_github_kornilova_l_flamegraph_proto_tree_pb.Tree.TreeInfo, 1));
 };
 
 
 /** @param {?proto.com.github.kornilova_l.flamegraph.proto.Tree.TreeInfo|undefined} value */
-proto.com.github.kornilova_l.flamegraph.proto.TreePreview.prototype.setTreeInfo = function (value) {
-    jspb.Message.setWrapperField(this, 1, value);
+proto.com.github.kornilova_l.flamegraph.proto.TreePreview.prototype.setTreeInfo = function(value) {
+  jspb.Message.setWrapperField(this, 1, value);
 };
 
 
-proto.com.github.kornilova_l.flamegraph.proto.TreePreview.prototype.clearTreeInfo = function () {
-    this.setTreeInfo(undefined);
+proto.com.github.kornilova_l.flamegraph.proto.TreePreview.prototype.clearTreeInfo = function() {
+  this.setTreeInfo(undefined);
 };
 
 
@@ -431,8 +431,8 @@ proto.com.github.kornilova_l.flamegraph.proto.TreePreview.prototype.clearTreeInf
  * Returns whether this field is set.
  * @return {!boolean}
  */
-proto.com.github.kornilova_l.flamegraph.proto.TreePreview.prototype.hasTreeInfo = function () {
-    return jspb.Message.getField(this, 1) != null;
+proto.com.github.kornilova_l.flamegraph.proto.TreePreview.prototype.hasTreeInfo = function() {
+  return jspb.Message.getField(this, 1) != null;
 };
 
 
@@ -440,14 +440,14 @@ proto.com.github.kornilova_l.flamegraph.proto.TreePreview.prototype.hasTreeInfo 
  * optional uint32 depth = 2;
  * @return {number}
  */
-proto.com.github.kornilova_l.flamegraph.proto.TreePreview.prototype.getDepth = function () {
-    return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+proto.com.github.kornilova_l.flamegraph.proto.TreePreview.prototype.getDepth = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
 };
 
 
 /** @param {number} value */
-proto.com.github.kornilova_l.flamegraph.proto.TreePreview.prototype.setDepth = function (value) {
-    jspb.Message.setField(this, 2, value);
+proto.com.github.kornilova_l.flamegraph.proto.TreePreview.prototype.setDepth = function(value) {
+  jspb.Message.setField(this, 2, value);
 };
 
 
@@ -455,14 +455,14 @@ proto.com.github.kornilova_l.flamegraph.proto.TreePreview.prototype.setDepth = f
  * optional int64 width = 3;
  * @return {number}
  */
-proto.com.github.kornilova_l.flamegraph.proto.TreePreview.prototype.getWidth = function () {
-    return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
+proto.com.github.kornilova_l.flamegraph.proto.TreePreview.prototype.getWidth = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
 };
 
 
 /** @param {number} value */
-proto.com.github.kornilova_l.flamegraph.proto.TreePreview.prototype.setWidth = function (value) {
-    jspb.Message.setField(this, 3, value);
+proto.com.github.kornilova_l.flamegraph.proto.TreePreview.prototype.setWidth = function(value) {
+  jspb.Message.setField(this, 3, value);
 };
 
 
@@ -472,15 +472,15 @@ proto.com.github.kornilova_l.flamegraph.proto.TreePreview.prototype.setWidth = f
  * replace the array itself, then you must call the setter to update it.
  * @return {!Array.<!proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector>}
  */
-proto.com.github.kornilova_l.flamegraph.proto.TreePreview.prototype.getVectorsList = function () {
-    return /** @type{!Array.<!proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector>} */ (
-        jspb.Message.getRepeatedWrapperField(this, proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector, 4));
+proto.com.github.kornilova_l.flamegraph.proto.TreePreview.prototype.getVectorsList = function() {
+  return /** @type{!Array.<!proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector>} */ (
+    jspb.Message.getRepeatedWrapperField(this, proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector, 4));
 };
 
 
 /** @param {!Array.<!proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector>} value */
-proto.com.github.kornilova_l.flamegraph.proto.TreePreview.prototype.setVectorsList = function (value) {
-    jspb.Message.setRepeatedWrapperField(this, 4, value);
+proto.com.github.kornilova_l.flamegraph.proto.TreePreview.prototype.setVectorsList = function(value) {
+  jspb.Message.setRepeatedWrapperField(this, 4, value);
 };
 
 
@@ -489,13 +489,13 @@ proto.com.github.kornilova_l.flamegraph.proto.TreePreview.prototype.setVectorsLi
  * @param {number=} opt_index
  * @return {!proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector}
  */
-proto.com.github.kornilova_l.flamegraph.proto.TreePreview.prototype.addVectors = function (opt_value, opt_index) {
-    return jspb.Message.addToRepeatedWrapperField(this, 4, opt_value, proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector, opt_index);
+proto.com.github.kornilova_l.flamegraph.proto.TreePreview.prototype.addVectors = function(opt_value, opt_index) {
+  return jspb.Message.addToRepeatedWrapperField(this, 4, opt_value, proto.com.github.kornilova_l.flamegraph.proto.TreePreview.Vector, opt_index);
 };
 
 
-proto.com.github.kornilova_l.flamegraph.proto.TreePreview.prototype.clearVectorsList = function () {
-    this.setVectorsList([]);
+proto.com.github.kornilova_l.flamegraph.proto.TreePreview.prototype.clearVectorsList = function() {
+  this.setVectorsList([]);
 };
 
 

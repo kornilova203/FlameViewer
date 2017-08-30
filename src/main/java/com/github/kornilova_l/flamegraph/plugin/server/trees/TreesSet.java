@@ -36,6 +36,7 @@ public abstract class TreesSet {
 
     @Nullable
     private static Tree getTreeForMethod(Tree sourceTree,
+                                         Tree outgoingCalls,
                                          String className,
                                          String methodName,
                                          String desc,
@@ -44,7 +45,7 @@ public abstract class TreesSet {
             return null;
         }
         return new MethodAccumulativeTreeBuilder(
-                sourceTree, className, methodName, desc, isStatic
+                sourceTree, outgoingCalls, className, methodName, desc, isStatic
         ).getTree();
     }
 
@@ -88,11 +89,11 @@ public abstract class TreesSet {
         switch (treeType) {
             case OUTGOING_CALLS:
                 getTree(TreeType.OUTGOING_CALLS, null);
-                tree = getTreeForMethod(outgoingCalls, className, methodName, desc, isStatic);
+                tree = getTreeForMethod(outgoingCalls, outgoingCalls, className, methodName, desc, isStatic);
                 break;
             case INCOMING_CALLS:
                 getTree(TreeType.INCOMING_CALLS, null);
-                tree = getTreeForMethod(incomingCalls, className, methodName, desc, isStatic);
+                tree = getTreeForMethod(incomingCalls, outgoingCalls, className, methodName, desc, isStatic);
                 break;
             default:
                 throw new IllegalArgumentException("Tree type is not supported");
@@ -139,7 +140,7 @@ public abstract class TreesSet {
         }
     }
 
-    private long getSelfTime(Node node) {
+    public static long getSelfTime(Node node) {
         long childTime = 0;
         for (Node child : node.getNodesList()) {
             childTime += child.getWidth();

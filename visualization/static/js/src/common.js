@@ -76,6 +76,14 @@ common.escapeRegExp = (text) => {
     return text.replace(/[-[\]{}()+?.,\\^$|#\s]/g, '\\$&');
 };
 
+common.roundRelativeTime = (time) => {
+    if (time * 100 > 1) {
+        return Math.round(time * 1000) / 10;
+    } else {
+        return Math.round(time * 10000) / 100;
+    }
+};
+
 const constants = {};
 constants.$main = null;
 constants.$treePreviewWrapper = null;

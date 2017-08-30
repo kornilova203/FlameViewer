@@ -65,12 +65,7 @@ function removeShowMore() {
  * @param {Number} biggestRelativeTime
  */
 function appendHotSpot(hotSpot, biggestRelativeTime) {
-    let relativeTime;
-    if (hotSpot.relativeTime * 100 > 1) {
-        relativeTime = Math.round(hotSpot.relativeTime * 1000) / 10;
-    } else {
-        relativeTime = Math.round(hotSpot.relativeTime * 10000) / 100;
-    }
+    let relativeTime =  common.roundRelativeTime(hotSpot.relativeTime);
     const hotSpotBlock = $(templates.tree.hotSpot(
         {
             methodName: hotSpot.methodName,

@@ -28,11 +28,45 @@ h1 {
     font-weight: bold;
 }
 
-.accumulative-tree-header {
+section header {
     color: #222;
+    font-weight: normal;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    top: 30px;
+}
+
+section header code {
+    font-family: "Gotham Pro", sans-serif;
+}
+
+section header h2 {
     font-size: 16px;
     font-weight: normal;
-    text-align: center;
+    margin-top: 5px;
+    margin-bottom: 7px;
+}
+
+section header h2 img {
+    top: 2px;
+}
+
+section header img {
+    margin-right: 5px;
+    position: relative;
+}
+
+section header .class-name {
+    display: flex;
+}
+
+.time-percent p {
+    margin-top: 5px;
+    color: #777;
+    font-size: 14px;
 }
 
 .file-form {
@@ -767,4 +801,12 @@ button:focus {
 
 canvas {
     transition: opacity 300ms;
+}
+
+.canvas-wrapper canvas, .call-tree-wrapper canvas {
+    margin-top: 40px;
+}
+
+.return-value, .parameter {
+    color: #000080;
 }
