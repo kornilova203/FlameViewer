@@ -18,8 +18,14 @@ class AgentConfigurationManager {
     AgentConfigurationManager(List<String> methodConfigLines) {
         configuration = new Configuration(methodConfigLines);
         System.out.println("Configuration:");
-        System.out.println("Including methods: " + configuration.getIncludingMethodConfigs());
-        System.out.println("Excluding methods: " + configuration.getExcludingMethodConfigs());
+        System.out.println("Including methods: ");
+        for (MethodConfig methodConfig : configuration.getIncludingMethodConfigs()) {
+            System.out.println("\t" + methodConfig);
+        }
+        System.out.println("Excluding methods: ");
+        for (MethodConfig methodConfig : configuration.getExcludingMethodConfigs()) {
+            System.out.println("\t" + methodConfig);
+        }
     }
 
     @NotNull

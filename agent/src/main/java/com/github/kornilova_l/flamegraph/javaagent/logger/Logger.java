@@ -27,7 +27,7 @@ public class Logger implements Runnable {
     }
 
     private void printStatus() {
-        System.out.println("Events added: " + loggerQueue.getEventsAdded());
+        System.out.println("Methods count: " + loggerQueue.getEventsAdded());
     }
 
     private void writeToFile(List<EventProtos.Event> events, OutputStream outputStream) {

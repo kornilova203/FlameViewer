@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
 public class Agent {
 
     public static void premain(String config, Instrumentation inst) throws IOException {
-        System.out.println("I am an agent");
         LoggerQueue.initLoggerQueue();
         String[] parameters = config.split("&");
         List<String> methods = getMethodsList(new File(parameters[1]));
