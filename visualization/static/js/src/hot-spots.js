@@ -46,7 +46,7 @@ function appendHotSpots() {
 }
 
 function appendShowMore() {
-    const $showMoreButton = $("main").append($("<button>Show more</button>"))
+    const $showMoreButton = $("main").append($("<button>Show more</button>"));
     $showMoreButton.click(appendHotSpots);
 }
 
@@ -77,7 +77,6 @@ function appendHotSpot(hotSpot, biggestRelativeTime) {
             className: hotSpot.className,
             retVal: hotSpot.retVal,
             parameters: hotSpot.parameters,
-            doBreak: (hotSpot.retVal + hotSpot.className + hotSpot.methodName).length > 80,
             relativeTime: relativeTime,
             fileName: constants.fileName,
             projectName: constants.projectName,

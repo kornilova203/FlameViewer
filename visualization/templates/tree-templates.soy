@@ -133,7 +133,6 @@
  * @param className
  * @param retVal
  * @param parameters
- * @param doBreak
  * @param relativeTime
  * @param fileName
  * @param projectName
@@ -147,19 +146,15 @@
         <p class="relative-time">{$relativeTime}%</p>
         <div class="total-time"><div class="method-time"></div></div>
     </div>
+    <div class="class-name"><code>{$className}</code></div>
     <p class="method">
     <code class="return-value">{$retVal}</code>
     <code> </code>
-    <code class="class-name">{$className}</code>
-    <wbr>
-    .
     <code class="method-name">{$methodName}</code>
     <wbr>
     (
     {foreach $parameter in $parameters}
         {if $parameter}
-            {if $doBreak}<br/>{/if}
-            {if $doBreak}<code>&#160&#160&#160&#160&#160&#160&#160&#160&#160&#160&#160&#160&#160&#160</code>{/if}
             <code class="parameter">{$parameter}</code>
             {if not isLast($parameter)}
                 <code>, </code>

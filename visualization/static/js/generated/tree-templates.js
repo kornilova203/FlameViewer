@@ -83,12 +83,12 @@ if (goog.DEBUG) {
 
 
 templates.tree.hotSpot = function(opt_data, opt_ignored) {
-  var output = '<div class="hot-spot"><a href="/flamegraph-profiler/outgoing-calls?file=' + soy.$$escapeUri(opt_data.fileName) + '&amp;project=' + soy.$$escapeUri(opt_data.projectName) + '&amp;method=' + soy.$$escapeUri(opt_data.methodName) + '&amp;class=' + soy.$$escapeUri(opt_data.className) + '&amp;desc=' + soy.$$escapeUri(opt_data.desc) + '"><img src="img/outgoing.png"/></a><a href="/flamegraph-profiler/incoming-calls?file=' + soy.$$escapeUri(opt_data.fileName) + '&amp;project=' + soy.$$escapeUri(opt_data.projectName) + '&amp;method=' + soy.$$escapeUri(opt_data.methodName) + '&amp;class=' + soy.$$escapeUri(opt_data.className) + '&amp;desc=' + soy.$$escapeUri(opt_data.desc) + '"><img src="img/incoming.png"/></a><div class="outer-time-div"><p class="relative-time">' + soy.$$escapeHtml(opt_data.relativeTime) + '%</p><div class="total-time"><div class="method-time"></div></div></div><p class="method"><code class="return-value">' + soy.$$escapeHtml(opt_data.retVal) + '</code><code> </code><code class="class-name">' + soy.$$escapeHtml(opt_data.className) + '</code><wbr>.<code class="method-name">' + soy.$$escapeHtml(opt_data.methodName) + '</code><wbr>(';
-  var parameterList124 = opt_data.parameters;
-  var parameterListLen124 = parameterList124.length;
-  for (var parameterIndex124 = 0; parameterIndex124 < parameterListLen124; parameterIndex124++) {
-    var parameterData124 = parameterList124[parameterIndex124];
-    output += (parameterData124) ? ((opt_data.doBreak) ? '<br/>' : '') + ((opt_data.doBreak) ? '<code>&#160&#160&#160&#160&#160&#160&#160&#160&#160&#160&#160&#160&#160&#160</code>' : '') + '<code class="parameter">' + soy.$$escapeHtml(parameterData124) + '</code>' + ((! (parameterIndex124 == parameterListLen124 - 1)) ? '<code>, </code>' : '') : '';
+  var output = '<div class="hot-spot"><a href="/flamegraph-profiler/outgoing-calls?file=' + soy.$$escapeUri(opt_data.fileName) + '&amp;project=' + soy.$$escapeUri(opt_data.projectName) + '&amp;method=' + soy.$$escapeUri(opt_data.methodName) + '&amp;class=' + soy.$$escapeUri(opt_data.className) + '&amp;desc=' + soy.$$escapeUri(opt_data.desc) + '"><img src="img/outgoing.png"/></a><a href="/flamegraph-profiler/incoming-calls?file=' + soy.$$escapeUri(opt_data.fileName) + '&amp;project=' + soy.$$escapeUri(opt_data.projectName) + '&amp;method=' + soy.$$escapeUri(opt_data.methodName) + '&amp;class=' + soy.$$escapeUri(opt_data.className) + '&amp;desc=' + soy.$$escapeUri(opt_data.desc) + '"><img src="img/incoming.png"/></a><div class="outer-time-div"><p class="relative-time">' + soy.$$escapeHtml(opt_data.relativeTime) + '%</p><div class="total-time"><div class="method-time"></div></div></div><div class="class-name"><code>' + soy.$$escapeHtml(opt_data.className) + '</code></div><p class="method"><code class="return-value">' + soy.$$escapeHtml(opt_data.retVal) + '</code><code> </code><code class="method-name">' + soy.$$escapeHtml(opt_data.methodName) + '</code><wbr>(';
+  var parameterList118 = opt_data.parameters;
+  var parameterListLen118 = parameterList118.length;
+  for (var parameterIndex118 = 0; parameterIndex118 < parameterListLen118; parameterIndex118++) {
+    var parameterData118 = parameterList118[parameterIndex118];
+    output += (parameterData118) ? '<code class="parameter">' + soy.$$escapeHtml(parameterData118) + '</code>' + ((! (parameterIndex118 == parameterListLen118 - 1)) ? '<code>, </code>' : '') : '';
   }
   output += ')</p></div>';
   return soydata.VERY_UNSAFE.ordainSanitizedHtml(output);

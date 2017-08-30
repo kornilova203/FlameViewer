@@ -40,7 +40,12 @@ main::-webkit-scrollbar-thumb, .call-tree-wrapper::-webkit-scrollbar-thumb {
 }
 
 .class-name {
-    color: #df7300;
+    margin-bottom: 3px;
+}
+
+.class-name code {
+    padding-left: 12px;
+    color: #666;
 }
 
 .parameter {
@@ -51,10 +56,9 @@ main::-webkit-scrollbar-thumb, .call-tree-wrapper::-webkit-scrollbar-thumb {
     width: 200px;
     height: 17px;
     float: left;
-    border: solid #ccc 1px;
     margin-left: 20px;
-    padding: 2px;
     box-sizing: border-box;
+    background-color: #eee;
 }
 
 .method-time {
@@ -65,6 +69,7 @@ main::-webkit-scrollbar-thumb, .call-tree-wrapper::-webkit-scrollbar-thumb {
 .method {
     margin-left: 320px;
     margin-top: 0;
+    margin-bottom: 0;
 }
 
 .code-margin {
