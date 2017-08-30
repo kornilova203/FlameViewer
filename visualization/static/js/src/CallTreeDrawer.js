@@ -1,4 +1,5 @@
 const PIX_IN_MS = 0.5;
+const EXCEPTION_COLOR = "#ff1533";
 
 class CallTreeDrawer extends AccumulativeTreeDrawer {
     /**
@@ -238,8 +239,6 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
             return "";
         }
         let className = nodeInfo.getClassName();
-        console.log((className + "." + nodeInfo.getMethodName()).toLowerCase() +
-            CallTreeDrawer._getParametersForNormalizedName(node));
         return (className + "." + nodeInfo.getMethodName()).toLowerCase() +
             CallTreeDrawer._getParametersForNormalizedName(node);
     }
@@ -282,5 +281,12 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
             default:
                 return "-";
         }
+    }
+
+    _getOriginalColor(node) {
+        if (node.getNodeInfo() !== undefined && node.getNodeInfo().getResultCase() === 6) { // exception
+            return EXCEPTION_COLOR;
+        }
+        return super._getOriginalColor(node);
     }
 }

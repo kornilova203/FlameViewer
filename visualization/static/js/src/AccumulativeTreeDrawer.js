@@ -3,7 +3,7 @@ const LAYER_GAP = 1;
 const POPUP_MARGIN = 6; // have no idea why there is a gap between popup and canvas
 const ZOOMED_PARENT_COLOR = "#94bcff";
 const RESET_ZOOM_BUTTON_COLOR = "#9da1ff";
-const HIGHLIGHT_NOT_SET_COLOR = "#e4e4e4";
+const HIGHLIGHT_NOT_SET_COLOR = "#d1d1d1";
 const SPACE_ABOVE_TREE = 40;
 
 /**
@@ -560,10 +560,7 @@ class AccumulativeTreeDrawer {
     }
 
     _setOriginalColorRecursively(node) {
-        const coefficient = this.packageList[AccumulativeTreeDrawer._getPackageName(node)];
-        const h = 195 + coefficient * 40;
-        const l = 50 + 10 * coefficient;
-        node.originalColor = `hsl(${h}, 94%, ${l}%)`;
+        node.originalColor = this._getOriginalColor(node);
         const children = node.getNodesList();
         for (let i = 0; i < children.length; i++) {
             this._setOriginalColorRecursively(children[i]);
@@ -605,7 +602,6 @@ class AccumulativeTreeDrawer {
     /**
      * @param node
      * @return {String}
-     * @private
      */
     static _getPackageName(node) {
         if (node.getNodeInfo() === undefined) {
@@ -741,5 +737,12 @@ class AccumulativeTreeDrawer {
         }
         let className = nodeInfo.getClassName();
         return (className + "." + nodeInfo.getMethodName()).toLowerCase();
+    }
+
+    _getOriginalColor(node) {
+        const coefficient = this.packageList[AccumulativeTreeDrawer._getPackageName(node)];
+        const h = 195 + coefficient * 40;
+        const l = 50 + 10 * coefficient;
+        return `hsl(${h}, 94%, ${l}%)`
     }
 }
