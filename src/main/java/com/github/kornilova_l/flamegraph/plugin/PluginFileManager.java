@@ -116,7 +116,7 @@ public class PluginFileManager {
     public File createLogFile(String projectName, String configurationName) {
         Path logDir = getLogDirPath(projectName);
         Path logFile = Paths.get(logDir.toString(),
-                configurationName + "-" + new SimpleDateFormat("yyyy-MM-dd-HH:mm:ss").format(new Date()) + ".ser");
+                configurationName + "-" + new SimpleDateFormat("yyyy-MM-dd-HH_mm_ss").format(new Date()) + ".ser");
         return new File(logFile.toString());
     }
 
@@ -282,7 +282,7 @@ public class PluginFileManager {
     }
 
     static class FileNameAndDate {
-        private static final Pattern nameWithoutDate = Pattern.compile(".*(?=-\\d\\d\\d\\d-\\d\\d-\\d\\d-\\d\\d:\\d\\d:\\d\\d(.*)?)");
+        private static final Pattern nameWithoutDate = Pattern.compile(".*(?=-\\d\\d\\d\\d-\\d\\d-\\d\\d-\\d\\d_\\d\\d_\\d\\d(.*)?)");
         @SuppressWarnings("unused")
         private final String name;
         private final String fullName;
