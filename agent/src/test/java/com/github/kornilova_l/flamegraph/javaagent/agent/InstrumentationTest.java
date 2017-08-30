@@ -11,6 +11,7 @@ import org.objectweb.asm.util.TraceClassVisitor;
 
 import java.io.*;
 import java.lang.instrument.Instrumentation;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -20,13 +21,13 @@ import static com.github.kornilova_l.flamegraph.javaagent.TestHelper.removePacka
 
 public class InstrumentationTest {
     private static AgentConfigurationManager configurationManager;
-    private static List<MethodConfig> methodConfigs = new HashSet<>();
+    private static List<MethodConfig> methodConfigs = new ArrayList<>();
     private static AgentConfigurationManager configurationManagerSaveParams;
-    private static List<MethodConfig> methodConfigsSaveParams = new HashSet<>();
+    private static List<MethodConfig> methodConfigsSaveParams = new ArrayList<>();
     private static AgentConfigurationManager configurationManagerSaveSecondParam;
-    private static List<MethodConfig> methodConfigsSaveSecondParam = new HashSet<>();
+    private static List<MethodConfig> methodConfigsSaveSecondParam = new ArrayList<>();
     private static AgentConfigurationManager configurationManagerSaveReturn;
-    private static List<MethodConfig> methodConfigsSaveReturn = new HashSet<>();
+    private static List<MethodConfig> methodConfigsSaveReturn = new ArrayList<>();
 
     @BeforeClass
     public static void setup() {
