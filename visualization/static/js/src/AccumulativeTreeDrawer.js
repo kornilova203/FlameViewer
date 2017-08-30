@@ -418,7 +418,8 @@ class AccumulativeTreeDrawer {
      */
     _setPopupContent(node) {
         const desc = encodeURIComponent(node.getNodeInfo().getDescription());
-        this.$popup.find("h3").text(`${node.getNodeInfo().getClassName()}.${node.getNodeInfo().getMethodName()}`);
+        this.$popup.find(".package-name").text(AccumulativeTreeDrawer._getPackageName(node));
+        this.$popup.find("h3").text(`${AccumulativeTreeDrawer._getClassName(node)}.${node.getNodeInfo().getMethodName()}`);
         this.$popup.find(".outgoing-link").attr("href", `/flamegraph-profiler/outgoing-calls?` +
             `file=${constants.fileName}&` +
             `project=${constants.projectName}&` +
@@ -613,6 +614,23 @@ class AccumulativeTreeDrawer {
             return className.substring(0, lastDot);
         } else {
             return ""
+        }
+    }
+
+    /**
+     * @param node
+     * @return {String}
+     */
+    static _getClassName(node) {
+        if (node.getNodeInfo() === undefined) {
+            return "";
+        }
+        const className = node.getNodeInfo().getClassName();
+        const lastDot = className.lastIndexOf(".");
+        if (lastDot !== -1) {
+            return className.substring(lastDot + 1, className.length);
+        } else {
+            return className;
         }
     }
 

@@ -27,7 +27,7 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
      */
     _setPopupContent(node) {
         super._setPopupContent(node);
-        this.$popup.find(".duration").text("duration: " + node.getWidth() + " ms");
+        this.$popup.find(".duration").text(node.getWidth() + " ms");
     }
 
     /**

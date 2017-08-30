@@ -142,3 +142,9 @@ canvas {
 #search-method-form {
     display: none;
 }
+
+.popup .package-name {
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 5px;
+}
