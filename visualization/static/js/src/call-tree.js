@@ -39,15 +39,16 @@ function drawTrees(trees) {
 }
 
 function bindHideDetailView() {
-    const $treePreviewWrapper = $(".tree-preview-wrapper");
     const $callTreeWrapper = $('.call-tree-wrapper');
+    const $callTreeText = $callTreeWrapper.find("h2 i");
+    const $treePreviewWrapper = $(".tree-preview-wrapper");
     const $searchMethodForm = $("#search-method-form").show();
-    $treePreviewWrapper.click(() => {
+    $callTreeText.click(() => {
         $treePreviewWrapper.removeClass("hidden-tree-preview");
         $callTreeWrapper.hide();
         $searchMethodForm.hide();
         $callTreeWrapper.find("*").remove();
-        $treePreviewWrapper.unbind();
+        $callTreeText.unbind();
     });
 }
 

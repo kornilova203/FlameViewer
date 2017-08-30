@@ -11,7 +11,7 @@
  */
 {template .getCallTreeSection}
 <section>
-    <h2 class="call-tree-header">{$threadName} <span>{$nodesCount} {if $nodesCount > 1}calls{else}call{/if}</span></h2>
+    <h2 class="call-tree-header"><i>Call Tree Preview</i> > {$threadName} <span>{$nodesCount} {if $nodesCount > 1}calls{else}call{/if}</span></h2>
     <canvas class="original-canvas"
         id="canvas-{$id}"
         width="{$canvasWidth}"

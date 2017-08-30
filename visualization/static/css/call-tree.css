@@ -9,12 +9,7 @@ body {
     overflow-x: hidden;
     height: calc(100vh - 45px);
     width: calc(100vw - 250px);
-    transition: width, background-color 300ms;
     padding-bottom: 100px;
-}
-
-.tree-preview-wrapper #expand-preview-button {
-    display: none;
 }
 
 .tree-preview-wrapper-without-files {
@@ -106,44 +101,21 @@ section {
     overflow-x: hidden;
 }
 
+.call-tree-wrapper h2 i {
+    color: #0e8fdf;
+    cursor: pointer;
+    font-style: normal;
+    text-decoration: underline;
+}
+
 canvas {
     padding-right: 30px;
 }
 
 .hidden-tree-preview {
-    width: 40px;
-    overflow-y: hidden;
-    background-color: #d0d0d0;
-    float: left;
-    cursor: pointer;
-}
-
-.hidden-tree-preview * {
-    display: none;
-}
-
-.hidden-tree-preview #expand-preview-button {
-    display: block;
-}
-
-.hidden-tree-preview #expand-preview-button * {
-    display: block;
-}
-
-#expand-preview-button {
-    background: none;
-    border: 0;
-    color: inherit;
-    font: inherit;
-    line-height: normal;
-    overflow: visible;
-    padding: 0;
+    opacity: 0;
+    pointer-events: none;
     position: absolute;
-    top: 50%;
-}
-
-#expand-preview-button img {
-    width: 40px;
 }
 
 #hide-file-list-button img {

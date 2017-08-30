@@ -14,7 +14,6 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
         this.$callTreeWrapper = $(".call-tree-wrapper");
         this.zoomedCanvasMargin = 0;
         this.$zoomedCanvas = null;
-        this.$treePreviewWrapper = $(".tree-preview-wrapper");
         this.id = id;
         this.enableZoom = true;
         this._countNodesRecursively(this.baseNode);
@@ -216,17 +215,6 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
         ).content;
 
         $(zoomedCanvasContent).insertAfter(this.$section.find(".original-canvas"));
-    }
-
-    /**
-     * @return {Number}
-     * @private
-     */
-    _getCanvasWidthForSection() {
-        return window.innerWidth -
-            AccumulativeTreeDrawer._getElementWidth(this.$fileMenu) -
-            AccumulativeTreeDrawer._getElementWidth(this.$treePreviewWrapper) -
-            70;
     }
 
     /**
