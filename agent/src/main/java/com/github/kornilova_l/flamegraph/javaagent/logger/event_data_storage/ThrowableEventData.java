@@ -26,10 +26,11 @@ public class ThrowableEventData extends MethodEventData {
                     EventProtos.Var.Object.newBuilder().build()
             );
         } else {
+            String message = throwable.getMessage();
             methodEventBuilder.setThrowable(
                     EventProtos.Var.Object.newBuilder()
                             .setType(throwable.getClass().toString())
-                            .setValue(throwable.getMessage()));
+                            .setValue(message == null ? "" : message));
         }
     }
 }
