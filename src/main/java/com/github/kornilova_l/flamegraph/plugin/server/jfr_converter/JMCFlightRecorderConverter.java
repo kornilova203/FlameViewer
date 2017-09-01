@@ -31,6 +31,7 @@ public class JMCFlightRecorderConverter {
     private final Map<String, Integer> stacks = new HashMap<>();
 
     public JMCFlightRecorderConverter(File unzippedFile) throws IllegalArgumentException {
+        System.out.println(unzippedFile.length());
         System.out.println("start converting");
         FlightRecording recording = FlightRecordingLoader.loadFile(unzippedFile);
         System.out.println("get recording");

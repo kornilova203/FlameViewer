@@ -2,6 +2,7 @@ package com.github.kornilova_l.flamegraph.plugin;
 
 import com.github.kornilova_l.flamegraph.plugin.server.jfr_converter.JMCFlightRecorderConverter;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeManager.Extension;
+import com.intellij.execution.runners.ProgramRunner;
 import com.intellij.openapi.application.PathManager;
 import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.http.QueryStringDecoder;
@@ -149,8 +150,13 @@ public class PluginFileManager {
         Path filePath = Paths.get(flamegraphFiles.toString(), fileName);
         byte[] bytes = new byte[byteBuf.readableBytes()];
         byteBuf.readBytes(bytes);
-        new JMCFlightRecorderConverter(unzip(bytes))
-                .writeTo(new File(filePath.toString()));
+        File unzippedFile = unzip(bytes);
+        if (unzippedFile.length() > 30000000) {
+//            new ProcessBuilder();
+        } else {
+            new JMCFlightRecorderConverter(unzip(bytes))
+                    .writeTo(new File(filePath.toString()));
+        }
     }
 
     public String getStaticFilePath(String staticFileUri) {

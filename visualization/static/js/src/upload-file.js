@@ -1,4 +1,4 @@
-const VALID_EXTENSION = ["jfr", "ser"];
+const JFR = "jfr";
 
 function appendWrongExtension() {
     if ($(".extension-error").length === 0) {
@@ -6,33 +6,65 @@ function appendWrongExtension() {
     }
 }
 
+class FileUploader {
+    /**
+     * @param {File} file
+     */
+    constructor(file) {
+        /**
+         * @type {File}
+         */
+        this.file = file;
+        /**
+         * @type {String}
+         */
+        this.loaderMessage = constants.loaderMessages.uploadingFile;
+    }
+
+    uploadFile() {
+        common.resizeLoaderBackground(700);
+        common.showLoader(this.loaderMessage + this.file.name, () => {
+            const request = new XMLHttpRequest();
+            request.onload = () => {
+                if (request.status === 400) {
+                    common.hideLoader();
+                    appendWrongExtension();
+                } else {
+                    // location.reload();
+                }
+            };
+            request.open("POST", "/flamegraph-profiler/upload-file", true);
+            request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            request.setRequestHeader('File-Name', this.file.name);
+            request.send(this.file);
+        });
+    }
+}
+
+class JfrUploader extends FileUploader {
+    /**
+     * @param {File} file
+     */
+    constructor(file) {
+        super(file);
+        this.loaderMessage = constants.loaderMessages.convertingFile;
+    }
+
+    uploadFile() {
+
+        super.uploadFile();
+    }
+}
+
 /**
  * @param {File} file
  */
 function sendToServer(file) {
-    common.resizeLoaderBackground(700);
-    let message;
-    if (common.getExtension(file.name) === "jfr") {
-        message = constants.loaderMessages.convertingFile;
+    if (common.getExtension(file.name) === JFR) {
+        new JfrUploader(file).uploadFile();
     } else {
-        message = constants.loaderMessages.uploadingFile;
+        new FileUploader(file).uploadFile();
     }
-    common.showLoader(message + file.name, () => {
-        const request = new XMLHttpRequest();
-        request.onload = () => {
-            console.log(request.status);
-            if (request.status === 400) {
-                common.hideLoader();
-                appendWrongExtension();
-            } else {
-                location.reload();
-            }
-        };
-        request.open("POST", "/flamegraph-profiler/upload-file", true);
-        request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        request.setRequestHeader('File-Name', file.name);
-        request.send(file);
-    });
 }
 
 function listenInput() {
