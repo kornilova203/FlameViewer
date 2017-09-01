@@ -18,6 +18,8 @@ npm run watch-accumulative-trees
 # wait for few seconds and ctrl + c
 npm run watch-call-tree
 # wait for few seconds and ctrl + c
+npm run watch-trees-preview
+# wait for few seconds and ctrl + c
 
 # DONE
 
