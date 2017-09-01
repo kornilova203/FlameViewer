@@ -281,7 +281,6 @@ nav ul li a:focus {
 
 .file-list li {
     display: flex;
-    align-items: center;
     height: 45px;
 }
 
@@ -587,6 +586,8 @@ button:focus {
     box-sizing: border-box;
     padding: 11px;
     transition: opacity 300ms;
+    position: relative;
+    top: 1px;
 }
 
 .file-list li .delete-file:hover {
@@ -695,7 +696,7 @@ button:focus {
 
 .filter-content input::placeholder {
     transition: all 0.7s ease 0s;
-    color: #888;
+    color: #9e9e9e;
 }
 
 .filter-content input:focus::placeholder {
