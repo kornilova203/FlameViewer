@@ -1,10 +1,9 @@
 out/
-.idea/
 build/
 .gradle/
 src/main/java/temp/
 visualization/node_modules/
-thoughts/
-visualization/npm-debug.log
-visualization/temp/
 agent/src/test/resources/actual/*
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/libraries/*

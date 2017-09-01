@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <bytecodeTargetLevel>
+      <module name="agent_jmh" target="1.8" />
+      <module name="agent_main" target="1.8" />
+      <module name="agent_test" target="1.8" />
+      <module name="configuration_main" target="1.8" />
+      <module name="configuration_test" target="1.8" />
+      <module name="java-profiling-plugin_jmh" target="1.8" />
+      <module name="java-profiling-plugin_main" target="1.8" />
+      <module name="java-profiling-plugin_test" target="1.8" />
+      <module name="profiler_jmh" target="1.8" />
+      <module name="profiler_main" target="1.8" />
+      <module name="profiler_test" target="1.8" />
+      <module name="protobuf_main" target="1.8" />
+      <module name="protobuf_test" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

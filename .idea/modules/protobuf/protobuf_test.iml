@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module external.linked.project.id=":protobuf:test" external.linked.project.path="$MODULE_DIR$/../../../protobuf" external.root.project.path="$MODULE_DIR$/../../.." external.system.id="GRADLE" external.system.module.group="com.gitgub.kornilova_l" external.system.module.type="sourceSet" external.system.module.version="1.0" type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8">
+    <output-test url="file://$MODULE_DIR$/../../../protobuf/build/classes/test" />
+    <exclude-output />
+    <content url="file://$MODULE_DIR$/../../../protobuf/src/test">
+      <sourceFolder url="file://$MODULE_DIR$/../../../protobuf/src/test/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/../../../protobuf/src/test/resources" type="java-test-resource" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="protobuf_main" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../../../protobuf/libs/protobuf-java-kornilova-l-3.3.0.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+  </component>
+  <component name="TestModuleProperties" production-module="protobuf_main" />
+</module>
