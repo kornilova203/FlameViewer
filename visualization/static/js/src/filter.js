@@ -11,6 +11,11 @@ CURRENT_EXCLUDED = CURRENT_EXCLUDED === undefined ? "" : CURRENT_EXCLUDED;
 let methodsCountInCurrentTree = null;
 
 $(window).on("load", () => {
+    if (common.getParameter("file") === undefined) {
+        // TODO: disable filter button
+        return;
+    }
+
     const $filterContent = $(".filter-content");
     const $applyAnchor = $filterContent.find("a");
     $callTreeA = $(".call-tree-a");

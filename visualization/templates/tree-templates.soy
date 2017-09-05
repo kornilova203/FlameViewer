@@ -191,16 +191,15 @@
 {/template}
 
 /**
- *
- * @param fileName
+ * @param question
  */
-{template .confirmDelete}
+{template .confirm}
 <div>
-    <div class="confirm-delete-bg"></div>
-    <div class="confirm-delete-popup">
-        <h3>Delete file {$fileName}?</h3>
-        <div class="do-delete"><a>Ok</a></div>
-        <div class="do-not-delete"><p>Cancel</p></div>
+    <div class="confirm-bg"></div>
+    <div class="confirm-popup">
+        <h3>{$question}</h3>
+        <button class="do-confirm"><a>Ok</a></button>
+        <button class="do-not-confirm">Cancel</button>
     </div>
 </div>
 {/template}

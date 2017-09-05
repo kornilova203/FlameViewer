@@ -30,7 +30,7 @@ class FileUploader {
                     common.hideLoader();
                     appendWrongExtension();
                 } else {
-                    // location.reload();
+                    location.reload();
                 }
             };
             request.open("POST", "/flamegraph-profiler/upload-file", true);
@@ -51,7 +51,6 @@ class JfrUploader extends FileUploader {
     }
 
     uploadFile() {
-
         super.uploadFile();
     }
 }

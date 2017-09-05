@@ -100,18 +100,18 @@ function bindEscAndCancel(popup) {
     // noinspection JSUnresolvedFunction
     $(document).keyup(function (e) {
         if (e.keyCode === KEYCODE_ENTER) {
-            popup.find(".do-delete").click();
+            popup.find(".do-confirm").click();
         }
         if (e.keyCode === KEYCODE_ESC) {
             console.log("esc");
-            popup.find(".confirm-delete-bg").click();
+            popup.find(".confirm-bg").click();
         }
     });
 }
 
 function createDeleteFilePopup(li, liFileName) {
-    const popupText = templates.tree.confirmDelete({
-        fileName: liFileName
+    const popupText = templates.tree.confirm({
+        question: "Delete file: " + liFileName + "?"
     }).content;
     const popup = $(popupText);
     $("body").append(popup);
@@ -119,14 +119,14 @@ function createDeleteFilePopup(li, liFileName) {
     if (liFileName === constants.fileName) {
         popup.find("a").attr("href", "/flamegraph-profiler/" + getPageName() + "?project=" + constants.projectName);
     }
-    popup.find(".do-delete").click(() => {
+    popup.find(".do-confirm").click(() => {
         deleteFile(popup, li, liFileName);
     });
-    popup.find(".do-not-delete").click(() => {
+    popup.find(".do-not-confirm").click(() => {
         popup.remove();
         $(document).unbind("keyup");
     });
-    popup.find(".confirm-delete-bg").click(() => {
+    popup.find(".confirm-bg").click(() => {
         if (wasPopupClicked) {
             wasPopupClicked = false;
         } else {
@@ -134,7 +134,7 @@ function createDeleteFilePopup(li, liFileName) {
             $(document).unbind("keyup");
         }
     });
-    popup.find(".confirm-delete-popup").click(() => {
+    popup.find(".confirm-popup").click(() => {
         wasPopupClicked = true;
     });
     bindEscAndCancel(popup);

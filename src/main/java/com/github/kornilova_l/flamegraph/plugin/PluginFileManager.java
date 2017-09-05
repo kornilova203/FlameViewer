@@ -69,6 +69,18 @@ public class PluginFileManager {
         createDirIfNotExist(serFiles);
         flamegraphFiles = Paths.get(uploadedFilesPath.toString(), FLAMEGRAPH_FILES);
         createDirIfNotExist(flamegraphFiles);
+        clearDir(new File(notConvertedFiles.toString()));
+    }
+
+    private void clearDir(File dir) {
+        File[] files = dir.listFiles();
+        if (files == null) {
+            return;
+        }
+        for (File file : files) {
+            //noinspection ResultOfMethodCallIgnored
+            file.delete();
+        }
     }
 
     public static PluginFileManager getInstance() {
@@ -244,17 +256,26 @@ public class PluginFileManager {
         file.delete();
     }
 
-    public void save(byte[] bytes, String fileName) {
-        Path filePath;
-        if (getExtension(fileName) == Extension.SER) {
-            filePath = Paths.get(serFiles.toString(), fileName);
-        } else {
-            filePath = Paths.get(flamegraphFiles.toString(), fileName);
-        }
+    public boolean save(byte[] bytes, String fileName) {
+        Path filePath = getSavePath(fileName);
         try (OutputStream outputStream = new FileOutputStream(new File(filePath.toString()))) {
             outputStream.write(bytes);
+            return true;
         } catch (IOException e) {
             e.printStackTrace();
+        }
+        return false;
+    }
+
+    private Path getSavePath(String fileName) {
+        switch (getExtension(fileName)) {
+            case JFR:
+                return Paths.get(notConvertedFiles.toString(), fileName);
+            case SER:
+                return Paths.get(serFiles.toString(), fileName);
+            case OTHER:
+            default:
+                return Paths.get(flamegraphFiles.toString(), fileName);
         }
     }
 

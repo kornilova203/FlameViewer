@@ -338,7 +338,6 @@ nav ul li a:focus {
 }
 
 .extension-error {
-    float: right;
     color: rgba(138, 18, 11, 0.84);
 }
 
@@ -594,7 +593,7 @@ button:focus {
     opacity: 1;
 }
 
-.confirm-delete-popup {
+.confirm-popup {
     position: fixed;
     background-color: white;
     border: solid #aaa 1px;
@@ -606,34 +605,24 @@ button:focus {
     box-sizing: border-box;
 }
 
-.confirm-delete-popup h3 {
+.confirm-popup h3 {
     width: 100%;
     text-align: center;
     font-weight: normal;
     font-size: 14px;
 }
 
-.do-delete, .do-not-delete {
-    width: 70px;
-    height: 30px;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: white;
-}
-
-.do-delete {
+.do-confirm {
     float: left;
     background-color: #60b3df;
 }
 
-.do-not-delete {
+.do-not-confirm {
     float: right;
     background-color: #0e8fdf;
 }
 
-.confirm-delete-bg {
+.confirm-bg {
     position: fixed;
     top: 0;
     left: 0;
@@ -643,7 +632,7 @@ button:focus {
     opacity: 0.3;
 }
 
-.do-delete a {
+.do-confirm a {
     text-decoration: none;
     color: white;
 }
@@ -703,7 +692,7 @@ button:focus {
     color: #bbb;
 }
 
-.apply-filter, .cancel-filter, .clear-filter {
+.apply-filter, .cancel-filter, .clear-filter, .do-confirm, .do-not-confirm {
     position: absolute;
     background: none;
     border: 0;
@@ -719,26 +708,26 @@ button:focus {
     transition: background-color 300ms;
 }
 
-.apply-filter {
+.apply-filter, .do-confirm {
     background-color: rgba(14, 143, 223, 0.66);
     right: 170px;
     cursor: default;
 }
 
-.active-apply:hover, .filter-applied:hover {
+.active-apply:hover, .filter-applied:hover, .do-confirm:hover {
     background-color: #086ead;
 }
 
-.active-apply:active, .filter-applied:active {
+.active-apply:active, .filter-applied:active, .do-confirm:active {
     background-color: #064e7a;
 }
 
-.active-apply {
+.active-apply, .do-confirm {
     background-color: #0e8fdf;
     cursor: pointer;
 }
 
-.cancel-filter, .clear-filter {
+.cancel-filter, .clear-filter, .do-not-confirm {
     background-color: #ababab;
     right: 90px;
 }
@@ -747,11 +736,11 @@ button:focus {
     right: 10px;
 }
 
-.cancel-filter:hover, .clear-filter:hover {
+.cancel-filter:hover, .clear-filter:hover, .do-not-confirm:hover {
     background-color: #8a8a8a;
 }
 
-.cancel-filter:active, .clear-filter:active {
+.cancel-filter:active, .clear-filter:active, .do-not-confirm:active {
     background-color: #696969;
 }
 
@@ -810,4 +799,15 @@ canvas {
 
 .return-value, .parameter {
     color: #000080;
+}
+
+.do-confirm, .do-not-confirm {
+    width: 70px;
+    height: 30px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    position: static;
 }

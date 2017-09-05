@@ -75,7 +75,11 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
 
     @NotNull
     public static Extension getExtension(@NotNull String fileName) {
-        String extension = fileName.substring(fileName.indexOf(".") + 1, fileName.length());
+        int dot = fileName.indexOf(".");
+        if (dot == -1) {
+            return Extension.OTHER;
+        }
+        String extension = fileName.substring(dot + 1, fileName.length());
         switch (extension) {
             case "ser":
                 return Extension.SER;
@@ -206,25 +210,19 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
                             ChannelHandlerContext context) {
         String fileName = fullHttpRequest.headers().get("File-Name");
         LOG.info("Got file: " + fileName);
-        boolean isSupported = false;
+        boolean isSaved = false;
         switch (getExtension(fileName)) {
             case JFR:
-                isSupported = true;
-                fileManager.convertAndSave(fullHttpRequest.content(), fileName);
-                break;
             case SER:
-                isSupported = true;
-                fileManager.save(getBytes(fullHttpRequest.content()), fileName);
+                isSaved = fileManager.save(getBytes(fullHttpRequest.content()), fileName);
                 break;
             case OTHER:
                 byte[] bytes = getBytes(fullHttpRequest.content());
-                isSupported = StacksParser.isFlamegraph(bytes);
-                if (isSupported) {
-                    fileManager.save(bytes, fileName);
+                if (StacksParser.isFlamegraph(bytes)) {
+                    isSaved = fileManager.save(bytes, fileName);
                 }
-                break;
         }
-        if (isSupported) {
+        if (isSaved) {
             sendStatus(HttpResponseStatus.OK, context.channel());
         } else {
             sendStatus(HttpResponseStatus.BAD_REQUEST, context.channel());

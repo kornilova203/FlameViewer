@@ -110,11 +110,11 @@ if (goog.DEBUG) {
 }
 
 
-templates.tree.confirmDelete = function(opt_data, opt_ignored) {
-  return soydata.VERY_UNSAFE.ordainSanitizedHtml('<div><div class="confirm-delete-bg"></div><div class="confirm-delete-popup"><h3>Delete file ' + soy.$$escapeHtml(opt_data.fileName) + '?</h3><div class="do-delete"><a>Ok</a></div><div class="do-not-delete"><p>Cancel</p></div></div></div>');
+templates.tree.confirm = function(opt_data, opt_ignored) {
+  return soydata.VERY_UNSAFE.ordainSanitizedHtml('<div><div class="confirm-bg"></div><div class="confirm-popup"><h3>' + soy.$$escapeHtml(opt_data.question) + '</h3><button class="do-confirm"><a>Ok</a></button><button class="do-not-confirm">Cancel</button></div></div>');
 };
 if (goog.DEBUG) {
-  templates.tree.confirmDelete.soyTemplateName = 'templates.tree.confirmDelete';
+  templates.tree.confirm.soyTemplateName = 'templates.tree.confirm';
 }
 
 
