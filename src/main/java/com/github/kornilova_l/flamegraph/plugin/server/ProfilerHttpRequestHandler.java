@@ -1,7 +1,7 @@
 package com.github.kornilova_l.flamegraph.plugin.server;
 
 import com.github.kornilova_l.flamegraph.plugin.PluginFileManager;
-import com.github.kornilova_l.flamegraph.plugin.server.jfr_converter.StacksParser;
+import com.github.kornilova_l.flamegraph.plugin.converters.ProfilerToFlamegraphConverter;
 import com.github.kornilova_l.flamegraph.plugin.server.methods_count_handlers.AccumulativeTreesMethodCounter;
 import com.github.kornilova_l.flamegraph.plugin.server.methods_count_handlers.CallTreeMethodsCounter;
 import com.github.kornilova_l.flamegraph.plugin.server.tree_request_handlers.CallTreeRequestHandler;
@@ -10,7 +10,6 @@ import com.github.kornilova_l.flamegraph.plugin.server.tree_request_handlers.Inc
 import com.github.kornilova_l.flamegraph.plugin.server.tree_request_handlers.OutgoingCallsRequestHandler;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.Filter;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeManager;
-import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeManager.Extension;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeManager.TreeType;
 import com.github.kornilova_l.libs.com.google.protobuf.Message;
 import com.google.gson.Gson;
@@ -73,23 +72,6 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
         Responses.send(response, channel, true);
     }
 
-    @NotNull
-    public static Extension getExtension(@NotNull String fileName) {
-        int dot = fileName.indexOf(".");
-        if (dot == -1) {
-            return Extension.OTHER;
-        }
-        String extension = fileName.substring(dot + 1, fileName.length());
-        switch (extension) {
-            case "ser":
-                return Extension.SER;
-            case "jfr":
-                return Extension.JFR;
-            default:
-                return Extension.OTHER;
-        }
-    }
-
     @Nullable
     public static String getParameter(QueryStringDecoder urlDecoder, String key) {
         Map<String, java.util.List<String>> parameters = urlDecoder.parameters();
@@ -132,9 +114,9 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
                                 String replacement = fileName == null ?
                                         "" :
                                         "file=" + fileName + "&";
-                        return line.replace("{{ projectName }}", projectName)
-                                .replace("{{ fileParam }}", replacement)
-                                .replace("{{ filter }}", filterParameters);
+                                return line.replace("{{ projectName }}", projectName)
+                                        .replace("{{ fileParam }}", replacement)
+                                        .replace("{{ filter }}", filterParameters);
                             }
                     )
                     .toArray(String[]::new)).getBytes();
@@ -210,23 +192,38 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
                             ChannelHandlerContext context) {
         String fileName = fullHttpRequest.headers().get("File-Name");
         LOG.info("Got file: " + fileName);
-        boolean isSaved = false;
-        switch (getExtension(fileName)) {
-            case JFR:
-            case SER:
-                isSaved = fileManager.save(getBytes(fullHttpRequest.content()), fileName);
+        byte[] bytes = getBytes(fullHttpRequest.content());
+        boolean isSaved;
+        switch (ProfilerToFlamegraphConverter.Companion.getFileExtension(fileName)) {
+            case "ser":
+                isSaved = fileManager.serFileSaver.save(bytes, fileName) != null;
                 break;
-            case OTHER:
-                byte[] bytes = getBytes(fullHttpRequest.content());
-                if (StacksParser.isFlamegraph(bytes)) {
-                    isSaved = fileManager.save(bytes, fileName);
-                }
+            default:
+                isSaved = convertWithExtensions(fileName, bytes);
         }
+        sendStatus(context.channel(), isSaved);
+    }
+
+    private void sendStatus(Channel channel, boolean isSaved) {
         if (isSaved) {
-            sendStatus(HttpResponseStatus.OK, context.channel());
+            sendStatus(HttpResponseStatus.OK, channel);
         } else {
-            sendStatus(HttpResponseStatus.BAD_REQUEST, context.channel());
+            sendStatus(HttpResponseStatus.BAD_REQUEST, channel);
         }
+    }
+
+    private boolean convertWithExtensions(String fileName, byte[] bytes) {
+        boolean isSaved = false;
+        File file = fileManager.tempFileSaver.save(bytes, fileName);
+        if (file != null) {
+            byte[] convertedBytes = ProfilerToFlamegraphConverter.Companion.convert(file);
+            if (convertedBytes != null) {
+                isSaved = fileManager.flamegraphFileSaver.save(convertedBytes, fileName) != null;
+            }
+            //noinspection ResultOfMethodCallIgnored
+            file.delete();
+        }
+        return isSaved;
     }
 
     private byte[] getBytes(ByteBuf byteBuf) {

@@ -140,6 +140,9 @@ function createDeleteFilePopup(li, liFileName) {
     bindEscAndCancel(popup);
 }
 
+/**
+ * @param {Array<{id: String, fullName: String}>} filesList
+ */
 function updateFilesList(filesList) {
     if (filesList.length === 0) {
         $("<p class='no-file-found'>No file was found</p>").appendTo($(".file-menu"));
@@ -149,16 +152,15 @@ function updateFilesList(filesList) {
             projectName: constants.projectName,
             pageName: getPageName()
         }).content;
-        const list = $(listString);
-        list.appendTo($(".file-menu"));
-        // noinspection JSValidateTypes
-        list.children().each(function () {
-            const li = $(this);
-            const liFileName = li.attr("id");
-            li.find("img").click(() => {
-                createDeleteFilePopup(li, liFileName);
-            })
-        });
+        const $list = $(listString);
+        $list.appendTo($(".file-menu"));
+        for (let i = 0; i < filesList.length; i++) {
+            const file = filesList[i];
+            const $li = $list.find("#" + file.id);
+            $li.find("img").click(() => {
+                createDeleteFilePopup($li, file.fullName);
+            });
+        }
         if (constants.fileName !== undefined) {
             console.log(constants.fileName);
             // get current file id. Like server forms id's

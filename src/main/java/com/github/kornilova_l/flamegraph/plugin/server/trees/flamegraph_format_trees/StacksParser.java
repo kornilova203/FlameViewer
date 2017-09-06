@@ -1,4 +1,4 @@
-package com.github.kornilova_l.flamegraph.plugin.server.jfr_converter;
+package com.github.kornilova_l.flamegraph.plugin.server.trees.flamegraph_format_trees;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -13,7 +13,7 @@ public class StacksParser {
             Pattern.compile("([^ ]+ [^ ]+(([./])[^ ]+)+\\([^)]*\\)(;| \\d+))+");
 
     @Nullable
-    public static Map<String, Integer> getStacks(File convertedFile) {
+    static Map<String, Integer> getStacks(File convertedFile) {
         try (BufferedReader reader = new BufferedReader(
                 new FileReader(convertedFile)
         )) {

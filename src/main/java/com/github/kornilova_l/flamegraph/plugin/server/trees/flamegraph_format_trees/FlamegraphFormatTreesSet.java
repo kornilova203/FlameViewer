@@ -12,7 +12,7 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 
-import static com.github.kornilova_l.flamegraph.plugin.server.jfr_converter.StacksParser.getStacks;
+import static com.github.kornilova_l.flamegraph.plugin.server.trees.flamegraph_format_trees.StacksParser.getStacks;
 
 public class FlamegraphFormatTreesSet extends TreesSet {
     private static final com.intellij.openapi.diagnostic.Logger LOG =

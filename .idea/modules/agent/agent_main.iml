@@ -1,10 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module external.linked.project.id=":agent:main" external.linked.project.path="$MODULE_DIR$/../../../agent" external.root.project.path="$MODULE_DIR$/../../.." external.system.id="GRADLE" external.system.module.group="com.gitgub.kornilova_l" external.system.module.type="sourceSet" external.system.module.version="1.0" type="JAVA_MODULE" version="4">
+  <component name="FacetManager">
+    <facet type="kotlin-language" name="Kotlin">
+      <configuration version="2" platform="JVM 1.6" useProjectSettings="false">
+        <compilerSettings />
+        <compilerArguments>
+          <option name="destination" value="$MODULE_DIR$/../../../agent/build/kotlin-classes/main" />
+          <option name="classpath" value="$MODULE_DIR$/../../../lib/annotations-java8.jar:/home/lk/JetBrains/profiler/protobuf/libs/protobuf-java-kornilova-l-3.3.0.jar:/home/lk/.gradle/caches/modules-2/files-2.1/org.ow2.asm/asm/5.2/4ce3ecdc7115bcbf9d4ff4e6ec638e60760819df/asm-5.2.jar:/home/lk/.gradle/caches/modules-2/files-2.1/org.ow2.asm/asm-util/5.2/9408ea14e73b7c9b427545a1b84923d6afaf8e1e/asm-util-5.2.jar:/home/lk/.gradle/caches/modules-2/files-2.1/org.ow2.asm/asm-commons/5.0.3/a7111830132c7f87d08fe48cb0ca07630f8cb91c/asm-commons-5.0.3.jar:/home/lk/JetBrains/profiler/protobuf/build/libs/protobuf-1.0.jar:/home/lk/JetBrains/profiler/configuration/build/libs/configuration-1.0.jar:/home/lk/.gradle/caches/modules-2/files-2.1/org.ow2.asm/asm-tree/5.2/733a8d67f6f4174d12142b7bbcfc496a6d99882e/asm-tree-5.2.jar" />
+          <option name="noStdlib" value="true" />
+          <option name="noReflect" value="true" />
+          <option name="moduleName" value="agent_main" />
+          <option name="jvmTarget" value="1.6" />
+          <option name="addCompilerBuiltIns" value="true" />
+          <option name="loadBuiltInsFromDependencies" value="true" />
+          <option name="languageVersion" value="1.1" />
+          <option name="apiVersion" value="1.1" />
+          <option name="pluginClasspaths">
+            <array />
+          </option>
+          <option name="coroutinesWarn" value="true" />
+          <option name="pluginOptions">
+            <array />
+          </option>
+        </compilerArguments>
+      </configuration>
+    </facet>
+  </component>
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8">
     <output url="file://$MODULE_DIR$/../../../agent/build/classes/main" />
     <exclude-output />
     <content url="file://$MODULE_DIR$/../../../agent/src/main">
       <sourceFolder url="file://$MODULE_DIR$/../../../agent/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../../agent/src/main/kotlin" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../../../agent/src/main/resources" type="java-resource" />
     </content>
     <orderEntry type="inheritedJdk" />

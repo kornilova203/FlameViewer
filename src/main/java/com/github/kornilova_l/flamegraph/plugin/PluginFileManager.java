@@ -1,15 +1,15 @@
 package com.github.kornilova_l.flamegraph.plugin;
 
-import com.github.kornilova_l.flamegraph.plugin.server.jfr_converter.JMCFlightRecorderConverter;
-import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeManager.Extension;
-import com.intellij.execution.runners.ProgramRunner;
+import com.github.kornilova_l.flamegraph.plugin.converters.ProfilerToFlamegraphConverter;
 import com.intellij.openapi.application.PathManager;
-import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.http.QueryStringDecoder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
@@ -17,10 +17,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.zip.GZIPInputStream;
-import java.util.zip.ZipException;
 
-import static com.github.kornilova_l.flamegraph.plugin.server.ProfilerHttpRequestHandler.getExtension;
 import static com.github.kornilova_l.flamegraph.plugin.server.ProfilerHttpRequestHandler.getParameter;
 
 public class PluginFileManager {
@@ -42,11 +39,15 @@ public class PluginFileManager {
     @NotNull
     private final Path staticDirPath;
     @NotNull
-    private final Path notConvertedFiles;
-    @NotNull
     private final Path serFiles;
     @NotNull
     private final Path flamegraphFiles;
+
+    public final FileSaver serFileSaver;
+
+    public final FileSaver tempFileSaver; // save files before converting
+
+    public final FileSaver flamegraphFileSaver;
 
     private PluginFileManager(@NotNull String systemDirPath) {
         Path systemDir = Paths.get(systemDirPath);
@@ -63,13 +64,16 @@ public class PluginFileManager {
         );
         @NotNull Path uploadedFilesPath = Paths.get(logDirPath.toString(), UPLOADED_FILES);
         createDirIfNotExist(uploadedFilesPath);
-        notConvertedFiles = Paths.get(uploadedFilesPath.toString(), NOT_CONVERTED);
+        @NotNull Path notConvertedFiles = Paths.get(uploadedFilesPath.toString(), NOT_CONVERTED);
         createDirIfNotExist(notConvertedFiles);
+        tempFileSaver = new FileSaver(notConvertedFiles);
         serFiles = Paths.get(uploadedFilesPath.toString(), SER_FILES);
         createDirIfNotExist(serFiles);
+        serFileSaver = new FileSaver(serFiles);
         flamegraphFiles = Paths.get(uploadedFilesPath.toString(), FLAMEGRAPH_FILES);
         createDirIfNotExist(flamegraphFiles);
         clearDir(new File(notConvertedFiles.toString()));
+        flamegraphFileSaver = new FileSaver(flamegraphFiles);
     }
 
     private void clearDir(File dir) {
@@ -158,19 +162,6 @@ public class PluginFileManager {
         return new LinkedList<>();
     }
 
-    public void convertAndSave(ByteBuf byteBuf, String fileName) {
-        Path filePath = Paths.get(flamegraphFiles.toString(), fileName);
-        byte[] bytes = new byte[byteBuf.readableBytes()];
-        byteBuf.readBytes(bytes);
-        File unzippedFile = unzip(bytes);
-        if (unzippedFile.length() > 30000000) {
-//            new ProcessBuilder();
-        } else {
-            new JMCFlightRecorderConverter(unzip(bytes))
-                    .writeTo(new File(filePath.toString()));
-        }
-    }
-
     public String getStaticFilePath(String staticFileUri) {
         Path path = Paths.get(
                 staticDirPath.toString(),
@@ -203,7 +194,7 @@ public class PluginFileManager {
         if (!Objects.equals(projectName, UPLOADED_FILES)) {
             dirPath = getLogDirPath(projectName);
         } else {
-            if (getExtension(fileName) == Extension.SER) {
+            if (Objects.equals(ProfilerToFlamegraphConverter.Companion.getFileExtension(fileName), "ser")) {
                 dirPath = serFiles;
             } else {
                 dirPath = flamegraphFiles;
@@ -256,58 +247,6 @@ public class PluginFileManager {
         file.delete();
     }
 
-    public boolean save(byte[] bytes, String fileName) {
-        Path filePath = getSavePath(fileName);
-        try (OutputStream outputStream = new FileOutputStream(new File(filePath.toString()))) {
-            outputStream.write(bytes);
-            return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    private Path getSavePath(String fileName) {
-        switch (getExtension(fileName)) {
-            case JFR:
-                return Paths.get(notConvertedFiles.toString(), fileName);
-            case SER:
-                return Paths.get(serFiles.toString(), fileName);
-            case OTHER:
-            default:
-                return Paths.get(flamegraphFiles.toString(), fileName);
-        }
-    }
-
-    public File unzip(byte[] bytes) {
-        byte[] unzippedBytes = getUnzippedBytes(bytes);
-        File file = new File(
-                Paths.get(notConvertedFiles.toString(), "temp.jfr").toString());
-        try (OutputStream outputStream = new FileOutputStream(file)) {
-            outputStream.write(unzippedBytes);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return file;
-    }
-
-    private byte[] getUnzippedBytes(byte[] bytes) {
-        try (InputStream inputStream = new GZIPInputStream(new ByteArrayInputStream(bytes));
-             ByteArrayOutputStream bout = new ByteArrayOutputStream()) {
-            byte[] buffer = new byte[1024];
-            int len;
-            while ((len = inputStream.read(buffer)) > 0) {
-                bout.write(buffer, 0, len);
-            }
-            return bout.toByteArray();
-        } catch (ZipException exception) {
-            return bytes;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return new byte[0];
-    }
-
     static class FileNameAndDate {
         private static final Pattern nameWithoutDate = Pattern.compile(".*(?=-\\d\\d\\d\\d-\\d\\d-\\d\\d-\\d\\d_\\d\\d_\\d\\d(.*)?)");
         @SuppressWarnings("unused")
@@ -328,6 +267,26 @@ public class PluginFileManager {
                 this.name = fullName;
             }
             this.date = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date(file.lastModified()));
+        }
+    }
+
+    public class FileSaver {
+        private final Path dir;
+
+        FileSaver(Path dir) {
+            this.dir = dir;
+        }
+
+        @Nullable
+        public File save(byte[] bytes, String fileName) {
+            File file = Paths.get(dir.toString(), fileName).toFile();
+            try (OutputStream outputStream = new FileOutputStream(file)) {
+                outputStream.write(bytes);
+                return file;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
         }
     }
 }

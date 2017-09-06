@@ -29,10 +29,20 @@
     <depends>com.intellij.modules.lang</depends>
     -->
 
+    <extensionPoints>
+        <extensionPoint name="profilerToFlamegraphConverter"
+                        interface="com.github.kornilova_l.flamegraph.plugin.converters.ProfilerToFlamegraphConverter"/>
+    </extensionPoints>
+
     <extensions defaultExtensionNs="com.intellij">
-        <httpRequestHandler implementation="com.github.kornilova_l.flamegraph.plugin.server.ProfilerHttpRequestHandler"/>
+        <httpRequestHandler
+                implementation="com.github.kornilova_l.flamegraph.plugin.server.ProfilerHttpRequestHandler"/>
         <executor implementation="com.github.kornilova_l.flamegraph.plugin.execution.ProfilerExecutor"/>
         <programRunner implementation="com.github.kornilova_l.flamegraph.plugin.execution.ProfilerProgramRunner"/>
+    </extensions>
+
+    <extensions defaultExtensionNs="com.github.com.kornilovaL">
+        <profilerToFlamegraphConverter implementation="com.github.kornilova_l.flamegraph.plugin.converters.jmc.JMCConverter"/>
     </extensions>
 
     <actions>
@@ -63,15 +73,20 @@
     <project-components>
         <component>
             <interface-class>com.intellij.openapi.components.PersistentStateComponent</interface-class>
-            <implementation-class>com.github.kornilova_l.flamegraph.plugin.configuration.ConfigStorage</implementation-class>
+            <implementation-class>com.github.kornilova_l.flamegraph.plugin.configuration.ConfigStorage
+            </implementation-class>
         </component>
         <component>
-            <interface-class>com.github.kornilova_l.flamegraph.plugin.ui.line_markers.LineMarkerProjectComponent</interface-class>
-            <implementation-class>com.github.kornilova_l.flamegraph.plugin.ui.line_markers.LineMarkerProjectComponent</implementation-class>
+            <interface-class>com.github.kornilova_l.flamegraph.plugin.ui.line_markers.LineMarkerProjectComponent
+            </interface-class>
+            <implementation-class>com.github.kornilova_l.flamegraph.plugin.ui.line_markers.LineMarkerProjectComponent
+            </implementation-class>
         </component>
         <component>
-            <interface-class>com.github.kornilova_l.flamegraph.plugin.ui.line_markers.LineMarkersHolder</interface-class>
-            <implementation-class>com.github.kornilova_l.flamegraph.plugin.ui.line_markers.LineMarkersHolder</implementation-class>
+            <interface-class>com.github.kornilova_l.flamegraph.plugin.ui.line_markers.LineMarkersHolder
+            </interface-class>
+            <implementation-class>com.github.kornilova_l.flamegraph.plugin.ui.line_markers.LineMarkersHolder
+            </implementation-class>
         </component>
     </project-components>
 
