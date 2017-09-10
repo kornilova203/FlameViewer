@@ -282,6 +282,7 @@ nav ul li a:focus {
 .file-list li {
     display: flex;
     height: 45px;
+    align-items: center;
 }
 
 .file-list::-webkit-scrollbar {
@@ -586,7 +587,6 @@ button:focus {
     padding: 11px;
     transition: opacity 300ms;
     position: relative;
-    top: 1px;
 }
 
 .file-list li .delete-file:hover {
