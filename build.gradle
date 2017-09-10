@@ -44,6 +44,7 @@ dependencies {
     compile project('configuration')
     compile project('protobuf')
     testCompile project('agent')
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
 }
 
 
@@ -65,5 +66,15 @@ task copyAgent(type: Copy) {
 task('prepareAndRunIde', dependsOn: [copyStatic, build, jar]) {
     doLast {
         runIdea.execute()
+    }
+}
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+compileTestKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
     }
 }

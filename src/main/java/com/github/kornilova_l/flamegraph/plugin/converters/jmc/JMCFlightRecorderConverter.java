@@ -92,7 +92,7 @@ class JMCFlightRecorderConverter {
         stacks.put(stackTrace, count);
     }
 
-    public void writeTo(File file) {
+    void writeTo(File file) {
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file))) {
             for (Map.Entry<String, Integer> entry : stacks.entrySet()) {
                 bufferedWriter.write(String.format("%s %d%n", entry.getKey(), entry.getValue()));

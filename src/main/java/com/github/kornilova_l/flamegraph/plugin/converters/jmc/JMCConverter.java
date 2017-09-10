@@ -1,10 +1,12 @@
 package com.github.kornilova_l.flamegraph.plugin.converters.jmc;
 
 import com.github.kornilova_l.flamegraph.plugin.converters.ProfilerToFlamegraphConverter;
+import org.apache.commons.lang.SystemUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.*;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -14,7 +16,7 @@ import java.util.zip.ZipException;
 
 class JMCConverter extends ProfilerToFlamegraphConverter {
     @SuppressWarnings("FieldCanBeLocal")
-    private int allowedSize = 30000000;
+    private int allowedSize = 10000000;
 
     @Override
     public boolean isSupported(@NotNull File file) {
@@ -57,14 +59,18 @@ class JMCConverter extends ProfilerToFlamegraphConverter {
     }
 
     private ProcessBuilder createProcessBuilder(File file) {
+        String delimiter = SystemUtils.IS_OS_WINDOWS ? ";" : ":";
         return new ProcessBuilder(
                 "java",
                 "-Xmx2048m",
                 "-cp",
-                getPathToJar("com.jrockit.mc.flightrecorder_5.5.1.172852.jar") + ":" + getPathToJar("com.jrockit.mc.common_5.5.1.172852.jar") + ":.",
-                //"/home/lk/.IntelliJIdea2017.1/config/plugins/java-profiling-plugin/lib/com.jrockit.mc.flightrecorder_5.5.1.172852.jar:/home/lk/.IntelliJIdea2017.1/config/plugins/java-profiling-plugin/lib/com.jrockit.mc.common_5.5.1.172852.jar:.",
+                "\"" + getPathToJar("com.jrockit.mc.flightrecorder_5.5.1.172852.jar")
+                        + delimiter +
+                        getPathToJar("com.jrockit.mc.common_5.5.1.172852.jar")
+                        + delimiter + "\"",
                 JMCFlightRecorderConverter.class.getName(),
-                file.getPath());
+                "\"" + file.getPath() + "\""
+        );
     }
 
     @Nullable
@@ -84,8 +90,13 @@ class JMCConverter extends ProfilerToFlamegraphConverter {
             return null;
         }
         String relativePath = getRelativeClassFilePath(myClass.getName());
-        String fullPath = fullPathUrl.getPath();
-        return fullPath.substring(0, fullPath.indexOf(relativePath));
+        try {
+            String fullPath = Paths.get(fullPathUrl.toURI()).toString();
+            return fullPath.substring(0, fullPath.indexOf(relativePath));
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     private String getResourcePath(String qualifiedName) {
