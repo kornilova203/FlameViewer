@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.github.kornilova_l.flamegraph.plugin.server.trees.flamegraph_format_trees.StacksParser.getStacks;
+import static com.github.kornilova_l.flamegraph.plugin.server.trees.flamegraph_format_trees.StacksParser.isFullCalls;
 
 public class FlamegraphFormatTreesSet extends TreesSet {
     private static final com.intellij.openapi.diagnostic.Logger LOG =
@@ -25,7 +26,11 @@ public class FlamegraphFormatTreesSet extends TreesSet {
             outgoingCalls = null;
         } else {
             long startTime = System.currentTimeMillis();
-            outgoingCalls = new StacksOCTreeBuilder(stacks).getTree();
+            if (isFullCalls(stacks)) {
+                outgoingCalls = new StacksOCTreeBuilder(stacks).getTree();
+            } else {
+                outgoingCalls = new SimpleStacksOCTreeBuilder(stacks).getTree();
+            }
             LOG.info("Building outgoing calls for: " + convertedFile.getName() + " took " + (System.currentTimeMillis() - startTime) + "ms");
         }
     }
