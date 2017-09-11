@@ -33,6 +33,7 @@ class AccumulativeTreeDrawer {
         this.baseNode.depth = 0;
         this.$popup = null;
         this.$popupTable = null;
+        this.$popupHeader = null;
         this.canvasOffset = 0;
         this.enableZoom = true;
         this.nodesCount = -1;
@@ -200,6 +201,7 @@ class AccumulativeTreeDrawer {
         const popupContent = templates.tree.accumulativeTreePopup().content;
         this.$popup = $(popupContent).appendTo(this.$section.find(".canvas-wrapper"));
         this.$popupTable = this.$popup.find("table");
+        this.$popupHeader = this.$popup.find(".parameters-header");
     }
 
     /**
@@ -409,7 +411,8 @@ class AccumulativeTreeDrawer {
      * @private
      */
     static _getLabelText(node) {
-        return `${node.getNodeInfo().getMethodName()} (${node.getNodeInfo().getClassName()})`;
+        const className = node.getNodeInfo().getClassName();
+        return node.getNodeInfo().getMethodName() + (className ? " (" + className + ")" : "");
     }
 
     _drawFullTree() {
@@ -435,27 +438,32 @@ class AccumulativeTreeDrawer {
      * @protected
      */
     _setPopupContent(node) {
-        const desc = encodeURIComponent(node.getNodeInfo().getDescription());
         this.$popup.find(".package-name").text(AccumulativeTreeDrawer._getPackageName(node));
-        this.$popup.find("h3").text(`${AccumulativeTreeDrawer._getClassName(node)}.${node.getNodeInfo().getMethodName()}`);
-        this.$popup.find(".outgoing-link").attr("href", `/flamegraph-profiler/outgoing-calls?` +
-            `file=${constants.fileName}&` +
-            `project=${constants.projectName}&` +
-            `method=${node.getNodeInfo().getMethodName()}&` +
-            `class=${node.getNodeInfo().getClassName()}&` +
-            `desc=${desc}&` +
-            `isStatic=${node.getNodeInfo().getIsStatic() === true ? "true" : "false"}`
+        this.$popup.find("h3").text(AccumulativeTreeDrawer.getTitle(node));
+        const desc = encodeURIComponent(node.getNodeInfo().getDescription());
+        this.$popup.find(".outgoing-link").attr("href",
+            `/flamegraph-profiler/outgoing-calls?` + AccumulativeTreeDrawer.getGETParameters(node, desc)
         );
-        this.$popup.find(".incoming-link").attr("href", `/flamegraph-profiler/incoming-calls?` +
-            `file=${constants.fileName}&` +
-            `project=${constants.projectName}&` +
-            `method=${node.getNodeInfo().getMethodName()}&` +
-            `class=${node.getNodeInfo().getClassName()}&` +
-            `desc=${desc}&` +
-            `isStatic=${node.getNodeInfo().getIsStatic() === true ? "true" : "false"}`
+        this.$popup.find(".incoming-link").attr("href",
+            `/flamegraph-profiler/incoming-calls?` + AccumulativeTreeDrawer.getGETParameters(node, desc)
         );
         this._setPopupTable(node);
         this._setPopupReturnValue(node);
+    }
+
+    static getGETParameters(node, desc) {
+        const className = node.getNodeInfo().getClassName();
+        return `file=${constants.fileName}&` +
+            `project=${constants.projectName}&` +
+            `method=${node.getNodeInfo().getMethodName()}` +
+            (className ? "&class=" + className + "&" : "") +
+            (desc ? `&desc=${desc}&` : "") +
+            (desc ? `&isStatic=${node.getNodeInfo().getIsStatic() === true ? "true" : "false"}` : "");
+    }
+
+    static getTitle(node) {
+        const className = AccumulativeTreeDrawer._getClassName(node);
+        return (className ? className + "." : "") + node.getNodeInfo().getMethodName();
     }
 
     /**
@@ -480,6 +488,10 @@ class AccumulativeTreeDrawer {
             for (let i = 0; i < parametersList.length; i++) {
                 this.$popupTable.append($("<tr><td><p>" + parametersList[i] + "</p></td></tr>"))
             }
+            this.$popup.find();
+            this.$popupHeader.show();
+        } else {
+            this.$popupHeader.hide();
         }
     }
 

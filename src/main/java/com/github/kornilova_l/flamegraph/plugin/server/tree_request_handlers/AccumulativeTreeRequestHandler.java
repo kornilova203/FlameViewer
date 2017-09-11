@@ -34,9 +34,10 @@ public abstract class AccumulativeTreeRequestHandler extends TreeRequestHandler 
         String className = getParameter(urlDecoder, "class");
         String desc = getParameter(urlDecoder, "desc");
         String isStaticString = getParameter(urlDecoder, "isStatic");
-        if (methodName != null && className != null && desc != null) {
-            boolean isStatic;
-            isStatic = isStaticString != null && Objects.equals(isStaticString, "true");
+        if (methodName != null) {
+            className = className != null ? className : "";
+            desc = desc != null ? desc : "";
+            boolean isStatic = isStaticString != null && Objects.equals(isStaticString, "true");
             return TreeManager.getInstance().getTree(logFile, treeType, className, methodName,
                     desc, isStatic, filter);
         } else {
