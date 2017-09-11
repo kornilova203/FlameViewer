@@ -108,7 +108,11 @@ class JMCFlightRecorderConverter {
             return;
         }
         System.out.println(args[0]);
-        File file = new File(args[0]);
+        String fileName = args[0];
+        if (fileName.charAt(0) == '"') {
+            fileName = fileName.substring(1, fileName.length() - 1);
+        }
+        File file = new File(fileName);
         System.out.println(file);
         new JMCFlightRecorderConverter(file).writeTo(file);
 

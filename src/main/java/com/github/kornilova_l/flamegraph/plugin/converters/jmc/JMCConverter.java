@@ -64,12 +64,12 @@ class JMCConverter extends ProfilerToFlamegraphConverter {
                 "java",
                 "-Xmx2048m",
                 "-cp",
-                "\"" + getPathToJar("com.jrockit.mc.flightrecorder_5.5.1.172852.jar")
+                getPathToJar("com.jrockit.mc.flightrecorder_5.5.1.172852.jar")
                         + delimiter +
                         getPathToJar("com.jrockit.mc.common_5.5.1.172852.jar")
-                        + delimiter + "\"",
+                        + delimiter,
                 JMCFlightRecorderConverter.class.getName(),
-                "\"" + file.getPath() + "\""
+                file.getPath()
         );
     }
 
