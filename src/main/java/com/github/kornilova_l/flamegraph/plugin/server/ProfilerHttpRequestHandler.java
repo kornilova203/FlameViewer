@@ -28,6 +28,9 @@ import org.jetbrains.io.Responses;
 
 import java.io.*;
 import java.util.Map;
+import java.util.Objects;
+
+import static com.github.kornilova_l.flamegraph.plugin.server.trees.flamegraph_format_trees.StacksParser.isFlamegraph;
 
 public class ProfilerHttpRequestHandler extends HttpRequestHandler {
 
@@ -194,12 +197,12 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
         LOG.info("Got file: " + fileName);
         byte[] bytes = getBytes(fullHttpRequest.content());
         boolean isSaved;
-        switch (ProfilerToFlamegraphConverter.Companion.getFileExtension(fileName)) {
-            case "ser":
-                isSaved = fileManager.serFileSaver.save(bytes, fileName) != null;
-                break;
-            default:
-                isSaved = convertWithExtensions(fileName, bytes);
+        if (Objects.equals(ProfilerToFlamegraphConverter.Companion.getFileExtension(fileName), "ser")) {
+            isSaved = fileManager.serFileSaver.save(bytes, fileName) != null;
+        } else if (isFlamegraph(bytes)) {
+            isSaved = fileManager.flamegraphFileSaver.save(bytes, fileName) != null;
+        } else {
+            isSaved = convertWithExtensions(fileName, bytes);
         }
         sendStatus(context.channel(), isSaved);
     }
