@@ -16,7 +16,7 @@ import java.util.zip.ZipException;
 
 class JMCConverter extends ProfilerToFlamegraphConverter {
     @SuppressWarnings("FieldCanBeLocal")
-    private int allowedSize = 10000000;
+    private int allowedSize = 30000000;
 
     @Override
     public boolean isSupported(@NotNull File file) {

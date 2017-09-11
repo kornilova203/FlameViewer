@@ -1,5 +1,6 @@
 package com.github.kornilova_l.flamegraph.plugin.converters
 
+import com.github.kornilova_l.flamegraph.plugin.server.trees.flamegraph_format_trees.StacksParser
 import com.intellij.openapi.extensions.ExtensionPointName
 import java.io.File
 
@@ -16,9 +17,10 @@ abstract class ProfilerToFlamegraphConverter {
         }
 
         fun convert(file: File): ByteArray? {
-            return EP_NAME.extensions
+            val bytes = EP_NAME.extensions
                     .firstOrNull { it.isSupported(file) }
-                    ?.convert(file)
+                    ?.convert(file) ?: return null
+            return if (StacksParser.isFlamegraph(bytes)) bytes else null
         }
     }
 

@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 
 public class StacksParser {
     private static Pattern flamegraphLinePattern =
-            Pattern.compile("([^ ]+ [^ ]+(([./])[^ ]+)+\\([^)]*\\)(;| \\d+))+");
+            Pattern.compile(".* \\d+");
 
     @Nullable
     static Map<String, Integer> getStacks(File convertedFile) {
@@ -39,7 +39,6 @@ public class StacksParser {
         ))) {
             String line = reader.readLine();
             while (line != null && !Objects.equals(line, "")) {
-                System.out.println(line);
                 if (!flamegraphLinePattern.matcher(line).matches()) {
                     return false;
                 } else {
