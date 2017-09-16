@@ -13,7 +13,7 @@ public class StacksParser {
     private static final Pattern fullCallPattern = Pattern.compile("[\\w.$\\[\\]]+ [\\w$.\\[\\]]+\\([^)]*\\)");
 
     @Nullable
-    static Map<String, Integer> getStacks(File convertedFile) {
+    public static Map<String, Integer> getStacks(File convertedFile) {
         try (BufferedReader reader = new BufferedReader(
                 new FileReader(convertedFile)
         )) {

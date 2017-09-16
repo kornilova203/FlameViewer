@@ -47,7 +47,7 @@ public class PluginFileManager {
 
     public final FileSaver tempFileSaver; // save files before converting
 
-    public final FileSaver flamegraphFileSaver;
+    public final FlamegraphSaver flamegraphFileSaver;
 
     private PluginFileManager(@NotNull String systemDirPath) {
         Path systemDir = Paths.get(systemDirPath);
@@ -73,7 +73,7 @@ public class PluginFileManager {
         flamegraphFiles = Paths.get(uploadedFilesPath.toString(), FLAMEGRAPH_FILES);
         createDirIfNotExist(flamegraphFiles);
         clearDir(new File(notConvertedFiles.toString()));
-        flamegraphFileSaver = new FileSaver(flamegraphFiles);
+        flamegraphFileSaver = new FlamegraphSaver(flamegraphFiles);
     }
 
     private void clearDir(File dir) {
@@ -271,7 +271,7 @@ public class PluginFileManager {
     }
 
     public class FileSaver {
-        private final Path dir;
+        final Path dir;
 
         FileSaver(Path dir) {
             this.dir = dir;
@@ -282,6 +282,25 @@ public class PluginFileManager {
             File file = Paths.get(dir.toString(), fileName).toFile();
             try (OutputStream outputStream = new FileOutputStream(file)) {
                 outputStream.write(bytes);
+                return file;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+    }
+
+    public class FlamegraphSaver extends FileSaver {
+        FlamegraphSaver(Path dir) {
+            super(dir);
+        }
+
+        public File save(@NotNull Map<String, Integer> stacks, @NotNull String fileName) {
+            File file = Paths.get(dir.toString(), fileName).toFile();
+            try (OutputStream outputStream = new FileOutputStream(file)) {
+                for (Map.Entry<String, Integer> stack : stacks.entrySet()) {
+                    outputStream.write((stack.getKey() + " " + stack.getValue() + "\n").getBytes());
+                }
                 return file;
             } catch (IOException e) {
                 e.printStackTrace();

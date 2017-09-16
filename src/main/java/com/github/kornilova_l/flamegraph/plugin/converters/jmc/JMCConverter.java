@@ -1,6 +1,7 @@
 package com.github.kornilova_l.flamegraph.plugin.converters.jmc;
 
 import com.github.kornilova_l.flamegraph.plugin.converters.ProfilerToFlamegraphConverter;
+import com.github.kornilova_l.flamegraph.plugin.server.trees.flamegraph_format_trees.StacksParser;
 import org.apache.commons.lang.SystemUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -10,13 +11,15 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.ZipException;
 
 class JMCConverter extends ProfilerToFlamegraphConverter {
     @SuppressWarnings("FieldCanBeLocal")
-    private int allowedSize = 30000000;
+    private int allowedSize = 20000000;
 
     @Override
     public boolean isSupported(@NotNull File file) {
@@ -25,7 +28,7 @@ class JMCConverter extends ProfilerToFlamegraphConverter {
 
     @NotNull
     @Override
-    public byte[] convert(@NotNull File file) {
+    public Map<String, Integer> convert(@NotNull File file) {
         byte[] unzippedBytes = getUnzippedBytes(file);
         if (unzippedBytes.length > allowedSize) {
             saveToFile(file, unzippedBytes);
@@ -33,7 +36,8 @@ class JMCConverter extends ProfilerToFlamegraphConverter {
         } else {
             new JMCFlightRecorderConverter(new ByteArrayInputStream(unzippedBytes)).writeTo(file);
         }
-        return getBytes(file);
+        Map<String, Integer> res = StacksParser.getStacks(file);
+        return res != null ? res : new HashMap<>();
     }
 
     private void saveToFile(@NotNull File file, byte[] unzippedBytes) {

@@ -26,6 +26,7 @@ class JMCFlightRecorderConverter {
     private static boolean useSimpleNames = false;
     private static boolean hideArguments = false;
     private Map<String, Integer> stacks = new HashMap<>();
+
     JMCFlightRecorderConverter(InputStream inputStream) {
         System.out.println("Start");
         FlightRecording recording = FlightRecordingLoader.loadStream(inputStream);

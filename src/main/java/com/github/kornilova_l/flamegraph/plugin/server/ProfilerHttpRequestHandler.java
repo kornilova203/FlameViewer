@@ -219,9 +219,10 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
         boolean isSaved = false;
         File file = fileManager.tempFileSaver.save(bytes, fileName);
         if (file != null) {
-            byte[] convertedBytes = ProfilerToFlamegraphConverter.Companion.convert(file);
-            if (convertedBytes != null) {
-                isSaved = fileManager.flamegraphFileSaver.save(convertedBytes, fileName) != null;
+            Map<String, Integer> stacks = ProfilerToFlamegraphConverter.Companion.convert(file);
+            if (stacks != null) {
+                isSaved = fileManager.flamegraphFileSaver
+                        .save(stacks, fileName) != null;
             }
             //noinspection ResultOfMethodCallIgnored
             file.delete();
