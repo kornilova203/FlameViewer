@@ -27,13 +27,14 @@ class AccumulativeTreeDrawer {
         this.zoomedNode = null;
         this.$fileMenu = $(".file-menu");
         this.baseNode = this.tree.getBaseNode();
+        this.isFull = this.baseNode.getNodesList()[0].getNodeInfo().getClassName() !== "";
         this.packageList = {}; // map package name to color
         this._buildPackageListRecursively(this.baseNode);
         this._setPackageColorsRecursively();
         this.baseNode.depth = 0;
         this.$popup = null;
-        this.$popupTable = null;
-        this.$popupHeader = null;
+        this.$popupParameters = null;
+        this.$popupIcon = null;
         this.canvasOffset = 0;
         this.enableZoom = true;
         this.nodesCount = -1;
@@ -198,10 +199,12 @@ class AccumulativeTreeDrawer {
     }
 
     _createPopup() {
-        const popupContent = templates.tree.accumulativeTreePopup().content;
+        const popupContent = templates.tree.accumulativeTreePopup({
+            isFull: this.isFull
+        }).content;
         this.$popup = $(popupContent).appendTo(this.$section.find(".canvas-wrapper"));
-        this.$popupTable = this.$popup.find("table");
-        this.$popupHeader = this.$popup.find(".parameters-header");
+        this.$popupParameters = this.$popup.find(".parameters");
+        this.$popupIcon = this.$popup.find(".parameter-icon");
     }
 
     /**
@@ -438,8 +441,8 @@ class AccumulativeTreeDrawer {
      * @protected
      */
     _setPopupContent(node) {
-        this.$popup.find(".package-name").text(AccumulativeTreeDrawer._getPackageName(node));
-        this.$popup.find("h3").text(AccumulativeTreeDrawer.getTitle(node));
+        this.$popup.find(".class-name").text(node.getNodeInfo().getClassName());
+        this.$popup.find("h3").text(node.getNodeInfo().getMethodName());
         const desc = encodeURIComponent(node.getNodeInfo().getDescription());
         this.$popup.find(".outgoing-link").attr("href",
             `/flamegraph-profiler/outgoing-calls?` + AccumulativeTreeDrawer.getGETParameters(node, desc)
@@ -447,7 +450,7 @@ class AccumulativeTreeDrawer {
         this.$popup.find(".incoming-link").attr("href",
             `/flamegraph-profiler/incoming-calls?` + AccumulativeTreeDrawer.getGETParameters(node, desc)
         );
-        this._setPopupTable(node);
+        this._setParameters(node);
         this._setPopupReturnValue(node);
     }
 
@@ -459,11 +462,6 @@ class AccumulativeTreeDrawer {
             (className ? "&class=" + className + "&" : "") +
             (desc ? `&desc=${desc}&` : "") +
             (desc ? `&isStatic=${node.getNodeInfo().getIsStatic() === true ? "true" : "false"}` : "");
-    }
-
-    static getTitle(node) {
-        const className = AccumulativeTreeDrawer._getClassName(node);
-        return (className ? className + "." : "") + node.getNodeInfo().getMethodName();
     }
 
     /**
@@ -481,17 +479,17 @@ class AccumulativeTreeDrawer {
     /**
      * @param node
      */
-    _setPopupTable(node) {
+    _setParameters(node) {
         const parametersList = AccumulativeTreeDrawer.getParametersTypesList(node.getNodeInfo().getDescription());
-        this.$popupTable.find("*").remove();
+        this.$popupParameters.find("*").remove();
         if (parametersList !== null) {
             for (let i = 0; i < parametersList.length; i++) {
-                this.$popupTable.append($("<tr><td><p>" + parametersList[i] + "</p></td></tr>"))
+                this.$popupParameters.append($("<p>" + parametersList[i] + "</p>"))
             }
             this.$popup.find();
-            this.$popupHeader.show();
+            this.$popupIcon.show();
         } else {
-            this.$popupHeader.hide();
+            this.$popupIcon.hide();
         }
     }
 
@@ -647,23 +645,6 @@ class AccumulativeTreeDrawer {
         }
     }
 
-    /**
-     * @param node
-     * @return {String}
-     */
-    static _getClassName(node) {
-        if (node.getNodeInfo() === undefined) {
-            return "";
-        }
-        const className = node.getNodeInfo().getClassName();
-        const lastDot = className.lastIndexOf(".");
-        if (lastDot !== -1) {
-            return className.substring(lastDot + 1, className.length);
-        } else {
-            return className;
-        }
-    }
-
     _setPopupReturnValue(node) {
 
     }
@@ -713,7 +694,6 @@ class AccumulativeTreeDrawer {
 
     /**
      * @return {Number}
-     * @private
      */
     _getCanvasWidthForSection() {
         return window.innerWidth -

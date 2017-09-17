@@ -91,35 +91,37 @@
  */
 {template .callTreePopup}
 <div class="popup">
-    <a class="outgoing-link"><img src="img/outgoing.png"/></a>
-    <a class="incoming-link"><img src="img/incoming.png"/></a>
-    <p class="package-name"></p>
-    <h3></h3>
     <p class="duration"></p>
-    <h4 class="parameters-header">Parameters:</h4>
-    <table>
-        <tr>
-            <th>Type</th>
-            <th>Value</th>
-        </tr>
-    </table>
-    <h4 class="return-value-type"></h4>
-    <p class="return-value"></p>
+    <div class="method-links">
+        <a class="outgoing-link"><img src="img/outgoing.png"/></a>
+        <a class="incoming-link"><img src="img/incoming.png"/></a>
+    </div>
+    <img class="icon" src="img/class.png"/><p class="class-name shift-right"></p>
+    <img class="icon" src="img/method.png"/><h3 class="method-name shift-right"></h3>
+    <img class="icon parameter-icon" src="img/parameter.png"/>
+    <div class="parameters shift-right"></div>
+    <h4 class="return-value-type shift-right"></h4>
+    <p class="return-value shift-right"></p>
 </div>
 {/template}
 
 /**
  * Generate popup for method in base tree
+ * @param isFull
  */
 {template .accumulativeTreePopup}
 <div class="popup">
-    <a class="outgoing-link"><img src="img/outgoing.png"/></a>
-    <a class="incoming-link"><img src="img/incoming.png"/></a>
-    <p class="package-name"></p>
-    <h3></h3>
+    <div class="method-links">
+        <a class="outgoing-link"><img src="img/outgoing.png"/></a>
+        <a class="incoming-link"><img src="img/incoming.png"/></a>
+    </div>
+    {if $isFull}<img class="icon" src="img/class.png"/>{/if}
+    <p class="class-name{if $isFull} shift-right{/if}"></p>
+    {if $isFull}<img class="icon" src="img/method.png"/>{/if}
+    <h3 class="method-name{if $isFull} shift-right{/if}"></h3>
     <p class="p-calls-num"></p>
-    <h4 class="parameters-header">Parameters:</h4>
-    <table></table>
+    {if $isFull}<img class="icon parameter-icon" src="img/parameter.png"/>{/if}
+    <div class="parameters{if $isFull} shift-right{/if}"></div>
 </div>
 {/template}
 

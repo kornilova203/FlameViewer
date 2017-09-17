@@ -104,38 +104,20 @@ section header .class-name {
     padding: 6px 15px 8px;
     text-align: left;
     display: none;
+    min-width: 120px;
 }
 
 .popup h3 {
     font-size: 14px;
     margin-top: 2px;
-    margin-bottom: 5px;
+    margin-bottom: 7px;
     font-weight: normal;
 }
 
 .popup h4 {
-    margin: 10px 0 5px;
+    margin: 15px 0 5px;
     font-size: 14px;
-}
-
-.popup table td, .popup table th {
-    width: 150px;
-    overflow: hidden;
-    display: inline-block;
-    white-space: nowrap;
-}
-
-.popup table p {
-    display: inline-block;
-    text-overflow: ellipsis;
-    width: 100%;
-    overflow: hidden;
-}
-
-.popup table {
-    font-size: 14px;
-    position: relative;
-    right: 4px;
+    font-weight: normal;
 }
 
 .popup p {
@@ -145,6 +127,40 @@ section header .class-name {
 
 .popup a img {
     margin-right: 10px;
+}
+
+.popup .class-name {
+    font-size: 13px;
+    color: #444;
+    margin-bottom: 8px;
+}
+
+.shift-right {
+    padding-left: 23px;
+}
+
+.method-links {
+    margin-bottom: 5px;
+}
+
+.popup .duration {
+    position: absolute;
+    right: 15px;
+    top: 12px;
+    color: #444;
+}
+
+.popup .parameters p {
+    margin-bottom: 2px;
+    max-width: 300px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.popup .parameters span {
+    font-style: italic;
+    color: #555;
 }
 
 .inputfile {
@@ -797,7 +813,7 @@ canvas {
     margin-top: 40px;
 }
 
-.return-value, .parameter {
+.parameter {
     color: #000080;
 }
 
@@ -810,4 +826,9 @@ canvas {
     align-items: center;
     color: white;
     position: static;
+}
+
+.icon {
+    position: absolute;
+    margin-top: -4px;
 }

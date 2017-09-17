@@ -34,14 +34,17 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
      * @override
      * @param node
      */
-    _setPopupTable(node) {
+    _setParameters(node) {
         const parametersList = AccumulativeTreeDrawer.getParametersTypesList(node.getNodeInfo().getDescription());
-        this.$popupTable.find(".parameter-tr").remove();
+        this.$popupParameters.find("*").remove();
 
         if (parametersList !== null) {
             for (let i = 0; i < parametersList.length; i++) {
-                this.$popupTable.append($(`<tr class='parameter-tr'><td><p>${parametersList[i]}</p></td><td><p>${CallTreeDrawer.getValueForParameter(i + 1, node.getNodeInfo().getParametersList())}</p></td></tr>`))
+                this.$popupParameters.append($(`<p>${parametersList[i]}<span class="parameter-value">${CallTreeDrawer.getValueForParameter(i + 1, node.getNodeInfo().getParametersList())}</span></p>`))
             }
+            this.$popupIcon.show();
+        } else {
+            this.$popupIcon.hide();
         }
     }
 
@@ -52,10 +55,10 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
     static getValueForParameter(index, parameters) {
         for (let i = 0; i < parameters.length; i++) {
             if (parameters[i].getIndex() === index) {
-                return CallTreeDrawer._getParameterVal(parameters[i])
+                return " = " + CallTreeDrawer._getParameterVal(parameters[i])
             }
         }
-        return "-";
+        return "";
     }
 
 
@@ -120,25 +123,29 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
     _createPopup() {
         const popupContent = templates.tree.callTreePopup().content;
         this.$popup = $(popupContent).appendTo(this.$section);
-        this.$popupTable = this.$popup.find("table");
+        this.$popupParameters = this.$popup.find(".parameters");
+        this.$popupIcon = this.$popup.find(".parameter-icon");
+        this.$returnValueType = this.$popup.find(".return-value-type");
+        this.$returnValue = this.$popup.find(".return-value");
     }
 
     _setPopupReturnValue(node) {
-        const returnValueType = this.$popup.find(".return-value-type");
-        const returnValue = this.$popup.find(".return-value");
-        returnValueType.text("");
-        returnValue.text("");
+        this.$returnValueType.show();
+        this.$returnValue.show();
         switch (node.getNodeInfo().getResultCase()) {
             case 5: // return value
-                returnValueType.text("Return value:");
                 let value = CallTreeDrawer._getType(node.getNodeInfo().getReturnValue());
                 if (value !== undefined) {
-                    returnValue.text(value);
+                    this.$returnValueType.text("Return value:");
+                    this.$returnValue.text(value);
+                } else {
+                    this.$returnValueType.hide();
+                    this.$returnValue.hide();
                 }
                 break;
             case 6: // exception
-                returnValueType.text("Exception:");
-                returnValue.text(node.getNodeInfo().getException().getType() + ": " + node.getNodeInfo().getException().getValue())
+                this.$returnValueType.text("Exception:");
+                this.$returnValue.text(node.getNodeInfo().getException().getType() + ": " + node.getNodeInfo().getException().getValue())
         }
     }
 
