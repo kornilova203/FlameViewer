@@ -7,6 +7,7 @@ import com.jrockit.mc.flightrecorder.FlightRecordingLoader;
 import com.jrockit.mc.flightrecorder.internal.model.FLRStackTrace;
 import com.jrockit.mc.flightrecorder.spi.IEvent;
 import com.jrockit.mc.flightrecorder.spi.IView;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
 import java.util.HashMap;
@@ -47,12 +48,14 @@ class JMCFlightRecorderConverter {
         Stack<String> stack = new Stack<>();
         for (IMCFrame frame : flrStackTrace.getFrames()) {
             // Push method to a stack
-            stack.push(getFrameName(frame));
+            if (frame != null) {
+                stack.push(getFrameName(frame));
+            }
         }
         return stack;
     }
 
-    private static String getFrameName(IMCFrame frame) {
+    private static String getFrameName(@NotNull IMCFrame frame) {
         StringBuilder methodBuilder = new StringBuilder();
         IMCMethod method = frame.getMethod();
         methodBuilder.append(method.getHumanReadable(showReturnValue, !useSimpleNames, true, !useSimpleNames,
