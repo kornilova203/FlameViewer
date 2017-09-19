@@ -31,7 +31,7 @@ body {
 section {
     background-color: white;
     position: relative;
-    padding: 0 30px;
+    padding: 0 35px;
     transition: margin 300ms;
 }
 
@@ -109,7 +109,7 @@ section {
 }
 
 canvas {
-    padding-right: 30px;
+    padding-right: 35px;
 }
 
 .hidden-tree-preview {

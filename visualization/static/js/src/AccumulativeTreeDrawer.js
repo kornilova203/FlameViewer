@@ -4,6 +4,7 @@ const POPUP_MARGIN = 6; // have no idea why there is a gap between popup and can
 const ZOOMED_PARENT_COLOR = "#94bcff";
 const RESET_ZOOM_BUTTON_COLOR = "#9da1ff";
 const HIGHLIGHT_NOT_SET_COLOR = "#d1d1d1";
+const CANVAS_PADDING = 35;
 
 /**
  * Draws tree without:
@@ -33,6 +34,7 @@ class AccumulativeTreeDrawer {
         this._setPackageColorsRecursively();
         this.baseNode.depth = 0;
         this.$popup = null;
+        this.$canvasWrapper = null;
         this.$popupParameters = null;
         this.$popupIcon = null;
         this.canvasOffset = 0;
@@ -202,7 +204,8 @@ class AccumulativeTreeDrawer {
         const popupContent = templates.tree.accumulativeTreePopup({
             isFull: this.isFull
         }).content;
-        this.$popup = $(popupContent).appendTo(this.$section.find(".canvas-wrapper"));
+        this.$canvasWrapper = this.$section.find(".canvas-wrapper");
+        this.$popup = $(popupContent).appendTo(this.$canvasWrapper);
         this.$popupParameters = this.$popup.find(".parameters");
         this.$popupIcon = this.$popup.find(".parameter-icon");
     }
@@ -235,12 +238,12 @@ class AccumulativeTreeDrawer {
 
     /**
      * @param {Number} offsetX
-     * @param depth
+     * @param {Number} depth
      */
     _setPopupPosition(offsetX, depth) {
         this.$popup
             .css("left", offsetX)
-            .css("margin-top", -AccumulativeTreeDrawer._calcNormaOffsetY(depth) - POPUP_MARGIN + 1)
+            .css("margin-top", -AccumulativeTreeDrawer._calcNormaOffsetY(depth) - POPUP_MARGIN + 2)
     }
 
     static _calcNormaOffsetY(depth) {
@@ -271,7 +274,7 @@ class AccumulativeTreeDrawer {
         shape.addEventListener("mouseover", () => {
             isMethodHovered = true;
             this._setPopupContent(node);
-            this._setPopupPosition(offsetX, depth);
+            this._setPopupPosition(this._shiftIfHidden(offsetX), depth);
             this.$popup.show();
         });
         // noinspection JSUnresolvedFunction
@@ -698,7 +701,7 @@ class AccumulativeTreeDrawer {
     _getCanvasWidthForSection() {
         return window.innerWidth -
             AccumulativeTreeDrawer._getElementWidth(this.$fileMenu) -
-            70;
+            CANVAS_PADDING * 2;
     }
 
     /**
@@ -799,5 +802,22 @@ class AccumulativeTreeDrawer {
             return desc.substring(openBracket + 1, closeBracket).split(", ");
         }
         return [];
+    }
+
+    _getRightCornerPos(offsetX) {
+        //noinspection JSValidateTypes
+        return offsetX + this.$popup.outerWidth();
+    }
+
+    /**
+     * @param {number} offsetX
+     * @return {number}
+     */
+    _shiftIfHidden(offsetX) {
+        const rightCorner = this._getRightCornerPos(offsetX);
+        //noinspection JSValidateTypes
+        return rightCorner > this.$canvasWrapper.outerWidth() + CANVAS_PADDING - 6 ?
+            offsetX - (rightCorner - this.$canvasWrapper.outerWidth() - CANVAS_PADDING + 6) :
+            offsetX;
     }
 }

@@ -61,26 +61,6 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
         return "";
     }
 
-
-    //noinspection JSUnusedGlobalSymbols
-    /**
-     * @param {Number} offsetX
-     * @param depth
-     * @override
-     */
-    _setPopupPosition(offsetX, depth) {
-        const callTreeWrapper = $(".call-tree-wrapper");
-        offsetX += this.zoomedCanvasMargin;
-        //noinspection JSValidateTypes
-        if (offsetX < callTreeWrapper.scrollLeft()) {
-            //noinspection JSValidateTypes
-            offsetX = callTreeWrapper.scrollLeft();
-        } else {
-            offsetX += 30;
-        }
-        super._setPopupPosition(offsetX, depth);
-    }
-
     draw() {
         this._prepareDraw();
 
@@ -283,5 +263,25 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
             return EXCEPTION_COLOR;
         }
         return super._getOriginalColor(node);
+    }
+
+    /**
+     * @param {number} offsetX
+     * @return {number}
+     * @override
+     */
+    _shiftIfHidden(offsetX) {
+        offsetX += this.zoomedCanvasMargin;
+        //noinspection JSValidateTypes
+        if (offsetX < this.$callTreeWrapper.scrollLeft()) {
+            //noinspection JSValidateTypes
+            return this.$callTreeWrapper.scrollLeft();
+        } else {
+            offsetX += CANVAS_PADDING;
+            const rightCorner = super._getRightCornerPos(offsetX);
+            return rightCorner > this.canvasWidth + CANVAS_PADDING * 2 ?
+                offsetX - (rightCorner - this.canvasWidth - CANVAS_PADDING * 2) :
+                offsetX;
+        }
     }
 }
