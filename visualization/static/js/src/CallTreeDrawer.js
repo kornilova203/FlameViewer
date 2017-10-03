@@ -13,6 +13,7 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
         this.canvasOffset = 0;
         this.$callTreeWrapper = $(".call-tree-wrapper");
         this.zoomedCanvasMargin = 0;
+        this.availableWidth = 0; // for popup position
         this.$zoomedCanvas = null;
         this.id = id;
         this.enableZoom = true;
@@ -65,6 +66,7 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
         this._prepareDraw();
 
         this.$section = this._createSection();
+        this.availableWidth = Math.max(this.canvasWidth, CallTreeDrawer._getElementWidth(this.$section));
         this.stage = new createjs.Stage("canvas-" + this.id);
         this.stage.id = "canvas-" + this.id;
         this.stage.enableMouseOver(20);
@@ -279,8 +281,8 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
         } else {
             offsetX += CANVAS_PADDING;
             const rightCorner = super._getRightCornerPos(offsetX);
-            return rightCorner > this.canvasWidth + CANVAS_PADDING * 2 ?
-                offsetX - (rightCorner - this.canvasWidth - CANVAS_PADDING * 2) :
+            return rightCorner > this.availableWidth + CANVAS_PADDING * 2 ?
+                offsetX - (rightCorner - this.availableWidth - CANVAS_PADDING * 2) :
                 offsetX;
         }
     }
