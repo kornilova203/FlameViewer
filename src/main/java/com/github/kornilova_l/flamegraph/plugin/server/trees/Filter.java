@@ -4,6 +4,7 @@ import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 public class Filter {
     @Nullable
@@ -19,10 +20,14 @@ public class Filter {
     @Nullable
     private Pattern compilePattern(@Nullable String patternString) {
         if (patternString != null) {
-            return Pattern.compile(
-                    patternString.replaceAll("\\.", "\\\\.")
-                            .replaceAll("\\*", ".*")
-            );
+            try {
+                return Pattern.compile(
+                        patternString.replaceAll("\\.", "\\\\.")
+                                .replaceAll("\\*", ".*")
+                );
+            } catch (PatternSyntaxException e) { // if pattern is invalid
+                return null;
+            }
         }
         return null;
     }
