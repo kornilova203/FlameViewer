@@ -9,6 +9,9 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
     constructor(tree, id) {
         super(tree);
         this.canvasWidth = Math.ceil(this.treeWidth * PIX_IN_MS);
+        if (this.canvasWidth > 32000) {
+            this.canvasWidth = 32000;
+        }
         this.threadName = this.tree.getTreeInfo().getThreadName();
         this.canvasOffset = 0;
         this.$callTreeWrapper = $(".call-tree-wrapper");
