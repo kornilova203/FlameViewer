@@ -25,7 +25,7 @@
     </facet>
   </component>
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8">
-    <output-test url="file://$MODULE_DIR$/../../../agent/build/classes/test" />
+    <output-test url="file://$MODULE_DIR$/../../../agent/out/test/classes" />
     <exclude-output />
     <content url="file://$MODULE_DIR$/../../../agent/src/test">
       <sourceFolder url="file://$MODULE_DIR$/../../../agent/src/test/java" isTestSource="true" />

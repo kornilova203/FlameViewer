@@ -25,7 +25,7 @@
     </facet>
   </component>
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8">
-    <output-test url="file://$MODULE_DIR$/../../../protobuf/build/classes/test" />
+    <output-test url="file://$MODULE_DIR$/../../../protobuf/out/test/classes" />
     <exclude-output />
     <content url="file://$MODULE_DIR$/../../../protobuf/src/test">
       <sourceFolder url="file://$MODULE_DIR$/../../../protobuf/src/test/java" isTestSource="true" />

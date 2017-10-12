@@ -5,6 +5,7 @@
     <content url="file://$MODULE_DIR$/../../../protobuf">
       <excludeFolder url="file://$MODULE_DIR$/../../../protobuf/.gradle" />
       <excludeFolder url="file://$MODULE_DIR$/../../../protobuf/build" />
+      <excludeFolder url="file://$MODULE_DIR$/../../../protobuf/out" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

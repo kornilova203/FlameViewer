@@ -25,7 +25,7 @@
     </facet>
   </component>
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8">
-    <output url="file://$MODULE_DIR$/../../../agent/build/classes/jmh" />
+    <output url="file://$MODULE_DIR$/../../../agent/out/jmh/classes" />
     <exclude-output />
     <content url="file://$MODULE_DIR$/../../../agent/src/jmh">
       <sourceFolder url="file://$MODULE_DIR$/../../../agent/src/jmh/java" isTestSource="false" />
@@ -39,15 +39,6 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../../lib/annotations-java8.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
           <root url="jar://$MODULE_DIR$/../../../protobuf/libs/protobuf-java-kornilova-l-3.3.0.jar!/" />
         </CLASSES>
         <JAVADOC />
@@ -55,6 +46,15 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="Gradle: org.openjdk.jmh:jmh-core:1.12" level="project" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../../../lib/annotations-java8.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
     <orderEntry type="module" module-name="agent_test" production-on-test="" />
     <orderEntry type="module" module-name="agent_main" />
     <orderEntry type="library" name="Gradle: org.openjdk.jmh:jmh-generator-bytecode:1.12" level="project" />

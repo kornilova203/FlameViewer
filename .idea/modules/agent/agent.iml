@@ -5,6 +5,7 @@
     <content url="file://$MODULE_DIR$/../../../agent">
       <excludeFolder url="file://$MODULE_DIR$/../../../agent/.gradle" />
       <excludeFolder url="file://$MODULE_DIR$/../../../agent/build" />
+      <excludeFolder url="file://$MODULE_DIR$/../../../agent/out" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
