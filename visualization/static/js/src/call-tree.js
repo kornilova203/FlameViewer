@@ -47,7 +47,7 @@ function bindHideDetailView() {
         $treePreviewWrapper.removeClass("hidden-tree-preview");
         $callTreeWrapper.hide();
         $searchMethodForm.hide();
-        $callTreeWrapper.find("*").remove();
+        $callTreeWrapper.find("*").not(".saved-value, .saved-value-content").remove();
         $callTreeText.unbind();
     });
 }

@@ -15,6 +15,8 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
         this.threadName = this.tree.getTreeInfo().getThreadName();
         this.canvasOffset = 0;
         this.$callTreeWrapper = $(".call-tree-wrapper");
+        this.$savedValue = $(".saved-value");
+        this.$savedValueContent = $(".saved-value-content");
         this.zoomedCanvasMargin = 0;
         this.availableWidth = 0; // for popup position
         this.$zoomedCanvas = null;
@@ -39,12 +41,22 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
      * @param node
      */
     _setParameters(node) {
-        const parametersList = AccumulativeTreeDrawer.getParametersTypesList(node.getNodeInfo().getDescription());
         this.$popupParameters.find("*").remove();
+        const parametersList = AccumulativeTreeDrawer.getParametersTypesList(node.getNodeInfo().getDescription());
 
         if (parametersList !== null) {
             for (let i = 0; i < parametersList.length; i++) {
-                this.$popupParameters.append($(`<p>${parametersList[i]}<span class="parameter-value">${CallTreeDrawer.getValueForParameter(i + 1, node.getNodeInfo().getParametersList())}</span></p>`))
+                const value = CallTreeDrawer.getValueForParameter(i + 1, node.getNodeInfo().getParametersList());
+                const $parameter = $(`<p>${parametersList[i]}<span class="parameter-value">${value}</span></p>`);
+                $parameter.hover(() => {
+                    if (value !== "") {
+                        this.$savedValue.css("opacity", "1");
+                        this.$savedValueContent.text(value);
+                    }
+                }, () => {
+                    this.$savedValue.css("opacity", "0");
+                });
+                this.$popupParameters.append($parameter);
             }
             this.$popupIcon.show();
         } else {
