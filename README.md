@@ -1,5 +1,5 @@
-# Java profiler for IntelliJ IDEA
-Instrumenting Java profiler with flamegraph visualizer.
+# Flamegraph Visualizer
+Instrumenting Java Profiler & Flamegraph Visualizer.
 
 ## Features
 
