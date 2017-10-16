@@ -28,6 +28,7 @@ Hot Spots
 ![](screenshots/hot-spots.png)
 
 ## Compiling
+Plugin will be soon on plugins.jetbrains.com
 
 See [js files](/visualization/README.md)
 
