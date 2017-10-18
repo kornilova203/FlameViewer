@@ -721,7 +721,24 @@ class AccumulativeTreeDrawer {
     _enableResizeZoomedCanvas() {
         constants.$arrowLeft.click(this._updateCanvasWidthDecorator());
         constants.$arrowRight.click(this._updateCanvasWidthDecorator());
-        $(window).resize(this._updateCanvasWidthDecorator());
+        const $window = $(window);
+        let windowWidth = $window.width();
+        let lastResizeTime = 0;
+        $window.resize(() => {
+            /**
+             * Prevent several redraws when window is resized
+             */
+            setTimeout(() => {
+                if (new Date().getTime() - lastResizeTime < 1000) {
+                    return;
+                }
+                if (windowWidth !== $window.width()) { // if width was changed
+                    this._updateCanvasWidthDecorator()();
+                    windowWidth = $window.width();
+                }
+                lastResizeTime = new Date().getTime();
+            }, 1000);
+        });
     }
 
     /**
