@@ -1,5 +1,5 @@
-# Java profiler for IntelliJ IDEA
-Instrumenting Java profiler with flamegraph visualizer.
+# Flamegraph Visualizer
+Instrumenting Java Profiler & Flamegraph Visualizer.
 
 ## Features
 
@@ -28,6 +28,7 @@ Hot Spots
 ![](screenshots/hot-spots.png)
 
 ## Compiling
+Plugin will be soon on plugins.jetbrains.com
 
 See [js files](/visualization/README.md)
 
