@@ -134,8 +134,9 @@ class AccumulativeTreeDrawer {
      */
     _drawNode(node, color, scaleX, offsetX, isMostFirst, stage) {
         const shape = this._drawRectangle(node, color, scaleX, offsetX, isMostFirst, stage);
-        this._addShowPopupEvent(shape, offsetX + this.canvasOffset, node.depth, node);
-        if (scaleX * this.currentCanvasWidth > 5) {
+        if (scaleX * this.currentCanvasWidth > 4) {
+            this.listenScale(node, shape);
+            this._addShowPopupEvent(shape, offsetX + this.canvasOffset, node.depth, node);
             this._drawLabel(AccumulativeTreeDrawer._getLabelText(node), shape, scaleX, offsetX, node.depth, stage);
         }
     }
@@ -175,7 +176,6 @@ class AccumulativeTreeDrawer {
         shape.setTransform(offsetX, offsetY, scaleX);
         //noinspection JSUnresolvedFunction
         stage.addChild(shape);
-        this.listenScale(node, shape);
         return shape;
     }
 
@@ -408,6 +408,7 @@ class AccumulativeTreeDrawer {
 
     _addResetButton() {
         const shape = this._drawRectangle(this.baseNode, RESET_ZOOM_BUTTON_COLOR, 1, 0, true, this.zoomedStage);
+        this.listenScale(this.baseNode, shape);
         this._drawLabel("Reset zoom", shape, 1, 0, 0, this.zoomedStage);
     }
 
@@ -755,7 +756,7 @@ class AccumulativeTreeDrawer {
         this.zoomedStage = new createjs.Stage("canvas-zoomed");
         this.zoomedStage.id = "canvas-zoomed";
         this.stage.enableMouseOver(20);
-        this.zoomedStage.enableMouseOver(20);
+        this.zoomedStage.enableMouseOver(10);
     }
 
     /**
