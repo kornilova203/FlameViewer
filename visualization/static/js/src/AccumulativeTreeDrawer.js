@@ -41,7 +41,7 @@ class AccumulativeTreeDrawer {
         this.enableZoom = true;
         this.nodesCount = -1;
         // for search:
-        this.searchPattern = null;
+        this.isHighlightedFunction = null;
         this.currentlyShownNodes = [];
         this.baseNode.fillCommand = {};
         this.wasMainStageHighlighted = false;
@@ -288,23 +288,37 @@ class AccumulativeTreeDrawer {
 
     _enableSearch() {
         const input = $("#search-method-form").find("input");
+        let lastRedrawTime = 0;
+        const simpleSearchPattern = new RegExp("[a-z\.]+");
         input.on('change keyup copy paste cut', () => {
-            const val = input.val();
-            if (!val) {
-                this.searchPattern = null;
-                this._resetHighlight();
-            } else {
-                const lowercaseVal = val.toLowerCase();
-                const pattern = new RegExp(
-                    ".*" + common.escapeRegExp(lowercaseVal).split("*").join(".*") + ".*"
-                );
-                this.searchPattern = pattern;
-                if (this.currentlyShownNodes.length === 0) {
-                    this._setHighlightOnMainStage(pattern);
-                } else {
-                    this._setHighlightOnZoomedStage(pattern);
+            setTimeout(() => {
+                if (new Date().getTime() - lastRedrawTime < 500) {
+                    return;
                 }
-            }
+                const val = input.val();
+                if (!val) {
+                    this.isHighlightedFunction = null;
+                    this._resetHighlight();
+                } else {
+                    const lowercaseVal = val.toLowerCase();
+                    if (simpleSearchPattern.test(lowercaseVal)) {
+                        this.isHighlightedFunction = (testString) => {
+                            return testString.indexOf(lowercaseVal) !== -1;
+                        };
+                    } else {
+                        const pattern = new RegExp(".*" + common.escapeRegExp(lowercaseVal).split("*").join(".*") + ".*");
+                        this.isHighlightedFunction = (testString) => {
+                            return pattern.test(testString);
+                        };
+                    }
+                    if (this.currentlyShownNodes.length === 0) {
+                        this._setHighlightOnMainStage();
+                    } else {
+                        this._setHighlightOnZoomedStage();
+                    }
+                }
+                lastRedrawTime = new Date().getTime();
+            }, 500);
         })
     }
 
@@ -503,7 +517,7 @@ class AccumulativeTreeDrawer {
      * @private
      */
     _updateHighlightRecursively(node, pattern) {
-        if (AccumulativeTreeDrawer._isNodeHighlighted(node, pattern)) {
+        if (this.isHighlightedFunction(node.normalizedName)) {
             AccumulativeTreeDrawer._setHighlight(node, true, true);
         } else {
             AccumulativeTreeDrawer._setHighlight(node, false, true);
@@ -516,12 +530,11 @@ class AccumulativeTreeDrawer {
 
     /**
      * @param {Array} currentlyShownNodes
-     * @param {RegExp} pattern
      * @private
      */
-    static _updateHighlight(currentlyShownNodes, pattern) {
+    _updateHighlight(currentlyShownNodes) {
         for (let i = 0; i < currentlyShownNodes.length; i++) {
-            if (AccumulativeTreeDrawer._isNodeHighlighted(currentlyShownNodes[i], pattern)) {
+            if (this.isHighlightedFunction(currentlyShownNodes[i].normalizedName)) {
                 AccumulativeTreeDrawer._setHighlight(currentlyShownNodes[i], true, false);
             } else {
                 AccumulativeTreeDrawer._setHighlight(currentlyShownNodes[i], false, false);
@@ -541,16 +554,6 @@ class AccumulativeTreeDrawer {
         } else {
             node.zoomedFillCommand.style = isHighlightSet ? node.originalColor : HIGHLIGHT_NOT_SET_COLOR;
         }
-    }
-
-    /**
-     * @param node
-     * @param {RegExp} pattern
-     * @return {boolean}
-     * @private
-     */
-    static _isNodeHighlighted(node, pattern) {
-        return pattern.test(node.normalizedName);
     }
 
     static _resetHighlightList(currentlyShownNodes) {
@@ -574,21 +577,19 @@ class AccumulativeTreeDrawer {
     }
 
     /**
-     * @param {RegExp} pattern
      * @private
      */
-    _setHighlightOnMainStage(pattern) {
+    _setHighlightOnMainStage() {
         this.wasMainStageHighlighted = true;
-        this._updateHighlightRecursively(this.baseNode, pattern);
+        this._updateHighlightRecursively(this.baseNode);
         this.stage.update();
     }
 
     /**
-     * @param {RegExp} pattern
      * @private
      */
-    _setHighlightOnZoomedStage(pattern) {
-        AccumulativeTreeDrawer._updateHighlight(this.currentlyShownNodes, pattern);
+    _setHighlightOnZoomedStage() {
+        this._updateHighlight(this.currentlyShownNodes);
         this.zoomedStage.update();
     }
 
@@ -655,8 +656,8 @@ class AccumulativeTreeDrawer {
 
     _resetZoom() {
         this.zoomedNode = null;
-        if (this.searchPattern !== null) {
-            this._setHighlightOnMainStage(this.searchPattern);
+        if (this.isHighlightedFunction !== null) {
+            this._setHighlightOnMainStage();
         } else if (this.wasMainStageHighlighted) {
             this._resetHighlight();
         }
@@ -681,8 +682,8 @@ class AccumulativeTreeDrawer {
                 false
             );
             this._addResetButton();
-            if (this.searchPattern !== null) {
-                this._setHighlightOnZoomedStage(this.searchPattern);
+            if (this.isHighlightedFunction !== null) {
+                this._setHighlightOnZoomedStage();
             } else {
                 this.zoomedStage.update();
             }
