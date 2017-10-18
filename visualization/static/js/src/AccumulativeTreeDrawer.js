@@ -288,38 +288,31 @@ class AccumulativeTreeDrawer {
 
     _enableSearch() {
         const input = $("#search-method-form").find("input");
-        let lastRedrawTime = 0;
         const simpleSearchPattern = new RegExp("[a-z\.]+");
-        input.on('change keyup copy paste cut', () => {
-            setTimeout(() => {
-                if (new Date().getTime() - lastRedrawTime < 500) {
-                    return;
-                }
-                const val = input.val();
-                if (!val) {
-                    this.isHighlightedFunction = null;
-                    this._resetHighlight();
+        input.on('change keyup copy paste cut', common.updateRareDecorator(500, () => {
+            const val = input.val();
+            if (!val) {
+                this.isHighlightedFunction = null;
+                this._resetHighlight();
+            } else {
+                const lowercaseVal = val.toLowerCase();
+                if (simpleSearchPattern.test(lowercaseVal)) {
+                    this.isHighlightedFunction = (testString) => {
+                        return testString.indexOf(lowercaseVal) !== -1;
+                    };
                 } else {
-                    const lowercaseVal = val.toLowerCase();
-                    if (simpleSearchPattern.test(lowercaseVal)) {
-                        this.isHighlightedFunction = (testString) => {
-                            return testString.indexOf(lowercaseVal) !== -1;
-                        };
-                    } else {
-                        const pattern = new RegExp(".*" + common.escapeRegExp(lowercaseVal).split("*").join(".*") + ".*");
-                        this.isHighlightedFunction = (testString) => {
-                            return pattern.test(testString);
-                        };
-                    }
-                    if (this.currentlyShownNodes.length === 0) {
-                        this._setHighlightOnMainStage();
-                    } else {
-                        this._setHighlightOnZoomedStage();
-                    }
+                    const pattern = new RegExp(".*" + common.escapeRegExp(lowercaseVal).split("*").join(".*") + ".*");
+                    this.isHighlightedFunction = (testString) => {
+                        return pattern.test(testString);
+                    };
                 }
-                lastRedrawTime = new Date().getTime();
-            }, 500);
-        })
+                if (this.currentlyShownNodes.length === 0) {
+                    this._setHighlightOnMainStage();
+                } else {
+                    this._setHighlightOnZoomedStage();
+                }
+            }
+        }));
     }
 
     /**
@@ -723,22 +716,12 @@ class AccumulativeTreeDrawer {
         constants.$arrowRight.click(this._updateCanvasWidthDecorator());
         const $window = $(window);
         let windowWidth = $window.width();
-        let lastResizeTime = 0;
-        $window.resize(() => {
-            /**
-             * Prevent several redraws when window is resized
-             */
-            setTimeout(() => {
-                if (new Date().getTime() - lastResizeTime < 1000) {
-                    return;
-                }
-                if (windowWidth !== $window.width()) { // if width was changed
-                    this._updateCanvasWidthDecorator()();
-                    windowWidth = $window.width();
-                }
-                lastResizeTime = new Date().getTime();
-            }, 1000);
-        });
+        $window.resize(common.updateRareDecorator(1000, () => {
+            if (windowWidth !== $window.width()) { // if width was changed
+                this._updateCanvasWidthDecorator()();
+                windowWidth = $window.width();
+            }
+        }));
     }
 
     /**

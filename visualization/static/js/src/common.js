@@ -84,6 +84,25 @@ common.roundRelativeTime = (time) => {
     }
 };
 
+/**
+ * Do callback not more often than updateTime ms
+ * @param {number} updateTime
+ * @param {function} callback
+ * @return {function}
+ */
+common.updateRareDecorator = (updateTime, callback) => {
+    let lastUpdateTime = 0;
+    return () => {
+        setTimeout(() => {
+            if (new Date().getTime() - lastUpdateTime < updateTime) {
+                return;
+            }
+            callback();
+            lastUpdateTime = new Date().getTime();
+        }, updateTime)
+    }
+};
+
 const constants = {};
 constants.$main = null;
 constants.$treePreviewWrapper = null;

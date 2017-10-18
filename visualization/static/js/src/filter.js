@@ -46,14 +46,14 @@ $(window).on("load", () => {
     setValueFromParameters($includedInput, $excludedInput);
     updateFilterButton();
 
-    $includedInput.on('change keyup copy paste cut', () => {
+    $includedInput.on('change keyup copy paste cut', common.updateRareDecorator(500, () => {
+        console.log("update");
         updateFilterLink($applyAnchor, $includedInput.val(), $excludedInput.val());
-
-    });
-    $excludedInput.on('change keyup copy paste cut', () => {
+    }));
+    $excludedInput.on('change keyup copy paste cut', common.updateRareDecorator(1000, () => {
+        console.log("update");
         updateFilterLink($applyAnchor, $includedInput.val(), $excludedInput.val());
-    });
-
+    }));
     setClearAction($filterContent.find(".clear-filter"), $includedInput, $excludedInput, $applyAnchor);
 });
 
