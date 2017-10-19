@@ -152,7 +152,7 @@ section header .class-name {
 
 .popup .parameters p {
     margin-bottom: 2px;
-    max-width: 300px;
+    max-width: 350px;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;

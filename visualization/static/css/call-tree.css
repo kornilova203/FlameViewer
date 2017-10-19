@@ -144,19 +144,8 @@ canvas {
 }
 
 .saved-value {
-    background-color: #e5e5e5;
-    position: absolute;
-    bottom: 15px;
-    z-index: 10;
     padding: 10px;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 300ms;
-}
-
-.saved-value-content {
     font-style: italic;
-    color: #555;
+    color: #333;
     font-size: 14px;
-    margin: 0;
 }

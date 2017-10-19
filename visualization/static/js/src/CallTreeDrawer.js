@@ -15,8 +15,7 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
         this.threadName = this.tree.getTreeInfo().getThreadName();
         this.canvasOffset = 0;
         this.$callTreeWrapper = $(".call-tree-wrapper");
-        this.$savedValue = $(".saved-value");
-        this.$savedValueContent = $(".saved-value-content");
+        this.$savedValue = null;
         this.zoomedCanvasMargin = 0;
         this.availableWidth = 0; // for popup position
         this.$zoomedCanvas = null;
@@ -42,20 +41,18 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
      */
     _setParameters(node) {
         this.$popupParameters.find("*").remove();
+        this.$savedValue.text("");
         const parametersList = AccumulativeTreeDrawer.getParametersTypesList(node.getNodeInfo().getDescription());
 
         if (parametersList !== null) {
             for (let i = 0; i < parametersList.length; i++) {
                 const value = CallTreeDrawer.getValueForParameter(i + 1, node.getNodeInfo().getParametersList());
                 const $parameter = $(`<p>${parametersList[i]}<span class="parameter-value">${value}</span></p>`);
-                $parameter.hover(() => {
-                    if (value !== "") {
-                        this.$savedValue.css("opacity", "1");
-                        this.$savedValueContent.text(value);
-                    }
-                }, () => {
-                    this.$savedValue.css("opacity", "0");
-                });
+                if (value.length + parametersList[i].length > 60) {
+                    $parameter.hover(() => {
+                        this.$savedValue.text(value);
+                    });
+                }
                 this.$popupParameters.append($parameter);
             }
             this.$popupIcon.show();
@@ -124,6 +121,7 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
         this.$popupIcon = this.$popup.find(".parameter-icon");
         this.$returnValueType = this.$popup.find(".return-value-type");
         this.$returnValue = this.$popup.find(".return-value");
+        this.$savedValue = this.$popup.find(".saved-value");
     }
 
     _setPopupReturnValue(node) {

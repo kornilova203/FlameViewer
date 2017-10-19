@@ -55,7 +55,7 @@ if (goog.DEBUG) {
 
 
 templates.tree.callTreePopup = function(opt_data, opt_ignored) {
-    return soydata.VERY_UNSAFE.ordainSanitizedHtml('<div class="popup"><p class="duration"></p><div class="method-links"><a class="outgoing-link"><img src="img/outgoing.png"/></a><a class="incoming-link"><img src="img/incoming.png"/></a></div><img class="icon" src="img/class.png"/><p class="class-name shift-right"></p><img class="icon" src="img/method.png"/><h3 class="method-name shift-right"></h3><img class="icon parameter-icon" src="img/parameter.png"/><div class="parameters shift-right"></div><h4 class="return-value-type shift-right"></h4><p class="return-value shift-right"></p></div>');
+  return soydata.VERY_UNSAFE.ordainSanitizedHtml('<div class="popup"><p class="duration"></p><div class="method-links"><a class="outgoing-link"><img src="img/outgoing.png"/></a><a class="incoming-link"><img src="img/incoming.png"/></a></div><img class="icon" src="img/class.png"/><p class="class-name shift-right"></p><img class="icon" src="img/method.png"/><h3 class="method-name shift-right"></h3><img class="icon parameter-icon" src="img/parameter.png"/><div class="parameters shift-right"></div><h4 class="return-value-type shift-right"></h4><p class="return-value shift-right"></p><p class="saved-value shift-right"></p></div>');
 };
 if (goog.DEBUG) {
   templates.tree.callTreePopup.soyTemplateName = 'templates.tree.callTreePopup';
@@ -63,7 +63,7 @@ if (goog.DEBUG) {
 
 
 templates.tree.accumulativeTreePopup = function(opt_data, opt_ignored) {
-    return soydata.VERY_UNSAFE.ordainSanitizedHtml('<div class="popup"><div class="method-links"><a class="outgoing-link"><img src="img/outgoing.png"/></a><a class="incoming-link"><img src="img/incoming.png"/></a></div>' + ((opt_data.isFull) ? '<img class="icon" src="img/class.png"/>' : '') + '<p class="class-name' + ((opt_data.isFull) ? ' shift-right' : '') + '"></p>' + ((opt_data.isFull) ? '<img class="icon" src="img/method.png"/>' : '') + '<h3 class="method-name' + ((opt_data.isFull) ? ' shift-right' : '') + '"></h3><p class="p-calls-num"></p>' + ((opt_data.isFull) ? '<img class="icon parameter-icon" src="img/parameter.png"/>' : '') + '<div class="parameters' + ((opt_data.isFull) ? ' shift-right' : '') + '"></div></div>');
+  return soydata.VERY_UNSAFE.ordainSanitizedHtml('<div class="popup"><div class="method-links"><a class="outgoing-link"><img src="img/outgoing.png"/></a><a class="incoming-link"><img src="img/incoming.png"/></a></div>' + ((opt_data.isFull) ? '<img class="icon" src="img/class.png"/>' : '') + '<p class="class-name' + ((opt_data.isFull) ? ' shift-right' : '') + '"></p>' + ((opt_data.isFull) ? '<img class="icon" src="img/method.png"/>' : '') + '<h3 class="method-name' + ((opt_data.isFull) ? ' shift-right' : '') + '"></h3><p class="p-calls-num"></p>' + ((opt_data.isFull) ? '<img class="icon parameter-icon" src="img/parameter.png"/>' : '') + '<div class="parameters' + ((opt_data.isFull) ? ' shift-right' : '') + '"></div></div>');
 };
 if (goog.DEBUG) {
   templates.tree.accumulativeTreePopup.soyTemplateName = 'templates.tree.accumulativeTreePopup';
@@ -72,11 +72,11 @@ if (goog.DEBUG) {
 
 templates.tree.listOfFiles = function(opt_data, opt_ignored) {
   var output = '<ol class="file-list">';
-    var fileList116 = opt_data.fileList;
-    var fileListLen116 = fileList116.length;
-    for (var fileIndex116 = 0; fileIndex116 < fileListLen116; fileIndex116++) {
-        var fileData116 = fileList116[fileIndex116];
-        output += '<li id="' + soy.$$escapeHtmlAttribute(fileData116.id) + '"><img class="delete-file" src="img/close-white.png"/><a href="/flamegraph-profiler/' + soy.$$escapeHtmlAttribute(opt_data.pageName) + '?file=' + soy.$$escapeUri(fileData116.fullName) + '&amp;project=' + soy.$$escapeUri(opt_data.projectName) + '"><p>' + soy.$$escapeHtml(fileData116.name) + '<br><span>' + soy.$$escapeHtml(fileData116.date) + '</span></p></a></li>';
+  var fileList116 = opt_data.fileList;
+  var fileListLen116 = fileList116.length;
+  for (var fileIndex116 = 0; fileIndex116 < fileListLen116; fileIndex116++) {
+    var fileData116 = fileList116[fileIndex116];
+    output += '<li id="' + soy.$$escapeHtmlAttribute(fileData116.id) + '"><img class="delete-file" src="img/close-white.png"/><a href="/flamegraph-profiler/' + soy.$$escapeHtmlAttribute(opt_data.pageName) + '?file=' + soy.$$escapeUri(fileData116.fullName) + '&amp;project=' + soy.$$escapeUri(opt_data.projectName) + '"><p>' + soy.$$escapeHtml(fileData116.name) + '<br><span>' + soy.$$escapeHtml(fileData116.date) + '</span></p></a></li>';
   }
   output += '</ol>';
   return soydata.VERY_UNSAFE.ordainSanitizedHtml(output);
@@ -96,11 +96,11 @@ if (goog.DEBUG) {
 
 templates.tree.hotSpot = function(opt_data, opt_ignored) {
   var output = '<div class="hot-spot"><a href="/flamegraph-profiler/outgoing-calls?file=' + soy.$$escapeUri(opt_data.fileName) + '&amp;project=' + soy.$$escapeUri(opt_data.projectName) + '&amp;method=' + soy.$$escapeUri(opt_data.methodName) + '&amp;class=' + soy.$$escapeUri(opt_data.className) + '&amp;desc=' + soy.$$escapeUri(opt_data.desc) + '"><img src="img/outgoing.png"/></a><a href="/flamegraph-profiler/incoming-calls?file=' + soy.$$escapeUri(opt_data.fileName) + '&amp;project=' + soy.$$escapeUri(opt_data.projectName) + '&amp;method=' + soy.$$escapeUri(opt_data.methodName) + '&amp;class=' + soy.$$escapeUri(opt_data.className) + '&amp;desc=' + soy.$$escapeUri(opt_data.desc) + '"><img src="img/incoming.png"/></a><div class="outer-time-div"><p class="relative-time">' + soy.$$escapeHtml(opt_data.relativeTime) + '%</p><div class="total-time"><div class="method-time"></div></div></div><div class="class-name"><code>' + soy.$$escapeHtml(opt_data.className) + '</code></div><p class="method"><code class="return-value">' + soy.$$escapeHtml(opt_data.retVal) + ' </code><code class="method-name">' + soy.$$escapeHtml(opt_data.methodName) + '</code><wbr>(';
-    var parameterList159 = opt_data.parameters;
-    var parameterListLen159 = parameterList159.length;
-    for (var parameterIndex159 = 0; parameterIndex159 < parameterListLen159; parameterIndex159++) {
-        var parameterData159 = parameterList159[parameterIndex159];
-        output += (parameterData159) ? '<code class="parameter">' + soy.$$escapeHtml(parameterData159) + '</code>' + ((!(parameterIndex159 == parameterListLen159 - 1)) ? '<code>, </code>' : '') : '';
+  var parameterList159 = opt_data.parameters;
+  var parameterListLen159 = parameterList159.length;
+  for (var parameterIndex159 = 0; parameterIndex159 < parameterListLen159; parameterIndex159++) {
+    var parameterData159 = parameterList159[parameterIndex159];
+    output += (parameterData159) ? '<code class="parameter">' + soy.$$escapeHtml(parameterData159) + '</code>' + ((! (parameterIndex159 == parameterListLen159 - 1)) ? '<code>, </code>' : '') : '';
   }
   output += ')</p></div>';
   return soydata.VERY_UNSAFE.ordainSanitizedHtml(output);
