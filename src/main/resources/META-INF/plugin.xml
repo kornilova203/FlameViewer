@@ -1,16 +1,16 @@
 <idea-plugin>
     <id>com.github.com.kornilovaL</id>
     <name>Flamegraph Visualizer</name>
-    <version>1.3</version>
+    <version>1.4</version>
 
     <description><![CDATA[
       Plugin for flamegraph visualization<br>
     ]]></description>
 
     <change-notes><![CDATA[
-      * Fixed bug when parsing big .jfr file<br>
-      * Added simplified flamegraph format (without parameters and return value)<br>
-      * IU improvements
+      * Bug fixes<br>
+      * Improved search<br>
+      * Displayed full value of saved parameter<br>
     ]]>
     </change-notes>
 
