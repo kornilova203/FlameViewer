@@ -54,7 +54,8 @@ public class LineMarkersHolder extends AbstractProjectComponent {
                     )
             );
             rangeHighlighters.put(psiMethod, highlighter);
-        } catch (ProcessCanceledException exception) {
+        } catch (ProcessCanceledException | IllegalArgumentException exception) {
+            /* IllegalArgumentException may be thrown by markupModel if ranges are outdated */
             exception.printStackTrace();
         }
     }
@@ -68,10 +69,9 @@ public class LineMarkersHolder extends AbstractProjectComponent {
     }
 
     private void updateMethodMarker(@NotNull PsiFile psiFile, @NotNull Document document) {
-        DumbService.getInstance(myProject).runWhenSmart(() -> {
-            new UpdatingPsiElementVisitor(myProject, getMarkupModel(document, myProject))
-                    .visitElement(psiFile);
-        });
+        DumbService.getInstance(myProject).runWhenSmart(() ->
+                new UpdatingPsiElementVisitor(myProject, getMarkupModel(document, myProject))
+                        .visitElement(psiFile));
     }
 
     void updateMethodMarker(PsiMethod psiMethod, MarkupModelEx markupModel) {
