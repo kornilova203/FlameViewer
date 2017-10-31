@@ -132,7 +132,7 @@ canvas {
 }
 
 .return-value {
-    max-width: 300px;
+    max-width: 350px;
     text-overflow: ellipsis;
     display: inline-block;
     overflow: hidden;

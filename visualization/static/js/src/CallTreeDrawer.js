@@ -127,21 +127,45 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
     _setPopupReturnValue(node) {
         this.$returnValueType.show();
         this.$returnValue.show();
+        this.$returnValue.off();
+        let value;
         switch (node.getNodeInfo().getResultCase()) {
             case 5: // return value
-                let value = CallTreeDrawer._getType(node.getNodeInfo().getReturnValue());
+                value = CallTreeDrawer._getType(node.getNodeInfo().getReturnValue());
                 if (value !== undefined) {
                     this.$returnValueType.text("Return value:");
-                    this.$returnValue.text(value);
                 } else {
                     this.$returnValueType.hide();
                     this.$returnValue.hide();
+                    return;
                 }
                 break;
             case 6: // exception
                 this.$returnValueType.text("Exception:");
-                this.$returnValue.text(node.getNodeInfo().getException().getType() + ": " + node.getNodeInfo().getException().getValue())
+                const message = node.getNodeInfo().getException().getValue();
+                value = node.getNodeInfo().getException().getType() + (message ? ": " + message : "");
+                value = CallTreeDrawer.removeWordClass(value);
         }
+        if (value !== undefined) {
+            this.$returnValue.text(value);
+            if (value.length > 60) {
+                this.$returnValue.hover(() => {
+                    this.$savedValue.text(value);
+                });
+            }
+        }
+    }
+
+    /**
+     * class com.intellij.psi.text.BlockSupport$ReparsedSuccessfullyException ->
+     * -> com.intellij.psi.text.BlockSupport$ReparsedSuccessfullyException:
+     */
+    static removeWordClass(value) {
+        const classIndex = value.indexOf("class");
+        if (classIndex === 0) {
+            return value.substring("class".length, value.length);
+        }
+        return value;
     }
 
     static _getType(returnValue) {
