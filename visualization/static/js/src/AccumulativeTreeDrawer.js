@@ -425,8 +425,7 @@ class AccumulativeTreeDrawer {
      * @private
      */
     static _getLabelText(node) {
-        const className = node.getNodeInfo().getClassName();
-        return node.getNodeInfo().getMethodName() + (className ? " (" + className + ")" : "");
+        return node.getNodeInfo().getMethodName();
     }
 
     _drawFullTree() {
