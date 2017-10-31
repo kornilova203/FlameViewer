@@ -63,7 +63,8 @@ public class com/github/kornilova_l/flamegraph/javaagent/generate/test_classes/O
     LCONST_1
     LCMP
     IFLE L4
-    ACONST_NULL
+    ALOAD 2
+    ICONST_0
     ALOAD 1
     INVOKEVIRTUAL com/github/kornilova_l/flamegraph/javaagent/logger/event_data_storage/StartData.getStartTime ()J
     ALOAD 1
@@ -76,11 +77,11 @@ public class com/github/kornilova_l/flamegraph/javaagent/generate/test_classes/O
     ICONST_1
     LDC "([Ljava/lang/String;)I"
     LDC ""
-    INVOKESTATIC com/github/kornilova_l/flamegraph/javaagent/logger/LoggerQueue.addToQueue (Ljava/lang/Throwable;JJ[Ljava/lang/Object;Ljava/lang/Thread;Ljava/lang/String;Ljava/lang/String;ZLjava/lang/String;Ljava/lang/String;)V
+    INVOKESTATIC com/github/kornilova_l/flamegraph/javaagent/logger/LoggerQueue.addToQueue (Ljava/lang/Throwable;ZJJ[Ljava/lang/Object;Ljava/lang/Thread;Ljava/lang/String;Ljava/lang/String;ZLjava/lang/String;Ljava/lang/String;)V
    L4
    FRAME APPEND [java/lang/Throwable]
     ALOAD 2
     ATHROW
-    MAXSTACK = 12
+    MAXSTACK = 13
     MAXLOCALS = 3
 }

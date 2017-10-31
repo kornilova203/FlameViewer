@@ -43,6 +43,7 @@ public class LoggerQueue {
     }
 
     public static void addToQueue(Throwable throwable,
+                                  boolean saveMessage,
                                   long startTime,
                                   long duration,
                                   Object[] parameters,
@@ -53,7 +54,7 @@ public class LoggerQueue {
                                   String desc,
                                   String savedParameters) {
         loggerQueue.addToQueue(new ThrowableEventData(thread, className, startTime, duration,
-                methodName, desc, isStatic, parameters, throwable, savedParameters));
+                methodName, desc, isStatic, parameters, throwable, saveMessage, savedParameters));
     }
 
     ConcurrentLinkedQueue<MethodEventData> getQueue() {

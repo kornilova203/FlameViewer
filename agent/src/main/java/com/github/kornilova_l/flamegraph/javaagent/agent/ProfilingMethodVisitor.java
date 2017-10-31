@@ -164,7 +164,7 @@ class ProfilingMethodVisitor extends AdviceAdapter {
                 description = "(Ljava/lang/Object;JJ[Ljava/lang/Object;Ljava/lang/Thread;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ZLjava/lang/String;)V";
                 break;
             case Throwable:
-                description = "(Ljava/lang/Throwable;JJ[Ljava/lang/Object;Ljava/lang/Thread;Ljava/lang/String;Ljava/lang/String;ZLjava/lang/String;Ljava/lang/String;)V";
+                description = "(Ljava/lang/Throwable;ZJJ[Ljava/lang/Object;Ljava/lang/Thread;Ljava/lang/String;Ljava/lang/String;ZLjava/lang/String;Ljava/lang/String;)V";
                 break;
         }
         if (hasSystemCL) {
@@ -304,10 +304,18 @@ class ProfilingMethodVisitor extends AdviceAdapter {
 
     private void getIsStatic() {
         if (isStatic()) {
-            mv.visitInsn(ICONST_1);
+            loadTrue();
         } else {
-            mv.visitInsn(ICONST_0);
+            loadFalse();
         }
+    }
+
+    private void loadFalse() {
+        mv.visitInsn(ICONST_0);
+    }
+
+    private void loadTrue() {
+        mv.visitInsn(ICONST_1);
     }
 
     private void getTime() {
@@ -379,10 +387,11 @@ class ProfilingMethodVisitor extends AdviceAdapter {
     }
 
     private void formThrowableExit() {
-        if (methodConfig.isSaveReturnValue()) {
-            dup();
+        dup(); // always save type of exception
+        if (methodConfig.isSaveReturnValue()) { // if save message
+            loadTrue();
         } else {
-            loadNull();
+            loadFalse();
         }
         getCommonExitData();
         // last two parameters is swapped to avoid ambiguous call

@@ -5,15 +5,20 @@ public class ThrowsException {
 //        StartData startData = LoggerQueue.createStartData(System.currentTimeMillis(), null);
 //        try {
 //            startData.setDuration(System.currentTimeMillis());
-//            startData.setThrownByMethod();
 //            if (startData.getDuration() > 1) {
+//                startData.setThrownByMethod();
 //                LoggerQueue.addToQueue(null,
-//                        startData,
+//                        false,
+//                        startData.getStartTime(),
+//                        startData.getDuration(),
+//                        startData.getParameters(),
 //                        Thread.currentThread(),
 //                        "com/github/kornilova_l/flamegraph/javaagent/generate/test_classes/ThrowsException",
 //                        "main",
 //                        true,
-//                        "([Ljava/lang/String;)V");
+//                        "([Ljava/lang/String;)V",
+//                        ""
+//                );
 //            }
         throw new AssertionError("error");
 //        } catch (Throwable throwable) {
@@ -21,12 +26,16 @@ public class ThrowsException {
 //                startData.setDuration(System.currentTimeMillis());
 //                if (startData.getDuration() > 1) {
 //                    LoggerQueue.addToQueue(null,
-//                            startData,
+//                            startData.getStartTime(),
+//                            startData.getDuration(),
+//                            startData.getParameters(),
 //                            Thread.currentThread(),
 //                            "com/github/kornilova_l/flamegraph/javaagent/generate/test_classes/ThrowsException",
 //                            "main",
+//                            "([Ljava/lang/String;)V",
 //                            true,
-//                            "([Ljava/lang/String;)V");
+//                            ""
+//                    );
 //                }
 //            }
 //            throw throwable;

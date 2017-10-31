@@ -19,7 +19,7 @@ public class OneMethod {
             if (!startData.isThrownByMethod()) {
                 startData.setDuration(System.currentTimeMillis());
                 if (startData.getDuration() > 1) {
-                    LoggerQueue.addToQueue(null, startData.getStartTime(), startData.getDuration(), startData.getParameters(), Thread.currentThread(), "com/github/kornilova_l/flamegraph/javaagent/generate/test_classes/OneMethod", "main", true, "([Ljava/lang/String;)I", "");
+                    LoggerQueue.addToQueue(throwable, false, startData.getStartTime(), startData.getDuration(), startData.getParameters(), Thread.currentThread(), "com/github/kornilova_l/flamegraph/javaagent/generate/test_classes/OneMethod", "main", true, "([Ljava/lang/String;)I", "");
                 }
             }
             throw throwable;

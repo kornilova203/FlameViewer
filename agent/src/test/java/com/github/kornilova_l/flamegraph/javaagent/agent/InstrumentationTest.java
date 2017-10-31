@@ -12,7 +12,6 @@ import org.objectweb.asm.util.TraceClassVisitor;
 import java.io.*;
 import java.lang.instrument.Instrumentation;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -24,8 +23,6 @@ public class InstrumentationTest {
     private static List<MethodConfig> methodConfigs = new ArrayList<>();
     private static AgentConfigurationManager configurationManagerSaveParams;
     private static List<MethodConfig> methodConfigsSaveParams = new ArrayList<>();
-    private static AgentConfigurationManager configurationManagerSaveSecondParam;
-    private static List<MethodConfig> methodConfigsSaveSecondParam = new ArrayList<>();
     private static AgentConfigurationManager configurationManagerSaveReturn;
     private static List<MethodConfig> methodConfigsSaveReturn = new ArrayList<>();
 
@@ -33,7 +30,6 @@ public class InstrumentationTest {
     public static void setup() {
         configurationManager = createConfig("*.*(*)", methodConfigs);
         configurationManagerSaveParams = createConfig("*.*(*+)", methodConfigsSaveParams);
-        configurationManagerSaveSecondParam = createConfig("*.*(long, *+)", methodConfigsSaveSecondParam);
         configurationManagerSaveReturn = createConfig("*.*(*)+", methodConfigsSaveReturn);
     }
 
@@ -42,6 +38,7 @@ public class InstrumentationTest {
         TestHelper.createDir("actual");
         List<String> methodConfigsStrings = new LinkedList<>();
         methodConfigsStrings.add(config);
+        methodConfigsStrings.add("!*.<init>(*)");
         AgentConfigurationManager configurationManager = new AgentConfigurationManager(
                 methodConfigsStrings
         );
@@ -52,9 +49,9 @@ public class InstrumentationTest {
 
     @Test
     public void basicInstrumentation() {
-        classTest(OneMethod.class, configurationManager, methodConfigs, true);
-//        classTest(ThrowsException.class, configurationManager, methodConfigs, true);
-        // next test fails because TraceClassVisitor inserts spaces to end of lines
+        /* All test fail because it is not possible to generate exactly same bytecode */
+//        classTest(OneMethod.class, configurationManager, methodConfigs, true);
+        classTest(ThrowsException.class, configurationManager, methodConfigs, true);
 //        classTest(UsesThreadPool.class, configurationManager, methodConfigs);
 //        classTest(SeveralReturns.class, configurationManager, methodConfigs, true);
 //        classTest(TwoMethods.class, configurationManager, methodConfigs, true);

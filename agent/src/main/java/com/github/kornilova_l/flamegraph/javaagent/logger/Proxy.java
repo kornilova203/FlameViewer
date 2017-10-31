@@ -5,6 +5,7 @@ import com.github.kornilova_l.flamegraph.javaagent.logger.event_data_storage.Sta
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+@SuppressWarnings("unused")
 public class Proxy {
     private static final String loggerQueueClassName = "com.github.kornilova_l.flamegraph.javaagent.logger.LoggerQueue";
     private static Class<?> loggerQueue = null;
@@ -15,7 +16,9 @@ public class Proxy {
         return new StartData(startTime, parameters);
     }
 
-    @SuppressWarnings("unused")
+    /**
+     * {@link LoggerQueue#addToQueue(java.lang.Object, long, long, java.lang.Object[], java.lang.Thread, java.lang.String, java.lang.String, java.lang.String, boolean, java.lang.String)}
+     */
     public static void addToQueue(Object retVal,
                                   long startTime,
                                   long duration,
@@ -26,6 +29,15 @@ public class Proxy {
                                   String desc,
                                   boolean isStatic,
                                   String savedParameters) {
+        /*
+        following if block is added as a reminder to update proxy if addToQueue methods was changed
+        (it cannot be compiled if not updated),
+        this if block is excluded by compiler
+         */
+        //noinspection ConstantConditions,ConstantIfStatement
+        if (false) {
+            LoggerQueue.addToQueue(retVal, startTime, duration, parameters, thread, className, methodName, desc, isStatic, savedParameters);
+        }
         if (addRetVal == null) {
             try {
                 getLoggerQueueIfNotCached();
@@ -58,7 +70,11 @@ public class Proxy {
         }
     }
 
+    /**
+     * {@link LoggerQueue#addToQueue(java.lang.Throwable, boolean, long, long, java.lang.Object[], java.lang.Thread, java.lang.String, java.lang.String, boolean, java.lang.String, java.lang.String)}
+     */
     public static void addToQueue(Throwable throwable,
+                                  boolean saveMessage,
                                   long startTime,
                                   long duration,
                                   Object[] parameters,
@@ -68,11 +84,21 @@ public class Proxy {
                                   boolean isStatic,
                                   String desc,
                                   String savedParameters) {
+        /*
+        following if block is added as a reminder to update proxy if addToQueue methods was changed
+        (it cannot be compiled if not updated),
+        this if block is excluded by compiler
+         */
+        //noinspection ConstantConditions,ConstantIfStatement
+        if (false) {
+            LoggerQueue.addToQueue(throwable, saveMessage, startTime, duration, parameters, thread, className, methodName, isStatic, desc, savedParameters);
+        }
         if (addException == null) {
             try {
                 getLoggerQueueIfNotCached();
                 addException = loggerQueue.getMethod("addToQueue",
                         Throwable.class,
+                        boolean.class,
                         long.class,
                         long.class,
                         Object[].class,
@@ -87,7 +113,7 @@ public class Proxy {
             }
         }
         try {
-            addException.invoke(null, throwable, startTime, duration, parameters, thread, className, methodName, isStatic, desc, savedParameters);
+            addException.invoke(null, throwable, saveMessage, startTime, duration, parameters, thread, className, methodName, isStatic, desc, savedParameters);
         } catch (IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
