@@ -156,15 +156,58 @@ function bindDelete(filesList, $list) {
     }
 }
 
+/**
+ * Function is called after checking $file with shift and if $lastSelectedFile is not null
+ * @param $selectedFile
+ * @param $list
+ */
+function selectRange($selectedFile, $list) {
+    if ($lastSelectedFile === null) { // this should not happen but who knows
+        return;
+    }
+    let start = false;
+    let stop = false;
+    const id1 = $selectedFile.attr("id");
+    const id2 = $lastSelectedFile.attr("id");
+    $list.children().each(function () {
+        if (stop) {
+            return;
+        }
+        const $file = $(this);
+        const id = $file.attr("id");
+        if (id === id1 || id === id2) {
+            if (!start) {
+                start = true;
+            } else {
+                stop = true;
+                return;
+            }
+        }
+        if (start) {
+            $file.find("input").prop('checked', true);
+        }
+    })
+}
+
 function listenCheckbox($list) {
     $list.children().each(function () {
         const $file = $(this);
-        $file.click(() => {
+        $file.mousedown((event) => {
             const $checkbox = $file.find("input");
-            if ($checkbox.is(":checked")) {
+            if (!$checkbox.is(":checked")) { // inversion because click event works strangely
+                console.log("checked");
+                if (event.shiftKey) {
+                    console.log("with shift");
+                    if ($lastSelectedFile !== null) {
+                        selectRange($file, $list);
+                        $lastSelectedFile = $file;
+                        return;
+                    }
+                }
                 selectedFiles.add($file);
                 $lastSelectedFile = $file;
             } else {
+                console.log("unchecked");
                 selectedFiles.delete($file);
                 $lastSelectedFile = null;
             }

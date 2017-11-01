@@ -293,6 +293,7 @@ nav ul li a:focus {
     height: calc(100vh - 145px);
     border-top: solid 1px #bbb;
     border-bottom: solid 1px #ccc;
+    user-select: none;
 }
 
 .file-list li {
