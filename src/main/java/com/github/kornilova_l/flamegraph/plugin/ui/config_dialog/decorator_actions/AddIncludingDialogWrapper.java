@@ -32,7 +32,6 @@ public class AddIncludingDialogWrapper extends DialogWrapper {
         init();
         setTitle("Add Included Method Pattern");
         initValidation();
-        setOKActionEnabled(false);
     }
 
     @Nullable
@@ -52,6 +51,15 @@ public class AddIncludingDialogWrapper extends DialogWrapper {
 
     @Override
     protected void doOKAction() {
+        /* It may happen that values are not validated */
+        if (!MethodFormManager.isValidField(form.excludedMethodForm.classNamePatternTextField.getText()) ||
+                Objects.equals(form.excludedMethodForm.classNamePatternTextField.getText(), "") ||
+                !MethodFormManager.isValidField(form.excludedMethodForm.methodNamePatternTextField.getText()) ||
+                Objects.equals(form.excludedMethodForm.methodNamePatternTextField.getText(), "") ||
+                DialogHelper.validateParameters(tablePanel, parameters).size() != 0) {
+            super.doOKAction();
+            return;
+        }
         DialogHelper.saveConfig(form.excludedMethodForm,
                 form.saveReturnValueCheckBox.isSelected(),
                 parameters,
@@ -73,9 +81,6 @@ public class AddIncludingDialogWrapper extends DialogWrapper {
         if (!MethodFormManager.isValidField(form.excludedMethodForm.methodNamePatternTextField.getText())) {
             validationInfos.add(new ValidationInfo("Pattern must not contain space character",
                     form.excludedMethodForm.methodNamePatternTextField));
-        }
-        if (validationInfos.size() == 0) {
-            setOKActionEnabled(isOKActionEnabled());
         }
         if (tablePanel != null) {
             validationInfos.addAll(DialogHelper.validateParameters(tablePanel, parameters));
