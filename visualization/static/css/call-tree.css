@@ -147,5 +147,6 @@ canvas {
     padding: 10px;
     font-style: italic;
     color: #333;
-    font-size: 14px;
+    max-width: 400px;
+    word-wrap: break-word;
 }
