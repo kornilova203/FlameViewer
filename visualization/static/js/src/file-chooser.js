@@ -1,5 +1,7 @@
 const KEYCODE_ESC = 27;
 const KEYCODE_ENTER = 13;
+const selectedFiles = new Set();
+let $lastSelectedFile = null;
 
 $(window).on("load", () => {
     getFilesList(constants.projectName);
@@ -153,6 +155,23 @@ function bindDelete(filesList, $list) {
         });
     }
 }
+
+function listenCheckbox($list) {
+    $list.children().each(function () {
+        const $file = $(this);
+        $file.click(() => {
+            const $checkbox = $file.find("input");
+            if ($checkbox.is(":checked")) {
+                selectedFiles.add($file);
+                $lastSelectedFile = $file;
+            } else {
+                selectedFiles.delete($file);
+                $lastSelectedFile = null;
+            }
+        });
+    })
+}
+
 /**
  * @param {Array<{id: String, fullName: String}>} filesList
  */
@@ -166,6 +185,7 @@ function updateFilesList(filesList) {
             pageName: getPageName()
         }).content;
         const $list = $(listString);
+        listenCheckbox($list);
         $list.appendTo($(".file-menu"));
         bindDelete(filesList, $list);
         if (constants.fileName !== undefined) {

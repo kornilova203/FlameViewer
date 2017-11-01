@@ -72,11 +72,11 @@ if (goog.DEBUG) {
 
 templates.tree.listOfFiles = function(opt_data, opt_ignored) {
   var output = '<ol class="file-list">';
-  var fileList116 = opt_data.fileList;
-  var fileListLen116 = fileList116.length;
-  for (var fileIndex116 = 0; fileIndex116 < fileListLen116; fileIndex116++) {
-    var fileData116 = fileList116[fileIndex116];
-    output += '<li id="' + soy.$$escapeHtmlAttribute(fileData116.id) + '"><img class="delete-file" src="img/close-white.png"/><a href="/flamegraph-profiler/' + soy.$$escapeHtmlAttribute(opt_data.pageName) + '?file=' + soy.$$escapeUri(fileData116.fullName) + '&amp;project=' + soy.$$escapeUri(opt_data.projectName) + '"><p>' + soy.$$escapeHtml(fileData116.name) + '<br><span>' + soy.$$escapeHtml(fileData116.date) + '</span></p></a></li>';
+  var fileList122 = opt_data.fileList;
+  var fileListLen122 = fileList122.length;
+  for (var fileIndex122 = 0; fileIndex122 < fileListLen122; fileIndex122++) {
+    var fileData122 = fileList122[fileIndex122];
+    output += '<li id="' + soy.$$escapeHtmlAttribute(fileData122.id) + '"><input id="checkbox-' + soy.$$escapeHtmlAttribute(fileData122.id) + '" class="file-checkbox" name="' + soy.$$escapeHtmlAttribute(fileData122.id) + '" type="checkbox"><label for="checkbox-' + soy.$$escapeHtmlAttribute(fileData122.id) + '" class="file-checkbox-label"></label><a href="/flamegraph-profiler/' + soy.$$escapeHtmlAttribute(opt_data.pageName) + '?file=' + soy.$$escapeUri(fileData122.fullName) + '&amp;project=' + soy.$$escapeUri(opt_data.projectName) + '"><p>' + soy.$$escapeHtml(fileData122.name) + '<br><span>' + soy.$$escapeHtml(fileData122.date) + '</span></p></a></li>';
   }
   output += '</ol>';
   return soydata.VERY_UNSAFE.ordainSanitizedHtml(output);
@@ -96,11 +96,11 @@ if (goog.DEBUG) {
 
 templates.tree.hotSpot = function(opt_data, opt_ignored) {
   var output = '<div class="hot-spot"><a href="/flamegraph-profiler/outgoing-calls?file=' + soy.$$escapeUri(opt_data.fileName) + '&amp;project=' + soy.$$escapeUri(opt_data.projectName) + '&amp;method=' + soy.$$escapeUri(opt_data.methodName) + '&amp;class=' + soy.$$escapeUri(opt_data.className) + '&amp;desc=' + soy.$$escapeUri(opt_data.desc) + '"><img src="img/outgoing.png"/></a><a href="/flamegraph-profiler/incoming-calls?file=' + soy.$$escapeUri(opt_data.fileName) + '&amp;project=' + soy.$$escapeUri(opt_data.projectName) + '&amp;method=' + soy.$$escapeUri(opt_data.methodName) + '&amp;class=' + soy.$$escapeUri(opt_data.className) + '&amp;desc=' + soy.$$escapeUri(opt_data.desc) + '"><img src="img/incoming.png"/></a><div class="outer-time-div"><p class="relative-time">' + soy.$$escapeHtml(opt_data.relativeTime) + '%</p><div class="total-time"><div class="method-time"></div></div></div><div class="class-name"><code>' + soy.$$escapeHtml(opt_data.className) + '</code></div><p class="method"><code class="return-value">' + soy.$$escapeHtml(opt_data.retVal) + ' </code><code class="method-name">' + soy.$$escapeHtml(opt_data.methodName) + '</code><wbr>(';
-  var parameterList159 = opt_data.parameters;
-  var parameterListLen159 = parameterList159.length;
-  for (var parameterIndex159 = 0; parameterIndex159 < parameterListLen159; parameterIndex159++) {
-    var parameterData159 = parameterList159[parameterIndex159];
-    output += (parameterData159) ? '<code class="parameter">' + soy.$$escapeHtml(parameterData159) + '</code>' + ((! (parameterIndex159 == parameterListLen159 - 1)) ? '<code>, </code>' : '') : '';
+  var parameterList165 = opt_data.parameters;
+  var parameterListLen165 = parameterList165.length;
+  for (var parameterIndex165 = 0; parameterIndex165 < parameterListLen165; parameterIndex165++) {
+    var parameterData165 = parameterList165[parameterIndex165];
+    output += (parameterData165) ? '<code class="parameter">' + soy.$$escapeHtml(parameterData165) + '</code>' + ((! (parameterIndex165 == parameterListLen165 - 1)) ? '<code>, </code>' : '') : '';
   }
   output += ')</p></div>';
   return soydata.VERY_UNSAFE.ordainSanitizedHtml(output);

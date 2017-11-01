@@ -325,13 +325,8 @@ nav ul li a:focus {
 }
 
 .file-list li:hover {
-    padding-right: 10px;
     background-color: rgba(14, 160, 243, 0.8);
     min-width: 100%;
-    box-sizing: border-box;
-}
-
-.file-list li:hover {
     transition: background-color 300ms;
 }
 
@@ -590,22 +585,7 @@ button:focus {
     cursor: pointer;
 }
 
-.file-list li:hover .delete-file {
-    opacity: 0.8;
-}
-
-.delete-file {
-    opacity: 0;
-    display: inline-block;
-    cursor: pointer;
-    height: 40px;
-    box-sizing: border-box;
-    padding: 11px;
-    transition: opacity 300ms;
-    position: relative;
-}
-
-.file-list li .delete-file:hover {
+.file-list li:hover .file-checkbox + .file-checkbox-label:before {
     opacity: 1;
 }
 
@@ -831,4 +811,39 @@ canvas {
 .icon {
     position: absolute;
     margin-top: -4px;
+}
+
+.file-checkbox {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.file-checkbox, .file-checkbox-label {
+    display: inline-block;
+    vertical-align: middle;
+    margin: 5px;
+    cursor: pointer;
+    right: 11px;
+}
+
+.file-checkbox-label {
+    position: relative;
+}
+
+.file-checkbox + .file-checkbox-label:before {
+    content: '';
+    background: #fff;
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    padding: 2px;
+    text-align: center;
+    box-sizing: border-box;
+    opacity: 0.7;
+    transition: opacity 300ms;
+}
+
+.file-checkbox:checked + .file-checkbox-label:before {
+    background: #0e69b1;
+    border: 2px solid white;
 }
