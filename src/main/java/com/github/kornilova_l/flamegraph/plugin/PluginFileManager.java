@@ -223,6 +223,7 @@ public class PluginFileManager {
 
     @NotNull
     public List<String> getProjectList() {
+        removeEmptyProjects();
         File logDir = new File(logDirPath.toString());
         if (logDir.exists() && logDir.isDirectory()) {
             File[] files = logDir.listFiles();
@@ -236,6 +237,27 @@ public class PluginFileManager {
             }
         }
         return new ArrayList<>();
+    }
+
+    private void removeEmptyProjects() {
+        File logDir = new File(logDirPath.toString());
+        if (logDir.exists() && logDir.isDirectory()) {
+            File[] projects = logDir.listFiles();
+            if (projects != null) {
+                for (File project : projects) {
+                    if (project.isDirectory()) {
+                        if (Objects.equals(project.getName(), UPLOADED_FILES)) {
+                            continue;
+                        }
+                        File[] projectFiles = project.listFiles();
+                        if (projectFiles == null || projectFiles.length == 0) {
+                            //noinspection ResultOfMethodCallIgnored
+                            project.delete();
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public void deleteFile(@NotNull String fileName, @NotNull String projectName) {
