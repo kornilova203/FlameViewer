@@ -56,8 +56,16 @@ section {
     font-size: 16px;
     line-height: 18px;
     padding-top: 10px;
+    max-width: 100%;
     margin-top: 0;
-    width: 100%;
+}
+
+.call-tree-header {
+    position: fixed;
+    background-color: white;
+    z-index: 10;
+    margin-left: -35px;
+    padding: 10px 15px 10px 10px;
 }
 
 .tree-preview h2 {
@@ -95,6 +103,10 @@ section {
     display: none;
     overflow-x: scroll;
     overflow-y: scroll;
+}
+
+.call-tree-wrapper canvas {
+    margin-top: 60px;
 }
 
 .call-tree-wrapper-zoomed {
