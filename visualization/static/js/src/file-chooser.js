@@ -1,14 +1,5 @@
 const KEYCODE_ESC = 27;
 const KEYCODE_ENTER = 13;
-/**
- * Save ids because jquery instances of same element are different
- * @type {Set<string>}
- */
-const selectedFilesIds = new Set();
-/**
- * @type {string|null}
- */
-let $lastSelectedFileIds = null;
 
 $(window).on("load", () => {
     getFilesList(constants.projectName);
@@ -164,18 +155,21 @@ function bindDelete(filesList, $list) {
 }
 
 /**
- * Function is called after checking $file with shift and if $lastSelectedFileIds is not null
- * @param $selectedFile
+ * Function is called after checking $file with shift and if previouslyToggledFileId is not null
+ * @param $toggledFile
  * @param $list
+ * @param {Set<string>} selectedFilesIds
+ * @param {string} previouslyToggledFileId
+ * @param {function} callback
  */
-function selectRange($selectedFile, $list) {
-    if ($lastSelectedFileIds === null) { // this should not happen but who knows
+function doSmthWithRange($toggledFile, $list, selectedFilesIds, previouslyToggledFileId, callback) {
+    if (previouslyToggledFileId === null) { // this should not happen but who knows
         return;
     }
     let start = false;
     let stop = false;
-    const id1 = $selectedFile.attr("id");
-    const id2 = $lastSelectedFileIds;
+    const id1 = $toggledFile.attr("id");
+    const id2 = previouslyToggledFileId;
     $list.children().each(function () {
         if (stop) {
             return;
@@ -193,35 +187,67 @@ function selectRange($selectedFile, $list) {
             return;
         }
         if (start) {
-            $file.find("input").prop('checked', true);
-            selectedFilesIds.add($file.attr("id"));
+            callback($file, selectedFilesIds);
         }
     });
 }
 
+function selectFile($file, selectedFilesIds) {
+    $file.find("input").prop('checked', true);
+    selectedFilesIds.add($file.attr("id"));
+}
+
+/**
+ * @param $file
+ * @param {Set<string>} selectedFilesIds
+ */
+function deselectFile($file, selectedFilesIds) {
+    $file.find("input").prop('checked', false);
+    selectedFilesIds.delete($file.attr("id"));
+}
+
 function listenCheckbox($list) {
+    /**
+     * Save ids because jquery instances of same element are different
+     * @type {Set<string>}
+     */
+    const selectedFilesIds = new Set();
+    /**
+     * @type {string|null}
+     */
+    let lastSelectedFileId = null;
+    /**
+     * @type {string|null}
+     */
+    let lastDeselectedFileId = null;
+
     $list.children().each(function () {
         const $file = $(this);
+        const fileId = $file.attr("id");
         const $checkbox = $file.find("input");
         const $label = $file.find("label");
         $label.click((event) => {
             if (!$checkbox.is(":checked")) { // inversion because click event works strangely
                 constants.$removeFilesButton.addClass("active-gray-button");
-                if (event.shiftKey && $lastSelectedFileIds !== null) {
-                        selectRange($file, $list);
+                if (event.shiftKey && lastSelectedFileId !== null) { // select range
+                    doSmthWithRange($file, $list, selectedFilesIds, lastSelectedFileId, selectFile);
                 }
-                $lastSelectedFileIds = $file.attr("id");
-                selectedFilesIds.add($file.attr("id"));
+                lastSelectedFileId = fileId;
+                lastDeselectedFileId = null;
+                selectedFilesIds.add(fileId);
             } else {
-                selectedFilesIds.delete($file.attr("id"));
-                $lastSelectedFileIds = null;
+                if (event.shiftKey && lastDeselectedFileId !== null) { // deselect range
+                    doSmthWithRange($file, $list, selectedFilesIds, lastDeselectedFileId, deselectFile);
+                }
+                selectedFilesIds.delete(fileId);
+                lastSelectedFileId = null;
+                lastDeselectedFileId = fileId;
                 if (selectedFilesIds.size === 0) {
                     constants.$removeFilesButton.removeClass("active-gray-button");
                 }
             }
-            console.log(selectedFilesIds.size);
         });
-    })
+    });
 }
 
 /**
@@ -250,7 +276,7 @@ function updateFilesList(filesList) {
         appendInput();
         listenInput();
     } else {
-        $(".file-list").css("height", "calc(100vh - 145px)")
+        $(".file-list").css("height", "calc(100vh - 126px)")
     }
 }
 
