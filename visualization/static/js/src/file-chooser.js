@@ -173,8 +173,15 @@ function bindDelete($list, selectedFilesIds, filesList) {
         if (selectedFilesIds.size === 0) {
             return;
         }
-        const data = getFileNames(selectedFilesIds, filesList);
+        const fileNames = getFileNames(selectedFilesIds, filesList);
         removeFromList($list, selectedFilesIds);
+        for (let i = 0; i < fileNames.length; i++) {
+            const request = new XMLHttpRequest();
+            request.open("POST", "/flamegraph-profiler/delete-file", true);
+            request.setRequestHeader('File-Name', fileNames[i]);
+            request.setRequestHeader('Project-Name', constants.projectName);
+            request.send();
+        }
     });
 }
 
@@ -296,7 +303,6 @@ function updateFilesList(filesList) {
         listenCheckbox($list, filesList);
         $list.appendTo($(".file-menu"));
         if (constants.fileName !== undefined) {
-            console.log(constants.fileName);
             // get current file id. Like server forms id's
             $("#" + constants.fileName.split(":").join("").split(".").join("")).addClass("current-file");
         }

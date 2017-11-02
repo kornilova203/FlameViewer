@@ -28,6 +28,7 @@ public class PluginFileManager {
     private static final String STATIC_DIR_NAME = "static";
     private static final String REQUEST_PREFIX = "/flamegraph-profiler/";
     private static final String UPLOADED_FILES = "uploaded-files";
+    private static final String DELETED_FILES = "deleted";
     private static final String NOT_CONVERTED = "not-converted";
     private static final String SER_FILES = "ser";
     private static final String FLAMEGRAPH_FILES = "flamegraph";
@@ -62,9 +63,13 @@ public class PluginFileManager {
                         getClass().getResource("/" + STATIC_DIR_NAME).getPath()
                 ).getAbsolutePath()
         );
-        @NotNull Path uploadedFilesPath = Paths.get(logDirPath.toString(), UPLOADED_FILES);
+        Path uploadedFilesPath = Paths.get(logDirPath.toString(), UPLOADED_FILES);
         createDirIfNotExist(uploadedFilesPath);
-        @NotNull Path notConvertedFiles = Paths.get(uploadedFilesPath.toString(), NOT_CONVERTED);
+
+        Path deletedFilesPath = Paths.get(logDirPath.toString(), DELETED_FILES);
+        createDirIfNotExist(deletedFilesPath);
+
+        Path notConvertedFiles = Paths.get(uploadedFilesPath.toString(), NOT_CONVERTED);
         createDirIfNotExist(notConvertedFiles);
         tempFileSaver = new FileSaver(notConvertedFiles);
         serFiles = Paths.get(uploadedFilesPath.toString(), SER_FILES);
@@ -231,6 +236,7 @@ public class PluginFileManager {
                 return Arrays.stream(files)
                         .filter(file ->
                                 !Objects.equals(file.getName(), UPLOADED_FILES) &&
+                                        !Objects.equals(file.getName(), DELETED_FILES) &&
                                         file.isDirectory())
                         .map(File::getName)
                         .collect(Collectors.toList());
@@ -246,7 +252,8 @@ public class PluginFileManager {
             if (projects != null) {
                 for (File project : projects) {
                     if (project.isDirectory()) {
-                        if (Objects.equals(project.getName(), UPLOADED_FILES)) {
+                        if (Objects.equals(project.getName(), UPLOADED_FILES) ||
+                                Objects.equals(project.getName(), DELETED_FILES)) {
                             continue;
                         }
                         File[] projectFiles = project.listFiles();
@@ -266,7 +273,7 @@ public class PluginFileManager {
             return;
         }
         //noinspection ResultOfMethodCallIgnored
-        file.delete();
+        file.renameTo(Paths.get(logDirPath.toString(), DELETED_FILES, fileName).toFile());
     }
 
     static class FileNameAndDate {
