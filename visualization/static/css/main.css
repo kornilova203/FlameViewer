@@ -398,6 +398,11 @@ nav ul li a:focus {
     color: #bbb;
 }
 
+.file-list-actions {
+    height: 20px;
+    position: relative;
+}
+
 .current-file {
     background-color: #0e8fdf;
 }
@@ -536,15 +541,18 @@ nav ul li a:focus {
     position: absolute;
     bottom: 6px;
     right: 15px;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+}
+
+#hide-file-list-button, .action-button {
     background: none;
     border: 0;
     color: inherit;
     font: inherit;
     line-height: normal;
     overflow: visible;
-    padding: 0;
-    width: 30px;
-    height: 30px;
 }
 
 #hide-file-list-button img {
@@ -566,6 +574,35 @@ nav ul li a:focus {
 
 button:focus {
     outline: none;
+}
+
+.action-button {
+    position: relative;
+    transition: opacity 300ms;
+    top: 6px;
+}
+
+.remove-files-button {
+    opacity: 0.2;
+    margin-left: 8px;
+}
+
+.search-file-button {
+    top: 7px;
+    right: 8px;
+}
+
+.active-gray-button {
+    cursor: pointer;
+    opacity: 0.7;
+}
+
+.active-gray-button:hover {
+    opacity: 0.8;
+}
+
+.active-gray-button:active {
+    opacity: 0.9;
 }
 
 .vertical-project-name {
@@ -842,6 +879,7 @@ canvas {
     box-sizing: border-box;
     opacity: 0.7;
     transition: opacity 300ms;
+    pointer-events: none;
 }
 
 .file-checkbox:checked + .file-checkbox-label:before {

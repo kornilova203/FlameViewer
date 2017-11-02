@@ -112,6 +112,7 @@ constants.$arrowLeft = null;
 constants.$arrowRight = null;
 constants.projectName = common.getParameter("project");
 constants.fileName = common.getParameter("file");
+constants.$removeFilesButton = null;
 constants.loaderMessages = {
     drawing: "Drawing...",
     deserialization: "Deserialization of binary data...",
@@ -129,6 +130,7 @@ $(window).on("load", () => {
     constants.$treePreviewWrapper = $('.tree-preview-wrapper');
     constants.$arrowLeft = $("#arrow-left");
     constants.$arrowRight = $("#arrow-right");
+    constants.$removeFilesButton = $(".remove-files-button");
 });
 
 /**

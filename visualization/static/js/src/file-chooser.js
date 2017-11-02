@@ -1,7 +1,14 @@
 const KEYCODE_ESC = 27;
 const KEYCODE_ENTER = 13;
-const selectedFiles = new Set();
-let $lastSelectedFile = null;
+/**
+ * Save ids because jquery instances of same element are different
+ * @type {Set<string>}
+ */
+const selectedFilesIds = new Set();
+/**
+ * @type {string|null}
+ */
+let $lastSelectedFileIds = null;
 
 $(window).on("load", () => {
     getFilesList(constants.projectName);
@@ -157,18 +164,18 @@ function bindDelete(filesList, $list) {
 }
 
 /**
- * Function is called after checking $file with shift and if $lastSelectedFile is not null
+ * Function is called after checking $file with shift and if $lastSelectedFileIds is not null
  * @param $selectedFile
  * @param $list
  */
 function selectRange($selectedFile, $list) {
-    if ($lastSelectedFile === null) { // this should not happen but who knows
+    if ($lastSelectedFileIds === null) { // this should not happen but who knows
         return;
     }
     let start = false;
     let stop = false;
     const id1 = $selectedFile.attr("id");
-    const id2 = $lastSelectedFile.attr("id");
+    const id2 = $lastSelectedFileIds;
     $list.children().each(function () {
         if (stop) {
             return;
@@ -180,37 +187,39 @@ function selectRange($selectedFile, $list) {
                 start = true;
             } else {
                 stop = true;
-                return;
             }
+        }
+        if (id === id1) { // this will be checked automatically
+            return;
         }
         if (start) {
             $file.find("input").prop('checked', true);
+            selectedFilesIds.add($file.attr("id"));
         }
-    })
+    });
 }
 
 function listenCheckbox($list) {
     $list.children().each(function () {
         const $file = $(this);
-        $file.mousedown((event) => {
-            const $checkbox = $file.find("input");
+        const $checkbox = $file.find("input");
+        const $label = $file.find("label");
+        $label.click((event) => {
             if (!$checkbox.is(":checked")) { // inversion because click event works strangely
-                console.log("checked");
-                if (event.shiftKey) {
-                    console.log("with shift");
-                    if ($lastSelectedFile !== null) {
+                constants.$removeFilesButton.addClass("active-gray-button");
+                if (event.shiftKey && $lastSelectedFileIds !== null) {
                         selectRange($file, $list);
-                        $lastSelectedFile = $file;
-                        return;
-                    }
                 }
-                selectedFiles.add($file);
-                $lastSelectedFile = $file;
+                $lastSelectedFileIds = $file.attr("id");
+                selectedFilesIds.add($file.attr("id"));
             } else {
-                console.log("unchecked");
-                selectedFiles.delete($file);
-                $lastSelectedFile = null;
+                selectedFilesIds.delete($file.attr("id"));
+                $lastSelectedFileIds = null;
+                if (selectedFilesIds.size === 0) {
+                    constants.$removeFilesButton.removeClass("active-gray-button");
+                }
             }
+            console.log(selectedFilesIds.size);
         });
     })
 }
