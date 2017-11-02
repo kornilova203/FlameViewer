@@ -141,17 +141,41 @@ function createDeleteFilePopup(li, liFileName) {
 }
 
 /**
+ * @param {Set<string>} selectedFilesIds
  * @param {Array<{id: String, fullName: String}>} filesList
- * @param $list
  */
-function bindDelete(filesList, $list) {
-    for (let i = 0; i < filesList.length; i++) {
-        const file = filesList[i];
-        const $li = $list.find("#" + file.id);
-        $li.find("img").click(() => {
-            createDeleteFilePopup($li, file.fullName);
-        });
-    }
+function getFileNames(selectedFilesIds, filesList) {
+    const arr = [];
+    selectedFilesIds.forEach((id) => {
+        for (let i = 0; i < filesList.length; i++) {
+            if (filesList[i].id === id) {
+                arr.push(filesList[i].fullName);
+                return;
+            }
+        }
+    });
+    return arr;
+}
+
+function removeFromList($list, selectedFilesIds) {
+    selectedFilesIds.forEach((id) => {
+        $list.find("#" + id).remove();
+    });
+}
+
+/**
+ * @param $list
+ * @param {Set<string>} selectedFilesIds
+ * @param {Array<{id: String, fullName: String}>} filesList
+ */
+function bindDelete($list, selectedFilesIds, filesList) {
+    constants.$removeFilesButton.click(() => {
+        if (selectedFilesIds.size === 0) {
+            return;
+        }
+        const data = getFileNames(selectedFilesIds, filesList);
+        removeFromList($list, selectedFilesIds);
+    });
 }
 
 /**
@@ -206,7 +230,11 @@ function deselectFile($file, selectedFilesIds) {
     selectedFilesIds.delete($file.attr("id"));
 }
 
-function listenCheckbox($list) {
+/**
+ * @param $list
+ * @param {Array<{id: String, fullName: String}>} filesList
+ */
+function listenCheckbox($list, filesList) {
     /**
      * Save ids because jquery instances of same element are different
      * @type {Set<string>}
@@ -248,6 +276,8 @@ function listenCheckbox($list) {
             }
         });
     });
+
+    bindDelete($list, selectedFilesIds, filesList);
 }
 
 /**
@@ -263,9 +293,8 @@ function updateFilesList(filesList) {
             pageName: getPageName()
         }).content;
         const $list = $(listString);
-        listenCheckbox($list);
+        listenCheckbox($list, filesList);
         $list.appendTo($(".file-menu"));
-        bindDelete(filesList, $list);
         if (constants.fileName !== undefined) {
             console.log(constants.fileName);
             // get current file id. Like server forms id's
