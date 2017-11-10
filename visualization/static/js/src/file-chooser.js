@@ -90,9 +90,8 @@ function showNoDataFound() {
 
 function appendInput() {
     const input = templates.tree.fileInput().content;
-    // noinspection all
-    $(input).insertBefore("#search-file-form");
-    $(".file-list").css("height", "calc(100vh - 233px)")
+    $(input).insertBefore(".file-list-actions");
+    $(".file-list").css("height", "calc(100vh - 217px)")
 }
 
 /**
