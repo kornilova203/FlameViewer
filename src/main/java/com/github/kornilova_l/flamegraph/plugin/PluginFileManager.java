@@ -2,6 +2,7 @@ package com.github.kornilova_l.flamegraph.plugin;
 
 import com.github.kornilova_l.flamegraph.plugin.converters.ProfilerToFlamegraphConverter;
 import com.intellij.openapi.application.PathManager;
+import com.intellij.openapi.diagnostic.Logger;
 import io.netty.handler.codec.http.QueryStringDecoder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -21,6 +22,8 @@ import java.util.stream.Collectors;
 import static com.github.kornilova_l.flamegraph.plugin.server.ProfilerHttpRequestHandler.getParameter;
 
 public class PluginFileManager {
+    private static final Logger LOG = Logger.getInstance(PluginFileManager.class);
+
     private static final boolean isWindows = System.getProperty("os.name").startsWith("Windows");
     private static final String PLUGIN_DIR_NAME = "flamegraph-profiler";
     private static final String LOG_DIR_NAME = "log";
@@ -79,6 +82,8 @@ public class PluginFileManager {
         createDirIfNotExist(flamegraphFiles);
         clearDir(new File(notConvertedFiles.toString()));
         flamegraphFileSaver = new FlamegraphSaver(flamegraphFiles);
+
+        finallyDeleteRemovedFiles();
     }
 
     private void clearDir(File dir) {
@@ -90,6 +95,21 @@ public class PluginFileManager {
             //noinspection ResultOfMethodCallIgnored
             file.delete();
         }
+    }
+
+    @SuppressWarnings("UnusedReturnValue")
+    private boolean finallyDeleteRemovedFiles() {
+        File deletedFilesDir = Paths.get(logDirPath.toString(), DELETED_FILES).toFile();
+        if (!deletedFilesDir.exists() || !deletedFilesDir.isDirectory()) {
+            LOG.debug("Directory with deleted files was not found");
+            return false;
+        }
+        File[] files = deletedFilesDir.listFiles();
+        //noinspection SimplifiableIfStatement
+        if (files != null) {
+            return Arrays.stream(files).map(File::delete).anyMatch(res -> !res);
+        }
+        return false;
     }
 
     public static PluginFileManager getInstance() {
@@ -164,6 +184,8 @@ public class PluginFileManager {
                     .map(FileNameAndDate::new)
                     .collect(Collectors.toList());
         }
+
+        finallyDeleteRemovedFiles();
         return new LinkedList<>();
     }
 
