@@ -2,6 +2,15 @@ const KEYCODE_ESC = 27;
 const KEYCODE_ENTER = 13;
 const KEYCODE_DELETE = 46;
 
+/**
+ * @type {string|null}
+ */
+let lastSelectedFileId = null;
+/**
+ * @type {string|null}
+ */
+let lastDeselectedFileId = null;
+
 $(window).on("load", () => {
     getFilesList(constants.projectName);
     showProjectsList();
@@ -116,13 +125,52 @@ function getFileNames(selectedFilesIds, filesList) {
     return arr;
 }
 
+/**
+ * @return {Array} array of html representations of these files
+ * (they are used to undo remove)
+ */
 function removeFromList($list, selectedFilesIds) {
+    const removedFiles = [];
     selectedFilesIds.forEach((id) => {
-        $list.find("#" + id).remove();
+        const $removedFile = $list.find("#" + id);
+        removedFiles.push($removedFile);
+        $removedFile.remove();
     });
+    return removedFiles;
 }
 
-function showUndoDelete(fileNames) {
+/**
+ * @param $list
+ * @param {Array} removedFiles
+ */
+function addToList($list, removedFiles) {
+    for (let i = 0; i < removedFiles.length; i++) {
+        const $file = removedFiles[i];
+        $file.find("input").prop('checked', false);
+        $list.append($file);
+    }
+}
+
+/**
+ * @param {Array} fileNames
+ */
+function sendRequestUndoDelete(fileNames) {
+    for (let i = 0; i < fileNames.length; i++) {
+        const request = new XMLHttpRequest();
+        request.open("POST", "/flamegraph-profiler/undo-delete-file", true);
+        request.setRequestHeader('File-Name', fileNames[i]);
+        request.setRequestHeader('Project-Name', constants.projectName);
+        request.send();
+    }
+}
+
+/**
+ * @param fileNames
+ * @param removedFiles
+ * @param $list
+ * @param selectedFilesIds
+ */
+function showUndoDelete(fileNames, removedFiles, $list, selectedFilesIds) {
     const $undoDeleteButton = $(".undo-delete");
     $undoDeleteButton.addClass("visible");
     setTimeout(() => {
@@ -131,12 +179,10 @@ function showUndoDelete(fileNames) {
     }, 4000);
 
     $undoDeleteButton.click(() => { // undo delete
-        for (let i = 0; i < fileNames.length; i++) {
-            const request = new XMLHttpRequest();
-            request.open("POST", "/flamegraph-profiler/undo-delete-file", true);
-            request.setRequestHeader('File-Name', fileNames[i]);
-            request.setRequestHeader('Project-Name', constants.projectName);
-            request.send();
+        sendRequestUndoDelete(fileNames);
+        addToList($list, removedFiles);
+        for (let i = 0; i < removedFiles.length; i++) {
+            bindCheckboxEvent(removedFiles[i], selectedFilesIds, $list)
         }
         $undoDeleteButton.off();
         $undoDeleteButton.removeClass("visible");
@@ -144,7 +190,10 @@ function showUndoDelete(fileNames) {
 }
 
 /**
- * @return function
+ * @param $list
+ * @param {Set} selectedFilesIds
+ * @param filesList
+ * @return {function()}
  */
 function deleteSelectedFilesDecorator($list, selectedFilesIds, filesList) {
     return () => {
@@ -153,7 +202,7 @@ function deleteSelectedFilesDecorator($list, selectedFilesIds, filesList) {
         }
 
         const fileNames = getFileNames(selectedFilesIds, filesList);
-        removeFromList($list, selectedFilesIds);
+        const removedFiles = removeFromList($list, selectedFilesIds);
         for (let i = 0; i < fileNames.length; i++) {
             const request = new XMLHttpRequest();
             request.open("POST", "/flamegraph-profiler/delete-file", true);
@@ -161,7 +210,10 @@ function deleteSelectedFilesDecorator($list, selectedFilesIds, filesList) {
             request.setRequestHeader('Project-Name', constants.projectName);
             request.send();
         }
-        showUndoDelete(fileNames);
+        showUndoDelete(fileNames, removedFiles, $list, selectedFilesIds);
+        selectedFilesIds.clear();
+        lastDeselectedFileId = null;
+        lastSelectedFileId = null;
     }
 }
 
@@ -231,6 +283,41 @@ function deselectFile($file, selectedFilesIds) {
 }
 
 /**
+ * @param $file
+ * @param {Set} selectedFilesIds
+ * @param $list
+ */
+function bindCheckboxEvent($file, selectedFilesIds, $list) {
+    const fileId = $file.attr("id");
+    const $checkbox = $file.find("input");
+    const $label = $file.find("label");
+    $label.click((event) => {
+        console.log(lastSelectedFileId);
+        if (!$checkbox.is(":checked")) { // inversion because click event works strangely
+            console.log("checked");
+            constants.$removeFilesButton.addClass("active-gray-button");
+            if (event.shiftKey && lastSelectedFileId !== null) { // select range
+                doSmthWithRange($file, $list, selectedFilesIds, lastSelectedFileId, selectFile);
+            }
+            lastSelectedFileId = fileId;
+            lastDeselectedFileId = null;
+            selectedFilesIds.add(fileId);
+        } else {
+            console.log("unchecked");
+            if (event.shiftKey && lastDeselectedFileId !== null) { // deselect range
+                doSmthWithRange($file, $list, selectedFilesIds, lastDeselectedFileId, deselectFile);
+            }
+            selectedFilesIds.delete(fileId);
+            lastSelectedFileId = null;
+            lastDeselectedFileId = fileId;
+            if (selectedFilesIds.size === 0) {
+                constants.$removeFilesButton.removeClass("active-gray-button");
+            }
+        }
+    });
+}
+
+/**
  * @param $list
  * @param {Array<{id: String, fullName: String}>} filesList
  */
@@ -240,41 +327,10 @@ function listenCheckbox($list, filesList) {
      * @type {Set<string>}
      */
     const selectedFilesIds = new Set();
-    /**
-     * @type {string|null}
-     */
-    let lastSelectedFileId = null;
-    /**
-     * @type {string|null}
-     */
-    let lastDeselectedFileId = null;
 
     $list.children().each(function () {
         const $file = $(this);
-        const fileId = $file.attr("id");
-        const $checkbox = $file.find("input");
-        const $label = $file.find("label");
-        $label.click((event) => {
-            if (!$checkbox.is(":checked")) { // inversion because click event works strangely
-                constants.$removeFilesButton.addClass("active-gray-button");
-                if (event.shiftKey && lastSelectedFileId !== null) { // select range
-                    doSmthWithRange($file, $list, selectedFilesIds, lastSelectedFileId, selectFile);
-                }
-                lastSelectedFileId = fileId;
-                lastDeselectedFileId = null;
-                selectedFilesIds.add(fileId);
-            } else {
-                if (event.shiftKey && lastDeselectedFileId !== null) { // deselect range
-                    doSmthWithRange($file, $list, selectedFilesIds, lastDeselectedFileId, deselectFile);
-                }
-                selectedFilesIds.delete(fileId);
-                lastSelectedFileId = null;
-                lastDeselectedFileId = fileId;
-                if (selectedFilesIds.size === 0) {
-                    constants.$removeFilesButton.removeClass("active-gray-button");
-                }
-            }
-        });
+        bindCheckboxEvent($file, selectedFilesIds, $list);
     });
 
     bindDelete($list, selectedFilesIds, filesList);
