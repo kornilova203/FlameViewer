@@ -1,5 +1,6 @@
 const KEYCODE_ESC = 27;
 const KEYCODE_ENTER = 13;
+const KEYCODE_DELETE = 46;
 
 $(window).on("load", () => {
     getFilesList(constants.projectName);
@@ -85,59 +86,17 @@ function appendInput() {
     $(".file-list").css("height", "calc(100vh - 233px)")
 }
 
-function deleteFile(popup, li, liFileName) {
-    popup.remove();
-    const request = new XMLHttpRequest();
-    request.open("POST", "/flamegraph-profiler/delete-file", true);
-    request.setRequestHeader('File-Name', liFileName);
-    request.setRequestHeader('Project-Name', constants.projectName);
-    request.send();
-    li.remove();
-    $(document).unbind("keyup");
-}
-
-function bindEscAndCancel(popup) {
+/**
+ * @param {number} KEY_CODE
+ * @param {function} callback
+ */
+function bindKey(KEY_CODE, callback) {
     // noinspection JSUnresolvedFunction
     $(document).keyup(function (e) {
-        if (e.keyCode === KEYCODE_ENTER) {
-            popup.find(".do-confirm").click();
-        }
-        if (e.keyCode === KEYCODE_ESC) {
-            console.log("esc");
-            popup.find(".confirm-bg").click();
+        if (e.keyCode === KEY_CODE) {
+            callback();
         }
     });
-}
-
-function createDeleteFilePopup(li, liFileName) {
-    const popupText = templates.tree.confirm({
-        question: "Delete file: " + liFileName + "?"
-    }).content;
-    const popup = $(popupText);
-    $("body").append(popup);
-    let wasPopupClicked = false;
-    if (liFileName === constants.fileName) {
-        popup.find("a").attr("href", "/flamegraph-profiler/" + getPageName() + "?project=" + constants.projectName);
-    }
-    popup.find(".do-confirm").click(() => {
-        deleteFile(popup, li, liFileName);
-    });
-    popup.find(".do-not-confirm").click(() => {
-        popup.remove();
-        $(document).unbind("keyup");
-    });
-    popup.find(".confirm-bg").click(() => {
-        if (wasPopupClicked) {
-            wasPopupClicked = false;
-        } else {
-            popup.remove();
-            $(document).unbind("keyup");
-        }
-    });
-    popup.find(".confirm-popup").click(() => {
-        wasPopupClicked = true;
-    });
-    bindEscAndCancel(popup);
 }
 
 /**
@@ -163,16 +122,36 @@ function removeFromList($list, selectedFilesIds) {
     });
 }
 
+function showUndoDelete(fileNames) {
+    const $undoDeleteButton = $(".undo-delete");
+    $undoDeleteButton.addClass("visible");
+    setTimeout(() => {
+        $undoDeleteButton.removeClass("visible");
+        $undoDeleteButton.off();
+    }, 4000);
+
+    $undoDeleteButton.click(() => { // undo delete
+        for (let i = 0; i < fileNames.length; i++) {
+            const request = new XMLHttpRequest();
+            request.open("POST", "/flamegraph-profiler/undo-delete-file", true);
+            request.setRequestHeader('File-Name', fileNames[i]);
+            request.setRequestHeader('Project-Name', constants.projectName);
+            request.send();
+        }
+        $undoDeleteButton.off();
+        $undoDeleteButton.removeClass("visible");
+    });
+}
+
 /**
- * @param $list
- * @param {Set<string>} selectedFilesIds
- * @param {Array<{id: String, fullName: String}>} filesList
+ * @return function
  */
-function bindDelete($list, selectedFilesIds, filesList) {
-    constants.$removeFilesButton.click(() => {
+function deleteSelectedFilesDecorator($list, selectedFilesIds, filesList) {
+    return () => {
         if (selectedFilesIds.size === 0) {
             return;
         }
+
         const fileNames = getFileNames(selectedFilesIds, filesList);
         removeFromList($list, selectedFilesIds);
         for (let i = 0; i < fileNames.length; i++) {
@@ -182,6 +161,20 @@ function bindDelete($list, selectedFilesIds, filesList) {
             request.setRequestHeader('Project-Name', constants.projectName);
             request.send();
         }
+        showUndoDelete(fileNames);
+    }
+}
+
+/**
+ * @param $list
+ * @param {Set<string>} selectedFilesIds
+ * @param {Array<{id: String, fullName: String}>} filesList
+ */
+function bindDelete($list, selectedFilesIds, filesList) {
+    const deleteSelectedFiles = deleteSelectedFilesDecorator($list, selectedFilesIds, filesList);
+    bindKey(KEYCODE_DELETE, deleteSelectedFiles);
+    constants.$removeFilesButton.click(() => {
+        deleteSelectedFiles();
     });
 }
 

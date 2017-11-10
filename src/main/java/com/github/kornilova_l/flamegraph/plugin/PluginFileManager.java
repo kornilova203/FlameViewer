@@ -197,11 +197,32 @@ public class PluginFileManager {
         return path.toString().replaceAll("%20", " ");
     }
 
+    /**
+     * If you have a file name you should use {@link #getLogDirPath(String, String)}
+     */
     @NotNull
     private Path getLogDirPath(@NotNull String projectName) {
         Path path = Paths.get(logDirPath.toString(), projectName);
         createDirIfNotExist(path);
         return path;
+    }
+
+    /**
+     * @param fileName file name is used to get an extension in case if project is UPLOADED_FILES dir
+     */
+    @NotNull
+    private Path getLogDirPath(@NotNull String projectName, @NotNull String fileName) {
+        Path projectDirPath;
+        if (!Objects.equals(projectName, UPLOADED_FILES)) {
+            projectDirPath = getLogDirPath(projectName);
+        } else {
+            if (Objects.equals(ProfilerToFlamegraphConverter.Companion.getFileExtension(fileName), "ser")) {
+                projectDirPath = serFiles;
+            } else {
+                projectDirPath = flamegraphFiles;
+            }
+        }
+        return projectDirPath;
     }
 
     @NotNull
@@ -217,16 +238,7 @@ public class PluginFileManager {
 
     @Nullable
     private File getLogFile(String projectName, String fileName) {
-        Path dirPath;
-        if (!Objects.equals(projectName, UPLOADED_FILES)) {
-            dirPath = getLogDirPath(projectName);
-        } else {
-            if (Objects.equals(ProfilerToFlamegraphConverter.Companion.getFileExtension(fileName), "ser")) {
-                dirPath = serFiles;
-            } else {
-                dirPath = flamegraphFiles;
-            }
-        }
+        Path dirPath = getLogDirPath(projectName, fileName);
 
         File file = new File(Paths.get(dirPath.toString(), fileName).toString());
         if (file.exists()) {
@@ -296,6 +308,17 @@ public class PluginFileManager {
         }
         //noinspection ResultOfMethodCallIgnored
         file.renameTo(Paths.get(logDirPath.toString(), DELETED_FILES, fileName).toFile());
+    }
+
+    public void undoDeleteFile(String fileName, String projectName) {
+        File file = Paths.get(logDirPath.toString(), DELETED_FILES, fileName).toFile();
+        if (file == null || !file.exists()) {
+            LOG.debug("Undo delete. Cannot find file to undo delete: " + fileName);
+            return;
+        }
+        Path projectDirPath = getLogDirPath(projectName, fileName);
+        //noinspection ResultOfMethodCallIgnored
+        file.renameTo(Paths.get(projectDirPath.toString(), fileName).toFile());
     }
 
     static class FileNameAndDate {

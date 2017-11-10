@@ -110,14 +110,6 @@ if (goog.DEBUG) {
 }
 
 
-templates.tree.confirm = function(opt_data, opt_ignored) {
-  return soydata.VERY_UNSAFE.ordainSanitizedHtml('<div><div class="confirm-bg"></div><div class="confirm-popup"><h3>' + soy.$$escapeHtml(opt_data.question) + '</h3><button class="do-confirm"><a>Ok</a></button><button class="do-not-confirm">Cancel</button></div></div>');
-};
-if (goog.DEBUG) {
-  templates.tree.confirm.soyTemplateName = 'templates.tree.confirm';
-}
-
-
 templates.tree.getTreePreviewSection = function(opt_data, opt_ignored) {
   return soydata.VERY_UNSAFE.ordainSanitizedHtml('<section class="tree-preview"><h2>' + soy.$$escapeHtml(opt_data.threadName) + '</h2><canvas id="canvas-' + soy.$$escapeHtmlAttribute(opt_data.id) + '" height="' + soy.$$escapeHtmlAttribute(opt_data.canvasHeight) + '" width="' + soy.$$escapeHtmlAttribute(opt_data.canvasWidth) + '"></canvas><button class="show-call-tree-button"><img src="img/view-details-icon.png"/></button></section>');
 };

@@ -420,6 +420,11 @@ nav ul li a:focus {
     color: #111;
 }
 
+button {
+    border: none;
+    cursor: pointer;
+}
+
 .projects-dropdown {
     display: inline-block;
     width: 100%;
@@ -627,50 +632,6 @@ button:focus {
     opacity: 1;
 }
 
-.confirm-popup {
-    position: fixed;
-    background-color: white;
-    border: solid #aaa 1px;
-    width: 200px;
-    height: 90px;
-    top: calc(50vh - 45px);
-    left: calc(50vw - 100px);
-    padding: 0 20px;
-    box-sizing: border-box;
-}
-
-.confirm-popup h3 {
-    width: 100%;
-    text-align: center;
-    font-weight: normal;
-    font-size: 14px;
-}
-
-.do-confirm {
-    float: left;
-    background-color: #60b3df;
-}
-
-.do-not-confirm {
-    float: right;
-    background-color: #0e8fdf;
-}
-
-.confirm-bg {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: white;
-    opacity: 0.3;
-}
-
-.do-confirm a {
-    text-decoration: none;
-    color: white;
-}
-
 .filter {
     position: fixed;
     width: 80px;
@@ -770,11 +731,11 @@ button:focus {
     right: 10px;
 }
 
-.cancel-filter:hover, .clear-filter:hover, .do-not-confirm:hover {
+.cancel-filter:hover, .clear-filter:hover, .do-not-confirm:hover, .undo-delete:hover {
     background-color: #8a8a8a;
 }
 
-.cancel-filter:active, .clear-filter:active, .do-not-confirm:active {
+.cancel-filter:active, .clear-filter:active, .do-not-confirm:active, .undo-delete:active {
     background-color: #696969;
 }
 
@@ -885,4 +846,24 @@ canvas {
 .file-checkbox:checked + .file-checkbox-label:before {
     background: #0e69b1;
     border: 2px solid white;
+}
+
+.undo-delete {
+    position: absolute;
+    width: 80px;
+    top: 5px;
+    left: 125px;
+    text-align: center;
+    background-color: #ababab;
+    color: white;
+    font-size: 14px;
+    padding: 7px 0;
+    transition: background-color, opacity 300ms;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.visible {
+    opacity: 1;
+    pointer-events: auto;
 }

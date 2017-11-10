@@ -13,6 +13,7 @@ import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeManager;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeManager.TreeType;
 import com.github.kornilova_l.libs.com.google.protobuf.Message;
 import com.google.gson.Gson;
+import com.intellij.openapi.diagnostic.Logger;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
@@ -34,8 +35,7 @@ import static com.github.kornilova_l.flamegraph.plugin.server.trees.flamegraph_f
 
 public class ProfilerHttpRequestHandler extends HttpRequestHandler {
 
-    private static final com.intellij.openapi.diagnostic.Logger LOG =
-            com.intellij.openapi.diagnostic.Logger.getInstance(ProfilerHttpRequestHandler.class);
+    private static final Logger LOG = Logger.getInstance(ProfilerHttpRequestHandler.class);
     private final PluginFileManager fileManager = PluginFileManager.getInstance();
 
     public static void sendProto(ChannelHandlerContext context,
@@ -178,17 +178,31 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
                 uploadFile(fullHttpRequest, context);
                 return true;
             case ServerNames.DELETE_FILE:
-                String fileName = fullHttpRequest.headers().get("File-Name");
-                String projectName = fullHttpRequest.headers().get("Project-Name");
-                if (fileName == null || projectName == null) {
-                    return true;
-                }
-                LOG.info("Delete file: " + fileName + " project: " + projectName);
-                fileManager.deleteFile(fileName, projectName);
-                sendStatus(HttpResponseStatus.OK, context.channel());
+            case ServerNames.UNDO_DELETE_FILE:
+                manageDelete(fullHttpRequest, context, uri);
                 return true;
         }
         return false;
+    }
+
+    private void manageDelete(FullHttpRequest fullHttpRequest,
+                              ChannelHandlerContext context,
+                              String uri) {
+        String fileName = fullHttpRequest.headers().get("File-Name");
+        String projectName = fullHttpRequest.headers().get("Project-Name");
+        if (fileName == null || projectName == null) {
+            return;
+        }
+        switch (uri) {
+            case ServerNames.DELETE_FILE:
+                LOG.info("Delete file: " + fileName + " project: " + projectName);
+                fileManager.deleteFile(fileName, projectName);
+                break;
+            case ServerNames.UNDO_DELETE_FILE:
+                LOG.info("Undo delete file: " + fileName + " project: " + projectName);
+                fileManager.undoDeleteFile(fileName, projectName);
+        }
+        sendStatus(HttpResponseStatus.OK, context.channel());
     }
 
     private void uploadFile(FullHttpRequest fullHttpRequest,
