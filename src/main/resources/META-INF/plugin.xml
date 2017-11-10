@@ -1,16 +1,18 @@
 <idea-plugin>
     <id>com.github.com.kornilovaL</id>
     <name>Flamegraph Visualizer</name>
-    <version>1.4</version>
+    <version>1.5</version>
 
     <description><![CDATA[
       Plugin for flamegraph visualization<br>
     ]]></description>
 
     <change-notes><![CDATA[
-      * Bug fixes<br>
-      * Improved search<br>
-      * Displayed full value of saved parameter<br>
+      * Choose and delete several files<br>
+      * Name of thread on call tree page is fixed<br>
+      * Fixed bug when adding new pattern to configuration<br>
+      * Always save type of thrown exception<br>
+      * Display only method nodes on flamegraph<br>
     ]]>
     </change-notes>
 
