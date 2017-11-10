@@ -8,7 +8,7 @@
           <option name="destination" value="$MODULE_DIR$/../../build/kotlin-classes/main" />
           <option name="noStdlib" value="true" />
           <option name="noReflect" value="true" />
-          <option name="moduleName" value="java-profiling-plugin_main" />
+          <option name="moduleName" value="java-profiling-plugin" />
           <option name="jvmTarget" value="1.8" />
           <option name="addCompilerBuiltIns" value="true" />
           <option name="loadBuiltInsFromDependencies" value="true" />
@@ -20,7 +20,6 @@
           <option name="pluginClasspaths">
             <array />
           </option>
-          <option name="version" value="true" />
           <option name="coroutinesWarn" value="true" />
         </compilerArguments>
       </configuration>
@@ -84,7 +83,7 @@
     </orderEntry>
     <orderEntry type="module" module-name="configuration_main" />
     <orderEntry type="module" module-name="protobuf_main" />
-    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jre8:1.1.4-3" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jre8:1.1.51" level="project" />
     <orderEntry type="module-library">
       <library name="Gradle: com.jetbrains:idea:172.3317.76">
         <CLASSES>
@@ -337,7 +336,7 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="Gradle: org.jetbrains:annotations:13.0" level="project" />
-    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jre7:1.1.4-3" level="project" />
-    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.1.4-3" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jre7:1.1.51" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.1.51" level="project" />
   </component>
 </module>

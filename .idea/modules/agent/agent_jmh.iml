@@ -36,20 +36,20 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="protobuf_main" />
     <orderEntry type="module" module-name="configuration_main" />
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../../protobuf/libs/protobuf-java-kornilova-l-3.3.0.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
     <orderEntry type="library" name="Gradle: org.openjdk.jmh:jmh-core:1.12" level="project" />
     <orderEntry type="module-library">
       <library>
         <CLASSES>
           <root url="jar://$MODULE_DIR$/../../../lib/annotations-java8.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../../../protobuf/libs/protobuf-java-kornilova-l-3.3.0.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
