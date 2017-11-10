@@ -24,7 +24,7 @@ public abstract class AccumulativeTreeRequestHandler extends TreeRequestHandler 
     }
 
     @Override
-    public void process() {
+    public void doActualProcess() {
         sendProto(context, getFilteredTree());
     }
 

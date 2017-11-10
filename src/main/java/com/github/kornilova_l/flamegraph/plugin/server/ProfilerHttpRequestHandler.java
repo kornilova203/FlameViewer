@@ -66,7 +66,7 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
         f.addListener(ChannelFutureListener.CLOSE);
     }
 
-    private static void sendStatus(HttpResponseStatus status, Channel channel) {
+    public static void sendStatus(HttpResponseStatus status, Channel channel) {
         DefaultFullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, status);
         HttpUtil.setContentLength(response, 0);
         Responses.addCommonHeaders(response);

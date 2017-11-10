@@ -27,6 +27,10 @@ function getAndShowTreesPreview() {
 
         request.onload = function () {
             common.hideLoader(0);
+            if (request.status === 400) { // if file was not found
+                common.showMessage("Choose file");
+                return;
+            }
             common.showLoader(constants.loaderMessages.deserialization, () => {
                 const arrayBuffer = request.response;
                 const byteArray = new Uint8Array(arrayBuffer);

@@ -14,7 +14,7 @@ public class HotSpotsRequestHandler extends TreeRequestHandler {
     }
 
     @Override
-    public void process() {
+    public void doActualProcess() {
         if (logFile == null) {
             return;
         }
