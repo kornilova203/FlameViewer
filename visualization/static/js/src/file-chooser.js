@@ -214,6 +214,7 @@ function deleteSelectedFilesDecorator($list, selectedFilesIds, filesList) {
         selectedFilesIds.clear();
         lastDeselectedFileId = null;
         lastSelectedFileId = null;
+        constants.$removeFilesButton.removeClass("active-gray-button");
     }
 }
 
