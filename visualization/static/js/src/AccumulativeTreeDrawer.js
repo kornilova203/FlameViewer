@@ -130,11 +130,12 @@ class AccumulativeTreeDrawer {
      * @param {Number} offsetX
      * @param {Boolean} isMostFirst
      * @param {createjs.Stage} stage
+     * @param {number} zoomedNodeDepth
      * @private
      */
-    _drawNode(node, color, scaleX, offsetX, isMostFirst, stage) {
+    _drawNode(node, color, scaleX, offsetX, isMostFirst, stage, zoomedNodeDepth) {
         const shape = this._drawRectangle(node, color, scaleX, offsetX, isMostFirst, stage);
-        if (scaleX * this.currentCanvasWidth > 4) {
+        if (scaleX * this.currentCanvasWidth > 4 || node.depth - zoomedNodeDepth <= 2) {
             this.listenScale(node, shape);
             this._addShowPopupEvent(shape, offsetX + this.canvasOffset, node.depth, node);
             this._drawLabel(AccumulativeTreeDrawer._getLabelText(node), shape, scaleX, offsetX, node.depth, stage);
@@ -353,7 +354,7 @@ class AccumulativeTreeDrawer {
     _expandParents(node) {
         let parent = node.parent;
         while (parent !== this.baseNode) {
-            this._drawNode(parent, ZOOMED_PARENT_COLOR, 1, 0, true, this.zoomedStage);
+            this._drawNode(parent, ZOOMED_PARENT_COLOR, 1, 0, true, this.zoomedStage, node.depth);
             parent = parent.parent;
         }
     }
@@ -376,6 +377,7 @@ class AccumulativeTreeDrawer {
      * @param {createjs.Stage} stage
      * @param {Boolean} saveNodesToList
      * @param {Boolean} saveOriginalColor
+     * @param {number} zoomedNodeDepth
      * @private
      * @return {Number} max depth
      */
@@ -386,7 +388,8 @@ class AccumulativeTreeDrawer {
                           isMostFirst,
                           stage,
                           saveNodesToList,
-                          saveOriginalColor) {
+                          saveOriginalColor,
+                          zoomedNodeDepth) {
         if (saveNodesToList) {
             this.currentlyShownNodes.push(node);
         }
@@ -396,7 +399,8 @@ class AccumulativeTreeDrawer {
             this._countScaleXForNode(node) / newFullScaleX,
             (this._countOffsetXForNode(node) - newOffsetX) / newFullScaleX,
             isMostFirst,
-            stage
+            stage,
+            zoomedNodeDepth
         );
         const children = node.getNodesList();
         for (let i = 0; i < children.length; i++) {
@@ -408,7 +412,8 @@ class AccumulativeTreeDrawer {
                 i === 0 && isMostFirst,
                 stage,
                 saveNodesToList,
-                saveOriginalColor
+                saveOriginalColor,
+                zoomedNodeDepth
             );
         }
     }
@@ -440,7 +445,8 @@ class AccumulativeTreeDrawer {
                 true,
                 this.stage,
                 false,
-                true
+                true,
+                0
             );
         }
         this.stage.update();
@@ -671,7 +677,8 @@ class AccumulativeTreeDrawer {
                 true,
                 this.zoomedStage,
                 true,
-                false
+                false,
+                node.depth
             );
             this._addResetButton();
             if (this.isHighlightedFunction !== null) {
