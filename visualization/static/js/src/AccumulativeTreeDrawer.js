@@ -135,7 +135,7 @@ class AccumulativeTreeDrawer {
      */
     _drawNode(node, color, scaleX, offsetX, isMostFirst, stage, zoomedNodeDepth) {
         const shape = this._drawRectangle(node, color, scaleX, offsetX, isMostFirst, stage);
-        if (scaleX * this.currentCanvasWidth > 4 || node.depth - zoomedNodeDepth <= 2) {
+        if (scaleX * this.currentCanvasWidth > 4 || node.depth - zoomedNodeDepth <= 1) {
             this.listenScale(node, shape);
             this._addShowPopupEvent(shape, offsetX + this.canvasOffset, node.depth, node);
             this._drawLabel(AccumulativeTreeDrawer._getLabelText(node), shape, scaleX, offsetX, node.depth, stage);
