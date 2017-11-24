@@ -17,14 +17,23 @@ class AgentConfigurationManager {
 
     AgentConfigurationManager(List<String> methodConfigLines) {
         configuration = new Configuration(methodConfigLines);
-        System.out.println("Configuration:");
-        System.out.println("Including methods: ");
-        for (MethodConfig methodConfig : configuration.getIncludingMethodConfigs()) {
-            System.out.println("\t" + methodConfig);
-        }
-        System.out.println("Excluding methods: ");
-        for (MethodConfig methodConfig : configuration.getExcludingMethodConfigs()) {
-            System.out.println("\t" + methodConfig);
+        if (configuration.getIncludingMethodConfigs().size() == 0 &&
+                configuration.getExcludingMethodConfigs().size() == 0) {
+            System.out.println("Configuration of profiler is empty. Methods will not be instrumented.");
+        } else {
+            System.out.println("Configuration:");
+            if (configuration.getIncludingMethodConfigs().size() != 0) {
+                System.out.println("Including patterns: ");
+                for (MethodConfig methodConfig : configuration.getIncludingMethodConfigs()) {
+                    System.out.println("\t" + methodConfig);
+                }
+            }
+            if (configuration.getExcludingMethodConfigs().size() != 0) {
+                System.out.println("Excluding patterns: ");
+                for (MethodConfig methodConfig : configuration.getExcludingMethodConfigs()) {
+                    System.out.println("\t" + methodConfig);
+                }
+            }
         }
     }
 
