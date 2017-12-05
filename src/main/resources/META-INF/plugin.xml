@@ -1,18 +1,14 @@
 <idea-plugin>
     <id>com.github.com.kornilovaL</id>
     <name>Flamegraph Visualizer</name>
-    <version>1.5</version>
+    <version>1.6</version>
 
     <description><![CDATA[
       Plugin for flamegraph visualization<br>
     ]]></description>
 
     <change-notes><![CDATA[
-      * Choose and delete several files<br>
-      * Name of thread on call tree page is fixed<br>
-      * Fixed bug when adding new pattern to configuration<br>
-      * Always save type of thrown exception<br>
-      * Display only method nodes on flamegraph<br>
+      * Small methods are now zoomable if they are located above zoomed node
     ]]>
     </change-notes>
 
@@ -68,7 +64,6 @@
     </actions>
     <project-components>
         <component>
-            <interface-class>com.intellij.openapi.components.PersistentStateComponent</interface-class>
             <implementation-class>com.github.kornilova_l.flamegraph.plugin.configuration.ConfigStorage
             </implementation-class>
         </component>

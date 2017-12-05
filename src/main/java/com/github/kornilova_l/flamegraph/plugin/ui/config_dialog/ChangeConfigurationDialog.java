@@ -2,7 +2,7 @@ package com.github.kornilova_l.flamegraph.plugin.ui.config_dialog;
 
 import com.github.kornilova_l.flamegraph.configuration.Configuration;
 import com.github.kornilova_l.flamegraph.configuration.MethodConfig;
-import com.github.kornilova_l.flamegraph.plugin.configuration.PluginConfigManager;
+import com.github.kornilova_l.flamegraph.plugin.configuration.ConfigStorage;
 import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.decorator_actions.AddNodeActionButton;
 import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.decorator_actions.CopyAction;
 import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.decorator_actions.RemoveNodeActionButton;
@@ -68,7 +68,8 @@ public class ChangeConfigurationDialog extends DialogWrapper {
     @Nullable
     @Override
     protected JComponent createCenterPanel() {
-        trueConfiguration = PluginConfigManager.getConfiguration(project);
+        trueConfiguration = project.getComponent(ConfigStorage.class).getState();
+        assert trueConfiguration != null;
         tempConfiguration = new Configuration(trueConfiguration);
 
         ConfigurationForm configurationForm = new ConfigurationForm();

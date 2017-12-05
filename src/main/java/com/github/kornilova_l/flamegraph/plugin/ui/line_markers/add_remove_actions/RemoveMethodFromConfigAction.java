@@ -2,6 +2,7 @@ package com.github.kornilova_l.flamegraph.plugin.ui.line_markers.add_remove_acti
 
 import com.github.kornilova_l.flamegraph.configuration.Configuration;
 import com.github.kornilova_l.flamegraph.configuration.MethodConfig;
+import com.github.kornilova_l.flamegraph.plugin.configuration.ConfigStorage;
 import com.github.kornilova_l.flamegraph.plugin.configuration.PluginConfigManager;
 import com.github.kornilova_l.flamegraph.plugin.ui.line_markers.LineMarkersHolder;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -28,7 +29,8 @@ public class RemoveMethodFromConfigAction extends AddMethodToConfigAction {
         }
         assert event.getProject() != null;
         LineMarkersHolder lineMarkersHolder = project.getComponent(LineMarkersHolder.class);
-        Configuration configuration = PluginConfigManager.getConfiguration(event.getProject());
+        Configuration configuration = event.getProject().getComponent(ConfigStorage.class).getState();
+        assert configuration != null;
         MethodConfig methodConfig = PluginConfigManager.newMethodConfig(psiMethod);
 
         if (configuration.isMethodExcluded(methodConfig)) {

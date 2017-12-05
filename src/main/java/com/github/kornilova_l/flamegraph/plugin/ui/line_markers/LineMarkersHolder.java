@@ -1,6 +1,7 @@
 package com.github.kornilova_l.flamegraph.plugin.ui.line_markers;
 
 import com.github.kornilova_l.flamegraph.configuration.Configuration;
+import com.github.kornilova_l.flamegraph.plugin.configuration.ConfigStorage;
 import com.github.kornilova_l.flamegraph.plugin.configuration.PluginConfigManager;
 import com.intellij.openapi.components.AbstractProjectComponent;
 import com.intellij.openapi.editor.Document;
@@ -30,7 +31,7 @@ public class LineMarkersHolder extends AbstractProjectComponent {
 
     protected LineMarkersHolder(Project project) {
         super(project);
-        configuration = PluginConfigManager.getConfiguration(myProject);
+        configuration = myProject.getComponent(ConfigStorage.class).getState();
     }
 
     public static MarkupModelEx getMarkupModel(Document document, Project project) {

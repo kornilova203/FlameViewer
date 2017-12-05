@@ -3,8 +3,6 @@ package com.github.kornilova_l.flamegraph.plugin.configuration;
 import com.github.kornilova_l.flamegraph.configuration.Configuration;
 import com.github.kornilova_l.flamegraph.configuration.MethodConfig;
 import com.github.kornilova_l.flamegraph.proto.TreeProtos;
-import com.intellij.openapi.components.PersistentStateComponent;
-import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -13,19 +11,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Map;
 import java.util.Objects;
 
 public class PluginConfigManager {
-    private static final Map<Project, Configuration> states = new HashMap<>();
-
-    public static Configuration getConfiguration(@NotNull Project project) {
-        return states.computeIfAbsent(
-                project,
-                k -> ((ConfigStorage) project.getComponent(PersistentStateComponent.class)).getState());
-    }
 
     public static void exportConfig(@NotNull File file, @NotNull Configuration configuration) {
         try (OutputStream outputStream = new FileOutputStream(file)) {

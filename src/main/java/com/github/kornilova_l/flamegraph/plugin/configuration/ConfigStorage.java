@@ -5,7 +5,7 @@ import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.State;
 
 @State(name = "flamegraph-profiler")
-class ConfigStorage implements PersistentStateComponent<Configuration> {
+public class ConfigStorage implements PersistentStateComponent<Configuration> {
     Configuration configuration;
 
     public ConfigStorage() {
