@@ -697,6 +697,8 @@ class AccumulativeTreeDrawer {
     }
 
     /**
+     * Returns width that is available for canvas
+     * (window width minus file menu and minus paddings)
      * @return {Number}
      */
     _getCanvasWidthForSection() {

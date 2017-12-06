@@ -312,15 +312,23 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
     _shiftIfHidden(offsetX) {
         offsetX += this.zoomedCanvasMargin;
         //noinspection JSValidateTypes
-        if (offsetX < this.$callTreeWrapper.scrollLeft()) {
+        const leftCornerOffset = this.$callTreeWrapper.scrollLeft();
+        if (offsetX < leftCornerOffset) { // if left corner is hidden
             //noinspection JSValidateTypes
-            return this.$callTreeWrapper.scrollLeft();
+            return leftCornerOffset;
         } else {
             offsetX += CANVAS_PADDING;
             const rightCorner = super._getRightCornerPos(offsetX);
-            return rightCorner > this.availableWidth + CANVAS_PADDING * 2 ?
-                offsetX - (rightCorner - this.availableWidth - CANVAS_PADDING * 2) :
-                offsetX;
+            if (this.zoomedNode !== null) { // if zoomed
+                const canvasRightCorner = leftCornerOffset + this._getCanvasWidthForSection() + CANVAS_PADDING * 2;
+                return rightCorner > canvasRightCorner ? // if right corner is hidden
+                    offsetX - (rightCorner - canvasRightCorner) :
+                    offsetX;
+            } else {
+                return rightCorner > this.availableWidth + CANVAS_PADDING * 2 ? // if right corner is hidden
+                    offsetX - (rightCorner - this.availableWidth - CANVAS_PADDING * 2) :
+                    offsetX;
+            }
         }
     }
 }
