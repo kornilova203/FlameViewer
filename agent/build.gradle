@@ -28,15 +28,23 @@ dependencies {
     compile fileTree(dir: '../lib', include: ['annotations-java8.jar'])
 }
 
-jar {
+task agentJar(type: Jar) {
     from {
         configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
     }
+    from sourceSets.main.output
+    agentJar.exclude '**/proxy/**'
     manifest {
         attributes "Premain-Class": "com.github.kornilova_l.flamegraph.javaagent.agent.Agent"
     }
     archiveName = 'javaagent.jar'
     includeEmptyDirs = false
+}
+
+task proxyJar(type: Jar) {
+    from sourceSets.main.output
+    exclude '**/javaagent/**'
+    proxyJar.archiveName = 'proxy.jar'
 }
 
 jmh {

@@ -43,10 +43,10 @@ gradlew runIdea
 
 Linux:
 ```bash
-./gradlew :agent:jar && \
+./gradlew :agent:agentJar && \
+./gradlew :agent:proxyJar && \
 ./gradlew copyAgent && \
 ./gradlew copyStatic && \
-./gradlew copyIcons && \
 ./gradlew runIdea
 
 ```

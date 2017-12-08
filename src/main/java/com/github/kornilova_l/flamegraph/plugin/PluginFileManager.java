@@ -11,6 +11,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
@@ -24,7 +26,6 @@ import static com.github.kornilova_l.flamegraph.plugin.server.ProfilerHttpReques
 public class PluginFileManager {
     private static final Logger LOG = Logger.getInstance(PluginFileManager.class);
 
-    private static final boolean isWindows = System.getProperty("os.name").startsWith("Windows");
     private static final String PLUGIN_DIR_NAME = "flamegraph-profiler";
     private static final String LOG_DIR_NAME = "log";
     private static final String CONFIG_DIR_NAME = "configuration";
@@ -225,15 +226,15 @@ public class PluginFileManager {
         return projectDirPath;
     }
 
-    @NotNull
-    public String getPathToAgent() {
-        String path = getClass().getResource("/javaagent.jar")
-                .getPath()
-                .replaceAll("%20", " ");
-        if (isWindows) {
-            path = path.substring(1, path.length()).replaceAll("/", "\\\\");
+    @Nullable
+    public String getPathToJar(String jarName) {
+        URL url = getClass().getResource("/" + jarName);
+        try {
+            return Paths.get(url.toURI()).toString();
+        } catch (URISyntaxException e) {
+            LOG.error(e);
         }
-        return path;
+        return null;
     }
 
     @Nullable

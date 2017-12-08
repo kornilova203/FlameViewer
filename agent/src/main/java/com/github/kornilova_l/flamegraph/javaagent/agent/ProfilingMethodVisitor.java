@@ -14,6 +14,7 @@ import java.util.regex.Pattern;
 class ProfilingMethodVisitor extends AdviceAdapter {
     private final static Pattern returnTypePattern = Pattern.compile("(?<=\\)).*"); // (?<=\)).*
     private final static String LOGGER_PACKAGE_NAME = "com/github/kornilova_l/flamegraph/javaagent/logger/";
+    private final static String PROXY_PACKAGE_NAME = "com/github/kornilova_l/flamegraph/proxy/";
     private final String methodName;
     private final String className;
     private final boolean hasSystemCL;
@@ -108,7 +109,7 @@ class ProfilingMethodVisitor extends AdviceAdapter {
                     "(J[Ljava/lang/Object;)Lcom/github/kornilova_l/flamegraph/javaagent/logger/event_data_storage/StartData;",
                     false);
         } else {
-            mv.visitMethodInsn(INVOKESTATIC, LOGGER_PACKAGE_NAME + "Proxy",
+            mv.visitMethodInsn(INVOKESTATIC, PROXY_PACKAGE_NAME + "Proxy",
                     "createStartData",
                     "(J[Ljava/lang/Object;)Lcom/github/kornilova_l/flamegraph/javaagent/logger/event_data_storage/StartData;",
                     false);
@@ -171,7 +172,7 @@ class ProfilingMethodVisitor extends AdviceAdapter {
             mv.visitMethodInsn(INVOKESTATIC, LOGGER_PACKAGE_NAME + "LoggerQueue", "addToQueue",
                     description, false);
         } else {
-            mv.visitMethodInsn(INVOKESTATIC, LOGGER_PACKAGE_NAME + "Proxy", "addToQueue",
+            mv.visitMethodInsn(INVOKESTATIC, PROXY_PACKAGE_NAME + "Proxy", "addToQueue",
                     description, false);
         }
     }
@@ -206,13 +207,6 @@ class ProfilingMethodVisitor extends AdviceAdapter {
     private void createObjArray(int arraySize) {
         getIConst(arraySize);
         mv.visitTypeInsn(ANEWARRAY, "java/lang/Object");
-    }
-
-    private void loadThisToArr() {
-        mv.visitInsn(DUP); // array reference
-        getIConst(0); // index of element
-        mv.visitVarInsn(ALOAD, 0);
-        mv.visitInsn(AASTORE); // load obj to array
     }
 
     private void paramToObj(String paramDesc, int pos) {

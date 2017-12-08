@@ -15,7 +15,7 @@ buildscript {
 }
 
 plugins {
-    id "org.jetbrains.intellij" version "0.2.17"
+    id "org.jetbrains.intellij" version "0.1.10"
 }
 apply plugin: 'org.jetbrains.intellij'
 
@@ -51,17 +51,12 @@ dependencies {
 
 task copyStatic(type: Copy) {
     from 'visualization/static'
-    into 'build/idea-sandbox/plugins/java-profiling-plugin/classes/static'
-}
-
-task copyIcons(type: Copy) {
-    from 'icons'
-    into 'build/idea-sandbox/plugins/java-profiling-plugin/classes/icons'
+    into 'build/classes/main/static'
 }
 
 task copyAgent(type: Copy) {
-    from 'agent/build/libs/javaagent.jar'
-    into 'build/idea-sandbox/plugins/java-profiling-plugin/classes'
+    from 'agent/build/libs'
+    into 'build/classes/main'
 }
 
 task('prepareAndRunIde', dependsOn: [copyStatic, build, jar]) {

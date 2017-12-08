@@ -1,10 +1,16 @@
-package com.github.kornilova_l.flamegraph.javaagent.logger;
+package com.github.kornilova_l.flamegraph.proxy;
 
+import com.github.kornilova_l.flamegraph.javaagent.logger.LoggerQueue;
 import com.github.kornilova_l.flamegraph.javaagent.logger.event_data_storage.StartData;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+/**
+ * This class is added to separate jar file
+ * this jar file is added to classpath when program is profiled
+ * It is used for the classes that do not have the system classloader in the chain
+ */
 @SuppressWarnings("unused")
 public class Proxy {
     private static final String loggerQueueClassName = "com.github.kornilova_l.flamegraph.javaagent.logger.LoggerQueue";
@@ -29,6 +35,7 @@ public class Proxy {
                                   String desc,
                                   boolean isStatic,
                                   String savedParameters) {
+        System.out.println("I am a proxy");
         /*
         following if block is added as a reminder to update proxy if addToQueue methods was changed
         (it cannot be compiled if not updated),
