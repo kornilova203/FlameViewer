@@ -150,12 +150,12 @@ public class PluginFileManager {
         return getLogFile(projectName, fileName);
     }
 
-    public File getConfigurationFile(String projectName) {
+    public File getConfigurationFile(@NotNull String projectName) {
         Path path = Paths.get(configDirPath.toString(), projectName + ".config");
         return new File(path.toString());
     }
 
-    public File createLogFile(String projectName, String configurationName) {
+    public File createLogFile(@NotNull String projectName, @NotNull String configurationName) {
         Path logDir = getLogDirPath(projectName);
         Path logFile = Paths.get(logDir.toString(),
                 configurationName + "-" + new SimpleDateFormat("yyyy-MM-dd-HH_mm_ss").format(new Date()) + ".ser");
