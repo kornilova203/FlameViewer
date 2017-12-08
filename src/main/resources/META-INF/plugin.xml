@@ -34,22 +34,19 @@
     </extensions>
 
     <extensions defaultExtensionNs="com.github.com.kornilovaL">
-        <profilerToFlamegraphConverter implementation="com.github.kornilova_l.flamegraph.plugin.converters.jmc.JMCConverter"/>
+        <profilerToFlamegraphConverter
+                implementation="com.github.kornilova_l.flamegraph.plugin.converters.jmc.JMCConverter"/>
     </extensions>
 
     <actions>
-        <group id="java-profiling-plugin.ToolsMenu" description="">
-            <separator/>
+        <group id="com.github.kornilova_l.flamegraph" text="Flamegraph Profiler" popup="true" icon="ProfilerIcons.flameIcon">
             <action class="com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.ShowProfilerDialogAction"
-                    id="flamegraph-profiler.ShowProfilerDialog" text="Edit Configuration..."
-                    icon="ProfilerIcons.flameIcon"/>
+                    id="flamegraph-profiler.ShowProfilerDialog" text="Edit Configuration..."/>
             <action id="java-profiling-plugin.server"
                     class="com.github.kornilova_l.flamegraph.plugin.server.ShowLastResultAction"
-                    text="Open Results..." description="" icon="ProfilerIcons.flameIcon"/>
+                    text="Open Results..." description=""/>
             <action class="com.github.kornilova_l.flamegraph.plugin.server.ShowUploadFilePageAction"
-                    id="flamegraph-profiler.ShowUploadFilePageAction" text="Upload File..."
-                    icon="ProfilerIcons.flameIcon"/>
-            <separator/>
+                    id="flamegraph-profiler.ShowUploadFilePageAction" text="Upload File..."/>
             <add-to-group group-id="ToolsMenu" anchor="last"/>
         </group>
         <group>
