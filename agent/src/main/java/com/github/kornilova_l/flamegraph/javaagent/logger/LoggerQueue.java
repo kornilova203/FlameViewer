@@ -6,11 +6,12 @@ import com.github.kornilova_l.flamegraph.javaagent.logger.event_data_storage.Sta
 import com.github.kornilova_l.flamegraph.javaagent.logger.event_data_storage.ThrowableEventData;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class LoggerQueue {
     private static LoggerQueue loggerQueue;
     private final ConcurrentLinkedQueue<MethodEventData> queue = new ConcurrentLinkedQueue<>();
-    private int countEventsAdded = 0;
+    private AtomicInteger countEventsAdded = new AtomicInteger(0);
 
     /**
      * Method is called by javaagent.
@@ -24,10 +25,16 @@ public class LoggerQueue {
         return loggerQueue;
     }
 
+    /**
+     * This method is called concurrently
+     */
     public static StartData createStartData(long startTime, Object[] parameters) {
         return new StartData(startTime, parameters);
     }
 
+    /**
+     * This method is called concurrently
+     */
     public static void addToQueue(Object retVal,
                                   long startTime,
                                   long duration,
@@ -42,6 +49,9 @@ public class LoggerQueue {
                 methodName, desc, isStatic, parameters, retVal, savedParameters));
     }
 
+    /**
+     * This method is called concurrently
+     */
     public static void addToQueue(Throwable throwable,
                                   boolean saveMessage,
                                   long startTime,
@@ -61,12 +71,15 @@ public class LoggerQueue {
         return queue;
     }
 
+    /**
+     * This method is called concurrently
+     */
     public void addToQueue(MethodEventData methodEventData) {
-        countEventsAdded++;
+        countEventsAdded.incrementAndGet();
         queue.add(methodEventData);
     }
 
     int getEventsAdded() {
-        return countEventsAdded;
+        return countEventsAdded.get();
     }
 }
