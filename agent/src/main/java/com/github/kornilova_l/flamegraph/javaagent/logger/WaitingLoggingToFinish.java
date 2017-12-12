@@ -15,7 +15,7 @@ public class WaitingLoggingToFinish extends Thread {
 
     @Override
     public void run() {
-        while (logger.loggerQueue.queue.isEmpty()) {
+        while (!logger.loggerQueue.queue.isEmpty()) {
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
