@@ -18,6 +18,7 @@ plugins {
     id "org.jetbrains.intellij" version "0.1.10"
 }
 apply plugin: 'org.jetbrains.intellij'
+apply plugin: "idea"
 
 allprojects {
     apply plugin: 'java'
@@ -36,6 +37,15 @@ configurations {
     intellij.downloadSources = false
     intellij.version = "172.3317.76"
     intellij.pluginName = "Flamegraph Profiler"
+}
+
+sourceSets.main.java.srcDir new File('protobuf/src/main/gen')
+
+idea {
+    module {
+        // Marks the already(!) added srcDir as "generated"
+        generatedSourceDirs += file('protobuf/src/main/gen')
+    }
 }
 
 dependencies {
