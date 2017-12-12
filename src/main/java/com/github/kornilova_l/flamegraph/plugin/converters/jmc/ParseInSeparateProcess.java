@@ -18,10 +18,6 @@ public class ParseInSeparateProcess {
         }
         File file = new File(fileName);
         System.out.println(file);
-        try {
-            new FlightRecorderConverterEight(file).writeTo(file);
-        } catch (Exception e) { // if it is java 9
-            new FlightRecorderConverterNine(file).writeTo(file);
-        }
+        new FlightRecorderConverter(file).writeTo(file);
     }
 }

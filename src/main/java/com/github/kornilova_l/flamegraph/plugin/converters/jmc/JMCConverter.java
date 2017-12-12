@@ -21,7 +21,7 @@ import java.util.zip.ZipException;
 class JMCConverter extends ProfilerToFlamegraphConverter {
     private static final Logger LOG = Logger.getInstance(ProfilerToFlamegraphConverter.class);
     @SuppressWarnings("FieldCanBeLocal")
-    private int allowedSize = 20000000;
+    private int allowedSize = 20000000; // in bytes. It is 20MB
 
     @Override
     public boolean isSupported(@NotNull File file) {
@@ -32,24 +32,28 @@ class JMCConverter extends ProfilerToFlamegraphConverter {
     @Override
     public Map<String, Integer> convert(@NotNull File file) {
         byte[] unzippedBytes = getUnzippedBytes(file);
+        File newFile = getFileNear(file);
+        saveToFile(newFile, unzippedBytes);
         if (unzippedBytes.length > allowedSize) {
             LOG.info("File " + file + " is too big. It will be converted in separate process");
-            saveToFile(file, unzippedBytes);
-            startProcess(file);
+            startProcess(newFile);
         } else {
-            try {
-                new FlightRecorderConverterEight(new ByteArrayInputStream(unzippedBytes)).writeTo(file);
-            } catch (RuntimeException e) { // if it is a java9 recording
-                LOG.debug(e);
-                saveToFile(file, unzippedBytes);
-                new FlightRecorderConverterNine(file).writeTo(file);
-            }
+            new FlightRecorderConverter(newFile).writeTo(newFile);
         }
-        Map<String, Integer> res = StacksParser.getStacks(file);
+        Map<String, Integer> res = StacksParser.getStacks(newFile);
+        boolean isDeleted = newFile.delete();
+        if (!isDeleted) {
+            LOG.warn("File " + newFile + " was not deleted");
+        }
         return res != null ? res : new HashMap<>();
     }
 
-    private void saveToFile(@NotNull File file, byte[] unzippedBytes) {
+    static File getFileNear(@NotNull File file) {
+        Path dir = Paths.get(file.toURI()).toAbsolutePath().getParent();
+        return Paths.get(dir.toString(), "temp-" + System.currentTimeMillis()).toFile();
+    }
+
+    static void saveToFile(@NotNull File file, byte[] unzippedBytes) {
         try (OutputStream outputStream = new FileOutputStream(file)) {
             outputStream.write(unzippedBytes);
         } catch (IOException e) {
@@ -59,15 +63,18 @@ class JMCConverter extends ProfilerToFlamegraphConverter {
 
     private void startProcess(File file) {
         ProcessBuilder processBuilder = createProcessBuilder(file);
-        String dirPath = getDirPath(FlightRecorderConverterEight.class);
+        String dirPath = getDirPath(FlightRecorderConverter.class);
+        System.out.println(dirPath);
         if (dirPath == null) {
+            LOG.error("Cannot find directory of FlightRecorderConverter.class. Please submit the report to https://github.com/kornilova-l/flamegraph-visualizer/issues");
             return;
         }
+        processBuilder.redirectError(new File("error.txt"));
         processBuilder.directory(new File(dirPath));
         try {
             processBuilder.start().waitFor();
         } catch (InterruptedException | IOException e) {
-            e.printStackTrace();
+            LOG.error(e);
         }
     }
 
@@ -83,8 +90,8 @@ class JMCConverter extends ProfilerToFlamegraphConverter {
                         + delimiter +
                         getPathToJar("flight-recorder-parser-for-java-9.jar")
                         + delimiter,
-                ParseInSeparateProcess.class.getName(),
-                file.getPath()
+                ParseInSeparateProcess.class.getCanonicalName(),
+                Paths.get(file.toURI()).toAbsolutePath().toString()
         );
     }
 
@@ -132,7 +139,7 @@ class JMCConverter extends ProfilerToFlamegraphConverter {
         return path.toString() + ".class";
     }
 
-    private byte[] getBytes(File file) {
+    private static byte[] getBytes(File file) {
         try (InputStream inputStream = new FileInputStream(file)) {
             byte[] bytes = new byte[inputStream.available()];
             //noinspection ResultOfMethodCallIgnored
@@ -144,7 +151,7 @@ class JMCConverter extends ProfilerToFlamegraphConverter {
         return new byte[0];
     }
 
-    private byte[] getUnzippedBytes(File file) {
+    static byte[] getUnzippedBytes(File file) {
         try (FileInputStream inputStream = new FileInputStream(file)) {
             try (GZIPInputStream gzipInputStream = new GZIPInputStream(inputStream)) {
                 ByteArrayOutputStream bout = new ByteArrayOutputStream();

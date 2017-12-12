@@ -30,6 +30,8 @@ Hot Spots
 ## Compiling
 Plugin will be soon on plugins.jetbrains.com
 
+Build jar with [Flight Recorder parser](https://github.com/kornilova-l/flight-recorder-parser-for-java-9) and place it in lib/ directory.
+
 See [js files](/visualization/README.md)
 
 Windows:
