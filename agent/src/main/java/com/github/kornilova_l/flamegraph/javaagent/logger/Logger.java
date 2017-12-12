@@ -14,6 +14,7 @@ public class Logger implements Runnable {
     private File file;
     private LoggerQueue loggerQueue = LoggerQueue.getInstance();
     private long lastLogTime;
+    private long countEventsAdded = 0L;
 
     public Logger(File file) {
         this.file = file;
@@ -27,7 +28,7 @@ public class Logger implements Runnable {
     }
 
     private void printStatus() {
-        System.out.println("Methods count: " + loggerQueue.getEventsAdded());
+        System.out.println("Methods count: " + countEventsAdded);
     }
 
     private void writeToFile(List<EventProtos.Event> events, OutputStream outputStream) {
@@ -80,6 +81,7 @@ public class Logger implements Runnable {
         try (OutputStream outputStream = new FileOutputStream(file, true)) {
             ConcurrentLinkedQueue<MethodEventData> queue = loggerQueue.getQueue();
             while (!queue.isEmpty()) {
+                countEventsAdded++;
                 writeToFile(queue.remove().getEvents(), outputStream);
             }
         } catch (IOException e) {
