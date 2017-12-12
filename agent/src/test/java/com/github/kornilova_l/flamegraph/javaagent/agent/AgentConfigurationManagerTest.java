@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 
@@ -26,29 +27,30 @@ public class AgentConfigurationManagerTest {
     }
 
     @Test
-    public void findIncludingConfigsForClass() throws Exception {
-        List<MethodConfig> config = new ArrayList<>();
-        config.add(new MethodConfig("samples.*", "main", "(*)"));
-        config.add(new MethodConfig(
+    public void findIncludingConfigsForClass() {
+        List<MethodConfig> expected = new ArrayList<>();
+        expected.add(new MethodConfig("samples.*", "main", "(*)"));
+        expected.add(new MethodConfig(
                 "samples.CheckIncomingCalls",
                 "fun1",
                 "(boolean)"
         ));
-        config.add(new MethodConfig(
+        expected.add(new MethodConfig(
                 "samples.CheckIncomingCalls",
                 "fun2",
                 "(int+, *)"
         ));
-        config.add(new MethodConfig(
+        expected.add(new MethodConfig(
                 "samples.CheckIncomingCalls",
                 "fun2",
                 "(int, String+)+"
         ));
-        assertTrue(config.equals(configurationManager.findIncludingConfigs("samples/CheckIncomingCalls")));
+        assertEquals(String.join("\n", expected.stream().map(MethodConfig::toString).collect(Collectors.toList())),
+                String.join("\n", configurationManager.findIncludingConfigs("samples/CheckIncomingCalls").stream().map(MethodConfig::toString).collect(Collectors.toList())));
     }
 
     @Test
-    public void newMethodConfig() throws Exception {
+    public void newMethodConfig() {
         assertEquals("MyClass.someMethod()",
                 AgentConfigurationManager.newMethodConfig(
                         "MyClass",
@@ -110,7 +112,7 @@ public class AgentConfigurationManagerTest {
     }
 
     @Test
-    public void isMethodExcluded() throws Exception {
+    public void isMethodExcluded() {
         assertFalse(configurationManager.isMethodExcluded(
                 new MethodConfig(
                         "samples.CheckIncomingCalls",
@@ -142,7 +144,7 @@ public class AgentConfigurationManagerTest {
     }
 
     @Test
-    public void findIncludingConfigsForMethod() throws Exception {
+    public void findIncludingConfigsForMethod() {
         List<MethodConfig> config = new ArrayList<>();
         config.add(new MethodConfig(
                 "samples.CheckIncomingCalls",

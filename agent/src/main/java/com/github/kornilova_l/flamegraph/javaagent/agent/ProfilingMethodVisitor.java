@@ -165,7 +165,7 @@ class ProfilingMethodVisitor extends AdviceAdapter {
                 description = "(Ljava/lang/Object;JJ[Ljava/lang/Object;Ljava/lang/Thread;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ZLjava/lang/String;)V";
                 break;
             case Throwable:
-                description = "(Ljava/lang/Throwable;ZJJ[Ljava/lang/Object;Ljava/lang/Thread;Ljava/lang/String;Ljava/lang/String;ZLjava/lang/String;Ljava/lang/String;)V";
+                description = "(Ljava/lang/Throwable;ZJJ[Ljava/lang/Object;Ljava/lang/Thread;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ZLjava/lang/String;)V";
                 break;
         }
         if (hasSystemCL) {
@@ -388,8 +388,6 @@ class ProfilingMethodVisitor extends AdviceAdapter {
             loadFalse();
         }
         getCommonExitData();
-        // last two parameters is swapped to avoid ambiguous call
-        mv.visitInsn(SWAP);
         mv.visitLdcInsn(savedParameters);
         addToQueue(Type.Throwable);
     }

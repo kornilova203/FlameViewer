@@ -6,3 +6,4 @@ visualization/node_modules/
 agent/src/test/resources/actual/*
 .idea/
 lib/
+/agent/src/test/resources/expected/

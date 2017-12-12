@@ -78,7 +78,7 @@ public class Proxy {
     }
 
     /**
-     * {@link LoggerQueue#addToQueue(java.lang.Throwable, boolean, long, long, java.lang.Object[], java.lang.Thread, java.lang.String, java.lang.String, boolean, java.lang.String, java.lang.String)}
+     * {@link LoggerQueue#addToQueue(java.lang.Throwable, boolean, long, long, java.lang.Object[], java.lang.Thread, java.lang.String, java.lang.String, java.lang.String, boolean, java.lang.String)}
      */
     public static void addToQueue(Throwable throwable,
                                   boolean saveMessage,
@@ -88,8 +88,8 @@ public class Proxy {
                                   Thread thread,
                                   String className,
                                   String methodName,
-                                  boolean isStatic,
                                   String desc,
+                                  boolean isStatic,
                                   String savedParameters) {
         /*
         following if block is added as a reminder to update proxy if addToQueue methods was changed
@@ -98,7 +98,7 @@ public class Proxy {
          */
         //noinspection ConstantConditions,ConstantIfStatement
         if (false) {
-            LoggerQueue.addToQueue(throwable, saveMessage, startTime, duration, parameters, thread, className, methodName, isStatic, desc, savedParameters);
+            LoggerQueue.addToQueue(throwable, saveMessage, startTime, duration, parameters, thread, className, methodName, desc, isStatic, savedParameters);
         }
         if (addException == null) {
             try {
@@ -112,8 +112,8 @@ public class Proxy {
                         Thread.class,
                         String.class,
                         String.class,
-                        boolean.class,
                         String.class,
+                        boolean.class,
                         String.class);
             } catch (NoSuchMethodException | ExceptionInInitializerError | ClassNotFoundException e) {
                 e.printStackTrace();

@@ -1,7 +1,6 @@
-package com.github.kornilova_l.flamegraph.plugin.server.jfr_converter;
+package com.github.kornilova_l.flamegraph.plugin.server.trees.flamegraph_format_trees;
 
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TestHelper;
-import com.github.kornilova_l.flamegraph.plugin.server.trees.flamegraph_format_trees.StacksOCTreeBuilder;
 import com.github.kornilova_l.flamegraph.proto.TreeProtos;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,12 +17,12 @@ import static org.junit.Assert.assertNotNull;
 public class StacksOCTreeBuilderTest {
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
 
     }
 
     @Test
-    public void getTree() throws Exception {
+    public void getTree() {
         doTest(new File("src/test/resources/StacksOCTreeBuilderTest/test_data01.txt"), new File("src/test/resources/StacksOCTreeBuilderTest/result01.txt"));
 
     }

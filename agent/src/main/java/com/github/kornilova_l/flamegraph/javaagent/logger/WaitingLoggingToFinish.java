@@ -6,6 +6,8 @@ package com.github.kornilova_l.flamegraph.javaagent.logger;
  */
 public class WaitingLoggingToFinish extends Thread {
     private Logger logger;
+
+
     public WaitingLoggingToFinish(String name, Logger logger) {
         super(name);
         this.logger = logger;
@@ -13,6 +15,13 @@ public class WaitingLoggingToFinish extends Thread {
 
     @Override
     public void run() {
-        logger.finish();
+        while (logger.loggerQueue.queue.isEmpty()) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        logger.printStatus();
     }
 }

@@ -2,6 +2,7 @@ package com.github.kornilova_l.flamegraph.javaagent.agent;
 
 import com.github.kornilova_l.flamegraph.configuration.MethodConfig;
 import com.github.kornilova_l.flamegraph.javaagent.TestHelper;
+import com.github.kornilova_l.flamegraph.javaagent.generate.Generator;
 import com.github.kornilova_l.flamegraph.javaagent.generate.test_classes.*;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -51,7 +52,7 @@ public class InstrumentationTest {
     public void basicInstrumentation() {
         /* All test fail because it is not possible to generate exactly same bytecode */
 //        classTest(OneMethod.class, configurationManager, methodConfigs, true);
-        classTest(ThrowsException.class, configurationManager, methodConfigs, true);
+        classTest(ThrowsException.class, ThrowsExceptionExpected.class, configurationManager, methodConfigs, true);
 //        classTest(UsesThreadPool.class, configurationManager, methodConfigs);
 //        classTest(SeveralReturns.class, configurationManager, methodConfigs, true);
 //        classTest(TwoMethods.class, configurationManager, methodConfigs, true);
@@ -61,29 +62,34 @@ public class InstrumentationTest {
 
     @Test
     public void saveParameters() {
-        classTest(SaveParameters.class, configurationManagerSaveParams, methodConfigsSaveParams, true);
+        /* All test fail because it is not possible to generate exactly same bytecode */
+        classTest(SaveParameters.class, SaveParameters.class, configurationManagerSaveParams, methodConfigsSaveParams, true);
 //        classTest(SaveSecondParam.class, configurationManagerSaveSecondParam, methodConfigsSaveSecondParam, true);
     }
 
     @Test
     public void saveReturnValue() {
-        classTest(SaveReturnValue.class, configurationManagerSaveReturn, methodConfigsSaveReturn, true);
+        /* All test fail because it is not possible to generate exactly same bytecode */
+        classTest(SaveReturnValue.class, SaveReturnValueExpected.class, configurationManagerSaveReturn, methodConfigsSaveReturn, true);
     }
 
     @Test
     public void useProxy() {
-        classTest(UseProxy.class, configurationManagerSaveReturn, methodConfigsSaveReturn, false);
+        /* All test fail because it is not possible to generate exactly same bytecode */
+        classTest(UseProxy.class, UseProxyExpected.class, configurationManagerSaveReturn, methodConfigsSaveReturn, false);
     }
 
     @Test
     public void hasCatch() {
-        classTest(HasCatch.class, configurationManagerSaveReturn, methodConfigsSaveReturn, true);
+        classTest(HasCatch.class, HasCatchExpected.class, configurationManagerSaveReturn, methodConfigsSaveReturn, true);
     }
 
     private void classTest(Class testedClass,
+                           Class expectedClass,
                            AgentConfigurationManager configurationManager,
                            List<MethodConfig> methodConfigs,
                            boolean hasSystemCL) {
+        Generator.generate(expectedClass);
         try {
             String fullName = testedClass.getName();
             String fileName = removePackage(fullName);
@@ -115,7 +121,7 @@ public class InstrumentationTest {
                     )), ClassReader.SKIP_DEBUG
             );
 
-            TestHelper.compareFiles(new File("src/test/resources/expected/" + fileName + ".txt"),
+            TestHelper.compareFiles(new File("src/test/resources/expected/" + removePackage(expectedClass.getName()) + ".txt"),
                     outFile);
         } catch (FileNotFoundException e) {
             e.printStackTrace();

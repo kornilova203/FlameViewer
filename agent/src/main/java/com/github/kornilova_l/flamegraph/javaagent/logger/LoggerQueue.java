@@ -9,7 +9,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class LoggerQueue {
     private static LoggerQueue loggerQueue;
-    private final ConcurrentLinkedQueue<MethodEventData> queue = new ConcurrentLinkedQueue<>();
+    final ConcurrentLinkedQueue<MethodEventData> queue = new ConcurrentLinkedQueue<>();
 
     /**
      * Method is called by javaagent.
@@ -58,15 +58,11 @@ public class LoggerQueue {
                                   Thread thread,
                                   String className,
                                   String methodName,
-                                  boolean isStatic,
                                   String desc,
+                                  boolean isStatic,
                                   String savedParameters) {
         loggerQueue.addToQueue(new ThrowableEventData(thread, className, startTime, duration,
                 methodName, desc, isStatic, parameters, throwable, saveMessage, savedParameters));
-    }
-
-    ConcurrentLinkedQueue<MethodEventData> getQueue() {
-        return queue;
     }
 
     /**

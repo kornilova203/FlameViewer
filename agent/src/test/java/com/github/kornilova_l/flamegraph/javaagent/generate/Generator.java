@@ -7,6 +7,7 @@ import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.util.TraceClassVisitor;
 
 import java.io.*;
+import java.nio.file.Paths;
 
 /**
  * Get bytecode from source with inserted calls to LoggerQueue and
@@ -14,9 +15,7 @@ import java.io.*;
  * Get readable representation and save to file
  */
 public class Generator {
-    private static final Class testedClass = SaveParameters.class;
-
-    public static void main(String[] args) {
+    public static void generate(Class testedClass) {
         TestHelper.createDir("expected");
         String fullName = testedClass.getName();
         InputStream inputStream =
@@ -35,10 +34,11 @@ public class Generator {
             bytes = cw.toByteArray();
             cr = new ClassReader(bytes);
             cw = new ClassWriter(cr, 0);
-            OutputStream outputStream = new FileOutputStream(
-                    new File("agent/src/test/resources/expected/" +
-                            TestHelper.removePackage(fullName) +
-                            ".txt"));
+            File outputFile = new File("src/test/resources/expected/" +
+                    TestHelper.removePackage(fullName) +
+                    ".txt");
+            outputFile = Paths.get(outputFile.toURI()).toAbsolutePath().toFile();
+            OutputStream outputStream = new FileOutputStream(outputFile);
             cr.accept(
                     new TraceClassVisitor(cw, new PrintWriter(outputStream)),
                     0

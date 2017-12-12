@@ -8,11 +8,12 @@ import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
- * Thread which writes all events from loggingQueue to file
+ * Thread which writes all events from loggingQueue to file.
+ * Logger is created ones and all it's methods (except {link #printStatus()} are called from single thread
  */
 public class Logger implements Runnable {
+    final LoggerQueue loggerQueue = LoggerQueue.getInstance();
     private File file;
-    private LoggerQueue loggerQueue = LoggerQueue.getInstance();
     private long lastLogTime;
     private long countEventsAdded = 0L;
 
@@ -22,12 +23,7 @@ public class Logger implements Runnable {
         lastLogTime = System.currentTimeMillis();
     }
 
-    public void finish() {
-        logEvents();
-        printStatus();
-    }
-
-    private void printStatus() {
+    void printStatus() {
         System.out.println("Methods count: " + countEventsAdded);
     }
 
@@ -55,6 +51,7 @@ public class Logger implements Runnable {
 
     @Override
     public void run() {
+        /* Logger is a daemon thread so it will stop when program is finished */
         //noinspection InfiniteLoopStatement
         while (true) {
             try {
@@ -77,9 +74,9 @@ public class Logger implements Runnable {
     }
 
 
-    private synchronized void logEvents() {
+    private void logEvents() {
         try (OutputStream outputStream = new FileOutputStream(file, true)) {
-            ConcurrentLinkedQueue<MethodEventData> queue = loggerQueue.getQueue();
+            ConcurrentLinkedQueue<MethodEventData> queue = loggerQueue.queue;
             while (!queue.isEmpty()) {
                 countEventsAdded++;
                 writeToFile(queue.remove().getEvents(), outputStream);

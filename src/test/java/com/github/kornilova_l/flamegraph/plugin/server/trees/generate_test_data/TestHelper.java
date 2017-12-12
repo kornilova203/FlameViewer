@@ -17,18 +17,18 @@ public class TestHelper {
     private static Path path = Paths.get("src", "test", "resources", "out");
 
     public static void generateSerFile(Runnable runnable, String fileName) {
-        LoggerQueue.initLoggerQueue();
-        Logger logger = new Logger(new AgentFileManager(TestHelper.path.toString()));
-
-        startLogger(logger);
-
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            logger.finish();
-            File file = getLatestFile();
-            TestHelper.renameFile(file, fileName + ".ser");
-        }));
-
-        runnable.run();
+//        LoggerQueue.initLoggerQueue();
+//        Logger logger = new Logger();
+//
+//        startLogger(logger);
+//
+//        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+//            logger.finish();
+//            File file = getLatestFile();
+//            TestHelper.renameFile(file, fileName + ".ser");
+//        }));
+//
+//        runnable.run();
 
     }
 
