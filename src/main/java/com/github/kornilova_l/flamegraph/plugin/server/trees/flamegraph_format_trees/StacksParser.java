@@ -19,6 +19,7 @@ public class StacksParser {
         )) {
             Map<String, Integer> stacks = new HashMap<>();
             reader.lines()
+                    .filter(line -> !line.isEmpty())
                     .forEach(line -> stacks.put(
                             line.substring(0, line.lastIndexOf(" ")),
                             Integer.parseInt(line.substring(

@@ -9,9 +9,8 @@ import com.jrockit.mc.flightrecorder.spi.IEvent;
 import com.jrockit.mc.flightrecorder.spi.IView;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.*;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.File;
+import java.io.InputStream;
 import java.util.Stack;
 
 /**
@@ -20,15 +19,14 @@ import java.util.Stack;
  * Saves to /stacks dir in profiler dir
  */
 @SuppressWarnings("FieldCanBeLocal")
-class JMCFlightRecorderConverter {
+class FlightRecorderConverterEight extends Converter {
     private static String EVENT_TYPE = "Method Profiling Sample";
     private static String EVENT_VALUE_STACK = "(stackTrace)";
     private static boolean showReturnValue = true;
     private static boolean useSimpleNames = false;
     private static boolean hideArguments = false;
-    private Map<String, Integer> stacks = new HashMap<>();
 
-    JMCFlightRecorderConverter(InputStream inputStream) {
+    FlightRecorderConverterEight(InputStream inputStream) {
         System.out.println("Start");
         FlightRecording recording = FlightRecordingLoader.loadStream(inputStream);
         System.out.println("Got Recording");
@@ -36,7 +34,7 @@ class JMCFlightRecorderConverter {
         System.out.println("Built stacks");
     }
 
-    private JMCFlightRecorderConverter(File file) {
+    FlightRecorderConverterEight(File file) {
         System.out.println("Start");
         FlightRecording recording = FlightRecordingLoader.loadFile(file);
         System.out.println("Got Recording");
@@ -94,31 +92,5 @@ class JMCFlightRecorderConverter {
             count++;
         }
         stacks.put(stackTrace, count);
-    }
-
-    void writeTo(File file) {
-        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file))) {
-            for (Map.Entry<String, Integer> entry : stacks.entrySet()) {
-                bufferedWriter.write(String.format("%s %d%n", entry.getKey(), entry.getValue()));
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void main(String[] args) throws FileNotFoundException {
-        if (args.length != 1) {
-            System.out.println("Specify path to file");
-            return;
-        }
-        System.out.println(args[0]);
-        String fileName = args[0];
-        if (fileName.charAt(0) == '"') {
-            fileName = fileName.substring(1, fileName.length() - 1);
-        }
-        File file = new File(fileName);
-        System.out.println(file);
-        new JMCFlightRecorderConverter(file).writeTo(file);
-
     }
 }

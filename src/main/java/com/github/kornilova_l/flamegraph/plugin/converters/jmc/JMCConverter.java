@@ -2,6 +2,7 @@ package com.github.kornilova_l.flamegraph.plugin.converters.jmc;
 
 import com.github.kornilova_l.flamegraph.plugin.converters.ProfilerToFlamegraphConverter;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.flamegraph_format_trees.StacksParser;
+import com.intellij.openapi.diagnostic.Logger;
 import org.apache.commons.lang.SystemUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -18,6 +19,7 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.ZipException;
 
 class JMCConverter extends ProfilerToFlamegraphConverter {
+    private static final Logger LOG = Logger.getInstance(ProfilerToFlamegraphConverter.class);
     @SuppressWarnings("FieldCanBeLocal")
     private int allowedSize = 20000000;
 
@@ -31,10 +33,17 @@ class JMCConverter extends ProfilerToFlamegraphConverter {
     public Map<String, Integer> convert(@NotNull File file) {
         byte[] unzippedBytes = getUnzippedBytes(file);
         if (unzippedBytes.length > allowedSize) {
+            LOG.info("File " + file + " is too big. It will be converted in separate process");
             saveToFile(file, unzippedBytes);
             startProcess(file);
         } else {
-            new JMCFlightRecorderConverter(new ByteArrayInputStream(unzippedBytes)).writeTo(file);
+            try {
+                new FlightRecorderConverterEight(new ByteArrayInputStream(unzippedBytes)).writeTo(file);
+            } catch (RuntimeException e) { // if it is a java9 recording
+                LOG.debug(e);
+                saveToFile(file, unzippedBytes);
+                new FlightRecorderConverterNine(file).writeTo(file);
+            }
         }
         Map<String, Integer> res = StacksParser.getStacks(file);
         return res != null ? res : new HashMap<>();
@@ -50,7 +59,7 @@ class JMCConverter extends ProfilerToFlamegraphConverter {
 
     private void startProcess(File file) {
         ProcessBuilder processBuilder = createProcessBuilder(file);
-        String dirPath = getDirPath(JMCFlightRecorderConverter.class);
+        String dirPath = getDirPath(FlightRecorderConverterEight.class);
         if (dirPath == null) {
             return;
         }
@@ -71,8 +80,10 @@ class JMCConverter extends ProfilerToFlamegraphConverter {
                 getPathToJar("com.jrockit.mc.flightrecorder_5.5.1.172852.jar")
                         + delimiter +
                         getPathToJar("com.jrockit.mc.common_5.5.1.172852.jar")
+                        + delimiter +
+                        getPathToJar("flight-recorder-parser-for-java-9.jar")
                         + delimiter,
-                JMCFlightRecorderConverter.class.getName(),
+                ParseInSeparateProcess.class.getName(),
                 file.getPath()
         );
     }
@@ -108,8 +119,8 @@ class JMCConverter extends ProfilerToFlamegraphConverter {
     }
 
     /**
-     * com.github.kornilova_l.flamegraph.plugin.converters.jmc.JMCFlightRecorderConverter ->
-     * com/github/kornilova_l/flamegraph/plugin/converters/jmc/JMCFlightRecorderConverter.class
+     * com.github.kornilova_l.flamegraph.plugin.converters.jmc.FlightRecorderConverterEight ->
+     * com/github/kornilova_l/flamegraph/plugin/converters/jmc/FlightRecorderConverterEight.class
      */
     @NotNull
     private String getRelativeClassFilePath(String qualifiedName) {
