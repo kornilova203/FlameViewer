@@ -452,10 +452,6 @@ button {
     background-color: #d8d8d8
 }
 
-.projects-dropdown:hover .projects-dropdown-content {
-    display: block;
-}
-
 .projects-dropdown:hover .dropButton {
     background-color: #c4c4c4;
 }

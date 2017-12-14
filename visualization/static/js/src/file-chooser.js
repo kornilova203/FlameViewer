@@ -39,8 +39,32 @@ function showFilesList($projectsDropdown, $searchForm,
     $(".tree-preview-wrapper").removeClass("tree-preview-wrapper-without-files");
 }
 
+function showProjectsOnClick($projectsDropdown) {
+    const $content = $projectsDropdown.find(".projects-dropdown-content");
+    let isOpen = false;
+
+    function closeContent() {
+        isOpen = false;
+        $content.off();
+        $content.hide();
+        $projectsDropdown.unbind("mouseleave");
+    }
+
+    $projectsDropdown.click(() =>{
+        if (!isOpen) {
+            $content.show();
+            isOpen = true;
+            $projectsDropdown.mouseleave(closeContent)
+        } else {
+            closeContent();
+        }
+    });
+}
+
 function enableHideFilesList() {
     const $projectsDropdown = $(".projects-dropdown");
+    showProjectsOnClick($projectsDropdown);
+
     const $searchForm = $("#search-file-form");
     const $verticalProjectName = $(".vertical-project-name");
     const $loaderBackground = $(".loader-background");
