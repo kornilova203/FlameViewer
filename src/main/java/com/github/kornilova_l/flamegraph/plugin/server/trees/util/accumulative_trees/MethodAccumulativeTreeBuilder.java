@@ -1,8 +1,6 @@
 package com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumulative_trees;
 
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeBuilder;
-import com.github.kornilova_l.flamegraph.plugin.server.trees.util.MethodTimeCounter;
-import com.github.kornilova_l.flamegraph.proto.TreeProtos;
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree;
 
 import static com.github.kornilova_l.flamegraph.plugin.server.trees.TreesSet.setTreeWidth;
@@ -37,9 +35,14 @@ public class MethodAccumulativeTreeBuilder implements TreeBuilder {
         tree = treeBuilder.build();
     }
 
+    /**
+     * Does not matter is it call traces or back traces,
+     * to calculate time call traces are needed.
+     * It calculates total time of method (not only self-time)
+     */
     private void setTimePercent(Tree outgoingTree) {
         treeBuilder.getTreeInfoBuilder().setTimePercent(
-                new MethodTimeCounter(outgoingTree, className, methodName, desc).getTime()
+                treeBuilder.getWidth() / (float) outgoingTree.getWidth()
         );
     }
 
