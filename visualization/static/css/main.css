@@ -418,6 +418,8 @@ nav ul li a:focus {
     cursor: pointer;
     background-color: #d0d0d0;
     color: #111;
+    display: flex;
+    align-items: center;
 }
 
 button {
@@ -459,7 +461,8 @@ button {
 .projects-dropdown p {
     width: 200px;
     overflow: hidden;
-    padding: 15px 20px 10px;
+    padding-left: 20px;
+    padding-right: 10px;
     margin: 0;
 }
 
