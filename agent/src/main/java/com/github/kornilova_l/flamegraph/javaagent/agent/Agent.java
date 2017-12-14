@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @SuppressWarnings("unused")
 public class Agent {
 
-    public static void premain(String config, Instrumentation inst) throws IOException {
+    public static void premain(String config, Instrumentation inst) {
         LoggerQueue.initLoggerQueue();
         String[] parameters = config.split("&");
         List<String> methods = getMethodsList(new File(parameters[1]));

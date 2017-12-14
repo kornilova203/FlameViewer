@@ -5,7 +5,6 @@ import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 
 import java.lang.instrument.ClassFileTransformer;
-import java.lang.instrument.IllegalClassFormatException;
 import java.security.ProtectionDomain;
 import java.util.List;
 
@@ -33,11 +32,12 @@ class ProfilingClassFileTransformer implements ClassFileTransformer {
                             String className,
                             Class<?> classBeingRedefined,
                             ProtectionDomain protectionDomain,
-                            byte[] classfileBuffer) throws IllegalClassFormatException {
+                            byte[] classfileBuffer) {
         if (loader == null) { // if rt.jar
             return classfileBuffer;
         }
-        if (!className.startsWith("com/github/kornilova_l")) {
+        if (!className.startsWith("com/github/kornilova_l/flamegraph/javaagent") &&
+                !className.startsWith("com/github/kornilova_l/flamegraph/proxy")) { // exclude classes of agent
             List<MethodConfig> methodConfigs = configurationManager.findIncludingConfigs(className);
             if (methodConfigs.size() != 0) {
                 ClassReader cr = new ClassReader(classfileBuffer);
