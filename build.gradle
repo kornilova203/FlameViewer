@@ -1,5 +1,5 @@
 buildscript {
-    ext.kotlin_version = '1.2.0'
+    ext.kotlin_version = '1.2.10'
     repositories {
         jcenter()
         maven {
@@ -11,14 +11,17 @@ buildscript {
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "me.champeau.gradle:jmh-gradle-plugin:0.3.1"
     }
 }
 
 plugins {
     id "org.jetbrains.intellij" version "0.1.10"
 }
+
 apply plugin: 'org.jetbrains.intellij'
 apply plugin: "idea"
+apply plugin: 'me.champeau.gradle.jmh'
 
 allprojects {
     apply plugin: 'java'
@@ -26,7 +29,6 @@ allprojects {
     group = 'com.gitgub.kornilova_l'
     version = '1.0'
 }
-
 
 repositories {
     mavenCentral()
@@ -56,7 +58,6 @@ dependencies {
     compile project('configuration')
     compile project('protobuf')
     testCompile project('agent')
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
 }
 
 
@@ -84,4 +85,13 @@ compileTestKotlin {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+}
+
+/* if have some problems with jmh - execute clean first */
+jmh {
+    /* jmh Jar warns about duplicate dependencies
+     * currently I do not know how to fix it */
+    zip64 = true
+    duplicateClassesStrategy = DuplicatesStrategy.WARN
+    include = 'benchmarks.CallTracesBenchmark'
 }

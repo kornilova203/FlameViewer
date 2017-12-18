@@ -4,13 +4,8 @@ buildscript {
         maven {
             url "https://plugins.gradle.org/m2/"
         }
-        dependencies {
-            classpath "me.champeau.gradle:jmh-gradle-plugin:0.3.1"
-        }
     }
 }
-
-apply plugin: "me.champeau.gradle.jmh"
 
 repositories {
     mavenCentral()
@@ -26,6 +21,15 @@ dependencies {
     testCompile project(':protobuf')
     testCompile project(':configuration')
     compile fileTree(dir: '../lib', include: ['annotations-java8.jar'])
+}
+
+sourceSets.main.java.srcDir new File('../protobuf/src/main/gen')
+
+idea {
+    module {
+        // Marks the already(!) added srcDir as "generated"
+        generatedSourceDirs += file('protobuf/src/main/gen')
+    }
 }
 
 task agentJar(type: Jar) {
@@ -45,13 +49,6 @@ task proxyJar(type: Jar) {
     from sourceSets.main.output
     exclude '**/javaagent/**'
     proxyJar.archiveName = 'proxy.jar'
-}
-
-jmh {
-    warmupIterations = 5
-    iterations = 10
-    fork = 2
-    include = "test.*"
 }
 
 task runAgent(type: JavaExec, dependsOn: build) {
