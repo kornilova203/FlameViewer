@@ -37,12 +37,15 @@ Each rectangle represents a method. If a rectangle is wide it means that your pr
 Basically you are looking for rectangles that have a wide "roof" that does not have any other method calls. It means that your program spent a lot of time executing this method.
 
 ### Call Traces
-This flamegraph accumulates all stacktraces of profiled program. One rectangle represents one or multiple calls of method.  
-You can see popup with detailed information about method if you place the cursor on the method's rectangle. If you click on call-traces/back-traces icon on a popup (blue icons at the top of popup) you will see call-traces/back-traces tree for the method (this tree accumulates information from all calls of the method).
+This flamegraph accumulates all stacktraces of profiled program. One rectangle represents one or multiple calls of method.
+
+If you place the cursor on the method's rectangle you will see popup with detailed information about method.
+
+If you click on call-traces/back-traces icon on a popup (blue icons at the top of popup) you will see call-traces/back-traces tree for the method (this tree accumulates information from all calls of the method).
 ![](screenshots/call-traces.png)
 
 ### Back Traces
-_Back Traces_ is the bottom-up tree. It shows methods had called the root method (that is on the top of flamegraph). This flamegraph may be helpful if you know that some method was called a lot of time and you want to know what is the reason for it.  
+_Back Traces_ is the bottom-up tree. It shows methods that called the method on the top of flamegraph. This flamegraph may be helpful if you know that some method was called a lot of times and you want to know what is the reason for it.  
 ![](screenshots/back-traces.png)
 
 ### Zoom  
@@ -62,14 +65,14 @@ On Hot Spots page you can see where your program spent the most time.
 ![](screenshots/hot-spots.png)
 
 ### Call Tree
-_This page is only for _.ser_ files_
+_This page is only for _.ser_ files_  
 On **Call Tree** page you can see activity of all threads. To see what was happening inside particular thread you should click on it's name.   
 ![threads preview](screenshots/preview.png)
 
 ### Detailed View of Thread
-_This page is only for _.ser_ files_
+_This page is only for _.ser_ files_  
 On this page you can see what was happening inside some thread. All method calls have original order. Each rectangle represents only one method call.  
-You can see popup with detailed information about method if you place the cursor on the method (there you can see parameters and return value if it was saved).  
+You can see popup with detailed information about method if you place the cursor on the method (also there are parameters and return value if they were saved).  
 ![](screenshots/thread.png)
 
 
