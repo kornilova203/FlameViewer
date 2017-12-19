@@ -5,13 +5,21 @@ Instrumentation Java Profiler & Flamegraph Visualizer.
 1. [Performance Recording](#performance-recording)
 2. [Visualizing Results](#visualizing-results)
 3. [Flamegraph Visualizer Features](#flamegraph-visualizer-features)
+
     3.1 [Call Traces](#call-traces)
+    
     3.2 [Back Traces](#back-traces)
+    
     3.3 [Zoom](#zoom)
+    
     3.4 [Filtering](#filtering)
+    
     3.5 [Search](#search)
+    
     3.6 [Hot Spots](#hot-spots)
+    
     3.7 [Call Tree](#call-tree)
+    
     3.8 [Detailed View of Thread](#detailed-view-of-thread)
 
 ## Performance Recording
