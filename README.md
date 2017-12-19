@@ -27,7 +27,7 @@ The configuration below tells profiler to record all methods from my.package.uti
 ## Visualizing Results
 You can analyze performance of your program with **Flamegraph Visualizer** that is included in the plugin. It can read _.ser_ files that are created by Flamegraph Profiler, _.jfr_ files created by Java Flight Recorder and files in flamegraph format.
 1. After executing program with the profiler choose **Tools | Flamegraph Profiler | Open Results...** to see the result.
-2. To upload your _.jfr_ or _.ser_ file choose **Tools | Flamegraph Profiler | Open Results...**
+2. To upload your _.jfr_ or _.ser_ file choose **Tools | Flamegraph Profiler | Upload File...**
 
 ## Flamegraph Visualizer Features
 Flamegraph Visualizer helps you to analyze performance of Java program. It draws a flamegraph where x-axis represents time and y-axis shows stack depth.
