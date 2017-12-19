@@ -35,7 +35,6 @@ public class Proxy {
                                   String desc,
                                   boolean isStatic,
                                   String savedParameters) {
-        System.out.println("I am a proxy");
         /*
         following if block is added as a reminder to update proxy if addToQueue methods was changed
         (it cannot be compiled if not updated),
@@ -120,7 +119,7 @@ public class Proxy {
             }
         }
         try {
-            addException.invoke(null, throwable, saveMessage, startTime, duration, parameters, thread, className, methodName, isStatic, desc, savedParameters);
+            addException.invoke(null, throwable, saveMessage, startTime, duration, parameters, thread, className, methodName, desc, isStatic, savedParameters);
         } catch (IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
