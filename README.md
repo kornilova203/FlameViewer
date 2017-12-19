@@ -2,25 +2,17 @@
 Instrumentation Java Profiler & Flamegraph Visualizer.
 
 ## Table of contents
-1. [Performance Recording](#performance-recording)
-2. [Visualizing Results](#visualizing-results)
-3. [Flamegraph Visualizer Features](#flamegraph-visualizer-features)
-
-    3.1 [Call Traces](#call-traces)
-    
-    3.2 [Back Traces](#back-traces)
-    
-    3.3 [Zoom](#zoom)
-    
-    3.4 [Filtering](#filtering)
-    
-    3.5 [Search](#search)
-    
-    3.6 [Hot Spots](#hot-spots)
-    
-    3.7 [Call Tree](#call-tree)
-    
-    3.8 [Detailed View of Thread](#detailed-view-of-thread)
+* [Performance Recording](#performance-recording)
+* [Visualizing Results](#visualizing-results)
+* [Flamegraph Visualizer Features](#flamegraph-visualizer-features)
+    * [Call Traces](#call-traces)
+    * [Back Traces](#back-traces)
+    * [Zoom](#zoom)    
+    * [Filtering](#filtering)    
+    * [Search](#search)    
+    * [Hot Spots](#hot-spots)    
+    * [Call Tree](#call-tree)    
+    * [Detailed View of Thread](#detailed-view-of-thread)
 
 ## Performance Recording
 Plugin lets you record performance of Java program with instrumentation profiler.
