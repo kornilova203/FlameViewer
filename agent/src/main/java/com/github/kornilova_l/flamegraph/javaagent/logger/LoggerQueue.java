@@ -2,7 +2,7 @@ package com.github.kornilova_l.flamegraph.javaagent.logger;
 
 import com.github.kornilova_l.flamegraph.javaagent.logger.event_data_storage.MethodEventData;
 import com.github.kornilova_l.flamegraph.javaagent.logger.event_data_storage.RetValEventData;
-import com.github.kornilova_l.flamegraph.javaagent.logger.event_data_storage.StartData;
+import com.github.kornilova_l.flamegraph.proxy.StartData;
 import com.github.kornilova_l.flamegraph.javaagent.logger.event_data_storage.ThrowableEventData;
 
 import java.util.concurrent.ConcurrentLinkedQueue;

@@ -1,7 +1,6 @@
 package com.github.kornilova_l.flamegraph.proxy;
 
 import com.github.kornilova_l.flamegraph.javaagent.logger.LoggerQueue;
-import com.github.kornilova_l.flamegraph.javaagent.logger.event_data_storage.StartData;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

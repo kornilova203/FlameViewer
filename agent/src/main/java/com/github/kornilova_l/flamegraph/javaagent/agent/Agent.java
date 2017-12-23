@@ -17,7 +17,14 @@ import java.util.stream.Collectors;
 @SuppressWarnings("unused")
 public class Agent {
 
+    /**
+     * @param config output file name and configuration file name separated by '&'
+     */
     public static void premain(String config, Instrumentation inst) {
+        start(config, inst);
+    }
+
+    private static void start(String config, Instrumentation inst) {
         LoggerQueue.initLoggerQueue();
         String[] parameters = config.split("&");
         List<String> methods = getMethodsList(new File(parameters[1]));
@@ -27,6 +34,14 @@ public class Agent {
         createLogger(new File(parameters[0]));
         AgentConfigurationManager configurationManager = new AgentConfigurationManager(methods);
         inst.addTransformer(new ProfilingClassFileTransformer(configurationManager));
+    }
+
+    /**
+     * For tests. Library looks for method with this name
+     * when adding javaagent to running JVM
+     */
+    public static void agentmain(String config, Instrumentation inst) {
+        start(config, inst);
     }
 
     private static void createLogger(File logFile) {

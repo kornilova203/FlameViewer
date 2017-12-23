@@ -40,6 +40,8 @@ task agentJar(type: Jar) {
     agentJar.exclude '**/proxy/**'
     manifest {
         attributes "Premain-Class": "com.github.kornilova_l.flamegraph.javaagent.agent.Agent"
+        /* for test (lib looks for this attribute, I do not know why it does not like Premain-Class) */
+        attributes "Agent-Class": "com.github.kornilova_l.flamegraph.javaagent.agent.Agent"
     }
     archiveName = 'javaagent.jar'
     includeEmptyDirs = false
@@ -48,6 +50,7 @@ task agentJar(type: Jar) {
 task proxyJar(type: Jar) {
     from sourceSets.main.output
     exclude '**/javaagent/**'
+    exclude '**/proto/**'
     proxyJar.archiveName = 'proxy.jar'
 }
 

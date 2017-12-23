@@ -1,2 +1,4 @@
 rootProject.name = 'java-profiling-plugin'
 include 'protobuf', 'agent', 'configuration'
+include 'agent-test'
+

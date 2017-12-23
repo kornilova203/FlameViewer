@@ -1,4 +1,4 @@
-package com.github.kornilova_l.flamegraph.javaagent.logger.event_data_storage;
+package com.github.kornilova_l.flamegraph.proxy;
 
 public class StartData {
     private final long startTime;

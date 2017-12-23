@@ -1,7 +1,7 @@
 package com.github.kornilova_l.flamegraph.javaagent.generate.test_classes;
 
 import com.github.kornilova_l.flamegraph.javaagent.logger.LoggerQueue;
-import com.github.kornilova_l.flamegraph.javaagent.logger.event_data_storage.StartData;
+import com.github.kornilova_l.flamegraph.proxy.StartData;
 
 public class HasCatchExpected {
     public static void main(String[] args) {

@@ -1,7 +1,7 @@
 package com.github.kornilova_l.flamegraph.plugin.server.trees.generate_test_data;
 
 import com.github.kornilova_l.flamegraph.javaagent.logger.LoggerQueue;
-import com.github.kornilova_l.flamegraph.javaagent.logger.event_data_storage.StartData;
+import com.github.kornilova_l.flamegraph.proxy.StartData;
 
 /**
  * _   _
