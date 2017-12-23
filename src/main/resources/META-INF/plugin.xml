@@ -1,25 +1,13 @@
 <idea-plugin>
-    <id>com.github.com.kornilovaL</id>
-    <name>Flamegraph Visualizer</name>
-    <version>1.6</version>
+    <id>com.github.com.kornilovaL.flamegraphProfiler</id>
+    <name>Flamegraph Profiler</name>
+    <version>0.5</version>
 
     <description><![CDATA[
-      Plugin for flamegraph visualization<br>
+      Instrumentation Java Profiler & Flamegraph Visualizer<br>
     ]]></description>
 
-    <change-notes><![CDATA[
-      * Small methods are now zoomable if they are located above zoomed node
-    ]]>
-    </change-notes>
-
-    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
     <idea-version since-build="162"/>
-
-    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
-         on how to target different products -->
-    <!-- uncomment to enable plugin in all products
-    <depends>com.intellij.modules.lang</depends>
-    -->
 
     <extensionPoints>
         <extensionPoint name="profilerToFlamegraphConverter"
@@ -33,7 +21,7 @@
         <programRunner implementation="com.github.kornilova_l.flamegraph.plugin.execution.ProfilerProgramRunner"/>
     </extensions>
 
-    <extensions defaultExtensionNs="com.github.com.kornilovaL">
+    <extensions defaultExtensionNs="com.github.com.kornilovaL.flamegraphProfiler">
         <profilerToFlamegraphConverter
                 implementation="com.github.kornilova_l.flamegraph.plugin.converters.jmc.JMCConverter"/>
     </extensions>
