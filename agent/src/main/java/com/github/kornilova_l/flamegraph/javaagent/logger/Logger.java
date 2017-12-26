@@ -16,6 +16,7 @@ public class Logger implements Runnable {
     private File file;
     private long lastLogTime;
     private long countEventsAdded = 0L;
+    private volatile boolean isWriting = false;
 
     public Logger(File file) {
         this.file = file;
@@ -77,12 +78,18 @@ public class Logger implements Runnable {
     private void logEvents() {
         try (OutputStream outputStream = new FileOutputStream(file, true)) {
             ConcurrentLinkedQueue<MethodEventData> queue = loggerQueue.queue;
+            isWriting = true;
             while (!queue.isEmpty()) {
                 countEventsAdded++;
                 writeToFile(queue.remove().getEvents(), outputStream);
             }
+            isWriting = false;
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public boolean isWriting() {
+        return isWriting;
     }
 }
