@@ -16,6 +16,7 @@ dependencies {
     testCompile fileTree(dir: 'lib', include: ['ea-agent-loader-1.0.4-SNAPSHOT.jar'])
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile project(':protobuf')
+    testCompile group: 'commons-io', name: 'commons-io', version: '2.5'
 }
 
 sourceSets.test.java.srcDir new File('../protobuf/src/main/gen')

@@ -74,6 +74,9 @@ public class TestWithProxy {
     }
 
     static void clearOutputFile() {
+        if (!outputFile.exists()) {
+            return;
+        }
         if (!outputFile.delete()) {
             throw new RuntimeException("Cannot delete output file");
         }
