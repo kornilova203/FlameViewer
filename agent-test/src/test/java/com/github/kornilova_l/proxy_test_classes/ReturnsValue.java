@@ -1,4 +1,4 @@
-package com.github.kornilova_l.flamegraph.proxy;
+package com.github.kornilova_l.proxy_test_classes;
 
 public class ReturnsValue implements TestModule {
 

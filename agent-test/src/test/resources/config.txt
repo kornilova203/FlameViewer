@@ -1,1 +1,1 @@
-*.run(*)
+com.github.kornilova_l.proxy_test_classes.*.run(long, String, double)

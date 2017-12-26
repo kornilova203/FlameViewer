@@ -24,9 +24,15 @@ class MyClassLoader extends ClassLoader {
      */
     @Override
     public Class<?> findClass(String className) throws ClassNotFoundException {
+        if (className.equals("com.github.kornilova_l.flamegraph.proxy.Proxy") ||
+                className.equals("com.github.kornilova_l.flamegraph.proxy.StartData")) {
+            return ClassLoader.getSystemClassLoader().loadClass(className);
+        }
         try {
             byte b[] = fetchClassFromFS(pathToBin + "/" + className.replace('.', '/') + ".class");
-            return defineClass(className, b, 0, b.length);
+            Class<?> clazz = defineClass(className, b, 0, b.length);
+            System.out.println("Load class " + clazz);
+            return clazz;
         } catch (IOException e) {
             e.printStackTrace();
             throw new ClassNotFoundException();
