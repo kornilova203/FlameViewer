@@ -15,6 +15,8 @@ class ProfilingMethodVisitor extends AdviceAdapter {
     private final static Pattern returnTypePattern = Pattern.compile("(?<=\\)).*"); // (?<=\)).*
     private final static String LOGGER_PACKAGE_NAME = "com/github/kornilova_l/flamegraph/javaagent/logger/";
     private final static String PROXY_PACKAGE_NAME = "com/github/kornilova_l/flamegraph/proxy/";
+    private final static String START_DATA_CLASS = PROXY_PACKAGE_NAME + "StartData";
+    private final static String START_DATA_TYPE = "L" + START_DATA_CLASS + ";";
     private final String methodName;
     private final String className;
     private final boolean hasSystemCL;
@@ -100,18 +102,16 @@ class ProfilingMethodVisitor extends AdviceAdapter {
     }
 
     private void createStartData() {
-        startData = newLocal(org.objectweb.asm.Type.getType(
-                "Lcom/github/kornilova_l/flamegraph/proxy/StartData;"
-        ));
+        startData = newLocal(org.objectweb.asm.Type.getType(START_DATA_TYPE));
         if (hasSystemCL) {
             mv.visitMethodInsn(INVOKESTATIC, LOGGER_PACKAGE_NAME + "LoggerQueue",
                     "createStartData",
-                    "(J[Ljava/lang/Object;)Lcom/github/kornilova_l/flamegraph/proxy/StartData;",
+                    "(J[Ljava/lang/Object;)" + START_DATA_TYPE,
                     false);
         } else {
             mv.visitMethodInsn(INVOKESTATIC, PROXY_PACKAGE_NAME + "Proxy",
                     "createStartData",
-                    "(J[Ljava/lang/Object;)Lcom/github/kornilova_l/flamegraph/proxy/StartData;",
+                    "(J[Ljava/lang/Object;)" + START_DATA_TYPE,
                     false);
         }
     }
@@ -145,7 +145,7 @@ class ProfilingMethodVisitor extends AdviceAdapter {
         getStartData();
         mv.visitMethodInsn(
                 INVOKEVIRTUAL,
-                "com/github/kornilova_l/flamegraph/proxy/StartData",
+                START_DATA_CLASS,
                 "isThrownByMethod",
                 "()Z",
                 false
@@ -356,7 +356,7 @@ class ProfilingMethodVisitor extends AdviceAdapter {
         getStartData();
         mv.visitMethodInsn(
                 INVOKEVIRTUAL,
-                "com/github/kornilova_l/flamegraph/proxy/StartData",
+                START_DATA_CLASS,
                 "setThrownByMethod",
                 "()V",
                 false
@@ -394,13 +394,13 @@ class ProfilingMethodVisitor extends AdviceAdapter {
 
     private void getCommonExitData() {
         getStartData();
-        mv.visitMethodInsn(INVOKEVIRTUAL, "com/github/kornilova_l/flamegraph/proxy/StartData",
+        mv.visitMethodInsn(INVOKEVIRTUAL, START_DATA_CLASS,
                 "getStartTime", "()J", false);
         getStartData();
-        mv.visitMethodInsn(INVOKEVIRTUAL, "com/github/kornilova_l/flamegraph/proxy/StartData",
+        mv.visitMethodInsn(INVOKEVIRTUAL, START_DATA_CLASS,
                 "getDuration", "()J", false);
         getStartData();
-        mv.visitMethodInsn(INVOKEVIRTUAL, "com/github/kornilova_l/flamegraph/proxy/StartData",
+        mv.visitMethodInsn(INVOKEVIRTUAL, START_DATA_CLASS,
                 "getParameters", "()[Ljava/lang/Object;", false);
         getThread();
         mv.visitLdcInsn(className);
@@ -413,7 +413,7 @@ class ProfilingMethodVisitor extends AdviceAdapter {
         getStartData();
         getTime();
         mv.visitMethodInsn(INVOKEVIRTUAL,
-                "com/github/kornilova_l/flamegraph/proxy/StartData",
+                START_DATA_CLASS,
                 "setDuration",
                 "(J)V",
                 false);
@@ -426,7 +426,7 @@ class ProfilingMethodVisitor extends AdviceAdapter {
     private void getIfTimeIsMoreOneMs() {
         getStartData();
         mv.visitMethodInsn(INVOKEVIRTUAL,
-                "com/github/kornilova_l/flamegraph/proxy/StartData",
+                START_DATA_CLASS,
                 "getDuration",
                 "()J",
                 false);
