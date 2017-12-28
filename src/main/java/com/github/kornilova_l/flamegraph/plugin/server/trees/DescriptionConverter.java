@@ -3,8 +3,8 @@ package com.github.kornilova_l.flamegraph.plugin.server.trees;
 import com.github.kornilova_l.flamegraph.configuration.MethodConfig;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.github.kornilova_l.flamegraph.configuration.MethodConfig.splitDesc;
 
@@ -20,30 +20,28 @@ public class DescriptionConverter {
     }
 
     @NotNull
-    public static String getBeautifulParameters(String fullDescription) {
+    private static String getBeautifulParameters(String fullDescription) {
         List<String> jvmParams = splitDesc(fullDescription.substring(1, fullDescription.indexOf(")")));
-        List<String> parameters = jvmParams.stream()
-                .map(parameter -> {
-                    int lastArr = parameter.lastIndexOf('[');
-                    lastArr++;
-                    StringBuilder parameterBuilder = new StringBuilder(
-                            MethodConfig.jvmTypeToParam(parameter.substring(lastArr, parameter.length()))
-                    );
-                    for (int i = 0; i < lastArr; i++) {
-                        parameterBuilder.append("[]");
-                    }
-                    parameter = parameterBuilder.toString();
-                    return parameter;
-                })
-                .collect(Collectors.toList());
-
+        List<String> parameters = new ArrayList<>();
+        for (String jvmParam : jvmParams) {
+            int lastArr = jvmParam.lastIndexOf('[');
+            lastArr++;
+            StringBuilder parameterBuilder = new StringBuilder(
+                    MethodConfig.jvmTypeToParam(jvmParam.substring(lastArr, jvmParam.length()))
+            );
+            for (int i = 0; i < lastArr; i++) {
+                parameterBuilder.append("[]");
+            }
+            jvmParam = parameterBuilder.toString();
+            parameters.add(jvmParam);
+        }
         return "(" +
                 String.join(", ", parameters) +
                 ")";
     }
 
     @NotNull
-    public static String getBeautifulReturnValue(String fullDesc) {
+    private static String getBeautifulReturnValue(String fullDesc) {
         String jvmRetVal = fullDesc.substring(fullDesc.indexOf(")") + 1, fullDesc.length());
         int lastArr = jvmRetVal.lastIndexOf('[');
         lastArr++;

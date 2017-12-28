@@ -9,7 +9,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class MethodConfig implements Comparable<MethodConfig>, Cloneable {
-    private final static Pattern paramsPattern = Pattern.compile("(\\[*)(C|Z|S|I|J|F|D|B|(:?L[^;]+;))");
+    private final static Pattern paramsPattern = Pattern.compile("\\[*(C|Z|S|I|J|F|D|B|(:?L[^;]+;))");
     @NotNull
     private String methodPatternString = "";
     @NotNull
