@@ -9,8 +9,8 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 
 public class StacksParser {
-    private static Pattern flamegraphLinePattern = Pattern.compile(".* \\d+");
-    private static final Pattern fullCallPattern = Pattern.compile("([^ ]+ [^ ]+\\([^)]*\\);?)+");
+    private static final Pattern flamegraphLinePattern = Pattern.compile(".* \\d+");
+    private static final Pattern fullCallPattern = Pattern.compile("(?:[^ ()]+ [^ ()]+\\([^)]*\\);)*[^ ()]+ [^ ()]+\\([^)]*\\);?");
 
     @Nullable
     public static Map<String, Integer> getStacks(File convertedFile) {
@@ -53,8 +53,15 @@ public class StacksParser {
         return hasValidLine;
     }
 
-    static boolean isFullCalls(Map<String, Integer> stacks) {
-        return stacks.keySet().stream()
-                .allMatch(call -> fullCallPattern.matcher(call).matches());
+    /**
+     * @return true if stacktraces contain parameters and return value
+     */
+    static boolean doCallsContainParameters(Map<String, Integer> stacks) {
+        for (String stack : stacks.keySet()) {
+            if (!fullCallPattern.matcher(stack).matches()) {
+                return false;
+            }
+        }
+        return true;
     }
 }

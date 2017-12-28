@@ -3,7 +3,6 @@ package com.github.kornilova_l.flamegraph.plugin.server.trees.flamegraph_format_
 import com.github.kornilova_l.flamegraph.proto.TreeProtos;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
 import java.util.Map;
 
 import static com.github.kornilova_l.flamegraph.plugin.server.trees.TreesSet.setTreeWidth;
@@ -15,31 +14,6 @@ public class StacksOCTreeBuilder extends SimpleStacksOCTreeBuilder {
         super(stacks);
     }
 
-    private static String removePackage(String type) {
-        int dot = type.lastIndexOf('.');
-        if (dot != -1) {
-            return type.substring(dot + 1, type.length());
-        }
-        return type;
-    }
-
-    @NotNull
-    private static String getBeautifulDesc(String desc) {
-        String innerPart = desc.substring(1, desc.indexOf(")"));
-        String[] stringParameters = innerPart.split(" *, *");
-        for (int i = 0; i < stringParameters.length; i++) {
-            stringParameters[i] = removePackage(stringParameters[i]);
-        }
-        String beautifulInnerPart = String.join(", ", Arrays.asList(stringParameters));
-        String retVal = removePackage(
-                desc.substring(desc.indexOf(")") + 1, desc.length())
-        );
-        return "(" +
-                beautifulInnerPart +
-                ")" +
-                retVal;
-    }
-
     @Override
     protected TreeProtos.Tree buildTree(@NotNull Map<String, Integer> stacks) {
         treeBuilder.setBaseNode(TreeProtos.Tree.Node.newBuilder());
@@ -47,17 +21,7 @@ public class StacksOCTreeBuilder extends SimpleStacksOCTreeBuilder {
         setNodesOffsetRecursively(treeBuilder.getBaseNodeBuilder(), 0);
         setTreeWidth(treeBuilder);
         treeBuilder.setDepth(maxDepth);
-        setBeautifulDescRecursively(treeBuilder.getBaseNodeBuilder());
         return treeBuilder.build();
-    }
-
-    private void setBeautifulDescRecursively(TreeProtos.Tree.Node.Builder node) {
-        for (TreeProtos.Tree.Node.Builder child : node.getNodesBuilderList()) {
-            child.getNodeInfoBuilder().setDescription(
-                    getBeautifulDesc(child.getNodeInfoBuilder().getDescription())
-            );
-            setBeautifulDescRecursively(child);
-        }
     }
 
     @Override
