@@ -2,6 +2,7 @@ package com.github.kornilova_l.flamegraph.plugin.converters.jmc
 
 import com.github.kornilova_l.flamegraph.plugin.converters.jmc.JMCConverter.*
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.io.File
 
@@ -18,7 +19,10 @@ class JMCConverterTest {
 
         ParseInSeparateProcess.main(arrayOf(newFile.toString()))
 
-        assertEquals(expectedStacksFile.readText(), newFile.readText())
+        val expected = expectedStacksFile.readText()
+        val actual = "${newFile.readText()}\n"
+
+        assertEquals(expected, actual)
 
         newFile.delete()
     }

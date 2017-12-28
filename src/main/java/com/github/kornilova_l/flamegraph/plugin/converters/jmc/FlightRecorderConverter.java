@@ -66,6 +66,7 @@ class FlightRecorderConverter {
             for (Map.Entry<String, Integer> entry : stacks.entrySet()) {
                 bufferedWriter.write(String.format("%s %d%n", entry.getKey(), entry.getValue()));
             }
+            bufferedWriter.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
