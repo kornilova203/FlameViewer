@@ -5,7 +5,7 @@ import java.io.File
 
 abstract class ProfilerToFlamegraphConverter {
     companion object {
-        private val EP_NAME = ExtensionPointName.create<ProfilerToFlamegraphConverter>("com.github.com.kornilovaL.profilerToFlamegraphConverter")
+        private val EP_NAME = ExtensionPointName.create<ProfilerToFlamegraphConverter>("com.github.kornilovaL.flamegraphProfiler.profilerToFlamegraphConverter")
 
         fun getFileExtension(fileName: String): String {
             val dot = fileName.indexOf(".")

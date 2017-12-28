@@ -1,5 +1,5 @@
 <idea-plugin>
-    <id>com.github.com.kornilovaL.flamegraphProfiler</id>
+    <id>com.github.kornilovaL.flamegraphProfiler</id>
     <name>Flamegraph Profiler</name>
     <version>0.5</version>
 
@@ -21,7 +21,7 @@
         <programRunner implementation="com.github.kornilova_l.flamegraph.plugin.execution.ProfilerProgramRunner"/>
     </extensions>
 
-    <extensions defaultExtensionNs="com.github.com.kornilovaL.flamegraphProfiler">
+    <extensions defaultExtensionNs="com.github.kornilovaL.flamegraphProfiler">
         <profilerToFlamegraphConverter
                 implementation="com.github.kornilova_l.flamegraph.plugin.converters.jmc.JMCConverter"/>
     </extensions>
