@@ -1,10 +1,27 @@
-<idea-plugin>
+<idea-plugin url="https://github.com/kornilova-l/flamegraph-visualizer">
     <id>com.github.kornilovaL.flamegraphProfiler</id>
     <name>Flamegraph Profiler</name>
     <version>0.5</version>
 
+    <vendor url="https://github.com/kornilova-l" email="kornilova203@gmail.com" />
+
     <description><![CDATA[
       Instrumentation Java Profiler & Flamegraph Visualizer<br>
+      <strong>Performance Recording</strong><br>
+      Plugin lets you record performance of Java program with instrumentation profiler.
+<ol>
+<li>To specify methods that will be recorded open <strong>Tools | Flamegraph Profiler | Edit Configuration...</strong>
+</li>
+<li>To run program with profiler select the desired run configuration and choose <strong>Run <name> with profiler</strong></li>
+<li>Also you can configure profiler to save value of method's parameters or it's return value. This should be done if you want to see how parameters influence method's performance. To enable this option check 'Save' checkbox beside type of parameter(s) when editing pattern in configuration.</li>
+</ol>
+
+<strong>Visualizing Results</strong><br>
+You can analyze performance of your program with <strong>Flamegraph Visualizer</strong> that is included in the plugin. It can read _.ser_ files that are created by Flamegraph Profiler, _.jfr_ files created by Java Flight Recorder and files in flamegraph format.
+<ol>
+<li>After executing program with the profiler choose <strong>Tools | Flamegraph Profiler | Open Results...</strong> to see the result.</li>
+<li>To upload your <i>.jfr</i> or <i>.ser</i> file choose <strong>Tools | Flamegraph Profiler | Upload File...</strong></li>
+</ol>
     ]]></description>
 
     <idea-version since-build="162"/>
