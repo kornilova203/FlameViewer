@@ -12,9 +12,9 @@ repositories {
 }
 
 dependencies {
-    compile "org.ow2.asm:asm:5.2"
-    compile "org.ow2.asm:asm-util:5.2" // TraceClassVisitor (for debugging)
-    compile group: 'org.ow2.asm', name: 'asm-commons', version: '5.0.3' // AdviceAdapter
+    compile "org.ow2.asm:asm:6.0"
+    compile "org.ow2.asm:asm-util:6.0" // TraceClassVisitor (for debugging)
+    compile group: 'org.ow2.asm', name: 'asm-commons', version: '6.0' // AdviceAdapter
     compile project(':protobuf')
     compile project(':configuration')
     testCompile group: 'junit', name: 'junit', version: '4.12'
