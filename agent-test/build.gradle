@@ -17,6 +17,5 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile project(':protobuf')
     testCompile group: 'commons-io', name: 'commons-io', version: '2.5'
+    testCompile fileTree(dir: '../protobuf/src/main/gen')
 }
-
-sourceSets.test.java.srcDir new File('../protobuf/src/main/gen')

@@ -9,7 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
-import static com.github.kornilova_l.flamegraph.configuration.MethodConfig.jvmTypeToParam;
+import static com.github.kornilova_l.flamegraph.configuration.MethodConfig.parseToken;
 import static com.github.kornilova_l.flamegraph.configuration.MethodConfig.splitDesc;
 
 class AgentConfigurationManager {
@@ -55,28 +55,10 @@ class AgentConfigurationManager {
         LinkedList<String> params = new LinkedList<>();
         for (String jvmParam : jvmParams) {
             StringBuilder paramBuilder = new StringBuilder();
-            int dimensions = countDimensions(jvmParam);
-            paramBuilder.append(
-                    jvmTypeToParam(jvmParam.substring(dimensions, jvmParam.length()))
-            );
-            for (int i = 0; i < dimensions; i++) {
-                paramBuilder.append("[]");
-            }
+            parseToken(paramBuilder, jvmParam, 0);
             params.add(paramBuilder.toString());
         }
         return "(" + String.join(", ", params) + ")";
-    }
-
-    private static int countDimensions(String jvmType) {
-        int count = 0;
-        for (int i = 0; i < jvmType.length(); i++) {
-            if (jvmType.charAt(i) == '[') {
-                count++;
-            } else {
-                break;
-            }
-        }
-        return count;
     }
 
     @NotNull

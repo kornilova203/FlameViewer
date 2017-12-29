@@ -278,30 +278,60 @@ public class MethodConfig implements Comparable<MethodConfig>, Cloneable {
         return jvmParams;
     }
 
+    /**
+     * @return end index of current token
+     */
+    public static int parseToken(StringBuilder output, String desc, int startIndex) {
+        if (desc.charAt(startIndex) == '[') {
+            int endPos = parseToken(output, desc, startIndex + 1);
+            output.append("[]");
+            return endPos;
+        } else {
+            char c = desc.charAt(startIndex);
+            if (c == 'L') {
+                int slashPos = -1;
+                int endPos = -1;
+                for (int i = startIndex + 1; i < desc.length(); i++) {
+                    char maybeSlash = desc.charAt(i);
+                    if (maybeSlash == '/') {
+                        slashPos = i;
+                    } else if (maybeSlash == ';') {
+                        endPos = i + 1;
+                        break;
+                    }
+                }
+                output.append(desc.substring(slashPos + 1, endPos - 1));
+                return endPos;
+            } else {
+                output.append(MethodConfig.jvmTypeToParam(c));
+                return startIndex + 1;
+            }
+        }
+    }
+
     @NotNull
-    public static String jvmTypeToParam(@NotNull String typeWithoutDimensions) {
-        switch (typeWithoutDimensions) {
-            case "I":
+    private static String jvmTypeToParam(char primitiveTypeDesc) {
+        switch (primitiveTypeDesc) {
+            case 'I':
                 return "int";
-            case "J":
+            case 'J':
                 return "long";
-            case "Z":
+            case 'Z':
                 return "boolean";
-            case "C":
+            case 'C':
                 return "char";
-            case "S":
+            case 'S':
                 return "short";
-            case "B":
+            case 'B':
                 return "byte";
-            case "F":
+            case 'F':
                 return "float";
-            case "D":
+            case 'D':
                 return "double";
-            case "V":
+            case 'V':
                 return "void";
             default:
-                String nameWithoutLAndSemicolon = typeWithoutDimensions.substring(1, typeWithoutDimensions.length() - 1);
-                return nameWithoutLAndSemicolon.substring(nameWithoutLAndSemicolon.lastIndexOf("/") + 1, nameWithoutLAndSemicolon.length());
+                throw new IllegalArgumentException("Not known primitive type: " + primitiveTypeDesc);
         }
     }
 
