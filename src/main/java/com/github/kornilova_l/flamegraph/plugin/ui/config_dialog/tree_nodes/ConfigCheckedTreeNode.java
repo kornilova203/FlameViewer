@@ -7,14 +7,21 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public abstract class ConfigCheckedTreeNode extends CheckedTreeNode {
-    String name;
     @NotNull
     final List<MethodConfig> methodConfigs;
-
+    String name;
     ConfigCheckedTreeNode(@NotNull String name, @NotNull List<MethodConfig> methodConfigs) {
         super(name);
         this.name = name;
         this.methodConfigs = methodConfigs;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override
@@ -25,10 +32,6 @@ public abstract class ConfigCheckedTreeNode extends CheckedTreeNode {
     @Override
     public String toString() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public abstract void removeItselfFromConfigsSet();

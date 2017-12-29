@@ -202,16 +202,13 @@ public class ConfigCheckboxTree extends CheckboxTree {
 
     public void updateTreeNodeNames(Object[] path) {
         ConfigCheckedTreeNode checkedTreeNode = (ConfigCheckedTreeNode) path[path.length - 1];
-        if (!(checkedTreeNode instanceof MethodTreeNode)) {
+        if (checkedTreeNode == null || !(checkedTreeNode instanceof MethodTreeNode)) {
             return;
         }
         MethodConfig methodConfig = ((MethodTreeNode) checkedTreeNode).getMethodConfig();
-        checkedTreeNode.setName(methodConfig.getMethodPatternString() + methodConfig.parametersToString());
-        model.nodeChanged(checkedTreeNode);
-        ((ConfigCheckedTreeNode) path[path.length - 2]).setName(methodConfig.getClassPattern());
-        model.nodeChanged((CheckedTreeNode) path[path.length - 2]);
-        ((ConfigCheckedTreeNode) path[path.length - 3]).setName(methodConfig.getPackagePattern());
-        model.nodeChanged((CheckedTreeNode) path[path.length - 3]);
+        removeNode(checkedTreeNode);
+        addMethodNode(methodConfig, ((MethodTreeNode) checkedTreeNode).getMethodConfigs());
+        TreeUtil.expandAll(this);
     }
 
     private void selectionChanged(TreeSelectionEvent event) {
@@ -223,12 +220,26 @@ public class ConfigCheckboxTree extends CheckboxTree {
             TreePath oldPath = event.getOldLeadSelectionPath();
             if (oldPath != null) {
                 Object[] path = oldPath.getPath();
-                if (path.length == 4) {
+                if (path.length == 4 && areNamesChanged(path)) {
                     updateTreeNodeNames(path);
                 }
             }
             methodFormManager.selectionChanged(event.getPath());
         }
+    }
+
+    /**
+     * @param path that contains 4 nodes
+     */
+    private boolean areNamesChanged(Object[] path) {
+        ConfigCheckedTreeNode methodNode = (ConfigCheckedTreeNode) path[3];
+        if (methodNode == null || !(methodNode instanceof MethodTreeNode)) {
+            return false;
+        }
+        MethodConfig methodConfig = ((MethodTreeNode) methodNode).getMethodConfig();
+        return !methodNode.getName().equals(methodConfig.getMethodPatternString() + methodConfig.parametersToString()) ||
+                !((ConfigCheckedTreeNode) path[2]).getName().equals(methodConfig.getClassPattern()) ||
+                !((ConfigCheckedTreeNode) path[1]).getName().equals(methodConfig.getPackagePattern());
     }
 
     public void initTree(@NotNull List<MethodConfig> methodConfigs) {
@@ -289,9 +300,7 @@ public class ConfigCheckboxTree extends CheckboxTree {
     }
 
     public MethodTreeNode addNode(MethodConfig methodConfig, @NotNull List<MethodConfig> methodConfigs) {
-        MethodTreeNode node = addMethodNode(methodConfig, methodConfigs);
-        TreeUtil.expandAll(this);
-        return node;
+        return addMethodNode(methodConfig, methodConfigs);
     }
 
     public void removeNode(@NotNull ConfigCheckedTreeNode treeNode) {
