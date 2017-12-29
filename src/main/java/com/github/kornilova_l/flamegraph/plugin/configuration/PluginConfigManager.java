@@ -2,7 +2,6 @@ package com.github.kornilova_l.flamegraph.plugin.configuration;
 
 import com.github.kornilova_l.flamegraph.configuration.Configuration;
 import com.github.kornilova_l.flamegraph.configuration.MethodConfig;
-import com.github.kornilova_l.flamegraph.proto.TreeProtos;
 import com.intellij.psi.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -129,35 +128,5 @@ public class PluginConfigManager {
                     + typeName.substring(typeName.lastIndexOf('>') + 1, typeName.length());
         }
         return typeName;
-    }
-
-    @NotNull
-    public static MethodConfig newMethodConfig(TreeProtos.Tree.Node node) {
-        TreeProtos.Tree.Node.NodeInfo nodeInfo = node.getNodeInfo();
-        String desc = nodeInfo.getDescription();
-        return new MethodConfig(nodeInfo.getClassName(),
-                nodeInfo.getMethodName(),
-                desc.substring(0, desc.indexOf(")") + 1));
-    }
-
-    @NotNull
-    public static Configuration newConfiguration(@Nullable String[] includingConfigs,
-                                                 @Nullable String[] excludingConfigs) {
-        Configuration configuration = new Configuration();
-        if (includingConfigs != null) {
-            for (String includingConfig : includingConfigs) {
-                if (includingConfig != null) {
-                    configuration.addMethodConfig(includingConfig, false);
-                }
-            }
-        }
-        if (excludingConfigs != null) {
-            for (String excludingConfig : excludingConfigs) {
-                if (excludingConfig != null) {
-                    configuration.addMethodConfig(excludingConfig, true);
-                }
-            }
-        }
-        return configuration;
     }
 }
