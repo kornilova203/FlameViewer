@@ -28,11 +28,14 @@ class ProfilingClassVisitor extends ClassVisitor {
 
     @Override
     public MethodVisitor visitMethod(int access, String methodName, String desc, String signature, String[] exceptions) {
+        if (methodName == null) { // it happens with rt.jar classes. I do not know why
+            return null;
+        }
         MethodVisitor mv = cv.visitMethod(access, methodName, desc, signature, exceptions);
         if (mv != null &&
                 !methodName.equals("<clinit>") &&
                 !methodName.equals("toString") &&
-                (access & Opcodes.ACC_SYNTHETIC) == 0) { // exclude synthetic includingMethodConfigs
+                (access & Opcodes.ACC_SYNTHETIC) == 0) { // exclude synthetic methods
             MethodConfig trueMethodConfig = AgentConfigurationManager.newMethodConfig(className, methodName, desc);
             if (!configurationManager.isMethodExcluded(trueMethodConfig)) {
                 List<MethodConfig> includingConfigsForMethod = AgentConfigurationManager.findIncludingConfigs(
