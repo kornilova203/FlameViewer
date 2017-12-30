@@ -87,10 +87,10 @@ See [js files](/visualization/README.md)
 
 Windows:
 ```
-gradlew :agent:jar && \
+gradlew :agent:agentJar && \
+gradlew :agent:proxyJar && \
 gradlew copyAgent && \
 gradlew copyStatic && \
-gradlew copyIcons && \
 gradlew runIdea
 ```
 
