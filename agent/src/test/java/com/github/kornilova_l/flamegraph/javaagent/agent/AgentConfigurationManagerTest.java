@@ -21,6 +21,7 @@ public class AgentConfigurationManagerTest {
         configLines.add("samples.CheckIncomingCalls.fun1(boolean)");
         configLines.add("samples.CheckIncomingCalls.fun2(int+, *)");
         configLines.add("samples.CheckIncomingCalls.fun2(int, String+)+");
+        configLines.add("java.io.File.*(*)");
         configLines.add("!samples.CheckIncomingCalls.fun2(int, boolean)");
         configLines.add("!samples.CheckIncomingCalls.fun2(int, long, *)");
         configurationManager = new AgentConfigurationManager(configLines);
@@ -46,7 +47,23 @@ public class AgentConfigurationManagerTest {
                 "(int, String+)+"
         ));
         assertEquals(String.join("\n", expected.stream().map(MethodConfig::toString).collect(Collectors.toList())),
-                String.join("\n", configurationManager.findIncludingConfigs("samples/CheckIncomingCalls").stream().map(MethodConfig::toString).collect(Collectors.toList())));
+                String.join("\n", configurationManager.findIncludingConfigs("samples/CheckIncomingCalls", false).stream().map(MethodConfig::toString).collect(Collectors.toList())));
+    }
+
+    @Test
+    public void includingConfigsForSystemClasses() {
+        List<String> configLines = new ArrayList<>();
+        configLines.add("java.io.File.fun1(*)");
+        configLines.add("java.io.File.fun2(*)");
+        configLines.add("!samples.CheckIncomingCalls.fun2(int, long, *)");
+        configLines.add("*.*(*)");
+        AgentConfigurationManager configurationManager = new AgentConfigurationManager(configLines);
+
+        List<MethodConfig> expected = new ArrayList<>();
+        expected.add(new MethodConfig("java.io.File", "fun1", "(*)"));
+        expected.add(new MethodConfig("java.io.File", "fun2", "(*)"));
+        assertEquals(String.join("\n", expected.stream().map(MethodConfig::toString).collect(Collectors.toList())),
+                String.join("\n", configurationManager.findIncludingConfigs("java/io/File", true).stream().map(MethodConfig::toString).collect(Collectors.toList())));
     }
 
     @Test

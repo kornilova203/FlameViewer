@@ -105,13 +105,25 @@ class AgentConfigurationManager {
         }
     }
 
+    /**
+     * @param isSystemClass true if class is loaded by bootstrap. In this case method will look only for
+     *                exact match of class name and package name. (rt.jar classes are checked
+     *                separately because otherwise *.*(*) includes absolutely all methods
+     *                and that may lead to big overhead)
+     */
     @NotNull
-    List<MethodConfig> findIncludingConfigs(String className) {
+    List<MethodConfig> findIncludingConfigs(String className, boolean isSystemClass) {
         className = className.replace('/', '.');
         List<MethodConfig> applicableMethodConfigs = new ArrayList<>();
-        for (MethodConfig methodConfig : configuration.getIncludingMethodConfigs()) {
-            if (methodConfig.isApplicableTo(className)) {
-                applicableMethodConfigs.add(methodConfig);
+        for (MethodConfig config : configuration.getIncludingMethodConfigs()) {
+            if (isSystemClass) {
+                if (config.getClassPatternString().equals(className)) {
+                    applicableMethodConfigs.add(config);
+                }
+            } else {
+                if (config.isApplicableTo(className)) {
+                    applicableMethodConfigs.add(config);
+                }
             }
         }
         return applicableMethodConfigs;
