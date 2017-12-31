@@ -59,6 +59,25 @@ class SystemClassMethodVisitor extends ProfilingMethodVisitor {
         pop();
     }
 
+    @Override
+    void throwableAddToQueue() {
+        int throwable = newLocal(org.objectweb.asm.Type.getType("L" + Throwable.class.getName() + ";"));
+        mv.visitVarInsn(ASTORE, throwable);
+    }
+
+    @Override
+    void getIfWasThrownByMethod() {
+        mv.visitVarInsn(ALOAD, startDataClassLocal);
+        mv.visitLdcInsn("isThrownByMethod");
+        createEmptyArray("Class");
+        invokeGetMethod();
+        mv.visitVarInsn(ALOAD, startDataLocal);
+        createEmptyArray("Object");
+        invokeInvoke();
+        mv.visitTypeInsn(CHECKCAST, "java/lang/Boolean");
+        mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Boolean", "booleanValue", "()Z", false);
+    }
+
     private void invokeAddToQueue() {
         loadNull();
         getIConst(10);

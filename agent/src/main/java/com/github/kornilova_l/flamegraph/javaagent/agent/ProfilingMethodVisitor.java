@@ -151,7 +151,7 @@ class ProfilingMethodVisitor extends AdviceAdapter {
      * Adds boolean value to stack.
      * The value indicates if the throwable was thrown by method itself
      */
-    private void getIfWasThrownByMethod() {
+    void getIfWasThrownByMethod() {
         getStartData();
         mv.visitMethodInsn(
                 INVOKEVIRTUAL,
@@ -394,7 +394,7 @@ class ProfilingMethodVisitor extends AdviceAdapter {
      * Throwable must be on stack.
      * It will be duplicated
      */
-    private void throwableAddToQueue() {
+    void throwableAddToQueue() {
         dup(); // duplicate throwable
         if (methodConfig.isSaveReturnValue()) { // if save message
             loadTrue();
