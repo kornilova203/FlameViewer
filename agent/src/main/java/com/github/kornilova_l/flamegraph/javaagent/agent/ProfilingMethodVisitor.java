@@ -120,7 +120,7 @@ class ProfilingMethodVisitor extends AdviceAdapter {
         }
     }
 
-    private void addTryCatchBeginning() {
+    void addTryCatchBeginning() {
         mv.visitLabel(start);
     }
 
@@ -282,7 +282,7 @@ class ProfilingMethodVisitor extends AdviceAdapter {
                 "(Z)Ljava/lang/Boolean;", false);
     }
 
-    private void longToObj() {
+    void longToObj() {
         mv.visitMethodInsn(INVOKESTATIC, "java/lang/Long", "valueOf",
                 "(J)Ljava/lang/Long;", false);
     }
@@ -316,9 +316,8 @@ class ProfilingMethodVisitor extends AdviceAdapter {
         mv.visitInsn(ICONST_1);
     }
 
-    private void getTime() {
-        mv.visitMethodInsn(INVOKESTATIC, "java/lang/System",
-                "currentTimeMillis", "()J", false);
+    void getTime() {
+        mv.visitMethodInsn(INVOKESTATIC, "java/lang/System", "currentTimeMillis", "()J", false);
     }
 
     private void getThread() {

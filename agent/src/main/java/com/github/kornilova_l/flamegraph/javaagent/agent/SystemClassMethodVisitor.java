@@ -3,6 +3,7 @@ package com.github.kornilova_l.flamegraph.javaagent.agent;
 import com.github.kornilova_l.flamegraph.configuration.MethodConfig;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Type;
 
 /**
  * This method inserts reflection calls
@@ -14,7 +15,10 @@ import org.objectweb.asm.MethodVisitor;
 class SystemClassMethodVisitor extends ProfilingMethodVisitor {
     private final int proxyClassLocal = newLocal(org.objectweb.asm.Type.getType("L" + Class.class.getName() + ";"));
     private final int startDataClassLocal = newLocal(org.objectweb.asm.Type.getType("L" + Class.class.getName() + ";"));
+    private final int startDataLocal = newLocal(org.objectweb.asm.Type.getType("L" + Object.class.getName() + ";"));
+    @SuppressWarnings("FieldCanBeLocal")
     private final String proxyClassNameWithDots = "com.github.kornilova_l.flamegraph.proxy.Proxy";
+    @SuppressWarnings("FieldCanBeLocal")
     private final String startDataClassNameWithDots = "com.github.kornilova_l.flamegraph.proxy.StartData";
     private final Label startTryCatchForReflection = new Label();
 
@@ -33,7 +37,47 @@ class SystemClassMethodVisitor extends ProfilingMethodVisitor {
         addTryCatchForReflection();
         saveClass(proxyClassNameWithDots, proxyClassLocal);
         saveClass(startDataClassNameWithDots, startDataClassLocal);
-        super.onMethodEnter();
+        createStartData();
+        addTryCatchBeginning();
+    }
+
+    private void createStartData() {
+        getMethodCreateStartData();
+        invokeCreateStartData();
+        mv.visitVarInsn(ASTORE, startDataLocal);
+    }
+
+    private void invokeCreateStartData() {
+        mv.visitInsn(ACONST_NULL);
+        mv.visitInsn(ICONST_2);
+        mv.visitTypeInsn(ANEWARRAY, "java/lang/Object");
+        dup();
+        mv.visitInsn(ICONST_0);
+        getTime();
+        longToObj();
+        mv.visitInsn(AASTORE);
+        dup();
+        mv.visitInsn(ICONST_1);
+        mv.visitInsn(ICONST_0);
+        mv.visitTypeInsn(ANEWARRAY, "java/lang/Object");
+        mv.visitInsn(AASTORE);
+        mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/reflect/Method", "invoke", "(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;", false);
+    }
+
+    private void getMethodCreateStartData() {
+        mv.visitVarInsn(ALOAD, proxyClassLocal);
+        mv.visitLdcInsn("createStartData");
+        mv.visitInsn(ICONST_2);
+        mv.visitTypeInsn(ANEWARRAY, "java/lang/Class");
+        dup();
+        mv.visitInsn(ICONST_0);
+        mv.visitFieldInsn(GETSTATIC, "java/lang/Long", "TYPE", "Ljava/lang/Class;");
+        mv.visitInsn(AASTORE);
+        dup();
+        mv.visitInsn(ICONST_1);
+        mv.visitLdcInsn(Type.getObjectType("[Ljava/lang/Object;"));
+        mv.visitInsn(AASTORE);
+        mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Class", "getMethod", "(Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;", false);
     }
 
     private void saveClass(String className, int variable) {
