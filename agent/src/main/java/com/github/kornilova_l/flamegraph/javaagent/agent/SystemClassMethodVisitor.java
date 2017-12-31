@@ -12,8 +12,10 @@ import org.objectweb.asm.MethodVisitor;
  * (see it in test classes com.github.kornilova_l.flamegraph.javaagent.generate.test_classes.SystemClassExpected)
  */
 class SystemClassMethodVisitor extends ProfilingMethodVisitor {
-    private final int proxyClassLocal;
-    private final int startDataClassLocal;
+    private final int proxyClassLocal = newLocal(org.objectweb.asm.Type.getType("L" + Class.class.getName() + ";"));
+    private final int startDataClassLocal = newLocal(org.objectweb.asm.Type.getType("L" + Class.class.getName() + ";"));
+    private final String proxyClassNameWithDots = "com.github.kornilova_l.flamegraph.proxy.Proxy";
+    private final String startDataClassNameWithDots = "com.github.kornilova_l.flamegraph.proxy.StartData";
     private final Label startTryCatchForReflection = new Label();
 
     SystemClassMethodVisitor(int access,
@@ -24,19 +26,21 @@ class SystemClassMethodVisitor extends ProfilingMethodVisitor {
                              boolean hasSystemCL,
                              MethodConfig methodConfig) {
         super(access, methodName, desc, mv, className, hasSystemCL, methodConfig);
-        proxyClassLocal = newLocal(org.objectweb.asm.Type.getType("L" + Class.class.getName() + ";"));
-        startDataClassLocal = newLocal(org.objectweb.asm.Type.getType("L" + Class.class.getName() + ";"));
     }
 
     @Override
     protected void onMethodEnter() {
         addTryCatchForReflection();
+        saveClass(proxyClassNameWithDots, proxyClassLocal);
+        saveClass(startDataClassNameWithDots, startDataClassLocal);
         super.onMethodEnter();
     }
 
-    @Override
-    protected void onMethodExit(int opcode) {
-        super.onMethodExit(opcode);
+    private void saveClass(String className, int variable) {
+        mv.visitMethodInsn(INVOKESTATIC, "java/lang/ClassLoader", "getSystemClassLoader", "()Ljava/lang/ClassLoader;", false);
+        mv.visitLdcInsn(className);
+        mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/ClassLoader", "loadClass", "(Ljava/lang/String;)Ljava/lang/Class;", true);
+        mv.visitVarInsn(ASTORE, variable);
     }
 
     @Override
@@ -47,17 +51,12 @@ class SystemClassMethodVisitor extends ProfilingMethodVisitor {
 
     private void endTryCatchForReflection() {
         Label end = new Label(); // end of try-catch block (after it there is goto operation to endOfHandler
-        Label handler = new Label(); // start of exception handler
-        Label endOfHandler = new Label();
-        mv.visitTryCatchBlock(startTryCatchForReflection, end, handler, "java/lang/ClassNotFoundException");
-        mv.visitTryCatchBlock(startTryCatchForReflection, end, handler, "java/lang/NoSuchMethodException");
-        mv.visitTryCatchBlock(startTryCatchForReflection, end, handler, "java/lang/IllegalAccessException");
-        mv.visitTryCatchBlock(startTryCatchForReflection, end, handler, "java/lang/reflect/InvocationTargetException");
-        mv.visitLabel(end);
-        mv.visitJumpInsn(GOTO, endOfHandler);
-        mv.visitLabel(handler);
+        mv.visitTryCatchBlock(startTryCatchForReflection, end, end, "java/lang/ClassNotFoundException");
+        mv.visitTryCatchBlock(startTryCatchForReflection, end, end, "java/lang/NoSuchMethodException");
+        mv.visitTryCatchBlock(startTryCatchForReflection, end, end, "java/lang/IllegalAccessException");
+        mv.visitTryCatchBlock(startTryCatchForReflection, end, end, "java/lang/reflect/InvocationTargetException");
+        mv.visitLabel(end); // this label goes after athrow of try-catch that is added by ProfilingMethodVisitor
         printStackTrace();
-        mv.visitLabel(endOfHandler);
     }
 
     /**
