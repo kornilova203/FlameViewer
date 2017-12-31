@@ -6,6 +6,7 @@ package com.github.kornilova_l.flamegraph.javaagent.generate.test_classes;
  * not system classes in their methods.
  */
 public class SystemClass {
+    @SuppressWarnings("unused")
     public void method() {
         System.out.println("Hello, I am a method of System Class. " +
                 "I do not know about any other classes except system classes");

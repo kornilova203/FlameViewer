@@ -8,24 +8,25 @@ import java.lang.reflect.InvocationTargetException;
  * not system classes in their methods.
  */
 public class SystemClassExpected {
+    @SuppressWarnings({"RedundantCast", "unused"})
     public void method() {
         try {
-            Class<?> clazz = ClassLoader.getSystemClassLoader().loadClass("com.github.kornilova_l.flamegraph.proxy.Proxy");
-            Object startData = clazz.getMethod("createStartData", long.class, Object[].class)
+            Class<?> proxyClass = ClassLoader.getSystemClassLoader().loadClass("com.github.kornilova_l.flamegraph.proxy.Proxy");
+            Class<?> startDataClass = ClassLoader.getSystemClassLoader().loadClass("com.github.kornilova_l.flamegraph.proxy.StartData");
+            Object startData = proxyClass.getMethod("createStartData", long.class, Object[].class)
                     .invoke(null, System.currentTimeMillis(), new Object[0]);
             try {
                 System.out.println("Hello, I am a method of System Class. " +
                         "I do not know about any other classes except system classes");
-                clazz.getMethod("setDuration", long.class).invoke(startData, System.currentTimeMillis());
-
-                if ((long) clazz.getMethod("getDuration").invoke(startData) > 1) {
-                    clazz.getMethod("addToQueue", Object.class, long.class, long.class, Object[].class, Thread.class,
+                startDataClass.getMethod("setDuration", long.class).invoke(startData, System.currentTimeMillis());
+                if ((long) startDataClass.getMethod("getDuration").invoke(startData) > 1) {
+                    proxyClass.getMethod("addToQueue", Object.class, long.class, long.class, Object[].class, Thread.class,
                             String.class, String.class, String.class, boolean.class, String.class)
                             .invoke(null,
                                     null,
-                                    (long) clazz.getMethod("getStartTime").invoke(startData),
-                                    (long) clazz.getMethod("getDuration").invoke(startData),
-                                    (Object[]) clazz.getMethod("getParameters").invoke(startData),
+                                    (long) startDataClass.getMethod("getStartTime").invoke(startData),
+                                    (long) startDataClass.getMethod("getDuration").invoke(startData),
+                                    (Object[]) startDataClass.getMethod("getParameters").invoke(startData),
                                     Thread.currentThread(),
                                     "com/github/kornilova_l/flamegraph/javaagent/generate/test_classes/SystemClass",
                                     "method",
@@ -35,17 +36,17 @@ public class SystemClassExpected {
                             );
                 }
             } catch (Throwable t) {
-                if (!((boolean) clazz.getMethod("isThrownByMethod").invoke(startData))) {
-                    clazz.getMethod("setDuration", long.class).invoke(startData, System.currentTimeMillis());
-                    if ((long) clazz.getMethod("getDuration").invoke(startData) > 1) {
-                        clazz.getMethod("addToQueue", Throwable.class, boolean.class, long.class, long.class,
+                if (!((boolean) startDataClass.getMethod("isThrownByMethod").invoke(startData))) {
+                    startDataClass.getMethod("setDuration", long.class).invoke(startData, System.currentTimeMillis());
+                    if ((long) startDataClass.getMethod("getDuration").invoke(startData) > 1) {
+                        proxyClass.getMethod("addToQueue", Throwable.class, boolean.class, long.class, long.class,
                                 Object[].class, Thread.class, String.class, String.class, String.class, boolean.class, String.class)
                                 .invoke(null,
                                         null,
                                         false,
-                                        (long) clazz.getMethod("getStartTime").invoke(startData),
-                                        (long) clazz.getMethod("getDuration").invoke(startData),
-                                        (Object[]) clazz.getMethod("getParameters").invoke(startData),
+                                        (long) startDataClass.getMethod("getStartTime").invoke(startData),
+                                        (long) startDataClass.getMethod("getDuration").invoke(startData),
+                                        (Object[]) startDataClass.getMethod("getParameters").invoke(startData),
                                         Thread.currentThread(),
                                         "com/github/kornilova_l/flamegraph/javaagent/generate/test_classes/SystemClass",
                                         "method",

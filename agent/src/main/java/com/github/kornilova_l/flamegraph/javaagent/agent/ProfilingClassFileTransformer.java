@@ -48,7 +48,8 @@ class ProfilingClassFileTransformer implements ClassFileTransformer {
                                 className,
                                 hasSystemCLInChain(loader),
                                 methodConfigs,
-                                configurationManager
+                                configurationManager,
+                                loader == null
                         ), ClassReader.SKIP_FRAMES);
                 return cw.toByteArray();
             }

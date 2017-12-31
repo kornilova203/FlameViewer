@@ -13,17 +13,20 @@ class ProfilingClassVisitor extends ClassVisitor {
     private final boolean hasSystemCL;
     private final List<MethodConfig> includingConfigs;
     private final AgentConfigurationManager configurationManager;
+    private final boolean isSystemClass;
 
     ProfilingClassVisitor(ClassVisitor cv,
                           String className,
                           boolean hasSystemCL,
                           List<MethodConfig> includingConfigs,
-                          AgentConfigurationManager configurationManager) {
+                          AgentConfigurationManager configurationManager,
+                          boolean isSystemClass) {
         super(Opcodes.ASM5, cv);
         this.className = className;
         this.hasSystemCL = hasSystemCL;
         this.includingConfigs = includingConfigs;
         this.configurationManager = configurationManager;
+        this.isSystemClass = isSystemClass;
     }
 
     @Override
@@ -44,7 +47,11 @@ class ProfilingClassVisitor extends ClassVisitor {
                 );
                 if (includingConfigsForMethod.size() != 0) {
                     AgentConfigurationManager.setSaveParameters(trueMethodConfig, includingConfigsForMethod);
-                    return new ProfilingMethodVisitor(access, methodName, desc, mv, className, hasSystemCL, trueMethodConfig);
+                    if (isSystemClass) {
+                        return new SystemClassMethodVisitor(access, methodName, desc, mv, className, hasSystemCL, trueMethodConfig);
+                    } else {
+                        return new ProfilingMethodVisitor(access, methodName, desc, mv, className, hasSystemCL, trueMethodConfig);
+                    }
                 }
             }
         }

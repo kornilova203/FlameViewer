@@ -20,7 +20,7 @@ class IsCodeValidTest {
         val configManager = AgentConfigurationManager(listOf("java.io.FileOutputStream.write(byte[])"))
         cr.accept(
                 ProfilingClassVisitor(cw, "java/io/FileOutputStream", false,
-                        methodConfigs, configManager), ClassReader.SKIP_FRAMES
+                        methodConfigs, configManager, true), ClassReader.SKIP_FRAMES
         )
 
         bytes = cw.toByteArray()

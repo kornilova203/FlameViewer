@@ -7,7 +7,7 @@ import com.github.kornilova_l.flamegraph.javaagent.generate.Generator
 import com.github.kornilova_l.flamegraph.javaagent.generate.test_classes.*
 import com.github.kornilova_l.flamegraph.javaagent.getBytes
 import com.github.kornilova_l.flamegraph.javaagent.removePackage
-import org.junit.BeforeClass
+import org.junit.Before
 import org.junit.Test
 import org.objectweb.asm.ClassReader
 import org.objectweb.asm.ClassWriter
@@ -17,42 +17,43 @@ import java.util.*
 
 
 class InstrumentationTest {
+    @Before
+    fun setup() {
+        configurationManager = createConfig("*.*(*)", methodConfigs)
+        configurationManagerSaveParams = createConfig("*.*(*+)", methodConfigsSaveParams)
+        configurationManagerSaveReturn = createConfig("*.*(*)+", methodConfigsSaveReturn)
+    }
 
     @Test
-    fun basicInstrumentation() {
-        /* All test fail because it is not possible to generate exactly same bytecode */
-        //        classTest(OneMethod.class, configurationManager, methodConfigs, true);
+    fun methodThrowsExceptionCheckManually() {
+        /* Test fails because it is not possible to generate exactly same bytecode
+         * It duplicated exception on stack */
         classTest(ThrowsException::class.java, ThrowsExceptionExpected::class.java, configurationManager, methodConfigs, true)
-        //        classTest(UsesThreadPool.class, configurationManager, methodConfigs);
-        //        classTest(SeveralReturns.class, configurationManager, methodConfigs, true);
-        //        classTest(TwoMethods.class, configurationManager, methodConfigs, true);
     }
 
     @Test
     fun saveParameters() {
-        /* All test fail because it is not possible to generate exactly same bytecode */
-        classTest(SaveParameters::class.java, SaveParameters::class.java, configurationManagerSaveParams, methodConfigsSaveParams, true)
-        //        classTest(SaveSecondParam.class, configurationManagerSaveSecondParam, methodConfigsSaveSecondParam, true);
+        classTest(SaveParameters::class.java, SaveParametersExpected::class.java, configurationManagerSaveParams, methodConfigsSaveParams, true)
     }
 
     @Test
-    fun saveReturnValue() {
-        /* All test fail because it is not possible to generate exactly same bytecode */
+    fun saveReturnValueCheckManually() {
+        /* Test fails because it is not possible to generate exactly same bytecode
+         * It duplicates return value on stack */
         classTest(SaveReturnValue::class.java, SaveReturnValueExpected::class.java, configurationManagerSaveReturn, methodConfigsSaveReturn, true)
     }
 
     @Test
     fun useProxy() {
-        /* All test fail because it is not possible to generate exactly same bytecode */
         classTest(UseProxy::class.java, UseProxyExpected::class.java, configurationManagerSaveReturn, methodConfigsSaveReturn, false)
     }
 
     @Test
     fun systemClassesTest() {
-        val configurationManager = AgentConfigurationManager(listOf("java.io.File.*(*)"))
-        val methodConfigs = listOf(MethodConfig("java.io.File", "*", "(*)"))
+        val configurationManager = AgentConfigurationManager(listOf("${SystemClass::class.java.name}.method(*)"))
+        val methodConfigs = listOf(MethodConfig(SystemClass::class.java.name, "method", "(*)"))
         /* All test fail because it is not possible to generate exactly same bytecode */
-        classTest(SystemClass::class.java, SystemClassExpected::class.java, configurationManager, methodConfigs, false)
+        classTest(SystemClass::class.java, SystemClassExpected::class.java, configurationManager, methodConfigs, false, true)
     }
 
     @Test
@@ -87,7 +88,8 @@ class InstrumentationTest {
                             fullName.replace('.', '/'),
                             hasSystemCL,
                             methodConfigs,
-                            configurationManager
+                            configurationManager,
+                            isSystemClass
                     ), ClassReader.SKIP_FRAMES or ClassReader.SKIP_DEBUG
             )
 
@@ -130,13 +132,6 @@ class InstrumentationTest {
         private val methodConfigsSaveParams = ArrayList<MethodConfig>()
         private var configurationManagerSaveReturn: AgentConfigurationManager? = null
         private val methodConfigsSaveReturn = ArrayList<MethodConfig>()
-
-        @BeforeClass
-        fun setup() {
-            configurationManager = createConfig("*.*(*)", methodConfigs)
-            configurationManagerSaveParams = createConfig("*.*(*+)", methodConfigsSaveParams)
-            configurationManagerSaveReturn = createConfig("*.*(*)+", methodConfigsSaveReturn)
-        }
 
         private fun createConfig(config: String,
                                  methodConfigs: MutableList<MethodConfig>): AgentConfigurationManager {

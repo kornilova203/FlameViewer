@@ -29,8 +29,8 @@ public class UseProxyExpected {
             if (!startData.isThrownByMethod()) {
                 startData.setDuration(System.currentTimeMillis());
                 if (startData.getDuration() > 1) {
-                    Proxy.addToQueue(null,
-                            false,
+                    Proxy.addToQueue(throwable,
+                            true,
                             startData.getStartTime(),
                             startData.getDuration(),
                             startData.getParameters(),

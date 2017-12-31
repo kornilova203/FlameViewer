@@ -5,6 +5,7 @@ import java.io.File
 import java.io.FileNotFoundException
 import java.io.UnsupportedEncodingException
 import java.nio.charset.Charset
+import java.util.regex.Pattern
 
 fun removePackage(fullName: String): String {
     val dot = fullName.lastIndexOf('.')
@@ -33,8 +34,10 @@ private fun getData(file: File): String {
     throw RuntimeException("File was not open")
 }
 
+val expectedWord = Regex("(?<=\\w)Expected(?= \\{)")
+
 fun compareFiles(expected: File, actual: File) {
-    assertEquals(getData(expected), getData(actual))
+    assertEquals(getData(expected).replace(expectedWord, ""), getData(actual))
 }
 
 fun createDir(name: String) {
