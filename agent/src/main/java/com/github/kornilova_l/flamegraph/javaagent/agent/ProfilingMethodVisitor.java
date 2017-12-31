@@ -21,7 +21,7 @@ class ProfilingMethodVisitor extends AdviceAdapter {
     private final String className;
     private final boolean hasSystemCL;
     private final MethodConfig methodConfig;
-    private int startDataLocal;
+    int startDataLocal;
     private final Label start = new Label();
     private final Label endOfTryCatch = new Label();
     private final String savedParameters;
@@ -84,6 +84,20 @@ class ProfilingMethodVisitor extends AdviceAdapter {
 
     @Override
     protected void onMethodEnter() {
+        createStartData();
+        saveStartData();
+        mv.visitLabel(start); // try-catch beginning
+    }
+
+    private void saveStartData() {
+        startDataLocal = newLocal(org.objectweb.asm.Type.getType(START_DATA_TYPE));
+        mv.visitVarInsn(ASTORE, startDataLocal);
+    }
+
+    /**
+     * Leaves object on stack
+     */
+    protected void createStartData() {
         getTime();
         int countEnabledParams = 0;
         for (MethodConfig.Parameter parameter : methodConfig.getParameters()) {
@@ -96,17 +110,6 @@ class ProfilingMethodVisitor extends AdviceAdapter {
         } else {
             loadNull();
         }
-        createStartData();
-        saveStartData();
-        addTryCatchBeginning();
-    }
-
-    private void saveStartData() {
-        startDataLocal = newLocal(org.objectweb.asm.Type.getType(START_DATA_TYPE));
-        mv.visitVarInsn(ASTORE, startDataLocal);
-    }
-
-    private void createStartData() {
         if (hasSystemCL) {
             mv.visitMethodInsn(INVOKESTATIC, LOGGER_PACKAGE_NAME + "LoggerQueue",
                     "createStartData",
@@ -118,10 +121,6 @@ class ProfilingMethodVisitor extends AdviceAdapter {
                     "(J[Ljava/lang/Object;)" + START_DATA_TYPE,
                     false);
         }
-    }
-
-    void addTryCatchBeginning() {
-        mv.visitLabel(start);
     }
 
     private void endTryCatch() {
@@ -446,7 +445,7 @@ class ProfilingMethodVisitor extends AdviceAdapter {
      * Adds boolean value to stack.
      * The value is true if method took > 1ms
      */
-    private void getIfTimeIsMoreOneMs() {
+    void getIfTimeIsMoreOneMs() {
         getStartData();
         mv.visitMethodInsn(INVOKEVIRTUAL,
                 START_DATA_CLASS,

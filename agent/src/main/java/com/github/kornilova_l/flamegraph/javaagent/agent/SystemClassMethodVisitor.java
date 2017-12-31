@@ -15,7 +15,6 @@ import org.objectweb.asm.Type;
 class SystemClassMethodVisitor extends ProfilingMethodVisitor {
     private final int proxyClassLocal = newLocal(org.objectweb.asm.Type.getType("L" + Class.class.getName() + ";"));
     private final int startDataClassLocal = newLocal(org.objectweb.asm.Type.getType("L" + Class.class.getName() + ";"));
-    private final int startDataLocal = newLocal(org.objectweb.asm.Type.getType("L" + Object.class.getName() + ";"));
     @SuppressWarnings("FieldCanBeLocal")
     private final String proxyClassNameWithDots = "com.github.kornilova_l.flamegraph.proxy.Proxy";
     @SuppressWarnings("FieldCanBeLocal")
@@ -37,8 +36,7 @@ class SystemClassMethodVisitor extends ProfilingMethodVisitor {
         addTryCatchForReflection();
         saveClass(proxyClassNameWithDots, proxyClassLocal);
         saveClass(startDataClassNameWithDots, startDataClassLocal);
-        createStartData();
-        addTryCatchBeginning();
+        super.onMethodEnter();
     }
 
     @Override
@@ -47,8 +45,25 @@ class SystemClassMethodVisitor extends ProfilingMethodVisitor {
     }
 
     @Override
-    protected void saveExitTime() {
+    void getIfTimeIsMoreOneMs() {
+        mv.visitVarInsn(ALOAD, startDataClassLocal);
+        mv.visitLdcInsn("getDuration");
+        mv.visitInsn(ICONST_0);
+        mv.visitTypeInsn(ANEWARRAY, "java/lang/Class");
+        invokeGetMethod();
         mv.visitVarInsn(ALOAD, startDataLocal);
+        mv.visitInsn(ICONST_0);
+        mv.visitTypeInsn(ANEWARRAY, "java/lang/Object");
+        invokeInvoke();
+        mv.visitTypeInsn(CHECKCAST, "java/lang/Long");
+        mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Long", "longValue", "()J", false);
+        mv.visitInsn(LCONST_1);
+        mv.visitInsn(LCMP);
+    }
+
+    @Override
+    protected void saveExitTime() {
+        mv.visitVarInsn(ALOAD, startDataClassLocal);
         mv.visitLdcInsn("setDuration");
         mv.visitInsn(ICONST_1);
         mv.visitTypeInsn(ANEWARRAY, "java/lang/Class");
@@ -77,10 +92,10 @@ class SystemClassMethodVisitor extends ProfilingMethodVisitor {
         mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Class", "getMethod", "(Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;", false);
     }
 
-    private void createStartData() {
+    @Override
+    protected void createStartData() {
         getMethodCreateStartData();
         invokeCreateStartData();
-        mv.visitVarInsn(ASTORE, startDataLocal);
     }
 
     private void invokeCreateStartData() {
