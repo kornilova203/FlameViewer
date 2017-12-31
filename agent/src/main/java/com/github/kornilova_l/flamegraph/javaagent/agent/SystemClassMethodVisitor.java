@@ -41,6 +41,42 @@ class SystemClassMethodVisitor extends ProfilingMethodVisitor {
         addTryCatchBeginning();
     }
 
+    @Override
+    protected void onMethodExit(int opcode) {
+        saveExitTime();
+    }
+
+    @Override
+    protected void saveExitTime() {
+        mv.visitVarInsn(ALOAD, startDataLocal);
+        mv.visitLdcInsn("setDuration");
+        mv.visitInsn(ICONST_1);
+        mv.visitTypeInsn(ANEWARRAY, "java/lang/Class");
+        dup();
+        mv.visitInsn(ICONST_0);
+        mv.visitFieldInsn(GETSTATIC, "java/lang/Long", "TYPE", "Ljava/lang/Class;");
+        mv.visitInsn(AASTORE);
+        invokeGetMethod();
+        mv.visitVarInsn(ALOAD, startDataLocal);
+        mv.visitInsn(ICONST_1);
+        mv.visitTypeInsn(ANEWARRAY, "java/lang/Object");
+        dup();
+        mv.visitInsn(ICONST_0);
+        getTime();
+        longToObj();
+        mv.visitInsn(AASTORE);
+        invokeInvoke();
+        mv.visitInsn(POP); // remove return value of 'invoke' (it returns null here)
+    }
+
+    private void invokeInvoke() {
+        mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/reflect/Method", "invoke", "(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;", false);
+    }
+
+    private void invokeGetMethod() {
+        mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Class", "getMethod", "(Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;", false);
+    }
+
     private void createStartData() {
         getMethodCreateStartData();
         invokeCreateStartData();
@@ -61,7 +97,7 @@ class SystemClassMethodVisitor extends ProfilingMethodVisitor {
         mv.visitInsn(ICONST_0);
         mv.visitTypeInsn(ANEWARRAY, "java/lang/Object");
         mv.visitInsn(AASTORE);
-        mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/reflect/Method", "invoke", "(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;", false);
+        invokeInvoke();
     }
 
     private void getMethodCreateStartData() {
@@ -77,7 +113,7 @@ class SystemClassMethodVisitor extends ProfilingMethodVisitor {
         mv.visitInsn(ICONST_1);
         mv.visitLdcInsn(Type.getObjectType("[Ljava/lang/Object;"));
         mv.visitInsn(AASTORE);
-        mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Class", "getMethod", "(Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;", false);
+        invokeGetMethod();
     }
 
     private void saveClass(String className, int variable) {

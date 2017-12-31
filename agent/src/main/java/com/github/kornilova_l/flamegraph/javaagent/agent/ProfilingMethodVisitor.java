@@ -428,7 +428,7 @@ class ProfilingMethodVisitor extends AdviceAdapter {
      * Saves duration to start data.
      * Does not modify stack
      */
-    private void saveExitTime() {
+    void saveExitTime() {
         getStartData();
         getTime();
         mv.visitMethodInsn(INVOKEVIRTUAL,
