@@ -144,7 +144,7 @@ class ProfilingMethodVisitor extends AdviceAdapter {
         saveExitTime();
         getIfTimeIsMoreOneMs();
         mv.visitJumpInsn(IFLE, athrowLabel); // if method took < 1ms
-        formThrowableExit();
+        throwableAddToQueue();
     }
 
     /**
@@ -356,13 +356,13 @@ class ProfilingMethodVisitor extends AdviceAdapter {
 
     private void addToQueue(int opcode) {
         if (opcode == ATHROW) {
-            formThrowableExit();
+            throwableAddToQueue();
         } else {
-            formRetValExit(opcode);
+            retValAddToQueue(opcode);
         }
     }
 
-    private void setThrownByMethod() {
+    void setThrownByMethod() {
         getStartData();
         mv.visitMethodInsn(
                 INVOKEVIRTUAL,
@@ -373,7 +373,7 @@ class ProfilingMethodVisitor extends AdviceAdapter {
         );
     }
 
-    private void formRetValExit(int opcode) {
+    void retValAddToQueue(int opcode) {
         if (opcode != RETURN) { // return some value
             if (methodConfig.isSaveReturnValue()) {
                 int sizeOfRetVal = getSizeOfRetVal(opcode);
@@ -383,7 +383,7 @@ class ProfilingMethodVisitor extends AdviceAdapter {
                 loadNull();
             }
         } else {
-            retValToObj();
+            loadNull(); // there is nothing to save
         }
         getCommonExitData();
         mv.visitLdcInsn(savedParameters);
@@ -394,7 +394,7 @@ class ProfilingMethodVisitor extends AdviceAdapter {
      * Throwable must be on stack.
      * It will be duplicated
      */
-    private void formThrowableExit() {
+    private void throwableAddToQueue() {
         dup(); // duplicate throwable
         if (methodConfig.isSaveReturnValue()) { // if save message
             loadTrue();

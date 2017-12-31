@@ -40,25 +40,99 @@ class SystemClassMethodVisitor extends ProfilingMethodVisitor {
     }
 
     @Override
-    protected void onMethodExit(int opcode) {
-        saveExitTime();
-    }
-
-    @Override
     void getIfTimeIsMoreOneMs() {
         mv.visitVarInsn(ALOAD, startDataClassLocal);
         mv.visitLdcInsn("getDuration");
-        mv.visitInsn(ICONST_0);
+
+        mv.visitInsn(ICONST_0); // empty array
         mv.visitTypeInsn(ANEWARRAY, "java/lang/Class");
+
         invokeGetMethod();
         mv.visitVarInsn(ALOAD, startDataLocal);
-        mv.visitInsn(ICONST_0);
+
+        mv.visitInsn(ICONST_0); // empty array
         mv.visitTypeInsn(ANEWARRAY, "java/lang/Object");
+
         invokeInvoke();
         mv.visitTypeInsn(CHECKCAST, "java/lang/Long");
         mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Long", "longValue", "()J", false);
         mv.visitInsn(LCONST_1);
         mv.visitInsn(LCMP);
+    }
+
+    @Override
+    void setThrownByMethod() {
+        // todo: implement
+        super.setThrownByMethod();
+    }
+
+    @Override
+    void retValAddToQueue(int opcode) {
+        getMethodAddToQueue();
+        pop();
+    }
+
+    private void getMethodAddToQueue() {
+        mv.visitVarInsn(ALOAD, proxyClassLocal);
+        mv.visitLdcInsn("addToQueue");
+        mv.visitIntInsn(BIPUSH, 10); // size of array of types
+        mv.visitTypeInsn(ANEWARRAY, "java/lang/Class");
+        dup(); // duplicate array to add new object to it
+
+        mv.visitInsn(ICONST_0); // index 0
+        mv.visitLdcInsn(Type.getObjectType("java/lang/Object")); // retVal
+        addToArrayAndDup();
+
+        mv.visitInsn(ICONST_1); // index 1
+        getClassOfLong(); // start time
+        addToArrayAndDup();
+
+        mv.visitInsn(ICONST_2); // index 2
+        getClassOfLong(); // duration
+        addToArrayAndDup();
+
+        mv.visitInsn(ICONST_3); // index 3
+        getClassOfObjectArray(); // parameters
+        addToArrayAndDup();
+
+        mv.visitInsn(ICONST_4); // index 4
+        mv.visitLdcInsn(Type.getObjectType("java/lang/Thread")); // thread
+        addToArrayAndDup();
+
+        mv.visitInsn(ICONST_5); // index 5
+        getStringClass(); // class name
+        addToArrayAndDup();
+
+        mv.visitIntInsn(BIPUSH, 6); // index 6
+        getStringClass(); // method name
+        addToArrayAndDup();
+
+        mv.visitIntInsn(BIPUSH, 7); // index 7
+        getStringClass(); // description
+        addToArrayAndDup();
+
+        mv.visitIntInsn(BIPUSH, 8); // index 8
+        mv.visitFieldInsn(GETSTATIC, "java/lang/Boolean", "TYPE", "Ljava/lang/Class;"); // is static
+        addToArrayAndDup();
+
+        mv.visitIntInsn(BIPUSH, 9); // index 9
+        getStringClass(); // description
+        mv.visitInsn(AASTORE);
+
+        invokeGetMethod();
+    }
+
+    private void getStringClass() {
+        mv.visitLdcInsn(Type.getObjectType("java/lang/String"));
+    }
+
+    private void addToArrayAndDup() {
+        mv.visitInsn(AASTORE); // add to array
+        dup(); // duplicate array to add new object to it
+    }
+
+    private void getClassOfObjectArray() {
+        mv.visitLdcInsn(Type.getObjectType("[Ljava/lang/Object;"));
     }
 
     @Override
@@ -69,7 +143,7 @@ class SystemClassMethodVisitor extends ProfilingMethodVisitor {
         mv.visitTypeInsn(ANEWARRAY, "java/lang/Class");
         dup();
         mv.visitInsn(ICONST_0);
-        mv.visitFieldInsn(GETSTATIC, "java/lang/Long", "TYPE", "Ljava/lang/Class;");
+        getClassOfLong();
         mv.visitInsn(AASTORE);
         invokeGetMethod();
         mv.visitVarInsn(ALOAD, startDataLocal);
@@ -82,6 +156,10 @@ class SystemClassMethodVisitor extends ProfilingMethodVisitor {
         mv.visitInsn(AASTORE);
         invokeInvoke();
         mv.visitInsn(POP); // remove return value of 'invoke' (it returns null here)
+    }
+
+    private void getClassOfLong() {
+        mv.visitFieldInsn(GETSTATIC, "java/lang/Long", "TYPE", "Ljava/lang/Class;");
     }
 
     private void invokeInvoke() {
@@ -122,11 +200,11 @@ class SystemClassMethodVisitor extends ProfilingMethodVisitor {
         mv.visitTypeInsn(ANEWARRAY, "java/lang/Class");
         dup();
         mv.visitInsn(ICONST_0);
-        mv.visitFieldInsn(GETSTATIC, "java/lang/Long", "TYPE", "Ljava/lang/Class;");
+        getClassOfLong();
         mv.visitInsn(AASTORE);
         dup();
         mv.visitInsn(ICONST_1);
-        mv.visitLdcInsn(Type.getObjectType("[Ljava/lang/Object;"));
+        getClassOfObjectArray();
         mv.visitInsn(AASTORE);
         invokeGetMethod();
     }
