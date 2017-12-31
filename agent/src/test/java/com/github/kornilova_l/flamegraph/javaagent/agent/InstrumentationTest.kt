@@ -12,7 +12,9 @@ import org.junit.Test
 import org.objectweb.asm.ClassReader
 import org.objectweb.asm.ClassWriter
 import org.objectweb.asm.util.TraceClassVisitor
-import java.io.*
+import java.io.File
+import java.io.FileOutputStream
+import java.io.PrintWriter
 import java.util.*
 
 
@@ -25,34 +27,37 @@ class InstrumentationTest {
     }
 
     @Test
-    fun methodThrowsExceptionCheckManually() {
-        /* Test fails because it is not possible to generate exactly same bytecode
-         * It duplicated exception on stack */
-        classTest(ThrowsException::class.java, ThrowsExceptionExpected::class.java, configurationManager, methodConfigs, true)
+    fun methodThrowsException() {
+        classTest(ThrowsException::class.java, configurationManager!!, methodConfigs)
+        /* If instrumentation changed uncomment following and check it manually */
+//         classTest(ThrowsException::class.java, ThrowsExceptionExpected::class.java, configurationManager, methodConfigs, true)
     }
 
     @Test
     fun saveParameters() {
-        classTest(SaveParameters::class.java, SaveParametersExpected::class.java, configurationManagerSaveParams, methodConfigsSaveParams, true)
+        classTest(SaveParameters::class.java, configurationManagerSaveParams!!, methodConfigsSaveParams)
+        /* If instrumentation changed uncomment following and check it manually */
+//        classTest(SaveParameters::class.java, SaveParametersExpected::class.java, configurationManagerSaveParams!!, methodConfigsSaveParams, true)
     }
 
     @Test
-    fun saveReturnValueCheckManually() {
-        /* Test fails because it is not possible to generate exactly same bytecode
-         * It duplicates return value on stack */
-        classTest(SaveReturnValue::class.java, SaveReturnValueExpected::class.java, configurationManagerSaveReturn, methodConfigsSaveReturn, true)
+    fun saveReturnValue() {
+        classTest(SaveReturnValue::class.java, configurationManagerSaveReturn!!, methodConfigsSaveReturn)
+        /* If instrumentation changed uncomment following and check it manually */
+//        classTest(SaveReturnValue::class.java, SaveReturnValueExpected::class.java, configurationManagerSaveReturn!!, methodConfigsSaveReturn, true)
     }
 
     @Test
     fun useProxy() {
-        classTest(UseProxy::class.java, UseProxyExpected::class.java, configurationManagerSaveReturn, methodConfigsSaveReturn, false)
+        classTest(UseProxy::class.java, configurationManagerSaveReturn!!, methodConfigsSaveReturn, false)
+        /* If instrumentation changed uncomment following and check it manually */
+//        classTest(UseProxy::class.java, UseProxyExpected::class.java, configurationManagerSaveReturn!!, methodConfigsSaveReturn, false)
     }
 
     @Test
     fun systemClassesTest() {
         val configurationManager = AgentConfigurationManager(listOf("${SystemClass::class.java.name}.method(*)"))
         val methodConfigs = listOf(MethodConfig(SystemClass::class.java.name, "method", "(*)"))
-        /* All test fail because it is not possible to generate exactly same bytecode */
         classTest(SystemClass::class.java, SystemClassExpected::class.java, configurationManager, methodConfigs, false, true)
     }
 
@@ -60,69 +65,92 @@ class InstrumentationTest {
     fun fileOutputStream() {
         val methodConfigs = listOf(MethodConfig("java.io.FileOutputStream", "write", "(byte[])"))
         val configurationManager = AgentConfigurationManager(listOf("java.io.FileOutputStream.write(byte[])"))
-        classTest(FileOutputStream::class.java, FileOutputStream::class.java, configurationManager, methodConfigs, false)
+        classTest(FileOutputStream::class.java, FileOutputStream::class.java, configurationManager, methodConfigs, false, true)
     }
 
     @Test
     fun hasCatch() {
-        classTest(HasCatch::class.java, HasCatchExpected::class.java, configurationManagerSaveReturn, methodConfigsSaveReturn, true)
+        classTest(HasCatch::class.java, configurationManagerSaveReturn!!, methodConfigsSaveReturn)
+        /* If instrumentation changed uncomment following and check it manually */
+//        classTest(HasCatch::class.java, HasCatchExpected::class.java, configurationManagerSaveReturn!!, methodConfigsSaveReturn)
+    }
+
+    @Test
+    fun hasIf() {
+        classTest(HasIf::class.java, configurationManager!!, methodConfigs)
+        /* If instrumentation changed uncomment following and check it manually */
+//        classTest(HasIf::class.java, HasIfExpected::class.java, configurationManager!!, methodConfigs)
     }
 
     private fun classTest(testedClass: Class<*>,
                           expectedClass: Class<*>,
-                          configurationManager: AgentConfigurationManager?,
+                          configurationManager: AgentConfigurationManager,
                           methodConfigs: List<MethodConfig>,
-                          hasSystemCL: Boolean,
+                          hasSystemCL: Boolean = true,
                           isSystemClass: Boolean = false) {
-        Generator.generate(expectedClass)
-        try {
-            val fullName = testedClass.name
-            val fileName = removePackage(fullName)
-
-            var bytes = getBytes(testedClass)
-            var cr = ClassReader(bytes)
-            var cw = ClassWriter(cr, ClassWriter.COMPUTE_FRAMES)
-            cr.accept(
-                    ProfilingClassVisitor(
-                            cw,
-                            fullName.replace('.', '/'),
-                            hasSystemCL,
-                            methodConfigs,
-                            configurationManager,
-                            isSystemClass
-                    ), ClassReader.SKIP_FRAMES or ClassReader.SKIP_DEBUG
-            )
-
-            bytes = cw.toByteArray()
-
-            saveClass(bytes, fileName)
-
-            cr = ClassReader(bytes)
-            cw = ClassWriter(cr, 0)
-            val outFile = File("src/test/resources/actual/$fileName.txt")
-            cr.accept(
-                    TraceClassVisitor(cw, PrintWriter(
-                            FileOutputStream(outFile)
-                    )), ClassReader.SKIP_DEBUG
-            )
-
-            compareFiles(File("src/test/resources/expected/" + removePackage(expectedClass.name) + ".txt"),
-                    outFile)
-        } catch (e: FileNotFoundException) {
-            e.printStackTrace()
-        }
-
+        val expectedBytecodeFile = Generator.generate(expectedClass)
+        instrumentAndCompare(testedClass, configurationManager, methodConfigs, expectedBytecodeFile, hasSystemCL,
+                isSystemClass, true)
     }
 
-    private fun saveClass(bytes: ByteArray, fileName: String) {
-        try {
-            FileOutputStream(
-                    File("src/test/resources/actual/$fileName.class")
-            ).use { outputStream -> outputStream.write(bytes) }
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
+    private fun instrumentAndCompare(testedClass: Class<*>,
+                                     configurationManager: AgentConfigurationManager,
+                                     methodConfigs: List<MethodConfig>,
+                                     expectedBytecodeFile: File,
+                                     hasSystemCL: Boolean,
+                                     isSystemClass: Boolean,
+                                     deleteExpectedFile: Boolean = false) {
+        val bytes = instrumentClass(testedClass, configurationManager, methodConfigs, hasSystemCL, isSystemClass)
+        val fileName = removePackage(testedClass.name)
 
+        val outFile = File("src/test/resources/actual/$fileName.txt")
+        printInstructionsToFile(bytes, outFile)
+
+        compareFiles(expectedBytecodeFile, outFile, deleteExpectedFile)
+    }
+
+    private fun classTest(testedClass: Class<*>,
+                          configurationManager: AgentConfigurationManager,
+                          methodConfigs: List<MethodConfig>,
+                          hasSystemCL: Boolean = true,
+                          isSystemClass: Boolean = false) {
+        val expectedBytecodeFile = File("src/test/resources/expected/" + removePackage(testedClass.name) + ".txt")
+        instrumentAndCompare(testedClass, configurationManager, methodConfigs, expectedBytecodeFile, hasSystemCL,
+                isSystemClass)
+    }
+
+    private fun printInstructionsToFile(bytes: ByteArray, outFile: File) {
+        val cr = ClassReader(bytes)
+        val cw = ClassWriter(cr, 0)
+        cr.accept(
+                TraceClassVisitor(cw, PrintWriter(
+                        FileOutputStream(outFile)
+                )), ClassReader.SKIP_DEBUG
+        )
+    }
+
+    private fun instrumentClass(testedClass: Class<*>,
+                                configurationManager: AgentConfigurationManager?,
+                                methodConfigs: List<MethodConfig>,
+                                hasSystemCL: Boolean,
+                                isSystemClass: Boolean = false): ByteArray {
+        val fullName = testedClass.name
+
+        val bytes = getBytes(testedClass)
+        val cr = ClassReader(bytes)
+        val cw = ClassWriter(cr, ClassWriter.COMPUTE_FRAMES)
+        cr.accept(
+                ProfilingClassVisitor(
+                        cw,
+                        fullName.replace('.', '/'),
+                        hasSystemCL,
+                        methodConfigs,
+                        configurationManager,
+                        isSystemClass
+                ), ClassReader.SKIP_FRAMES or ClassReader.SKIP_DEBUG
+        )
+
+        return cw.toByteArray()
     }
 
     companion object {

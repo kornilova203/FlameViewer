@@ -22,8 +22,8 @@ class ProfilingMethodVisitor extends AdviceAdapter {
     private final boolean hasSystemCL;
     private final MethodConfig methodConfig;
     private int startDataLocal;
-    private int throwableLocal;
-    private Label start;
+    private final Label start = new Label();
+    private final Label endOfTryCatch = new Label();
     private final String savedParameters;
 
 
@@ -121,22 +121,16 @@ class ProfilingMethodVisitor extends AdviceAdapter {
     }
 
     private void addTryCatchBeginning() {
-        start = new Label();
         mv.visitLabel(start);
     }
 
-    private void endTryCatch(Label endOfTryCatch, Label labelBeforeReturn) {
+    private void endTryCatch() {
         Label handler = new Label();
         mv.visitTryCatchBlock(start, endOfTryCatch, handler, "java/lang/Throwable");
 
-        /* if everything is ok then go to return instruction */
-        mv.visitLabel(endOfTryCatch);
-        mv.visitJumpInsn(GOTO, labelBeforeReturn);
-
+        mv.visitLabel(endOfTryCatch); // it goes right after RETURN instruction.
+                                      // So code after it is executed if exception is thrown
         mv.visitLabel(handler);
-
-        throwableLocal = newLocal(org.objectweb.asm.Type.getType("Ljava/lang/Throwable;"));
-        mv.visitVarInsn(ASTORE, throwableLocal); // store throwable
 
         getIfWasThrownByMethod();
         Label athrowLabel = new Label(); // label before ATHROW instruction
@@ -144,7 +138,6 @@ class ProfilingMethodVisitor extends AdviceAdapter {
         addThrowableToQueue(athrowLabel); // this is executed if value was NOT thrown by current method
 
         mv.visitLabel(athrowLabel);
-        mv.visitVarInsn(ALOAD, throwableLocal); // load throwable
         mv.visitInsn(ATHROW);
     }
 
@@ -152,7 +145,6 @@ class ProfilingMethodVisitor extends AdviceAdapter {
         saveExitTime();
         getIfTimeIsMoreOneMs();
         mv.visitJumpInsn(IFLE, athrowLabel); // if method took < 1ms
-        mv.visitVarInsn(ALOAD, throwableLocal); // put throwable on stack
         formThrowableExit();
     }
 
@@ -191,7 +183,6 @@ class ProfilingMethodVisitor extends AdviceAdapter {
     }
 
     private void getArrayWithParameters(int arraySize) {
-        // TODO: refactor
         createObjArray(arraySize);
         int posOfParam = 0;
         if (!isStatic()) {
@@ -346,13 +337,17 @@ class ProfilingMethodVisitor extends AdviceAdapter {
             setThrownByMethod(); // ignore this throwable in catch block
         }
         getIfTimeIsMoreOneMs();
-        Label endOfIfBlockThatAddsEvent = addIfLess(); // this label is also end of try-catch
-        Label labelBeforeReturn = new Label(); // this label is just before return instruction (it is visited in the end of this method)
+
+        Label endOfIfBlockThatAddsEvent = addIfLess(); // end of if block
         addToQueue(opcode); // this is executed if duration > 1ms
         mv.visitLabel(endOfIfBlockThatAddsEvent); // end of if-block and try-catch block
-        endTryCatch(endOfIfBlockThatAddsEvent, labelBeforeReturn); // visit try-catch and handle exceptions
-        mv.visitLabel(labelBeforeReturn);
         /* here is RETURN instruction. It is visited automatically */
+    }
+
+    @Override
+    public void visitMaxs(int maxStack, int maxLocals) {
+        endTryCatch(); // visit try-catch and handle exceptions
+        super.visitMaxs(maxStack, maxLocals);
     }
 
     private Label addIfLess() {
@@ -363,7 +358,6 @@ class ProfilingMethodVisitor extends AdviceAdapter {
 
     private void addToQueue(int opcode) {
         if (opcode == ATHROW) {
-            dup(); // duplicate throwable
             formThrowableExit();
         } else {
             formRetValExit(opcode);
@@ -400,9 +394,10 @@ class ProfilingMethodVisitor extends AdviceAdapter {
 
     /**
      * Throwable must be on stack.
-     * It will not be duplicated
+     * It will be duplicated
      */
     private void formThrowableExit() {
+        dup(); // duplicate throwable
         if (methodConfig.isSaveReturnValue()) { // if save message
             loadTrue();
         } else {

@@ -1,26 +1,39 @@
 package com.github.kornilova_l.flamegraph.javaagent.agent
 
 import com.github.kornilova_l.flamegraph.configuration.MethodConfig
+import com.github.kornilova_l.flamegraph.javaagent.generate.test_classes.*
 import com.github.kornilova_l.flamegraph.javaagent.getBytes
 import org.junit.Test
 import org.objectweb.asm.ClassReader
 import org.objectweb.asm.ClassWriter
 import org.objectweb.asm.ClassWriter.COMPUTE_FRAMES
 import org.objectweb.asm.util.CheckClassAdapter
-import java.io.FileOutputStream
 
+/**
+ * Use [org.objectweb.asm.util.CheckClassAdapter] to check if
+ * generated instructions are valid
+ */
 class IsCodeValidTest {
     @Test
     fun isCodeValidTest() {
-        var bytes = getBytes(FileOutputStream::class.java)
+        doTest(HasCatch::class.java)
+        doTest(HasIf::class.java)
+        doTest(SaveParameters::class.java)
+        doTest(SaveReturnValue::class.java)
+        doTest(ThrowsException::class.java)
+        doTest(UseProxy::class.java)
+    }
+
+    private fun doTest(clazz: Class<*>, isSystemClass: Boolean = false) {
+        var bytes = getBytes(clazz)
 
         var cr = ClassReader(bytes)
         var cw = ClassWriter(cr, COMPUTE_FRAMES)
-        val methodConfigs = listOf(MethodConfig("java.io.FileOutputStream", "write", "(byte[])"))
-        val configManager = AgentConfigurationManager(listOf("java.io.FileOutputStream.write(byte[])"))
+        val methodConfigs = listOf(MethodConfig("*", "*", "(*)"))
+        val configManager = AgentConfigurationManager(listOf("*.*(*)"))
         cr.accept(
-                ProfilingClassVisitor(cw, "java/io/FileOutputStream", false,
-                        methodConfigs, configManager, true), ClassReader.SKIP_FRAMES
+                ProfilingClassVisitor(cw, clazz.name.replace('.', '/'), false,
+                        methodConfigs, configManager, isSystemClass), ClassReader.SKIP_FRAMES
         )
 
         bytes = cw.toByteArray()

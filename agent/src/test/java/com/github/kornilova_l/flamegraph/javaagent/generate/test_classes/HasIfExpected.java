@@ -3,19 +3,13 @@ package com.github.kornilova_l.flamegraph.javaagent.generate.test_classes;
 import com.github.kornilova_l.flamegraph.javaagent.logger.LoggerQueue;
 import com.github.kornilova_l.flamegraph.proxy.StartData;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-
-public class HasCatchExpected {
-    public static void main(String[] args) {
+public class HasIfExpected {
+    public static int main(int val) {
         StartData startData = LoggerQueue.createStartData(System.currentTimeMillis(), null);
         try {
-            try (OutputStream outputStream = new FileOutputStream(new File(""))) {
-                outputStream.write(new byte[0]);
-            } catch (IOException e) {
-                e.printStackTrace();
+            int res = 0;
+            if (val > 0) {
+                res++;
             }
             startData.setDuration(System.currentTimeMillis());
             if (startData.getDuration() > 1) {
@@ -24,32 +18,31 @@ public class HasCatchExpected {
                         startData.getDuration(),
                         startData.getParameters(),
                         Thread.currentThread(),
-                        "com/github/kornilova_l/flamegraph/javaagent/generate/test_classes/HasCatch",
+                        "com/github/kornilova_l/flamegraph/javaagent/generate/test_classes/HasIf",
                         "main",
-                        "([Ljava/lang/String;)V",
+                        "(I)I",
                         true,
-                        ""
-                );
+                        "");
             }
-        } catch (Throwable throwable) {
+            return res;
+        } catch (Throwable t) {
             if (!startData.isThrownByMethod()) {
                 startData.setDuration(System.currentTimeMillis());
                 if (startData.getDuration() > 1) {
-                    LoggerQueue.addToQueue(throwable,
+                    LoggerQueue.addToQueue(t,
                             false,
                             startData.getStartTime(),
                             startData.getDuration(),
                             startData.getParameters(),
                             Thread.currentThread(),
-                            "com/github/kornilova_l/flamegraph/javaagent/generate/test_classes/HasCatch",
+                            "com/github/kornilova_l/flamegraph/javaagent/generate/test_classes/HasIf",
                             "main",
-                            "([Ljava/lang/String;)V",
+                            "(I)I",
                             true,
-                            ""
-                    );
+                            "");
                 }
             }
-            throw throwable;
+            throw t;
         }
     }
 }

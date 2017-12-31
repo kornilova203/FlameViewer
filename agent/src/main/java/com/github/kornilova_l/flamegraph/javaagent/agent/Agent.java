@@ -35,6 +35,7 @@ public class Agent {
         }
         createLogger(new File(parameters[0]));
         AgentConfigurationManager configurationManager = new AgentConfigurationManager(methods);
+        configurationManager.printConfiguration();
         inst.addTransformer(new ProfilingClassFileTransformer(configurationManager), true);
 
         try {

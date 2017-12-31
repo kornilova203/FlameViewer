@@ -14,7 +14,7 @@ import static com.github.kornilova_l.flamegraph.javaagent.TestHelperKt.*;
  * Get readable representation and save to file
  */
 public class Generator {
-    public static void generate(Class<?> testedClass) {
+    public static File generate(Class<?> testedClass) {
         createDir("expected");
         String fullName = testedClass.getName();
         // recompute frames to get result similar to ProfilerClassVisitor
@@ -40,6 +40,6 @@ public class Generator {
             e.printStackTrace();
         }
 
-
+        return outputFile;
     }
 }

@@ -17,6 +17,9 @@ class AgentConfigurationManager {
 
     AgentConfigurationManager(List<String> methodConfigLines) {
         configuration = new Configuration(methodConfigLines);
+    }
+
+    public void printConfiguration() {
         if (configuration.getIncludingMethodConfigs().size() == 0 &&
                 configuration.getExcludingMethodConfigs().size() == 0) {
             System.out.println("Configuration of profiler is empty. Methods will not be instrumented.");
