@@ -31,7 +31,7 @@ public class SystemClassExpected {
                                     "com/github/kornilova_l/flamegraph/javaagent/generate/test_classes/SystemClass",
                                     "method",
                                     "()V",
-                                    true,
+                                    false,
                                     ""
                             );
                 }
@@ -51,7 +51,7 @@ public class SystemClassExpected {
                                         "com/github/kornilova_l/flamegraph/javaagent/generate/test_classes/SystemClass",
                                         "method",
                                         "()V",
-                                        true,
+                                        false,
                                         ""
                                 );
                     }

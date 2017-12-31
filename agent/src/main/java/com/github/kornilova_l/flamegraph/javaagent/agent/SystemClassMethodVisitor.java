@@ -41,21 +41,7 @@ class SystemClassMethodVisitor extends ProfilingMethodVisitor {
 
     @Override
     void getIfTimeIsMoreOneMs() {
-        mv.visitVarInsn(ALOAD, startDataClassLocal);
-        mv.visitLdcInsn("getDuration");
-
-        mv.visitInsn(ICONST_0); // empty array
-        mv.visitTypeInsn(ANEWARRAY, "java/lang/Class");
-
-        invokeGetMethod();
-        mv.visitVarInsn(ALOAD, startDataLocal);
-
-        mv.visitInsn(ICONST_0); // empty array
-        mv.visitTypeInsn(ANEWARRAY, "java/lang/Object");
-
-        invokeInvoke();
-        mv.visitTypeInsn(CHECKCAST, "java/lang/Long");
-        mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Long", "longValue", "()J", false);
+        getDuration();
         mv.visitInsn(LCONST_1);
         mv.visitInsn(LCMP);
     }
@@ -69,53 +55,163 @@ class SystemClassMethodVisitor extends ProfilingMethodVisitor {
     @Override
     void retValAddToQueue(int opcode) {
         getMethodAddToQueue();
+        invokeAddToQueue();
         pop();
+    }
+
+    private void invokeAddToQueue() {
+        loadNull();
+        getIConst(10);
+        mv.visitTypeInsn(ANEWARRAY, "java/lang/Object");
+        dup(); // duplicate array to load new value to it
+
+        getIConst(0); // index 0
+        loadNull(); // return value
+        addToArrayAndDup();
+
+        getIConst(1); // index 1
+        getStartTime();
+        addToArrayAndDup();
+
+        getIConst(2);
+        getDuration();
+        addToArrayAndDup();
+
+        getIConst(3);
+        getParameters();
+        addToArrayAndDup();
+
+        getIConst(4);
+        getThread();
+        addToArrayAndDup();
+
+        getIConst(5);
+        mv.visitLdcInsn(className);
+        addToArrayAndDup();
+
+        getIConst(6);
+        mv.visitLdcInsn(methodName);
+        addToArrayAndDup();
+
+        getIConst(7);
+        mv.visitLdcInsn(methodDesc);
+        addToArrayAndDup();
+
+        getIConst(8);
+        getIConst(isStatic() ? 1 : 0); // true or false
+        booleanToObj();
+        addToArrayAndDup();
+
+        getIConst(9);
+        mv.visitLdcInsn(savedParameters);
+        mv.visitInsn(AASTORE);
+
+        invokeInvoke();
+        pop(); // this method leaves null on stack
+    }
+
+    private void getParameters() {
+        mv.visitVarInsn(ALOAD, startDataClassLocal);
+        mv.visitLdcInsn("getParameters");
+        createEmptyArray("Class");
+
+        invokeGetMethod();
+
+        mv.visitVarInsn(ALOAD, startDataLocal);
+        createEmptyArray("Object");
+
+        invokeInvoke();
+
+        mv.visitTypeInsn(CHECKCAST, "[Ljava/lang/Object;");
+        mv.visitTypeInsn(CHECKCAST, "[Ljava/lang/Object;");
+    }
+
+    /**
+     * Leaves on stack new empty array of size 0
+     */
+    private void createEmptyArray(String type) {
+        mv.visitInsn(ICONST_0); // empty array
+        mv.visitTypeInsn(ANEWARRAY, "java/lang/" + type);
+    }
+
+    private void getDuration() {
+        mv.visitVarInsn(ALOAD, startDataClassLocal);
+        mv.visitLdcInsn("getDuration");
+
+        createEmptyArray("Class");
+
+        invokeGetMethod();
+        mv.visitVarInsn(ALOAD, startDataLocal);
+
+        createEmptyArray("Object");
+
+        invokeInvoke();
+        mv.visitTypeInsn(CHECKCAST, "java/lang/Long");
+        mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Long", "longValue", "()J", false);
+//        longToObj();
+    }
+
+    private void getStartTime() {
+        mv.visitVarInsn(ALOAD, startDataClassLocal);
+        mv.visitLdcInsn("getStartTime");
+
+        createEmptyArray("Class");
+
+        invokeGetMethod();
+        mv.visitVarInsn(ALOAD, startDataLocal);
+
+        createEmptyArray("Object");
+
+        invokeInvoke();
+        mv.visitTypeInsn(CHECKCAST, "java/lang/Long");
+        mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Long", "longValue", "()J", false);
+        longToObj();
     }
 
     private void getMethodAddToQueue() {
         mv.visitVarInsn(ALOAD, proxyClassLocal);
         mv.visitLdcInsn("addToQueue");
-        mv.visitIntInsn(BIPUSH, 10); // size of array of types
+        getIConst(10); // size of array of types
         mv.visitTypeInsn(ANEWARRAY, "java/lang/Class");
         dup(); // duplicate array to add new object to it
 
-        mv.visitInsn(ICONST_0); // index 0
+        getIConst(0);
         mv.visitLdcInsn(Type.getObjectType("java/lang/Object")); // retVal
         addToArrayAndDup();
 
-        mv.visitInsn(ICONST_1); // index 1
+        getIConst(1); // index 1
         getClassOfLong(); // start time
         addToArrayAndDup();
 
-        mv.visitInsn(ICONST_2); // index 2
+        getIConst(2); // index 2
         getClassOfLong(); // duration
         addToArrayAndDup();
 
-        mv.visitInsn(ICONST_3); // index 3
+        getIConst(3); // index 3
         getClassOfObjectArray(); // parameters
         addToArrayAndDup();
 
-        mv.visitInsn(ICONST_4); // index 4
+        getIConst(4); // index 4
         mv.visitLdcInsn(Type.getObjectType("java/lang/Thread")); // thread
         addToArrayAndDup();
 
-        mv.visitInsn(ICONST_5); // index 5
+        getIConst(5); // index 5
         getStringClass(); // class name
         addToArrayAndDup();
 
-        mv.visitIntInsn(BIPUSH, 6); // index 6
+        getIConst(6); // index 6
         getStringClass(); // method name
         addToArrayAndDup();
 
-        mv.visitIntInsn(BIPUSH, 7); // index 7
+        getIConst(7); // index 7
         getStringClass(); // description
         addToArrayAndDup();
 
-        mv.visitIntInsn(BIPUSH, 8); // index 8
+        getIConst(8); // index 8
         mv.visitFieldInsn(GETSTATIC, "java/lang/Boolean", "TYPE", "Ljava/lang/Class;"); // is static
         addToArrayAndDup();
 
-        mv.visitIntInsn(BIPUSH, 9); // index 9
+        getIConst(9); // index 9
         getStringClass(); // description
         mv.visitInsn(AASTORE);
 

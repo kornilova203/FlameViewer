@@ -17,14 +17,14 @@ class ProfilingMethodVisitor extends AdviceAdapter {
     private final static String PROXY_PACKAGE_NAME = "com/github/kornilova_l/flamegraph/proxy/";
     private final static String START_DATA_CLASS = PROXY_PACKAGE_NAME + "StartData";
     private final static String START_DATA_TYPE = "L" + START_DATA_CLASS + ";";
-    private final String methodName;
-    private final String className;
+    final String methodName;
+    final String className;
     private final boolean hasSystemCL;
     private final MethodConfig methodConfig;
     int startDataLocal;
     private final Label start = new Label();
     private final Label endOfTryCatch = new Label();
-    private final String savedParameters;
+    final String savedParameters;
 
 
     ProfilingMethodVisitor(int access, String methodName, String desc,
@@ -203,7 +203,7 @@ class ProfilingMethodVisitor extends AdviceAdapter {
         }
     }
 
-    private void loadNull() {
+    void loadNull() {
         mv.visitInsn(ACONST_NULL);
     }
 
@@ -276,7 +276,7 @@ class ProfilingMethodVisitor extends AdviceAdapter {
                 "(C)Ljava/lang/Character;", false);
     }
 
-    private void booleanToObj() {
+    void booleanToObj() {
         mv.visitMethodInsn(INVOKESTATIC, "java/lang/Boolean", "valueOf",
                 "(Z)Ljava/lang/Boolean;", false);
     }
@@ -291,7 +291,7 @@ class ProfilingMethodVisitor extends AdviceAdapter {
                 "(I)Ljava/lang/Integer;", false);
     }
 
-    private void getIConst(int i) {
+    void getIConst(int i) {
         if (i < 6) {
             mv.visitInsn(ICONST_0 + i);
         } else {
@@ -319,12 +319,12 @@ class ProfilingMethodVisitor extends AdviceAdapter {
         mv.visitMethodInsn(INVOKESTATIC, "java/lang/System", "currentTimeMillis", "()J", false);
     }
 
-    private void getThread() {
+    void getThread() {
         mv.visitMethodInsn(INVOKESTATIC, "java/lang/Thread", "currentThread",
                 "()Ljava/lang/Thread;", false);
     }
 
-    private boolean isStatic() {
+    boolean isStatic() {
         return (methodAccess & ACC_STATIC) != 0;
     }
 
