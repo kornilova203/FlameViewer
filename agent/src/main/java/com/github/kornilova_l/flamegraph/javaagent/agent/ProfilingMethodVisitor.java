@@ -85,9 +85,12 @@ class ProfilingMethodVisitor extends AdviceAdapter {
     @Override
     protected void onMethodEnter() {
         getTime();
-        int countEnabledParams = (int) methodConfig.getParameters().stream()
-                .filter((MethodConfig.Parameter::isEnabled))
-                .count();
+        int countEnabledParams = 0;
+        for (MethodConfig.Parameter parameter : methodConfig.getParameters()) {
+            if (parameter.isEnabled()) {
+                countEnabledParams++;
+            }
+        }
         if (countEnabledParams > 0) { // if at least one parameter is enabled
             getArrayWithParameters(countEnabledParams);
         } else {
