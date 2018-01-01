@@ -24,6 +24,7 @@ class ProfilingMethodVisitor extends AdviceAdapter {
     int startDataLocal;
     private final Label start = new Label();
     private final Label endOfTryCatch = new Label();
+    final boolean saveReturnValue;
     final String savedParameters;
 
 
@@ -35,6 +36,7 @@ class ProfilingMethodVisitor extends AdviceAdapter {
         this.hasSystemCL = hasSystemCL;
         this.methodConfig = methodConfig;
         this.savedParameters = getSavedParameters();
+        saveReturnValue = methodConfig.isSaveReturnValue();
     }
 
     private String getSavedParameters() {
@@ -134,13 +136,13 @@ class ProfilingMethodVisitor extends AdviceAdapter {
         getIfWasThrownByMethod();
         Label athrowLabel = new Label(); // label before ATHROW instruction
         mv.visitJumpInsn(IFNE, athrowLabel); // if value on stack is not zero == if was thrown by method go to ATHROW
-        addThrowableToQueue(athrowLabel); // this is executed if value was NOT thrown by current method
+        prepareAndAddThrowableToQueue(athrowLabel); // this is executed if value was NOT thrown by current method
 
         mv.visitLabel(athrowLabel);
         mv.visitInsn(ATHROW);
     }
 
-    private void addThrowableToQueue(Label athrowLabel) {
+    void prepareAndAddThrowableToQueue(Label athrowLabel) {
         saveExitTime();
         getIfTimeIsMoreOneMs();
         mv.visitJumpInsn(IFLE, athrowLabel); // if method took < 1ms
@@ -375,7 +377,7 @@ class ProfilingMethodVisitor extends AdviceAdapter {
 
     void retValAddToQueue(int opcode) {
         if (opcode != RETURN) { // return some value
-            if (methodConfig.isSaveReturnValue()) {
+            if (saveReturnValue) {
                 int sizeOfRetVal = getSizeOfRetVal(opcode);
                 dupRetVal(sizeOfRetVal);
                 retValToObj();

@@ -20,6 +20,7 @@ class SystemClassMethodVisitor extends ProfilingMethodVisitor {
     @SuppressWarnings("FieldCanBeLocal")
     private final String startDataClassNameWithDots = "com.github.kornilova_l.flamegraph.proxy.StartData";
     private final Label startTryCatchForReflection = new Label();
+    private int throwable;
 
     SystemClassMethodVisitor(int access,
                              String methodName,
@@ -60,9 +61,55 @@ class SystemClassMethodVisitor extends ProfilingMethodVisitor {
     }
 
     @Override
-    void throwableAddToQueue() {
-        int throwable = newLocal(org.objectweb.asm.Type.getType("L" + Throwable.class.getName() + ";"));
+    void prepareAndAddThrowableToQueue(Label athrowLabel) {
+        /* save throwable */
+        throwable = newLocal(org.objectweb.asm.Type.getType("L" + Throwable.class.getName() + ";"));
         mv.visitVarInsn(ASTORE, throwable);
+
+        super.prepareAndAddThrowableToQueue(athrowLabel);
+//        mv.visitVarInsn(ALOAD, throwable);
+    }
+
+    @Override
+    void throwableAddToQueue() {
+        mv.visitVarInsn(ALOAD, proxyClassLocal);
+        mv.visitLdcInsn("addToQueue");
+
+        getIConst(11); // size of array
+        mv.visitTypeInsn(ANEWARRAY, "java/lang/Class");
+        dup(); // duplicate array to add objects to it
+
+        getIConst(0); // index
+        mv.visitLdcInsn(Type.getObjectType("java/lang/Throwable"));
+        addToArrayAndDup();
+
+        getIConst(1);
+        mv.visitFieldInsn(GETSTATIC, "java/lang/Boolean", "TYPE", "Ljava/lang/Class;");
+        addToArrayAndDup();
+
+        getCommonClasses(2);
+
+        invokeGetMethod();
+
+        loadNull(); // static method
+
+        getIConst(11); // size of array
+        mv.visitTypeInsn(ANEWARRAY, "java/lang/Object");
+        dup(); // duplicate array to add objects to it
+
+        getIConst(0); // index
+        mv.visitVarInsn(ALOAD, throwable);
+        addToArrayAndDup();
+
+        getIConst(1); // index
+        getIConst(saveReturnValue ? 1 : 0);
+        booleanToObj();
+        addToArrayAndDup();
+
+        getCommonData(2);
+
+        invokeInvoke();
+        pop();
     }
 
     @Override
@@ -88,45 +135,61 @@ class SystemClassMethodVisitor extends ProfilingMethodVisitor {
         loadNull(); // return value
         addToArrayAndDup();
 
-        getIConst(1); // index 1
+        getCommonData(1);
+
+        invokeInvoke();
+        pop(); // this method leaves null on stack
+    }
+
+    /**
+     * Loads data to array:
+     * * start time
+     * * duration
+     * * parameters
+     * * thread
+     * * class name
+     * * method name
+     * * description
+     * * is static
+     * * info about what parameters were saved (string)
+     */
+    private void getCommonData(int startIndex) {
+        getIConst(startIndex++); // index 1
         getStartTime();
         addToArrayAndDup();
 
-        getIConst(2);
+        getIConst(startIndex++);
         getDuration();
         addToArrayAndDup();
 
-        getIConst(3);
+        getIConst(startIndex++);
         getParameters();
         addToArrayAndDup();
 
-        getIConst(4);
+        getIConst(startIndex++);
         getThread();
         addToArrayAndDup();
 
-        getIConst(5);
+        getIConst(startIndex++);
         mv.visitLdcInsn(className);
         addToArrayAndDup();
 
-        getIConst(6);
+        getIConst(startIndex++);
         mv.visitLdcInsn(methodName);
         addToArrayAndDup();
 
-        getIConst(7);
+        getIConst(startIndex++);
         mv.visitLdcInsn(methodDesc);
         addToArrayAndDup();
 
-        getIConst(8);
+        getIConst(startIndex++);
         getIConst(isStatic() ? 1 : 0); // true or false
         booleanToObj();
         addToArrayAndDup();
 
-        getIConst(9);
+        getIConst(startIndex);
         mv.visitLdcInsn(savedParameters);
         mv.visitInsn(AASTORE);
-
-        invokeInvoke();
-        pop(); // this method leaves null on stack
     }
 
     private void getParameters() {
@@ -198,43 +261,47 @@ class SystemClassMethodVisitor extends ProfilingMethodVisitor {
         mv.visitLdcInsn(Type.getObjectType("java/lang/Object")); // retVal
         addToArrayAndDup();
 
-        getIConst(1); // index 1
+        getCommonClasses(1);
+
+        invokeGetMethod();
+    }
+
+    private void getCommonClasses(int startIndex) {
+        getIConst(startIndex++); // index 1
         getClassOfLong(); // start time
         addToArrayAndDup();
 
-        getIConst(2); // index 2
+        getIConst(startIndex++); // index 2
         getClassOfLong(); // duration
         addToArrayAndDup();
 
-        getIConst(3); // index 3
+        getIConst(startIndex++); // index 3
         getClassOfObjectArray(); // parameters
         addToArrayAndDup();
 
-        getIConst(4); // index 4
+        getIConst(startIndex++); // index 4
         mv.visitLdcInsn(Type.getObjectType("java/lang/Thread")); // thread
         addToArrayAndDup();
 
-        getIConst(5); // index 5
+        getIConst(startIndex++); // index 5
         getStringClass(); // class name
         addToArrayAndDup();
 
-        getIConst(6); // index 6
+        getIConst(startIndex++); // index 6
         getStringClass(); // method name
         addToArrayAndDup();
 
-        getIConst(7); // index 7
+        getIConst(startIndex++); // index 7
         getStringClass(); // description
         addToArrayAndDup();
 
-        getIConst(8); // index 8
+        getIConst(startIndex++); // index 8
         mv.visitFieldInsn(GETSTATIC, "java/lang/Boolean", "TYPE", "Ljava/lang/Class;"); // is static
         addToArrayAndDup();
 
-        getIConst(9); // index 9
+        getIConst(startIndex); // index 9
         getStringClass(); // description
         mv.visitInsn(AASTORE);
-
-        invokeGetMethod();
     }
 
     private void getStringClass() {
