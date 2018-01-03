@@ -17,13 +17,15 @@ class ProfilingMethodVisitor extends AdviceAdapter {
     private final static String PROXY_PACKAGE_NAME = "com/github/kornilova_l/flamegraph/proxy/";
     private final static String START_DATA_CLASS = PROXY_PACKAGE_NAME + "StartData";
     private final static String START_DATA_TYPE = "L" + START_DATA_CLASS + ";";
-    private final String methodName;
-    private final String className;
+    final String methodName;
+    final String className;
     private final boolean hasSystemCL;
     private final MethodConfig methodConfig;
-    private int startData;
-    private Label start;
-    private final String savedParameters;
+    int startDataLocal;
+    private final Label start = new Label();
+    private final Label endOfTryCatch = new Label();
+    final boolean saveReturnValue;
+    final String savedParameters;
 
 
     ProfilingMethodVisitor(int access, String methodName, String desc,
@@ -34,6 +36,7 @@ class ProfilingMethodVisitor extends AdviceAdapter {
         this.hasSystemCL = hasSystemCL;
         this.methodConfig = methodConfig;
         this.savedParameters = getSavedParameters();
+        saveReturnValue = methodConfig.isSaveReturnValue();
     }
 
     private String getSavedParameters() {
@@ -83,26 +86,32 @@ class ProfilingMethodVisitor extends AdviceAdapter {
 
     @Override
     protected void onMethodEnter() {
+        createStartData();
+        saveStartData();
+        mv.visitLabel(start); // try-catch beginning
+    }
+
+    private void saveStartData() {
+        startDataLocal = newLocal(org.objectweb.asm.Type.getType(START_DATA_TYPE));
+        mv.visitVarInsn(ASTORE, startDataLocal);
+    }
+
+    /**
+     * Leaves object on stack
+     */
+    protected void createStartData() {
         getTime();
-        int countEnabledParams = (int) methodConfig.getParameters().stream()
-                .filter((MethodConfig.Parameter::isEnabled))
-                .count();
+        int countEnabledParams = 0;
+        for (MethodConfig.Parameter parameter : methodConfig.getParameters()) {
+            if (parameter.isEnabled()) {
+                countEnabledParams++;
+            }
+        }
         if (countEnabledParams > 0) { // if at least one parameter is enabled
             getArrayWithParameters(countEnabledParams);
         } else {
             loadNull();
         }
-        createStartData();
-        saveStartData();
-        addTryCatchBeginning();
-    }
-
-    private void saveStartData() {
-        mv.visitVarInsn(ASTORE, startData);
-    }
-
-    private void createStartData() {
-        startData = newLocal(org.objectweb.asm.Type.getType(START_DATA_TYPE));
         if (hasSystemCL) {
             mv.visitMethodInsn(INVOKESTATIC, LOGGER_PACKAGE_NAME + "LoggerQueue",
                     "createStartData",
@@ -116,32 +125,50 @@ class ProfilingMethodVisitor extends AdviceAdapter {
         }
     }
 
-    private void addTryCatchBeginning() {
-        start = new Label();
-        mv.visitLabel(start);
-    }
-
     private void endTryCatch() {
-        Label end = new Label();
-        mv.visitTryCatchBlock(start, end, end, "java/lang/Throwable");
-        mv.visitLabel(end);
-        getIfWasThrownByMethod();
-        Label ifLabel = new Label();
-        mv.visitJumpInsn(IFNE, ifLabel);
-        maybeAddThrowableToQueue(ifLabel);
+        Label handler = new Label();
+        mv.visitTryCatchBlock(start, endOfTryCatch, handler, "java/lang/Throwable");
 
-        mv.visitLabel(ifLabel);
+        mv.visitLabel(endOfTryCatch); // it goes right after RETURN instruction.
+                                      // So code after it is executed if exception is thrown
+        mv.visitLabel(handler);
+
+        maybeSaveThrowable();
+
+        getIfWasThrownByMethod();
+        Label athrowLabel = new Label(); // label before ATHROW instruction
+        mv.visitJumpInsn(IFNE, athrowLabel); // if value on stack is not zero == if was thrown by method go to ATHROW
+        prepareAndAddThrowableToQueue(athrowLabel); // this is executed if value was NOT thrown by current method
+
+        mv.visitLabel(athrowLabel);
+
+        maybeLoadThrowable();
+
         mv.visitInsn(ATHROW);
     }
 
-    private void maybeAddThrowableToQueue(Label ifLabel) {
-        saveExitTime();
-        getIfTimeIsMoreOneMs();
-        mv.visitJumpInsn(IFLE, ifLabel);
-        formThrowableExit();
+    void maybeSaveThrowable() {
+        /* throwable is saved in SystemClassMethodVisitor
+         * I added this method here to avoid unclear overrides */
     }
 
-    private void getIfWasThrownByMethod() {
+    void maybeLoadThrowable() {
+        /* throwable is loaded in SystemClassMethodVisitor
+         * I added this method here to avoid unclear overrides */
+    }
+
+    private void prepareAndAddThrowableToQueue(Label athrowLabel) {
+        saveExitTime();
+        getIfTimeIsMoreOneMs();
+        mv.visitJumpInsn(IFLE, athrowLabel); // if method took < 1ms
+        throwableAddToQueue();
+    }
+
+    /**
+     * Adds boolean value to stack.
+     * The value indicates if the throwable was thrown by method itself
+     */
+    void getIfWasThrownByMethod() {
         getStartData();
         mv.visitMethodInsn(
                 INVOKEVIRTUAL,
@@ -150,12 +177,6 @@ class ProfilingMethodVisitor extends AdviceAdapter {
                 "()Z",
                 false
         );
-    }
-
-    @Override
-    public void visitMaxs(int maxStack, int maxLocals) {
-        endTryCatch();
-        super.visitMaxs(maxStack, maxLocals);
     }
 
     private void addToQueue(Type type) {
@@ -178,7 +199,6 @@ class ProfilingMethodVisitor extends AdviceAdapter {
     }
 
     private void getArrayWithParameters(int arraySize) {
-        // TODO: refactor
         createObjArray(arraySize);
         int posOfParam = 0;
         if (!isStatic()) {
@@ -200,7 +220,7 @@ class ProfilingMethodVisitor extends AdviceAdapter {
         }
     }
 
-    private void loadNull() {
+    void loadNull() {
         mv.visitInsn(ACONST_NULL);
     }
 
@@ -273,12 +293,12 @@ class ProfilingMethodVisitor extends AdviceAdapter {
                 "(C)Ljava/lang/Character;", false);
     }
 
-    private void booleanToObj() {
+    void booleanToObj() {
         mv.visitMethodInsn(INVOKESTATIC, "java/lang/Boolean", "valueOf",
                 "(Z)Ljava/lang/Boolean;", false);
     }
 
-    private void longToObj() {
+    void longToObj() {
         mv.visitMethodInsn(INVOKESTATIC, "java/lang/Long", "valueOf",
                 "(J)Ljava/lang/Long;", false);
     }
@@ -288,7 +308,7 @@ class ProfilingMethodVisitor extends AdviceAdapter {
                 "(I)Ljava/lang/Integer;", false);
     }
 
-    private void getIConst(int i) {
+    void getIConst(int i) {
         if (i < 6) {
             mv.visitInsn(ICONST_0 + i);
         } else {
@@ -312,17 +332,16 @@ class ProfilingMethodVisitor extends AdviceAdapter {
         mv.visitInsn(ICONST_1);
     }
 
-    private void getTime() {
-        mv.visitMethodInsn(INVOKESTATIC, "java/lang/System",
-                "currentTimeMillis", "()J", false);
+    void getTime() {
+        mv.visitMethodInsn(INVOKESTATIC, "java/lang/System", "currentTimeMillis", "()J", false);
     }
 
-    private void getThread() {
+    void getThread() {
         mv.visitMethodInsn(INVOKESTATIC, "java/lang/Thread", "currentThread",
                 "()Ljava/lang/Thread;", false);
     }
 
-    private boolean isStatic() {
+    boolean isStatic() {
         return (methodAccess & ACC_STATIC) != 0;
     }
 
@@ -333,26 +352,34 @@ class ProfilingMethodVisitor extends AdviceAdapter {
             setThrownByMethod(); // ignore this throwable in catch block
         }
         getIfTimeIsMoreOneMs();
-        Label ifLabel = addIfLess();
-        maybeAddToQueue(opcode);
-        mv.visitLabel(ifLabel);
+
+        Label endOfIfBlockThatAddsEvent = addIfLess(); // end of if block
+        addToQueue(opcode); // this is executed if duration > 1ms
+        mv.visitLabel(endOfIfBlockThatAddsEvent); // end of if-block and try-catch block
+        /* here is RETURN instruction. It is visited automatically */
+    }
+
+    @Override
+    public void visitMaxs(int maxStack, int maxLocals) {
+        endTryCatch(); // visit try-catch and handle exceptions
+        super.visitMaxs(maxStack, maxLocals);
     }
 
     private Label addIfLess() {
-        Label label = new Label();
-        mv.visitJumpInsn(IFLE, label);
-        return label;
+        Label endOfIfBlockThatAddsEvent = new Label();
+        mv.visitJumpInsn(IFLE, endOfIfBlockThatAddsEvent);
+        return endOfIfBlockThatAddsEvent;
     }
 
-    private void maybeAddToQueue(int opcode) {
+    private void addToQueue(int opcode) {
         if (opcode == ATHROW) {
-            formThrowableExit();
+            throwableAddToQueue();
         } else {
-            formRetValExit(opcode);
+            retValAddToQueue(opcode);
         }
     }
 
-    private void setThrownByMethod() {
+    void setThrownByMethod() {
         getStartData();
         mv.visitMethodInsn(
                 INVOKEVIRTUAL,
@@ -363,9 +390,9 @@ class ProfilingMethodVisitor extends AdviceAdapter {
         );
     }
 
-    private void formRetValExit(int opcode) {
+    void retValAddToQueue(int opcode) {
         if (opcode != RETURN) { // return some value
-            if (methodConfig.isSaveReturnValue()) {
+            if (saveReturnValue) {
                 int sizeOfRetVal = getSizeOfRetVal(opcode);
                 dupRetVal(sizeOfRetVal);
                 retValToObj();
@@ -373,15 +400,19 @@ class ProfilingMethodVisitor extends AdviceAdapter {
                 loadNull();
             }
         } else {
-            retValToObj();
+            loadNull(); // there is nothing to save
         }
         getCommonExitData();
         mv.visitLdcInsn(savedParameters);
         addToQueue(Type.RetVal);
     }
 
-    private void formThrowableExit() {
-        dup(); // always save type of exception
+    /**
+     * Throwable must be on stack.
+     * It will be duplicated
+     */
+    void throwableAddToQueue() {
+        dup(); // duplicate throwable
         if (methodConfig.isSaveReturnValue()) { // if save message
             loadTrue();
         } else {
@@ -409,7 +440,11 @@ class ProfilingMethodVisitor extends AdviceAdapter {
         getIsStatic();
     }
 
-    private void saveExitTime() {
+    /**
+     * Saves duration to start data.
+     * Does not modify stack
+     */
+    void saveExitTime() {
         getStartData();
         getTime();
         mv.visitMethodInsn(INVOKEVIRTUAL,
@@ -420,10 +455,14 @@ class ProfilingMethodVisitor extends AdviceAdapter {
     }
 
     private void getStartData() {
-        mv.visitVarInsn(ALOAD, startData);
+        mv.visitVarInsn(ALOAD, startDataLocal);
     }
 
-    private void getIfTimeIsMoreOneMs() {
+    /**
+     * Adds boolean value to stack.
+     * The value is true if method took > 1ms
+     */
+    void getIfTimeIsMoreOneMs() {
         getStartData();
         mv.visitMethodInsn(INVOKEVIRTUAL,
                 START_DATA_CLASS,

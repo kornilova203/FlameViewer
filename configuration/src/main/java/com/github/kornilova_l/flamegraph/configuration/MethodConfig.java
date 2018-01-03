@@ -300,7 +300,12 @@ public class MethodConfig implements Comparable<MethodConfig>, Cloneable {
                         break;
                     }
                 }
-                output.append(desc.substring(slashPos + 1, endPos - 1));
+                if (slashPos == -1) { // if does not contain package
+                    output.append(desc.substring(1, endPos - 1));
+                } else {
+                    output.append(desc.substring(slashPos + 1, endPos - 1));
+
+                }
                 return endPos;
             } else {
                 output.append(MethodConfig.jvmTypeToParam(c));

@@ -1,0 +1,83 @@
+// class version 52.0 (52)
+// access flags 0x21
+public class com/github/kornilova_l/flamegraph/javaagent/generate/test_classes/UseProxy {
+
+
+  // access flags 0x1
+  public <init>()V
+    ALOAD 0
+    INVOKESPECIAL java/lang/Object.<init> ()V
+    RETURN
+    MAXSTACK = 1
+    MAXLOCALS = 1
+
+  // access flags 0x9
+  public static main([Ljava/lang/String;)V
+    TRYCATCHBLOCK L0 L1 L1 java/lang/Throwable
+    INVOKESTATIC java/lang/System.currentTimeMillis ()J
+    ACONST_NULL
+    INVOKESTATIC com/github/kornilova_l/flamegraph/proxy/Proxy.createStartData (J[Ljava/lang/Object;)Lcom/github/kornilova_l/flamegraph/proxy/StartData;
+    ASTORE 1
+   L0
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    LDC "Hello, world!"
+    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/String;)V
+    ALOAD 1
+    INVOKESTATIC java/lang/System.currentTimeMillis ()J
+    INVOKEVIRTUAL com/github/kornilova_l/flamegraph/proxy/StartData.setDuration (J)V
+    ALOAD 1
+    INVOKEVIRTUAL com/github/kornilova_l/flamegraph/proxy/StartData.getDuration ()J
+    LCONST_1
+    LCMP
+    IFLE L2
+    ACONST_NULL
+    ALOAD 1
+    INVOKEVIRTUAL com/github/kornilova_l/flamegraph/proxy/StartData.getStartTime ()J
+    ALOAD 1
+    INVOKEVIRTUAL com/github/kornilova_l/flamegraph/proxy/StartData.getDuration ()J
+    ALOAD 1
+    INVOKEVIRTUAL com/github/kornilova_l/flamegraph/proxy/StartData.getParameters ()[Ljava/lang/Object;
+    INVOKESTATIC java/lang/Thread.currentThread ()Ljava/lang/Thread;
+    LDC "com/github/kornilova_l/flamegraph/javaagent/generate/test_classes/UseProxy"
+    LDC "main"
+    LDC "([Ljava/lang/String;)V"
+    ICONST_1
+    LDC ""
+    INVOKESTATIC com/github/kornilova_l/flamegraph/proxy/Proxy.addToQueue (Ljava/lang/Object;JJ[Ljava/lang/Object;Ljava/lang/Thread;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ZLjava/lang/String;)V
+   L2
+   FRAME APPEND [com/github/kornilova_l/flamegraph/proxy/StartData]
+    RETURN
+   L1
+   FRAME SAME1 java/lang/Throwable
+    ALOAD 1
+    INVOKEVIRTUAL com/github/kornilova_l/flamegraph/proxy/StartData.isThrownByMethod ()Z
+    IFNE L3
+    ALOAD 1
+    INVOKESTATIC java/lang/System.currentTimeMillis ()J
+    INVOKEVIRTUAL com/github/kornilova_l/flamegraph/proxy/StartData.setDuration (J)V
+    ALOAD 1
+    INVOKEVIRTUAL com/github/kornilova_l/flamegraph/proxy/StartData.getDuration ()J
+    LCONST_1
+    LCMP
+    IFLE L3
+    DUP
+    ICONST_1
+    ALOAD 1
+    INVOKEVIRTUAL com/github/kornilova_l/flamegraph/proxy/StartData.getStartTime ()J
+    ALOAD 1
+    INVOKEVIRTUAL com/github/kornilova_l/flamegraph/proxy/StartData.getDuration ()J
+    ALOAD 1
+    INVOKEVIRTUAL com/github/kornilova_l/flamegraph/proxy/StartData.getParameters ()[Ljava/lang/Object;
+    INVOKESTATIC java/lang/Thread.currentThread ()Ljava/lang/Thread;
+    LDC "com/github/kornilova_l/flamegraph/javaagent/generate/test_classes/UseProxy"
+    LDC "main"
+    LDC "([Ljava/lang/String;)V"
+    ICONST_1
+    LDC ""
+    INVOKESTATIC com/github/kornilova_l/flamegraph/proxy/Proxy.addToQueue (Ljava/lang/Throwable;ZJJ[Ljava/lang/Object;Ljava/lang/Thread;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ZLjava/lang/String;)V
+   L3
+   FRAME SAME1 java/lang/Throwable
+    ATHROW
+    MAXSTACK = 14
+    MAXLOCALS = 2
+}

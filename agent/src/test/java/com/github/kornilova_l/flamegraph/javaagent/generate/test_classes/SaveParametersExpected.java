@@ -6,6 +6,7 @@ import com.github.kornilova_l.flamegraph.proxy.StartData;
 import java.util.ArrayList;
 
 public class SaveParametersExpected {
+    @SuppressWarnings("unused")
     void noParams() {
         StartData startData = LoggerQueue.createStartData(System.currentTimeMillis(), null);
         try {
@@ -40,9 +41,11 @@ public class SaveParametersExpected {
                             "");
                 }
             }
+            throw throwable;
         }
     }
 
+    @SuppressWarnings("unused")
     void oneParam(int i) {
         StartData startData = LoggerQueue.createStartData(System.currentTimeMillis(), new Object[]{i});
         try {
@@ -77,9 +80,11 @@ public class SaveParametersExpected {
                             "1");
                 }
             }
+            throw throwable;
         }
     }
 
+    @SuppressWarnings("unused")
     void twoParams(int i, ArrayList<String> list) {
         StartData startData = LoggerQueue.createStartData(System.currentTimeMillis(), new Object[]{i, list});
         try {
@@ -114,9 +119,11 @@ public class SaveParametersExpected {
                             "1,2");
                 }
             }
+            throw throwable;
         }
     }
 
+    @SuppressWarnings("unused")
     static void threeParams(boolean b, long l, String s) {
         StartData startData = LoggerQueue.createStartData(System.currentTimeMillis(), new Object[]{b, l, s});
         try {
@@ -147,10 +154,11 @@ public class SaveParametersExpected {
                             "com/github/kornilova_l/flamegraph/javaagent/generate/test_classes/SaveParameters",
                             "threeParams",
                             "(ZJLjava/lang/String;)V",
-                            false,
+                            true,
                             "1,2,3");
                 }
             }
+            throw throwable;
         }
     }
 }

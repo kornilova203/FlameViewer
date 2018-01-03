@@ -326,9 +326,8 @@ nav ul li a:focus {
 }
 
 .file-list li:hover {
-    background-color: rgba(14, 160, 243, 0.8);
+    background-color: #39AEF0;
     min-width: 100%;
-    transition: background-color 300ms;
 }
 
 .file-list li:hover a {
@@ -862,7 +861,31 @@ canvas {
     pointer-events: none;
 }
 
+.full-file-name {
+    position: absolute;
+    z-index: 2;
+    left: 43px;
+    background-color: #39AEF0;
+    color: white;
+    pointer-events: none;
+    display: flex;
+    height: 45px;
+    align-items: center;
+    padding: 0 5px;
+    min-width: 187px;
+    opacity: 0;
+}
+
+.full-file-name span {
+    font-size: 12px;
+    opacity: 0.9;
+}
+
 .visible {
     opacity: 1;
     pointer-events: auto;
+}
+
+.visible-without-pointer-events {
+    opacity: 1;
 }

@@ -1,0 +1,416 @@
+// class version 52.0 (52)
+// access flags 0x21
+public class com/github/kornilova_l/flamegraph/javaagent/generate/test_classes/SystemClass {
+
+
+  // access flags 0x1
+  public <init>()V
+    ALOAD 0
+    INVOKESPECIAL java/lang/Object.<init> ()V
+    RETURN
+    MAXSTACK = 1
+    MAXLOCALS = 1
+
+  // access flags 0x1
+  public method()V
+    TRYCATCHBLOCK L0 L1 L1 java/lang/Throwable
+    TRYCATCHBLOCK L2 L3 L3 java/lang/ClassNotFoundException
+    TRYCATCHBLOCK L2 L3 L3 java/lang/NoSuchMethodException
+    TRYCATCHBLOCK L2 L3 L3 java/lang/IllegalAccessException
+    TRYCATCHBLOCK L2 L3 L3 java/lang/reflect/InvocationTargetException
+   L2
+    INVOKESTATIC java/lang/ClassLoader.getSystemClassLoader ()Ljava/lang/ClassLoader;
+    LDC "com.github.kornilova_l.flamegraph.proxy.Proxy"
+    INVOKEVIRTUAL java/lang/ClassLoader.loadClass (Ljava/lang/String;)Ljava/lang/Class;
+    ASTORE 1
+    INVOKESTATIC java/lang/ClassLoader.getSystemClassLoader ()Ljava/lang/ClassLoader;
+    LDC "com.github.kornilova_l.flamegraph.proxy.StartData"
+    INVOKEVIRTUAL java/lang/ClassLoader.loadClass (Ljava/lang/String;)Ljava/lang/Class;
+    ASTORE 2
+    ALOAD 1
+    LDC "createStartData"
+    ICONST_2
+    ANEWARRAY java/lang/Class
+    DUP
+    ICONST_0
+    GETSTATIC java/lang/Long.TYPE : Ljava/lang/Class;
+    AASTORE
+    DUP
+    ICONST_1
+    LDC [Ljava/lang/Object;.class
+    AASTORE
+    INVOKEVIRTUAL java/lang/Class.getMethod (Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;
+    ACONST_NULL
+    ICONST_2
+    ANEWARRAY java/lang/Object
+    DUP
+    ICONST_0
+    INVOKESTATIC java/lang/System.currentTimeMillis ()J
+    INVOKESTATIC java/lang/Long.valueOf (J)Ljava/lang/Long;
+    AASTORE
+    DUP
+    ICONST_1
+    ICONST_0
+    ANEWARRAY java/lang/Object
+    AASTORE
+    INVOKEVIRTUAL java/lang/reflect/Method.invoke (Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
+    ASTORE 3
+   L0
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    LDC "Hello, I am a method of System Class. I do not know about any other classes except system classes"
+    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/String;)V
+    ALOAD 2
+    LDC "setDuration"
+    ICONST_1
+    ANEWARRAY java/lang/Class
+    DUP
+    ICONST_0
+    GETSTATIC java/lang/Long.TYPE : Ljava/lang/Class;
+    AASTORE
+    INVOKEVIRTUAL java/lang/Class.getMethod (Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;
+    ALOAD 3
+    ICONST_1
+    ANEWARRAY java/lang/Object
+    DUP
+    ICONST_0
+    INVOKESTATIC java/lang/System.currentTimeMillis ()J
+    INVOKESTATIC java/lang/Long.valueOf (J)Ljava/lang/Long;
+    AASTORE
+    INVOKEVIRTUAL java/lang/reflect/Method.invoke (Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
+    POP
+    ALOAD 2
+    LDC "getDuration"
+    ICONST_0
+    ANEWARRAY java/lang/Class
+    INVOKEVIRTUAL java/lang/Class.getMethod (Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;
+    ALOAD 3
+    ICONST_0
+    ANEWARRAY java/lang/Object
+    INVOKEVIRTUAL java/lang/reflect/Method.invoke (Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
+    CHECKCAST java/lang/Long
+    INVOKEVIRTUAL java/lang/Long.longValue ()J
+    LCONST_1
+    LCMP
+    IFLE L4
+    ALOAD 1
+    LDC "addToQueue"
+    BIPUSH 10
+    ANEWARRAY java/lang/Class
+    DUP
+    ICONST_0
+    LDC Ljava/lang/Object;.class
+    AASTORE
+    DUP
+    ICONST_1
+    GETSTATIC java/lang/Long.TYPE : Ljava/lang/Class;
+    AASTORE
+    DUP
+    ICONST_2
+    GETSTATIC java/lang/Long.TYPE : Ljava/lang/Class;
+    AASTORE
+    DUP
+    ICONST_3
+    LDC [Ljava/lang/Object;.class
+    AASTORE
+    DUP
+    ICONST_4
+    LDC Ljava/lang/Thread;.class
+    AASTORE
+    DUP
+    ICONST_5
+    LDC Ljava/lang/String;.class
+    AASTORE
+    DUP
+    BIPUSH 6
+    LDC Ljava/lang/String;.class
+    AASTORE
+    DUP
+    BIPUSH 7
+    LDC Ljava/lang/String;.class
+    AASTORE
+    DUP
+    BIPUSH 8
+    GETSTATIC java/lang/Boolean.TYPE : Ljava/lang/Class;
+    AASTORE
+    DUP
+    BIPUSH 9
+    LDC Ljava/lang/String;.class
+    AASTORE
+    INVOKEVIRTUAL java/lang/Class.getMethod (Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;
+    ACONST_NULL
+    BIPUSH 10
+    ANEWARRAY java/lang/Object
+    DUP
+    ICONST_0
+    ACONST_NULL
+    AASTORE
+    DUP
+    ICONST_1
+    ALOAD 2
+    LDC "getStartTime"
+    ICONST_0
+    ANEWARRAY java/lang/Class
+    INVOKEVIRTUAL java/lang/Class.getMethod (Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;
+    ALOAD 3
+    ICONST_0
+    ANEWARRAY java/lang/Object
+    INVOKEVIRTUAL java/lang/reflect/Method.invoke (Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
+    CHECKCAST java/lang/Long
+    INVOKEVIRTUAL java/lang/Long.longValue ()J
+    INVOKESTATIC java/lang/Long.valueOf (J)Ljava/lang/Long;
+    AASTORE
+    DUP
+    ICONST_2
+    ALOAD 2
+    LDC "getDuration"
+    ICONST_0
+    ANEWARRAY java/lang/Class
+    INVOKEVIRTUAL java/lang/Class.getMethod (Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;
+    ALOAD 3
+    ICONST_0
+    ANEWARRAY java/lang/Object
+    INVOKEVIRTUAL java/lang/reflect/Method.invoke (Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
+    CHECKCAST java/lang/Long
+    INVOKEVIRTUAL java/lang/Long.longValue ()J
+    INVOKESTATIC java/lang/Long.valueOf (J)Ljava/lang/Long;
+    AASTORE
+    DUP
+    ICONST_3
+    ALOAD 2
+    LDC "getParameters"
+    ICONST_0
+    ANEWARRAY java/lang/Class
+    INVOKEVIRTUAL java/lang/Class.getMethod (Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;
+    ALOAD 3
+    ICONST_0
+    ANEWARRAY java/lang/Object
+    INVOKEVIRTUAL java/lang/reflect/Method.invoke (Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
+    CHECKCAST [Ljava/lang/Object;
+    CHECKCAST [Ljava/lang/Object;
+    AASTORE
+    DUP
+    ICONST_4
+    INVOKESTATIC java/lang/Thread.currentThread ()Ljava/lang/Thread;
+    AASTORE
+    DUP
+    ICONST_5
+    LDC "com/github/kornilova_l/flamegraph/javaagent/generate/test_classes/SystemClass"
+    AASTORE
+    DUP
+    BIPUSH 6
+    LDC "method"
+    AASTORE
+    DUP
+    BIPUSH 7
+    LDC "()V"
+    AASTORE
+    DUP
+    BIPUSH 8
+    ICONST_0
+    INVOKESTATIC java/lang/Boolean.valueOf (Z)Ljava/lang/Boolean;
+    AASTORE
+    DUP
+    BIPUSH 9
+    LDC ""
+    AASTORE
+    INVOKEVIRTUAL java/lang/reflect/Method.invoke (Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
+    POP
+   L4
+   FRAME APPEND [java/lang/Class java/lang/Class java/lang/Object]
+    RETURN
+   L1
+   FRAME SAME1 java/lang/Throwable
+    ASTORE 4
+    ALOAD 2
+    LDC "isThrownByMethod"
+    ICONST_0
+    ANEWARRAY java/lang/Class
+    INVOKEVIRTUAL java/lang/Class.getMethod (Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;
+    ALOAD 3
+    ICONST_0
+    ANEWARRAY java/lang/Object
+    INVOKEVIRTUAL java/lang/reflect/Method.invoke (Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
+    CHECKCAST java/lang/Boolean
+    INVOKEVIRTUAL java/lang/Boolean.booleanValue ()Z
+    IFNE L5
+    ALOAD 2
+    LDC "setDuration"
+    ICONST_1
+    ANEWARRAY java/lang/Class
+    DUP
+    ICONST_0
+    GETSTATIC java/lang/Long.TYPE : Ljava/lang/Class;
+    AASTORE
+    INVOKEVIRTUAL java/lang/Class.getMethod (Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;
+    ALOAD 3
+    ICONST_1
+    ANEWARRAY java/lang/Object
+    DUP
+    ICONST_0
+    INVOKESTATIC java/lang/System.currentTimeMillis ()J
+    INVOKESTATIC java/lang/Long.valueOf (J)Ljava/lang/Long;
+    AASTORE
+    INVOKEVIRTUAL java/lang/reflect/Method.invoke (Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
+    POP
+    ALOAD 2
+    LDC "getDuration"
+    ICONST_0
+    ANEWARRAY java/lang/Class
+    INVOKEVIRTUAL java/lang/Class.getMethod (Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;
+    ALOAD 3
+    ICONST_0
+    ANEWARRAY java/lang/Object
+    INVOKEVIRTUAL java/lang/reflect/Method.invoke (Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
+    CHECKCAST java/lang/Long
+    INVOKEVIRTUAL java/lang/Long.longValue ()J
+    LCONST_1
+    LCMP
+    IFLE L5
+    ALOAD 1
+    LDC "addToQueue"
+    BIPUSH 11
+    ANEWARRAY java/lang/Class
+    DUP
+    ICONST_0
+    LDC Ljava/lang/Throwable;.class
+    AASTORE
+    DUP
+    ICONST_1
+    GETSTATIC java/lang/Boolean.TYPE : Ljava/lang/Class;
+    AASTORE
+    DUP
+    ICONST_2
+    GETSTATIC java/lang/Long.TYPE : Ljava/lang/Class;
+    AASTORE
+    DUP
+    ICONST_3
+    GETSTATIC java/lang/Long.TYPE : Ljava/lang/Class;
+    AASTORE
+    DUP
+    ICONST_4
+    LDC [Ljava/lang/Object;.class
+    AASTORE
+    DUP
+    ICONST_5
+    LDC Ljava/lang/Thread;.class
+    AASTORE
+    DUP
+    BIPUSH 6
+    LDC Ljava/lang/String;.class
+    AASTORE
+    DUP
+    BIPUSH 7
+    LDC Ljava/lang/String;.class
+    AASTORE
+    DUP
+    BIPUSH 8
+    LDC Ljava/lang/String;.class
+    AASTORE
+    DUP
+    BIPUSH 9
+    GETSTATIC java/lang/Boolean.TYPE : Ljava/lang/Class;
+    AASTORE
+    DUP
+    BIPUSH 10
+    LDC Ljava/lang/String;.class
+    AASTORE
+    INVOKEVIRTUAL java/lang/Class.getMethod (Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;
+    ACONST_NULL
+    BIPUSH 11
+    ANEWARRAY java/lang/Object
+    DUP
+    ICONST_0
+    ALOAD 4
+    AASTORE
+    DUP
+    ICONST_1
+    ICONST_0
+    INVOKESTATIC java/lang/Boolean.valueOf (Z)Ljava/lang/Boolean;
+    AASTORE
+    DUP
+    ICONST_2
+    ALOAD 2
+    LDC "getStartTime"
+    ICONST_0
+    ANEWARRAY java/lang/Class
+    INVOKEVIRTUAL java/lang/Class.getMethod (Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;
+    ALOAD 3
+    ICONST_0
+    ANEWARRAY java/lang/Object
+    INVOKEVIRTUAL java/lang/reflect/Method.invoke (Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
+    CHECKCAST java/lang/Long
+    INVOKEVIRTUAL java/lang/Long.longValue ()J
+    INVOKESTATIC java/lang/Long.valueOf (J)Ljava/lang/Long;
+    AASTORE
+    DUP
+    ICONST_3
+    ALOAD 2
+    LDC "getDuration"
+    ICONST_0
+    ANEWARRAY java/lang/Class
+    INVOKEVIRTUAL java/lang/Class.getMethod (Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;
+    ALOAD 3
+    ICONST_0
+    ANEWARRAY java/lang/Object
+    INVOKEVIRTUAL java/lang/reflect/Method.invoke (Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
+    CHECKCAST java/lang/Long
+    INVOKEVIRTUAL java/lang/Long.longValue ()J
+    INVOKESTATIC java/lang/Long.valueOf (J)Ljava/lang/Long;
+    AASTORE
+    DUP
+    ICONST_4
+    ALOAD 2
+    LDC "getParameters"
+    ICONST_0
+    ANEWARRAY java/lang/Class
+    INVOKEVIRTUAL java/lang/Class.getMethod (Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;
+    ALOAD 3
+    ICONST_0
+    ANEWARRAY java/lang/Object
+    INVOKEVIRTUAL java/lang/reflect/Method.invoke (Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
+    CHECKCAST [Ljava/lang/Object;
+    CHECKCAST [Ljava/lang/Object;
+    AASTORE
+    DUP
+    ICONST_5
+    INVOKESTATIC java/lang/Thread.currentThread ()Ljava/lang/Thread;
+    AASTORE
+    DUP
+    BIPUSH 6
+    LDC "com/github/kornilova_l/flamegraph/javaagent/generate/test_classes/SystemClass"
+    AASTORE
+    DUP
+    BIPUSH 7
+    LDC "method"
+    AASTORE
+    DUP
+    BIPUSH 8
+    LDC "()V"
+    AASTORE
+    DUP
+    BIPUSH 9
+    ICONST_0
+    INVOKESTATIC java/lang/Boolean.valueOf (Z)Ljava/lang/Boolean;
+    AASTORE
+    DUP
+    BIPUSH 10
+    LDC ""
+    AASTORE
+    INVOKEVIRTUAL java/lang/reflect/Method.invoke (Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
+    POP
+   L5
+   FRAME APPEND [java/lang/Throwable]
+    ALOAD 4
+    ATHROW
+   L3
+    ASTORE 5
+    ALOAD 5
+    INVOKEVIRTUAL java/lang/ReflectiveOperationException.printStackTrace ()V
+    NEW java/lang/RuntimeException
+    DUP
+    ALOAD 5
+    INVOKESPECIAL java/lang/RuntimeException.<init> (Ljava/lang/Throwable;)V
+    ATHROW
+    MAXSTACK = 8
+    MAXLOCALS = 6
+}

@@ -1,5 +1,6 @@
 package com.github.kornilova_l.flamegraph.javaagent.agent;
 
+import com.github.kornilova_l.flamegraph.configuration.MethodConfig;
 import com.github.kornilova_l.flamegraph.javaagent.logger.Logger;
 import com.github.kornilova_l.flamegraph.javaagent.logger.LoggerQueue;
 import com.github.kornilova_l.flamegraph.javaagent.logger.WaitingLoggingToFinish;
@@ -10,6 +11,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.instrument.Instrumentation;
+import java.lang.instrument.UnmodifiableClassException;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -33,7 +35,24 @@ public class Agent {
         }
         createLogger(new File(parameters[0]));
         AgentConfigurationManager configurationManager = new AgentConfigurationManager(methods);
-        inst.addTransformer(new ProfilingClassFileTransformer(configurationManager));
+        configurationManager.printConfiguration();
+        inst.addTransformer(new ProfilingClassFileTransformer(configurationManager), true);
+
+        try {
+            for (Class clazz : inst.getAllLoadedClasses()) {
+                if (!clazz.getName().contains("com.github.kornilova_l.flamegraph.javaagent") &&
+                        !clazz.getName().contains("com.github.kornilova_l.flamegraph.proxy")) {
+                    List<MethodConfig> methodConfigs = configurationManager
+                            .findIncludingConfigs(clazz.getName(), true);
+                    if (methodConfigs.size() != 0) {
+                        inst.retransformClasses(clazz);
+                    }
+                }
+            }
+
+        } catch (UnmodifiableClassException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

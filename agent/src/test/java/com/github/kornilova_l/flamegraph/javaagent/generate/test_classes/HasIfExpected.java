@@ -3,46 +3,46 @@ package com.github.kornilova_l.flamegraph.javaagent.generate.test_classes;
 import com.github.kornilova_l.flamegraph.javaagent.logger.LoggerQueue;
 import com.github.kornilova_l.flamegraph.proxy.StartData;
 
-public class ThrowsExceptionExpected {
-    public static void main(String[] args) {
+public class HasIfExpected {
+    public static int main(int val) {
         StartData startData = LoggerQueue.createStartData(System.currentTimeMillis(), null);
         try {
+            int res = 0;
+            if (val > 0) {
+                res++;
+            }
             startData.setDuration(System.currentTimeMillis());
-            startData.setThrownByMethod();
             if (startData.getDuration() > 1) {
                 LoggerQueue.addToQueue(null,
-                        false,
                         startData.getStartTime(),
                         startData.getDuration(),
                         startData.getParameters(),
                         Thread.currentThread(),
-                        "com/github/kornilova_l/flamegraph/javaagent/generate/test_classes/ThrowsException",
+                        "com/github/kornilova_l/flamegraph/javaagent/generate/test_classes/HasIf",
                         "main",
-                        "([Ljava/lang/String;)V",
+                        "(I)I",
                         true,
-                        ""
-                );
+                        "");
             }
-        throw new AssertionError("error");
-        } catch (Throwable throwable) {
+            return res;
+        } catch (Throwable t) {
             if (!startData.isThrownByMethod()) {
                 startData.setDuration(System.currentTimeMillis());
                 if (startData.getDuration() > 1) {
-                    LoggerQueue.addToQueue(throwable,
+                    LoggerQueue.addToQueue(t,
                             false,
                             startData.getStartTime(),
                             startData.getDuration(),
                             startData.getParameters(),
                             Thread.currentThread(),
-                            "com/github/kornilova_l/flamegraph/javaagent/generate/test_classes/ThrowsException",
+                            "com/github/kornilova_l/flamegraph/javaagent/generate/test_classes/HasIf",
                             "main",
-                            "([Ljava/lang/String;)V",
+                            "(I)I",
                             true,
-                            ""
-                    );
+                            "");
                 }
             }
-            throw throwable;
+            throw t;
         }
     }
 }

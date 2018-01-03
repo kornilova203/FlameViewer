@@ -360,6 +360,26 @@ function listenCheckbox($list, filesList) {
     bindDelete($list, selectedFilesIds, filesList);
 }
 
+function showFullNameOnHover($list) {
+    $list.children().each(function() {
+        const $fileLi = $(this);
+        $fileLi.mouseenter(() => {
+            constants.$fullFileName.find("*").remove();
+            constants.$fullFileName.append($fileLi.find("p").clone());
+            constants.$fullFileName.offset({top: $fileLi.offset().top});
+            constants.$fullFileName.addClass("visible-without-pointer-events");
+        });
+
+        $fileLi.mouseleave(() => {
+            constants.$fullFileName.removeClass("visible-without-pointer-events");
+        });
+    });
+
+    $list.scroll(() => {
+        constants.$fullFileName.removeClass("visible-without-pointer-events");
+    });
+}
+
 /**
  * @param {Array<{id: String, fullName: String}>} filesList
  */
@@ -379,6 +399,8 @@ function updateFilesList(filesList) {
             // get current file id. Like server forms id's
             $("#" + constants.fileName.split(":").join("").split(".").join("")).addClass("current-file");
         }
+
+        showFullNameOnHover($list);
     }
     if (constants.projectName === "uploaded-files") {
         appendInput();

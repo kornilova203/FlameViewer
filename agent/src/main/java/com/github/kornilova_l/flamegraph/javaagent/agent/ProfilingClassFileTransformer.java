@@ -33,12 +33,9 @@ class ProfilingClassFileTransformer implements ClassFileTransformer {
                             Class<?> classBeingRedefined,
                             ProtectionDomain protectionDomain,
                             byte[] classfileBuffer) {
-        if (loader == null) { // if rt.jar
-            return classfileBuffer;
-        }
         if (!className.startsWith("com/github/kornilova_l/flamegraph/javaagent") &&
                 !className.startsWith("com/github/kornilova_l/flamegraph/proxy")) { // exclude classes of agent
-            List<MethodConfig> methodConfigs = configurationManager.findIncludingConfigs(className);
+            List<MethodConfig> methodConfigs = configurationManager.findIncludingConfigs(className, loader == null);
             if (methodConfigs.size() != 0) {
                 ClassReader cr = new ClassReader(classfileBuffer);
                 ClassWriter cw = new ClassWriter(cr, ClassWriter.COMPUTE_FRAMES);
@@ -51,7 +48,8 @@ class ProfilingClassFileTransformer implements ClassFileTransformer {
                                 className,
                                 hasSystemCLInChain(loader),
                                 methodConfigs,
-                                configurationManager
+                                configurationManager,
+                                loader == null
                         ), ClassReader.SKIP_FRAMES);
                 return cw.toByteArray();
             }
