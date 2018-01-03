@@ -413,6 +413,7 @@ class SystemClassMethodVisitor extends ProfilingMethodVisitor {
         mv.visitTryCatchBlock(startTryCatchForReflection, end, end, "java/lang/reflect/InvocationTargetException");
         mv.visitLabel(end); // this label goes after athrow of try-catch that is added by ProfilingMethodVisitor
         printStackTrace();
+        mv.visitInsn(RETURN);
     }
 
     /**
