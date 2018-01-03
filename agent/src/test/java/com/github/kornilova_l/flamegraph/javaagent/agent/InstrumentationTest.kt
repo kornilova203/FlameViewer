@@ -58,21 +58,30 @@ class InstrumentationTest {
     fun systemClassTest() {
         val configurationManager = AgentConfigurationManager(listOf("${SystemClass::class.java.name}.method(*)"))
         val methodConfigs = listOf(MethodConfig(SystemClass::class.java.name, "method", "(*)"))
-        classTest(SystemClass::class.java, SystemClassExpected::class.java, configurationManager, methodConfigs, false, true)
+        classTest(SystemClass::class.java, configurationManager, methodConfigs, false, true)
+
+        /* If instrumentation changed uncomment following and check it manually */
+//        classTest(SystemClass::class.java, SystemClassExpected::class.java, configurationManager, methodConfigs, false, true)
     }
 
     @Test
     fun systemClassWithThrowTest() {
         val configurationManager = AgentConfigurationManager(listOf("${SystemClassWithThrow::class.java.name}.method(*)"))
         val methodConfigs = listOf(MethodConfig(SystemClassWithThrow::class.java.name, "method", "(*)"))
-        classTest(SystemClassWithThrow::class.java, SystemClassWithThrowExpected::class.java, configurationManager, methodConfigs, false, true)
+        classTest(SystemClassWithThrow::class.java, configurationManager, methodConfigs, false, true)
+
+        /* If instrumentation changed uncomment following and check it manually */
+//        classTest(SystemClassWithThrow::class.java, SystemClassWithThrowExpected::class.java, configurationManager, methodConfigs, false, true)
     }
 
     @Test
     fun systemClassHasIfTest() {
         val configurationManager = AgentConfigurationManager(listOf("${SystemClassHasIf::class.java.name}.method(*)"))
         val methodConfigs = listOf(MethodConfig(SystemClassHasIf::class.java.name, "method", "(*)"))
-        classTest(SystemClassHasIf::class.java, SystemClassHasIfExpected::class.java, configurationManager, methodConfigs, false, true)
+        classTest(SystemClassHasIf::class.java, configurationManager, methodConfigs, false, true)
+
+        /* If instrumentation changed uncomment following and check it manually */
+//        classTest(SystemClassHasIf::class.java, SystemClassHasIfExpected::class.java, configurationManager, methodConfigs, false, true)
     }
 
     @Test
