@@ -45,8 +45,6 @@ public class Agent {
                     List<MethodConfig> methodConfigs = configurationManager
                             .findIncludingConfigs(clazz.getName(), true);
                     if (methodConfigs.size() != 0) {
-                        System.out.println(clazz.getName());
-                        System.out.println(inst.isModifiableClass(clazz));
                         inst.retransformClasses(clazz);
                     }
                 }
