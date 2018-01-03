@@ -8,6 +8,7 @@ import org.objectweb.asm.ClassReader
 import org.objectweb.asm.ClassWriter
 import org.objectweb.asm.ClassWriter.COMPUTE_FRAMES
 import org.objectweb.asm.util.CheckClassAdapter
+import java.io.FileOutputStream
 
 /**
  * Use [org.objectweb.asm.util.CheckClassAdapter] to check if
@@ -25,6 +26,7 @@ class IsCodeValidTest {
         doTest(SystemClass::class.java, true)
         doTest(SystemClassWithThrow::class.java, true)
         doTest(SystemClassHasIf::class.java, true)
+        doTest(FileOutputStream::class.java, true)
     }
 
     private fun doTest(clazz: Class<*>, isSystemClass: Boolean = false) {
