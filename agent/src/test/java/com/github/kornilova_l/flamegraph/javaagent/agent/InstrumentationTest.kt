@@ -55,17 +55,17 @@ class InstrumentationTest {
     }
 
     @Test
-    fun systemClassesTest() {
+    fun systemClassTest() {
         val configurationManager = AgentConfigurationManager(listOf("${SystemClass::class.java.name}.method(*)"))
         val methodConfigs = listOf(MethodConfig(SystemClass::class.java.name, "method", "(*)"))
         classTest(SystemClass::class.java, SystemClassExpected::class.java, configurationManager, methodConfigs, false, true)
     }
 
     @Test
-    fun fileOutputStream() {
-        val methodConfigs = listOf(MethodConfig("java.io.FileOutputStream", "write", "(byte[])"))
-        val configurationManager = AgentConfigurationManager(listOf("java.io.FileOutputStream.write(byte[])"))
-        classTest(FileOutputStream::class.java, FileOutputStream::class.java, configurationManager, methodConfigs, false, true)
+    fun systemClassWithThrowTest() {
+        val configurationManager = AgentConfigurationManager(listOf("${SystemClassWithThrow::class.java.name}.method(*)"))
+        val methodConfigs = listOf(MethodConfig(SystemClassWithThrow::class.java.name, "method", "(*)"))
+        classTest(SystemClassWithThrow::class.java, SystemClassWithThrowExpected::class.java, configurationManager, methodConfigs, false, true)
     }
 
     @Test

@@ -49,8 +49,14 @@ class SystemClassMethodVisitor extends ProfilingMethodVisitor {
 
     @Override
     void setThrownByMethod() {
-        // todo: implement
-        super.setThrownByMethod();
+        mv.visitVarInsn(ALOAD, startDataClassLocal);
+        mv.visitLdcInsn("setThrownByMethod");
+        createEmptyArray("Class");
+        invokeGetMethod();
+        mv.visitInsn(ACONST_NULL);
+        createEmptyArray("Object");
+        invokeInvoke();
+        pop();
     }
 
     @Override

@@ -23,6 +23,7 @@ class IsCodeValidTest {
         doTest(ThrowsException::class.java)
         doTest(UseProxy::class.java)
         doTest(SystemClass::class.java, true)
+        doTest(SystemClassWithThrow::class.java, true)
     }
 
     private fun doTest(clazz: Class<*>, isSystemClass: Boolean = false) {
