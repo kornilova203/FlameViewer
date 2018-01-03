@@ -1,6 +1,7 @@
 package com.github.kornilova_l.flamegraph.javaagent.generate;
 
 import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.util.TraceClassVisitor;
 
 import java.io.*;
@@ -20,8 +21,9 @@ public class Generator {
         // recompute frames to get result similar to ProfilerClassVisitor
         byte[] bytes = getBytes(testedClass);
         ClassReader cr = new ClassReader(bytes);
+        ClassWriter cw = new ClassWriter(cr, ClassWriter.COMPUTE_FRAMES);
         cr.accept(
-                new TraceClassVisitor(null, new PrintWriter(System.out)),
+                cw,
                 ClassReader.SKIP_FRAMES | ClassReader.SKIP_DEBUG
         );
 

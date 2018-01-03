@@ -57,17 +57,6 @@ class SystemClassMethodVisitor extends ProfilingMethodVisitor {
     void retValAddToQueue(int opcode) {
         getMethodAddToQueue();
         invokeAddToQueue();
-        pop();
-    }
-
-    @Override
-    void prepareAndAddThrowableToQueue(Label athrowLabel) {
-        /* save throwable */
-        throwable = newLocal(org.objectweb.asm.Type.getType("L" + Throwable.class.getName() + ";"));
-        mv.visitVarInsn(ASTORE, throwable);
-
-        super.prepareAndAddThrowableToQueue(athrowLabel);
-//        mv.visitVarInsn(ALOAD, throwable);
     }
 
     @Override
@@ -110,6 +99,18 @@ class SystemClassMethodVisitor extends ProfilingMethodVisitor {
 
         invokeInvoke();
         pop();
+    }
+
+    @Override
+    void maybeSaveThrowable() {
+        /* save throwable */
+        throwable = newLocal(org.objectweb.asm.Type.getType("L" + Throwable.class.getName() + ";"));
+        mv.visitVarInsn(ASTORE, throwable);
+    }
+
+    @Override
+    void maybeLoadThrowable() {
+        mv.visitVarInsn(ALOAD, throwable);
     }
 
     @Override
@@ -160,6 +161,7 @@ class SystemClassMethodVisitor extends ProfilingMethodVisitor {
 
         getIConst(startIndex++);
         getDuration();
+        longToObj(); // convert to object because it is added to array of objects
         addToArrayAndDup();
 
         getIConst(startIndex++);
@@ -230,7 +232,6 @@ class SystemClassMethodVisitor extends ProfilingMethodVisitor {
         invokeInvoke();
         mv.visitTypeInsn(CHECKCAST, "java/lang/Long");
         mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Long", "longValue", "()J", false);
-//        longToObj();
     }
 
     private void getStartTime() {
@@ -337,7 +338,7 @@ class SystemClassMethodVisitor extends ProfilingMethodVisitor {
         longToObj();
         mv.visitInsn(AASTORE);
         invokeInvoke();
-        mv.visitInsn(POP); // remove return value of 'invoke' (it returns null here)
+        pop(); // remove return value of 'invoke' (it returns null here)
     }
 
     private void getClassOfLong() {
@@ -394,7 +395,7 @@ class SystemClassMethodVisitor extends ProfilingMethodVisitor {
     private void saveClass(String className, int variable) {
         mv.visitMethodInsn(INVOKESTATIC, "java/lang/ClassLoader", "getSystemClassLoader", "()Ljava/lang/ClassLoader;", false);
         mv.visitLdcInsn(className);
-        mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/ClassLoader", "loadClass", "(Ljava/lang/String;)Ljava/lang/Class;", true);
+        mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/ClassLoader", "loadClass", "(Ljava/lang/String;)Ljava/lang/Class;", false);
         mv.visitVarInsn(ASTORE, variable);
     }
 

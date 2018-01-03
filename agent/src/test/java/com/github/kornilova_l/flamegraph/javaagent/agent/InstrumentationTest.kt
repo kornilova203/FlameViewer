@@ -139,15 +139,20 @@ class InstrumentationTest {
         val bytes = getBytes(testedClass)
         val cr = ClassReader(bytes)
         val cw = ClassWriter(cr, ClassWriter.COMPUTE_FRAMES)
+        val traceClassVisitor = TraceClassVisitor(
+                cw,
+                PrintWriter(System.out)
+        )
         cr.accept(
                 ProfilingClassVisitor(
-                        cw,
+                        traceClassVisitor,
                         fullName.replace('.', '/'),
                         hasSystemCL,
                         methodConfigs,
                         configurationManager,
                         isSystemClass
-                ), ClassReader.SKIP_FRAMES or ClassReader.SKIP_DEBUG
+                ),
+                ClassReader.SKIP_FRAMES or ClassReader.SKIP_DEBUG
         )
 
         return cw.toByteArray()

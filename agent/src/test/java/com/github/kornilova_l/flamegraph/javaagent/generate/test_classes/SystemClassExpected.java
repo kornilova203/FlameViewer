@@ -41,8 +41,8 @@ public class SystemClassExpected {
                     if ((long) startDataClass.getMethod("getDuration").invoke(startData) > 1) {
                         proxyClass.getMethod("addToQueue", Throwable.class, boolean.class, long.class, long.class,
                                 Object[].class, Thread.class, String.class, String.class, String.class, boolean.class, String.class)
-                                .invoke(null,
-                                        null,
+                                .invoke(null, // static method
+                                        t,
                                         false,
                                         (long) startDataClass.getMethod("getStartTime").invoke(startData),
                                         (long) startDataClass.getMethod("getDuration").invoke(startData),

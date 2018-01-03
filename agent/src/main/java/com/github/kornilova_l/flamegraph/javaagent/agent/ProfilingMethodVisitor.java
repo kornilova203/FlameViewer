@@ -133,16 +133,31 @@ class ProfilingMethodVisitor extends AdviceAdapter {
                                       // So code after it is executed if exception is thrown
         mv.visitLabel(handler);
 
+        maybeSaveThrowable();
+
         getIfWasThrownByMethod();
         Label athrowLabel = new Label(); // label before ATHROW instruction
         mv.visitJumpInsn(IFNE, athrowLabel); // if value on stack is not zero == if was thrown by method go to ATHROW
         prepareAndAddThrowableToQueue(athrowLabel); // this is executed if value was NOT thrown by current method
 
         mv.visitLabel(athrowLabel);
+
+        maybeLoadThrowable();
+
         mv.visitInsn(ATHROW);
     }
 
-    void prepareAndAddThrowableToQueue(Label athrowLabel) {
+    void maybeSaveThrowable() {
+        /* throwable is saved in SystemClassMethodVisitor
+         * I added this method here to avoid unclear overrides */
+    }
+
+    void maybeLoadThrowable() {
+        /* throwable is loaded in SystemClassMethodVisitor
+         * I added this method here to avoid unclear overrides */
+    }
+
+    private void prepareAndAddThrowableToQueue(Label athrowLabel) {
         saveExitTime();
         getIfTimeIsMoreOneMs();
         mv.visitJumpInsn(IFLE, athrowLabel); // if method took < 1ms
