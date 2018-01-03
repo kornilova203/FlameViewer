@@ -33,7 +33,7 @@ private fun getData(file: File): String {
     throw RuntimeException("File was not open")
 }
 
-val expectedWord = Regex("(?<=\\w)Expected(?= \\{)")
+val expectedWord = Regex("(?<=\\w)Expected")
 
 fun compareFiles(expected: File, actual: File, deleteExpectedFile: Boolean = false) {
     val actualBytecode = getData(actual)

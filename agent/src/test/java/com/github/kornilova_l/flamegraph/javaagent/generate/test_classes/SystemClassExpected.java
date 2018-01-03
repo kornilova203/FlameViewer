@@ -60,6 +60,7 @@ public class SystemClassExpected {
             }
         } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
+            throw new RuntimeException(e);
         }
 
     }

@@ -418,8 +418,25 @@ class SystemClassMethodVisitor extends ProfilingMethodVisitor {
         mv.visitTryCatchBlock(startTryCatchForReflection, end, end, "java/lang/IllegalAccessException");
         mv.visitTryCatchBlock(startTryCatchForReflection, end, end, "java/lang/reflect/InvocationTargetException");
         mv.visitLabel(end); // this label goes after athrow of try-catch that is added by ProfilingMethodVisitor
+
+        int throwableLocal = newLocal(org.objectweb.asm.Type.getType("L" + Throwable.class.getName() + ";"));
+        mv.visitVarInsn(ASTORE, throwableLocal);
+
+        mv.visitVarInsn(ALOAD, throwableLocal);
         printStackTrace();
-        mv.visitInsn(RETURN);
+
+        throwFurther(throwableLocal);
+    }
+
+    /**
+     * Throw exception
+     */
+    private void throwFurther(int throwableLocal) {
+        mv.visitTypeInsn(NEW, "java/lang/RuntimeException");
+        dup();
+        mv.visitVarInsn(ALOAD, throwableLocal);
+        mv.visitMethodInsn(INVOKESPECIAL, "java/lang/RuntimeException", "<init>", "(Ljava/lang/Throwable;)V", false);
+        mv.visitInsn(ATHROW);
     }
 
     /**

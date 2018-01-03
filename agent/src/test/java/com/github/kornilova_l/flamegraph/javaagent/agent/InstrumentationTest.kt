@@ -69,6 +69,13 @@ class InstrumentationTest {
     }
 
     @Test
+    fun systemClassHasIfTest() {
+        val configurationManager = AgentConfigurationManager(listOf("${SystemClassHasIf::class.java.name}.method(*)"))
+        val methodConfigs = listOf(MethodConfig(SystemClassHasIf::class.java.name, "method", "(*)"))
+        classTest(SystemClassHasIf::class.java, SystemClassHasIfExpected::class.java, configurationManager, methodConfigs, false, true)
+    }
+
+    @Test
     fun hasCatch() {
         classTest(HasCatch::class.java, configurationManagerSaveReturn!!, methodConfigsSaveReturn)
         /* If instrumentation changed uncomment following and check it manually */
