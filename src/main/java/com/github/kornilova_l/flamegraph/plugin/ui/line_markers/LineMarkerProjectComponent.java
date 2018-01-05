@@ -36,8 +36,10 @@ public class LineMarkerProjectComponent extends AbstractProjectComponent {
              */
             @Override
             public void fileClosed(@NotNull FileEditorManager source, @NotNull VirtualFile file) {
-                if (Objects.equals(file.getFileType().getDefaultExtension(), "java")) {
-                    lineMarkersHolder.removeAllIcons(file);
+                if (source.getProject().isOpen()) {
+                    if (Objects.equals(file.getFileType().getDefaultExtension(), "java")) {
+                        lineMarkersHolder.removeAllIcons(file);
+                    }
                 }
             }
         });
