@@ -8,6 +8,10 @@ import java.util.Map;
 import static com.github.kornilova_l.flamegraph.plugin.server.trees.TreesSet.setTreeWidth;
 import static com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumulative_trees.AccumulativeTreesHelper.setNodesOffsetRecursively;
 
+/**
+ * Builds tree in which methods contain parameters
+ * and maybe contain return value
+ */
 public class StacksOCTreeBuilder extends SimpleStacksOCTreeBuilder {
 
     StacksOCTreeBuilder(@NotNull Map<String, Integer> stacks) {
@@ -27,7 +31,12 @@ public class StacksOCTreeBuilder extends SimpleStacksOCTreeBuilder {
     @Override
     TreeProtos.Tree.Node.NodeInfo.Builder formNodeInfo(String call) {
         String retType = getRetType(call);
-        String classAndMethod = call.substring(call.indexOf(" ") + 1, call.indexOf("("));
+        String classAndMethod;
+        if (!retType.equals("")) { // if contains return value
+            classAndMethod = call.substring(retType.length() + 1, call.indexOf("("));
+        } else {
+            classAndMethod = call.substring(0, call.indexOf("("));
+        }
         String className = getClassName(classAndMethod);
         String methodName = getMethodName(classAndMethod);
         String desc = getDesc(call);
@@ -63,10 +72,12 @@ public class StacksOCTreeBuilder extends SimpleStacksOCTreeBuilder {
 
     @NotNull
     private static String getRetType(String call) {
-        int space = call.indexOf(" ");
-        if (space != -1) {
+        int space = call.indexOf(' ');
+        int openBracket = call.indexOf('(');
+        if (space != -1 && space < openBracket) { // if space exist and it is not in parameters
             return call.substring(0, space);
+        } else {
+            return "";
         }
-        throw new IllegalArgumentException("Method does not contain return value");
     }
 }

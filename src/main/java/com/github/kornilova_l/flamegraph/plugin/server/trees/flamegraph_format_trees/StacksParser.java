@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 
 public class StacksParser {
     private static final Pattern flamegraphLinePattern = Pattern.compile(".* \\d+");
-    private static final Pattern fullCallPattern = Pattern.compile("(?:[^ ()]+ [^ ()]+\\([^)]*\\);)*[^ ()]+ [^ ()]+\\([^)]*\\);?");
+    private static final Pattern hasParametersPattern = Pattern.compile("[^;(]+\\([^)]*\\)(?:;[^;(]+\\([^)]*\\))*;?");
 
     @Nullable
     public static Map<String, Integer> getStacks(File convertedFile) {
@@ -58,7 +58,7 @@ public class StacksParser {
      */
     static boolean doCallsContainParameters(Map<String, Integer> stacks) {
         for (String stack : stacks.keySet()) {
-            if (!fullCallPattern.matcher(stack).matches()) {
+            if (!hasParametersPattern.matcher(stack).matches()) {
                 return false;
             }
         }

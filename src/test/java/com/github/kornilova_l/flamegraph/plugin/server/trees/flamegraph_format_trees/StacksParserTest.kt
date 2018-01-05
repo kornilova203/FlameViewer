@@ -21,13 +21,13 @@ class StacksParserTest {
         assertTrue(StacksParser.doCallsContainParameters(stacks))
 
         stacks = hashMapOf(Pair(" ()", 1))
-        assertFalse(StacksParser.doCallsContainParameters(stacks))
+        assertTrue(StacksParser.doCallsContainParameters(stacks))
 
         stacks = hashMapOf(Pair("a ()", 1))
-        assertFalse(StacksParser.doCallsContainParameters(stacks))
+        assertTrue(StacksParser.doCallsContainParameters(stacks))
 
         stacks = hashMapOf(Pair("void a(); a()", 1))
-        assertFalse(StacksParser.doCallsContainParameters(stacks))
+        assertTrue(StacksParser.doCallsContainParameters(stacks))
 
         stacks = hashMapOf(Pair("void a();void a)(", 1))
         assertFalse(StacksParser.doCallsContainParameters(stacks))

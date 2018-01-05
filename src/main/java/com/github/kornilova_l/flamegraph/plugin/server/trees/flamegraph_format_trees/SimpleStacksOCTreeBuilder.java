@@ -12,6 +12,10 @@ import static com.github.kornilova_l.flamegraph.plugin.server.trees.TreesSet.set
 import static com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumulative_trees.AccumulativeTreesHelper.setNodesOffsetRecursively;
 import static com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumulative_trees.AccumulativeTreesHelper.updateNodeList;
 
+/**
+ * Builds tree in which methods does not have
+ * return value and parameters
+ */
 public class SimpleStacksOCTreeBuilder implements TreeBuilder {
     final Tree.Builder treeBuilder = Tree.newBuilder();
     private final Tree tree;
