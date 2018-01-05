@@ -337,6 +337,7 @@ nav ul li a:focus {
 
 .file-list li p {
     margin: 0;
+    white-space: nowrap;
 }
 
 .file-list li span {
