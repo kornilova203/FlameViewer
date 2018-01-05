@@ -17,4 +17,12 @@ public class CallTreeBenchmark {
     public void buildTree() {
         new SerTreesSet(new File("src/jmh/resources/idea.ser")).getCallTree(null);
     }
+
+    public static void main(String[] args) {
+        long startTime = System.currentTimeMillis();
+        for (int i = 0; i < 600; i ++) {
+            new SerTreesSet(new File("src/jmh/resources/idea.ser")).getCallTree(null);
+        }
+        System.out.println("Time: " + (System.currentTimeMillis() - startTime) / 1000);
+    }
 }

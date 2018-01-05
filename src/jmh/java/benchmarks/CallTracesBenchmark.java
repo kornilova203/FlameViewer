@@ -17,4 +17,12 @@ public class CallTracesBenchmark {
     public void buildTree() {
         new FlamegraphFormatTreesSet(new File("src/jmh/resources/idea.jfr"));
     }
+
+    public static void main(String[] args) {
+        long startTime = System.currentTimeMillis();
+        for (int i = 0; i < 10; i++) {
+            new FlamegraphFormatTreesSet(new File("src/jmh/resources/idea.jfr"));
+        }
+        System.out.println("Time: " + (System.currentTimeMillis() - startTime) / 1000 + "s");
+    }
 }

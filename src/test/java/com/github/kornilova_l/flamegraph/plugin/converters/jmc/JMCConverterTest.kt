@@ -2,7 +2,6 @@ package com.github.kornilova_l.flamegraph.plugin.converters.jmc
 
 import com.github.kornilova_l.flamegraph.plugin.converters.jmc.JMCConverter.*
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.io.File
 

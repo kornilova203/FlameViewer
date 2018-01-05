@@ -33,7 +33,8 @@ public class CallTreesBuilder {
         }
     }
 
-    private static TreesProtos.@Nullable Trees HashMapToTrees(Map<Long, CTBuilder> trees,
+    @Nullable
+    private static TreesProtos.Trees HashMapToTrees(Map<Long, CTBuilder> trees,
                                                               long startTimeOfFirstThread) {
         TreesProtos.Trees.Builder treesBuilder = TreesProtos.Trees.newBuilder();
         for (CTBuilder oTBuilder : trees.values()) {

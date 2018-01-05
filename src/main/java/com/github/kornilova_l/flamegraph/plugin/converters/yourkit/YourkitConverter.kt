@@ -1,0 +1,53 @@
+package com.github.kornilova_l.flamegraph.plugin.converters.yourkit
+
+import com.github.kornilova_l.flamegraph.plugin.converters.ProfilerToFlamegraphConverter
+import com.github.kornilova_l.yourkit_to_flamegraph.Converter
+import java.io.BufferedReader
+import java.io.File
+import java.io.FileReader
+
+
+class YourkitConverter : ProfilerToFlamegraphConverter() {
+    override fun isSupported(file: File): Boolean {
+        if (getFileExtension(file.name) != "csv") {
+            return false
+        }
+        BufferedReader(FileReader(file)).use { reader ->
+
+            reader.readLine() // skip header
+            reader.readLine() // skip header
+
+            var line: String? = reader.readLine()
+
+            while (line != null) {
+                val parts = line.split("\",\"")
+                if (parts.size != 3) {
+                    return false
+                }
+                val firstString = parts[0].removePrefix("\"")
+                if (!isMethod(firstString) && !firstString.contains(':')) {
+                    return false
+                }
+                try {
+                    Integer.parseInt(parts[1]) // time
+                    Integer.parseInt(parts[2].removeSuffix("\"")) // level
+                } catch (e: NumberFormatException) {
+                    return false
+                }
+
+                line = reader.readLine()
+            }
+        }
+        return true
+    }
+
+    private fun isMethod(s: String): Boolean {
+        val openBracketPos = s.indexOf('(')
+        val closeBracketPos = s.indexOf(')')
+        return openBracketPos != -1 &&
+                closeBracketPos != -1 &&
+                openBracketPos < closeBracketPos
+    }
+
+    override fun convert(file: File): Map<String, Int> = Converter(file).getStacks()
+}

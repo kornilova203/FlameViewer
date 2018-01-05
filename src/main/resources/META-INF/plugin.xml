@@ -41,6 +41,8 @@ You can analyze performance of your program with <strong>Flamegraph Visualizer</
     <extensions defaultExtensionNs="com.github.kornilovaL.flamegraphProfiler">
         <profilerToFlamegraphConverter
                 implementation="com.github.kornilova_l.flamegraph.plugin.converters.jmc.JMCConverter"/>
+        <profilerToFlamegraphConverter
+                implementation="com.github.kornilova_l.flamegraph.plugin.converters.yourkit.YourkitConverter"/>
     </extensions>
 
     <actions>

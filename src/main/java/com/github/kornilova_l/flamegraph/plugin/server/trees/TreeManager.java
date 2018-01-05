@@ -59,8 +59,8 @@ public class TreeManager {
         return System.currentTimeMillis() - lastUpdate.get() >= 30000;
     }
 
-
-    public TreesProtos.@Nullable Trees getCallTree(File logFile,
+    @Nullable
+    public TreesProtos.Trees getCallTree(File logFile,
                                                    @Nullable Filter filter,
                                                    @Nullable List<Integer> threadsIds) {
         isBusy.set(true);

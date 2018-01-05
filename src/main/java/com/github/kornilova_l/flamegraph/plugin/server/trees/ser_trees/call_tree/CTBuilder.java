@@ -119,7 +119,8 @@ class CTBuilder {
         }
     }
 
-    private Tree.@NotNull Builder initTreeBuilder(long startTimeOfFirstThread) {
+    @NotNull
+    private Tree.Builder initTreeBuilder(long startTimeOfFirstThread) {
         return Tree.newBuilder()
                 .setTreeInfo(
                         Tree.TreeInfo.newBuilder()
