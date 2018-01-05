@@ -5,15 +5,11 @@ import com.intellij.openapi.progress.ProgressIndicatorProvider;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiRecursiveElementVisitor;
 
-public class UpdatingPsiElementVisitor extends PsiRecursiveElementVisitor {
-    final MarkupModelEx markupModel;
-    final LineMarkersHolder lineMarkersHolder;
+public class RemovingIconsPsiElementVisitor extends UpdatingPsiElementVisitor {
 
-    UpdatingPsiElementVisitor(Project project, MarkupModelEx markupModel) {
-        this.markupModel = markupModel;
-        lineMarkersHolder = project.getComponent(LineMarkersHolder.class);
+    RemovingIconsPsiElementVisitor(Project project, MarkupModelEx markupModel) {
+        super(project, markupModel);
     }
 
     @Override
@@ -23,7 +19,7 @@ public class UpdatingPsiElementVisitor extends PsiRecursiveElementVisitor {
             return;
         }
         if (element instanceof PsiMethod) {
-            lineMarkersHolder.updateMethodMarker((PsiMethod) element, markupModel);
+            lineMarkersHolder.removeIconIfPresent((PsiMethod) element, markupModel);
             return;
         }
         element.acceptChildren(this);

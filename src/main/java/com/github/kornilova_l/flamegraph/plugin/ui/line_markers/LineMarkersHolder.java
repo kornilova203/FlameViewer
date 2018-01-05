@@ -139,4 +139,28 @@ public class LineMarkersHolder extends AbstractProjectComponent {
             }
         }
     }
+
+    public void removeAllIcons(@NotNull VirtualFile file) {
+        DumbService.getInstance(myProject).runWhenSmart(() -> {
+            PsiFile[] psiFiles = FilenameIndex.getFilesByName(
+                    myProject,
+                    file.getName(),
+                    GlobalSearchScope.fileScope(myProject, file));
+            if (psiFiles.length != 1) {
+                return;
+            }
+            PsiFile psiFile = psiFiles[0];
+            Document document = psiFile.getViewProvider().getDocument();
+            if (document == null) {
+                return;
+            }
+            removeAllIcons(psiFile, document);
+        });
+    }
+
+    private void removeAllIcons(PsiFile psiFile, Document document) {
+        DumbService.getInstance(myProject).runWhenSmart(() ->
+                new RemovingIconsPsiElementVisitor(myProject, getMarkupModel(document, myProject))
+                        .visitElement(psiFile));
+    }
 }
