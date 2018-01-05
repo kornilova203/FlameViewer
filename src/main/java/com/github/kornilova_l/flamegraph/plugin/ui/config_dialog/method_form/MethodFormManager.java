@@ -29,7 +29,6 @@ public class MethodFormManager {
     private ConfigCheckboxTree tree;
     private MyDocumentListener methodDocumentListener;
     private MyDocumentListener classDocumentListener;
-    private MyFocusListener myFocusListener;
     private ChangeListener checkboxChangeListener;
     private Map<MethodConfig, String> methodKeysMap = new HashMap<>();
     private String latestMethodKey = "";
@@ -64,10 +63,6 @@ public class MethodFormManager {
     public void selectionChanged(TreePath path) {
         excludedMethodForm.methodNamePatternTextField.getDocument().removeDocumentListener(methodDocumentListener);
         excludedMethodForm.classNamePatternTextField.getDocument().removeDocumentListener(classDocumentListener);
-        if (myFocusListener != null) {
-            excludedMethodForm.methodNamePatternTextField.removeFocusListener(myFocusListener);
-            excludedMethodForm.classNamePatternTextField.removeFocusListener(myFocusListener);
-        }
         if (saveReturnValueCheckBox != null && checkboxChangeListener != null) {
             saveReturnValueCheckBox.removeChangeListener(checkboxChangeListener);
         }
@@ -93,7 +88,6 @@ public class MethodFormManager {
                     key
             );
             ((CardLayout) excludedMethodForm.paramTableCards.getLayout()).show(excludedMethodForm.paramTableCards, key);
-            myFocusListener = new MyFocusListener(treePath.getPath(), tree);
         }
         latestMethodKey = key;
         excludedMethodForm.methodNamePatternTextField.setText(methodConfig.getMethodPatternString());
@@ -102,8 +96,6 @@ public class MethodFormManager {
         classDocumentListener.setCurrentMethodConfig(methodConfig);
         methodDocumentListener.setTreeNode(((ConfigCheckedTreeNode) treePath.getLastPathComponent()));
         classDocumentListener.setTreeNode(((ConfigCheckedTreeNode) treePath.getLastPathComponent()));
-        excludedMethodForm.classNamePatternTextField.addFocusListener(myFocusListener);
-        excludedMethodForm.methodNamePatternTextField.addFocusListener(myFocusListener);
         excludedMethodForm.methodNamePatternTextField.getDocument().addDocumentListener(methodDocumentListener);
         excludedMethodForm.classNamePatternTextField.getDocument().addDocumentListener(classDocumentListener);
         if (saveReturnValueCheckBox != null) {
@@ -150,6 +142,7 @@ public class MethodFormManager {
         return validationInfos;
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public static boolean isValidField(String text) {
         return text.indexOf(' ') == -1 &&
                 text.indexOf('\n') == -1 &&
