@@ -154,7 +154,6 @@ public class ConfigCheckboxTree extends CheckboxTree {
                                              List<MethodConfig> methodConfigs) {
         ConfigCheckedTreeNode node = createNode(methodConfigs, methodConfig, nodeType);
         model.insertNodeInto(node, parent, parent.getChildCount());
-        model.nodeStructureChanged(parent);
         return node;
     }
 
@@ -188,7 +187,6 @@ public class ConfigCheckboxTree extends CheckboxTree {
         for (int i = 0; i < parent.getChildCount(); i++) {
             if (Objects.equals(parent.getChildAt(i).toString(), child.toString())) {
                 model.insertNodeInto(newNode, parent, i);
-                model.nodeStructureChanged(parent);
                 return newNode;
             }
         }
@@ -200,7 +198,7 @@ public class ConfigCheckboxTree extends CheckboxTree {
         return methodFormManager.validateInfo();
     }
 
-    public void updateTreeNodeNames(Object[] path) {
+    private void updateTreeNodeNames(Object[] path) {
         ConfigCheckedTreeNode checkedTreeNode = (ConfigCheckedTreeNode) path[path.length - 1];
         if (checkedTreeNode == null || !(checkedTreeNode instanceof MethodTreeNode)) {
             return;
@@ -305,23 +303,17 @@ public class ConfigCheckboxTree extends CheckboxTree {
 
     public void removeNode(@NotNull ConfigCheckedTreeNode treeNode) {
         CheckedTreeNode parent = (CheckedTreeNode) treeNode.getParent();
-        removeChild(treeNode);
-        while (parent != root && parent.getChildCount() == 0) {
-            CheckedTreeNode tempParent = ((CheckedTreeNode) parent.getParent());
-            removeChild(parent);
-            parent = tempParent;
+        if (parent == null) {
+            return;
         }
-        model.nodeStructureChanged(root);
+        model.removeNodeFromParent(treeNode);
+        while (parent != root && parent.getChildCount() == 0) {
+            CheckedTreeNode child = parent;
+            parent = ((CheckedTreeNode) parent.getParent());
+            model.removeNodeFromParent(child);
+        }
         methodFormManager.showChooseConfig();
         TreeUtil.expandAll(this);
-    }
-
-    private void removeChild(@NotNull CheckedTreeNode child) {
-        CheckedTreeNode parent = ((CheckedTreeNode) child.getParent());
-        int index = parent.getIndex(child);
-        if (index != -1) {
-            parent.remove(index);
-        }
     }
 
     @Nullable

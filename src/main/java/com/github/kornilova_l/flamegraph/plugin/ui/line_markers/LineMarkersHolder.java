@@ -4,6 +4,7 @@ import com.github.kornilova_l.flamegraph.configuration.Configuration;
 import com.github.kornilova_l.flamegraph.plugin.configuration.ConfigStorage;
 import com.github.kornilova_l.flamegraph.plugin.configuration.PluginConfigManager;
 import com.intellij.openapi.components.AbstractProjectComponent;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.EditorFactory;
@@ -26,6 +27,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 
 public class LineMarkersHolder extends AbstractProjectComponent {
+    private static final Logger LOG = Logger.getInstance(LineMarkersHolder.class);
     private final HashMap<PsiMethod, RangeHighlighter> rangeHighlighters = new HashMap<>();
     private final Configuration configuration;
 
@@ -39,7 +41,6 @@ public class LineMarkersHolder extends AbstractProjectComponent {
     }
 
     public void setIcon(PsiMethod psiMethod, MarkupModelEx markupModel) {
-        removeIconIfPresent(psiMethod, markupModel);
         try {
             RangeHighlighter highlighter = markupModel.addRangeHighlighter(
                     psiMethod.getTextOffset(),
@@ -56,16 +57,21 @@ public class LineMarkersHolder extends AbstractProjectComponent {
             );
             rangeHighlighters.put(psiMethod, highlighter);
         } catch (ProcessCanceledException | IllegalArgumentException exception) {
-            /* IllegalArgumentException may be thrown by markupModel if ranges are outdated */
-            exception.printStackTrace();
+            /* IllegalArgumentException may be thrown by markupModel if range is outdated */
+            LOG.warn("Range is outdated", exception);
         }
     }
 
     public void removeIconIfPresent(PsiMethod method, MarkupModelEx markupModel) {
-        RangeHighlighter highlighter = rangeHighlighters.get(method);
-        if (highlighter != null) {
-            markupModel.removeHighlighter(highlighter);
-            rangeHighlighters.remove(method);
+        for (PsiMethod methodWithIcon : rangeHighlighters.keySet()) {
+            /* PsiMethod does not have equals() and hashCode() method
+             * so we check all methods in set by isEquivalentTo() */
+            if (methodWithIcon.isEquivalentTo(method)) {
+                RangeHighlighter highlighter = rangeHighlighters.get(methodWithIcon);
+                markupModel.removeHighlighter(highlighter);
+                rangeHighlighters.remove(methodWithIcon);
+                return;
+            }
         }
     }
 
@@ -78,11 +84,28 @@ public class LineMarkersHolder extends AbstractProjectComponent {
     void updateMethodMarker(PsiMethod psiMethod, MarkupModelEx markupModel) {
         DumbService.getInstance(myProject).runWhenSmart(() -> {
             if (configuration.isMethodInstrumented(PluginConfigManager.newMethodConfig(psiMethod))) {
-                setIcon(psiMethod, markupModel);
+                if (!hasIcon(psiMethod)) {
+                    setIcon(psiMethod, markupModel);
+                }
             } else {
                 removeIconIfPresent(psiMethod, markupModel);
             }
         });
+    }
+
+    /**
+     * @return true if there is an icon on gutter beside the method
+     */
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    public boolean hasIcon(PsiMethod psiMethod) {
+        for (PsiMethod methodWithIcon : rangeHighlighters.keySet()) {
+            /* PsiMethod does not have equals() and hashCode() method
+             * so we check all methods in set by isEquivalentTo() */
+            if (methodWithIcon.isEquivalentTo(psiMethod)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     void updateMethodMarker(@NotNull VirtualFile file) {
@@ -115,5 +138,29 @@ public class LineMarkersHolder extends AbstractProjectComponent {
                 updateMethodMarker(virtualFile);
             }
         }
+    }
+
+    public void removeAllIcons(@NotNull VirtualFile file) {
+        DumbService.getInstance(myProject).runWhenSmart(() -> {
+            PsiFile[] psiFiles = FilenameIndex.getFilesByName(
+                    myProject,
+                    file.getName(),
+                    GlobalSearchScope.fileScope(myProject, file));
+            if (psiFiles.length != 1) {
+                return;
+            }
+            PsiFile psiFile = psiFiles[0];
+            Document document = psiFile.getViewProvider().getDocument();
+            if (document == null) {
+                return;
+            }
+            removeAllIcons(psiFile, document);
+        });
+    }
+
+    private void removeAllIcons(PsiFile psiFile, Document document) {
+        DumbService.getInstance(myProject).runWhenSmart(() ->
+                new RemovingIconsPsiElementVisitor(myProject, getMarkupModel(document, myProject))
+                        .visitElement(psiFile));
     }
 }

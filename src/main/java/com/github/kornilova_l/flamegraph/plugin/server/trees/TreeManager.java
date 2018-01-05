@@ -6,7 +6,6 @@ import com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees.SerTreesS
 import com.github.kornilova_l.flamegraph.proto.TreeProtos;
 import com.github.kornilova_l.flamegraph.proto.TreesPreviewProtos.TreesPreview;
 import com.github.kornilova_l.flamegraph.proto.TreesProtos;
-import com.intellij.openapi.diagnostic.Logger;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
@@ -16,7 +15,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class TreeManager {
-    private static final Logger LOG = Logger.getInstance(TreeManager.class);
     private File currentFile = null;
     private volatile TreesSet currentTreesSet = null;
     private AtomicLong lastUpdate = new AtomicLong(System.currentTimeMillis());

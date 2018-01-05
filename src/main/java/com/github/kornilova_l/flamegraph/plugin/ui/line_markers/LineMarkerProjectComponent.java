@@ -30,6 +30,16 @@ public class LineMarkerProjectComponent extends AbstractProjectComponent {
                     lineMarkersHolder.updateMethodMarker(file);
                 }
             }
+
+            /**
+             * Removes all profiler gutter icons
+             */
+            @Override
+            public void fileClosed(@NotNull FileEditorManager source, @NotNull VirtualFile file) {
+                if (Objects.equals(file.getFileType().getDefaultExtension(), "java")) {
+                    lineMarkersHolder.removeAllIcons(file);
+                }
+            }
         });
     }
 }

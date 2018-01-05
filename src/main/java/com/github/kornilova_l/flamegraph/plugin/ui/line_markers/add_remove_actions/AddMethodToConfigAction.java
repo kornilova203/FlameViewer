@@ -103,7 +103,7 @@ public class AddMethodToConfigAction extends AnAction {
 
         configuration.maybeRemoveExactExcludingConfig(methodConfig);
         configuration.addMethodConfig(methodConfig, false);
-        if (configuration.isMethodInstrumented(methodConfig)) {
+        if (configuration.isMethodInstrumented(methodConfig) && !lineMarkersHolder.hasIcon(method)) {
             lineMarkersHolder.setIcon(method, markupModel);
         }
     }
