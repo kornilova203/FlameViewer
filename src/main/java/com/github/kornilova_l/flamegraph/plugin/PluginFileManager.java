@@ -329,12 +329,24 @@ public class PluginFileManager {
         private final String fullName;
         @SuppressWarnings("unused")
         private final String date;
+        /**
+         * id is used as css id
+         */
         @SuppressWarnings("unused")
         private final String id;
 
         FileNameAndDate(@NotNull File file) {
             this.fullName = file.getName();
-            this.id = this.fullName.replaceAll("\\.", "").replaceAll(":", "");
+            StringBuilder stringBuilder = new StringBuilder();
+            for (int i = 0; i < file.getName().length(); i++) {
+                char c = file.getName().charAt(i);
+                if (c >= 'A' && c <= 'Z' || c >= 'a' && c <= 'z' || c >= '0' && c <= '9' || c == '-' || c == '_') { // if allowed by css
+                    stringBuilder.append(c);
+                } else {
+                    stringBuilder.append('_');
+                }
+            }
+            this.id = "id-" + stringBuilder.toString();
             Matcher matcher = nameWithoutDate.matcher(this.fullName);
             if (matcher.find()) {
                 this.name = matcher.group();
