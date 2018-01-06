@@ -128,22 +128,18 @@
 
 /**
  * Generate list of files
- * @param fileList list of files
  * @param projectName
  * @param pageName
+ * @param file
  */
-{template .listOfFiles}
-<ol class="file-list">
-  {foreach $file in $fileList}
-    <li id="{$file.id}">
-        <input id="checkbox-{$file.id}" class="file-checkbox" name="{$file.id}" type="checkbox">
-        <label for="checkbox-{$file.id}" class="file-checkbox-label"></label>
-        <a href="/flamegraph-profiler/{$pageName}?file={$file.fullName}&amp;project={$projectName}">
-            <p>{$file.name}<br><span>{$file.date}</span></p>
-        </a>
-    </li>
-  {/foreach}
-  </ol>
+{template .file}
+<li id="{$file.id}">
+    <input id="checkbox-{$file.id}" class="file-checkbox" name="{$file.id}" type="checkbox">
+    <label for="checkbox-{$file.id}" class="file-checkbox-label"></label>
+    <a href="/flamegraph-profiler/{$pageName}?file={$file.fullName}&amp;project={$projectName}">
+        <p>{$file.name}<br><span>{$file.date}</span></p>
+    </a>
+</li>
 {/template}
 
 /**

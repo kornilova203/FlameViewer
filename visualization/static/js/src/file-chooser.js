@@ -1,18 +1,325 @@
-const KEYCODE_ESC = 27;
-const KEYCODE_ENTER = 13;
 const KEYCODE_DELETE = 46;
 
-/**
- * @type {string|null}
- */
-let lastSelectedFileId = null;
-/**
- * @type {string|null}
- */
-let lastDeselectedFileId = null;
+class FilesListManager {
+    /**
+     * @param {String} projectName
+     * @param $fileList a place to append project list
+     */
+    constructor(projectName, $fileList) {
+        this.projectName = projectName;
+        this.$fileList = $fileList;
+
+        /**
+         * array of jquery objects
+         * each object also contains name of file and id
+         * @type {Array}
+         */
+        this.filesArray = [];
+
+        /**
+         * @type {String|null}
+         */
+        this.lastSelectedFileId = null;
+        /**
+         * @type {String|null}
+         */
+        this.lastDeselectedFileId = null;
+
+        this.selectedFilesIds = new Set();
+
+        this.bindDelete();
+
+        if (constants.projectName === "uploaded-files") {
+            this.appendInput();
+            listenInput();
+        } else {
+            $fileList.css("height", "calc(100vh - 126px)")
+        }
+    }
+
+    bindDelete() {
+        const deleteSelectedFiles = this.deleteSelectedFilesDecorator(this.$fileList, this.selectedFilesIds,
+            this.filesArray, this);
+        bindKey(KEYCODE_DELETE, deleteSelectedFiles);
+        constants.$removeFilesButton.click(() => {
+            deleteSelectedFiles();
+        });
+    }
+
+    /**
+     * @param $list
+     * @param {Set} selectedFilesIds
+     * @param {Array} filesArray array of jquery objects that contain id and fullName
+     * @param filesListManager
+     * @return {function()}
+     */
+    deleteSelectedFilesDecorator($list, selectedFilesIds, filesArray, filesListManager) {
+        return () => {
+            if (selectedFilesIds.size === 0) {
+                return;
+            }
+
+            const fileNames = this.getFileNames(selectedFilesIds, filesArray);
+            const removedFiles = FilesListManager.removeFromLists($list, selectedFilesIds, filesArray);
+            for (let i = 0; i < fileNames.length; i++) {
+                const request = new XMLHttpRequest();
+                request.open("POST", "/flamegraph-profiler/delete-file", true);
+                request.setRequestHeader('File-Name', fileNames[i]);
+                request.setRequestHeader('Project-Name', constants.projectName);
+                request.send();
+            }
+            this.showUndoDelete(fileNames, removedFiles, $list, selectedFilesIds);
+            selectedFilesIds.clear();
+            filesListManager.lastDeselectedFileId = null;
+            filesListManager.lastSelectedFileId = null;
+            constants.$removeFilesButton.removeClass("active-gray-button");
+        }
+    }
+
+    /**
+     * @param $list
+     * @param selectedFilesIds
+     * @param {Array} filesArray
+     * @return {Array} array of html representations of these files
+     * (they are used to undo remove)
+     */
+    static removeFromLists($list, selectedFilesIds, filesArray) {
+        const removedFiles = [];
+        selectedFilesIds.forEach((id) => {
+            const $removedFile = $list.find("#" + id);
+            removedFiles.push($removedFile);
+            $removedFile.remove();
+            for (let i = 0; i < filesArray.length; i++) {
+                if (filesArray[i].id === id) {
+                    filesArray.splice(i, 1);
+                    break;
+                }
+            }
+        });
+        return removedFiles;
+    }
+
+    /**
+     * @param fileNames
+     * @param removedFiles
+     * @param $list
+     * @param selectedFilesIds
+     */
+    showUndoDelete(fileNames, removedFiles, $list, selectedFilesIds) {
+        const $undoDeleteButton = $(".undo-delete");
+        $(".search-form").removeClass("visible");
+        $undoDeleteButton.addClass("visible");
+        setTimeout(() => {
+            $undoDeleteButton.removeClass("visible");
+            $(".search-form").addClass("visible");
+            $undoDeleteButton.off();
+        }, 4000);
+
+        $undoDeleteButton.click(() => { // undo delete
+            for (let i = 0; i < fileNames.length; i++) {
+                const request = new XMLHttpRequest();
+                request.open("POST", "/flamegraph-profiler/undo-delete-file", true);
+                request.setRequestHeader('File-Name', fileNames[i]);
+                request.setRequestHeader('Project-Name', constants.projectName);
+                request.onload = () => {
+                    this.updateFilesList();
+                };
+                request.send();
+            }
+            $undoDeleteButton.off();
+            $undoDeleteButton.removeClass("visible");
+            $(".search-form").addClass("visible");
+        });
+    }
+
+    /**
+     * @param {Set<string>} selectedFilesIds
+     * @param {Array} filesArray array of jquery objects that contain id and fullName
+     */
+    getFileNames(selectedFilesIds, filesArray) {
+        const arr = [];
+        selectedFilesIds.forEach((id) => {
+            for (let i = 0; i < filesArray.length; i++) {
+                if (filesArray[i].id === id) {
+                    arr.push(filesArray[i].fullName);
+                    return;
+                }
+            }
+        });
+        return arr;
+    }
+
+    appendInput() {
+        const input = templates.tree.fileInput().content;
+        $(input).insertBefore(".file-list-actions");
+        this.$fileList.css("height", "calc(100vh - 217px)")
+    }
+
+    /**
+     * @param {Array<{id: String, fullName: String}>} filesNames
+     */
+    appendToList(filesNames) {
+        for (let i = filesNames.length - 1; i >= 0; i--) {
+            const fileName = filesNames[i];
+            if (!this.hasThisFile(fileName.id)) {
+                this.appendFile(fileName)
+            }
+        }
+        if (this.filesArray.length === 0) {
+            $("<p class='no-file-found'>No file was found</p>").appendTo($(".file-menu"));
+        }
+        if (constants.fileName !== undefined) {
+            // get current file id. Like server forms id's
+            $("#" + constants.fileName.split(":").join("").split(".").join("")).addClass("current-file");
+        }
+    }
+
+    /**
+     * Gets list of files from server
+     * appends new files to list of files
+     */
+    updateFilesList() {
+        const request = new XMLHttpRequest();
+        request.open("GET", "/flamegraph-profiler/file-list?project=" + this.projectName, true);
+        request.responseType = "json";
+
+        request.onload = () => {
+            const fileNames = request.response;
+            this.appendToList(fileNames);
+        };
+        request.send();
+    }
+
+    showFullNameOnHover($file) {
+        $file.mouseenter(() => {
+            constants.$fullFileName.find("*").remove();
+            constants.$fullFileName.append($file.find("p").clone());
+            constants.$fullFileName.offset({top: $file.offset().top});
+            constants.$fullFileName.addClass("visible-without-pointer-events");
+        });
+
+        $file.mouseleave(() => {
+            constants.$fullFileName.removeClass("visible-without-pointer-events");
+        });
+
+        this.$fileList.scroll(() => {
+            constants.$fullFileName.removeClass("visible-without-pointer-events");
+        });
+    }
+
+    appendFile(fileName) {
+        const $file = $(templates.tree.file({
+            file: fileName,
+            projectName: constants.projectName,
+            pageName: getPageName()
+        }).content);
+        $file.prependTo(this.$fileList);
+        $file.id = fileName.id; // save id
+        $file.fullName = fileName.fullName; // save full name
+        this.filesArray.push($file);
+        this.listenCheckbox($file);
+        this.showFullNameOnHover($file);
+    }
+
+    /**
+     * @param $file jquery object that also contains id and fullName
+     */
+    listenCheckbox($file) {
+        const $checkbox = $file.find("input");
+        const $label = $file.find("label");
+        $label.click((event) => {
+            if (!$checkbox.is(":checked")) { // inversion because click event works strangely
+                constants.$removeFilesButton.addClass("active-gray-button"); // enable delete button
+                if (event.shiftKey && this.lastSelectedFileId !== null) { // select range
+                    this.doActionWithRange($file, this.lastSelectedFileId, FilesListManager.selectFile, this.selectedFilesIds);
+                }
+                this.selectedFilesIds.add($file.id);
+                this.lastSelectedFileId = $file.id;
+                this.lastDeselectedFileId = null;
+            } else {
+                if (event.shiftKey && this.lastDeselectedFileId !== null) { // deselect range
+                    this.doActionWithRange($file, this.lastDeselectedFileId, FilesListManager.deselectFile, this.selectedFilesIds);
+                }
+                this.selectedFilesIds.delete($file.id);
+                this.lastSelectedFileId = null;
+                this.lastDeselectedFileId = $file.id;
+                if (this.selectedFilesIds.size === 0) {
+                    constants.$removeFilesButton.removeClass("active-gray-button");
+                }
+            }
+        });
+    }
+
+    /**
+     * Function is called after checking $file with shift and if previouslyToggledFileId is not null
+     * @param $toggledFile
+     * @param {String} previouslyToggledFileId
+     * @param {function} callback
+     * @param selectedFilesIds
+     */
+    doActionWithRange($toggledFile, previouslyToggledFileId, callback, selectedFilesIds) {
+        if (previouslyToggledFileId === null) { // this should not happen but who knows
+            return;
+        }
+        let start = false;
+        let stop = false;
+        const id1 = $toggledFile.id;
+        const id2 = previouslyToggledFileId;
+        this.$fileList.children().each(function () {
+            if (stop) {
+                return;
+            }
+            const $file = $(this);
+            const id = $file.attr("id");
+            if (id === id1 || id === id2) {
+                if (!start) {
+                    start = true;
+                } else {
+                    stop = true;
+                }
+            }
+            if (id === id1) { // this will be checked automatically
+                return;
+            }
+            if (start) {
+                callback($file, selectedFilesIds);
+            }
+        });
+    }
+
+    static selectFile($file, selectedFilesIds) {
+        $file.find("input").prop('checked', true);
+        selectedFilesIds.add($file.attr("id"));
+    }
+
+    /**
+     * @param $file
+     * @param selectedFilesIds
+     */
+    static deselectFile($file, selectedFilesIds) {
+        $file.find("input").prop('checked', false);
+        selectedFilesIds.delete($file.id);
+    }
+
+    hasThisFile(fileId) {
+        for (let i = 0; i < this.filesArray.length; i++) {
+            if (this.filesArray[i].id === fileId) {
+                return true;
+            }
+        }
+        return false;
+    }
+}
 
 $(window).on("load", () => {
-    getFilesList(constants.projectName);
+    const filesListManager = new FilesListManager(constants.projectName, $(".file-list"));
+    filesListManager.updateFilesList();
+
+    /* check for new files */
+    setInterval(() => {
+        filesListManager.updateFilesList();
+    }, 1000);
+
     showProjectsList();
     if (constants.fileName === undefined) {
         showChooseFile();
@@ -50,7 +357,7 @@ function showProjectsOnClick($projectsDropdown) {
         $projectsDropdown.unbind("mouseleave");
     }
 
-    $projectsDropdown.click(() =>{
+    $projectsDropdown.click(() => {
         if (!isOpen) {
             $content.show();
             isOpen = true;
@@ -112,12 +419,6 @@ function showNoDataFound() {
     common.showMessage("No call was registered or all methods took <1ms");
 }
 
-function appendInput() {
-    const input = templates.tree.fileInput().content;
-    $(input).insertBefore(".file-list-actions");
-    $(".file-list").css("height", "calc(100vh - 217px)")
-}
-
 /**
  * @param {number} KEY_CODE
  * @param {function} callback
@@ -129,285 +430,6 @@ function bindKey(KEY_CODE, callback) {
             callback();
         }
     });
-}
-
-/**
- * @param {Set<string>} selectedFilesIds
- * @param {Array<{id: String, fullName: String}>} filesList
- */
-function getFileNames(selectedFilesIds, filesList) {
-    const arr = [];
-    selectedFilesIds.forEach((id) => {
-        for (let i = 0; i < filesList.length; i++) {
-            if (filesList[i].id === id) {
-                arr.push(filesList[i].fullName);
-                return;
-            }
-        }
-    });
-    return arr;
-}
-
-/**
- * @return {Array} array of html representations of these files
- * (they are used to undo remove)
- */
-function removeFromList($list, selectedFilesIds) {
-    const removedFiles = [];
-    selectedFilesIds.forEach((id) => {
-        const $removedFile = $list.find("#" + id);
-        removedFiles.push($removedFile);
-        $removedFile.remove();
-    });
-    return removedFiles;
-}
-
-/**
- * @param $list
- * @param {Array} removedFiles
- */
-function addToList($list, removedFiles) {
-    for (let i = 0; i < removedFiles.length; i++) {
-        const $file = removedFiles[i];
-        $file.find("input").prop('checked', false);
-        $list.append($file);
-    }
-}
-
-/**
- * @param {Array} fileNames
- */
-function sendRequestUndoDelete(fileNames) {
-    for (let i = 0; i < fileNames.length; i++) {
-        const request = new XMLHttpRequest();
-        request.open("POST", "/flamegraph-profiler/undo-delete-file", true);
-        request.setRequestHeader('File-Name', fileNames[i]);
-        request.setRequestHeader('Project-Name', constants.projectName);
-        request.send();
-    }
-}
-
-/**
- * @param fileNames
- * @param removedFiles
- * @param $list
- * @param selectedFilesIds
- */
-function showUndoDelete(fileNames, removedFiles, $list, selectedFilesIds) {
-    const $undoDeleteButton = $(".undo-delete");
-    $undoDeleteButton.addClass("visible");
-    setTimeout(() => {
-        $undoDeleteButton.removeClass("visible");
-        $undoDeleteButton.off();
-    }, 4000);
-
-    $undoDeleteButton.click(() => { // undo delete
-        sendRequestUndoDelete(fileNames);
-        addToList($list, removedFiles);
-        for (let i = 0; i < removedFiles.length; i++) {
-            bindCheckboxEvent(removedFiles[i], selectedFilesIds, $list)
-        }
-        $undoDeleteButton.off();
-        $undoDeleteButton.removeClass("visible");
-    });
-}
-
-/**
- * @param $list
- * @param {Set} selectedFilesIds
- * @param filesList
- * @return {function()}
- */
-function deleteSelectedFilesDecorator($list, selectedFilesIds, filesList) {
-    return () => {
-        if (selectedFilesIds.size === 0) {
-            return;
-        }
-
-        const fileNames = getFileNames(selectedFilesIds, filesList);
-        const removedFiles = removeFromList($list, selectedFilesIds);
-        for (let i = 0; i < fileNames.length; i++) {
-            const request = new XMLHttpRequest();
-            request.open("POST", "/flamegraph-profiler/delete-file", true);
-            request.setRequestHeader('File-Name', fileNames[i]);
-            request.setRequestHeader('Project-Name', constants.projectName);
-            request.send();
-        }
-        showUndoDelete(fileNames, removedFiles, $list, selectedFilesIds);
-        selectedFilesIds.clear();
-        lastDeselectedFileId = null;
-        lastSelectedFileId = null;
-        constants.$removeFilesButton.removeClass("active-gray-button");
-    }
-}
-
-/**
- * @param $list
- * @param {Set<string>} selectedFilesIds
- * @param {Array<{id: String, fullName: String}>} filesList
- */
-function bindDelete($list, selectedFilesIds, filesList) {
-    const deleteSelectedFiles = deleteSelectedFilesDecorator($list, selectedFilesIds, filesList);
-    bindKey(KEYCODE_DELETE, deleteSelectedFiles);
-    constants.$removeFilesButton.click(() => {
-        deleteSelectedFiles();
-    });
-}
-
-/**
- * Function is called after checking $file with shift and if previouslyToggledFileId is not null
- * @param $toggledFile
- * @param $list
- * @param {Set<string>} selectedFilesIds
- * @param {string} previouslyToggledFileId
- * @param {function} callback
- */
-function doSmthWithRange($toggledFile, $list, selectedFilesIds, previouslyToggledFileId, callback) {
-    if (previouslyToggledFileId === null) { // this should not happen but who knows
-        return;
-    }
-    let start = false;
-    let stop = false;
-    const id1 = $toggledFile.attr("id");
-    const id2 = previouslyToggledFileId;
-    $list.children().each(function () {
-        if (stop) {
-            return;
-        }
-        const $file = $(this);
-        const id = $file.attr("id");
-        if (id === id1 || id === id2) {
-            if (!start) {
-                start = true;
-            } else {
-                stop = true;
-            }
-        }
-        if (id === id1) { // this will be checked automatically
-            return;
-        }
-        if (start) {
-            callback($file, selectedFilesIds);
-        }
-    });
-}
-
-function selectFile($file, selectedFilesIds) {
-    $file.find("input").prop('checked', true);
-    selectedFilesIds.add($file.attr("id"));
-}
-
-/**
- * @param $file
- * @param {Set<string>} selectedFilesIds
- */
-function deselectFile($file, selectedFilesIds) {
-    $file.find("input").prop('checked', false);
-    selectedFilesIds.delete($file.attr("id"));
-}
-
-/**
- * @param $file
- * @param {Set} selectedFilesIds
- * @param $list
- */
-function bindCheckboxEvent($file, selectedFilesIds, $list) {
-    const fileId = $file.attr("id");
-    const $checkbox = $file.find("input");
-    const $label = $file.find("label");
-    $label.click((event) => {
-        console.log(lastSelectedFileId);
-        if (!$checkbox.is(":checked")) { // inversion because click event works strangely
-            console.log("checked");
-            constants.$removeFilesButton.addClass("active-gray-button");
-            if (event.shiftKey && lastSelectedFileId !== null) { // select range
-                doSmthWithRange($file, $list, selectedFilesIds, lastSelectedFileId, selectFile);
-            }
-            lastSelectedFileId = fileId;
-            lastDeselectedFileId = null;
-            selectedFilesIds.add(fileId);
-        } else {
-            console.log("unchecked");
-            if (event.shiftKey && lastDeselectedFileId !== null) { // deselect range
-                doSmthWithRange($file, $list, selectedFilesIds, lastDeselectedFileId, deselectFile);
-            }
-            selectedFilesIds.delete(fileId);
-            lastSelectedFileId = null;
-            lastDeselectedFileId = fileId;
-            if (selectedFilesIds.size === 0) {
-                constants.$removeFilesButton.removeClass("active-gray-button");
-            }
-        }
-    });
-}
-
-/**
- * @param $list
- * @param {Array<{id: String, fullName: String}>} filesList
- */
-function listenCheckbox($list, filesList) {
-    /**
-     * Save ids because jquery instances of same element are different
-     * @type {Set<string>}
-     */
-    const selectedFilesIds = new Set();
-
-    $list.children().each(function () {
-        const $file = $(this);
-        bindCheckboxEvent($file, selectedFilesIds, $list);
-    });
-
-    bindDelete($list, selectedFilesIds, filesList);
-}
-
-function showFullNameOnHover($list) {
-    $list.children().each(function() {
-        const $fileLi = $(this);
-        $fileLi.mouseenter(() => {
-            constants.$fullFileName.find("*").remove();
-            constants.$fullFileName.append($fileLi.find("p").clone());
-            constants.$fullFileName.offset({top: $fileLi.offset().top});
-            constants.$fullFileName.addClass("visible-without-pointer-events");
-        });
-
-        $fileLi.mouseleave(() => {
-            constants.$fullFileName.removeClass("visible-without-pointer-events");
-        });
-    });
-
-    $list.scroll(() => {
-        constants.$fullFileName.removeClass("visible-without-pointer-events");
-    });
-}
-
-/**
- * @param {Array<{id: String, fullName: String}>} filesList
- */
-function updateFilesList(filesList) {
-    if (filesList.length === 0) {
-        $("<p class='no-file-found'>No file was found</p>").appendTo($(".file-menu"));
-    } else {
-        const listString = templates.tree.listOfFiles({
-            fileList: filesList,
-            projectName: constants.projectName,
-            pageName: getPageName()
-        }).content;
-        const $list = $(listString);
-        listenCheckbox($list, filesList);
-        $list.appendTo($(".file-menu"));
-        if (constants.fileName !== undefined) {
-            // get current file id. Like server forms id's
-            $("#" + constants.fileName.split(":").join("").split(".").join("")).addClass("current-file");
-        }
-
-        showFullNameOnHover($list);
-    }
-    if (constants.projectName === "uploaded-files") {
-        appendInput();
-        listenInput();
-    } else {
-        $(".file-list").css("height", "calc(100vh - 126px)")
-    }
 }
 
 function appendProject(project) {
@@ -446,14 +468,15 @@ function showProjectsList() {
     request.send();
 }
 
-function getFilesList(projectName) {
-    const request = new XMLHttpRequest();
-    request.open("GET", "/flamegraph-profiler/file-list?project=" + projectName, true);
-    request.responseType = "json";
+// /**
+//  * Enables search within files
+//  * @param {Array<{id: String, fullName: String}>} filesList
+//  */
+// function enableFilesSearch(filesList) {
+//     const input = $("#search-file-form").find("input");
+//     input.on("change keyup copy paste cut", () => {
+//         const val = input.val();
+//         filesList
+//     });
+// }
 
-    request.onload = function () {
-        const fileNames = request.response;
-        updateFilesList(fileNames);
-    };
-    request.send();
-}

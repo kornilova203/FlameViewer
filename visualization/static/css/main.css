@@ -370,6 +370,7 @@ nav ul li a:focus {
 .search-form {
     pointer-events: none;
     margin-left: 20px;
+    opacity: 0;
 }
 
 .search-form input {
@@ -591,9 +592,16 @@ button:focus {
     margin-left: 8px;
 }
 
-.search-file-button {
-    top: 7px;
-    right: 8px;
+#search-file-form {
+    float: right;
+    position: relative;
+    top: -6px;
+    left: -20px;
+    margin-left: 0;
+}
+
+#search-file-form input {
+    width: 155px;
 }
 
 .active-gray-button {
@@ -850,8 +858,8 @@ canvas {
 .undo-delete {
     position: absolute;
     width: 80px;
-    top: 5px;
-    left: 125px;
+    top: 3px;
+    left: 100px;
     text-align: center;
     background-color: #ababab;
     color: white;
@@ -860,6 +868,7 @@ canvas {
     transition: background-color, opacity 300ms;
     opacity: 0;
     pointer-events: none;
+    z-index: 1;
 }
 
 .full-file-name {
