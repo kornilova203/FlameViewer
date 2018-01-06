@@ -11,7 +11,7 @@ class FilesListManager {
 
         /**
          * array of jquery objects
-         * each object also contains name of file and id
+         * each object also contains fileName, id and date
          * @type {Array}
          */
         this.filesArray = [];
@@ -207,16 +207,81 @@ class FilesListManager {
         });
     }
 
+    /**
+     * @param {String} date1
+     * @param {String} date2
+     */
+    static isLater(date1, date2) {
+        const year1 = FilesListManager.getYear(date1);
+        const year2 = FilesListManager.getYear(date2);
+        if (year1 > year2) {
+            return true;
+        } else if (year1 < year2) {
+            return false;
+        }
+        const month1 = FilesListManager.getMonth(date1);
+        const month2 = FilesListManager.getMonth(date2);
+        if (month1 > month2) {
+            return true;
+        } else if (month1 < month2) {
+            return false;
+        }
+        const day1 = FilesListManager.getDay(date1);
+        const day2 = FilesListManager.getDay(date2);
+        if (day1 > day2) {
+            return true;
+        } else if (day1 < day2) {
+            return false;
+        }
+        const time1 = FilesListManager.getTime(date1);
+        const time2 = FilesListManager.getTime(date2);
+        if (time1 > time2) {
+            return true;
+        } else if (time1 < time2) {
+            return false;
+        }
+        return false;
+    }
+
+    static getYear(date) {
+        return parseInt(date.split(' ')[0].split('.')[2]);
+    }
+
+    static getMonth(date) {
+        return parseInt(date.split(' ')[0].split('.')[1]);
+    }
+
+    static getDay(date) {
+        return parseInt(date.split(' ')[0].split('.')[0]);
+    }
+
+    static getTime(date) {
+        return date.split(' ')[1];
+    }
+
     appendFile(fileName) {
         const $file = $(templates.tree.file({
             file: fileName,
             projectName: constants.projectName,
             pageName: getPageName()
         }).content);
-        $file.prependTo(this.$fileList);
+        let wasInserted = false;
+        for (let i = 0; i < this.filesArray.length; i++) {
+            if (FilesListManager.isLater(fileName.date, this.filesArray[i].date)) {
+                $file.insertBefore($(`#${this.filesArray[i].id}`));
+                this.filesArray.splice(i, 0, $file); // insert before
+                wasInserted = true;
+                break;
+            }
+        }
+        if (!wasInserted) {
+            /* insert to end */
+            this.filesArray.push($file);
+            $file.appendTo(this.$fileList);
+        }
         $file.id = fileName.id; // save id
         $file.fullName = fileName.fullName; // save full name
-        this.filesArray.push($file);
+        $file.date = fileName.date; // save date
         this.listenCheckbox($file);
         this.showFullNameOnHover($file);
     }
