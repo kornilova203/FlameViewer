@@ -4,6 +4,7 @@ Instrumentation Java Profiler & Flamegraph Visualizer.
 ## Table of contents
 * [Performance Recording](#performance-recording)
 * [Visualizing Results](#visualizing-results)
+    * How to open
 * [Flamegraph Visualizer Features](#flamegraph-visualizer-features)
     * [Call Traces](#call-traces)
     * [Back Traces](#back-traces)
@@ -23,9 +24,20 @@ The configuration below tells profiler to record all methods from my.package.uti
 2. To run program with profiler select the desired run configuration and choose **Run <name> with profiler**  
 ![](screenshots/run_with_profiler.png)
 3. Also you can configure profiler to save value of method's parameters or it's return value. This should be done if you want to see how parameters influence method's performance. To enable this option check 'Save' checkbox beside type of parameter(s) when editing pattern in configuration.
+4. Methods of system classes are not recorded by default. You may include them if you specify full name of a system class in configuration. For example: _java.io.FileOutputStream.*(*)_
 
 ## Visualizing Results
-You can analyze performance of your program with **Flamegraph Visualizer** that is included in the plugin. It can read _.ser_ files that are created by Flamegraph Profiler, _.jfr_ files created by Java Flight Recorder and files in flamegraph format.
+You can analyze performance of your program with **Flamegraph Visualizer** that is included in the plugin.  
+It supports following files:
+* Files in flamegraph format
+* _.ser_ files that are created by Flamegraph Profiler
+* _.jfr_ files created by Java Flight Recorder
+* Yourkit _csv_ files. To generate csv file from a snapshot run following script:  
+```bash
+java -jar -Dexport.call.tree.cpu -Dexport.csv <path-to-yourkit>/lib/yjp.jar -export ~/Snapshots/<snapshot-name>.snapshot <dir-of-converted-file>
+```
+
+Ways to open visualizer:
 1. After executing program with the profiler choose **Tools | Flamegraph Profiler | Open Results...** to see the result.
 2. To upload your _.jfr_ or _.ser_ file choose **Tools | Flamegraph Profiler | Upload File...**
 
@@ -58,6 +70,9 @@ If you want to see method that are located in some particular package you can ap
 
 ### Search
 You can find any method, class or package using search.  
+**Tips**:  
+* Character '*' matches any sequence of characters.
+* If profiler saved values of parameters, you may include them in search string. For example: _resolve(*, *IdeaPlugin.xml_
 ![](screenshots/search.png)
 
 ### Hot Spots
