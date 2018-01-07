@@ -166,10 +166,21 @@ class FilesListManager {
         if (this.filesArray.length === 0) {
             $("<p class='no-file-found'>No file was found</p>").appendTo($(".file-menu"));
         }
+    }
+
+    highlightCurrentFile() {
         if (constants.fileName !== undefined) {
-            // get current file id. Like server forms id's
-            $("#" + constants.fileName.split(":").join("").split(".").join("")).addClass("current-file");
+            $("#" + this.getFileId(constants.fileName)).addClass("current-file");
         }
+    }
+
+    getFileId(fileName) {
+        for (let i = 0; i < this.filesArray.length; i++) {
+            if (this.filesArray[i].fullName === fileName) {
+                return this.filesArray[i].id;
+            }
+        }
+        return "";
     }
 
     /**
@@ -184,6 +195,7 @@ class FilesListManager {
         request.onload = () => {
             const fileNames = request.response;
             this.appendToList(fileNames);
+            this.highlightCurrentFile();
         };
         request.send();
     }
