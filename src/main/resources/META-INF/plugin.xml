@@ -10,19 +10,40 @@
       <strong>Performance Recording</strong><br>
       Plugin lets you record performance of Java program with instrumentation profiler.
 <ol>
-<li>To specify methods that will be recorded open <strong>Tools | Flamegraph Profiler | Edit Configuration...</strong>
-</li>
-<li>To run program with profiler select the desired run configuration and choose <strong>Run <name> with profiler</strong></li>
-<li>Also you can configure profiler to save value of method's parameters or it's return value. This should be done if you want to see how parameters influence method's performance. To enable this option check 'Save' checkbox beside type of parameter(s) when editing pattern in configuration.</li>
+    <li>To specify methods that will be recorded open <strong>Tools | Flamegraph Profiler | Edit Configuration...</strong></li>
+    <li>To run program with profiler select the desired run configuration and choose <strong>Run <name> with profiler</strong></li>
+    <li>Also you can configure profiler to save value of method's parameters or it's return value. This should be done if you want to see how parameters influence method's performance. To enable this option check 'Save' checkbox beside type of parameter(s) when editing pattern in configuration.</li>
 </ol>
 
 <strong>Visualizing Results</strong><br>
-You can analyze performance of your program with <strong>Flamegraph Visualizer</strong> that is included in the plugin. It can read _.ser_ files that are created by Flamegraph Profiler, _.jfr_ files created by Java Flight Recorder and files in flamegraph format.
+You can analyze performance of your program with <strong>Flamegraph Visualizer</strong>.
+<strong>It supports following files:</strong>
 <ol>
-<li>After executing program with the profiler choose <strong>Tools | Flamegraph Profiler | Open Results...</strong> to see the result.</li>
-<li>To upload your <i>.jfr</i> or <i>.ser</i> file choose <strong>Tools | Flamegraph Profiler | Upload File...</strong></li>
+    <li>Files in flamegraph format</li>
+    <li>_.ser_ files that are created by Flamegraph Profiler</li>
+    <li>_.jfr_ files created by Java Flight Recorder</li>
+    <li>Yourkit _csv_ files (To generate csv file from a snapshot run following script: <code>java -jar -Dexport.call.tree.cpu -Dexport.csv <path-to-yourkit>/lib/yjp.jar -export ~/Snapshots/<snapshot-name>.snapshot <dir-of-converted-file></code>)</li>
 </ol>
+<strong>Ways to open visualizer:</strong>
+<ol>
+    <li>After executing program with the profiler choose <strong>Tools | Flamegraph Profiler | Open Results...</strong> to see the result.</li>
+    <li>To upload your <i>.jfr</i> or <i>.ser</i> file choose <strong>Tools | Flamegraph Profiler | Upload File...</strong></li>
+</ol>
+Detailed description at <a href="https://github.com/kornilova-l/flamegraph-visualizer">github.com/kornilova-l/flamegraph-visualizer</a>
     ]]></description>
+
+    <change-notes><![CDATA[
+    Profiler:<br/>
+      * Not it is possible to instrument methods of system classes<br/>
+      * Bug fixes<br/>
+    Visualizer:<br/>
+      * Yourkit files are supported<br/>
+      * Files list is updated without need to reload page<br/>
+      * Implemented files search<br/>
+      * Call traces page is open by default<br/>
+      * Full name of file is shown when the cursor is placed above the file<br/>
+    ]]>
+    </change-notes>
 
     <idea-version since-build="162"/>
 
