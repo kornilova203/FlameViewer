@@ -403,6 +403,7 @@ nav ul li a:focus {
 .file-list-actions {
     height: 20px;
     position: relative;
+    padding-top: 5px;
 }
 
 .current-file {
@@ -531,6 +532,7 @@ button {
 #search-method-form {
     position: fixed;
     right: 100px;
+    top: 3px;
     z-index: 10;
 }
 
@@ -771,6 +773,7 @@ button:focus {
 
 #search-method-form input {
     margin-top: 5px;
+    background-color: #ddd;
 }
 
 .canvas-zoomed {

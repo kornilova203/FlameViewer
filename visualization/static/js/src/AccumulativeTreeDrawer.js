@@ -287,11 +287,18 @@ class AccumulativeTreeDrawer {
         });
     }
 
+    /**
+     * Enable files search
+     * @private
+     */
     _enableSearch() {
-        const input = $("#search-method-form").find("input");
+        const $searchMethodForm = $("#search-method-form");
+        $searchMethodForm.addClass("visible");
+        const $input = $searchMethodForm.find("input");
+        $input.off(); // in call tree the input can be reused
         const simpleSearchPattern = new RegExp("[a-z\.]+");
-        input.on('change keyup copy paste cut', common.updateRareDecorator(500, () => {
-            const val = input.val();
+        $input.on('change keyup copy paste cut', common.updateRareDecorator(500, () => {
+            const val = $input.val();
             if (!val) {
                 this.isHighlightedFunction = null;
                 this._resetHighlight();

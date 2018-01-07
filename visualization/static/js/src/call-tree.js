@@ -28,7 +28,6 @@ common.showCallTree = (threadId) => {
 function drawTrees(trees) {
     common.showLoader(constants.loaderMessages.drawing, () => {
         $('.call-tree-wrapper').show();
-        $("#search-method-form").show();
         for (let i = 0; i < trees.length; i++) {
             const drawer = new CallTreeDrawer(trees[i], i);
             drawer.draw();
@@ -42,11 +41,9 @@ function bindHideDetailView() {
     const $callTreeWrapper = $('.call-tree-wrapper');
     const $callTreeText = $callTreeWrapper.find("h2 i");
     const $treePreviewWrapper = $(".tree-preview-wrapper");
-    const $searchMethodForm = $("#search-method-form").show();
     $callTreeText.click(() => {
         $treePreviewWrapper.removeClass("hidden-tree-preview");
         $callTreeWrapper.hide();
-        $searchMethodForm.hide();
         $callTreeWrapper.find("*").remove();
         $callTreeText.unbind();
     });

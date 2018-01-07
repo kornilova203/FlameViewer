@@ -426,7 +426,13 @@ $(window).on("load", () => {
     enableHideFilesList();
 });
 
-function showFilesList($projectsDropdown, $searchForm,
+/**
+ * @param $projectsDropdown
+ * @param $fileListActions
+ * @param $verticalProjectName
+ * @param $loaderBackground
+ */
+function showFilesList($projectsDropdown, $fileListActions,
                        $verticalProjectName, $loaderBackground) {
     $loaderBackground.css("left", "calc((100vw - 250px) / 2 + 250px - 80px)");
     $(".file-menu").css("width", 250);
@@ -434,7 +440,7 @@ function showFilesList($projectsDropdown, $searchForm,
     $projectsDropdown.css("opacity", 1);
     $projectsDropdown.css("pointer-events", "auto");
     $projectsDropdown.css("position", "relative");
-    $searchForm.show();
+    $fileListActions.show();
     $(".file-form").show();
     constants.$arrowLeft.show();
     constants.$arrowRight.hide();
@@ -471,7 +477,7 @@ function enableHideFilesList() {
     const $projectsDropdown = $(".projects-dropdown");
     showProjectsOnClick($projectsDropdown);
 
-    const $searchForm = $("#search-file-form");
+    const $fileListActions = $(".file-list-actions");
     const $verticalProjectName = $(".vertical-project-name");
     const $loaderBackground = $(".loader-background");
     $verticalProjectName.html(constants.projectName === "uploaded-files" ? "Uploaded files" : constants.projectName);
@@ -482,7 +488,7 @@ function enableHideFilesList() {
         $projectsDropdown.css("transition", "opacity 50ms");
         $projectsDropdown.css("pointer-events", "none");
         $projectsDropdown.css("position", "absolute");
-        $searchForm.hide();
+        $fileListActions.hide();
         $(".file-form").hide();
         constants.$arrowLeft.hide();
         constants.$arrowRight.show();
@@ -493,11 +499,11 @@ function enableHideFilesList() {
         $(".file-list").hide();
     });
     constants.$arrowRight.click(() => { // show
-        showFilesList($projectsDropdown, $searchForm,
+        showFilesList($projectsDropdown, $fileListActions,
             $verticalProjectName, $loaderBackground);
     });
     $verticalProjectName.click(() => {
-        showFilesList($projectsDropdown, $searchForm,
+        showFilesList($projectsDropdown, $fileListActions,
             $verticalProjectName, $loaderBackground);
     });
 }
