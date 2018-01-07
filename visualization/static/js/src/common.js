@@ -114,6 +114,7 @@ constants.projectName = common.getParameter("project");
 constants.fileName = common.getParameter("file");
 constants.$removeFilesButton = null;
 constants.$fullFileName = null;
+constants.pageName = /[^\/]*((?=\?)|(?=\.html))/.exec(window.location.href)[0];
 constants.loaderMessages = {
     drawing: "Drawing...",
     deserialization: "Deserialization of binary data...",

@@ -11,7 +11,7 @@ const TreeProto = require('../generated/tree_pb');
  * @param {Number} percent
  */
 function drawTree(tree, className, methodName, desc, percent) {
-    if (getPageName() === "incoming-calls") {
+    if (constants.pageName === "incoming-calls") {
         drawIncomingCalls(tree, className, methodName, desc, percent);
     } else {
         drawAccumulativeTree(tree, className, methodName, desc, percent);
@@ -65,7 +65,7 @@ function drawIncomingCalls(tree, className, methodName, desc, percent) {
     if (className === undefined && // if common tree
         drawer.getNodesCount() > 20000) {
         common.showMessage("Tree has more than 20 000 nodes. " +
-            "You can see incoming calls for particular method (for this go to Hot spots page)");
+            "You can see back traces for particular method (for this go to Hot spots page)");
         common.hideLoader();
         return;
     }

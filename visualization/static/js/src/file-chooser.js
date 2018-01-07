@@ -273,7 +273,7 @@ class FilesListManager {
         const $file = $(templates.tree.file({
             file: fileName,
             projectName: constants.projectName,
-            pageName: getPageName()
+            pageName: constants.pageName
         }).content);
         if (!fileName.fullName.toLowerCase().includes(this.currentSearch)) { // if is excluded by search
             $file.hide();
@@ -520,10 +520,6 @@ function enableHideFilesList() {
     });
 }
 
-function getPageName() {
-    return /[^\/]*((?=\?)|(?=\.html))/.exec(window.location.href)[0];
-}
-
 function showChooseFile() {
     if (constants.projectName === "uploaded-files") {
         common.showMessage("Choose or upload file");
@@ -555,7 +551,7 @@ function appendProject(project) {
         return;
     }
     const link = "/flamegraph-profiler/" +
-        getPageName() +
+        constants.pageName +
         "?project=" +
         (project === "Uploaded files" ? "uploaded-files" : project);
     const newElem = $(`<a href='${link}'>${project}</a>`);

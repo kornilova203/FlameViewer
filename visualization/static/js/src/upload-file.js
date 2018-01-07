@@ -32,6 +32,7 @@ class FileUploader {
                 } else {
                     location.reload();
                 }
+                redirectToFile(this.file.name);
             };
             request.open("POST", "/flamegraph-profiler/upload-file", true);
             request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -53,6 +54,14 @@ class JfrUploader extends FileUploader {
     uploadFile() {
         super.uploadFile();
     }
+}
+
+/**
+ * Opens a page with uploaded file
+ * @param name
+ */
+function redirectToFile(name) {
+    window.location.href = `/flamegraph-profiler/${constants.pageName}?file=${encodeURIComponent(name)}&project=${encodeURIComponent(constants.projectName)}`
 }
 
 /**
