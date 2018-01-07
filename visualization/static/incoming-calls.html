@@ -51,16 +51,17 @@
     <button class="remove-files-button action-button">
       <img src="img/delete-black.png"/>
     </button>
-    <button class="search-file-button action-button active-gray-button">
-      <img src="img/search-black.png"/>
-      <button class="undo-delete">Undo</button>
-    </button>
+    <button class="undo-delete">Undo</button>
+    <form class="search-form visible" id="search-file-form">
+      <input size="40" placeholder="Search file"/>
+    </form>
   </div>
   <div class="vertical-project-name"></div>
   <button id="hide-file-list-button">
     <img id="arrow-left" src="img/arrow-left-black.png"/>
     <img id="arrow-right" src="img/arrow-right-black.png"/>
   </button>
+  <ol class="file-list"></ol>
 </div>
 <nav>
   <ul>

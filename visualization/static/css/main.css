@@ -380,10 +380,10 @@ nav ul li a:focus {
     color: #6a6a6a;
     width: 170px;
     padding: 6px 0 6px 25px;
-    pointer-events: initial;
     border-width: 0;
     border-bottom: solid black 1px;
     margin-top: 10px;
+    transition: opacity 300ms;
 }
 
 .search-form input:focus {
@@ -898,4 +898,9 @@ canvas {
 
 .visible-without-pointer-events {
     opacity: 1;
+}
+
+.disabled-field {
+    pointer-events: none;
+    opacity: 0.6;
 }

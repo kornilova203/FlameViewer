@@ -66,6 +66,12 @@ function sendToServer(file) {
     }
 }
 
+function appendInput($fileList) {
+    const input = templates.tree.fileInput().content;
+    $(input).insertBefore(".file-list-actions");
+    $fileList.css("height", "calc(100vh - 217px)")
+}
+
 function listenInput() {
     $('#file').on('change', (e) => {
         const reader = new FileReader();

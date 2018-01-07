@@ -27,10 +27,18 @@ class FilesListManager {
 
         this.selectedFilesIds = new Set();
 
+        /**
+         * @type {string}
+         */
+        this.currentSearch = "";
+
+        this.filesSearchInput = $("#search-file-form").find("input");
+
         this.bindDelete();
+        this.enableFilesSearch();
 
         if (constants.projectName === "uploaded-files") {
-            this.appendInput();
+            appendInput(this.$fileList); // 'upload new file' input
             listenInput();
         } else {
             $fileList.css("height", "calc(100vh - 126px)")
@@ -60,7 +68,7 @@ class FilesListManager {
             }
 
             const fileNames = this.getFileNames(selectedFilesIds, filesArray);
-            const removedFiles = FilesListManager.removeFromLists($list, selectedFilesIds, filesArray);
+            FilesListManager.removeFromLists($list, selectedFilesIds, filesArray);
             for (let i = 0; i < fileNames.length; i++) {
                 const request = new XMLHttpRequest();
                 request.open("POST", "/flamegraph-profiler/delete-file", true);
@@ -68,11 +76,12 @@ class FilesListManager {
                 request.setRequestHeader('Project-Name', constants.projectName);
                 request.send();
             }
-            this.showUndoDelete(fileNames, removedFiles, $list, selectedFilesIds);
+            this.showUndoDelete(fileNames, $list, selectedFilesIds);
             selectedFilesIds.clear();
             filesListManager.lastDeselectedFileId = null;
             filesListManager.lastSelectedFileId = null;
             constants.$removeFilesButton.removeClass("active-gray-button");
+            this.enableFilesInput();
         }
     }
 
@@ -80,15 +89,12 @@ class FilesListManager {
      * @param $list
      * @param selectedFilesIds
      * @param {Array} filesArray
-     * @return {Array} array of html representations of these files
-     * (they are used to undo remove)
      */
     static removeFromLists($list, selectedFilesIds, filesArray) {
-        const removedFiles = [];
         selectedFilesIds.forEach((id) => {
             const $removedFile = $list.find("#" + id);
-            removedFiles.push($removedFile);
             $removedFile.remove();
+            /* remove from filesArray */
             for (let i = 0; i < filesArray.length; i++) {
                 if (filesArray[i].id === id) {
                     filesArray.splice(i, 1);
@@ -96,16 +102,14 @@ class FilesListManager {
                 }
             }
         });
-        return removedFiles;
     }
 
     /**
      * @param fileNames
-     * @param removedFiles
      * @param $list
      * @param selectedFilesIds
      */
-    showUndoDelete(fileNames, removedFiles, $list, selectedFilesIds) {
+    showUndoDelete(fileNames, $list, selectedFilesIds) {
         const $undoDeleteButton = $(".undo-delete");
         $(".search-form").removeClass("visible");
         $undoDeleteButton.addClass("visible");
@@ -147,12 +151,6 @@ class FilesListManager {
             }
         });
         return arr;
-    }
-
-    appendInput() {
-        const input = templates.tree.fileInput().content;
-        $(input).insertBefore(".file-list-actions");
-        this.$fileList.css("height", "calc(100vh - 217px)")
     }
 
     /**
@@ -265,6 +263,9 @@ class FilesListManager {
             projectName: constants.projectName,
             pageName: getPageName()
         }).content);
+        if (!fileName.fullName.toLowerCase().includes(this.currentSearch)) { // if is excluded by search
+            $file.hide();
+        }
         let wasInserted = false;
         for (let i = 0; i < this.filesArray.length; i++) {
             if (FilesListManager.isLater(fileName.date, this.filesArray[i].date)) {
@@ -312,7 +313,21 @@ class FilesListManager {
                     constants.$removeFilesButton.removeClass("active-gray-button");
                 }
             }
+            /* allow files search change only if none file is selected */
+            if (this.selectedFilesIds.size === 0) {
+                this.enableFilesInput();
+            } else {
+                this.disableFilesInput();
+            }
         });
+    }
+
+    enableFilesInput() {
+        this.filesSearchInput.removeClass("disabled-field"); // enable files search
+    }
+
+    disableFilesInput() {
+        this.filesSearchInput.addClass("disabled-field"); // disable files search
     }
 
     /**
@@ -343,11 +358,13 @@ class FilesListManager {
                     stop = true;
                 }
             }
-            if (id === id1) { // this will be checked automatically
+            if (id === id1) { // this will be checked or unchecked automatically
                 return;
             }
             if (start) {
-                callback($file, selectedFilesIds);
+                if ($file.css("display") !== "none") { // if it is not hidden by search
+                    callback($file, selectedFilesIds);
+                }
             }
         });
     }
@@ -373,6 +390,23 @@ class FilesListManager {
             }
         }
         return false;
+    }
+
+    /**
+     * Enable files search
+     */
+    enableFilesSearch() {
+        this.filesSearchInput.on("change keyup copy paste cut", () => {
+            this.currentSearch = this.filesSearchInput.val().toLowerCase();
+            for (let i = 0; i < this.filesArray.length; i++) {
+                const fullName = this.filesArray[i].fullName.toLowerCase();
+                if (fullName.includes(this.currentSearch)) { // if file is in search result
+                    this.filesArray[i].show();
+                } else {
+                    this.filesArray[i].hide();
+                }
+            }
+        });
     }
 }
 
@@ -532,16 +566,3 @@ function showProjectsList() {
     };
     request.send();
 }
-
-// /**
-//  * Enables search within files
-//  * @param {Array<{id: String, fullName: String}>} filesList
-//  */
-// function enableFilesSearch(filesList) {
-//     const input = $("#search-file-form").find("input");
-//     input.on("change keyup copy paste cut", () => {
-//         const val = input.val();
-//         filesList
-//     });
-// }
-
