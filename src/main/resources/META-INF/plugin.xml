@@ -34,7 +34,7 @@ Detailed description at <a href="https://github.com/kornilova-l/flamegraph-visua
 
     <change-notes><![CDATA[
     Profiler:<br/>
-      * Not it is possible to instrument methods of system classes<br/>
+      * Now it is possible to instrument methods of system classes<br/>
       * Bug fixes<br/>
     Visualizer:<br/>
       * Yourkit files are supported<br/>

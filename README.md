@@ -1,8 +1,5 @@
 # Flamegraph Profiler
-Instrumentation Java Profiler & Flamegraph Visualizer.  
-
-## Download Plugin
-https://plugins.jetbrains.com/plugin/10305-flamegraph-profiler
+Instrumentation Java Profiler & Flamegraph Visualizer.
 
 ## Table of contents
 * [Performance Recording](#performance-recording)
@@ -96,6 +93,10 @@ You can see popup with detailed information about method if you place the cursor
 
 
 ## Building
+Plugin will be soon on plugins.jetbrains.com
+
+Build jar with [Flight Recorder parser](https://github.com/kornilova-l/flight-recorder-parser-for-java-9) and place it in lib/ directory.
+
 Generate java files from .proto files. Script is [here](protobuf/README.md)
 
 See [js files](/visualization/README.md)
