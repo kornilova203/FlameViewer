@@ -164,7 +164,11 @@ class FilesListManager {
             }
         }
         if (this.filesArray.length === 0) {
-            $("<p class='no-file-found'>No file was found</p>").appendTo($(".file-menu"));
+            if (this.$fileList.children().length === 0) {
+                $("<p class='no-file-found'>No file was found</p>").appendTo(this.$fileList);
+            }
+        } else {
+            $(".no-file-found").remove();
         }
     }
 
