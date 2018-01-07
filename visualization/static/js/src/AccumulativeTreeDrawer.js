@@ -296,22 +296,22 @@ class AccumulativeTreeDrawer {
         $searchMethodForm.addClass("visible");
         const $input = $searchMethodForm.find("input");
         $input.off(); // in call tree the input can be reused
-        const simpleSearchPattern = new RegExp("[a-z\.]+");
+        $input.val(""); // clear input
         $input.on('change keyup copy paste cut', common.updateRareDecorator(500, () => {
             const val = $input.val();
             if (!val) {
                 this.isHighlightedFunction = null;
                 this._resetHighlight();
             } else {
-                const lowercaseVal = val.toLowerCase();
-                if (simpleSearchPattern.test(lowercaseVal)) {
+                const lowercaseVal = AccumulativeTreeDrawer.removeTrailingStars(val.toLowerCase());
+                if (lowercaseVal.includes("*")) {
+                    const pattern = new RegExp(common.escapeRegExp(lowercaseVal).split("*").join(".*"));
                     this.isHighlightedFunction = (testString) => {
-                        return testString.indexOf(lowercaseVal) !== -1;
+                        return pattern.test(testString); // tests if there exist a substring that satisfies pattern
                     };
                 } else {
-                    const pattern = new RegExp(".*" + common.escapeRegExp(lowercaseVal).split("*").join(".*") + ".*");
                     this.isHighlightedFunction = (testString) => {
-                        return pattern.test(testString);
+                        return testString.indexOf(lowercaseVal) !== -1;
                     };
                 }
                 if (this.currentlyShownNodes.length === 0) {
@@ -321,6 +321,19 @@ class AccumulativeTreeDrawer {
                 }
             }
         }));
+    }
+
+    /**
+     * @param {String} s
+     */
+    static removeTrailingStars(s) {
+        if (s[0] === "*") {
+            s = s.substring(1, s.length);
+        }
+        if (s.length !== 0 && s[s.length - 1] === "*") {
+            s = s.substring(0, s.length - 1);
+        }
+        return s;
     }
 
     /**
