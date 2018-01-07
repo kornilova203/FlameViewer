@@ -2,7 +2,6 @@
  * Separate module for testing Proxy class
  */
 group 'com.github.kornilova_l'
-version '0.5'
 
 apply plugin: 'java'
 

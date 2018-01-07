@@ -27,7 +27,7 @@ allprojects {
     apply plugin: 'java'
     apply plugin: 'kotlin'
     group = 'com.gitgub.kornilova_l'
-    version = '0.5'
+    version = '0.6'
 }
 
 repositories {
