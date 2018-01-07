@@ -4,7 +4,6 @@ Instrumentation Java Profiler & Flamegraph Visualizer.
 ## Table of contents
 * [Performance Recording](#performance-recording)
 * [Visualizing Results](#visualizing-results)
-    * How to open
 * [Flamegraph Visualizer Features](#flamegraph-visualizer-features)
     * [Call Traces](#call-traces)
     * [Back Traces](#back-traces)
@@ -24,7 +23,7 @@ The configuration below tells profiler to record all methods from my.package.uti
 2. To run program with profiler select the desired run configuration and choose **Run <name> with profiler**  
 ![](screenshots/run_with_profiler.png)
 3. Also you can configure profiler to save value of method's parameters or it's return value. This should be done if you want to see how parameters influence method's performance. To enable this option check 'Save' checkbox beside type of parameter(s) when editing pattern in configuration.
-4. Methods of system classes are not recorded by default. You may include them if you specify full name of a system class in configuration. For example: _java.io.FileOutputStream.*(*)_
+4. Methods of system classes are not recorded by default. You may include them if you specify full name of a system class in configuration. For example: _java.io.FileOutputStream.\*(\*)_
 
 ## Visualizing Results
 You can analyze performance of your program with **Flamegraph Visualizer** that is included in the plugin.  
