@@ -373,15 +373,16 @@ nav ul li a:focus {
     opacity: 0;
 }
 
+/*noinspection CssOptimizeSimilarProperties*/
 .search-form input {
-    background: url(../img/search-icon-black.png) no-repeat 0 4px;
+    background: url(../img/search-icon-black.png) no-repeat 4px 5px;
     background-size: 18px;
+    background-color: #d5d5d5;
     font-size: 14px;
     color: #6a6a6a;
     width: 170px;
     padding: 6px 0 6px 25px;
     border-width: 0;
-    border-bottom: solid black 1px;
     margin-top: 10px;
     transition: opacity 300ms;
 }
@@ -392,11 +393,11 @@ nav ul li a:focus {
 
 .search-form input::placeholder {
     transition: all 0.7s ease 0s;
-    color: #888;
+    color: #777;
 }
 
 .search-form input:focus::placeholder {
-    color: #bbb;
+    color: #999;
 }
 
 .file-list-actions {
@@ -596,12 +597,12 @@ button:focus {
     float: right;
     position: relative;
     top: -6px;
-    left: -20px;
+    left: -10px;
     margin-left: 0;
 }
 
 #search-file-form input {
-    width: 155px;
+    width: 165px;
 }
 
 .active-gray-button {
