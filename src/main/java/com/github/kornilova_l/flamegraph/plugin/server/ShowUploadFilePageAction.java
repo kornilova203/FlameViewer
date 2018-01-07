@@ -11,7 +11,7 @@ public class ShowUploadFilePageAction extends AnAction implements DumbAware {
     public void actionPerformed(AnActionEvent e) {
         BrowserUtil.browse("http://localhost:" +
                 BuiltInServerManager.getInstance().getPort() +
-                ServerNames.CALL_TREE +
+                ServerNames.OUTGOING_CALLS +
                 "?" +
                 "project=uploaded-files");
     }
