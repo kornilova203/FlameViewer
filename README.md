@@ -68,10 +68,12 @@ If you want to see method that are located in some particular package you can ap
 ![](screenshots/filter.png)
 
 ### Search
-You can find any method, class or package using search.  
+You can find any method, class or package using search.
+
 **Tips**:  
 * Character '*' matches any sequence of characters.
 * If profiler saved values of parameters, you may include them in search string. For example: _resolve(*, *IdeaPlugin.xml_
+
 ![](screenshots/search.png)
 
 ### Hot Spots
