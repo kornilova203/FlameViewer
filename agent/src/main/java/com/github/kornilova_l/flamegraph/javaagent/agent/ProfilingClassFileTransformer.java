@@ -54,6 +54,6 @@ class ProfilingClassFileTransformer implements ClassFileTransformer {
                 return cw.toByteArray();
             }
         }
-        return null;
+        return classfileBuffer; // do not modify classes of the javaagent
     }
 }
