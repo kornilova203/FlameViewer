@@ -70,8 +70,7 @@ public class Proxy {
 
     private static void getLoggerQueueIfNotCached() throws ClassNotFoundException {
         if (loggerQueue == null) {
-            loggerQueue = ClassLoader.getSystemClassLoader()
-                    .loadClass(loggerQueueClassName);
+            loggerQueue = Class.forName(loggerQueueClassName, true, ClassLoader.getSystemClassLoader());
         }
     }
 
