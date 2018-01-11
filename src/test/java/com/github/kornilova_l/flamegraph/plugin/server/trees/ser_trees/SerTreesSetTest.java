@@ -31,7 +31,7 @@ public class SerTreesSetTest {
     }
 
     @Test
-    public void filterCallTree() throws Exception {
+    public void filterCallTree() {
         testCallTreeFilter(SimpleTree.fileName, filter0, 0);
         testCallTreeFilter(SimpleTree.fileName, filter1, 1);
         testCallTreeFilter(SimpleTree.fileName, filter2, 2);
@@ -46,7 +46,7 @@ public class SerTreesSetTest {
     }
 
     @Test
-    public void filterOutgoingTree() throws Exception {
+    public void filterOutgoingTree() {
         testOutgoingCallsFilter(TwoThreads.fileName, filter0, 0);
         testOutgoingCallsFilter(TwoThreads.fileName, filter1, 1);
         testOutgoingCallsFilter(TwoThreads.fileName, filter2, 2);
@@ -55,7 +55,7 @@ public class SerTreesSetTest {
     }
 
     @Test
-    public void filterIncomingTree() throws Exception {
+    public void filterIncomingTree() {
         testIncomingCallsFilter(TwoThreads.fileName, filter0, 0);
         testIncomingCallsFilter(TwoThreads.fileName, filter1, 1);
         testIncomingCallsFilter(TwoThreads.fileName, filter2, 2);
@@ -88,7 +88,7 @@ public class SerTreesSetTest {
     }
 
     @Test
-    public void getCallTreeTest() throws Exception {
+    public void getCallTreeTest() {
         callTreeTest(SimpleTree.fileName);
         callTreeTest(TwoThreads.fileName);
     }

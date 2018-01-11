@@ -1,7 +1,6 @@
 package com.github.kornilova_l.flamegraph.plugin.server;
 
 import com.github.kornilova_l.flamegraph.plugin.PluginFileManager;
-import com.github.kornilova_l.flamegraph.plugin.converters.ProfilerToFlamegraphConverter;
 import com.github.kornilova_l.flamegraph.plugin.server.methods_count_handlers.AccumulativeTreesMethodCounter;
 import com.github.kornilova_l.flamegraph.plugin.server.methods_count_handlers.CallTreeMethodsCounter;
 import com.github.kornilova_l.flamegraph.plugin.server.tree_request_handlers.CallTreeRequestHandler;
@@ -29,14 +28,12 @@ import org.jetbrains.io.Responses;
 
 import java.io.*;
 import java.util.Map;
-import java.util.Objects;
-
-import static com.github.kornilova_l.flamegraph.plugin.server.trees.flamegraph_format_trees.StacksParser.isFlamegraph;
 
 public class ProfilerHttpRequestHandler extends HttpRequestHandler {
 
     private static final Logger LOG = Logger.getInstance(ProfilerHttpRequestHandler.class);
     private final PluginFileManager fileManager = PluginFileManager.getInstance();
+    private final FileUploader fileUploader = new FileUploader();
 
     public static void sendProto(ChannelHandlerContext context,
                                  @Nullable Message message) {
@@ -205,43 +202,45 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
         sendStatus(HttpResponseStatus.OK, context.channel());
     }
 
-    private void uploadFile(FullHttpRequest fullHttpRequest,
-                            ChannelHandlerContext context) {
+    private synchronized void uploadFile(FullHttpRequest fullHttpRequest,
+                                         ChannelHandlerContext context) {
         String fileName = fullHttpRequest.headers().get("File-Name");
+        int[] fileParts = getFileParts(fullHttpRequest);
+        if (fileParts == null) {
+            sendStatus(context.channel(), false);
+            return;
+        }
+        int currentPart = fileParts[0];
+        int totalPartsCount = fileParts[1];
         LOG.info("Got file: " + fileName);
         byte[] bytes = getBytes(fullHttpRequest.content());
-        boolean isSaved;
-        if (Objects.equals(ProfilerToFlamegraphConverter.Companion.getFileExtension(fileName), "ser")) {
-            isSaved = fileManager.serFileSaver.save(bytes, fileName) != null;
-        } else if (isFlamegraph(bytes)) {
-            isSaved = fileManager.flamegraphFileSaver.save(bytes, fileName) != null;
-        } else {
-            isSaved = convertWithExtensions(fileName, bytes);
-        }
-        sendStatus(context.channel(), isSaved);
+        fileUploader.upload(fileName, bytes, currentPart, totalPartsCount);
+        sendStatus(context.channel(), true); // send OK
     }
 
-    private void sendStatus(Channel channel, boolean isSaved) {
-        if (isSaved) {
+    /**
+     * @return information about what part was sent
+     */
+    private int[] getFileParts(FullHttpRequest fullHttpRequest) {
+        String filePartsString = fullHttpRequest.headers().get("File-Part");
+        String[] fileParts = filePartsString.split("/");
+        if (fileParts.length != 2) {
+            LOG.error("Header File-Parts does not contain information in format '<current part>/<total parts>'. " + filePartsString);
+        }
+        try {
+            return new int[]{Integer.parseInt(fileParts[0]), Integer.parseInt(fileParts[1])};
+        } catch (NumberFormatException e) {
+            LOG.error("Header File-Parts does not contain information in format '<current part>/<total parts>'. " + filePartsString, e);
+        }
+        return null;
+    }
+
+    private void sendStatus(Channel channel, boolean isOk) {
+        if (isOk) {
             sendStatus(HttpResponseStatus.OK, channel);
         } else {
             sendStatus(HttpResponseStatus.BAD_REQUEST, channel);
         }
-    }
-
-    private boolean convertWithExtensions(String fileName, byte[] bytes) {
-        boolean isSaved = false;
-        File file = fileManager.tempFileSaver.save(bytes, fileName);
-        if (file != null) {
-            Map<String, Integer> stacks = ProfilerToFlamegraphConverter.Companion.convert(file);
-            if (stacks != null) {
-                isSaved = fileManager.flamegraphFileSaver
-                        .save(stacks, fileName) != null;
-            }
-            //noinspection ResultOfMethodCallIgnored
-            file.delete();
-        }
-        return isSaved;
     }
 
     private byte[] getBytes(ByteBuf byteBuf) {
@@ -254,7 +253,6 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
     public boolean process(QueryStringDecoder urlDecoder,
                            FullHttpRequest fullHttpRequest,
                            ChannelHandlerContext context) {
-        LOG.info(fullHttpRequest.method() + " Request: " + urlDecoder.uri());
         if (!urlDecoder.uri().startsWith(ServerNames.MAIN_NAME)) {
             return false;
         }
@@ -262,7 +260,7 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
         if (fullHttpRequest.method() == HttpMethod.POST) {
             return processPostMethod(urlDecoder, fullHttpRequest, context);
         } else {
-            return processGetMethod(urlDecoder, context);
+            return processGetMethod(urlDecoder, context, fullHttpRequest);
         }
     }
 
@@ -272,23 +270,23 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
                 request.method() == HttpMethod.GET;
     }
 
-    private boolean processGetMethod(QueryStringDecoder urlDecoder, ChannelHandlerContext context) {
+    private boolean processGetMethod(QueryStringDecoder urlDecoder, ChannelHandlerContext context, FullHttpRequest fullHttpRequest) {
         String uri = urlDecoder.path(); // without get parameters
         switch (uri) {
             case ServerNames.LIST_PROJECTS:
-                LOG.info("list-projects");
                 sendListProjects(context);
                 return true;
             case ServerNames.FILE_LIST:
-                LOG.info("file list");
                 String project = getParameter(urlDecoder, "project");
                 if (project != null) {
                     sendFileList(context, project);
                 }
                 return true;
             case ServerNames.HOT_SPOTS_JS_REQUEST:
-                LOG.info("hot spots js request");
                 new HotSpotsRequestHandler(urlDecoder, context).process();
+                return true;
+            case ServerNames.DOES_FILE_EXIST:
+                sendIfFileExist(fullHttpRequest, context);
                 return true;
         }
         switch (uri) {
@@ -336,6 +334,15 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
         } catch (IOException e) {
             e.printStackTrace();
             return false;
+        }
+    }
+
+    private void sendIfFileExist(FullHttpRequest fullHttpRequest, ChannelHandlerContext context) {
+        String fileName = fullHttpRequest.headers().get("File-Name");
+        if (PluginFileManager.getInstance().getLogFile("uploaded-files", fileName) != null) {
+            sendStatus(context.channel(), true);
+        } else {
+            sendStatus(context.channel(), false);
         }
     }
 

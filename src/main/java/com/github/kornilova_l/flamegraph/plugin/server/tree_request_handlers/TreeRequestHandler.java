@@ -31,6 +31,7 @@ public abstract class TreeRequestHandler {
     public final void process() {
         if (logFile == null) {
             sendStatus(HttpResponseStatus.BAD_REQUEST, context.channel());
+            return;
         }
         doActualProcess();
     }

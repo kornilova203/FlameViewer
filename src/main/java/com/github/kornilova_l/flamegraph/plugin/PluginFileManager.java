@@ -23,6 +23,17 @@ import java.util.stream.Collectors;
 
 import static com.github.kornilova_l.flamegraph.plugin.server.ProfilerHttpRequestHandler.getParameter;
 
+/**
+ * IDEA system dir
+ * |-- flamegraph-profiler
+ *   |-- configuration // where configuration is exported after
+ *   |-- log
+ *     |-- deleted // deleted files temporary stored in this dir (they are returned back if `undo` is pressed)
+ *     |-- uploaded-files
+ *       |-- flamegraph // uploaded files in flamegraph format
+ *       |-- not-converted // files are stored here before conversion
+ *       \-- ser // uploaded .ser files
+ */
 public class PluginFileManager {
     private static final Logger LOG = Logger.getInstance(PluginFileManager.class);
 
@@ -113,7 +124,7 @@ public class PluginFileManager {
         return false;
     }
 
-    public static PluginFileManager getInstance() {
+    public synchronized static PluginFileManager getInstance() {
         if (pluginFileManager == null) {
             pluginFileManager = new PluginFileManager(PathManager.getSystemPath());
         }
@@ -142,7 +153,7 @@ public class PluginFileManager {
     }
 
     @Nullable
-    public File getLogFile(QueryStringDecoder urlDecoder) {
+    public synchronized File getLogFile(QueryStringDecoder urlDecoder) {
         String projectName = getParameter(urlDecoder, "project");
         String fileName = getParameter(urlDecoder, "file");
         if (projectName == null || fileName == null) {
@@ -151,12 +162,12 @@ public class PluginFileManager {
         return getLogFile(projectName, fileName);
     }
 
-    public File getConfigurationFile(@NotNull String projectName) {
+    public synchronized File getConfigurationFile(@NotNull String projectName) {
         Path path = Paths.get(configDirPath.toString(), projectName + ".config");
         return new File(path.toString());
     }
 
-    public File createLogFile(@NotNull String projectName, @NotNull String configurationName) {
+    public synchronized File createLogFile(@NotNull String projectName, @NotNull String configurationName) {
         Path logDir = getLogDirPath(projectName);
         Path logFile = Paths.get(logDir.toString(),
                 configurationName + "-" + new SimpleDateFormat("yyyy-MM-dd-HH_mm_ss").format(new Date()) + ".ser");
@@ -164,7 +175,7 @@ public class PluginFileManager {
     }
 
     @NotNull
-    public List<FileNameAndDate> getFileNameList(@NotNull String projectName) {
+    public synchronized List<FileNameAndDate> getFileNameList(@NotNull String projectName) {
         File projectLogDir = new File(getLogDirPath(projectName).toString());
         if (!Objects.equals(projectName, UPLOADED_FILES)) {
             return getFileNameList(projectLogDir);
@@ -190,7 +201,7 @@ public class PluginFileManager {
         return new LinkedList<>();
     }
 
-    public String getStaticFilePath(String staticFileUri) {
+    public synchronized String getStaticFilePath(String staticFileUri) {
         Path path = Paths.get(
                 staticDirPath.toString(),
                 staticFileUri.substring(REQUEST_PREFIX.length(), staticFileUri.length())
@@ -227,7 +238,7 @@ public class PluginFileManager {
     }
 
     @Nullable
-    public String getPathToJar(String jarName) {
+    public synchronized String getPathToJar(String jarName) {
         URL url = getClass().getResource("/" + jarName);
         try {
             return Paths.get(url.toURI()).toString();
@@ -238,7 +249,7 @@ public class PluginFileManager {
     }
 
     @Nullable
-    private File getLogFile(String projectName, String fileName) {
+    public synchronized File getLogFile(String projectName, String fileName) {
         Path dirPath = getLogDirPath(projectName, fileName);
 
         File file = new File(Paths.get(dirPath.toString(), fileName).toString());
@@ -249,7 +260,7 @@ public class PluginFileManager {
     }
 
     @Nullable
-    public String getLatestFileName(@NotNull String projectName) {
+    public synchronized String getLatestFileName(@NotNull String projectName) {
         Path dirPath = Paths.get(logDirPath.toString(), projectName);
         File dir = new File(dirPath.toString());
         if (dir.exists() && dir.isDirectory()) {
@@ -262,7 +273,7 @@ public class PluginFileManager {
     }
 
     @NotNull
-    public List<String> getProjectList() {
+    public synchronized List<String> getProjectList() {
         removeEmptyProjects();
         File logDir = new File(logDirPath.toString());
         if (logDir.exists() && logDir.isDirectory()) {
@@ -302,7 +313,31 @@ public class PluginFileManager {
         }
     }
 
-    public void deleteFile(@NotNull String fileName, @NotNull String projectName) {
+    /**
+     * Mainly used for test
+     */
+    public synchronized void deleteAllUploadedFiles() {
+        File[] dirsInsideUploadedFiles = Paths.get(logDirPath.toString(), UPLOADED_FILES).toFile().listFiles();
+        if (dirsInsideUploadedFiles == null) {
+            return;
+        }
+        for (File maybeDir : dirsInsideUploadedFiles) {
+            if (maybeDir.isDirectory()) {
+                File[] files = maybeDir.listFiles();
+                if (files == null) {
+                    continue;
+                }
+                for (File file : files) {
+                    boolean res = file.delete();
+                    if (!res) {
+                        System.err.println("Cannot delete file: " + file);
+                    }
+                }
+            }
+        }
+    }
+
+    public synchronized void deleteFile(@NotNull String fileName, @NotNull String projectName) {
         File file = getLogFile(projectName, fileName);
         if (file == null || !file.exists()) {
             return;
@@ -311,7 +346,7 @@ public class PluginFileManager {
         file.renameTo(Paths.get(logDirPath.toString(), DELETED_FILES, fileName).toFile());
     }
 
-    public void undoDeleteFile(String fileName, String projectName) {
+    public synchronized void undoDeleteFile(String fileName, String projectName) {
         File file = Paths.get(logDirPath.toString(), DELETED_FILES, fileName).toFile();
         if (file == null || !file.exists()) {
             LOG.debug("Undo delete. Cannot find file to undo delete: " + fileName);
@@ -371,7 +406,7 @@ public class PluginFileManager {
                 outputStream.write(bytes);
                 return file;
             } catch (IOException e) {
-                e.printStackTrace();
+                LOG.error(e);
             }
             return null;
         }

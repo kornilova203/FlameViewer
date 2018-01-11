@@ -22,23 +22,57 @@ class FileUploader {
     }
 
     uploadFile() {
+        const bytesInMB = 1000000;
+        const fileSizeMegabytes = this.file.size / bytesInMB;
         common.resizeLoaderBackground(700);
         common.showLoader(this.loaderMessage + this.file.name, () => {
-            const request = new XMLHttpRequest();
-            request.onload = () => {
-                if (request.status === 400) {
-                    common.hideLoader();
-                    appendWrongExtension();
-                } else {
-                    location.reload();
-                }
-                redirectToFile(this.file.name);
-            };
-            request.open("POST", "/flamegraph-profiler/upload-file", true);
-            request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-            request.setRequestHeader('File-Name', this.file.name);
-            request.send(this.file);
+            /* send file by 100MB parts because IDEA server does not allow to send large files */
+            const partsCount = Math.ceil(fileSizeMegabytes / 100);
+            let countFilesSent = 0; // how many parts were received by server
+            let success = true; // if all parts were successfully sent
+            for (let i = 0; i < partsCount; i++) {
+                const request = new XMLHttpRequest();
+                request.onload = () => {
+                    countFilesSent++;
+                    if (request.status !== 200) { // if something went wrong during upload
+                        success = false;
+                    }
+                    if (countFilesSent === partsCount) { // if all parts uploaded
+                        this.endFileUpload(success)
+                    }
+                };
+                request.open("POST", "/flamegraph-profiler/upload-file", true);
+                request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                request.setRequestHeader('File-Name', this.file.name);
+                request.setRequestHeader('File-Part', (i + 1) + "/" + partsCount);
+                request.send(this.file.slice(i * bytesInMB * 100, Math.min((i + 1) * bytesInMB * 100, this.file.size)));
+            }
         });
+    }
+
+    endFileUpload(success) {
+        common.hideLoader();
+        if (success) {
+            console.log("File was sent");
+            this.checkIfFileWasUploaded();
+        } else {
+            // todo: show error message
+            console.error("File was not sent");
+        }
+    }
+
+    checkIfFileWasUploaded() {
+        const request = new XMLHttpRequest();
+        request.onload = () => {
+            if (request.status === 200) {
+                redirectToFile(this.file.name);
+            } else {
+                console.error("File was not uploaded");
+            }
+        };
+        request.open("GET", "/flamegraph-profiler/does-file-exist", true);
+        request.setRequestHeader('File-Name', this.file.name);
+        request.send();
     }
 }
 

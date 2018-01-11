@@ -21,6 +21,7 @@ public class ServerNames {
     static final String HOT_SPOTS = MAIN_NAME + "/hot-spots";
     static final String HOT_SPOTS_JS_REQUEST = MAIN_NAME + "/hot-spots-json";
     static final String UPLOAD_FILE = MAIN_NAME + "/upload-file";
+    static final String DOES_FILE_EXIST = MAIN_NAME + "/does-file-exist";
     static final String DELETE_FILE = MAIN_NAME + "/delete-file";
     static final String UNDO_DELETE_FILE = MAIN_NAME + "/undo-delete-file";
     static final Pattern CSS_PATTERN = Pattern.compile(MAIN_NAME + "/css.+css$");
