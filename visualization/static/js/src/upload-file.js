@@ -1,11 +1,5 @@
 const JFR = "jfr";
 
-function appendWrongExtension() {
-    if ($(".extension-error").length === 0) {
-        $(".file-form").append("<p class='extension-error'>Wrong file extension</p>");
-    }
-}
-
 class FileUploader {
     /**
      * @param {File} file
@@ -22,6 +16,10 @@ class FileUploader {
     }
 
     uploadFile() {
+        if (this.file.size === 0) {
+            common.showError("File is empty");
+            return;
+        }
         const bytesInMB = 1000000;
         const fileSizeMegabytes = this.file.size / bytesInMB;
         common.resizeLoaderBackground(700);
@@ -56,7 +54,7 @@ class FileUploader {
             console.log("File was sent");
             this.checkIfFileWasUploaded();
         } else {
-            // todo: show error message
+            common.showError("File was not sent");
             console.error("File was not sent");
         }
     }
@@ -67,6 +65,7 @@ class FileUploader {
             if (request.status === 200) {
                 redirectToFile(this.file.name);
             } else {
+                common.showError("File format is unsupported");
                 console.error("File was not uploaded");
             }
         };

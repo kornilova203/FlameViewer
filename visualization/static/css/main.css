@@ -351,10 +351,6 @@ nav ul li a:focus {
     opacity: 0.6;
 }
 
-.extension-error {
-    color: rgba(138, 18, 11, 0.84);
-}
-
 .file-menu {
     z-index: 1;
     float: left;
