@@ -50,6 +50,8 @@ Detailed description at <a href="https://github.com/kornilova-l/flamegraph-visua
     <extensionPoints>
         <extensionPoint name="profilerToFlamegraphConverter"
                         interface="com.github.kornilova_l.flamegraph.plugin.converters.ProfilerToFlamegraphConverter"/>
+        <extensionPoint name="profilerToCallTracesConverter"
+                        interface="com.github.kornilova_l.flamegraph.plugin.server.trees.ProfilerToCallTracesConverter"/>
     </extensionPoints>
 
     <extensions defaultExtensionNs="com.intellij">
