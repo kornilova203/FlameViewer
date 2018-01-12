@@ -3,7 +3,7 @@
     <name>Flamegraph Profiler</name>
     <version>0.6</version>
 
-    <vendor url="https://github.com/kornilova-l" email="kornilova203@gmail.com" />
+    <vendor url="https://github.com/kornilova-l" email="kornilova203@gmail.com"/>
 
     <description><![CDATA[
       Instrumentation Java Profiler & Flamegraph Visualizer<br>
@@ -50,8 +50,8 @@ Detailed description at <a href="https://github.com/kornilova-l/flamegraph-visua
     <extensionPoints>
         <extensionPoint name="profilerToFlamegraphConverter"
                         interface="com.github.kornilova_l.flamegraph.plugin.converters.ProfilerToFlamegraphConverter"/>
-        <extensionPoint name="profilerToCallTracesConverter"
-                        interface="com.github.kornilova_l.flamegraph.plugin.server.trees.ProfilerToCallTracesConverter"/>
+        <extensionPoint name="fileToCallTracesConverter"
+                        interface="com.github.kornilova_l.flamegraph.plugin.server.trees.FileToCallTracesConverter"/>
     </extensionPoints>
 
     <extensions defaultExtensionNs="com.intellij">
@@ -66,10 +66,13 @@ Detailed description at <a href="https://github.com/kornilova-l/flamegraph-visua
                 implementation="com.github.kornilova_l.flamegraph.plugin.converters.jmc.JMCConverter"/>
         <profilerToFlamegraphConverter
                 implementation="com.github.kornilova_l.flamegraph.plugin.converters.yourkit.YourkitConverter"/>
+        <fileToCallTracesConverter
+                implementation="com.github.kornilova_l.flamegraph.plugin.server.trees.converters.FlamegraphToCallTracesConverter"/>
     </extensions>
 
     <actions>
-        <group id="com.github.kornilova_l.flamegraph" text="Flamegraph Profiler" popup="true" icon="ProfilerIcons.flameIcon">
+        <group id="com.github.kornilova_l.flamegraph" text="Flamegraph Profiler" popup="true"
+               icon="ProfilerIcons.flameIcon">
             <action class="com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.ShowProfilerDialogAction"
                     id="flamegraph-profiler.ShowProfilerDialog" text="Edit Configuration..."/>
             <action id="java-profiling-plugin.server"

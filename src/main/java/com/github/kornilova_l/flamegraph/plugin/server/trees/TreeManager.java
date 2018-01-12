@@ -1,11 +1,12 @@
 package com.github.kornilova_l.flamegraph.plugin.server.trees;
 
-import com.github.kornilova_l.flamegraph.plugin.converters.ProfilerToFlamegraphConverter;
-import com.github.kornilova_l.flamegraph.plugin.server.trees.flamegraph_format_trees.FlamegraphFormatTreesSet;
+import com.github.kornilova_l.flamegraph.plugin.PluginFileManager;
+import com.github.kornilova_l.flamegraph.plugin.server.trees.converters.flamegraph_format_trees.TreesSetImpl;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees.SerTreesSet;
 import com.github.kornilova_l.flamegraph.proto.TreeProtos;
 import com.github.kornilova_l.flamegraph.proto.TreesPreviewProtos.TreesPreview;
 import com.github.kornilova_l.flamegraph.proto.TreesProtos;
+import com.intellij.openapi.diagnostic.Logger;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
@@ -15,6 +16,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class TreeManager {
+    private static final Logger LOG = Logger.getInstance(PluginFileManager.class);
     private File currentFile = null;
     private volatile TreesSet currentTreesSet = null;
     private AtomicLong lastUpdate = new AtomicLong(System.currentTimeMillis());
@@ -61,8 +63,8 @@ public class TreeManager {
 
     @Nullable
     public TreesProtos.Trees getCallTree(File logFile,
-                                                   @Nullable Filter filter,
-                                                   @Nullable List<Integer> threadsIds) {
+                                         @Nullable Filter filter,
+                                         @Nullable List<Integer> threadsIds) {
         isBusy.set(true);
         updateTreesSet(logFile);
 
@@ -78,12 +80,20 @@ public class TreeManager {
         if (currentFile == null ||
                 !Objects.equals(logFile.getAbsolutePath(), currentFile.getAbsolutePath())) {
             currentFile = logFile;
-            switch (ProfilerToFlamegraphConverter.Companion.getFileExtension(logFile.getName())) {
-                case "ser":
-                    currentTreesSet = new SerTreesSet(logFile);
-                    break;
-                default:
-                    currentTreesSet = new FlamegraphFormatTreesSet(logFile);
+            String parentDirName = PluginFileManager.getParentDirName(logFile);
+            if (parentDirName == null) {
+                LOG.error("Cannot find parent directory of log file");
+                return;
+            }
+            if (parentDirName.equals("ser")) {
+                currentTreesSet = new SerTreesSet(logFile);
+            } else {
+                TreeProtos.Tree callTraces = FileToCallTracesConverter.Companion.convert(parentDirName, logFile);
+                if (callTraces == null) {
+                    LOG.error("Cannot convert file " + logFile);
+                    return;
+                }
+                currentTreesSet = new TreesSetImpl(callTraces);
             }
         }
     }

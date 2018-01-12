@@ -2,21 +2,15 @@ package com.github.kornilova_l.flamegraph.plugin.server
 
 import com.github.kornilova_l.flamegraph.plugin.PluginFileManager
 import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase
-import junit.framework.TestCase
 import org.jetbrains.ide.BuiltInServerManager
 import java.io.DataOutputStream
+import java.io.File
 import java.net.HttpURLConnection
 import java.net.URL
 import java.util.*
-import java.io.InputStreamReader
-import java.io.BufferedReader
-import java.io.File
 
 
 class FilesUploaderTest : LightPlatformCodeInsightFixtureTestCase() {
-    private val bytesInMB = 1_000_000
-    private val megabytesInOnePart = 100
-    private val jmcFive = File("src/test/resources/jfr_files/jmc_5_recording.jfr")
 
     fun testUploadSmallFiles() {
         PluginFileManager.getInstance().deleteAllUploadedFiles()
@@ -44,8 +38,16 @@ class FilesUploaderTest : LightPlatformCodeInsightFixtureTestCase() {
 
     fun testJfrFileUpload() {
         PluginFileManager.getInstance().deleteAllUploadedFiles()
+        val jmcFive = File("src/test/resources/jfr_files/jmc_5_recording.jfr")
         sendFile(jmcFive.name, jmcFive.readBytes())
         fileReceivedTest(jmcFive.name, File("src/test/resources/jfr_files/expected/jmc_5_recording.flamegraph"))
+    }
+
+    fun testFlamegraphFileUpload() {
+        PluginFileManager.getInstance().deleteAllUploadedFiles()
+        val flamegraphFile = File("src/test/resources/StacksOCTreeBuilderTest/test_data01.txt")
+        sendFile(flamegraphFile.name, flamegraphFile.readBytes())
+        fileReceivedTest(flamegraphFile.name, flamegraphFile) // file should stay the same
     }
 
     fun testIfFileUploaded() {
@@ -98,57 +100,54 @@ class FilesUploaderTest : LightPlatformCodeInsightFixtureTestCase() {
         assertEquals(file!!.readLines(), expectedFile.readLines())
     }
 
-    private fun sendFile(fileName: String, bytes: ByteArray) {
-        var partsCount = bytes.size / (bytesInMB * megabytesInOnePart)
-        if (bytes.size % (bytesInMB * megabytesInOnePart) != 0) {
-            partsCount++
+    companion object {
+        private val bytesInMB = 1_000_000
+        private val megabytesInOnePart = 100
+
+        fun sendFile(fileName: String, bytes: ByteArray) {
+            var partsCount = bytes.size / (bytesInMB * megabytesInOnePart)
+            if (bytes.size % (bytesInMB * megabytesInOnePart) != 0) {
+                partsCount++
+            }
+            /* do not pause in following block while debugging. It may break connection */
+            for (i in 0 until partsCount) {
+                println("request")
+                //Create connection
+                val url = URL("http://localhost:${BuiltInServerManager.getInstance().port}/flamegraph-profiler/upload-file")
+                val connection = url.openConnection() as HttpURLConnection
+                connection.requestMethod = "POST"
+                connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded")
+                connection.useCaches = false
+                connection.doOutput = true
+
+                val contentLength = if (i == partsCount - 1)
+                    bytes.size % (bytesInMB * megabytesInOnePart)
+                else
+                    bytesInMB * megabytesInOnePart
+
+                connection.setRequestProperty("Content-Length", Integer.toString(contentLength))
+                connection.setRequestProperty("File-Part", "${i + 1}/$partsCount")
+                connection.setRequestProperty("File-Name", fileName)
+
+                //Send request
+                val wr = DataOutputStream(
+                        connection.outputStream)
+                wr.write(
+                        Arrays.copyOfRange(
+                                bytes,
+                                i * bytesInMB * megabytesInOnePart,
+                                Math.min(bytes.size, (i + 1) * bytesInMB * megabytesInOnePart)
+                        )
+                )
+                wr.flush()
+                wr.close()
+
+                getResponse(connection) // without it connection will not be closed
+            }
         }
-        /* do not pause in following block while debugging. It may break connection */
-        for (i in 0 until partsCount) {
-            println("request")
-            //Create connection
-            val url = URL("http://localhost:${BuiltInServerManager.getInstance().port}/flamegraph-profiler/upload-file")
-            val connection = url.openConnection() as HttpURLConnection
-            connection.requestMethod = "POST"
-            connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded")
-            connection.useCaches = false
-            connection.doOutput = true
 
-            val contentLength = if (i == partsCount - 1)
-                bytes.size % (bytesInMB * megabytesInOnePart)
-            else
-                bytesInMB * megabytesInOnePart
-
-            connection.setRequestProperty("Content-Length", Integer.toString(contentLength))
-            connection.setRequestProperty("File-Part", "${i + 1}/$partsCount")
-            connection.setRequestProperty("File-Name", fileName)
-
-            //Send request
-            val wr = DataOutputStream(
-                    connection.outputStream)
-            wr.write(
-                    Arrays.copyOfRange(
-                            bytes,
-                            i * bytesInMB * megabytesInOnePart,
-                            Math.min(bytes.size, (i + 1) * bytesInMB * megabytesInOnePart)
-                    )
-            )
-            wr.flush()
-            wr.close()
-
-            getResponse(connection) // without it connection will not be closed
+        fun getResponse(connection: HttpURLConnection): ByteArray {
+            return connection.inputStream.readBytes()
         }
-    }
-
-    private fun getResponse(connection: HttpURLConnection) {
-        //Get Response
-        val `is` = connection.inputStream
-        val rd = BufferedReader(InputStreamReader(`is`))
-        var line = rd.readLine()
-        while (line != null) {
-            println(line)
-            line = rd.readLine()
-        }
-        rd.close()
     }
 }

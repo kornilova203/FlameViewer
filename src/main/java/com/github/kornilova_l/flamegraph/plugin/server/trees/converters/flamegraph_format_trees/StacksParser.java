@@ -1,4 +1,4 @@
-package com.github.kornilova_l.flamegraph.plugin.server.trees.flamegraph_format_trees;
+package com.github.kornilova_l.flamegraph.plugin.server.trees.converters.flamegraph_format_trees;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -56,7 +56,7 @@ public class StacksParser {
     /**
      * @return true if stacktraces contain parameters and return value
      */
-    static boolean doCallsContainParameters(Map<String, Integer> stacks) {
+    public static boolean doCallsContainParameters(Map<String, Integer> stacks) {
         for (String stack : stacks.keySet()) {
             if (!hasParametersPattern.matcher(stack).matches()) {
                 return false;

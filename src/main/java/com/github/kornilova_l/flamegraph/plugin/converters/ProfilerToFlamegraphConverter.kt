@@ -4,18 +4,12 @@ import com.github.kornilova_l.flamegraph.plugin.PluginFileManager
 import com.intellij.openapi.extensions.ExtensionPointName
 import java.io.File
 
-private val fileManager = PluginFileManager.getInstance()
 
-fun convertWithExtensions(fileName: String, bytes: ByteArray): Boolean {
+fun tryToConvertFileToFlamegraph(file: File): Boolean {
     var isSaved = false
-    val file = fileManager.tempFileSaver.save(bytes, fileName)
-    if (file != null) {
-        val stacks = ProfilerToFlamegraphConverter.convert(file)
-        if (stacks != null) {
-            isSaved = fileManager.flamegraphFileSaver
-                    .save(stacks, fileName) != null
-        }
-        file.delete()
+    val stacks = ProfilerToFlamegraphConverter.convert(file)
+    if (stacks != null) {
+        isSaved = PluginFileManager.getInstance().flamegraphFileSaver.save(stacks, file.name) != null
     }
     return isSaved
 }

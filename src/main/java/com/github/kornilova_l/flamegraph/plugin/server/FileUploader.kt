@@ -2,11 +2,13 @@ package com.github.kornilova_l.flamegraph.plugin.server
 
 import com.github.kornilova_l.flamegraph.plugin.PluginFileManager
 import com.github.kornilova_l.flamegraph.plugin.converters.ProfilerToFlamegraphConverter
-import com.github.kornilova_l.flamegraph.plugin.converters.convertWithExtensions
-import com.github.kornilova_l.flamegraph.plugin.server.trees.flamegraph_format_trees.StacksParser.isFlamegraph
+import com.github.kornilova_l.flamegraph.plugin.converters.tryToConvertFileToFlamegraph
+import com.github.kornilova_l.flamegraph.plugin.server.trees.FileToCallTracesConverter
+import com.intellij.openapi.diagnostic.Logger.getInstance
 
 
 class FileUploader {
+    private val LOG = getInstance(FileUploader::class.java)
     private val fileManager = PluginFileManager.getInstance()
     private val fileAccumulators = HashMap<String, FileAccumulator>()
 
@@ -24,14 +26,22 @@ class FileUploader {
                 /* here we are not interested if file will be saved/converted
                  * client will send a request to check if file was saved/converted */
                 val allBytes = fileAccumulator.getBytes()
-                when {
-                    ProfilerToFlamegraphConverter.getFileExtension(fileName) == "ser" ->
-                        fileManager.serFileSaver.save(allBytes, fileName) != null
-                    isFlamegraph(allBytes) ->
-                        fileManager.flamegraphFileSaver.save(allBytes, fileName) != null
-                    else ->
-                        convertWithExtensions(fileName, allBytes)
+                if (ProfilerToFlamegraphConverter.getFileExtension(fileName) == "ser") {
+                    fileManager.serFileSaver.save(allBytes, fileName)
                 }
+                val tempFile = PluginFileManager.getInstance().tempFileSaver.save(bytes, fileName)
+                if (tempFile == null) {
+                    LOG.error("Cannot save file to temporal repository: $tempFile")
+                    return
+                }
+                val res = tryToConvertFileToFlamegraph(tempFile)
+                if (!res) { // if no converter was found
+                    val converterId = FileToCallTracesConverter.isSupported(tempFile)
+                    if (converterId != null) { // if supported
+                        PluginFileManager.getInstance().saveUploadedFile(converterId, fileName, bytes)
+                    }
+                }
+                tempFile.delete()
                 fileAccumulators.remove(fileName)
             }
         }

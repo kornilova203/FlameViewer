@@ -1,7 +1,7 @@
 package com.github.kornilova_l.flamegraph.plugin.converters.jmc;
 
 import com.github.kornilova_l.flamegraph.plugin.converters.ProfilerToFlamegraphConverter;
-import com.github.kornilova_l.flamegraph.plugin.server.trees.flamegraph_format_trees.StacksParser;
+import com.github.kornilova_l.flamegraph.plugin.server.trees.converters.flamegraph_format_trees.StacksParser;
 import com.intellij.openapi.diagnostic.Logger;
 import org.apache.commons.lang.SystemUtils;
 import org.jetbrains.annotations.NotNull;
@@ -18,7 +18,7 @@ import java.util.Objects;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.ZipException;
 
-class JMCConverter extends ProfilerToFlamegraphConverter {
+public class JMCConverter extends ProfilerToFlamegraphConverter {
     private static final Logger LOG = Logger.getInstance(ProfilerToFlamegraphConverter.class);
     @SuppressWarnings("FieldCanBeLocal")
     private int allowedSize = 20000000; // in bytes. It is 20MB
@@ -139,7 +139,7 @@ class JMCConverter extends ProfilerToFlamegraphConverter {
         return path.toString() + ".class";
     }
 
-    private static byte[] getBytes(File file) {
+    public static byte[] getBytes(File file) {
         try (InputStream inputStream = new FileInputStream(file)) {
             byte[] bytes = new byte[inputStream.available()];
             //noinspection ResultOfMethodCallIgnored

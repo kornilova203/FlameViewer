@@ -11,7 +11,6 @@ import com.github.kornilova_l.flamegraph.proto.TreesProtos;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -21,7 +20,6 @@ import static com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumul
 import static com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumulative_trees.AccumulativeTreesHelper.updateNodeList;
 
 public abstract class TreesSet {
-    protected final File logFile;
     private final List<HotSpot> hotSpots = new ArrayList<>();
     @Nullable
     protected TreesProtos.Trees callTree;
@@ -29,10 +27,6 @@ public abstract class TreesSet {
     protected Tree outgoingCalls;
     @Nullable
     private Tree incomingCalls;
-
-    public TreesSet(File logFile) {
-        this.logFile = logFile;
-    }
 
     @Nullable
     private static Tree getTreeForMethod(Tree sourceTree,
@@ -140,7 +134,7 @@ public abstract class TreesSet {
         }
     }
 
-    public static long getSelfTime(Node node) {
+    private static long getSelfTime(Node node) {
         long childTime = 0;
         for (Node child : node.getNodesList()) {
             childTime += child.getWidth();

@@ -1,4 +1,4 @@
-package com.github.kornilova_l.flamegraph.plugin.server.trees.flamegraph_format_trees;
+package com.github.kornilova_l.flamegraph.plugin.server.trees.converters.flamegraph_format_trees;
 
 import com.github.kornilova_l.flamegraph.proto.TreeProtos;
 import org.jetbrains.annotations.NotNull;
@@ -14,7 +14,7 @@ import static com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumul
  */
 public class StacksOCTreeBuilder extends SimpleStacksOCTreeBuilder {
 
-    StacksOCTreeBuilder(@NotNull Map<String, Integer> stacks) {
+    public StacksOCTreeBuilder(@NotNull Map<String, Integer> stacks) {
         super(stacks);
     }
 

@@ -1,4 +1,4 @@
-package com.github.kornilova_l.flamegraph.plugin.server.trees.flamegraph_format_trees;
+package com.github.kornilova_l.flamegraph.plugin.server.trees.converters.flamegraph_format_trees;
 
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TestHelper;
 import com.github.kornilova_l.flamegraph.proto.TreeProtos;
@@ -23,8 +23,8 @@ public class StacksOCTreeBuilderTest {
 
     @Test
     public void getTree() {
-        doTest(new File("src/test/resources/StacksOCTreeBuilderTest/test_data01.txt"), new File("src/test/resources/StacksOCTreeBuilderTest/result01.txt"));
-
+        doTest(new File("src/test/resources/StacksOCTreeBuilderTest/test_data01.txt"),
+                new File("src/test/resources/StacksOCTreeBuilderTest/result01.txt"));
     }
 
     private void doTest(File data, File res) {

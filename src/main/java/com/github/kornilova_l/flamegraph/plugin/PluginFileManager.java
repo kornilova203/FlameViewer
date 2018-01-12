@@ -7,10 +7,7 @@ import io.netty.handler.codec.http.QueryStringDecoder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Path;
@@ -355,6 +352,31 @@ public class PluginFileManager {
         Path projectDirPath = getLogDirPath(projectName, fileName);
         //noinspection ResultOfMethodCallIgnored
         file.renameTo(Paths.get(projectDirPath.toString(), fileName).toFile());
+    }
+
+    public void saveUploadedFile(@NotNull String converterId, @NotNull String fileName, @NotNull byte[] bytes) {
+        File dir = Paths.get(logDirPath.toString(), UPLOADED_FILES, converterId).toFile();
+        if (!dir.exists()) {
+            boolean res = dir.mkdir();
+            if (!res) {
+                LOG.error("Cannot save file " + fileName + " to " + converterId + " directory.");
+                return;
+            }
+        }
+        File newFile = Paths.get(dir.toString(), fileName).toFile();
+        try (OutputStream outputStream = new FileOutputStream(newFile)) {
+            outputStream.write(bytes);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static String getParentDirName(File file) {
+        File parentFile = file.getParentFile();
+        if (parentFile == null) {
+            return null;
+        }
+        return parentFile.getName();
     }
 
     static class FileNameAndDate {

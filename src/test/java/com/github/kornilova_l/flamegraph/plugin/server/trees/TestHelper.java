@@ -7,9 +7,9 @@ import java.io.IOException;
 import static org.junit.Assert.assertEquals;
 
 public class TestHelper {
-    public static void compare(String actual, File res) {
-        try (FileInputStream inputStream = new FileInputStream(res)) {
-            byte[] data = new byte[(int) res.length()];
+    public static void compare(String actual, File expected) {
+        try (FileInputStream inputStream = new FileInputStream(expected)) {
+            byte[] data = new byte[(int) expected.length()];
             //noinspection ResultOfMethodCallIgnored
             inputStream.read(data);
             String result = new String(data, "UTF-8");

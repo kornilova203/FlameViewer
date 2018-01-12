@@ -1,4 +1,4 @@
-package com.github.kornilova_l.flamegraph.plugin.server.trees.flamegraph_format_trees;
+package com.github.kornilova_l.flamegraph.plugin.server.trees.converters.flamegraph_format_trees;
 
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeBuilder;
 import com.github.kornilova_l.flamegraph.proto.TreeProtos;
@@ -21,7 +21,7 @@ public class SimpleStacksOCTreeBuilder implements TreeBuilder {
     private final Tree tree;
     int maxDepth = 0;
 
-    SimpleStacksOCTreeBuilder(@NotNull Map<String, Integer> stacks) {
+    public SimpleStacksOCTreeBuilder(@NotNull Map<String, Integer> stacks) {
         tree = buildTree(stacks);
     }
 

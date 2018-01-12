@@ -15,9 +15,8 @@ import java.io.File;
 import java.util.List;
 
 public class SerTreesSet extends TreesSet {
-    public SerTreesSet(File logFile) {
-        super(logFile);
 
+    public SerTreesSet(File logFile) {
         callTree = new CallTreesBuilder(logFile).getTrees();
     }
 
