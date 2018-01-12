@@ -103,6 +103,19 @@ common.updateRareDecorator = (updateTime, callback) => {
     }
 };
 
+/**
+ * Show error message to user
+ * @param {String} errorMessage
+ */
+common.showError = (errorMessage) => {
+    const errorMessageBlock = $(".error-message-block");
+    errorMessageBlock.find("p").text(errorMessage);
+    errorMessageBlock.addClass("visible");
+    setTimeout(() => {
+        errorMessageBlock.removeClass("visible");
+    }, 5000);
+};
+
 const constants = {};
 constants.$main = null;
 constants.$treePreviewWrapper = null;

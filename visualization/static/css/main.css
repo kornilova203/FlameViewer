@@ -897,11 +897,6 @@ canvas {
     opacity: 0.9;
 }
 
-.visible {
-    opacity: 1;
-    pointer-events: auto;
-}
-
 .visible-without-pointer-events {
     opacity: 1;
 }
@@ -909,4 +904,34 @@ canvas {
 .disabled-field {
     pointer-events: none;
     opacity: 0.6;
+}
+
+.error-message-block {
+    position: absolute;
+    bottom: 25px;
+    right: 20px;
+    width: 300px;
+    background-color: #e5e5e5;
+    padding: 15px 20px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 300ms;
+}
+
+.error-message-block p {
+    margin: 4px 0;
+    padding-left: 35px;
+}
+
+.error-message-block img {
+    float: left;
+    position: relative;
+    top: -2px;
+    margin-right: 8px;
+    opacity: 0.6;
+}
+
+.visible {
+    opacity: 1;
+    pointer-events: auto;
 }
