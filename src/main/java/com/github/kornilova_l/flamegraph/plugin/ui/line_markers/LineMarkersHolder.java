@@ -66,11 +66,18 @@ public class LineMarkersHolder extends AbstractProjectComponent {
         for (PsiMethod methodWithIcon : rangeHighlighters.keySet()) {
             /* PsiMethod does not have equals() and hashCode() method
              * so we check all methods in set by isEquivalentTo() */
-            if (methodWithIcon.isEquivalentTo(method)) {
-                RangeHighlighter highlighter = rangeHighlighters.get(methodWithIcon);
-                markupModel.removeHighlighter(highlighter);
-                rangeHighlighters.remove(methodWithIcon);
-                return;
+            try {
+                if (methodWithIcon.isEquivalentTo(method)) {
+                    RangeHighlighter highlighter = rangeHighlighters.get(methodWithIcon);
+                    markupModel.removeHighlighter(highlighter);
+                    rangeHighlighters.remove(methodWithIcon);
+                    return;
+                }
+            } catch (AssertionError e) {
+                /* it is thrown from com.intellij.psi.impl.source.tree.AstPath.ChildPath.getNode
+                 * when isEquivalentTo() method is called
+                 * I do not know why and how to fix it. It is okay to just ignore it */
+                LOG.warn(e);
             }
         }
     }
