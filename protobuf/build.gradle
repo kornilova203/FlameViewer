@@ -3,3 +3,12 @@ apply plugin: 'java'
 dependencies {
     compile fileTree(dir: 'libs', include: ['protobuf-java-kornilova-l-3.3.0.jar'])
 }
+
+sourceSets.main.java.srcDir new File('src/main/gen')
+
+idea {
+    module {
+        // Marks the already(!) added srcDir as "generated"
+        generatedSourceDirs += file('src/main/gen')
+    }
+}

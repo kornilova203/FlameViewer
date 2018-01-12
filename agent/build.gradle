@@ -31,15 +31,6 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 }
 
-sourceSets.main.java.srcDir new File('../protobuf/src/main/gen')
-
-idea {
-    module {
-        // Marks the already(!) added srcDir as "generated"
-        generatedSourceDirs += file('protobuf/src/main/gen')
-    }
-}
-
 task agentJar(type: Jar) {
     from {
         configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
