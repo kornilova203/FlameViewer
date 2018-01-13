@@ -5,7 +5,6 @@ base_node {
       method_name: "fun2"
       class_name: "com.github.kornilova_l.flamegraph.plugin.server.trees.generate_test_data.MyTask"
       description: "()void"
-      count: 2
     }
     nodes {
       width: 10
@@ -13,7 +12,6 @@ base_node {
         method_name: "fun1"
         class_name: "com.github.kornilova_l.flamegraph.plugin.server.trees.generate_test_data.MyTask"
         description: "()void"
-        count: 2
       }
       nodes {
         width: 10
@@ -21,7 +19,6 @@ base_node {
           method_name: "run"
           class_name: "com.github.kornilova_l.flamegraph.plugin.server.trees.generate_test_data.MyTask"
           description: "()void"
-          count: 2
         }
       }
     }
@@ -33,7 +30,6 @@ base_node {
       method_name: "fun4"
       class_name: "com.github.kornilova_l.flamegraph.plugin.server.trees.generate_test_data.MyTask"
       description: "()void"
-      count: 2
     }
     nodes {
       offset: 10
@@ -42,7 +38,6 @@ base_node {
         method_name: "fun3"
         class_name: "com.github.kornilova_l.flamegraph.plugin.server.trees.generate_test_data.MyTask"
         description: "()void"
-        count: 2
       }
       nodes {
         offset: 10
@@ -51,7 +46,6 @@ base_node {
           method_name: "run"
           class_name: "com.github.kornilova_l.flamegraph.plugin.server.trees.generate_test_data.MyTask"
           description: "()void"
-          count: 2
         }
       }
     }

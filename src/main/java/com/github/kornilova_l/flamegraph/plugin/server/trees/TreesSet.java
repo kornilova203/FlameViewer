@@ -55,7 +55,7 @@ public abstract class TreesSet {
     }
 
     /**
-     * This method must be called after offset of nodes is set
+     * This method must be called after offsets of nodes are set
      * {@link AccumulativeTreesHelper#setNodesOffsetRecursively}
      *
      * @param treeBuilder set width to this tree
@@ -214,7 +214,7 @@ public abstract class TreesSet {
                     nodeBuilder.addNodes(newNode);
                     newNode = nodeBuilder.getNodesBuilderList().get(nodeBuilder.getNodesBuilderList().size() - 1);
                 } else {
-                    newNode = updateNodeList(nodeBuilder, child, -1);
+                    newNode = updateNodeList(nodeBuilder, child);
                 }
                 buildFilteredTreeRecursively(
                         newNode,

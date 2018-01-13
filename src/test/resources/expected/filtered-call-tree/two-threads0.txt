@@ -11,7 +11,6 @@ trees {
         return_value {
         }
         description: "()void"
-        count: 1
       }
       nodes {
         offset: 10
@@ -22,7 +21,6 @@ trees {
           return_value {
           }
           description: "()void"
-          count: 1
         }
         nodes {
           offset: 10
@@ -33,7 +31,6 @@ trees {
             return_value {
             }
             description: "()void"
-            count: 1
           }
         }
       }
@@ -46,7 +43,6 @@ trees {
           return_value {
           }
           description: "()void"
-          count: 1
         }
         nodes {
           offset: 50
@@ -57,7 +53,6 @@ trees {
             return_value {
             }
             description: "()void"
-            count: 1
           }
         }
       }
@@ -80,7 +75,6 @@ trees {
         return_value {
         }
         description: "()void"
-        count: 1
       }
       nodes {
         offset: 10
@@ -91,7 +85,6 @@ trees {
           return_value {
           }
           description: "()void"
-          count: 1
         }
         nodes {
           offset: 10
@@ -102,7 +95,6 @@ trees {
             return_value {
             }
             description: "()void"
-            count: 1
           }
         }
       }
@@ -115,7 +107,6 @@ trees {
           return_value {
           }
           description: "()void"
-          count: 1
         }
         nodes {
           offset: 50
@@ -126,7 +117,6 @@ trees {
             return_value {
             }
             description: "()void"
-            count: 1
           }
         }
       }

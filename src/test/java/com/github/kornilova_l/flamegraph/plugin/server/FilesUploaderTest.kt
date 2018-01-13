@@ -20,19 +20,21 @@ class FilesUploaderTest : LightPlatformCodeInsightFixtureTestCase() {
 
     fun testUploadMediumFiles() {
         PluginFileManager.getInstance().deleteAllUploadedFiles()
-        sendFile("01_medium.ser", createBytes(bytesInMB * 10))
-        fileReceivedTest("01_medium.ser", bytesInMB * 10)
+        val bytes = createBytes(bytesInMB * 10)
+        sendFile("01_medium.ser", bytes)
+        val expectedFile = PluginFileManager.getInstance().tempFileSaver.save(bytes, "01_medium.ser")!!
+        fileReceivedTest("01_medium.ser", expectedFile)
 
-        sendFile("02_medium.ser", createBytes(bytesInMB * 90))
+        sendFile("02_medium.ser", ByteArray(bytesInMB * 90))
         fileReceivedTest("02_medium.ser", bytesInMB * 90)
 
-        sendFile("03_medium.ser", createBytes(bytesInMB * 100))
+        sendFile("03_medium.ser", ByteArray(bytesInMB * 100))
         fileReceivedTest("03_medium.ser", bytesInMB * 100)
     }
 
     fun testUploadBigFiles() {
         PluginFileManager.getInstance().deleteAllUploadedFiles()
-        sendFile("big.ser", createBytes(bytesInMB * 150))
+        sendFile("big.ser", ByteArray(bytesInMB * 150))
         fileReceivedTest("big.ser", bytesInMB * 150)
     }
 

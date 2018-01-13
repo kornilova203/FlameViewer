@@ -10,47 +10,51 @@ public class AccumulativeTreesHelper {
     static TreeProtos.Tree.Node.NodeInfo.Builder createNodeInfo(String className,
                                                                 String methodName,
                                                                 String desc,
-                                                                boolean isStatic,
-                                                                int callsCount) {
+                                                                boolean isStatic) {
         return TreeProtos.Tree.Node.NodeInfo.newBuilder()
                 .setClassName(className)
                 .setMethodName(methodName)
                 .setDescription(desc)
-                .setIsStatic(isStatic)
-                .setCount(callsCount);
+                .setIsStatic(isStatic);
     }
 
     /**
      * @param nodeBuilder node in building tree. Child of this node will be updated or created
      * @param node        node in source tree. Information of this node will be added to building tree
-     * @param time        time which will be set (or added) to created or updated node (-1 if time should be taken from node)
      * @return Node.Builder from building tree which was created or updated
      */
     public static TreeProtos.Tree.Node.Builder updateNodeList(TreeProtos.Tree.Node.Builder nodeBuilder,
-                                                              TreeProtos.Tree.Node node,
+                                                              TreeProtos.Tree.Node node) {
+        TreeProtos.Tree.Node.NodeInfo nodeInfo = node.getNodeInfo();
+        return updateNodeList(nodeBuilder, nodeInfo.getClassName(), nodeInfo.getMethodName(),
+                nodeInfo.getDescription(), node.getWidth());
+    }
+
+    /**
+     * @param nodeBuilder node in building tree. Child of this node will be updated or created
+     * @param time        time which will be set (or added) to created or updated node
+     *                    (in back traces added time differs for node's time)
+     * @return Node.Builder from building tree which was created or updated
+     */
+    public static TreeProtos.Tree.Node.Builder updateNodeList(TreeProtos.Tree.Node.Builder nodeBuilder,
+                                                              String className,
+                                                              String methodName,
+                                                              String description,
                                                               long time) {
-        time = time == -1 ? node.getWidth() : time;
         int childCount = nodeBuilder.getNodesCount();
         List<TreeProtos.Tree.Node.Builder> children = nodeBuilder.getNodesBuilderList();
-        String comparableName = getComparableName(node);
+        String comparableName = className + methodName;
         for (int i = 0; i < childCount; i++) {
             TreeProtos.Tree.Node.Builder childNodeBuilder = children.get(i);
-            if (isSameMethod(childNodeBuilder, node)) {
-                updateNode(childNodeBuilder, node, time);
+            if (isSameMethod(childNodeBuilder, className, methodName, description)) {
+                addTimeToNode(childNodeBuilder, time);
                 return childNodeBuilder;
             }
             if (comparableName.compareTo(getComparableName(children.get(i))) < 0) { // if insert between
-                return addNodeToList(nodeBuilder, node, time, i);
+                return addNodeToList(nodeBuilder, className, methodName, description, time, i);
             }
         }
-        return addNodeToList(nodeBuilder, node, time, childCount); // no such method and it is biggest
-    }
-
-    private static void updateNode(TreeProtos.Tree.Node.Builder childNodeBuilder, TreeProtos.Tree.Node node, long time) {
-        addTimeToNode(childNodeBuilder, time);
-        int count = node.getNodeInfo().getCount();
-        count = count == 0 ? 1 : count;
-        addCountToNode(childNodeBuilder, count);
+        return addNodeToList(nodeBuilder, className, methodName, description, time, childCount); // no such method and it is biggest
     }
 
     @NotNull
@@ -60,12 +64,6 @@ public class AccumulativeTreesHelper {
             return "";
         }
         return nodeInfo.getClassName() + nodeInfo.getMethodName();
-    }
-
-    private static void addCountToNode(TreeProtos.Tree.Node.Builder nodeBuilder, int count) {
-        nodeBuilder.getNodeInfoBuilder().setCount(
-                nodeBuilder.getNodeInfoBuilder().getCount() + count
-        );
     }
 
     /**
@@ -79,30 +77,23 @@ public class AccumulativeTreesHelper {
     }
 
     private static TreeProtos.Tree.Node.Builder addNodeToList(TreeProtos.Tree.Node.Builder nodeBuilder,
-                                                              TreeProtos.Tree.Node node,
+                                                              String className,
+                                                              String methodName,
+                                                              String desc,
                                                               long time,
                                                               int pos) {
-        TreeProtos.Tree.Node.Builder newNodeBuilder = createNodeBuilder(node, time);
+        TreeProtos.Tree.Node.Builder newNodeBuilder = createNodeBuilder(className, methodName, desc, time);
         nodeBuilder.addNodes(pos, newNodeBuilder);
         return nodeBuilder.getNodesBuilder(pos);
     }
 
-    private static TreeProtos.Tree.Node.Builder createNodeBuilder(TreeProtos.Tree.Node node,
+    private static TreeProtos.Tree.Node.Builder createNodeBuilder(String className,
+                                                                  String methodName,
+                                                                  String desc,
                                                                   long time) {
-        TreeProtos.Tree.Node.NodeInfo CTNodeInfo = node.getNodeInfo();
-        int callsCount = node.getNodeInfo().getCount();
-        if (callsCount == 0) {
-            callsCount = 1;
-        }
         return TreeProtos.Tree.Node.newBuilder()
                 .setNodeInfo(
-                        createNodeInfo(
-                                CTNodeInfo.getClassName(),
-                                CTNodeInfo.getMethodName(),
-                                CTNodeInfo.getDescription(),
-                                CTNodeInfo.getIsStatic(),
-                                callsCount
-                        )
+                        createNodeInfo(className, methodName, desc, false)
                 )
                 .setWidth(time);
     }
@@ -111,12 +102,13 @@ public class AccumulativeTreesHelper {
      * If class name, method name and description are the same return true
      */
     static boolean isSameMethod(TreeProtos.Tree.Node.Builder nodeBuilder,
-                                TreeProtos.Tree.Node node) {
-        TreeProtos.Tree.Node.NodeInfo nodeInfo = node.getNodeInfo();
+                                String className,
+                                String methodName,
+                                String desc) {
         TreeProtos.Tree.Node.NodeInfo.Builder nodeBuilderInfo = nodeBuilder.getNodeInfoBuilder();
-        return Objects.equals(nodeInfo.getClassName(), nodeBuilderInfo.getClassName()) &&
-                Objects.equals(nodeInfo.getMethodName(), nodeBuilderInfo.getMethodName()) &&
-                Objects.equals(nodeInfo.getDescription(), nodeBuilderInfo.getDescription());
+        return Objects.equals(className, nodeBuilderInfo.getClassName()) &&
+                Objects.equals(methodName, nodeBuilderInfo.getMethodName()) &&
+                Objects.equals(desc, nodeBuilderInfo.getDescription());
     }
 
     /**

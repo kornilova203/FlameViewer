@@ -24,13 +24,19 @@ class FileToCallTracesTest : LightPlatformCodeInsightFixtureTestCase() {
     }
 
     fun testYourkitCsv() {
+        doTest("simple")
+        doTest("01_yourkit_test")
+        doTest("02_yourkit_test")
+    }
+
+    private fun doTest(fileName: String) {
         PluginFileManager.getInstance().deleteAllUploadedFiles()
-        val yourkitCsvFile = File("src/test/resources/file_to_call_traces_converter/yourkit_csv/simple.csv")
+        val yourkitCsvFile = File("src/test/resources/file_to_call_traces_converter/yourkit_csv/$fileName.csv")
         sendFile(yourkitCsvFile.name, yourkitCsvFile.readBytes())
         val bytes = sendRequestForCallTraces(yourkitCsvFile.name)
         assertNotNull(bytes)
         TestHelper.compare(TreeProtos.Tree.parseFrom(ByteArrayInputStream(bytes)).toString(),
-                File("src/test/resources/file_to_call_traces_converter/yourkit_csv/expected/simple.txt"))
+                File("src/test/resources/file_to_call_traces_converter/yourkit_csv/expected/$fileName.txt"))
     }
 
     private fun sendRequestForCallTraces(fileName: String): ByteArray {

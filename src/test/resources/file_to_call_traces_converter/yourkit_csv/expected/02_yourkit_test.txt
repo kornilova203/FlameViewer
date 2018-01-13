@@ -1,0 +1,100 @@
+base_node {
+  nodes {
+    width: 200
+    node_info {
+      method_name: "connect"
+      class_name: "java.net.Socket"
+      description: "(SocketAddress, int)"
+    }
+    nodes {
+      width: 100
+      node_info {
+        method_name: "run"
+        class_name: "java.lang.Thread"
+        description: "()"
+      }
+      nodes {
+        width: 60
+        node_info {
+          method_name: "run"
+          class_name: "java.util.concurrent.ThreadPoolExecutor$Worker"
+          description: "()"
+        }
+      }
+    }
+    nodes {
+      offset: 100
+      width: 24
+      node_info {
+        method_name: "connect"
+        class_name: "java.net.SocksSocketImpl"
+        description: "(SocketAddress, int)"
+      }
+      nodes {
+        offset: 100
+        width: 4
+        node_info {
+          method_name: "doPrivileged"
+          class_name: "java.security.AccessController"
+          description: "(PrivilegedAction)"
+        }
+        nodes {
+          offset: 100
+          width: 4
+          node_info {
+            method_name: "run"
+            class_name: "java.net.SocksSocketImpl$3"
+            description: "()"
+          }
+          nodes {
+            offset: 100
+            width: 4
+            node_info {
+              method_name: "run"
+              class_name: "java.net.SocksSocketImpl$3"
+              description: "()"
+            }
+            nodes {
+              offset: 100
+              width: 4
+              node_info {
+                method_name: "<clinit>"
+                class_name: "java.net.ProxySelector"
+                description: "()"
+              }
+              nodes {
+                offset: 100
+                width: 4
+                node_info {
+                  method_name: "forName"
+                  class_name: "java.lang.Class"
+                  description: "(String)"
+                }
+                nodes {
+                  offset: 100
+                  width: 4
+                  node_info {
+                    method_name: "forName0"
+                    class_name: "java.lang.Class"
+                    description: "(String, boolean, ClassLoader, Class)"
+                  }
+                  nodes {
+                    offset: 100
+                    width: 4
+                    node_info {
+                      method_name: "<clinit>"
+                      class_name: "sun.net.spi.DefaultProxySelector"
+                      description: "()"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+depth: 9
+width: 200

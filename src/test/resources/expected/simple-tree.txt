@@ -10,7 +10,6 @@ base_node {
       return_value {
       }
       description: "()void"
-      count: 1
     }
     nodes {
       width: 35
@@ -20,7 +19,6 @@ base_node {
         return_value {
         }
         description: "()void"
-        count: 1
       }
       nodes {
         width: 5
@@ -30,7 +28,6 @@ base_node {
           return_value {
           }
           description: "()void"
-          count: 1
         }
       }
       nodes {
@@ -42,7 +39,6 @@ base_node {
           return_value {
           }
           description: "()void"
-          count: 1
         }
       }
     }
@@ -55,7 +51,6 @@ base_node {
         return_value {
         }
         description: "()void"
-        count: 1
       }
     }
     nodes {
@@ -67,7 +62,6 @@ base_node {
         return_value {
         }
         description: "()void"
-        count: 1
       }
     }
   }

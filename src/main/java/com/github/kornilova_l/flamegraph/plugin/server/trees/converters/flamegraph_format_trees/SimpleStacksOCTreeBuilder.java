@@ -53,7 +53,7 @@ public class SimpleStacksOCTreeBuilder implements TreeBuilder {
                     .setWidth(width)
                     .setNodeInfo(nodeInfo)
                     .build();
-            nodeBuilder = updateNodeList(nodeBuilder, callNode, -1);
+            nodeBuilder = updateNodeList(nodeBuilder, callNode);
         }
     }
 

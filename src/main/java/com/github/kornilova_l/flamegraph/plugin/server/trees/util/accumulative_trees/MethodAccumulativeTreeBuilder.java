@@ -52,7 +52,8 @@ public class MethodAccumulativeTreeBuilder implements TreeBuilder {
 
     private void traverseTreeAndFind(Tree.Node node) {
 
-        if (AccumulativeTreesHelper.isSameMethod(wantedMethodNode, node)) {
+        if (AccumulativeTreesHelper.isSameMethod(wantedMethodNode, node.getNodeInfo().getClassName(), node.getNodeInfo().getMethodName(),
+                node.getNodeInfo().getDescription())) {
             addNodesRecursively(treeBuilder.getBaseNodeBuilder(), node, 0);
         }
         for (Tree.Node childNode : node.getNodesList()) {
@@ -67,7 +68,7 @@ public class MethodAccumulativeTreeBuilder implements TreeBuilder {
         if (depth > maxDepth) {
             maxDepth = depth;
         }
-        nodeBuilder = updateNodeList(nodeBuilder, node, -1);
+        nodeBuilder = updateNodeList(nodeBuilder, node);
         for (Tree.Node childNode : node.getNodesList()) {
             addNodesRecursively(nodeBuilder, childNode, depth);
         }
@@ -81,8 +82,7 @@ public class MethodAccumulativeTreeBuilder implements TreeBuilder {
                                         className,
                                         methodName,
                                         desc,
-                                        isStatic,
-                                        0
+                                        isStatic
                                 )
                         ));
         treeBuilder = Tree.newBuilder()

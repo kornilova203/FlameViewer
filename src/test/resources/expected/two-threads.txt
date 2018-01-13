@@ -10,7 +10,6 @@ base_node {
       return_value {
       }
       description: "()void"
-      count: 1
     }
     nodes {
       offset: 10
@@ -21,7 +20,6 @@ base_node {
         return_value {
         }
         description: "()void"
-        count: 1
       }
       nodes {
         offset: 10
@@ -32,7 +30,6 @@ base_node {
           return_value {
           }
           description: "()void"
-          count: 1
         }
       }
     }
@@ -45,7 +42,6 @@ base_node {
         return_value {
         }
         description: "()void"
-        count: 1
       }
       nodes {
         offset: 50
@@ -56,7 +52,6 @@ base_node {
           return_value {
           }
           description: "()void"
-          count: 1
         }
       }
     }
@@ -77,7 +72,6 @@ base_node {
       return_value {
       }
       description: "()void"
-      count: 1
     }
     nodes {
       offset: 10
@@ -88,7 +82,6 @@ base_node {
         return_value {
         }
         description: "()void"
-        count: 1
       }
       nodes {
         offset: 10
@@ -99,7 +92,6 @@ base_node {
           return_value {
           }
           description: "()void"
-          count: 1
         }
       }
     }
@@ -112,7 +104,6 @@ base_node {
         return_value {
         }
         description: "()void"
-        count: 1
       }
       nodes {
         offset: 50
@@ -123,7 +114,6 @@ base_node {
           return_value {
           }
           description: "()void"
-          count: 1
         }
       }
     }
