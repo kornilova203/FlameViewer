@@ -50,13 +50,11 @@ public class PluginFileManager {
     @NotNull
     private final Path logDirPath;
     @NotNull
+    private final File uploadedFilesDir;
+    @NotNull
     private final Path configDirPath;
     @NotNull
     private final Path staticDirPath;
-    @NotNull
-    private final Path serFiles;
-    @NotNull
-    private final Path flamegraphFiles;
 
     public final FileSaver serFileSaver;
 
@@ -79,6 +77,7 @@ public class PluginFileManager {
         );
         Path uploadedFilesPath = Paths.get(logDirPath.toString(), UPLOADED_FILES);
         createDirIfNotExist(uploadedFilesPath);
+        uploadedFilesDir = uploadedFilesPath.toFile();
 
         Path deletedFilesPath = Paths.get(logDirPath.toString(), DELETED_FILES);
         createDirIfNotExist(deletedFilesPath);
@@ -86,10 +85,10 @@ public class PluginFileManager {
         Path notConvertedFiles = Paths.get(uploadedFilesPath.toString(), NOT_CONVERTED);
         createDirIfNotExist(notConvertedFiles);
         tempFileSaver = new FileSaver(notConvertedFiles);
-        serFiles = Paths.get(uploadedFilesPath.toString(), SER_FILES);
+        Path serFiles = Paths.get(uploadedFilesPath.toString(), SER_FILES);
         createDirIfNotExist(serFiles);
         serFileSaver = new FileSaver(serFiles);
-        flamegraphFiles = Paths.get(uploadedFilesPath.toString(), FLAMEGRAPH_FILES);
+        Path flamegraphFiles = Paths.get(uploadedFilesPath.toString(), FLAMEGRAPH_FILES);
         createDirIfNotExist(flamegraphFiles);
         clearDir(new File(notConvertedFiles.toString()));
         flamegraphFileSaver = new FlamegraphSaver(flamegraphFiles);
@@ -176,28 +175,35 @@ public class PluginFileManager {
     @NotNull
     public synchronized List<FileNameAndDate> getFileNameList(@NotNull String projectName) {
         File projectLogDir = getLogDirPath(projectName);
-        if (!Objects.equals(projectName, UPLOADED_FILES)) {
-            return getFileNameList(projectLogDir);
-        }
         List<FileNameAndDate> fileNames = new ArrayList<>();
-        fileNames.addAll(getFileNameList(new File(serFiles.toString())));
-        fileNames.addAll(getFileNameList(new File(flamegraphFiles.toString())));
+        if (!Objects.equals(projectName, UPLOADED_FILES)) {
+            addFilesFromDirToList(projectLogDir, fileNames);
+            return fileNames;
+        }
+        File[] dirsInsideUploaded = uploadedFilesDir.listFiles();
+        if (dirsInsideUploaded == null) {
+            return fileNames;
+        }
+        for (File dir : dirsInsideUploaded) {
+            if (dir.isDirectory()) {
+                addFilesFromDirToList(dir, fileNames);
+            }
+        }
         return fileNames;
     }
 
-    @NotNull
-    private List<FileNameAndDate> getFileNameList(File projectLogDir) {
+    private void addFilesFromDirToList(File projectLogDir, List<FileNameAndDate> fileNames) {
         File[] files = projectLogDir.listFiles();
-        if (files != null) {
-            return Arrays.stream(files)
-                    .filter(file -> !file.isDirectory())
-                    .sorted((f1, f2) -> Long.compare(f2.lastModified(), f1.lastModified()))
-                    .map(FileNameAndDate::new)
-                    .collect(Collectors.toList());
+        if (files == null) {
+            return;
         }
-
+        Arrays.sort(files, (f1, f2) -> Long.compare(f2.lastModified(), f1.lastModified()));
+        for (File file : files) {
+            if (file.isFile()) {
+                fileNames.add(new FileNameAndDate(file));
+            }
+        }
         finallyDeleteRemovedFiles();
-        return new LinkedList<>();
     }
 
     public synchronized String getStaticFilePath(String staticFileUri) {
@@ -234,7 +240,6 @@ public class PluginFileManager {
      */
     @Nullable
     private File findFileInUploadedFiles(@NotNull String fileName) {
-        File uploadedFilesDir = Paths.get(logDirPath.toString(), UPLOADED_FILES).toFile();
         File[] subDirs = uploadedFilesDir.listFiles();
         if (subDirs == null) {
             return null;
@@ -337,7 +342,7 @@ public class PluginFileManager {
      * Mainly used for test
      */
     public synchronized void deleteAllUploadedFiles() {
-        File[] dirsInsideUploadedFiles = Paths.get(logDirPath.toString(), UPLOADED_FILES).toFile().listFiles();
+        File[] dirsInsideUploadedFiles = uploadedFilesDir.listFiles();
         if (dirsInsideUploadedFiles == null) {
             return;
         }
@@ -383,7 +388,7 @@ public class PluginFileManager {
     }
 
     public void moveFileToUploadedFiles(@NotNull String converterId, @NotNull String fileName, @NotNull File file) {
-        File dir = Paths.get(logDirPath.toString(), UPLOADED_FILES, converterId).toFile();
+        File dir = Paths.get(uploadedFilesDir.toString(), converterId).toFile();
         if (!dir.exists()) {
             boolean res = dir.mkdir();
             if (!res) {
