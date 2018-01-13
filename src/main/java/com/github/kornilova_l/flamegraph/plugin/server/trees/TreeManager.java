@@ -1,6 +1,7 @@
 package com.github.kornilova_l.flamegraph.plugin.server.trees;
 
 import com.github.kornilova_l.flamegraph.plugin.PluginFileManager;
+import com.github.kornilova_l.flamegraph.plugin.converters.ProfilerToFlamegraphConverter;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.converters.flamegraph_format_trees.TreesSetImpl;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees.SerTreesSet;
 import com.github.kornilova_l.flamegraph.proto.TreeProtos;
@@ -12,15 +13,12 @@ import org.jetbrains.annotations.Nullable;
 import java.io.File;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicLong;
 
 public class TreeManager {
     private static final Logger LOG = Logger.getInstance(PluginFileManager.class);
     private File currentFile = null;
     private volatile TreesSet currentTreesSet = null;
-    private AtomicLong lastUpdate = new AtomicLong(System.currentTimeMillis());
-    private AtomicBoolean isBusy = new AtomicBoolean(false);
+    private long lastUpdate;
     private static TreeManager treeManager = new TreeManager();
 
     public static TreeManager getInstance() {
@@ -37,8 +35,7 @@ public class TreeManager {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                if (!thisTreeManager.isBusy() &&
-                        thisTreeManager.longTimePassedSinceUpdate()) {
+                if (thisTreeManager.longTimePassedSinceUpdate()) {
                     thisTreeManager.removeTreesSet();
                 }
             }
@@ -47,103 +44,78 @@ public class TreeManager {
         watchLastUpdate.start();
     }
 
-    private boolean isBusy() {
-        return isBusy.get();
-    }
-
     private void removeTreesSet() {
         currentTreesSet = null;
         currentFile = null;
-        lastUpdate.set(System.currentTimeMillis());
+        lastUpdate = System.currentTimeMillis();
     }
 
-    private boolean longTimePassedSinceUpdate() {
-        return System.currentTimeMillis() - lastUpdate.get() >= 30000;
+    private synchronized boolean longTimePassedSinceUpdate() {
+        return System.currentTimeMillis() - lastUpdate >= 30000;
     }
 
     @Nullable
-    public TreesProtos.Trees getCallTree(File logFile,
-                                         @Nullable Filter filter,
-                                         @Nullable List<Integer> threadsIds) {
-        isBusy.set(true);
+    public synchronized TreesProtos.Trees getCallTree(File logFile,
+                                                      @Nullable Filter filter,
+                                                      @Nullable List<Integer> threadsIds) {
         updateTreesSet(logFile);
-
-        TreesProtos.Trees callTree = currentTreesSet.getCallTree(filter, threadsIds);
-
-        isBusy.set(false);
-
-        return callTree;
-
+        return currentTreesSet.getCallTree(filter, threadsIds);
     }
 
     private void updateTreesSet(File logFile) {
         if (currentFile == null ||
                 !Objects.equals(logFile.getAbsolutePath(), currentFile.getAbsolutePath())) {
             currentFile = logFile;
+            if (ProfilerToFlamegraphConverter.Companion.getFileExtension(logFile.getName()).equals("ser")) {
+                currentTreesSet = new SerTreesSet(logFile);
+                return;
+            }
             String parentDirName = PluginFileManager.getParentDirName(logFile);
             if (parentDirName == null) {
                 LOG.error("Cannot find parent directory of log file");
                 return;
             }
-            if (parentDirName.equals("ser")) {
-                currentTreesSet = new SerTreesSet(logFile);
-            } else {
-                TreeProtos.Tree callTraces = FileToCallTracesConverter.Companion.convert(parentDirName, logFile);
-                if (callTraces == null) {
-                    LOG.error("Cannot convert file " + logFile);
-                    return;
-                }
-                currentTreesSet = new TreesSetImpl(callTraces);
+            TreeProtos.Tree callTraces = FileToCallTracesConverter.Companion.convert(parentDirName, logFile);
+            if (callTraces == null) {
+                LOG.error("Cannot convert file " + logFile);
+                return;
             }
+            currentTreesSet = new TreesSetImpl(callTraces);
         }
     }
 
     @Nullable
-    public TreeProtos.Tree getTree(File logFile, TreeType treeType, @Nullable Filter filter) {
-        isBusy.set(true);
+    public synchronized TreeProtos.Tree getTree(File logFile, TreeType treeType, @Nullable Filter filter) {
         updateTreesSet(logFile);
-        TreeProtos.Tree tree = currentTreesSet.getTree(treeType, filter);
-
-        isBusy.set(false);
-
-        return tree;
+        return currentTreesSet.getTree(treeType, filter);
     }
 
     @Nullable
-    public TreeProtos.Tree getTree(File logFile,
-                                   TreeType treeType,
-                                   String className,
-                                   String methodName,
-                                   String desc,
-                                   boolean isStatic,
-                                   @Nullable Filter filter) {
-        isBusy.set(true);
+    public synchronized TreeProtos.Tree getTree(File logFile,
+                                                TreeType treeType,
+                                                String className,
+                                                String methodName,
+                                                String desc,
+                                                boolean isStatic,
+                                                @Nullable Filter filter) {
         updateTreesSet(logFile);
-        TreeProtos.Tree tree = currentTreesSet.getTree(treeType, className, methodName, desc, isStatic, filter);
-        isBusy.set(false);
-        return tree;
+        return currentTreesSet.getTree(treeType, className, methodName, desc, isStatic, filter);
 
     }
 
-    public List<TreesSet.HotSpot> getHotSpots(File logFile) {
-        isBusy.set(true);
+    public synchronized List<TreesSet.HotSpot> getHotSpots(File logFile) {
         updateTreesSet(logFile);
-        List<TreesSet.HotSpot> hotSpots = currentTreesSet.getHotSpots();
-        isBusy.set(false);
-        return hotSpots;
+        return currentTreesSet.getHotSpots();
     }
 
-    public void updateLastTime() {
-        lastUpdate.set(System.currentTimeMillis());
+    public synchronized void updateLastTime() {
+        lastUpdate = System.currentTimeMillis();
     }
 
     @Nullable
-    public TreesPreview getCallTreesPreview(@Nullable File logFile, Filter filter) {
-        isBusy.set(true);
+    public synchronized TreesPreview getCallTreesPreview(@Nullable File logFile, Filter filter) {
         updateTreesSet(logFile);
-        TreesPreview treesPreview = currentTreesSet.getTreesPreview(filter);
-        isBusy.set(false);
-        return treesPreview;
+        return currentTreesSet.getTreesPreview(filter);
     }
 
     public enum TreeType {
