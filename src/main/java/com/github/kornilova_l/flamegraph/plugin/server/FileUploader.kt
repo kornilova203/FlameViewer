@@ -4,11 +4,14 @@ import com.github.kornilova_l.flamegraph.plugin.PluginFileManager
 import com.github.kornilova_l.flamegraph.plugin.converters.ProfilerToFlamegraphConverter
 import com.github.kornilova_l.flamegraph.plugin.converters.tryToConvertFileToFlamegraph
 import com.github.kornilova_l.flamegraph.plugin.server.trees.FileToCallTracesConverter
-import com.intellij.openapi.diagnostic.Logger.getInstance
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.nio.file.Paths
 
+private val partSize = 1_000_000 * 100 // 100MB
 
 class FileUploader {
-    private val LOG = getInstance(FileUploader::class.java)
     private val fileManager = PluginFileManager.getInstance()
     private val fileAccumulators = HashMap<String, FileAccumulator>()
 
@@ -20,65 +23,81 @@ class FileUploader {
      */
     fun upload(fileName: String, bytes: ByteArray, currentPart: Int, partsCount: Int) {
         synchronized(this) {
-            val fileAccumulator = fileAccumulators.computeIfAbsent(fileName, { FileAccumulator(partsCount) })
+            val fileAccumulator = fileAccumulators.computeIfAbsent(fileName, { FileAccumulator(fileName, partsCount) })
             fileAccumulator.add(bytes, currentPart - 1)
-            if (fileAccumulator.allFileReceived()) {
+            if (fileAccumulator.fullFileReceived()) {
                 /* here we are not interested if file will be saved/converted
                  * client will send a request to check if file was saved/converted */
-                val allBytes = fileAccumulator.getBytes()
+                val file = fileAccumulator.getFile()
+                fileAccumulators.remove(fileName)
                 if (ProfilerToFlamegraphConverter.getFileExtension(fileName) == "ser") {
-                    fileManager.serFileSaver.save(allBytes, fileName)
-                }
-                val tempFile = PluginFileManager.getInstance().tempFileSaver.save(bytes, fileName)
-                if (tempFile == null) {
-                    LOG.error("Cannot save file to temporal repository: $tempFile")
+                    /* move file to ser files */
+                    fileManager.serFileSaver.moveToDir(file, fileName)
                     return
                 }
-                val res = tryToConvertFileToFlamegraph(tempFile)
+                val res = tryToConvertFileToFlamegraph(file)
+                /* if res == true then flamegraph was already saved to another file. And it is save to file.delete() */
                 if (!res) { // if no converter was found
-                    val converterId = FileToCallTracesConverter.isSupported(tempFile)
+                    val converterId = FileToCallTracesConverter.isSupported(file)
                     if (converterId != null) { // if supported
-                        PluginFileManager.getInstance().saveUploadedFile(converterId, fileName, bytes)
+                        /* move file to needed directory. */
+                        PluginFileManager.getInstance().moveFileToUploadedFiles(converterId, fileName, file)
+                        return // do not delete file
                     }
                 }
-                tempFile.delete()
-                fileAccumulators.remove(fileName)
+                file.delete()
             }
         }
     }
 
     /**
      * IDEA server does not allow to upload big files
-     * so file is split and send by parts. Each part is 100MB.
+     * so file is split and send by bytes. Each part is 100MB.
      */
-    class FileAccumulator(partsCount: Int) {
-        private val parts = Array<ByteArray?>(partsCount, { null })
+    class FileAccumulator(private val fileName: String, partsCount: Int) {
+        private val receivedParts = BooleanArray(partsCount)
+        private var tempFile = PluginFileManager.getInstance().tempFileSaver
+                .save(ByteArray(0), fileName)!!
 
         /**
          * @param partIndex index of part [0, partsCount)
          */
-        fun add(bytes: ByteArray, partIndex: Int) {
-            parts[partIndex] = bytes
-        }
-
-        fun allFileReceived(): Boolean {
-            for (filePart in parts) {
-                if (filePart == null) {
-                    return false
+        fun add(newBytes: ByteArray, partIndex: Int) {
+            val newFile = PluginFileManager.getInstance().tempFileSaver
+                    .save(ByteArray(0), fileName + System.currentTimeMillis())!!
+            FileInputStream(tempFile).use { inputStream ->
+                FileOutputStream(newFile).use { outputStream ->
+                    for (i in 0 until partIndex) { // copy all bytes that are located before new part
+                        if (receivedParts[i]) { // if part was received
+                            copyOnePart(outputStream, inputStream)
+                        }
+                    }
+                    /* add new part to file */
+                    outputStream.write(newBytes)
+                    /* copy all other parts */
+                    for (i in partIndex + 1 until receivedParts.size) { // write parts that were previously received
+                        if (receivedParts[i]) { // if part was received
+                            copyOnePart(outputStream, inputStream)
+                        }
+                    }
                 }
             }
-            return true
+            receivedParts[partIndex] = true
+            tempFile.delete() // delete previous file
+            tempFile = newFile
         }
 
-        fun getBytes(): ByteArray {
-            val totalSize = parts.sumBy { it!!.size }
-            val bytes = ByteArray(totalSize)
-            var currentByte = 0
-            for (i in 0 until parts.size) {
-                System.arraycopy(parts[i], 0, bytes, currentByte, parts[i]!!.size)
-                currentByte += parts[i]!!.size
-            }
-            return bytes
+        private fun copyOnePart(outputStream: FileOutputStream, inputStream: FileInputStream) {
+            outputStream.write(inputStream.readBytes(partSize))
+        }
+
+        fun fullFileReceived(): Boolean = receivedParts.all { it } // all parts received
+
+        fun getFile(): File {
+            val parentDir = tempFile.parent
+            val fileWithOriginalName = Paths.get(parentDir.toString(), fileName).toFile()
+            tempFile.renameTo(fileWithOriginalName)
+            return fileWithOriginalName
         }
     }
 }

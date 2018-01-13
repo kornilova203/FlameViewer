@@ -3,8 +3,10 @@ package com.github.kornilova_l.flamegraph.plugin.server
 import com.github.kornilova_l.flamegraph.plugin.PluginFileManager
 import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase
 import org.jetbrains.ide.BuiltInServerManager
+import java.io.BufferedReader
 import java.io.DataOutputStream
 import java.io.File
+import java.io.FileReader
 import java.net.HttpURLConnection
 import java.net.URL
 import java.util.*
@@ -14,7 +16,7 @@ class FilesUploaderTest : LightPlatformCodeInsightFixtureTestCase() {
 
     fun testUploadSmallFiles() {
         PluginFileManager.getInstance().deleteAllUploadedFiles()
-        sendFile("small.ser", createBytes(1000))
+        sendFile("small.ser", ByteArray(1000))
         fileReceivedTest("small.ser", 1000)
     }
 
@@ -34,8 +36,16 @@ class FilesUploaderTest : LightPlatformCodeInsightFixtureTestCase() {
 
     fun testUploadBigFiles() {
         PluginFileManager.getInstance().deleteAllUploadedFiles()
-        sendFile("big.ser", ByteArray(bytesInMB * 150))
-        fileReceivedTest("big.ser", bytesInMB * 150)
+        val bytes = createBytes(bytesInMB * 250)
+        sendFile("big.ser", bytes)
+        var expectedFile = PluginFileManager.getInstance().tempFileSaver.save(bytes, "01_medium.ser")!!
+        fileReceivedTest("big.ser", expectedFile)
+
+        /* send parts in reversed order */
+        PluginFileManager.getInstance().deleteAllUploadedFiles()
+        sendFile("big.ser", bytes, true)
+        expectedFile = PluginFileManager.getInstance().tempFileSaver.save(bytes, "01_medium.ser")!!
+        fileReceivedTest("big.ser", expectedFile)
     }
 
     fun testJfrFileUpload() {
@@ -81,13 +91,17 @@ class FilesUploaderTest : LightPlatformCodeInsightFixtureTestCase() {
      * each line contains a number == number of current line
      */
     private fun createBytes(size: Int): ByteArray {
-        val bytesList = ArrayList<Byte>()
+        val bytes = ByteArray(size)
         var lineNumber = 0
-        while (bytesList.size < size) {
-            bytesList.addAll("$lineNumber\n".toByteArray().toList())
+        var currentSize = 0
+        while (currentSize < size) {
+            val newBytes = "$lineNumber. Some text that is needed to increase size of lines\n".toByteArray()
+            val newSize = Math.min(bytes.size, currentSize + newBytes.size)
+            System.arraycopy(newBytes, 0, bytes, currentSize, newSize - currentSize)
+            currentSize = newSize
             lineNumber++
         }
-        return ByteArray(size) { i -> bytesList[i] }
+        return bytes
     }
 
     private fun fileReceivedTest(fileName: String, fileSize: Int) {
@@ -99,6 +113,20 @@ class FilesUploaderTest : LightPlatformCodeInsightFixtureTestCase() {
     private fun fileReceivedTest(fileName: String, expectedFile: File) {
         val file = PluginFileManager.getInstance().getLogFile("uploaded-files", fileName)
         assertNotNull(file)
+        BufferedReader(FileReader(file)).use { reader1 ->
+            BufferedReader(FileReader(expectedFile)).use { reader2 ->
+                var line1 = reader1.readLine()
+                var line2 = reader2.readLine()
+                while (line1 != null && line2 != null) {
+                    assertEquals(line2, line1)
+                    line1 = reader1.readLine()
+                    line2 = reader2.readLine()
+                }
+                /* assert the same number of lines */
+                assertNull(line1)
+                assertNull(line2)
+            }
+        }
         assertEquals(file!!.readLines(), expectedFile.readLines())
     }
 
@@ -106,13 +134,14 @@ class FilesUploaderTest : LightPlatformCodeInsightFixtureTestCase() {
         private val bytesInMB = 1_000_000
         private val megabytesInOnePart = 100
 
-        fun sendFile(fileName: String, bytes: ByteArray) {
+        fun sendFile(fileName: String, bytes: ByteArray, reverseOrder: Boolean = false) {
             var partsCount = bytes.size / (bytesInMB * megabytesInOnePart)
             if (bytes.size % (bytesInMB * megabytesInOnePart) != 0) {
                 partsCount++
             }
             /* do not pause in following block while debugging. It may break connection */
-            for (i in 0 until partsCount) {
+            val list = if (reverseOrder) partsCount - 1 downTo 0 else 0 until partsCount
+            for (i in list) {
                 println("request")
                 //Create connection
                 val url = URL("http://localhost:${BuiltInServerManager.getInstance().port}/flamegraph-profiler/upload-file")

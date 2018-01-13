@@ -382,7 +382,7 @@ public class PluginFileManager {
         }
     }
 
-    public void saveUploadedFile(@NotNull String converterId, @NotNull String fileName, @NotNull byte[] bytes) {
+    public void moveFileToUploadedFiles(@NotNull String converterId, @NotNull String fileName, @NotNull File file) {
         File dir = Paths.get(logDirPath.toString(), UPLOADED_FILES, converterId).toFile();
         if (!dir.exists()) {
             boolean res = dir.mkdir();
@@ -392,10 +392,9 @@ public class PluginFileManager {
             }
         }
         File newFile = Paths.get(dir.toString(), fileName).toFile();
-        try (OutputStream outputStream = new FileOutputStream(newFile)) {
-            outputStream.write(bytes);
-        } catch (IOException e) {
-            e.printStackTrace();
+        boolean success = file.renameTo(newFile);
+        if (!success) {
+            LOG.error("Cannot move file " + file + " to " + converterId + " directory.");
         }
     }
 
@@ -459,6 +458,17 @@ public class PluginFileManager {
                 LOG.error(e);
             }
             return null;
+        }
+
+        @Nullable
+        public File moveToDir(@NotNull File file, @NotNull String newFileName) {
+            File newFile = Paths.get(dir.toString(), newFileName).toFile();
+            boolean success = file.renameTo(newFile);
+            if (!success) {
+                LOG.error("Cannot move file " + file);
+                return null;
+            }
+            return newFile;
         }
     }
 
