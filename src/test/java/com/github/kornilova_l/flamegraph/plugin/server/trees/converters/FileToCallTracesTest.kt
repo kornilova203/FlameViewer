@@ -12,8 +12,8 @@ import java.io.File
 import java.net.HttpURLConnection
 import java.net.URL
 
-class FlamegraphToCallTracesTest : LightPlatformCodeInsightFixtureTestCase() {
-    fun testCallTracesBuilding() {
+class FileToCallTracesTest : LightPlatformCodeInsightFixtureTestCase() {
+    fun testFlamegraph() {
         PluginFileManager.getInstance().deleteAllUploadedFiles()
         val flamegraphFile = File("src/test/resources/StacksOCTreeBuilderTest/test_data01.txt")
         sendFile(flamegraphFile.name, flamegraphFile.readBytes())
@@ -21,6 +21,16 @@ class FlamegraphToCallTracesTest : LightPlatformCodeInsightFixtureTestCase() {
         assertNotNull(bytes)
         TestHelper.compare(TreeProtos.Tree.parseFrom(ByteArrayInputStream(bytes)).toString(),
                 File("src/test/resources/StacksOCTreeBuilderTest/result01.txt"))
+    }
+
+    fun testYourkitCsv() {
+        PluginFileManager.getInstance().deleteAllUploadedFiles()
+        val yourkitCsvFile = File("src/test/resources/file_to_call_traces_converter/yourkit_csv/simple.csv")
+        sendFile(yourkitCsvFile.name, yourkitCsvFile.readBytes())
+        val bytes = sendRequestForCallTraces(yourkitCsvFile.name)
+        assertNotNull(bytes)
+        TestHelper.compare(TreeProtos.Tree.parseFrom(ByteArrayInputStream(bytes)).toString(),
+                File("src/test/resources/file_to_call_traces_converter/yourkit_csv/expected/simple.txt"))
     }
 
     private fun sendRequestForCallTraces(fileName: String): ByteArray {

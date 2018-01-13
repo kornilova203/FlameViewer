@@ -1,15 +1,18 @@
-package com.github.kornilova_l.flamegraph.plugin.converters.yourkit
+package com.github.kornilova_l.flamegraph.plugin.server.trees.converters
 
 import com.github.kornilova_l.flamegraph.plugin.converters.ProfilerToFlamegraphConverter
-import com.github.kornilova_l.yourkit_to_flamegraph.Converter
-import java.io.BufferedReader
-import java.io.File
-import java.io.FileReader
+import com.github.kornilova_l.flamegraph.plugin.server.trees.FileToCallTracesConverter
+import com.github.kornilova_l.flamegraph.proto.TreeProtos
 
+import java.io.*
 
-class YourkitConverter : ProfilerToFlamegraphConverter() {
+class YourkitCsvToCallTracesConverter : FileToCallTracesConverter() {
+    override fun getId(): String {
+        return "yourkit"
+    }
+
     override fun isSupported(file: File): Boolean {
-        if (getFileExtension(file.name) != "csv") {
+        if (ProfilerToFlamegraphConverter.getFileExtension(file.name) != "csv") {
             return false
         }
         BufferedReader(FileReader(file)).use { reader ->
@@ -49,5 +52,7 @@ class YourkitConverter : ProfilerToFlamegraphConverter() {
                 openBracketPos < closeBracketPos
     }
 
-    override fun convert(file: File): Map<String, Int> = Converter(file).getStacks()
+    override fun convert(file: File): TreeProtos.Tree {
+        return TreeProtos.Tree.newBuilder().build()
+    }
 }

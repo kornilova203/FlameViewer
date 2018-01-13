@@ -1,13 +1,15 @@
 package com.github.kornilova_l.flamegraph.plugin;
 
-import com.github.kornilova_l.flamegraph.plugin.converters.ProfilerToFlamegraphConverter;
 import com.intellij.openapi.application.PathManager;
 import com.intellij.openapi.diagnostic.Logger;
 import io.netty.handler.codec.http.QueryStringDecoder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Path;
@@ -23,13 +25,13 @@ import static com.github.kornilova_l.flamegraph.plugin.server.ProfilerHttpReques
 /**
  * IDEA system dir
  * |-- flamegraph-profiler
- *   |-- configuration // where configuration is exported after
- *   |-- log
- *     |-- deleted // deleted files temporary stored in this dir (they are returned back if `undo` is pressed)
- *     |-- uploaded-files
- *       |-- flamegraph // uploaded files in flamegraph format
- *       |-- not-converted // files are stored here before conversion
- *       \-- ser // uploaded .ser files
+ * |-- configuration // where configuration is exported after
+ * |-- log
+ * |-- deleted // deleted files temporary stored in this dir (they are returned back if `undo` is pressed)
+ * |-- uploaded-files
+ * |-- flamegraph // uploaded files in flamegraph format
+ * |-- not-converted // files are stored here before conversion
+ * \-- ser // uploaded .ser files
  */
 public class PluginFileManager {
     private static final Logger LOG = Logger.getInstance(PluginFileManager.class);
@@ -165,7 +167,7 @@ public class PluginFileManager {
     }
 
     public synchronized File createLogFile(@NotNull String projectName, @NotNull String configurationName) {
-        Path logDir = getLogDirPath(projectName);
+        File logDir = getLogDirPath(projectName);
         Path logFile = Paths.get(logDir.toString(),
                 configurationName + "-" + new SimpleDateFormat("yyyy-MM-dd-HH_mm_ss").format(new Date()) + ".ser");
         return new File(logFile.toString());
@@ -173,7 +175,7 @@ public class PluginFileManager {
 
     @NotNull
     public synchronized List<FileNameAndDate> getFileNameList(@NotNull String projectName) {
-        File projectLogDir = new File(getLogDirPath(projectName).toString());
+        File projectLogDir = getLogDirPath(projectName);
         if (!Objects.equals(projectName, UPLOADED_FILES)) {
             return getFileNameList(projectLogDir);
         }
@@ -210,28 +212,47 @@ public class PluginFileManager {
      * If you have a file name you should use {@link #getLogDirPath(String, String)}
      */
     @NotNull
-    private Path getLogDirPath(@NotNull String projectName) {
+    private File getLogDirPath(@NotNull String projectName) {
         Path path = Paths.get(logDirPath.toString(), projectName);
         createDirIfNotExist(path);
-        return path;
+        return path.toFile();
     }
 
     /**
      * @param fileName file name is used to get an extension in case if project is UPLOADED_FILES dir
      */
-    @NotNull
-    private Path getLogDirPath(@NotNull String projectName, @NotNull String fileName) {
-        Path projectDirPath;
+    @Nullable
+    private File getLogDirPath(@NotNull String projectName, @NotNull String fileName) {
         if (!Objects.equals(projectName, UPLOADED_FILES)) {
-            projectDirPath = getLogDirPath(projectName);
-        } else {
-            if (Objects.equals(ProfilerToFlamegraphConverter.Companion.getFileExtension(fileName), "ser")) {
-                projectDirPath = serFiles;
-            } else {
-                projectDirPath = flamegraphFiles;
+            return getLogDirPath(projectName);
+        }
+        return findFileInUploadedFiles(fileName);
+    }
+
+    /**
+     * @return parent directory of file. null if file was not found
+     */
+    @Nullable
+    private File findFileInUploadedFiles(@NotNull String fileName) {
+        File uploadedFilesDir = Paths.get(logDirPath.toString(), UPLOADED_FILES).toFile();
+        File[] subDirs = uploadedFilesDir.listFiles();
+        if (subDirs == null) {
+            return null;
+        }
+        for (File subDir : subDirs) {
+            if (subDir.isDirectory()) {
+                File[] files = subDir.listFiles();
+                if (files == null) {
+                    return null;
+                }
+                for (File file : files) {
+                    if (file.getName().equals(fileName)) {
+                        return subDir;
+                    }
+                }
             }
         }
-        return projectDirPath;
+        return null;
     }
 
     @Nullable
@@ -247,9 +268,11 @@ public class PluginFileManager {
 
     @Nullable
     public synchronized File getLogFile(String projectName, String fileName) {
-        Path dirPath = getLogDirPath(projectName, fileName);
-
-        File file = new File(Paths.get(dirPath.toString(), fileName).toString());
+        File parentDir = getLogDirPath(projectName, fileName);
+        if (parentDir == null) {
+            return null;
+        }
+        File file = Paths.get(parentDir.toString(), fileName).toFile();
         if (file.exists()) {
             return file;
         }
@@ -349,9 +372,14 @@ public class PluginFileManager {
             LOG.debug("Undo delete. Cannot find file to undo delete: " + fileName);
             return;
         }
-        Path projectDirPath = getLogDirPath(projectName, fileName);
-        //noinspection ResultOfMethodCallIgnored
-        file.renameTo(Paths.get(projectDirPath.toString(), fileName).toFile());
+        File projectDirPath = getLogDirPath(projectName, fileName);
+        if (projectDirPath == null) {
+            return;
+        }
+        boolean res = file.renameTo(Paths.get(projectDirPath.toString(), fileName).toFile());
+        if (!res) {
+            LOG.warn("Cannot move file back from temp directory. File: " + fileName);
+        }
     }
 
     public void saveUploadedFile(@NotNull String converterId, @NotNull String fileName, @NotNull byte[] bytes) {
