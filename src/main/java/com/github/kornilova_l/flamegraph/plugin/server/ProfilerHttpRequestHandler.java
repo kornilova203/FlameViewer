@@ -157,9 +157,7 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
     private void sendStatic(ChannelHandlerContext context,
                             String fileUri,
                             String contentType) throws IOException {
-        LOG.info("Got filename: " + fileUri);
         String filePath = fileManager.getStaticFilePath(fileUri);
-        LOG.info("This file will be sent: " + filePath);
         try (InputStream inputStream = new FileInputStream(new File(filePath))) {
             sendBytes(context, contentType, IOUtils.toByteArray(inputStream));
         }
