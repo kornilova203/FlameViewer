@@ -50,7 +50,7 @@ public class AccumulativeTreesHelper {
                 addTimeToNode(childNodeBuilder, time);
                 return childNodeBuilder;
             }
-            if (comparableName.compareTo(getComparableName(children.get(i))) < 0) { // if insert between
+            if (comparableName.compareTo(getComparableName(childNodeBuilder)) < 0) { // if insert between
                 return addNodeToList(nodeBuilder, className, methodName, description, time, i);
             }
         }

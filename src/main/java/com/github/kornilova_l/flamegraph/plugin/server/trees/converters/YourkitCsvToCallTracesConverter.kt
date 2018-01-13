@@ -5,11 +5,12 @@ import com.github.kornilova_l.flamegraph.plugin.server.trees.FileToCallTracesCon
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TreesSet.setTreeWidth
 import com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumulative_trees.AccumulativeTreesHelper
 import com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumulative_trees.AccumulativeTreesHelper.setNodesOffsetRecursively
-import com.github.kornilova_l.flamegraph.proto.TreeProtos
+import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node
 import java.io.BufferedReader
 import java.io.File
 import java.io.FileReader
+import java.util.*
 
 class YourkitCsvToCallTracesConverter : FileToCallTracesConverter() {
     override fun getId(): String {
@@ -57,26 +58,16 @@ class YourkitCsvToCallTracesConverter : FileToCallTracesConverter() {
                 openBracketPos < closeBracketPos
     }
 
-    override fun convert(file: File): TreeProtos.Tree {
+    override fun convert(file: File): Tree {
         val tree = createEmptyTree()
         val currentStack = ArrayList<Node.Builder>()
         var maxDepth = 0
         currentStack.add(tree.baseNodeBuilder)
-        file.forEachLine { line ->
-            val values = line.split("\",\"")
-            if (values[0].contains('(')) {
-                val time = getTime(values)
-                val newDepth = getDepth(values) - 1 // first call has depth 1
-                val name = getName(values)
-                while (newDepth <= currentStack.size - 1) { // if some calls are finished
-                    currentStack.removeAt(currentStack.size - 1)
-                }
-                val newNode = AccumulativeTreesHelper.updateNodeList(currentStack[currentStack.size - 1], getClassName(name),
-                        getMethodName(name), getDescription(name), time)
-                currentStack.add(newNode)
-                if (currentStack.size - 1 > maxDepth) {
-                    maxDepth = currentStack.size - 1
-                }
+        BufferedReader(FileReader(file), 1000 * 8192).use { reader ->
+            var line = reader.readLine()
+            while (line != null) {
+                maxDepth = processLine(line, currentStack, maxDepth)
+                line = reader.readLine()
             }
         }
         tree.depth = maxDepth
@@ -85,12 +76,59 @@ class YourkitCsvToCallTracesConverter : FileToCallTracesConverter() {
         return tree.build()
     }
 
-    private fun getDescription(name: String): String {
-        return name.substring(name.indexOf('('), name.length)
+    private fun processLine(line: String,
+                            currentStack: ArrayList<Node.Builder>,
+                            maxDepth: Int): Int {
+        val delimPos = line.indexOf("\",\"")
+        if (delimPos == -1) {
+            return maxDepth
+        }
+        var name = line.substring(1, delimPos) // remove prefix '"'
+        if (!name.contains('(')) {
+            return maxDepth
+        }
+        var time = -1L
+        var newDepth = -1
+        try {
+            /* find next delimiter */
+            for (i in delimPos + 1 until line.length - 2) {
+                if (line[i] == '"' && line[i + 1] == ',' && line[i + 2] == '"') {
+                    time = java.lang.Long.parseLong(line.substring(delimPos + 3, i))
+                    newDepth = Integer.parseInt(line.substring(i + 3, line.length - 1))
+                    break
+                }
+            }
+        } catch (e: NumberFormatException) {
+            e.printStackTrace()
+        }
+        if (time == -1L || newDepth == -1) {
+            return maxDepth
+        }
+        newDepth -= 1 // after this depth of first call is 1
+        name = getCleanName(name)
+        while (newDepth <= currentStack.size - 1) { // if some calls are finished
+            currentStack.removeAt(currentStack.size - 1)
+        }
+        val parametersPos = name.indexOf('(')
+        val newNode = AccumulativeTreesHelper.updateNodeList(
+                currentStack[currentStack.size - 1],
+                getClassName(name, parametersPos),
+                getMethodName(name, parametersPos),
+                getDescription(name, parametersPos),
+                time
+        )
+        currentStack.add(newNode)
+        if (currentStack.size - 1 > maxDepth) {
+            return currentStack.size - 1
+        }
+        return maxDepth
     }
 
-    private fun getClassName(name: String): String {
-        val parametersPos = name.indexOf('(')
+    private fun getDescription(name: String, parametersPos: Int): String {
+        return name.substring(parametersPos, name.length)
+    }
+
+    private fun getClassName(name: String, parametersPos: Int): String {
         var lastDot = 0
         for (i in 0 until parametersPos) {
             if (name[i] == '.') {
@@ -103,8 +141,7 @@ class YourkitCsvToCallTracesConverter : FileToCallTracesConverter() {
         return name.substring(0, lastDot)
     }
 
-    private fun getMethodName(name: String): String {
-        val parametersPos = name.indexOf('(')
+    private fun getMethodName(name: String, parametersPos: Int): String {
         var lastDot = -1
         for (i in 0 until parametersPos) {
             if (name[i] == '.') {
@@ -114,24 +151,15 @@ class YourkitCsvToCallTracesConverter : FileToCallTracesConverter() {
         return name.substring(lastDot + 1, parametersPos)
     }
 
-    private fun createEmptyTree(): TreeProtos.Tree.Builder {
-        val tree = TreeProtos.Tree.newBuilder()
+    private fun createEmptyTree(): Tree.Builder {
+        val tree = Tree.newBuilder()
         tree.setBaseNode(Node.newBuilder())
         return tree
     }
 
-    private fun getName(values: List<String>): String {
-        val name = values[0].removePrefix("\"")
+    private fun getCleanName(name: String): String {
         val openBracketPos = name.lastIndexOf('(')
         val lastSpacePos = name.substring(0, openBracketPos).lastIndexOf(' ') // remove parameters because they may contain spaces
         return name.substring(lastSpacePos + 1, name.length)
-    }
-
-    private fun getDepth(values: List<String>): Int {
-        return Integer.parseInt(values[2].removeSuffix("\""))
-    }
-
-    private fun getTime(values: List<String>): Long {
-        return java.lang.Long.parseLong(values[1])
     }
 }
