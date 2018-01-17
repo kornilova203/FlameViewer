@@ -37,7 +37,6 @@ repositories {
 configurations {
     intellij.updateSinceUntilBuild = false
     intellij.downloadSources = false
-    intellij.version = "172.3317.76"
     intellij.pluginName = "FlamegraphProfiler"
 }
 
