@@ -24,7 +24,9 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.xdebugger.ui.DebuggerColors;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class LineMarkersHolder extends AbstractProjectComponent {
     private static final Logger LOG = Logger.getInstance(LineMarkersHolder.class);
@@ -40,7 +42,14 @@ public class LineMarkersHolder extends AbstractProjectComponent {
         return (MarkupModelEx) DocumentMarkupModel.forDocument(document, project, true);
     }
 
-    public void setIcon(PsiMethod psiMethod, MarkupModelEx markupModel) {
+    /**
+     * For test
+     */
+    public int getLineMarkersCount() {
+        return rangeHighlighters.size();
+    }
+
+    public synchronized void setIcon(PsiMethod psiMethod, MarkupModelEx markupModel) {
         try {
             RangeHighlighter highlighter = markupModel.addRangeHighlighter(
                     psiMethod.getTextOffset(),
@@ -62,7 +71,11 @@ public class LineMarkersHolder extends AbstractProjectComponent {
         }
     }
 
-    public void removeIconIfPresent(PsiMethod method, MarkupModelEx markupModel) {
+    /**
+     * Before calling this method all PsiMethod instances in {@link #rangeHighlighters}
+     * should be valid. To remove invalid instances call {@link #removeInvalidMethods()}
+     */
+    public synchronized void removeIconIfPresent(PsiMethod method, MarkupModelEx markupModel) {
         for (PsiMethod methodWithIcon : rangeHighlighters.keySet()) {
             /* PsiMethod does not have equals() and hashCode() method
              * so we check all methods in set by isEquivalentTo() */
@@ -90,6 +103,7 @@ public class LineMarkersHolder extends AbstractProjectComponent {
 
     void updateMethodMarker(PsiMethod psiMethod, MarkupModelEx markupModel) {
         DumbService.getInstance(myProject).runWhenSmart(() -> {
+            removeInvalidMethods();
             if (configuration.isMethodInstrumented(PluginConfigManager.newMethodConfig(psiMethod))) {
                 if (!hasIcon(psiMethod)) {
                     setIcon(psiMethod, markupModel);
@@ -100,11 +114,28 @@ public class LineMarkersHolder extends AbstractProjectComponent {
         });
     }
 
+    public synchronized void removeInvalidMethods() {
+        List<PsiMethod> invalidMethods = null;
+        for (PsiMethod psiMethod : rangeHighlighters.keySet()) {
+            if (!psiMethod.isValid()) {
+                if (invalidMethods == null) {
+                    invalidMethods = new ArrayList<>();
+                }
+                invalidMethods.add(psiMethod);
+            }
+        }
+        if (invalidMethods != null) {
+            for (PsiMethod invalidMethod : invalidMethods) {
+                rangeHighlighters.remove(invalidMethod);
+            }
+        }
+    }
+
     /**
      * @return true if there is an icon on gutter beside the method
      */
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    public boolean hasIcon(PsiMethod psiMethod) {
+    public synchronized boolean hasIcon(PsiMethod psiMethod) {
         for (PsiMethod methodWithIcon : rangeHighlighters.keySet()) {
             /* PsiMethod does not have equals() and hashCode() method
              * so we check all methods in set by isEquivalentTo() */
@@ -134,7 +165,7 @@ public class LineMarkersHolder extends AbstractProjectComponent {
     }
 
 
-    public void updateOpenedDocuments() {
+    public synchronized void updateOpenedDocuments() {
         for (Editor editor : EditorFactory.getInstance().getAllEditors()) {
             if (editor.getProject() != myProject) {
                 continue;
@@ -147,7 +178,8 @@ public class LineMarkersHolder extends AbstractProjectComponent {
         }
     }
 
-    public void removeAllIcons(@NotNull VirtualFile file) {
+    public synchronized void removeAllIcons(@NotNull VirtualFile file) {
+        removeInvalidMethods();
         DumbService.getInstance(myProject).runWhenSmart(() -> {
             PsiFile[] psiFiles = FilenameIndex.getFilesByName(
                     myProject,

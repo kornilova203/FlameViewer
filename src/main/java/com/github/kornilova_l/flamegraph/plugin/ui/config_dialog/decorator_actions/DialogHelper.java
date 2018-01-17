@@ -3,7 +3,6 @@ package com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.decorator_acti
 import com.github.kornilova_l.flamegraph.configuration.Configuration;
 import com.github.kornilova_l.flamegraph.configuration.MethodConfig;
 import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.ConfigCheckboxTree;
-import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.ExcludedMethodForm;
 import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.method_form.MethodFormManager;
 import com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.method_form.MyTableView;
 import com.intellij.openapi.ui.ValidationInfo;
@@ -26,10 +25,15 @@ public class DialogHelper {
         return tablePanel;
     }
 
-    static void saveConfig(ExcludedMethodForm excludedMethodForm, boolean saveRetVal, LinkedList<MethodConfig.Parameter> parameters, ConfigCheckboxTree tree, Configuration tempConfig) {
+    public static void saveConfig(@NotNull String className,
+                                  @NotNull String methodName,
+                                  boolean saveRetVal,
+                                  @NotNull List<MethodConfig.Parameter> parameters,
+                                  ConfigCheckboxTree tree,
+                                  Configuration tempConfig) {
         MethodConfig methodConfig = new MethodConfig(
-                excludedMethodForm.classNamePatternTextField.getText(),
-                excludedMethodForm.methodNamePatternTextField.getText(),
+                className,
+                methodName,
                 parameters,
                 true,
                 saveRetVal

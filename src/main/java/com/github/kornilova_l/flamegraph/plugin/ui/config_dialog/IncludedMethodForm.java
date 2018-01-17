@@ -32,9 +32,6 @@ public class IncludedMethodForm {
         mainPanel.add(saveReturnValueCheckBox, BorderLayout.SOUTH);
     }
 
-    /**
-     * @noinspection ALL
-     */
     public JComponent $$$getRootComponent$$$() {
         return mainPanel;
     }

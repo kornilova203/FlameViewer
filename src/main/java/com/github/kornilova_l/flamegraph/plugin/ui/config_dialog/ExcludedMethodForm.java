@@ -50,9 +50,6 @@ public class ExcludedMethodForm {
         label2.setLabelFor(methodNamePatternTextField);
     }
 
-    /**
-     * @noinspection ALL
-     */
     public JComponent $$$getRootComponent$$$() {
         return mainPanel;
     }

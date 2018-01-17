@@ -298,7 +298,9 @@ public class ConfigCheckboxTree extends CheckboxTree {
     }
 
     public MethodTreeNode addNode(MethodConfig methodConfig, @NotNull List<MethodConfig> methodConfigs) {
-        return addMethodNode(methodConfig, methodConfigs);
+        MethodTreeNode node = addMethodNode(methodConfig, methodConfigs);
+        TreeUtil.expandAll(this);
+        return node;
     }
 
     public void removeNode(@NotNull ConfigCheckedTreeNode treeNode) {

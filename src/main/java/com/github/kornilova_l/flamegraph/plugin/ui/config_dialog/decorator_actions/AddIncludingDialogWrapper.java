@@ -60,7 +60,8 @@ public class AddIncludingDialogWrapper extends DialogWrapper {
             super.doOKAction();
             return;
         }
-        DialogHelper.saveConfig(form.excludedMethodForm,
+        DialogHelper.saveConfig(form.excludedMethodForm.classNamePatternTextField.getText(),
+                form.excludedMethodForm.methodNamePatternTextField.getText(),
                 form.saveReturnValueCheckBox.isSelected(),
                 parameters,
                 tree,

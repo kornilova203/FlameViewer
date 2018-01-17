@@ -144,4 +144,18 @@ public class ChangeConfigurationDialog extends DialogWrapper {
         }
         return validationInfos;
     }
+
+    /**
+     * For test
+     */
+    Configuration getTempConfiguration() {
+        return tempConfiguration;
+    }
+
+    /**
+     * For test
+     */
+    Configuration getTrueConfiguration() {
+        return trueConfiguration;
+    }
 }

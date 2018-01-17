@@ -2,6 +2,7 @@ package com.github.kornilova_l.flamegraph.configuration;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
@@ -15,15 +16,19 @@ public class MethodConfig implements Comparable<MethodConfig>, Cloneable {
     @NotNull
     private String classPatternString = "";
     @NotNull
-    private List<Parameter> parameters = new LinkedList<>();
+    private List<Parameter> parameters;
     private boolean isEnabled = true;
     private boolean saveReturnValue = false;
 
     private Pattern classPattern;
     private Pattern methodPattern;
 
+    /**
+     * Constructor without parameters for PersistentStateComponent
+     */
     @SuppressWarnings("unused")
     public MethodConfig() {
+        parameters = new ArrayList<>();
     }
 
     public MethodConfig(@NotNull String classPatternString,
