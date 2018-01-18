@@ -62,6 +62,10 @@ public abstract class TreesSet {
      */
     public static void setTreeWidth(Tree.Builder treeBuilder) {
         Node.Builder baseNode = treeBuilder.getBaseNodeBuilder();
+        if (baseNode.getNodesCount() == 0) { // if tree is empty
+            treeBuilder.setWidth(0);
+            return;
+        }
         Node.Builder lastNode = baseNode.getNodesBuilder(baseNode.getNodesCount() - 1);
         treeBuilder.setWidth(
                 lastNode.getOffset() + lastNode.getWidth()

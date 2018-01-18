@@ -13,7 +13,9 @@ import org.junit.Test;
 
 import java.io.File;
 
+import static com.github.kornilova_l.flamegraph.plugin.server.trees.TreesSet.setTreeWidth;
 import static com.github.kornilova_l.flamegraph.plugin.server.trees.generate_test_data.TestHelper.generateSerFile;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -130,5 +132,29 @@ public class SerTreesSetTest {
         assertNotNull(treesPreview);
         TestHelper.compare(treesPreview.toString(),
                 new File("src/test/resources/expected/" + fileName + "-treesPreview.txt"));
+    }
+
+    @Test
+    public void setTreeWidthTest() {
+        Tree.Builder tree = Tree.newBuilder();
+        tree.setBaseNode(Tree.Node.newBuilder());
+        Tree.Node.Builder baseNode = tree.getBaseNodeBuilder();
+
+        Tree.Node.Builder node = Tree.Node.newBuilder()
+                .setOffset(10)
+                .setWidth(20);
+        baseNode.addNodes(node);
+
+        setTreeWidth(tree);
+
+        assertEquals(30, tree.getWidth());
+
+        /* Empty tree */
+        tree = Tree.newBuilder();
+        tree.setBaseNode(Tree.Node.newBuilder());
+
+        setTreeWidth(tree);
+
+        assertEquals(0, tree.getWidth());
     }
 }
