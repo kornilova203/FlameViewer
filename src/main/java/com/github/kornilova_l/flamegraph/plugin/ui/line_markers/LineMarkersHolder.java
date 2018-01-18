@@ -75,7 +75,7 @@ public class LineMarkersHolder extends AbstractProjectComponent {
 
     /**
      * Before calling this method all PsiMethod instances in {@link #rangeHighlighters}
-     * should be valid. To remove invalid instances call {@link #removeInvalidMethods()}
+     * should be valid. To remove invalid instances call {@link #removeInvalidMethods(MarkupModelEx)}
      */
     public synchronized void removeIconIfPresent(PsiMethod method, MarkupModelEx markupModel) {
         for (PsiMethod methodWithIcon : rangeHighlighters.keySet()) {
@@ -105,7 +105,7 @@ public class LineMarkersHolder extends AbstractProjectComponent {
 
     void updateMethodMarker(PsiMethod psiMethod, MarkupModelEx markupModel) {
         DumbService.getInstance(myProject).runWhenSmart(() -> {
-            removeInvalidMethods();
+            removeInvalidMethods(markupModel);
             if (configuration.isMethodInstrumented(getClassName(psiMethod), getMethodName(psiMethod),
                     getParametersTypesList(psiMethod.getParameterList().getParameters()))) {
                 if (!hasIcon(psiMethod)) {
@@ -117,7 +117,7 @@ public class LineMarkersHolder extends AbstractProjectComponent {
         });
     }
 
-    public synchronized void removeInvalidMethods() {
+    public synchronized void removeInvalidMethods(MarkupModelEx markupModel) {
         List<PsiMethod> invalidMethods = null;
         for (PsiMethod psiMethod : rangeHighlighters.keySet()) {
             if (!psiMethod.isValid()) {
@@ -129,6 +129,12 @@ public class LineMarkersHolder extends AbstractProjectComponent {
         }
         if (invalidMethods != null) {
             for (PsiMethod invalidMethod : invalidMethods) {
+                try {
+                    markupModel.removeHighlighter(rangeHighlighters.get(invalidMethod));
+                } catch (AssertionError ignored) {
+                    /* Method is thrown if range is outdated.
+                     * It means line marker was already removed. */
+                }
                 rangeHighlighters.remove(invalidMethod);
             }
         }
@@ -182,7 +188,6 @@ public class LineMarkersHolder extends AbstractProjectComponent {
     }
 
     public synchronized void removeAllIcons(@NotNull VirtualFile file) {
-        removeInvalidMethods();
         DumbService.getInstance(myProject).runWhenSmart(() -> {
             PsiFile[] psiFiles = FilenameIndex.getFilesByName(
                     myProject,
@@ -196,6 +201,7 @@ public class LineMarkersHolder extends AbstractProjectComponent {
             if (document == null) {
                 return;
             }
+            removeInvalidMethods(getMarkupModel(document, myProject));
             removeAllIcons(psiFile, document);
         });
     }

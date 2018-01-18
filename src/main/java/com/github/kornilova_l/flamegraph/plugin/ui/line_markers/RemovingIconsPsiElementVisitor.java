@@ -19,7 +19,7 @@ public class RemovingIconsPsiElementVisitor extends UpdatingPsiElementVisitor {
             return;
         }
         if (element instanceof PsiMethod) {
-            lineMarkersHolder.removeInvalidMethods();
+            lineMarkersHolder.removeInvalidMethods(markupModel);
             lineMarkersHolder.removeIconIfPresent((PsiMethod) element, markupModel);
             return;
         }
