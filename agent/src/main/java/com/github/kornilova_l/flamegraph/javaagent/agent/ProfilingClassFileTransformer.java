@@ -34,7 +34,9 @@ class ProfilingClassFileTransformer implements ClassFileTransformer {
                             ProtectionDomain protectionDomain,
                             byte[] classfileBuffer) {
         if (!className.startsWith("com/github/kornilova_l/flamegraph/javaagent") &&
-                !className.startsWith("com/github/kornilova_l/flamegraph/proxy")) { // exclude classes of agent
+                !className.startsWith("com/github/kornilova_l/flamegraph/proxy") &&
+                !className.startsWith("com/github/kornilova_l/flamegraph/proto") &&
+                !className.startsWith("com/github/kornilova_l/libs/com/google/protobuf")) { // exclude classes of agent
             List<MethodConfig> methodConfigs = configurationManager.findIncludingConfigs(className, loader == null);
             if (methodConfigs.size() != 0) {
                 ClassReader cr = new ClassReader(classfileBuffer);
