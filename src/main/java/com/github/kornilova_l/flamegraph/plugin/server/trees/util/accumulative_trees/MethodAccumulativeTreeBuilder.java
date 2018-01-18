@@ -16,6 +16,9 @@ public class MethodAccumulativeTreeBuilder implements TreeBuilder {
     private Tree.Node.Builder wantedMethodNode;
     private int maxDepth = 0;
 
+    /**
+     * @param outgoingTree is needed to calculate time
+     */
     public MethodAccumulativeTreeBuilder(Tree sourceTree,
                                          Tree outgoingTree,
                                          String className,
@@ -42,8 +45,21 @@ public class MethodAccumulativeTreeBuilder implements TreeBuilder {
      */
     private void setTimePercent(Tree outgoingTree) {
         treeBuilder.getTreeInfoBuilder().setTimePercent(
-                treeBuilder.getWidth() / (float) outgoingTree.getWidth()
+                calculateTimeOfMethodRecursively(outgoingTree.getBaseNode()) / (float) outgoingTree.getWidth()
         );
+    }
+
+    private long calculateTimeOfMethodRecursively(Tree.Node node) {
+        if (AccumulativeTreesHelper.isSameMethod(wantedMethodNode, node.getNodeInfo().getClassName(), node.getNodeInfo().getMethodName(),
+                node.getNodeInfo().getDescription())) {
+            /* do not go deeper. We do not want to add up time of recursive calls */
+            return node.getWidth();
+        }
+        long time = 0;
+        for (Tree.Node child : node.getNodesList()) {
+            time += calculateTimeOfMethodRecursively(child);
+        }
+        return time;
     }
 
     public Tree getTree() {
