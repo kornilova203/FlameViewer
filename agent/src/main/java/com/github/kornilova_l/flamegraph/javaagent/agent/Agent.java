@@ -40,8 +40,9 @@ public class Agent {
 
         try {
             for (Class clazz : inst.getAllLoadedClasses()) {
-                if (!clazz.getName().contains("com.github.kornilova_l.flamegraph.javaagent") &&
-                        !clazz.getName().contains("com.github.kornilova_l.flamegraph.proxy")) {
+                /* we may want to instrument some classes that were loaded by bootstrap
+                 * before agent was loaded. */
+                if (clazz.getClassLoader() == null) { // if was loaded by bootstrap
                     List<MethodConfig> methodConfigs = configurationManager
                             .findIncludingConfigs(clazz.getName(), true);
                     if (methodConfigs.size() != 0) {
