@@ -2,6 +2,7 @@ package com.github.kornilova_l.flamegraph.plugin.server.trees;
 
 import com.github.kornilova_l.flamegraph.plugin.PluginFileManager;
 import com.github.kornilova_l.flamegraph.plugin.converters.ProfilerToFlamegraphConverter;
+import com.github.kornilova_l.flamegraph.plugin.server.trees.TreesSet.HotSpot;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.converters.flamegraph_format_trees.TreesSetImpl;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees.SerTreesSet;
 import com.github.kornilova_l.flamegraph.proto.TreeProtos;
@@ -17,6 +18,7 @@ import java.util.Objects;
 public class TreeManager {
     private static final Logger LOG = Logger.getInstance(PluginFileManager.class);
     private File currentFile = null;
+    @Nullable
     private volatile TreesSet currentTreesSet = null;
     private long lastUpdate;
     private static TreeManager treeManager = new TreeManager();
@@ -59,6 +61,10 @@ public class TreeManager {
                                                       @Nullable Filter filter,
                                                       @Nullable List<Integer> threadsIds) {
         updateTreesSet(logFile);
+        TreesSet currentTreesSet = this.currentTreesSet;
+        if (currentTreesSet == null) {
+            return null;
+        }
         return currentTreesSet.getCallTree(filter, threadsIds);
     }
 
@@ -87,6 +93,10 @@ public class TreeManager {
     @Nullable
     public synchronized TreeProtos.Tree getTree(File logFile, TreeType treeType, @Nullable Filter filter) {
         updateTreesSet(logFile);
+        TreesSet currentTreesSet = this.currentTreesSet;
+        if (currentTreesSet == null) {
+            return null;
+        }
         return currentTreesSet.getTree(treeType, filter);
     }
 
@@ -99,12 +109,21 @@ public class TreeManager {
                                                 boolean isStatic,
                                                 @Nullable Filter filter) {
         updateTreesSet(logFile);
+        TreesSet currentTreesSet = this.currentTreesSet;
+        if (currentTreesSet == null) {
+            return null;
+        }
         return currentTreesSet.getTree(treeType, className, methodName, desc, isStatic, filter);
 
     }
 
-    public synchronized List<TreesSet.HotSpot> getHotSpots(File logFile) {
+    @Nullable
+    public synchronized List<HotSpot> getHotSpots(File logFile) {
         updateTreesSet(logFile);
+        TreesSet currentTreesSet = this.currentTreesSet;
+        if (currentTreesSet == null) {
+            return null;
+        }
         return currentTreesSet.getHotSpots();
     }
 
@@ -115,6 +134,10 @@ public class TreeManager {
     @Nullable
     public synchronized TreesPreview getCallTreesPreview(@Nullable File logFile, Filter filter) {
         updateTreesSet(logFile);
+        TreesSet currentTreesSet = this.currentTreesSet;
+        if (currentTreesSet == null) {
+            return null;
+        }
         return currentTreesSet.getTreesPreview(filter);
     }
 

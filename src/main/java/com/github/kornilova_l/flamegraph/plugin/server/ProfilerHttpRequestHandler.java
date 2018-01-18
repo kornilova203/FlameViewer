@@ -81,7 +81,7 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
         return null;
     }
 
-    public static void sendJson(ChannelHandlerContext context, String json) {
+    public static void sendJson(ChannelHandlerContext context, @NotNull String json) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         try {
             outputStream.write(json.getBytes());
