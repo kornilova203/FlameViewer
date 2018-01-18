@@ -13,8 +13,7 @@ public class SystemClassExpected {
         try {
             Class<?> proxyClass = ClassLoader.getSystemClassLoader().loadClass("com.github.kornilova_l.flamegraph.proxy.Proxy");
             Class<?> startDataClass = ClassLoader.getSystemClassLoader().loadClass("com.github.kornilova_l.flamegraph.proxy.StartData");
-            Object startData = proxyClass.getMethod("createStartData", long.class, Object[].class)
-                    .invoke(null, System.currentTimeMillis(), new Object[0]);
+            Object startData = startDataClass.getConstructor(long.class, Object[].class).newInstance(System.currentTimeMillis(), new Object[0]);
             try {
                 System.out.println("Hello, I am a method of System Class. " +
                         "I do not know about any other classes except system classes");
@@ -58,10 +57,9 @@ public class SystemClassExpected {
                 }
                 throw t;
             }
-        } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+        } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
-
     }
 }

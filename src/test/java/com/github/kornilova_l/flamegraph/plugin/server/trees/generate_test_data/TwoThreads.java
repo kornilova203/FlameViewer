@@ -1,6 +1,5 @@
 package com.github.kornilova_l.flamegraph.plugin.server.trees.generate_test_data;
 
-import com.github.kornilova_l.flamegraph.javaagent.logger.LoggerQueue;
 import com.github.kornilova_l.flamegraph.proxy.StartData;
 
 /**
@@ -37,7 +36,7 @@ class MyTask implements Runnable {
 
     @Override
     public void run() {
-        StartData startData = LoggerQueue.createStartData(100 + offset, null);
+        StartData startData = new StartData(100 + offset, null);
         fun1();
         fun3();
         startData.setDuration(165 + offset);
@@ -55,7 +54,7 @@ class MyTask implements Runnable {
     }
 
     private void fun3() {
-        StartData startData = LoggerQueue.createStartData(140 + offset, null);
+        StartData startData = new StartData(140 + offset, null);
         fun4();
         startData.setDuration(155 + offset);
 //        if (startData.getDuration() > 1) {
@@ -72,7 +71,7 @@ class MyTask implements Runnable {
     }
 
     private void fun4() {
-        StartData startData = LoggerQueue.createStartData(150 + offset, null);
+        StartData startData = new StartData(150 + offset, null);
         startData.setDuration(155 + offset);
 //        if (startData.getDuration() > 1) {
 //            LoggerQueue.addToQueue(null,
@@ -88,7 +87,7 @@ class MyTask implements Runnable {
     }
 
     private void fun1() {
-        StartData startData = LoggerQueue.createStartData(110 + offset, null);
+        StartData startData = new StartData(110 + offset, null);
         fun2();
         startData.setDuration(125 + offset);
 //        if (startData.getDuration() > 1) {
@@ -105,7 +104,7 @@ class MyTask implements Runnable {
     }
 
     private void fun2() {
-        StartData startData = LoggerQueue.createStartData(110 + offset, null);
+        StartData startData = new StartData(110 + offset, null);
         startData.setDuration(115 + offset);
 //        if (startData.getDuration() > 1) {
 //            LoggerQueue.addToQueue(null,

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class SaveReturnValueExpected {
     @SuppressWarnings("unused")
     static ArrayList<String> returnGeneric() {
-        StartData startData = LoggerQueue.createStartData(System.currentTimeMillis(), null);
+        StartData startData = new StartData(System.currentTimeMillis(), null);
         try {
             System.out.println("Hello, world!");
             ArrayList<String> list = new ArrayList<>();
@@ -52,7 +52,7 @@ public class SaveReturnValueExpected {
 
     @SuppressWarnings("unused")
     int returnInt() {
-        StartData startData = LoggerQueue.createStartData(System.currentTimeMillis(), null);
+        StartData startData = new StartData(System.currentTimeMillis(), null);
         try {
             System.out.println("Hello, world!");
             startData.setDuration(System.currentTimeMillis());
@@ -94,7 +94,7 @@ public class SaveReturnValueExpected {
 
     @SuppressWarnings("unused")
     void returnVoid(int i) {
-        StartData startData = LoggerQueue.createStartData(System.currentTimeMillis(), null);
+        StartData startData = new StartData(System.currentTimeMillis(), null);
         try {
             System.out.println("Hello, world!");
             startData.setDuration(System.currentTimeMillis());
@@ -135,7 +135,7 @@ public class SaveReturnValueExpected {
 
     @SuppressWarnings("unused")
     String returnString() {
-        StartData startData = LoggerQueue.createStartData(System.currentTimeMillis(), null);
+        StartData startData = new StartData(System.currentTimeMillis(), null);
         try {
             System.out.println("Hello, world!");
             String hello = "hello";
@@ -178,7 +178,7 @@ public class SaveReturnValueExpected {
 
     @SuppressWarnings("unused")
     long returnLong() {
-        StartData startData = LoggerQueue.createStartData(System.currentTimeMillis(), null);
+        StartData startData = new StartData(System.currentTimeMillis(), null);
         try {
             System.out.println("Hello, world!");
             startData.setDuration(System.currentTimeMillis());

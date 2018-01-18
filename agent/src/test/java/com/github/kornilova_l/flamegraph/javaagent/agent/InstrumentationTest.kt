@@ -7,7 +7,6 @@ import com.github.kornilova_l.flamegraph.javaagent.generate.Generator
 import com.github.kornilova_l.flamegraph.javaagent.generate.test_classes.*
 import com.github.kornilova_l.flamegraph.javaagent.getBytes
 import com.github.kornilova_l.flamegraph.javaagent.removePackage
-import org.junit.Before
 import org.junit.Test
 import org.objectweb.asm.ClassReader
 import org.objectweb.asm.ClassWriter
@@ -19,37 +18,37 @@ import java.util.*
 
 
 class InstrumentationTest {
-    @Before
-    fun setup() {
-        configurationManager = createConfig("*.*(*)", methodConfigs)
-        configurationManagerSaveParams = createConfig("*.*(*+)", methodConfigsSaveParams)
-        configurationManagerSaveReturn = createConfig("*.*(*)+", methodConfigsSaveReturn)
-    }
+    private val methodConfigs = ArrayList<MethodConfig>()
+    private var configurationManager: AgentConfigurationManager = createConfig("*.*(*)", methodConfigs)
+    private val methodConfigsSaveParams = ArrayList<MethodConfig>()
+    private var configurationManagerSaveParams: AgentConfigurationManager = createConfig("*.*(*+)", methodConfigsSaveParams)
+    private val methodConfigsSaveReturn = ArrayList<MethodConfig>()
+    private var configurationManagerSaveReturn: AgentConfigurationManager = createConfig("*.*(*)+", methodConfigsSaveReturn)
 
     @Test
     fun methodThrowsException() {
-        classTest(ThrowsException::class.java, configurationManager!!, methodConfigs)
+        classTest(ThrowsException::class.java, configurationManager, methodConfigs)
         /* If instrumentation changed uncomment following and check it manually */
-//         classTest(ThrowsException::class.java, ThrowsExceptionExpected::class.java, configurationManager, methodConfigs, true)
+//        classTest(ThrowsException::class.java, ThrowsExceptionExpected::class.java, configurationManager, methodConfigs, true)
     }
 
     @Test
     fun saveParameters() {
-        classTest(SaveParameters::class.java, configurationManagerSaveParams!!, methodConfigsSaveParams)
+        classTest(SaveParameters::class.java, configurationManagerSaveParams, methodConfigsSaveParams)
         /* If instrumentation changed uncomment following and check it manually */
 //        classTest(SaveParameters::class.java, SaveParametersExpected::class.java, configurationManagerSaveParams!!, methodConfigsSaveParams, true)
     }
 
     @Test
     fun saveReturnValue() {
-        classTest(SaveReturnValue::class.java, configurationManagerSaveReturn!!, methodConfigsSaveReturn)
+        classTest(SaveReturnValue::class.java, configurationManagerSaveReturn, methodConfigsSaveReturn)
         /* If instrumentation changed uncomment following and check it manually */
 //        classTest(SaveReturnValue::class.java, SaveReturnValueExpected::class.java, configurationManagerSaveReturn!!, methodConfigsSaveReturn, true)
     }
 
     @Test
     fun useProxy() {
-        classTest(UseProxy::class.java, configurationManagerSaveReturn!!, methodConfigsSaveReturn, false)
+        classTest(UseProxy::class.java, configurationManagerSaveReturn, methodConfigsSaveReturn, false)
         /* If instrumentation changed uncomment following and check it manually */
 //        classTest(UseProxy::class.java, UseProxyExpected::class.java, configurationManagerSaveReturn!!, methodConfigsSaveReturn, false)
     }
@@ -86,18 +85,19 @@ class InstrumentationTest {
 
     @Test
     fun hasCatch() {
-        classTest(HasCatch::class.java, configurationManagerSaveReturn!!, methodConfigsSaveReturn)
+        classTest(HasCatch::class.java, configurationManagerSaveReturn, methodConfigsSaveReturn)
         /* If instrumentation changed uncomment following and check it manually */
 //        classTest(HasCatch::class.java, HasCatchExpected::class.java, configurationManagerSaveReturn!!, methodConfigsSaveReturn)
     }
 
     @Test
     fun hasIf() {
-        classTest(HasIf::class.java, configurationManager!!, methodConfigs)
+        classTest(HasIf::class.java, configurationManager, methodConfigs)
         /* If instrumentation changed uncomment following and check it manually */
 //        classTest(HasIf::class.java, HasIfExpected::class.java, configurationManager!!, methodConfigs)
     }
 
+    @Suppress("unused")
     private fun classTest(testedClass: Class<*>,
                           expectedClass: Class<*>,
                           configurationManager: AgentConfigurationManager,
@@ -175,12 +175,6 @@ class InstrumentationTest {
     }
 
     companion object {
-        private var configurationManager: AgentConfigurationManager? = null
-        private val methodConfigs = ArrayList<MethodConfig>()
-        private var configurationManagerSaveParams: AgentConfigurationManager? = null
-        private val methodConfigsSaveParams = ArrayList<MethodConfig>()
-        private var configurationManagerSaveReturn: AgentConfigurationManager? = null
-        private val methodConfigsSaveReturn = ArrayList<MethodConfig>()
 
         private fun createConfig(config: String,
                                  methodConfigs: MutableList<MethodConfig>): AgentConfigurationManager {

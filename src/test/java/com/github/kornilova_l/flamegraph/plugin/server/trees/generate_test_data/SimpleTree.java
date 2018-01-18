@@ -1,6 +1,5 @@
 package com.github.kornilova_l.flamegraph.plugin.server.trees.generate_test_data;
 
-import com.github.kornilova_l.flamegraph.javaagent.logger.LoggerQueue;
 import com.github.kornilova_l.flamegraph.proxy.StartData;
 
 /**
@@ -14,7 +13,7 @@ public class SimpleTree implements Runnable {
 
     @Override
     public void run() {
-        StartData startData = LoggerQueue.createStartData(100, null);
+        StartData startData = new StartData(100, null);
         fun1();
         fun4();
         fun5();
@@ -33,7 +32,7 @@ public class SimpleTree implements Runnable {
     }
 
     private void fun5() {
-        StartData startData = LoggerQueue.createStartData(190, null);
+        StartData startData = new StartData(190, null);
         startData.setDuration(195);
 //        if (startData.getDuration() > 1) {
 //            LoggerQueue.addToQueue(null,
@@ -49,7 +48,7 @@ public class SimpleTree implements Runnable {
     }
 
     private void fun4() {
-        StartData startData = LoggerQueue.createStartData(160, null);
+        StartData startData = new StartData(160, null);
         startData.setDuration(165);
 //        if (startData.getDuration() > 1) {
 //            LoggerQueue.addToQueue(null,
@@ -65,7 +64,7 @@ public class SimpleTree implements Runnable {
     }
 
     private void fun1() {
-        StartData startData = LoggerQueue.createStartData(100, null);
+        StartData startData = new StartData(100, null);
         fun2();
         fun3();
         startData.setDuration(135);
@@ -83,7 +82,7 @@ public class SimpleTree implements Runnable {
     }
 
     private void fun2() {
-        StartData startData = LoggerQueue.createStartData(100, null);
+        StartData startData = new StartData(100, null);
         startData.setDuration(105);
 //        if (startData.getDuration() > 1) {
 //            LoggerQueue.addToQueue(null,
@@ -99,7 +98,7 @@ public class SimpleTree implements Runnable {
     }
 
     private void fun3() {
-        StartData startData = LoggerQueue.createStartData(120, null);
+        StartData startData = new StartData(120, null);
         startData.setDuration(125);
 //        if (startData.getDuration() > 1) {
 //            LoggerQueue.addToQueue(null,

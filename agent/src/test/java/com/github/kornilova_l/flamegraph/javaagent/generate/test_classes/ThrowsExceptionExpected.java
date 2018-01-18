@@ -5,7 +5,7 @@ import com.github.kornilova_l.flamegraph.proxy.StartData;
 
 public class ThrowsExceptionExpected {
     public static void main(String[] args) {
-        StartData startData = LoggerQueue.createStartData(System.currentTimeMillis(), null);
+        StartData startData = new StartData(System.currentTimeMillis(), null);
         try {
             startData.setDuration(System.currentTimeMillis());
             startData.setThrownByMethod();

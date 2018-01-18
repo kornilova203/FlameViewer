@@ -10,7 +10,7 @@ import java.io.OutputStream;
 
 public class HasCatchExpected {
     public static void main(String[] args) {
-        StartData startData = LoggerQueue.createStartData(System.currentTimeMillis(), null);
+        StartData startData = new StartData(System.currentTimeMillis(), null);
         try {
             try (OutputStream outputStream = new FileOutputStream(new File(""))) {
                 outputStream.write(new byte[0]);

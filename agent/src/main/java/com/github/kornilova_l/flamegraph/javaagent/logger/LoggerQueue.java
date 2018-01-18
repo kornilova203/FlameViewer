@@ -2,7 +2,6 @@ package com.github.kornilova_l.flamegraph.javaagent.logger;
 
 import com.github.kornilova_l.flamegraph.javaagent.logger.event_data_storage.MethodEventData;
 import com.github.kornilova_l.flamegraph.javaagent.logger.event_data_storage.RetValEventData;
-import com.github.kornilova_l.flamegraph.proxy.StartData;
 import com.github.kornilova_l.flamegraph.javaagent.logger.event_data_storage.ThrowableEventData;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -21,13 +20,6 @@ public class LoggerQueue {
 
     static LoggerQueue getInstance() {
         return loggerQueue;
-    }
-
-    /**
-     * This method is called concurrently
-     */
-    public static StartData createStartData(long startTime, Object[] parameters) {
-        return new StartData(startTime, parameters);
     }
 
     /**

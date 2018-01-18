@@ -13,8 +13,7 @@ public class SystemClassHasIfExpected {
         try {
             Class<?> proxyClass = ClassLoader.getSystemClassLoader().loadClass("com.github.kornilova_l.flamegraph.proxy.Proxy");
             Class<?> startDataClass = ClassLoader.getSystemClassLoader().loadClass("com.github.kornilova_l.flamegraph.proxy.StartData");
-            Object startData = proxyClass.getMethod("createStartData", long.class, Object[].class)
-                    .invoke(null, System.currentTimeMillis(), new Object[0]);
+            Object startData = startDataClass.getConstructor(long.class, Object[].class).newInstance(System.currentTimeMillis(), new Object[0]);
             try {
                 int res = 0;
                 if (val > 0) {
@@ -61,7 +60,7 @@ public class SystemClassHasIfExpected {
                 }
                 throw t;
             }
-        } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+        } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
         }

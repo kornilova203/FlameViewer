@@ -18,6 +18,7 @@ public class com/github/kornilova_l/flamegraph/javaagent/generate/test_classes/S
     TRYCATCHBLOCK L2 L3 L3 java/lang/NoSuchMethodException
     TRYCATCHBLOCK L2 L3 L3 java/lang/IllegalAccessException
     TRYCATCHBLOCK L2 L3 L3 java/lang/reflect/InvocationTargetException
+    TRYCATCHBLOCK L2 L3 L3 java/lang/InstantiationException
    L2
     INVOKESTATIC java/lang/ClassLoader.getSystemClassLoader ()Ljava/lang/ClassLoader;
     LDC "com.github.kornilova_l.flamegraph.proxy.Proxy"
@@ -27,8 +28,7 @@ public class com/github/kornilova_l/flamegraph/javaagent/generate/test_classes/S
     LDC "com.github.kornilova_l.flamegraph.proxy.StartData"
     INVOKEVIRTUAL java/lang/ClassLoader.loadClass (Ljava/lang/String;)Ljava/lang/Class;
     ASTORE 2
-    ALOAD 1
-    LDC "createStartData"
+    ALOAD 2
     ICONST_2
     ANEWARRAY java/lang/Class
     DUP
@@ -39,8 +39,7 @@ public class com/github/kornilova_l/flamegraph/javaagent/generate/test_classes/S
     ICONST_1
     LDC [Ljava/lang/Object;.class
     AASTORE
-    INVOKEVIRTUAL java/lang/Class.getMethod (Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;
-    ACONST_NULL
+    INVOKEVIRTUAL java/lang/Class.getConstructor ([Ljava/lang/Class;)Ljava/lang/reflect/Constructor;
     ICONST_2
     ANEWARRAY java/lang/Object
     DUP
@@ -53,7 +52,7 @@ public class com/github/kornilova_l/flamegraph/javaagent/generate/test_classes/S
     ICONST_0
     ANEWARRAY java/lang/Object
     AASTORE
-    INVOKEVIRTUAL java/lang/reflect/Method.invoke (Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
+    INVOKEVIRTUAL java/lang/reflect/Constructor.newInstance ([Ljava/lang/Object;)Ljava/lang/Object;
     ASTORE 3
    L0
     NEW java/lang/AssertionError

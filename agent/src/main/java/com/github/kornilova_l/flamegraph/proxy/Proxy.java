@@ -17,10 +17,6 @@ public class Proxy {
     private static Method addRetVal = null;
     private static Method addException = null;
 
-    public static StartData createStartData(long startTime, Object[] parameters) {
-        return new StartData(startTime, parameters);
-    }
-
     /**
      * {@link LoggerQueue#addToQueue(java.lang.Object, long, long, java.lang.Object[], java.lang.Thread, java.lang.String, java.lang.String, java.lang.String, boolean, java.lang.String)}
      */

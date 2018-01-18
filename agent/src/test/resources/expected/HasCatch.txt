@@ -20,9 +20,11 @@ public class com/github/kornilova_l/flamegraph/javaagent/generate/test_classes/H
     TRYCATCHBLOCK L5 L10 L6 null
     TRYCATCHBLOCK L11 L12 L13 java/io/IOException
     TRYCATCHBLOCK L11 L14 L14 java/lang/Throwable
+    NEW com/github/kornilova_l/flamegraph/proxy/StartData
+    DUP
     INVOKESTATIC java/lang/System.currentTimeMillis ()J
     ACONST_NULL
-    INVOKESTATIC com/github/kornilova_l/flamegraph/javaagent/logger/LoggerQueue.createStartData (J[Ljava/lang/Object;)Lcom/github/kornilova_l/flamegraph/proxy/StartData;
+    INVOKESPECIAL com/github/kornilova_l/flamegraph/proxy/StartData.<init> (J[Ljava/lang/Object;)V
     ASTORE 1
    L11
     NEW java/io/FileOutputStream

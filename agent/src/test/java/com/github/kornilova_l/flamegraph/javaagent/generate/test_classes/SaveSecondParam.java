@@ -8,7 +8,7 @@ public class SaveSecondParam {
     }
 
     void oneParam(long l) {
-//        StartData startData = LoggerQueue.createStartData(System.currentTimeMillis(), null);
+//        StartData startData = new StartData(System.currentTimeMillis(), null);
         System.out.println("Hello, world!");
 //        startData.setDuration(System.currentTimeMillis());
 //        if (startData.getDuration() > 1) {
@@ -23,7 +23,7 @@ public class SaveSecondParam {
     }
 
     void twoParams(long l, ArrayList<String> list) {
-//        StartData startData = LoggerQueue.createStartData(System.currentTimeMillis(), new Object[]{list});
+//        StartData startData = new StartData(System.currentTimeMillis(), new Object[]{list});
         System.out.println("Hello, world!");
 //        startData.setDuration(System.currentTimeMillis());
 //        if (startData.getDuration() > 1) {
@@ -38,7 +38,7 @@ public class SaveSecondParam {
     }
 
     static void threeParams(long l1, long l, String s) {
-//        StartData startData = LoggerQueue.createStartData(System.currentTimeMillis(), new Object[]{l, s});
+//        StartData startData = new StartData(System.currentTimeMillis(), new Object[]{l, s});
         System.out.println("Hello, world!");
 //        startData.setDuration(System.currentTimeMillis());
 //        if (startData.getDuration() > 1) {

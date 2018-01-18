@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class SaveParametersExpected {
     @SuppressWarnings("unused")
     void noParams() {
-        StartData startData = LoggerQueue.createStartData(System.currentTimeMillis(), null);
+        StartData startData = new StartData(System.currentTimeMillis(), null);
         try {
             System.out.println("Hello, world!");
             startData.setDuration(System.currentTimeMillis());
@@ -47,7 +47,7 @@ public class SaveParametersExpected {
 
     @SuppressWarnings("unused")
     void oneParam(int i) {
-        StartData startData = LoggerQueue.createStartData(System.currentTimeMillis(), new Object[]{i});
+        StartData startData = new StartData(System.currentTimeMillis(), new Object[]{i});
         try {
             System.out.println("Hello, world!");
             startData.setDuration(System.currentTimeMillis());
@@ -86,7 +86,7 @@ public class SaveParametersExpected {
 
     @SuppressWarnings("unused")
     void twoParams(int i, ArrayList<String> list) {
-        StartData startData = LoggerQueue.createStartData(System.currentTimeMillis(), new Object[]{i, list});
+        StartData startData = new StartData(System.currentTimeMillis(), new Object[]{i, list});
         try {
             System.out.println("Hello, world!");
             startData.setDuration(System.currentTimeMillis());
@@ -125,7 +125,7 @@ public class SaveParametersExpected {
 
     @SuppressWarnings("unused")
     static void threeParams(boolean b, long l, String s) {
-        StartData startData = LoggerQueue.createStartData(System.currentTimeMillis(), new Object[]{b, l, s});
+        StartData startData = new StartData(System.currentTimeMillis(), new Object[]{b, l, s});
         try {
             System.out.println("Hello, world!");
             startData.setDuration(System.currentTimeMillis());

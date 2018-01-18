@@ -9,7 +9,7 @@ import com.github.kornilova_l.flamegraph.proxy.StartData;
  */
 public class UseProxyExpected {
     public static void main(String[] args) {
-        StartData startData = Proxy.createStartData(System.currentTimeMillis(), null);
+        StartData startData = new StartData(System.currentTimeMillis(), null);
         try {
         System.out.println("Hello, world!");
             startData.setDuration(System.currentTimeMillis());

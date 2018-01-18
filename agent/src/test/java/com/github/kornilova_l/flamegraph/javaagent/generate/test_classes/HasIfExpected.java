@@ -5,7 +5,7 @@ import com.github.kornilova_l.flamegraph.proxy.StartData;
 
 public class HasIfExpected {
     public static int main(int val) {
-        StartData startData = LoggerQueue.createStartData(System.currentTimeMillis(), null);
+        StartData startData = new StartData(System.currentTimeMillis(), null);
         try {
             int res = 0;
             if (val > 0) {

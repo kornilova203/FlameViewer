@@ -361,30 +361,12 @@ class SystemClassMethodVisitor extends ProfilingMethodVisitor {
 
     @Override
     protected void createStartData() {
-        getMethodCreateStartData();
-        invokeCreateStartData();
+        getConstructor();
+        createInstanceOfStartData();
     }
 
-    private void invokeCreateStartData() {
-        mv.visitInsn(ACONST_NULL);
-        mv.visitInsn(ICONST_2);
-        mv.visitTypeInsn(ANEWARRAY, "java/lang/Object");
-        dup();
-        mv.visitInsn(ICONST_0);
-        getTime();
-        longToObj();
-        mv.visitInsn(AASTORE);
-        dup();
-        mv.visitInsn(ICONST_1);
-        mv.visitInsn(ICONST_0);
-        mv.visitTypeInsn(ANEWARRAY, "java/lang/Object");
-        mv.visitInsn(AASTORE);
-        invokeInvoke();
-    }
-
-    private void getMethodCreateStartData() {
-        mv.visitVarInsn(ALOAD, proxyClassLocal);
-        mv.visitLdcInsn("createStartData");
+    private void getConstructor() {
+        mv.visitVarInsn(ALOAD, startDataClassLocal);
         mv.visitInsn(ICONST_2);
         mv.visitTypeInsn(ANEWARRAY, "java/lang/Class");
         dup();
@@ -395,7 +377,24 @@ class SystemClassMethodVisitor extends ProfilingMethodVisitor {
         mv.visitInsn(ICONST_1);
         getClassOfObjectArray();
         mv.visitInsn(AASTORE);
-        invokeGetMethod();
+        mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Class", "getConstructor", "([Ljava/lang/Class;)Ljava/lang/reflect/Constructor;", false);
+    }
+
+    private void createInstanceOfStartData() {
+        mv.visitInsn(ICONST_2); // size of array
+        mv.visitTypeInsn(ANEWARRAY, "java/lang/Object");
+        dup();
+        mv.visitInsn(ICONST_0); // index
+        getTime();
+        longToObj();
+        mv.visitInsn(AASTORE);
+        dup();
+        mv.visitInsn(ICONST_1); // index
+        // todo: save parameters
+        mv.visitInsn(ICONST_0); // create empty array with parameters
+        mv.visitTypeInsn(ANEWARRAY, "java/lang/Object");
+        mv.visitInsn(AASTORE);
+        mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/reflect/Constructor", "newInstance", "([Ljava/lang/Object;)Ljava/lang/Object;", false);
     }
 
     private void saveClass(String className, int variable) {
@@ -417,6 +416,7 @@ class SystemClassMethodVisitor extends ProfilingMethodVisitor {
         mv.visitTryCatchBlock(startTryCatchForReflection, end, end, "java/lang/NoSuchMethodException");
         mv.visitTryCatchBlock(startTryCatchForReflection, end, end, "java/lang/IllegalAccessException");
         mv.visitTryCatchBlock(startTryCatchForReflection, end, end, "java/lang/reflect/InvocationTargetException");
+        mv.visitTryCatchBlock(startTryCatchForReflection, end, end, "java/lang/InstantiationException");
         mv.visitLabel(end); // this label goes after athrow of try-catch that is added by ProfilingMethodVisitor
 
         int throwableLocal = newLocal(org.objectweb.asm.Type.getType("L" + Throwable.class.getName() + ";"));

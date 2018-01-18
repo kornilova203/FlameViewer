@@ -100,6 +100,8 @@ class ProfilingMethodVisitor extends AdviceAdapter {
      * Leaves object on stack
      */
     protected void createStartData() {
+        mv.visitTypeInsn(NEW, START_DATA_CLASS);
+        dup();
         getTime();
         int countEnabledParams = 0;
         for (MethodConfig.Parameter parameter : methodConfig.getParameters()) {
@@ -112,17 +114,7 @@ class ProfilingMethodVisitor extends AdviceAdapter {
         } else {
             loadNull();
         }
-        if (hasSystemCL) {
-            mv.visitMethodInsn(INVOKESTATIC, LOGGER_PACKAGE_NAME + "LoggerQueue",
-                    "createStartData",
-                    "(J[Ljava/lang/Object;)" + START_DATA_TYPE,
-                    false);
-        } else {
-            mv.visitMethodInsn(INVOKESTATIC, PROXY_PACKAGE_NAME + "Proxy",
-                    "createStartData",
-                    "(J[Ljava/lang/Object;)" + START_DATA_TYPE,
-                    false);
-        }
+        mv.visitMethodInsn(INVOKESPECIAL, START_DATA_CLASS, "<init>", "(J[Ljava/lang/Object;)V", false);
     }
 
     private void endTryCatch() {
