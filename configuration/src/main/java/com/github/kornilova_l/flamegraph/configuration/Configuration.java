@@ -1,6 +1,8 @@
 package com.github.kornilova_l.flamegraph.configuration;
 
+import com.github.kornilova_l.flamegraph.configuration.MethodConfig.Parameter;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -77,11 +79,22 @@ public class Configuration implements Cloneable {
     }
 
     @NotNull
+    public static List<String> getTypes(List<Parameter> parameters) {
+        List<String> parametersTypes = new ArrayList<>();
+        for (Parameter parameter : parameters) {
+            parametersTypes.add(parameter.getType());
+        }
+        return parametersTypes;
+    }
+
+    @NotNull
     private static List<MethodConfig> getApplicableMethodConfigs(@NotNull List<MethodConfig> methodConfigs,
                                                                  @NotNull MethodConfig testedConfig) {
         List<MethodConfig> applicableMethodConfigs = new ArrayList<>();
+
         for (MethodConfig methodConfig : methodConfigs) {
-            if (methodConfig.isApplicableTo(testedConfig)) {
+            if (methodConfig.isApplicableTo(testedConfig.getClassPatternString(),
+                    testedConfig.getMethodPatternString(), getTypes(testedConfig.getParameters()))) {
                 applicableMethodConfigs.add(methodConfig);
             }
         }
@@ -92,6 +105,7 @@ public class Configuration implements Cloneable {
         return includingMethodConfigs;
     }
 
+    @SuppressWarnings("unused")
     public void setIncludingMethodConfigs(List<MethodConfig> includingMethodConfigs) {
         this.includingMethodConfigs = includingMethodConfigs;
     }
@@ -100,6 +114,7 @@ public class Configuration implements Cloneable {
         return excludingMethodConfigs;
     }
 
+    @SuppressWarnings("unused")
     public void setExcludingMethodConfigs(List<MethodConfig> excludingMethodConfigs) {
         this.excludingMethodConfigs = excludingMethodConfigs;
     }
@@ -129,7 +144,7 @@ public class Configuration implements Cloneable {
         }
     }
 
-    public void addMethodConfig(@NotNull String methodConfigLine, boolean isExcluding) {
+    private void addMethodConfig(@NotNull String methodConfigLine, boolean isExcluding) {
         String classAndMethod = methodConfigLine.substring(0, methodConfigLine.indexOf("("));
         String classPatternString = classAndMethod.substring(0, classAndMethod.lastIndexOf("."));
         String methodPatternString = classAndMethod.substring(
@@ -160,6 +175,26 @@ public class Configuration implements Cloneable {
                 getIncludingConfigs(methodConfig).size() != 0;
     }
 
+    /**
+     * @param parameters null if method does not take parameters
+     */
+    public boolean isMethodInstrumented(@NotNull String className, @NotNull String methodName,
+                                        @Nullable List<String> parameters) {
+        return existsApplicableMethodConfig(includingMethodConfigs, className, methodName, parameters) &&
+                !existsApplicableMethodConfig(excludingMethodConfigs, className, methodName, parameters);
+
+    }
+
+    private boolean existsApplicableMethodConfig(List<MethodConfig> methodConfigs, @NotNull String className,
+                                                 @NotNull String methodName, @Nullable List<String> parameters) {
+        for (MethodConfig methodConfig : methodConfigs) {
+            if (methodConfig.isApplicableTo(className, methodName, parameters)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @NotNull
     public List<MethodConfig> getIncludingConfigs(@NotNull MethodConfig methodConfig) {
         return getApplicableMethodConfigs(includingMethodConfigs, methodConfig);
@@ -170,8 +205,8 @@ public class Configuration implements Cloneable {
         return getApplicableMethodConfigs(excludingMethodConfigs, methodConfig);
     }
 
-    public boolean isMethodExcluded(@NotNull MethodConfig methodConfig) {
-        return getExcludingConfigs(methodConfig).size() != 0;
+    public boolean isMethodExcluded(@NotNull String className, @NotNull String methodName, @NotNull List<String> parameters) {
+        return existsApplicableMethodConfig(excludingMethodConfigs, className, methodName, parameters);
     }
 
     /**
@@ -212,6 +247,7 @@ public class Configuration implements Cloneable {
         excludingMethodConfigs.addAll(temp);
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     private boolean hasDuplicate(Set<MethodConfig> temp, MethodConfig methodConfig) {
         boolean hasDuplicate = false;
         for (MethodConfig tempConfig : temp) {

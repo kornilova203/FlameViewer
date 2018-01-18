@@ -12,6 +12,8 @@ import com.intellij.openapi.editor.ex.MarkupModelEx;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiMethod;
 
+import static com.github.kornilova_l.flamegraph.configuration.Configuration.getTypes;
+
 public class RemoveMethodFromConfigAction extends AddMethodToConfigAction {
     @Override
     public void actionPerformed(AnActionEvent event) {
@@ -33,7 +35,8 @@ public class RemoveMethodFromConfigAction extends AddMethodToConfigAction {
         assert configuration != null;
         MethodConfig methodConfig = PluginConfigManager.newMethodConfig(psiMethod);
 
-        if (configuration.isMethodExcluded(methodConfig)) {
+        if (configuration.isMethodExcluded(methodConfig.getClassPatternString(), methodConfig.getMethodPatternString(),
+                getTypes(methodConfig.getParameters()))) {
             return;
         }
         MarkupModelEx markupModel = LineMarkersHolder.getMarkupModel(editor.getDocument(), project);

@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
+import static com.github.kornilova_l.flamegraph.configuration.Configuration.getTypes;
 import static com.github.kornilova_l.flamegraph.configuration.MethodConfig.parseToken;
 import static com.github.kornilova_l.flamegraph.configuration.MethodConfig.splitDesc;
 
@@ -69,7 +70,8 @@ class AgentConfigurationManager {
                                                    @NotNull MethodConfig methodConfig) {
         List<MethodConfig> finalConfigs = new ArrayList<>();
         for (MethodConfig includingConfig : includingConfigs) {
-            if (includingConfig.isApplicableTo(methodConfig)) {
+            if (includingConfig.isApplicableTo(methodConfig.getClassPatternString(), methodConfig.getMethodPatternString(),
+                    getTypes(methodConfig.getParameters()))) {
                 finalConfigs.add(includingConfig);
             }
         }

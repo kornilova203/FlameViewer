@@ -1,6 +1,7 @@
 package com.github.kornilova_l.flamegraph.configuration;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -90,13 +91,16 @@ public class MethodConfig implements Comparable<MethodConfig>, Cloneable {
     }
 
     private static boolean areParametersApplicable(@NotNull List<Parameter> applicableParams,
-                                                   @NotNull List<Parameter> testedParams) {
-        if (applicableParams.size() == 0) {
-            return testedParams.size() == 0;
-        }
+                                                   @Nullable List<String> testedParams) {
         if (applicableParams.size() == 1 &&
                 Objects.equals(applicableParams.get(0).type, "*")) {
             return true;
+        }
+        if (testedParams == null) {
+            return applicableParams.size() == 0;
+        }
+        if (applicableParams.size() == 0) {
+            return testedParams.size() == 0;
         }
         if (applicableParams.size() > testedParams.size() &&
                 !(applicableParams.size() == testedParams.size() + 1 && // for example "boolean, *" and "boolean"
@@ -109,7 +113,7 @@ public class MethodConfig implements Comparable<MethodConfig>, Cloneable {
             if (Objects.equals(parameter.type, "*")) {
                 return true;
             }
-            if (!testedParams.get(i).getType().endsWith(parameter.getType())) {
+            if (!testedParams.get(i).endsWith(parameter.getType())) {
                 return false;
             }
         }
@@ -248,16 +252,6 @@ public class MethodConfig implements Comparable<MethodConfig>, Cloneable {
         }
     }
 
-    public boolean isApplicableTo(@NotNull MethodConfig testedConfig) {
-        if (!isEnabled) {
-            return false;
-        }
-        compilePatterns();
-        return classPattern.matcher(testedConfig.classPatternString).matches() &&
-                methodPattern.matcher(testedConfig.methodPatternString).matches() &&
-                areParametersApplicable(parameters, testedConfig.parameters);
-    }
-
     public boolean isApplicableTo(String className) {
         compilePatterns();
         return classPattern.matcher(className).matches();
@@ -348,6 +342,17 @@ public class MethodConfig implements Comparable<MethodConfig>, Cloneable {
     void clearPatterns() {
         classPattern = null;
         methodPattern = null;
+    }
+
+    public boolean isApplicableTo(@NotNull String className, @NotNull String methodName,
+                                  @Nullable List<String> parameters) {
+        if (!isEnabled) {
+            return false;
+        }
+        compilePatterns();
+        return classPattern.matcher(className).matches() &&
+                methodPattern.matcher(methodName).matches() &&
+                areParametersApplicable(this.parameters, parameters);
     }
 
     public static class Parameter {

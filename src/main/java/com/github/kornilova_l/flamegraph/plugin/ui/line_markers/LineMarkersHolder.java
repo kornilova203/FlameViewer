@@ -28,6 +28,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static com.github.kornilova_l.flamegraph.plugin.configuration.PluginConfigManager.*;
+
 public class LineMarkersHolder extends AbstractProjectComponent {
     private static final Logger LOG = Logger.getInstance(LineMarkersHolder.class);
     private final HashMap<PsiMethod, RangeHighlighter> rangeHighlighters = new HashMap<>();
@@ -104,7 +106,8 @@ public class LineMarkersHolder extends AbstractProjectComponent {
     void updateMethodMarker(PsiMethod psiMethod, MarkupModelEx markupModel) {
         DumbService.getInstance(myProject).runWhenSmart(() -> {
             removeInvalidMethods();
-            if (configuration.isMethodInstrumented(PluginConfigManager.newMethodConfig(psiMethod))) {
+            if (configuration.isMethodInstrumented(getClassName(psiMethod), getMethodName(psiMethod),
+                    getParametersTypesList(psiMethod.getParameterList().getParameters()))) {
                 if (!hasIcon(psiMethod)) {
                     setIcon(psiMethod, markupModel);
                 }

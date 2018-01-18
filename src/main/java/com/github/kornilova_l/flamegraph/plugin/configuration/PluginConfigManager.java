@@ -10,7 +10,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
 
 public class PluginConfigManager {
@@ -23,26 +25,34 @@ public class PluginConfigManager {
         }
     }
 
-    @NotNull
-    public static MethodConfig newMethodConfig(@NotNull PsiMethod psiMethod) {
-        String classPatternString = "";
-        String methodPatternString;
+    public static String getClassName(@NotNull PsiMethod psiMethod) {
         PsiClass psiClass = psiMethod.getContainingClass();
         if (psiClass instanceof PsiAnonymousClass) {
             PsiClass outerClass = getOuterClass((PsiAnonymousClass) psiClass);
             if (outerClass != null) {
-                classPatternString = formClassString(outerClass) +
-                        "$*";
+                return formClassString(outerClass) + "$*";
             }
         } else {
-            classPatternString = formClassString(psiClass);
+            return formClassString(psiClass);
         }
-        methodPatternString = psiMethod.getName();
-        if (isInit(psiMethod, methodPatternString)) {
-            methodPatternString = "<init>";
+        return "";
+    }
+
+    public static String getMethodName(@NotNull PsiMethod psiMethod) {
+        String methodName = psiMethod.getName();
+        if (isInit(psiMethod, methodName)) {
+            return  "<init>";
         }
+        return methodName;
+    }
+
+    @NotNull
+    public static MethodConfig newMethodConfig(@NotNull PsiMethod psiMethod) {
+        String classPatternString = getClassName(psiMethod);
+        String methodPatternString = getMethodName(psiMethod);
         LinkedList<MethodConfig.Parameter> parameters = getParametersList(psiMethod.getParameterList().getParameters());
-        return new MethodConfig(classPatternString, methodPatternString, parameters, true, false);
+        return new MethodConfig(classPatternString, methodPatternString, parameters == null ? new ArrayList<>() : parameters,
+                true, false);
     }
 
     @Nullable
@@ -95,8 +105,11 @@ public class PluginConfigManager {
         return packageName + "." + string.substring(0, string.length() - 1);
     }
 
-    @NotNull
-    private static LinkedList<MethodConfig.Parameter> getParametersList(PsiParameter[] psiParameters) {
+    @Nullable
+    public static LinkedList<MethodConfig.Parameter> getParametersList(PsiParameter[] psiParameters) {
+        if (psiParameters.length == 0) {
+            return null;
+        }
         LinkedList<MethodConfig.Parameter> parameters = new LinkedList<>();
         for (PsiParameter psiParameter : psiParameters) {
             if (psiParameter.getTypeElement() == null ||
@@ -104,6 +117,22 @@ public class PluginConfigManager {
                 continue;
             }
             parameters.add(new MethodConfig.Parameter(psiTypeToString(psiParameter.getTypeElement()), false));
+        }
+        return parameters;
+    }
+
+    @Nullable
+    public static List<String> getParametersTypesList(PsiParameter[] psiParameters) {
+        if (psiParameters.length == 0) {
+            return null;
+        }
+        List<String> parameters = new ArrayList<>();
+        for (PsiParameter psiParameter : psiParameters) {
+            if (psiParameter.getTypeElement() == null ||
+                    psiParameter.getName() == null) {
+                continue;
+            }
+            parameters.add(psiTypeToString(psiParameter.getTypeElement()));
         }
         return parameters;
     }
