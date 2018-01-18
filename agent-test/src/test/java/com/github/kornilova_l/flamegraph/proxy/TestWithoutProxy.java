@@ -4,11 +4,9 @@ import com.github.kornilova_l.proxy_test_classes.ReturnsValue;
 import org.junit.Test;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.concurrent.RecursiveTask;
 
 import static com.github.kornilova_l.flamegraph.proxy.TestWithProxy.invokeTestMethod;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 /**
  * Tests proxy with class that is loaded by {@link MyClassLoader}
@@ -25,10 +23,9 @@ public class TestWithoutProxy {
         try {
             invokeTestMethod(ReturnsValue.class);
         } catch (InvocationTargetException e) {
-            exception = e;
+            exception = e; // if method cannot find proxy then it will throw an exception
         }
-        assertNotNull(exception);
-        /* cannot find proxy */
-        assertEquals("com/github/kornilova_l/flamegraph/proxy/Proxy", exception.getTargetException().getMessage());
+        /* classes that cannot load Proxy are not instrumented so exception will not be thrown */
+        assertNull(exception);
     }
 }
