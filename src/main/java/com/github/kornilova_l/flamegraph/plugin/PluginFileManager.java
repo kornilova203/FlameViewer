@@ -411,6 +411,14 @@ public class PluginFileManager {
         return parentFile.getName();
     }
 
+    /**
+     * For test
+     */
+    @NotNull
+    public Path getLogDirPath() {
+        return logDirPath;
+    }
+
     static class FileNameAndDate {
         private static final Pattern nameWithoutDate = Pattern.compile(".*(?=-\\d\\d\\d\\d-\\d\\d-\\d\\d-\\d\\d_\\d\\d_\\d\\d(.*)?)");
         @SuppressWarnings("unused")

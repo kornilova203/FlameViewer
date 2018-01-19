@@ -318,10 +318,8 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
         }
         try {
             if (ServerNames.CSS_PATTERN.matcher(uri).matches()) {
-                LOG.info("CSS");
                 sendStatic(context, uri, "text/css");
             } else if (ServerNames.JS_PATTERN.matcher(uri).matches()) {
-                LOG.info("JS");
                 sendStatic(context, uri, "text/javascript");
             } else if (ServerNames.FONT_PATTERN.matcher(uri).matches()) {
                 sendStatic(context, uri, "application/octet-stream");
