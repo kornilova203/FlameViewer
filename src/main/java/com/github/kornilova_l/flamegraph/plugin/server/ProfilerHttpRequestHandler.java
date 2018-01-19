@@ -335,12 +335,16 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
         }
     }
 
+    /**
+     * Sends code 302 FOUND if file was found
+     * and code 404 NOT_FOUND otherwise.
+     */
     private void sendIfFileExist(FullHttpRequest fullHttpRequest, ChannelHandlerContext context) {
         String fileName = fullHttpRequest.headers().get("File-Name");
         if (PluginFileManager.getInstance().getLogFile("uploaded-files", fileName) != null) {
-            sendStatus(context.channel(), true);
+            sendStatus(HttpResponseStatus.FOUND, context.channel());
         } else {
-            sendStatus(context.channel(), false);
+            sendStatus(HttpResponseStatus.NOT_FOUND, context.channel());
         }
     }
 

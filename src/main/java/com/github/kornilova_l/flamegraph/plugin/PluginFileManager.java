@@ -248,7 +248,7 @@ public class PluginFileManager {
             if (subDir.isDirectory()) {
                 File[] files = subDir.listFiles();
                 if (files == null) {
-                    return null;
+                    continue;
                 }
                 for (File file : files) {
                     if (file.getName().equals(fileName)) {

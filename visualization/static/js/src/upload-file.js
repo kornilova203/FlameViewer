@@ -26,10 +26,10 @@ class FileUploader {
 
     /**
      * @param {FileUploader} that
-     * @param {number} status
+     * @param {boolean} ifWasFound
      */
-    static uploadFile(that, status) {
-        if (status === 200) { // if file with this name exist
+    static uploadFile(that, ifWasFound) {
+        if (ifWasFound) { // if file with this name exist
             common.showError("File already exists");
         } else {
             const bytesInMB = 1000000;
@@ -74,10 +74,10 @@ class FileUploader {
 
     /**
      * @param {FileUploader} that
-     * @param {number} status
+     * @param {boolean} ifFileWasFound
      */
-    static reloadToNewFile(that, status) {
-        if (status === 200) {
+    static reloadToNewFile(that, ifFileWasFound) {
+        if (ifFileWasFound) {
             redirectToFile(that.file.name);
         } else {
             common.showError("File format is unsupported");
@@ -91,7 +91,7 @@ class FileUploader {
     checkIfFileWasUploaded(callback) {
         const request = new XMLHttpRequest();
         request.onload = () => {
-            callback(this, request.status);
+            callback(this, request.status === 302); // if was found
         };
         request.open("GET", "/flamegraph-profiler/does-file-exist", true);
         request.setRequestHeader('File-Name', this.file.name);

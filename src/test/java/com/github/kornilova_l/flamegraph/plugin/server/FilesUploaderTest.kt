@@ -2,6 +2,7 @@ package com.github.kornilova_l.flamegraph.plugin.server
 
 import com.github.kornilova_l.flamegraph.plugin.PluginFileManager
 import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase
+import io.netty.handler.codec.http.HttpResponseStatus
 import org.jetbrains.ide.BuiltInServerManager
 import java.io.BufferedReader
 import java.io.DataOutputStream
@@ -65,15 +66,15 @@ class FilesUploaderTest : LightPlatformCodeInsightFixtureTestCase() {
     fun testIfFileUploaded() {
         PluginFileManager.getInstance().deleteAllUploadedFiles()
         var responseCode = sendRequestDoesFileExist("file-does-not-exist.txt")
-        assertEquals(400, responseCode)
+        assertEquals(HttpResponseStatus.NOT_FOUND.code(), responseCode)
 
         sendFile("not-supported-file.txt", ByteArray(100))
         responseCode = sendRequestDoesFileExist("not-supported-file.txt")
-        assertEquals(400, responseCode)
+        assertEquals(HttpResponseStatus.NOT_FOUND.code(), responseCode)
 
         sendFile("supported-file.ser", ByteArray(100))
         responseCode = sendRequestDoesFileExist("supported-file.ser")
-        assertEquals(200, responseCode)
+        assertEquals(HttpResponseStatus.FOUND.code(), responseCode)
     }
 
     private fun sendRequestDoesFileExist(fileName: String): Int {
@@ -131,8 +132,8 @@ class FilesUploaderTest : LightPlatformCodeInsightFixtureTestCase() {
     }
 
     companion object {
-        private val bytesInMB = 1_000_000
-        private val megabytesInOnePart = 100
+        private const val bytesInMB = 1_000_000
+        private const val megabytesInOnePart = 100
 
         fun sendFile(fileName: String, bytes: ByteArray, reverseOrder: Boolean = false) {
             var partsCount = bytes.size / (bytesInMB * megabytesInOnePart)
