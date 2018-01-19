@@ -203,61 +203,20 @@ public class PluginFileManager {
                 fileNames.add(new FileNameAndDate(file));
             }
         }
-        finallyDeleteRemovedFiles();
     }
 
-    public synchronized String getStaticFilePath(String staticFileUri) {
-        Path path = Paths.get(
+    public synchronized File getStaticFile(String staticFileUri) {
+        return Paths.get(
                 staticDirPath.toString(),
                 staticFileUri.substring(REQUEST_PREFIX.length(), staticFileUri.length())
-        );
-        return path.toString().replaceAll("%20", " ");
+        ).toFile();
     }
 
-    /**
-     * If you have a file name you should use {@link #getLogDirPath(String, String)}
-     */
     @NotNull
     private File getLogDirPath(@NotNull String projectName) {
         Path path = Paths.get(logDirPath.toString(), projectName);
         createDirIfNotExist(path);
         return path.toFile();
-    }
-
-    /**
-     * @param fileName file name is used to get an extension in case if project is UPLOADED_FILES dir
-     */
-    @Nullable
-    private File getLogDirPath(@NotNull String projectName, @NotNull String fileName) {
-        if (!Objects.equals(projectName, UPLOADED_FILES)) {
-            return getLogDirPath(projectName);
-        }
-        return findFileInUploadedFiles(fileName);
-    }
-
-    /**
-     * @return parent directory of file. null if file was not found
-     */
-    @Nullable
-    private File findFileInUploadedFiles(@NotNull String fileName) {
-        File[] subDirs = uploadedFilesDir.listFiles();
-        if (subDirs == null) {
-            return null;
-        }
-        for (File subDir : subDirs) {
-            if (subDir.isDirectory()) {
-                File[] files = subDir.listFiles();
-                if (files == null) {
-                    continue;
-                }
-                for (File file : files) {
-                    if (file.getName().equals(fileName)) {
-                        return subDir;
-                    }
-                }
-            }
-        }
-        return null;
     }
 
     @Nullable
@@ -273,15 +232,10 @@ public class PluginFileManager {
 
     @Nullable
     public synchronized File getLogFile(String projectName, String fileName) {
-        File parentDir = getLogDirPath(projectName, fileName);
-        if (parentDir == null) {
-            return null;
+        if (!Objects.equals(projectName, UPLOADED_FILES)) {
+            return Paths.get(logDirPath.toString(), projectName, fileName).toFile();
         }
-        File file = Paths.get(parentDir.toString(), fileName).toFile();
-        if (file.exists()) {
-            return file;
-        }
-        return null;
+        return findFileInSubDirectories(fileName, uploadedFilesDir);
     }
 
     @Nullable
@@ -367,24 +321,81 @@ public class PluginFileManager {
         if (file == null || !file.exists()) {
             return;
         }
-        //noinspection ResultOfMethodCallIgnored
-        file.renameTo(Paths.get(logDirPath.toString(), DELETED_FILES, fileName).toFile());
+        /* uploaded files are stored in separate directories
+         * (name of a directory is an id of converter that is responsible for the file)
+         * when we move file to temporal directory we want to save converter id,
+         * so if delete action is undone we can move file back to needed directory */
+        boolean res;
+        if (projectName.equals("uploaded-files")) {
+            String converterId = file.getParentFile().getName();
+            File newDir = Paths.get(logDirPath.toString(), DELETED_FILES, converterId).toFile();
+            if (!newDir.exists()) {
+                if (!newDir.mkdir()) {
+                    LOG.warn("Cannot create directory to move deleted file. File: " + file + " Dir: " + newDir);
+                    return;
+                }
+            }
+            res = file.renameTo(Paths.get(newDir.toString(), fileName).toFile());
+        } else {
+            res = file.renameTo(Paths.get(logDirPath.toString(), DELETED_FILES, fileName).toFile());
+        }
+        if (!res) {
+            LOG.warn("Cannot move file to DELETED_FILES directory. File: " + file);
+        }
     }
 
     public synchronized void undoDeleteFile(String fileName, String projectName) {
-        File file = Paths.get(logDirPath.toString(), DELETED_FILES, fileName).toFile();
-        if (file == null || !file.exists()) {
+        File deletedFile = getDeletedFile(fileName, projectName);
+        if (deletedFile == null || !deletedFile.exists()) {
             LOG.debug("Undo delete. Cannot find file to undo delete: " + fileName);
             return;
         }
-        File projectDirPath = getLogDirPath(projectName, fileName);
+        File projectDirPath;
+        if (projectName.equals("uploaded-files")) {
+            String converterId = deletedFile.getParentFile().getName();
+            projectDirPath = Paths.get(logDirPath.toString(), UPLOADED_FILES, converterId).toFile();
+        } else  {
+            projectDirPath = Paths.get(logDirPath.toString(), projectName).toFile();
+        }
         if (projectDirPath == null) {
             return;
         }
-        boolean res = file.renameTo(Paths.get(projectDirPath.toString(), fileName).toFile());
+        boolean res = deletedFile.renameTo(Paths.get(projectDirPath.toString(), fileName).toFile());
         if (!res) {
             LOG.warn("Cannot move file back from temp directory. File: " + fileName);
         }
+    }
+
+    @Nullable
+    private File getDeletedFile(String fileName, String projectName) {
+        File deletedFilesDir = Paths.get(logDirPath.toString(), DELETED_FILES).toFile();
+        if (projectName.equals("uploaded-files")) {
+            return findFileInSubDirectories(fileName, deletedFilesDir);
+        } else {
+            return Paths.get(deletedFilesDir.toString(), fileName).toFile();
+        }
+    }
+
+    @Nullable
+    private File findFileInSubDirectories(String fileName, File dir) {
+        File[] subDirs = dir.listFiles();
+        if (subDirs == null) {
+            return null;
+        }
+        for (File subDir : subDirs) {
+            if (subDir.isDirectory() && !subDir.getName().equals(DELETED_FILES) && !subDir.getName().equals(NOT_CONVERTED)) {
+                File[] files = subDir.listFiles();
+                if (files == null) {
+                    continue;
+                }
+                for (File file : files) {
+                    if (file.getName().equals(fileName)) {
+                        return file;
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     public void moveFileToUploadedFiles(@NotNull String converterId, @NotNull String fileName, @NotNull File file) {

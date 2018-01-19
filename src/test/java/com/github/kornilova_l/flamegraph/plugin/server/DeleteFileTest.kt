@@ -20,6 +20,8 @@ class DeleteFileTest : LightPlatformCodeInsightFixtureTestCase() {
         assertTrue(file.isFile)
 
         doTestDelete(file, fileName, projectName)
+
+        doTestUndoDelete(file, fileName, projectName)
     }
 
     fun testDeleteUploadedFile() {
@@ -32,19 +34,43 @@ class DeleteFileTest : LightPlatformCodeInsightFixtureTestCase() {
         assertNotNull(file) // file was sent
         assertTrue(file!!.exists())
 
-        doTestDelete(file, fileName, projectName)
+        doTestDelete(file, fileName, projectName, "flamegraph")
+
+        doTestUndoDelete(file, fileName, projectName)
     }
 
-    private fun doTestDelete(file: File, fileName: String, projectName: String) {
-        assertEquals(HttpResponseStatus.OK.code(), sendDeleteFileReques(projectName, fileName))
+    private fun doTestDelete(file: File, fileName: String, projectName: String, converterId: String? = null) {
+        assertEquals(HttpResponseStatus.OK.code(), sendDeleteFileRequest(projectName, fileName))
         assertFalse(file.exists())
 
         /* check that file was mode to temp directory for deleted files */
-        val fileInDeletedDir = Paths.get(PluginFileManager.getInstance().logDirPath.toString(), "deleted", fileName).toFile()
+        val fileInDeletedDir = if (converterId != null) {
+            Paths.get(PluginFileManager.getInstance().logDirPath.toString(), "deleted", converterId, fileName).toFile()
+        } else {
+            Paths.get(PluginFileManager.getInstance().logDirPath.toString(), "deleted", fileName).toFile()
+        }
         assertTrue(fileInDeletedDir.exists())
     }
 
-    private fun sendDeleteFileReques(projectName: String, fileName: String): Int {
+    private fun doTestUndoDelete(deletedFile: File, fileName: String, projectName: String) {
+        val response = sendUndoDeleteRequest(fileName, projectName)
+        assertEquals(HttpResponseStatus.OK.code(), response)
+
+        assertTrue(deletedFile.exists())
+    }
+
+    private fun sendUndoDeleteRequest(fileName: String, projectName: String): Int {
+        val url = URL("http://localhost:${BuiltInServerManager.getInstance().port}${ServerNames.UNDO_DELETE_FILE}")
+        val connection = url.openConnection() as HttpURLConnection
+        connection.requestMethod = "POST"
+
+        connection.setRequestProperty("File-Name", fileName)
+        connection.setRequestProperty("Project-Name", projectName)
+
+        return connection.responseCode
+    }
+
+    private fun sendDeleteFileRequest(projectName: String, fileName: String): Int {
         val url = URL("http://localhost:${BuiltInServerManager.getInstance().port}${ServerNames.DELETE_FILE}")
         val connection = url.openConnection() as HttpURLConnection
         connection.requestMethod = "POST"

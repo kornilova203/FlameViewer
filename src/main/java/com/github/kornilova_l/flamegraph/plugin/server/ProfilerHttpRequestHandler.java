@@ -106,9 +106,9 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
                               @NotNull String projectName,
                               @Nullable String include,
                               @Nullable String exclude) {
-        htmlFilePath = fileManager.getStaticFilePath(htmlFilePath);
+        File staticFile = fileManager.getStaticFile(htmlFilePath);
         String filterParameters = getFilterAsGetParameters(include, exclude);
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(new File(htmlFilePath)))) {
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(staticFile))) {
             return String.join("", bufferedReader.lines()
                     .map((line) -> {
                                 String replacement = fileName == null ?
@@ -157,8 +157,8 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
     private void sendStatic(ChannelHandlerContext context,
                             String fileUri,
                             String contentType) throws IOException {
-        String filePath = fileManager.getStaticFilePath(fileUri);
-        try (InputStream inputStream = new FileInputStream(new File(filePath))) {
+        File staticFile = fileManager.getStaticFile(fileUri);
+        try (InputStream inputStream = new FileInputStream(staticFile)) {
             sendBytes(context, contentType, IOUtils.toByteArray(inputStream));
         }
     }
