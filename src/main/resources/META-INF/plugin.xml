@@ -1,7 +1,7 @@
 <idea-plugin url="https://github.com/kornilova-l/flamegraph-visualizer">
     <id>com.github.kornilovaL.flamegraphProfiler</id>
     <name>Flamegraph Profiler</name>
-    <version>0.6</version>
+    <version>0.7</version>
 
     <vendor url="https://github.com/kornilova-l" email="kornilova203@gmail.com"/>
 
@@ -33,15 +33,11 @@ Detailed description at <a href="https://github.com/kornilova-l/flamegraph-visua
     ]]></description>
 
     <change-notes><![CDATA[
-    Profiler:<br/>
-      * Now it is possible to instrument methods of system classes<br/>
-      * Bug fixes<br/>
-    Visualizer:<br/>
-      * Yourkit files are supported<br/>
-      * Files list is updated without need to reload page<br/>
-      * Implemented files search<br/>
-      * Call traces page is open by default<br/>
-      * Full name of file is shown when the cursor is placed above the file<br/>
+    <ul>
+      <li>Show message if uploaded file already exist or is unsupported.</li>
+      <li>Optimized visualization of Yourkit files.</li>
+      <li>Bug fixes and minor improvements.</li>
+    </ul>
     ]]>
     </change-notes>
 
