@@ -41,7 +41,7 @@ class FilesListManager {
             appendInput(this.$fileList); // 'upload new file' input
             listenInput();
         } else {
-            $fileList.css("height", "calc(100vh - 126px)")
+            $fileList.css("height", "calc(100vh - 130px)")
         }
     }
 

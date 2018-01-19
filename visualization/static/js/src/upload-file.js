@@ -128,10 +128,30 @@ function sendToServer(file) {
     }
 }
 
+function showSupportedFormats($input) {
+    const $button = $input.find(".supported-formats-help");
+    const $info = $input.find(".supported-formats");
+    const $closeButton = $input.find(".close-supported-formats");
+
+    $button.click(() => {
+        /* toggle visibility */
+       if ($info.hasClass("visible")) {
+           $info.removeClass("visible");
+       } else {
+           $info.addClass("visible");
+       }
+    });
+
+    $closeButton.click(() => {
+        $info.removeClass("visible");
+    });
+}
+
 function appendInput($fileList) {
-    const input = templates.tree.fileInput().content;
-    $(input).insertBefore(".file-list-actions");
-    $fileList.css("height", "calc(100vh - 217px)")
+    const $input = $(templates.tree.fileInput().content);
+    $input.insertBefore(".file-list-actions");
+    $fileList.css("height", "calc(100vh - 190px)");
+    showSupportedFormats($input);
 }
 
 function listenInput() {
