@@ -5,6 +5,7 @@ Instrumentation Java Profiler & Flamegraph Visualizer.
 https://plugins.jetbrains.com/plugin/10305-flamegraph-profiler
 
 ## Table of contents
+* [Quick Start](#quick-start)
 * [Performance Recording](#performance-recording)
 * [Visualizing Results](#visualizing-results)
 * [Flamegraph Visualizer Features](#flamegraph-visualizer-features)
@@ -16,6 +17,12 @@ https://plugins.jetbrains.com/plugin/10305-flamegraph-profiler
     * [Hot Spots](#hot-spots)    
     * [Call Tree](#call-tree)    
     * [Detailed View of Thread](#detailed-view-of-thread)
+    
+## Quick Start
+Use Flight Recorder to profile your program and then open flamegraphs:
+1. Run JVM with following VM options: `-XX:+UnlockCommercialFeatures -XX:+FlightRecorder -XX:StartFlightRecording=duration=30s,filename=my_recording.jfr`
+2. Open visualizer **Tools | Flamegraph Profiler | Upload File...**
+3. Upload my_recording.jfr
 
 ## Performance Recording
 Plugin lets you record performance of Java program with instrumentation profiler.
