@@ -35,6 +35,12 @@ The configuration below tells profiler to record all methods from my.package.uti
 3. Also you can configure profiler to save value of method's parameters or it's return value. This should be done if you want to see how parameters influence method's performance. To enable this option check 'Save' checkbox beside type of parameter(s) when editing pattern in configuration.
 4. Methods of system classes are not recorded by default. You may include them if you specify full name of a system class in configuration. For example: _java.io.FileOutputStream.\*(\*)_
 
+When your program finishes you will see following message:
+```
+Methods count: 42
+```
+If `Method count: 0` it means that either configuration is incorrect or all methods took less than 1ms. To profile small quick methods use sampling profiler (see [Quick Start](#quick-start)). 
+
 ## Visualizing Results
 You can analyze performance of your program with **Flamegraph Visualizer** that is included in the plugin.  
 It supports following files:
