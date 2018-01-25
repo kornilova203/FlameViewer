@@ -30,7 +30,7 @@ public class ReflectionBenchmark {
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void withoutReflection() throws InterruptedException {
-        StartData startData = Proxy.createStartData(System.currentTimeMillis(), new Object[0]);
+        StartData startData = new StartData(System.currentTimeMillis(), new Object[0]);
         try {
             Thread.sleep(2);
             startData.setDuration(System.currentTimeMillis());
