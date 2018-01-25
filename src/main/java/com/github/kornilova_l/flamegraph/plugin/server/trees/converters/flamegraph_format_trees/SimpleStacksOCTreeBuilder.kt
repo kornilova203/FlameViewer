@@ -14,6 +14,7 @@ open class SimpleStacksOCTreeBuilder(stacks: Map<String, Int>) : TreeBuilder {
     private val treeBuilder: Tree.Builder = Tree.newBuilder()
     private val tree: Tree
     private var maxDepth = 0
+    private val uniqueStrings = HashMap<String, String>()
 
     init {
         tree = buildTree(stacks)
@@ -42,8 +43,16 @@ open class SimpleStacksOCTreeBuilder(stacks: Map<String, Int>) : TreeBuilder {
         }
         var nodeBuilder: Tree.Node.Builder = treeBuilder.baseNodeBuilder
         for (call in calls) {
-            nodeBuilder = updateNodeList(nodeBuilder, getClassName(call),
-                    getMethodName(call), getDescription(call), width.toLong())
+            nodeBuilder = updateNodeList(nodeBuilder,
+                    getUniqueString(uniqueStrings, getClassName(call)),
+                    getUniqueString(uniqueStrings, getMethodName(call)),
+                    getUniqueString(uniqueStrings, getDescription(call)), width.toLong())
+        }
+    }
+
+    companion object {
+        fun getUniqueString(uniqueStrings: HashMap<String, String>, string: String): String {
+            return uniqueStrings.computeIfAbsent(string, { string })
         }
     }
 
