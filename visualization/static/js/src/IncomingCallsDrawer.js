@@ -1,7 +1,6 @@
 class IncomingCallsDrawer extends AccumulativeTreeDrawer {
     constructor(tree) {
         super(tree);
-        this._countNodesRecursively(this.baseNode);
     }
 
     // noinspection all

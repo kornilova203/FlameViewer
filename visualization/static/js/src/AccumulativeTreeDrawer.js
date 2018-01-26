@@ -39,24 +39,12 @@ class AccumulativeTreeDrawer {
         this.$popupIcon = null;
         this.canvasOffset = 0;
         this.enableZoom = true;
-        this.nodesCount = -1;
+        this.nodesCount = tree.getTreeInfo().getNodesCount();
         // for search:
         this.isHighlightedFunction = null;
         this.currentlyShownNodes = [];
         this.baseNode.fillCommand = {};
         this.wasMainStageHighlighted = false;
-    }
-
-    /**
-     * @param node
-     * @public
-     */
-    _countNodesRecursively(node) {
-        this.nodesCount++;
-        const children = node.getNodesList();
-        for (let i = 0; i < children.length; i++) {
-            this._countNodesRecursively(children[i]);
-        }
     }
 
     /**

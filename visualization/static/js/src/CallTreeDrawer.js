@@ -21,7 +21,6 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
         this.$zoomedCanvas = null;
         this.id = id;
         this.enableZoom = true;
-        this._countNodesRecursively(this.baseNode);
     }
 
     //noinspection JSUnusedGlobalSymbols
