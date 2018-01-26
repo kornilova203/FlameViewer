@@ -35,6 +35,7 @@ abstract class TreeRequestHandler(urlDecoder: QueryStringDecoder,
         treeBuilder.setTreeInfo(tree.treeInfo)
                 .setDepth(tree.depth)
                 .setWidth(tree.width)
+                .setVisibleDepth(lastLayer)
         return treeBuilder.build()
     }
 

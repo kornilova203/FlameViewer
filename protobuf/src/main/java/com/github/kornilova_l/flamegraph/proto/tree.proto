@@ -10,7 +10,8 @@ message Tree {
     TreeInfo tree_info = 1;
     Node base_node = 2;
     uint32 depth = 3;
-    int64 width = 4;
+    uint32 visible_depth = 4; // is null if tree was not cut
+    int64 width = 5;
 
     message Node {
         int64 offset = 1; // how much time passed since start of tree
