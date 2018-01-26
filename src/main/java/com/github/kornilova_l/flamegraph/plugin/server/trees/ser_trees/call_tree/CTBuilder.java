@@ -1,6 +1,7 @@
 package com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees.call_tree;
 
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TreesSet;
+import com.github.kornilova_l.flamegraph.plugin.server.trees.util.TreesUtil;
 import com.github.kornilova_l.flamegraph.proto.EventProtos;
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree;
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node;
@@ -11,7 +12,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static com.github.kornilova_l.flamegraph.plugin.server.trees.DescriptionConverter.getBeautifulDesc;
-import static com.github.kornilova_l.flamegraph.plugin.server.trees.TreesSet.setTreeWidth;
 
 class CTBuilder {
     private final String threadName;
@@ -101,7 +101,8 @@ class CTBuilder {
         }
         treeBuilder.setBaseNode(baseNode);
         subtractOffsetRecursively(treeBuilder.getBaseNodeBuilder(), threadStartTime);
-        setTreeWidth(treeBuilder);
+        TreesUtil.INSTANCE.setTreeWidth(treeBuilder);
+        TreesUtil.INSTANCE.setNodesCount(treeBuilder);
         treeBuilder.getTreeInfoBuilder().setStartTime(
                 threadStartTime - startTimeOfFirstThread
         );

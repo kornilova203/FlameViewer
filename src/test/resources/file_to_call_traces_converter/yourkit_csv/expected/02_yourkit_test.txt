@@ -1,3 +1,6 @@
+tree_info {
+  nodes_count: 11
+}
 base_node {
   nodes {
     width: 200

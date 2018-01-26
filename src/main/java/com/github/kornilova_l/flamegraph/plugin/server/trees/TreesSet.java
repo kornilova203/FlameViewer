@@ -1,7 +1,7 @@
 package com.github.kornilova_l.flamegraph.plugin.server.trees;
 
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeManager.TreeType;
-import com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumulative_trees.AccumulativeTreesHelper;
+import com.github.kornilova_l.flamegraph.plugin.server.trees.util.TreesUtil;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumulative_trees.MethodAccumulativeTreeBuilder;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumulative_trees.incoming_calls.IncomingCallsBuilder;
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree;
@@ -15,9 +15,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.TreeMap;
-
-import static com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumulative_trees.AccumulativeTreesHelper.setNodesOffsetRecursively;
-import static com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumulative_trees.AccumulativeTreesHelper.updateNodeList;
 
 public abstract class TreesSet {
     private final List<HotSpot> hotSpots = new ArrayList<>();
@@ -54,24 +51,6 @@ public abstract class TreesSet {
         return maxDepth;
     }
 
-    /**
-     * This method must be called after offsets of nodes are set
-     * {@link AccumulativeTreesHelper#setNodesOffsetRecursively}
-     *
-     * @param treeBuilder set width to this tree
-     */
-    public static void setTreeWidth(Tree.Builder treeBuilder) {
-        Node.Builder baseNode = treeBuilder.getBaseNodeBuilder();
-        if (baseNode.getNodesCount() == 0) { // if tree is empty
-            treeBuilder.setWidth(0);
-            return;
-        }
-        Node.Builder lastNode = baseNode.getNodesBuilder(baseNode.getNodesCount() - 1);
-        treeBuilder.setWidth(
-                lastNode.getOffset() + lastNode.getWidth()
-        );
-    }
-
     public abstract TreesPreview getTreesPreview(@Nullable Filter filter);
 
     public abstract Tree getTree(TreeType treeType,
@@ -106,7 +85,8 @@ public abstract class TreesSet {
 
     public abstract TreesProtos.Trees getCallTree(@Nullable Filter filter, @Nullable List<Integer> threadsIds);
 
-    @NotNull List<HotSpot> getHotSpots() {
+    @NotNull
+    List<HotSpot> getHotSpots() {
         if (hotSpots.size() == 0) {
             if (outgoingCalls == null) {
                 outgoingCalls = getTree(TreeType.OUTGOING_CALLS, null);
@@ -164,11 +144,12 @@ public abstract class TreesSet {
         }
         int maxDepth = getMaxDepthRecursively(filteredTree.getBaseNodeBuilder(), 0);
         if (!isCallTree) {
-            setNodesOffsetRecursively(filteredTree.getBaseNodeBuilder(), 0);
+            TreesUtil.INSTANCE.setNodesOffsetRecursively(filteredTree.getBaseNodeBuilder(), 0);
         } else {
             updateOffset(filteredTree);
         }
-        setTreeWidth(filteredTree);
+        TreesUtil.INSTANCE.setTreeWidth(filteredTree);
+        TreesUtil.INSTANCE.setNodesCount(filteredTree);
         filteredTree.setDepth(maxDepth);
         return filteredTree.build();
     }
@@ -218,7 +199,7 @@ public abstract class TreesSet {
                     nodeBuilder.addNodes(newNode);
                     newNode = nodeBuilder.getNodesBuilderList().get(nodeBuilder.getNodesBuilderList().size() - 1);
                 } else {
-                    newNode = updateNodeList(nodeBuilder, child);
+                    newNode = TreesUtil.INSTANCE.updateNodeList(nodeBuilder, child);
                 }
                 buildFilteredTreeRecursively(
                         newNode,

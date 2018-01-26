@@ -1,6 +1,7 @@
 trees {
   tree_info {
     thread_name: "main"
+    nodes_count: 5
   }
   base_node {
     nodes {

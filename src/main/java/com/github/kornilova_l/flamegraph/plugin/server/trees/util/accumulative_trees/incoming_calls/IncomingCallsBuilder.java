@@ -1,6 +1,7 @@
 package com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumulative_trees.incoming_calls;
 
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeBuilder;
+import com.github.kornilova_l.flamegraph.plugin.server.trees.util.TreesUtil;
 import com.github.kornilova_l.flamegraph.proto.TreeProtos;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -8,13 +9,10 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.github.kornilova_l.flamegraph.plugin.server.trees.TreesSet.setTreeWidth;
-import static com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumulative_trees.AccumulativeTreesHelper.setNodesOffsetRecursively;
-import static com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumulative_trees.AccumulativeTreesHelper.updateNodeList;
-
 public final class IncomingCallsBuilder implements TreeBuilder {
     private TreeProtos.Tree.Builder treeBuilder;
-    @Nullable private final TreeProtos.Tree tree;
+    @Nullable
+    private final TreeProtos.Tree tree;
     private int maxDepth = 0;
 
     public IncomingCallsBuilder(@NotNull TreeProtos.Tree outgoingCalls) {
@@ -26,8 +24,9 @@ public final class IncomingCallsBuilder implements TreeBuilder {
             tree = null;
             return;
         }
-        setNodesOffsetRecursively(treeBuilder.getBaseNodeBuilder(), 0);
-        setTreeWidth(treeBuilder);
+        TreesUtil.INSTANCE.setNodesOffsetRecursively(treeBuilder.getBaseNodeBuilder(), 0);
+        TreesUtil.INSTANCE.setTreeWidth(treeBuilder);
+        TreesUtil.INSTANCE.setNodesCount(treeBuilder);
         treeBuilder.setDepth(maxDepth);
         tree = treeBuilder.build();
     }
@@ -66,7 +65,7 @@ public final class IncomingCallsBuilder implements TreeBuilder {
                 for (NodeBuilderAndTime returnedNodeBuilder : traverseTree(childNode, depth)) {
                     long time = returnedNodeBuilder.time;
                     TreeProtos.Tree.Node.Builder childOfReturnedNode =
-                            updateNodeList(returnedNodeBuilder.nodeBuilder, node.getNodeInfo().getClassName(),
+                            TreesUtil.INSTANCE.updateNodeList(returnedNodeBuilder.nodeBuilder, node.getNodeInfo().getClassName(),
                                     node.getNodeInfo().getMethodName(), node.getNodeInfo().getDescription(), time);
                     arrayList.add(
                             new NodeBuilderAndTime(
@@ -83,7 +82,7 @@ public final class IncomingCallsBuilder implements TreeBuilder {
     private List<NodeBuilderAndTime> addLeafToBaseNodeChildren(TreeProtos.Tree.Node node) {
         ArrayList<NodeBuilderAndTime> arrayList = new ArrayList<>();
         TreeProtos.Tree.Node.Builder newNode =
-                updateNodeList(treeBuilder.getBaseNodeBuilder(), node);
+                TreesUtil.INSTANCE.updateNodeList(treeBuilder.getBaseNodeBuilder(), node);
         arrayList.add(
                 new NodeBuilderAndTime(
                         newNode,

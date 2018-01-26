@@ -1,6 +1,6 @@
 package com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumulative_trees
 
-import com.github.kornilova_l.flamegraph.plugin.server.trees.TreesSet.setTreeWidth
+import com.github.kornilova_l.flamegraph.plugin.server.trees.util.TreesUtil
 import com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumulative_trees.incoming_calls.IncomingCallsBuilder
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree
 import org.junit.Assert.assertEquals
@@ -64,7 +64,8 @@ class MethodAccumulativeTreeBuilderTest {
                         )
                 )
         treeBuilder.baseNodeBuilder.addNodes(node)
-        setTreeWidth(treeBuilder)
+        TreesUtil.setTreeWidth(treeBuilder)
+        TreesUtil.setNodesCount(treeBuilder)
         return treeBuilder.build()
     }
 }

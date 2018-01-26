@@ -33,8 +33,9 @@ message Tree {
     }
 
     message TreeInfo {
-        int64 start_time = 2;
-        string thread_name = 4;
-        float time_percent = 5; // for method trees
+        int64 start_time = 1;
+        string thread_name = 2;
+        float time_percent = 3; // for method trees
+        int32 nodes_count = 4;
     }
 }

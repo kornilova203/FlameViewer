@@ -2,9 +2,8 @@ package com.github.kornilova_l.flamegraph.plugin.server.trees.converters
 
 import com.github.kornilova_l.flamegraph.plugin.converters.ProfilerToFlamegraphConverter
 import com.github.kornilova_l.flamegraph.plugin.server.trees.FileToCallTracesConverter
-import com.github.kornilova_l.flamegraph.plugin.server.trees.TreesSet.setTreeWidth
-import com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumulative_trees.AccumulativeTreesHelper
-import com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumulative_trees.AccumulativeTreesHelper.setNodesOffsetRecursively
+import com.github.kornilova_l.flamegraph.plugin.server.trees.util.TreesUtil
+import com.github.kornilova_l.flamegraph.plugin.server.trees.util.TreesUtil.setNodesOffsetRecursively
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node
 import java.io.BufferedReader
@@ -72,7 +71,8 @@ class YourkitCsvToCallTracesConverter : FileToCallTracesConverter() {
         }
         tree.depth = maxDepth
         setNodesOffsetRecursively(tree.baseNodeBuilder, 0)
-        setTreeWidth(tree)
+        TreesUtil.setTreeWidth(tree)
+        TreesUtil.setNodesCount(tree)
         return tree.build()
     }
 
@@ -110,7 +110,7 @@ class YourkitCsvToCallTracesConverter : FileToCallTracesConverter() {
             currentStack.removeAt(currentStack.size - 1)
         }
         val parametersPos = name.indexOf('(')
-        val newNode = AccumulativeTreesHelper.updateNodeList(
+        val newNode = TreesUtil.updateNodeList(
                 currentStack[currentStack.size - 1],
                 getClassName(name, parametersPos),
                 getMethodName(name, parametersPos),

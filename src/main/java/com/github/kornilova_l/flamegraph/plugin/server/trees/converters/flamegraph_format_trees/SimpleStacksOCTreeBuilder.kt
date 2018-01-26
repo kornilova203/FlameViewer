@@ -1,9 +1,10 @@
 package com.github.kornilova_l.flamegraph.plugin.server.trees.converters.flamegraph_format_trees
 
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeBuilder
-import com.github.kornilova_l.flamegraph.plugin.server.trees.TreesSet.setTreeWidth
-import com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumulative_trees.AccumulativeTreesHelper.setNodesOffsetRecursively
-import com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumulative_trees.AccumulativeTreesHelper.updateNodeList
+import com.github.kornilova_l.flamegraph.plugin.server.trees.util.TreesUtil
+import com.github.kornilova_l.flamegraph.plugin.server.trees.util.TreesUtil.setNodesCount
+import com.github.kornilova_l.flamegraph.plugin.server.trees.util.TreesUtil.setNodesOffsetRecursively
+import com.github.kornilova_l.flamegraph.plugin.server.trees.util.TreesUtil.updateNodeList
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree
 
 /**
@@ -24,7 +25,8 @@ open class SimpleStacksOCTreeBuilder(stacks: Map<String, Int>) : TreeBuilder {
         treeBuilder.setBaseNode(Tree.Node.newBuilder())
         processStacks(stacks)
         setNodesOffsetRecursively(treeBuilder.baseNodeBuilder, 0)
-        setTreeWidth(treeBuilder)
+        TreesUtil.setTreeWidth(treeBuilder)
+        setNodesCount(treeBuilder)
         treeBuilder.depth = maxDepth
         return treeBuilder.build()
     }
