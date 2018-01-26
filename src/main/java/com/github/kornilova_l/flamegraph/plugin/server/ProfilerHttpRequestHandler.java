@@ -3,10 +3,11 @@ package com.github.kornilova_l.flamegraph.plugin.server;
 import com.github.kornilova_l.flamegraph.plugin.PluginFileManager;
 import com.github.kornilova_l.flamegraph.plugin.server.methods_count_handlers.AccumulativeTreesMethodCounter;
 import com.github.kornilova_l.flamegraph.plugin.server.methods_count_handlers.CallTreeMethodsCounter;
-import com.github.kornilova_l.flamegraph.plugin.server.tree_request_handlers.CallTreeRequestHandler;
-import com.github.kornilova_l.flamegraph.plugin.server.tree_request_handlers.HotSpotsRequestHandler;
-import com.github.kornilova_l.flamegraph.plugin.server.tree_request_handlers.IncomingCallsRequestHandler;
-import com.github.kornilova_l.flamegraph.plugin.server.tree_request_handlers.OutgoingCallsRequestHandler;
+import com.github.kornilova_l.flamegraph.plugin.server.tree_request_handlers.json.HotSpotsRequestHandler;
+import com.github.kornilova_l.flamegraph.plugin.server.tree_request_handlers.tree.IncomingCallsRequestHandler;
+import com.github.kornilova_l.flamegraph.plugin.server.tree_request_handlers.tree.OutgoingCallsRequestHandler;
+import com.github.kornilova_l.flamegraph.plugin.server.tree_request_handlers.trees.CallTreeRequestHandler;
+import com.github.kornilova_l.flamegraph.plugin.server.tree_request_handlers.trees.TreesPreviewHandler;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.Filter;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeManager;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeManager.TreeType;
@@ -289,8 +290,10 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
         }
         switch (uri) {
             case ServerNames.CALL_TREE_JS_REQUEST:
-            case ServerNames.CALL_TREE_PREVIEW_JS_REQUEST:
                 new CallTreeRequestHandler(urlDecoder, context).process();
+                return true;
+            case ServerNames.CALL_TREE_PREVIEW_JS_REQUEST:
+                new TreesPreviewHandler(urlDecoder, context).process();
                 return true;
             case ServerNames.OUTGOING_CALLS_JS_REQUEST:
                 new OutgoingCallsRequestHandler(urlDecoder, context).process();
