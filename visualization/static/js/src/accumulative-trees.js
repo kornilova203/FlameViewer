@@ -26,7 +26,7 @@ function drawTree(tree, className, methodName, desc, percent) {
  * @param {Number} percent
  */
 function drawAccumulativeTree(tree, className, methodName, desc, percent) {
-    const drawer = new AccumulativeTreeDrawer(tree);
+    const drawer = new CallTracesDrawer(tree);
     common.hideLoader();
     drawAndShowLoader(drawer, className, methodName, desc, percent);
 }
@@ -61,7 +61,7 @@ function drawAndShowLoader(drawer, className, methodName, desc, percent) {
  * @param {Number} percent
  */
 function drawIncomingCalls(tree, className, methodName, desc, percent) {
-    const drawer = new IncomingCallsDrawer(tree);
+    const drawer = new BackTracesDrawer(tree);
     if (className === undefined && // if common tree
         drawer.getNodesCount() > 20000) {
         common.showMessage("Tree has more than 20 000 nodes. " +

@@ -1,9 +1,8 @@
-class IncomingCallsDrawer extends AccumulativeTreeDrawer {
+class BackTracesDrawer extends AccumulativeTreeDrawer {
     constructor(tree) {
         super(tree);
     }
 
-    // noinspection all
     /**
      * Get canvas Y coordinate (it start from top)
      * @param y
@@ -33,5 +32,4 @@ class IncomingCallsDrawer extends AccumulativeTreeDrawer {
             .css("left", offsetX)
             .css("margin-top", -this.canvasHeight + AccumulativeTreeDrawer._calcNormaOffsetY(depth + 1) - POPUP_MARGIN)
     }
-
 }

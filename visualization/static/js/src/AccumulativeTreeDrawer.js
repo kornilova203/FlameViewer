@@ -10,6 +10,7 @@ const CANVAS_PADDING = 35;
  * Draws tree without:
  * - parameters
  * - start time
+ * @abstract
  */
 class AccumulativeTreeDrawer {
     constructor(tree) {
