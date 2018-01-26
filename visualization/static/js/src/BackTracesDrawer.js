@@ -32,4 +32,12 @@ class BackTracesDrawer extends AccumulativeTreeDrawer {
             .css("left", offsetX)
             .css("margin-top", -this.canvasHeight + AccumulativeTreeDrawer._calcNormaOffsetY(depth + 1) - POPUP_MARGIN)
     }
+
+    /**
+     * @override
+     * @param $header
+     */
+    appendHeader($header) {
+        $header.insertBefore(this.$section.find(".canvas-wrapper"));
+    }
 }

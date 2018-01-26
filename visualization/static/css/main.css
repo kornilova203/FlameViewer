@@ -39,6 +39,10 @@ section header {
     top: 30px;
 }
 
+.header-call-traces {
+    top: 60px;
+}
+
 section header code {
     font-family: "Gotham Pro", sans-serif;
 }

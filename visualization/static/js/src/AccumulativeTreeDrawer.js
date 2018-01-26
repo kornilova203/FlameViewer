@@ -18,14 +18,9 @@ class AccumulativeTreeDrawer {
         this.treeWidth = this.tree.getWidth();
         this.currentCanvasWidth = 0;
         this.canvasHeight = (LAYER_HEIGHT + LAYER_GAP) * (this.tree.getDepth() + 1);
-        this.$section = null;
+        this.$section = this._createSection();
         this.stage = null;
         this.zoomedStage = null;
-        this.className = "";
-        this.methodName = "";
-        this.returnValue = "";
-        this.timePercent = 0;
-        this.parameters = [];
         this.zoomedNode = null;
         this.$fileMenu = $(".file-menu");
         this.baseNode = this.tree.getBaseNode();
@@ -55,18 +50,29 @@ class AccumulativeTreeDrawer {
      * @param {Number} timePercent
      */
     setHeader(className, methodName, desc, timePercent) {
-        this.className = className;
-        this.methodName = methodName;
-        this.returnValue = AccumulativeTreeDrawer._getReturnValue(desc);
-        this.parameters = AccumulativeTreeDrawer._getParameters(desc);
-        this.timePercent = timePercent;
+        const $header = $(templates.tree.methodHeader({
+            className: className,
+            methodName: methodName,
+            returnValue: AccumulativeTreeDrawer._getReturnValue(desc),
+            parameters: AccumulativeTreeDrawer._getParameters(desc),
+            timePercent: timePercent
+        }).content);
+        this.appendHeader($header)
+    }
+
+    /**
+     * @abstract
+     * @protected
+     * @param $header
+     */
+    appendHeader($header) {
+
     }
 
     draw() {
         console.log("start drawing");
         this._prepareDraw();
         const startTime = new Date().getTime();
-        this.$section = this._createSection();
         this._createCanvas();
 
         this._createPopup(); // one for all nodes
@@ -100,15 +106,7 @@ class AccumulativeTreeDrawer {
     };
 
     _createSection() {
-        const sectionContent = templates.tree.getAccumulativeTreeSection(
-            {
-                className: this.className,
-                methodName: this.methodName,
-                returnValue: this.returnValue,
-                parameters: this.parameters,
-                timePercent: this.timePercent
-            }
-        ).content;
+        const sectionContent = templates.tree.getAccumulativeTreeSection({}).content;
         return $(sectionContent).appendTo($("main"));
     };
 
