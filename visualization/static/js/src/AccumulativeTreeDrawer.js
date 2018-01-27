@@ -122,7 +122,7 @@ class AccumulativeTreeDrawer {
      */
     _drawNode(node, color, scaleX, offsetX, isMostFirst, stage, zoomedNodeDepth) {
         const shape = this._drawRectangle(node, color, scaleX, offsetX, isMostFirst, stage);
-        if (scaleX * this.currentCanvasWidth > 4 || node.depth - zoomedNodeDepth <= 1) {
+        if (scaleX * this.currentCanvasWidth > 8 || node.depth - zoomedNodeDepth <= 1) {
             this.listenScale(node, shape);
             this._addShowPopupEvent(shape, offsetX + this.canvasOffset, node.depth, node);
             this._drawLabel(AccumulativeTreeDrawer._getLabelText(node), shape, scaleX, offsetX, node.depth, stage);
@@ -772,7 +772,7 @@ class AccumulativeTreeDrawer {
         this.zoomedStage = new createjs.Stage("canvas-zoomed");
         this.zoomedStage.id = "canvas-zoomed";
         this.stage.enableMouseOver(20);
-        this.zoomedStage.enableMouseOver(10);
+        this.zoomedStage.enableMouseOver(20);
     }
 
     /**

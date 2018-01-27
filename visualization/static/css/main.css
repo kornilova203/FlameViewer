@@ -777,6 +777,7 @@ button:focus {
 }
 
 .original-canvas {
+    margin-bottom: 100px;
     position: absolute;
 }
 

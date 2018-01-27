@@ -14,6 +14,16 @@ class CallTracesDrawer extends AccumulativeTreeDrawer {
 
     /**
      * @override
+     */
+    draw() {
+        super.draw();
+        const $main = $("main");
+        // noinspection JSValidateTypes
+        $main.scrollTop($main[0].scrollHeight);
+    }
+
+    /**
+     * @override
      * @param $header
      */
     appendHeader($header) {
