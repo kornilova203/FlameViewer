@@ -58,6 +58,7 @@ class YourkitCsvToCallTracesConverter : FileToCallTracesConverter() {
     }
 
     override fun convert(file: File): Tree {
+        val uniqueStrings = UniqueStringsKeeper()
         val tree = createEmptyTree()
         val currentStack = ArrayList<Node.Builder>()
         var maxDepth = 0
@@ -65,7 +66,7 @@ class YourkitCsvToCallTracesConverter : FileToCallTracesConverter() {
         BufferedReader(FileReader(file), 1000 * 8192).use { reader ->
             var line = reader.readLine()
             while (line != null) {
-                maxDepth = processLine(line, currentStack, maxDepth)
+                maxDepth = processLine(line, currentStack, maxDepth, uniqueStrings)
                 line = reader.readLine()
             }
         }
@@ -78,7 +79,8 @@ class YourkitCsvToCallTracesConverter : FileToCallTracesConverter() {
 
     private fun processLine(line: String,
                             currentStack: ArrayList<Node.Builder>,
-                            maxDepth: Int): Int {
+                            maxDepth: Int,
+                            uniqueStrings: UniqueStringsKeeper): Int {
         val delimPos = line.indexOf("\",\"")
         if (delimPos == -1) {
             return maxDepth
@@ -112,9 +114,9 @@ class YourkitCsvToCallTracesConverter : FileToCallTracesConverter() {
         val parametersPos = name.indexOf('(')
         val newNode = TreesUtil.updateNodeList(
                 currentStack[currentStack.size - 1],
-                getClassName(name, parametersPos),
-                getMethodName(name, parametersPos),
-                getDescription(name, parametersPos),
+                uniqueStrings.getUniqueString(getClassName(name, parametersPos)),
+                uniqueStrings.getUniqueString(getMethodName(name, parametersPos)),
+                uniqueStrings.getUniqueString(getDescription(name, parametersPos)),
                 time
         )
         currentStack.add(newNode)
