@@ -1,4 +1,4 @@
-class BackTracesDrawer extends AccumulativeTreeDrawer {
+class BackTracesDrawer extends TreeDrawer {
     constructor(tree) {
         super(tree);
     }
@@ -30,14 +30,6 @@ class BackTracesDrawer extends AccumulativeTreeDrawer {
     _setPopupPosition(offsetX, depth) {
         this.$popup
             .css("left", offsetX)
-            .css("margin-top", -this.canvasHeight + AccumulativeTreeDrawer._calcNormaOffsetY(depth + 1) - POPUP_MARGIN)
-    }
-
-    /**
-     * @override
-     * @param $header
-     */
-    appendHeader($header) {
-        $header.insertBefore(this.$section.find(".canvas-wrapper"));
+            .css("margin-top", -this.canvasHeight + TreeDrawer._calcNormaOffsetY(depth + 1) - POPUP_MARGIN)
     }
 }

@@ -1,7 +1,7 @@
 const PIX_IN_MS = 0.5;
 const EXCEPTION_COLOR = "#ff1533";
 
-class CallTreeDrawer extends AccumulativeTreeDrawer {
+class CallTreeDrawer extends TreeDrawer {
     /**
      * @param tree
      * @param {Number} id
@@ -41,7 +41,7 @@ class CallTreeDrawer extends AccumulativeTreeDrawer {
     _setParameters(node) {
         this.$popupParameters.find("*").remove();
         this.$savedValue.text("");
-        const parametersList = AccumulativeTreeDrawer.getParametersTypesList(node.getNodeInfo().getDescription());
+        const parametersList = TreeDrawer.getParametersTypesList(node.getNodeInfo().getDescription());
 
         if (parametersList !== null) {
             for (let i = 0; i < parametersList.length; i++) {

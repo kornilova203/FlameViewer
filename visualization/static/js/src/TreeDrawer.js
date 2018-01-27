@@ -12,7 +12,7 @@ const CANVAS_PADDING = 35;
  * - start time
  * @abstract
  */
-class AccumulativeTreeDrawer {
+class TreeDrawer {
     constructor(tree) {
         this.tree = tree;
         this.treeWidth = this.tree.getWidth();
@@ -41,32 +41,6 @@ class AccumulativeTreeDrawer {
         this.currentlyShownNodes = [];
         this.baseNode.fillCommand = {};
         this.wasMainStageHighlighted = false;
-    }
-
-    /**
-     * @param {String} className
-     * @param {String} methodName
-     * @param {String} desc
-     * @param {Number} timePercent
-     */
-    setHeader(className, methodName, desc, timePercent) {
-        const $header = $(templates.tree.methodHeader({
-            className: className,
-            methodName: methodName,
-            returnValue: AccumulativeTreeDrawer._getReturnValue(desc),
-            parameters: AccumulativeTreeDrawer._getParameters(desc),
-            timePercent: timePercent
-        }).content);
-        this.appendHeader($header)
-    }
-
-    /**
-     * @abstract
-     * @protected
-     * @param $header
-     */
-    appendHeader($header) {
-
     }
 
     draw() {
@@ -125,7 +99,7 @@ class AccumulativeTreeDrawer {
         if (scaleX * this.currentCanvasWidth > 8 || node.depth - zoomedNodeDepth <= 1) {
             this.listenScale(node, shape);
             this._addShowPopupEvent(shape, offsetX + this.canvasOffset, node.depth, node);
-            this._drawLabel(AccumulativeTreeDrawer._getLabelText(node), shape, scaleX, offsetX, node.depth, stage);
+            this._drawLabel(TreeDrawer._getLabelText(node), shape, scaleX, offsetX, node.depth, stage);
         }
     }
 
@@ -147,7 +121,7 @@ class AccumulativeTreeDrawer {
             node.zoomedFillCommand = shape.graphics.beginFill(color).command;
         }
         shape.graphics.drawRect(0, 0, this.currentCanvasWidth, LAYER_HEIGHT);
-        const offsetY = this.flipY(AccumulativeTreeDrawer._calcNormaOffsetY(node.depth));
+        const offsetY = this.flipY(TreeDrawer._calcNormaOffsetY(node.depth));
         const pixSizeX = Math.floor(scaleX * this.currentCanvasWidth);
         if (!isMostFirst) {
             offsetX = offsetX + 1;
@@ -231,7 +205,7 @@ class AccumulativeTreeDrawer {
     _setPopupPosition(offsetX, depth) {
         this.$popup
             .css("left", offsetX)
-            .css("margin-top", -AccumulativeTreeDrawer._calcNormaOffsetY(depth) - POPUP_MARGIN + 2)
+            .css("margin-top", -TreeDrawer._calcNormaOffsetY(depth) - POPUP_MARGIN + 2)
     }
 
     static _calcNormaOffsetY(depth) {
@@ -290,7 +264,7 @@ class AccumulativeTreeDrawer {
                 this.isHighlightedFunction = null;
                 this._resetHighlight();
             } else {
-                const lowercaseVal = AccumulativeTreeDrawer.removeTrailingStars(val.toLowerCase());
+                const lowercaseVal = TreeDrawer.removeTrailingStars(val.toLowerCase());
                 if (lowercaseVal.includes("*")) {
                     const pattern = new RegExp(common.escapeRegExp(lowercaseVal).split("*").join(".*"));
                     this.isHighlightedFunction = (testString) => {
@@ -333,7 +307,7 @@ class AccumulativeTreeDrawer {
         }
         const children = node.getNodesList();
         for (let i = 0; i < children.length; i++) {
-            AccumulativeTreeDrawer._resetHighlightRecursively(children[i]);
+            TreeDrawer._resetHighlightRecursively(children[i]);
         }
     }
 
@@ -435,7 +409,7 @@ class AccumulativeTreeDrawer {
     }
 
     _drawFullTree() {
-        this.currentCanvasWidth = AccumulativeTreeDrawer._getCanvasWidth(this.$section.find(".original-canvas"));
+        this.currentCanvasWidth = TreeDrawer._getCanvasWidth(this.$section.find(".original-canvas"));
         const children = this.baseNode.getNodesList();
         for (let i = 0; i < children.length; i++) {
             this._drawNodesRecursively(
@@ -460,10 +434,10 @@ class AccumulativeTreeDrawer {
         this.$popup.find("h3").text(node.getNodeInfo().getMethodName());
         const desc = encodeURIComponent(node.getNodeInfo().getDescription());
         this.$popup.find(".outgoing-link").attr("href",
-            `/flamegraph-profiler/outgoing-calls?` + AccumulativeTreeDrawer.getGETParameters(node, desc)
+            `/flamegraph-profiler/outgoing-calls?` + TreeDrawer.getGETParameters(node, desc)
         );
         this.$popup.find(".incoming-link").attr("href",
-            `/flamegraph-profiler/incoming-calls?` + AccumulativeTreeDrawer.getGETParameters(node, desc)
+            `/flamegraph-profiler/incoming-calls?` + TreeDrawer.getGETParameters(node, desc)
         );
         this._setParameters(node);
         this._setPopupReturnValue(node);
@@ -495,7 +469,7 @@ class AccumulativeTreeDrawer {
      * @param node
      */
     _setParameters(node) {
-        const parametersList = AccumulativeTreeDrawer.getParametersTypesList(node.getNodeInfo().getDescription());
+        const parametersList = TreeDrawer.getParametersTypesList(node.getNodeInfo().getDescription());
         this.$popupParameters.find("*").remove();
         if (parametersList !== null) {
             for (let i = 0; i < parametersList.length; i++) {
@@ -515,9 +489,9 @@ class AccumulativeTreeDrawer {
      */
     _updateHighlightRecursively(node, pattern) {
         if (this.isHighlightedFunction(node.normalizedName)) {
-            AccumulativeTreeDrawer._setHighlight(node, true, true);
+            TreeDrawer._setHighlight(node, true, true);
         } else {
-            AccumulativeTreeDrawer._setHighlight(node, false, true);
+            TreeDrawer._setHighlight(node, false, true);
         }
         const children = node.getNodesList();
         for (let i = 0; i < children.length; i++) {
@@ -532,9 +506,9 @@ class AccumulativeTreeDrawer {
     _updateHighlight(currentlyShownNodes) {
         for (let i = 0; i < currentlyShownNodes.length; i++) {
             if (this.isHighlightedFunction(currentlyShownNodes[i].normalizedName)) {
-                AccumulativeTreeDrawer._setHighlight(currentlyShownNodes[i], true, false);
+                TreeDrawer._setHighlight(currentlyShownNodes[i], true, false);
             } else {
-                AccumulativeTreeDrawer._setHighlight(currentlyShownNodes[i], false, false);
+                TreeDrawer._setHighlight(currentlyShownNodes[i], false, false);
             }
         }
     }
@@ -555,7 +529,7 @@ class AccumulativeTreeDrawer {
 
     static _resetHighlightList(currentlyShownNodes) {
         for (let i = 0; i < currentlyShownNodes.length; i++) {
-            AccumulativeTreeDrawer._setHighlight(currentlyShownNodes[i], true, false);
+            TreeDrawer._setHighlight(currentlyShownNodes[i], true, false);
         }
     }
 
@@ -565,10 +539,10 @@ class AccumulativeTreeDrawer {
     _resetHighlight() {
         if (this.currentlyShownNodes.length === 0) { // if not zoomed
             this.wasMainStageHighlighted = false;
-            AccumulativeTreeDrawer._resetHighlightRecursively(this.baseNode);
+            TreeDrawer._resetHighlightRecursively(this.baseNode);
             this.stage.update();
         } else { // if zoomed
-            AccumulativeTreeDrawer._resetHighlightList(this.currentlyShownNodes);
+            TreeDrawer._resetHighlightList(this.currentlyShownNodes);
             this.zoomedStage.update();
         }
     }
@@ -602,7 +576,7 @@ class AccumulativeTreeDrawer {
         const children = node.getNodesList();
         for (let i = 0; i < children.length; i++) {
             const child = children[i];
-            this._addPackage(AccumulativeTreeDrawer._getPackageName(child));
+            this._addPackage(TreeDrawer._getPackageName(child));
             this._buildPackageListRecursively(child);
         }
     }
@@ -664,7 +638,7 @@ class AccumulativeTreeDrawer {
 
     _setNodeZoomed(node) {
         this.zoomedNode = node;
-        this.currentCanvasWidth = AccumulativeTreeDrawer._getCanvasWidth(this.$section.find(".canvas-zoomed"));
+        this.currentCanvasWidth = TreeDrawer._getCanvasWidth(this.$section.find(".canvas-zoomed"));
         common.showLoader(constants.loaderMessages.drawing, () => {
             this.zoomedStage.removeAllChildren();
             this._expandParents(node);
@@ -700,7 +674,7 @@ class AccumulativeTreeDrawer {
      */
     _getCanvasWidthForSection() {
         return window.innerWidth -
-            AccumulativeTreeDrawer._getElementWidth(this.$fileMenu) -
+            TreeDrawer._getElementWidth(this.$fileMenu) -
             CANVAS_PADDING * 2;
     }
 
@@ -778,7 +752,7 @@ class AccumulativeTreeDrawer {
     }
 
     _getOriginalColor(node) {
-        const coefficient = this.packageList[AccumulativeTreeDrawer._getPackageName(node)];
+        const coefficient = this.packageList[TreeDrawer._getPackageName(node)];
         const h = 195 + coefficient * 40;
         const l = 50 + 10 * coefficient;
         return `hsl(${h}, 94%, ${l}%)`
@@ -826,5 +800,15 @@ class AccumulativeTreeDrawer {
         return rightCorner > this.$canvasWrapper.outerWidth() + CANVAS_PADDING - 6 ?
             offsetX - (rightCorner - this.$canvasWrapper.outerWidth() - CANVAS_PADDING + 6) :
             offsetX;
+    }
+
+    static _createHeader(className, methodName, desc, timePercent) {
+       return $(templates.tree.methodHeader({
+           className: className,
+           methodName: methodName,
+           returnValue: TreeDrawer._getReturnValue(desc),
+           parameters: TreeDrawer._getParameters(desc),
+           timePercent: timePercent
+       }).content);
     }
 }

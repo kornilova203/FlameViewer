@@ -12,9 +12,9 @@ const TreeProto = require('../generated/tree_pb');
  */
 function drawTree(tree, className, methodName, desc, percent) {
     if (constants.pageName === "incoming-calls") {
-        drawIncomingCalls(tree, className, methodName, desc, percent);
+        drawBackTraces(tree, className, methodName, desc, percent);
     } else {
-        drawAccumulativeTree(tree, className, methodName, desc, percent);
+        drawCallTraces(tree, className, methodName, desc, percent);
     }
 }
 
@@ -25,14 +25,20 @@ function drawTree(tree, className, methodName, desc, percent) {
  * @param desc
  * @param {Number} percent
  */
-function drawAccumulativeTree(tree, className, methodName, desc, percent) {
-    const drawer = new CallTracesDrawer(tree);
+function drawCallTraces(tree, className, methodName, desc, percent) {
+    let drawer;
+    if (className !== undefined && methodName !== undefined && desc !== undefined) {
+        drawer = new MethodCallTracesDrawer(tree, decodeURIComponent(className), decodeURIComponent(methodName),
+            decodeURIComponent(desc), percent);
+    } else {
+        drawer = new CallTracesDrawer(tree);
+    }
     common.hideLoader();
     drawAndShowLoader(drawer, className, methodName, desc, percent);
 }
 
 /**
- * @param {AccumulativeTreeDrawer} drawer
+ * @param {TreeDrawer} drawer
  * @param {String} className
  * @param {String} methodName
  * @param {String} desc
@@ -40,14 +46,6 @@ function drawAccumulativeTree(tree, className, methodName, desc, percent) {
  */
 function drawAndShowLoader(drawer, className, methodName, desc, percent) {
     common.showLoader(constants.loaderMessages.drawing, () => {
-        if (className !== undefined && methodName !== undefined && desc !== undefined) {
-            drawer.setHeader(
-                decodeURIComponent(className),
-                decodeURIComponent(methodName),
-                decodeURIComponent(desc),
-                percent
-            );
-        }
         drawer.draw();
         common.hideLoader();
     });
@@ -60,8 +58,14 @@ function drawAndShowLoader(drawer, className, methodName, desc, percent) {
  * @param desc
  * @param {Number} percent
  */
-function drawIncomingCalls(tree, className, methodName, desc, percent) {
-    const drawer = new BackTracesDrawer(tree);
+function drawBackTraces(tree, className, methodName, desc, percent) {
+    let drawer;
+    if (className !== undefined && methodName !== undefined && desc !== undefined) {
+        drawer = new MethodBackTracesDrawer(tree, decodeURIComponent(className), decodeURIComponent(methodName),
+            decodeURIComponent(desc), percent);
+    } else {
+        drawer = new BackTracesDrawer(tree);
+    }
     if (className === undefined && // if common tree
         drawer.getNodesCount() > 20000) {
         common.showMessage("Tree has more than 20 000 nodes. " +
