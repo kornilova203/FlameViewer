@@ -377,25 +377,21 @@ class AccumulativeTreeDrawer {
 
     /**
      * @param node this node will be drawn
-     * @param {Number} drawnLayerCount
      * @param {Number} newFullScaleX
      * @param {Number} newOffsetX
      * @param {Boolean} isMostFirst
      * @param {createjs.Stage} stage
      * @param {Boolean} saveNodesToList
-     * @param {Boolean} saveOriginalColor
      * @param {number} zoomedNodeDepth
-     * @private
+     * @protected
      * @return {Number} max depth
      */
     _drawNodesRecursively(node,
-                          drawnLayerCount,
                           newFullScaleX,
                           newOffsetX,
                           isMostFirst,
                           stage,
                           saveNodesToList,
-                          saveOriginalColor,
                           zoomedNodeDepth) {
         if (saveNodesToList) {
             this.currentlyShownNodes.push(node);
@@ -413,13 +409,11 @@ class AccumulativeTreeDrawer {
         for (let i = 0; i < children.length; i++) {
             this._drawNodesRecursively(
                 children[i],
-                drawnLayerCount + 1,
                 newFullScaleX,
                 newOffsetX,
                 i === 0 && isMostFirst,
                 stage,
                 saveNodesToList,
-                saveOriginalColor,
                 zoomedNodeDepth
             );
         }
@@ -446,13 +440,11 @@ class AccumulativeTreeDrawer {
         for (let i = 0; i < children.length; i++) {
             this._drawNodesRecursively(
                 children[i],
-                0,
                 1,
                 0,
                 true,
                 this.stage,
                 false,
-                true,
                 0
             );
         }
@@ -678,13 +670,11 @@ class AccumulativeTreeDrawer {
             this._expandParents(node);
             this._drawNodesRecursively(
                 node,
-                0,
                 this._countScaleXForNode(node),
                 this._countOffsetXForNode(node),
                 true,
                 this.zoomedStage,
                 true,
-                false,
                 node.depth
             );
             this._addResetButton();
