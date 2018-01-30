@@ -17,7 +17,6 @@ module.exports.TreeDrawer = class TreeDrawer {
         this.treeWidth = this.tree.getWidth();
         this.currentCanvasWidth = 0;
         this.canvasHeight = (LAYER_HEIGHT + LAYER_GAP) * (this.tree.getDepth() + 1);
-        this.$section = this._createSection();
         this.stage = null;
         this.zoomedStage = null;
         this.zoomedNode = null;
@@ -44,6 +43,7 @@ module.exports.TreeDrawer = class TreeDrawer {
 
     draw() {
         console.log("start drawing");
+        this.$section = this._createSection();
         this._prepareDraw();
         const startTime = new Date().getTime();
         this._createCanvas();

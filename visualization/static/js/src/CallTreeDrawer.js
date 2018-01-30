@@ -75,10 +75,12 @@ module.exports.CallTreeDrawer = class CallTreeDrawer extends TreeDrawer.TreeDraw
         return "";
     }
 
+    /**
+     * @override
+     */
     draw() {
-        this._prepareDraw();
-
         this.$section = this._createSection();
+        this._prepareDraw();
         this.availableWidth = Math.max(this.canvasWidth, CallTreeDrawer._getElementWidth(this.$section));
         this.stage = new createjs.Stage("canvas-" + this.id);
         this.stage.id = "canvas-" + this.id;
