@@ -11,4 +11,8 @@ class MethodBackTracesDrawer extends BackTracesDrawer {
         const $header = TreeDrawer._createHeader(className, methodName, desc, timePercent);
         $header.insertBefore(this.$section.find(".canvas-wrapper"));
     }
+
+    getTreeGETParameters(pathToNode) {
+        return methodFunctions.getTreeGETParameters.call(this, pathToNode);
+    }
 }

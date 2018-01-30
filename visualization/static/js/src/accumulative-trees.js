@@ -81,6 +81,14 @@ function treeIsEmpty(tree) {
     return tree.getBaseNode() === undefined;
 }
 
+/**
+ * @param {Uint8Array} byteArray
+ */
+function deserializeTree(byteArray) {
+    // noinspection JSUnresolvedVariable
+    return TreeProto.Tree.deserializeBinary(byteArray);
+}
+
 $(window).on("load", function () {
     if (constants.fileName !== undefined) {
         common.showLoader(constants.loaderMessages.buildingTree, () => {
@@ -112,8 +120,7 @@ $(window).on("load", function () {
                     console.log("got response");
                     const arrayBuffer = request.response;
                     const byteArray = new Uint8Array(arrayBuffer);
-                    //noinspection JSUnresolvedVariable
-                    const tree = TreeProto.Tree.deserializeBinary(byteArray);
+                    const tree = deserializeTree(byteArray);
                     if (!treeIsEmpty(tree)) {
                         let percent = 0;
                         if (tree.getTreeInfo() !== undefined && tree.getTreeInfo().getTimePercent()) {

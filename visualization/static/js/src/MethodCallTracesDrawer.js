@@ -19,19 +19,7 @@ class MethodCallTracesDrawer extends CallTracesDrawer {
         $header.addClass("header-call-traces");
     }
 
-    /**
-     * @param {Array<number>} pathToNode
-     * @return {string}
-     * @override
-     */
     getTreeGETParameters(pathToNode) {
-        return common.getParametersString({
-            project: constants.projectName,
-            file: constants.fileName,
-            method: this.method,
-            class: this.class,
-            desc: this.desc,
-            path: pathToNode
-        });
+        return methodFunctions.getTreeGETParameters.call(this, pathToNode);
     }
 }

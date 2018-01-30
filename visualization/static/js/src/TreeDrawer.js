@@ -64,8 +64,7 @@ class TreeDrawer {
      * @protected
      */
     _prepareDraw() {
-        this._assignParentsAndDepthRecursively(this.baseNode, 0);
-        this._setOriginalColorRecursively(this.baseNode);
+        this._prepareTree(this.tree);
         this._enableSearch();
     }
 
@@ -635,30 +634,86 @@ class TreeDrawer {
         $("#" + this.stage.id).removeClass("original-canvas-zoomed");
     }
 
+    /**
+     * @param node
+     * @override
+     */
     _setNodeZoomed(node) {
         this.zoomedNode = node;
-        this.currentCanvasWidth = TreeDrawer._getCanvasWidth(this.$section.find(".canvas-zoomed"));
-        common.showLoader(constants.loaderMessages.drawing, () => {
-            this.zoomedStage.removeAllChildren();
-            this._expandParents(node);
-            this._drawNodesRecursively(
-                node,
-                this._countScaleXForNode(node),
-                this._countOffsetXForNode(node),
-                true,
-                this.zoomedStage,
-                true,
-                node.depth
-            );
-            this._addResetButton();
-            if (this.isHighlightedFunction !== null) {
-                this._setHighlightOnZoomedStage();
-            } else {
-                this.zoomedStage.update();
-            }
-            $("#" + this.stage.id).addClass("original-canvas-zoomed");
-            $("#" + this.zoomedStage.id).addClass("canvas-zoomed-show");
-            common.hideLoader()
+        const pathToNode = TreeDrawer._getPathToNode(node);
+        const treeRequest = this._createTreeRequest(pathToNode);
+        treeRequest.onload = () => {
+            const arrayBuffer = treeRequest.response;
+            const byteArray = new Uint8Array(arrayBuffer);
+            // noinspection JSUnresolvedFunction
+            const zoomedTree = deserializeTree(byteArray);
+            this._prepareTree(zoomedTree);
+            this.currentCanvasWidth = TreeDrawer._getCanvasWidth(this.$section.find(".canvas-zoomed"));
+            common.showLoader(constants.loaderMessages.drawing, () => {
+                this.zoomedStage.removeAllChildren();
+                super._expandParents(node);
+                this._drawNodesRecursively(
+                    node,
+                    this._countScaleXForNode(node),
+                    this._countOffsetXForNode(node),
+                    true,
+                    this.zoomedStage,
+                    true,
+                    node.depth
+                );
+                this._addResetButton();
+                if (this.isHighlightedFunction !== null) {
+                    this._setHighlightOnZoomedStage();
+                } else {
+                    this.zoomedStage.update();
+                }
+                $("#" + this.stage.id).addClass("original-canvas-zoomed");
+                $("#" + this.zoomedStage.id).addClass("canvas-zoomed-show");
+                common.hideLoader()
+            });
+        };
+        treeRequest.send();
+    }
+
+    _prepareTree(tree) {
+        this._assignParentsAndDepthRecursively(tree.getBaseNode(), 0);
+        this._setOriginalColorRecursively(tree.getBaseNode());
+    }
+
+    /**
+     * @param node
+     * @return {Array<number>} path to node.
+     * Each element of path is an index of child
+     * @private
+     */
+    static _getPathToNode(node) {
+        const reversedPath = [];
+        while (node !== undefined) {
+            reversedPath.push(node.index);
+            node = node.parent;
+        }
+        return CallTracesDrawer._reverseList(reversedPath);
+    }
+
+    /**
+     * @param {Array<number>} pathToNode
+     * @return {XMLHttpRequest}
+     * @private
+     */
+    _createTreeRequest(pathToNode) {
+        const request = new XMLHttpRequest();
+        request.open("GET", `/flamegraph-profiler/trees/outgoing-calls?` + this.getTreeGETParameters(pathToNode));
+        return request;
+    }
+
+    /**
+     * @param {Array<number>} pathToNode
+     * @return {string}
+     */
+    getTreeGETParameters(pathToNode) {
+        return common.getParametersString({
+            project: constants.projectName,
+            file: constants.fileName
         });
     }
 
