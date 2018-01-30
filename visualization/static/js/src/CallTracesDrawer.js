@@ -32,6 +32,7 @@ class CallTracesDrawer extends TreeDrawer {
     _setNodeZoomed(node) {
         this.zoomedNode = node;
         const pathToNode = CallTracesDrawer._getPathToNode(node);
+        const treeRequest = this._createTreeRequest(pathToNode);
         this.currentCanvasWidth = TreeDrawer._getCanvasWidth(this.$section.find(".canvas-zoomed"));
         common.showLoader(constants.loaderMessages.drawing, () => {
             this.zoomedStage.removeAllChildren();
@@ -54,6 +55,28 @@ class CallTracesDrawer extends TreeDrawer {
             $("#" + this.stage.id).addClass("original-canvas-zoomed");
             $("#" + this.zoomedStage.id).addClass("canvas-zoomed-show");
             common.hideLoader()
+        });
+    }
+
+    /**
+     * @param {Array<number>} pathToNode
+     * @return {XMLHttpRequest}
+     * @private
+     */
+    _createTreeRequest(pathToNode) {
+        const request = new XMLHttpRequest();
+        request.open("GET", `/flamegraph-profiler/trees/outgoing-calls?` + this.getTreeGETParameters(pathToNode));
+        return request;
+    }
+
+    /**
+     * @param {Array<number>} pathToNode
+     * @return {string}
+     */
+    getTreeGETParameters(pathToNode) {
+        return common.getParametersString({
+            project: constants.projectName,
+            file: constants.fileName
         });
     }
 

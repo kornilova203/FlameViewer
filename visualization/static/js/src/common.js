@@ -104,6 +104,22 @@ common.updateRareDecorator = (updateTime, callback) => {
 };
 
 /**
+ * @param {Object} parameters
+ * @return {string}
+ */
+common.getParametersString = (parameters) => {
+    const keys = parameters.keys();
+    let string = "";
+    for (let i = 0; i < keys.length; i++) {
+        const key = keys[i];
+        const value = parameters[key];
+        string += `&${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
+
+    }
+    return string.substring(1, string.length); // remove first '&'
+};
+
+/**
  * Show error message to user
  * @param {String} errorMessage
  */
@@ -123,8 +139,8 @@ constants.$loaderBackground = null;
 constants.$loaderMessageP = null;
 constants.$arrowLeft = null;
 constants.$arrowRight = null;
-constants.projectName = common.getParameter("project");
-constants.fileName = common.getParameter("file");
+constants.projectName = decodeURIComponent(common.getParameter("project"));
+constants.fileName = decodeURIComponent(common.getParameter("file"));
 constants.$removeFilesButton = null;
 constants.$fullFileName = null;
 constants.pageName = /[^\/]*((?=\?)|(?=\.html))/.exec(window.location.href)[0];

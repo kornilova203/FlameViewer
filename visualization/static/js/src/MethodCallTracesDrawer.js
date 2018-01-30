@@ -18,4 +18,20 @@ class MethodCallTracesDrawer extends CallTracesDrawer {
         $header.insertAfter(this.$section.find(".canvas-wrapper"));
         $header.addClass("header-call-traces");
     }
+
+    /**
+     * @param {Array<number>} pathToNode
+     * @return {string}
+     * @override
+     */
+    getTreeGETParameters(pathToNode) {
+        return common.getParametersString({
+            project: constants.projectName,
+            file: constants.fileName,
+            method: this.method,
+            class: this.class,
+            desc: this.desc,
+            path: pathToNode
+        });
+    }
 }

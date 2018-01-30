@@ -432,25 +432,24 @@ class TreeDrawer {
     _setPopupContent(node) {
         this.$popup.find(".class-name").text(node.getNodeInfo().getClassName());
         this.$popup.find("h3").text(node.getNodeInfo().getMethodName());
-        const desc = encodeURIComponent(node.getNodeInfo().getDescription());
         this.$popup.find(".outgoing-link").attr("href",
-            `/flamegraph-profiler/outgoing-calls?` + TreeDrawer.getGETParameters(node, desc)
+            `/flamegraph-profiler/outgoing-calls?` + TreeDrawer.getGETParameters(node)
         );
         this.$popup.find(".incoming-link").attr("href",
-            `/flamegraph-profiler/incoming-calls?` + TreeDrawer.getGETParameters(node, desc)
+            `/flamegraph-profiler/incoming-calls?` + TreeDrawer.getGETParameters(node)
         );
         this._setParameters(node);
         this._setPopupReturnValue(node);
     }
 
-    static getGETParameters(node, desc) {
-        const className = node.getNodeInfo().getClassName();
-        return `file=${constants.fileName}&` +
-            `project=${constants.projectName}&` +
-            `method=${node.getNodeInfo().getMethodName()}` +
-            (className ? "&class=" + className + "&" : "") +
-            (desc ? `&desc=${desc}&` : "") +
-            (desc ? `&isStatic=${node.getNodeInfo().getIsStatic() === true ? "true" : "false"}` : "");
+    static getGETParameters(node) {
+        return common.getParametersString({
+            project: constants.projectName,
+            file: constants.fileName,
+            method: node.getNodeInfo().getMethodName(),
+            class: node.getNodeInfo().getClassName(),
+            desc: node.getNodeInfo().getDescription()
+        });
     }
 
     /**
@@ -803,12 +802,12 @@ class TreeDrawer {
     }
 
     static _createHeader(className, methodName, desc, timePercent) {
-       return $(templates.tree.methodHeader({
-           className: className,
-           methodName: methodName,
-           returnValue: TreeDrawer._getReturnValue(desc),
-           parameters: TreeDrawer._getParameters(desc),
-           timePercent: timePercent
-       }).content);
+        return $(templates.tree.methodHeader({
+            className: className,
+            methodName: methodName,
+            returnValue: TreeDrawer._getReturnValue(desc),
+            parameters: TreeDrawer._getParameters(desc),
+            timePercent: timePercent
+        }).content);
     }
 }
