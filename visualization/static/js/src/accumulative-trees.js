@@ -2,6 +2,9 @@
  * Main function
  */
 const deserializer = require('./deserialize-tree');
+const TreeDrawer = require('./TreeDrawer');
+const CallTracesDrawer = require('./CallTracesDrawer');
+const MethodCallTracesDrawer = require('./MethodCallTracesDrawer');
 
 /**
  * @param tree
@@ -28,10 +31,10 @@ function drawTree(tree, className, methodName, desc, percent) {
 function drawCallTraces(tree, className, methodName, desc, percent) {
     let drawer;
     if (className !== undefined && methodName !== undefined && desc !== undefined) {
-        drawer = new MethodCallTracesDrawer(tree, decodeURIComponent(className), decodeURIComponent(methodName),
+        drawer = new MethodCallTracesDrawer.MethodCallTracesDrawer(tree, decodeURIComponent(className), decodeURIComponent(methodName),
             decodeURIComponent(desc), percent);
     } else {
-        drawer = new CallTracesDrawer(tree);
+        drawer = new CallTracesDrawer.CallTracesDrawer(tree);
     }
     common.hideLoader();
     drawAndShowLoader(drawer, className, methodName, desc, percent);

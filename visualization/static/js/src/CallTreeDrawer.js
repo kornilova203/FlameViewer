@@ -1,7 +1,9 @@
 const PIX_IN_MS = 0.5;
 const EXCEPTION_COLOR = "#ff1533";
 
-class CallTreeDrawer extends TreeDrawer {
+const TreeDrawer = require('./TreeDrawer');
+
+class CallTreeDrawer extends TreeDrawer.TreeDrawer {
     /**
      * @param tree
      * @param {Number} id
@@ -41,7 +43,7 @@ class CallTreeDrawer extends TreeDrawer {
     _setParameters(node) {
         this.$popupParameters.find("*").remove();
         this.$savedValue.text("");
-        const parametersList = TreeDrawer.getParametersTypesList(node.getNodeInfo().getDescription());
+        const parametersList = TreeDrawer.TreeDrawer.getParametersTypesList(node.getNodeInfo().getDescription());
 
         if (parametersList !== null) {
             for (let i = 0; i < parametersList.length; i++) {
@@ -246,7 +248,7 @@ class CallTreeDrawer extends TreeDrawer {
      * @param node
      * @override
      */
-    _getNormalizedName(node) {
+    static _getNormalizedName(node) {
         const nodeInfo = node.getNodeInfo();
         if (nodeInfo === undefined) {
             return "";

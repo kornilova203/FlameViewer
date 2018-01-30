@@ -6,13 +6,15 @@ const RESET_ZOOM_BUTTON_COLOR = "#9da1ff";
 const HIGHLIGHT_NOT_SET_COLOR = "#d1d1d1";
 const CANVAS_PADDING = 35;
 
+const deserializer = require('./deserialize-tree');
+
 /**
  * Draws tree without:
  * - parameters
  * - start time
  * @abstract
  */
-class TreeDrawer {
+module.exports.TreeDrawer = class TreeDrawer {
     constructor(tree) {
         this.tree = tree;
         this.treeWidth = this.tree.getWidth();
@@ -323,7 +325,7 @@ class TreeDrawer {
      */
     _assignParentsAndDepthRecursively(node, depth) {
         const children = node.getNodesList();
-        node.normalizedName = this._getNormalizedName(node);
+        node.normalizedName = TreeDrawer._getNormalizedName(node);
         node.depth = depth;
         for (let i = 0; i < children.length; i++) {
             children[i].parent = node;
@@ -646,7 +648,7 @@ class TreeDrawer {
             const arrayBuffer = treeRequest.response;
             const byteArray = new Uint8Array(arrayBuffer);
             // noinspection JSUnresolvedFunction
-            const zoomedTree = deserializeTree(byteArray);
+            const zoomedTree = deserializer.deserializeTree(byteArray);
             this._prepareTree(zoomedTree);
             this.currentCanvasWidth = TreeDrawer._getCanvasWidth(this.$section.find(".canvas-zoomed"));
             common.showLoader(constants.loaderMessages.drawing, () => {
@@ -692,7 +694,19 @@ class TreeDrawer {
             reversedPath.push(node.index);
             node = node.parent;
         }
-        return CallTracesDrawer._reverseList(reversedPath);
+        return TreeDrawer._reverseList(reversedPath);
+    }
+
+    /**
+     * @param {Array} list
+     * @return {Array} reversed list
+     */
+    static _reverseList(list) {
+        const reversedPath = [];
+        for (let i = list.length - 1; i >= 0; i--) {
+            reversedPath.push(list[i]);
+        }
+        return reversedPath;
     }
 
     /**
@@ -796,7 +810,7 @@ class TreeDrawer {
     /**
      * @param node
      */
-    _getNormalizedName(node) {
+    static _getNormalizedName(node) {
         const nodeInfo = node.getNodeInfo();
         if (nodeInfo === undefined) {
             return "";
@@ -865,4 +879,4 @@ class TreeDrawer {
             timePercent: timePercent
         }).content);
     }
-}
+};

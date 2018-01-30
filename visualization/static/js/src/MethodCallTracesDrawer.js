@@ -1,4 +1,6 @@
-class MethodCallTracesDrawer extends CallTracesDrawer {
+const CallTracesDrawer = require('./CallTracesDrawer');
+
+module.exports.MethodCallTracesDrawer = class MethodCallTracesDrawer extends CallTracesDrawer.CallTracesDrawer {
     constructor(tree, className, methodName, desc, timePercent) {
         super(tree);
         this.class = className;
@@ -14,7 +16,7 @@ class MethodCallTracesDrawer extends CallTracesDrawer {
      * @param {Number} timePercent
      */
     _setHeader(className, methodName, desc, timePercent) {
-        const $header = TreeDrawer._createHeader(className, methodName, desc, timePercent);
+        const $header = MethodCallTracesDrawer._createHeader(className, methodName, desc, timePercent);
         $header.insertAfter(this.$section.find(".canvas-wrapper"));
         $header.addClass("header-call-traces");
     }
@@ -22,4 +24,4 @@ class MethodCallTracesDrawer extends CallTracesDrawer {
     getTreeGETParameters(pathToNode) {
         return methodFunctions.getTreeGETParameters.call(this, pathToNode);
     }
-}
+};

@@ -1,4 +1,6 @@
-class CallTracesDrawer extends TreeDrawer {
+const TreeDrawer = require('./TreeDrawer');
+
+module.exports.CallTracesDrawer = class CallTracesDrawer extends TreeDrawer.TreeDrawer {
     constructor(tree) {
         super(tree);
         const visibleDepth = tree.getVisibleDepth();
@@ -26,18 +28,6 @@ class CallTracesDrawer extends TreeDrawer {
     }
 
     /**
-     * @param {Array} list
-     * @return {Array} reversed list
-     */
-    static _reverseList(list) {
-        const reversedPath = [];
-        for (let i = list.length - 1; i >= 0; i--) {
-            reversedPath.push(list[i]);
-        }
-        return reversedPath;
-    }
-
-    /**
      * @override
      */
     draw() {
@@ -46,4 +36,4 @@ class CallTracesDrawer extends TreeDrawer {
         // noinspection JSValidateTypes
         $main.scrollTop($main[0].scrollHeight);
     }
-}
+};
