@@ -108,7 +108,7 @@ common.updateRareDecorator = (updateTime, callback) => {
  * @return {string}
  */
 common.getParametersString = (parameters) => {
-    const keys = parameters.keys();
+    const keys = Object.keys(parameters);
     let string = "";
     for (let i = 0; i < keys.length; i++) {
         const key = keys[i];
