@@ -4,9 +4,6 @@ const POPUP_MARGIN = 6; // have no idea why there is a gap between popup and can
 const ZOOMED_PARENT_COLOR = "#94bcff";
 const RESET_ZOOM_BUTTON_COLOR = "#9da1ff";
 const HIGHLIGHT_NOT_SET_COLOR = "#d1d1d1";
-const CANVAS_PADDING = 35;
-
-const deserializer = require('./deserialize-tree');
 
 /**
  * Draws tree without:
@@ -636,99 +633,11 @@ module.exports.TreeDrawer = class TreeDrawer {
         $("#" + this.stage.id).removeClass("original-canvas-zoomed");
     }
 
-    /**
-     * @param node
-     * @override
-     */
-    _setNodeZoomed(node) {
-        this.zoomedNode = node;
-        const pathToNode = TreeDrawer._getPathToNode(node);
-        const treeRequest = this._createTreeRequest(pathToNode);
-        treeRequest.onload = () => {
-            const arrayBuffer = treeRequest.response;
-            const byteArray = new Uint8Array(arrayBuffer);
-            // noinspection JSUnresolvedFunction
-            const zoomedTree = deserializer.deserializeTree(byteArray);
-            this._prepareTree(zoomedTree);
-            this.currentCanvasWidth = TreeDrawer._getCanvasWidth(this.$section.find(".canvas-zoomed"));
-            common.showLoader(constants.loaderMessages.drawing, () => {
-                this.zoomedStage.removeAllChildren();
-                super._expandParents(node);
-                this._drawNodesRecursively(
-                    node,
-                    this._countScaleXForNode(node),
-                    this._countOffsetXForNode(node),
-                    true,
-                    this.zoomedStage,
-                    true,
-                    node.depth
-                );
-                this._addResetButton();
-                if (this.isHighlightedFunction !== null) {
-                    this._setHighlightOnZoomedStage();
-                } else {
-                    this.zoomedStage.update();
-                }
-                $("#" + this.stage.id).addClass("original-canvas-zoomed");
-                $("#" + this.zoomedStage.id).addClass("canvas-zoomed-show");
-                common.hideLoader()
-            });
-        };
-        treeRequest.send();
-    }
+
 
     _prepareTree(tree) {
         this._assignParentsAndDepthRecursively(tree.getBaseNode(), 0);
         this._setOriginalColorRecursively(tree.getBaseNode());
-    }
-
-    /**
-     * @param node
-     * @return {Array<number>} path to node.
-     * Each element of path is an index of child
-     * @private
-     */
-    static _getPathToNode(node) {
-        const reversedPath = [];
-        while (node !== undefined) {
-            reversedPath.push(node.index);
-            node = node.parent;
-        }
-        return TreeDrawer._reverseList(reversedPath);
-    }
-
-    /**
-     * @param {Array} list
-     * @return {Array} reversed list
-     */
-    static _reverseList(list) {
-        const reversedPath = [];
-        for (let i = list.length - 1; i >= 0; i--) {
-            reversedPath.push(list[i]);
-        }
-        return reversedPath;
-    }
-
-    /**
-     * @param {Array<number>} pathToNode
-     * @return {XMLHttpRequest}
-     * @private
-     */
-    _createTreeRequest(pathToNode) {
-        const request = new XMLHttpRequest();
-        request.open("GET", `/flamegraph-profiler/trees/outgoing-calls?` + this.getTreeGETParameters(pathToNode));
-        return request;
-    }
-
-    /**
-     * @param {Array<number>} pathToNode
-     * @return {string}
-     */
-    getTreeGETParameters(pathToNode) {
-        return common.getParametersString({
-            project: constants.projectName,
-            file: constants.fileName
-        });
     }
 
     static _getCanvasWidth($canvas) {
@@ -743,7 +652,7 @@ module.exports.TreeDrawer = class TreeDrawer {
     _getCanvasWidthForSection() {
         return window.innerWidth -
             TreeDrawer._getElementWidth(this.$fileMenu) -
-            CANVAS_PADDING * 2;
+            constants.CANVAS_PADDING * 2;
     }
 
     /**
@@ -865,8 +774,8 @@ module.exports.TreeDrawer = class TreeDrawer {
     _shiftIfHidden(offsetX) {
         const rightCorner = this._getRightCornerPos(offsetX);
         //noinspection JSValidateTypes
-        return rightCorner > this.$canvasWrapper.outerWidth() + CANVAS_PADDING - 6 ?
-            offsetX - (rightCorner - this.$canvasWrapper.outerWidth() - CANVAS_PADDING + 6) :
+        return rightCorner > this.$canvasWrapper.outerWidth() + constants.CANVAS_PADDING - 6 ?
+            offsetX - (rightCorner - this.$canvasWrapper.outerWidth() - constants.CANVAS_PADDING + 6) :
             offsetX;
     }
 
@@ -878,5 +787,14 @@ module.exports.TreeDrawer = class TreeDrawer {
             parameters: TreeDrawer._getParameters(desc),
             timePercent: timePercent
         }).content);
+    }
+
+    /**
+     * @abstract
+     * @param node
+     * @protected
+     */
+    _setNodeZoomed(node) {
+
     }
 };

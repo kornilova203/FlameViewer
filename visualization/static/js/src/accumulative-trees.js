@@ -1,10 +1,11 @@
 /**
  * Main function
  */
-const deserializer = require('./deserialize-tree');
-const TreeDrawer = require('./TreeDrawer');
+const deserializer = require('./deserializer');
 const CallTracesDrawer = require('./CallTracesDrawer');
 const MethodCallTracesDrawer = require('./MethodCallTracesDrawer');
+const BackTracesDrawer = require('./BackTracesDrawer');
+const MethodBackTracesDrawer = require('./MethodBackTracesDrawer');
 
 /**
  * @param tree
@@ -41,7 +42,7 @@ function drawCallTraces(tree, className, methodName, desc, percent) {
 }
 
 /**
- * @param {TreeDrawer} drawer
+ * @param drawer
  * @param {String} className
  * @param {String} methodName
  * @param {String} desc
@@ -64,10 +65,10 @@ function drawAndShowLoader(drawer, className, methodName, desc, percent) {
 function drawBackTraces(tree, className, methodName, desc, percent) {
     let drawer;
     if (className !== undefined && methodName !== undefined && desc !== undefined) {
-        drawer = new MethodBackTracesDrawer(tree, decodeURIComponent(className), decodeURIComponent(methodName),
+        drawer = new MethodBackTracesDrawer.MethodBackTracesDrawer(tree, decodeURIComponent(className), decodeURIComponent(methodName),
             decodeURIComponent(desc), percent);
     } else {
-        drawer = new BackTracesDrawer(tree);
+        drawer = new BackTracesDrawer.BackTracesDrawer(tree);
     }
     if (className === undefined && // if common tree
         drawer.getNodesCount() > 20000) {

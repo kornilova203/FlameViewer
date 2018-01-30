@@ -1,6 +1,6 @@
-const TreeDrawer = require('./TreeDrawer');
+const AccumulativeTreeDrawer = require('./AccumulativeTreeDrawer');
 
-module.exports.CallTracesDrawer = class CallTracesDrawer extends TreeDrawer.TreeDrawer {
+module.exports.CallTracesDrawer = class CallTracesDrawer extends AccumulativeTreeDrawer.AccumulativeTreeDrawer {
     constructor(tree) {
         super(tree);
         const visibleDepth = tree.getVisibleDepth();

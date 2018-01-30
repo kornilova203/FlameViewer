@@ -1,11 +1,4 @@
-/**
- * @type {{TreesPreview: TreesPreview}}
- */
-const TreesPreviewProtos = require('../generated/trees_preview_pb');
-/**
- * @type {{TreePreview: TreePreview}}
- */
-const TreePreviewProtos = require('../generated/tree_preview_pb');
+const deserializer = require('./deserializer');
 
 $(window).on("load", function () {
     if (constants.fileName !== undefined) {
@@ -34,7 +27,7 @@ function getAndShowTreesPreview() {
             common.showLoader(constants.loaderMessages.deserialization, () => {
                 const arrayBuffer = request.response;
                 const byteArray = new Uint8Array(arrayBuffer);
-                const treesPreview = TreesPreviewProtos.TreesPreview.deserializeBinary(byteArray);
+                const treesPreview = deserializer.deserializeTreesPreview(byteArray);
                 common.hideLoader(0);
                 if (treesPreview.getTreesPreviewList().length !== 0) {
                     drawTreesPreview(treesPreview);
@@ -58,8 +51,8 @@ function drawTreesPreview(treesPreview) {
                 treesPreviewList[i],
                 i,
                 treesPreview.getFullduration(),
-                TreePreviewProtos.TreePreview.Vector.VectorCase.X,
-                TreePreviewProtos.TreePreview.Vector.VectorCase.Y
+                1, // TreePreviewProtos.TreePreview.Vector.VectorCase.X
+                2  // TreePreviewProtos.TreePreview.Vector.VectorCase.Y
             );
             drawer.draw();
         }

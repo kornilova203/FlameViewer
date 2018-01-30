@@ -1,4 +1,6 @@
-class MethodBackTracesDrawer extends BackTracesDrawer {
+const BackTracesDrawer = require('./BackTracesDrawer');
+
+module.exports.MethodBackTracesDrawer = class MethodBackTracesDrawer extends BackTracesDrawer.BackTracesDrawer {
     constructor(tree, className, methodName, desc, timePercent) {
         super(tree);
         this.class = className;

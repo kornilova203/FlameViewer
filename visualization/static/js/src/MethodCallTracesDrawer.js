@@ -1,6 +1,13 @@
 const CallTracesDrawer = require('./CallTracesDrawer');
 
 module.exports.MethodCallTracesDrawer = class MethodCallTracesDrawer extends CallTracesDrawer.CallTracesDrawer {
+    /**
+     * @param tree
+     * @param {string} className
+     * @param {string} methodName
+     * @param {string} desc
+     * @param {number} timePercent
+     */
     constructor(tree, className, methodName, desc, timePercent) {
         super(tree);
         this.class = className;

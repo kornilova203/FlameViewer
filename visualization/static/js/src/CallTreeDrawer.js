@@ -3,7 +3,7 @@ const EXCEPTION_COLOR = "#ff1533";
 
 const TreeDrawer = require('./TreeDrawer');
 
-class CallTreeDrawer extends TreeDrawer.TreeDrawer {
+module.exports.CallTreeDrawer = class CallTreeDrawer extends TreeDrawer.TreeDrawer {
     /**
      * @param tree
      * @param {Number} id
@@ -43,7 +43,7 @@ class CallTreeDrawer extends TreeDrawer.TreeDrawer {
     _setParameters(node) {
         this.$popupParameters.find("*").remove();
         this.$savedValue.text("");
-        const parametersList = TreeDrawer.TreeDrawer.getParametersTypesList(node.getNodeInfo().getDescription());
+        const parametersList = CallTreeDrawer.getParametersTypesList(node.getNodeInfo().getDescription());
 
         if (parametersList !== null) {
             for (let i = 0; i < parametersList.length; i++) {
@@ -318,18 +318,18 @@ class CallTreeDrawer extends TreeDrawer.TreeDrawer {
             //noinspection JSValidateTypes
             return leftCornerOffset;
         } else {
-            offsetX += CANVAS_PADDING;
+            offsetX += constants.CANVAS_PADDING;
             const rightCorner = super._getRightCornerPos(offsetX);
             if (this.zoomedNode !== null) { // if zoomed
-                const canvasRightCorner = leftCornerOffset + this._getCanvasWidthForSection() + CANVAS_PADDING * 2;
+                const canvasRightCorner = leftCornerOffset + this._getCanvasWidthForSection() + constants.CANVAS_PADDING * 2;
                 return rightCorner > canvasRightCorner ? // if right corner is hidden
                     offsetX - (rightCorner - canvasRightCorner) :
                     offsetX;
             } else {
-                return rightCorner > this.availableWidth + CANVAS_PADDING * 2 ? // if right corner is hidden
-                    offsetX - (rightCorner - this.availableWidth - CANVAS_PADDING * 2) :
+                return rightCorner > this.availableWidth + constants.CANVAS_PADDING * 2 ? // if right corner is hidden
+                    offsetX - (rightCorner - this.availableWidth - constants.CANVAS_PADDING * 2) :
                     offsetX;
             }
         }
     }
-}
+};
