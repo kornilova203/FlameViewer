@@ -1,5 +1,3 @@
-const LAYER_HEIGHT = 19;
-const LAYER_GAP = 1;
 const POPUP_MARGIN = 6; // have no idea why there is a gap between popup and canvas
 const ZOOMED_PARENT_COLOR = "#94bcff";
 const RESET_ZOOM_BUTTON_COLOR = "#9da1ff";
@@ -16,7 +14,7 @@ module.exports.TreeDrawer = class TreeDrawer {
         this.tree = tree;
         this.treeWidth = this.tree.getWidth();
         this.currentCanvasWidth = 0;
-        this.canvasHeight = (LAYER_HEIGHT + LAYER_GAP) * (this.tree.getDepth() + 1);
+        this.canvasHeight = (constants.LAYER_HEIGHT + constants.LAYER_GAP) * (this.tree.getDepth() + 1);
         this.stage = null;
         this.zoomedStage = null;
         this.zoomedNode = null;
@@ -46,9 +44,6 @@ module.exports.TreeDrawer = class TreeDrawer {
         this.$section = this._createSection();
         this._prepareDraw();
         const startTime = new Date().getTime();
-        this._createCanvas();
-
-        this._createPopup(); // one for all nodes
 
         const childNodes = this.baseNode.getNodesList();
         if (childNodes.length === 0) {
@@ -65,6 +60,8 @@ module.exports.TreeDrawer = class TreeDrawer {
     _prepareDraw() {
         this._prepareTree(this.tree);
         this._enableSearch();
+        this._createCanvas();
+        this._createPopup(); // one for all nodes
     }
 
     /**
@@ -74,7 +71,7 @@ module.exports.TreeDrawer = class TreeDrawer {
      * @protected
      */
     flipY(y) {
-        return this.canvasHeight - y - LAYER_HEIGHT;
+        return this.canvasHeight - y - constants.LAYER_HEIGHT;
     };
 
     _createSection() {
@@ -118,7 +115,7 @@ module.exports.TreeDrawer = class TreeDrawer {
         } else {
             node.zoomedFillCommand = shape.graphics.beginFill(color).command;
         }
-        shape.graphics.drawRect(0, 0, this.currentCanvasWidth, LAYER_HEIGHT);
+        shape.graphics.drawRect(0, 0, this.currentCanvasWidth, constants.LAYER_HEIGHT);
         const offsetY = this.flipY(TreeDrawer._calcNormaOffsetY(node.depth));
         const pixSizeX = Math.floor(scaleX * this.currentCanvasWidth);
         if (!isMostFirst) {
@@ -183,11 +180,11 @@ module.exports.TreeDrawer = class TreeDrawer {
     _drawLabel(labelText, shape, scaleX, offsetX, nodeDepth, stage) {
         const text = new createjs.Text(
             labelText,
-            (LAYER_HEIGHT - 2) + "px Arial",
+            (constants.LAYER_HEIGHT - 2) + "px Arial",
             "#fff"
         );
         text.x = offsetX + 2;
-        text.y = this.flipY(nodeDepth * (LAYER_GAP + LAYER_HEIGHT));
+        text.y = this.flipY(nodeDepth * (constants.LAYER_GAP + constants.LAYER_HEIGHT));
         this._setTextMask(text, shape, scaleX);
         // noinspection JSUnresolvedFunction
         stage.setChildIndex(text, this.stage.getNumChildren() - 1);
@@ -207,7 +204,7 @@ module.exports.TreeDrawer = class TreeDrawer {
     }
 
     static _calcNormaOffsetY(depth) {
-        return depth * (LAYER_GAP + LAYER_HEIGHT);
+        return depth * (constants.LAYER_GAP + constants.LAYER_HEIGHT);
     }
 
     /**

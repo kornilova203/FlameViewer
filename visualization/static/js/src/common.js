@@ -132,28 +132,32 @@ common.showError = (errorMessage) => {
     }, 5000);
 };
 
-const constants = {};
-constants.$main = null;
-constants.$treePreviewWrapper = null;
-constants.$loaderBackground = null;
-constants.$loaderMessageP = null;
-constants.$arrowLeft = null;
-constants.$arrowRight = null;
-constants.projectName = decodeURIComponent(common.getParameter("project"));
-constants.fileName = decodeURIComponent(common.getParameter("file"));
-constants.$removeFilesButton = null;
-constants.$fullFileName = null;
-constants.pageName = /[^\/]*((?=\?)|(?=\.html))/.exec(window.location.href)[0];
-constants.CANVAS_PADDING = 35;
-constants.loaderMessages = {
-    drawing: "Drawing...",
-    deserialization: "Deserialization of binary data...",
-    buildingTree: "Building tree...",
-    buildingTrees: "Building trees...",
-    countingTime: "Counting self-time of methods...",
-    convertingFile: "Converting file: ",
-    uploadingFile: "Uploading file: "
-};
+const constants = {
+    $main: null,
+    $treePreviewWrapper: null,
+    $loaderBackground: null,
+    $loaderMessageP: null,
+    $arrowLeft: null,
+    $arrowRight: null,
+    projectName: decodeURIComponent(common.getParameter("project")),
+    fileName: decodeURIComponent(common.getParameter("file")),
+    $removeFilesButton: null,
+    $fullFileName: null,
+    pageName: /[^\/]*((?=\?)|(?=\.html))/.exec(window.location.href)[0],
+    CANVAS_PADDING: 35,
+    LAYER_HEIGHT: 19,
+    LAYER_GAP: 1,
+    loaderMessages: {
+        drawing: "Drawing...",
+        deserialization: "Deserialization of binary data...",
+        buildingTree: "Building tree...",
+        buildingTrees: "Building trees...",
+        countingTime: "Counting self-time of methods...",
+        convertingFile: "Converting file: ",
+        uploadingFile: "Uploading file: "
+    }
+}
+;
 
 $(window).on("load", () => {
     constants.$main = $("main");

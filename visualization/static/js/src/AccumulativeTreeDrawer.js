@@ -8,6 +8,26 @@ module.exports.AccumulativeTreeDrawer = class AccumulativeTreeDrawer extends Tre
     constructor(tree) {
         super(tree);
     }
+
+    /**
+     * @override
+     * @protected
+     */
+    _prepareDraw() {
+        super._prepareDraw();
+        const visibleDepth = this.tree.getVisibleDepth();
+        if (visibleDepth !== 0) { // if only part of tree displayed
+            this._moveSectionUp();
+        }
+    }
+
+    /**
+     * @abstract
+     */
+    _moveSectionUp() {
+
+    }
+
     /**
      * @param node
      * @override
