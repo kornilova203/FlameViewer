@@ -132,31 +132,32 @@ common.showError = (errorMessage) => {
     }, 5000);
 };
 
+// noinspection JSValidateTypes
 const constants = {
-    $main: null,
-    $treePreviewWrapper: null,
-    $loaderBackground: null,
-    $loaderMessageP: null,
-    $arrowLeft: null,
-    $arrowRight: null,
-    projectName: decodeURIComponent(common.getParameter("project")),
-    fileName: decodeURIComponent(common.getParameter("file")),
-    $removeFilesButton: null,
-    $fullFileName: null,
-    pageName: /[^\/]*((?=\?)|(?=\.html))/.exec(window.location.href)[0],
-    CANVAS_PADDING: 35,
-    LAYER_HEIGHT: 19,
-    LAYER_GAP: 1,
-    loaderMessages: {
-        drawing: "Drawing...",
-        deserialization: "Deserialization of binary data...",
-        buildingTree: "Building tree...",
-        buildingTrees: "Building trees...",
-        countingTime: "Counting self-time of methods...",
-        convertingFile: "Converting file: ",
-        uploadingFile: "Uploading file: "
+        $main: null,
+        $treePreviewWrapper: null,
+        $loaderBackground: null,
+        $loaderMessageP: null,
+        $arrowLeft: null,
+        $arrowRight: null,
+        projectName: common.getParameter("project") === undefined ? undefined : decodeURIComponent(common.getParameter("project")),
+        fileName: common.getParameter("file") === undefined ? undefined : decodeURIComponent(common.getParameter("file")),
+        $removeFilesButton: null,
+        $fullFileName: null,
+        pageName: /[^\/]*((?=\?)|(?=\.html))/.exec(window.location.href)[0],
+        CANVAS_PADDING: 35,
+        LAYER_HEIGHT: 19,
+        LAYER_GAP: 1,
+        loaderMessages: {
+            drawing: "Drawing...",
+            deserialization: "Deserialization of binary data...",
+            buildingTree: "Building tree...",
+            buildingTrees: "Building trees...",
+            countingTime: "Counting self-time of methods...",
+            convertingFile: "Converting file: ",
+            uploadingFile: "Uploading file: "
+        }
     }
-}
 ;
 
 $(window).on("load", () => {
