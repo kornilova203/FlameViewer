@@ -47,6 +47,9 @@ public class PluginFileManager {
     private static final String SER_FILES = "ser";
     private static final String FLAMEGRAPH_FILES = "flamegraph";
     private static PluginFileManager pluginFileManager;
+    public final FileSaver serFileSaver;
+    public final FileSaver tempFileSaver; // save files before converting
+    public final FlamegraphSaver flamegraphFileSaver;
     @NotNull
     private final Path logDirPath;
     @NotNull
@@ -56,12 +59,6 @@ public class PluginFileManager {
     @NotNull
     private final Path staticDirPath;
 
-    public final FileSaver serFileSaver;
-
-    public final FileSaver tempFileSaver; // save files before converting
-
-    public final FlamegraphSaver flamegraphFileSaver;
-
     private PluginFileManager(@NotNull String systemDirPath) {
         Path systemDir = Paths.get(systemDirPath);
         Path pluginDir = Paths.get(systemDir.toString(), PLUGIN_DIR_NAME);
@@ -70,11 +67,11 @@ public class PluginFileManager {
         createDirIfNotExist(logDirPath);
         configDirPath = Paths.get(pluginDir.toString(), CONFIG_DIR_NAME);
         createDirIfNotExist(configDirPath);
-        staticDirPath = Paths.get(
-                new File(
-                        getClass().getResource("/" + STATIC_DIR_NAME).getPath()
-                ).getAbsolutePath()
-        );
+        try {
+            staticDirPath = Paths.get(getClass().getResource("/" + STATIC_DIR_NAME).toURI());
+        } catch (URISyntaxException e) {
+            throw new AssertionError("Cannot find static dir.", e);
+        }
         Path uploadedFilesPath = Paths.get(logDirPath.toString(), UPLOADED_FILES);
         createDirIfNotExist(uploadedFilesPath);
         uploadedFilesDir = uploadedFilesPath.toFile();
@@ -94,32 +91,6 @@ public class PluginFileManager {
         flamegraphFileSaver = new FlamegraphSaver(flamegraphFiles);
 
         finallyDeleteRemovedFiles();
-    }
-
-    private void clearDir(File dir) {
-        File[] files = dir.listFiles();
-        if (files == null) {
-            return;
-        }
-        for (File file : files) {
-            //noinspection ResultOfMethodCallIgnored
-            file.delete();
-        }
-    }
-
-    @SuppressWarnings("UnusedReturnValue")
-    private boolean finallyDeleteRemovedFiles() {
-        File deletedFilesDir = Paths.get(logDirPath.toString(), DELETED_FILES).toFile();
-        if (!deletedFilesDir.exists() || !deletedFilesDir.isDirectory()) {
-            LOG.debug("Directory with deleted files was not found");
-            return false;
-        }
-        File[] files = deletedFilesDir.listFiles();
-        //noinspection SimplifiableIfStatement
-        if (files != null) {
-            return Arrays.stream(files).map(File::delete).anyMatch(res -> !res);
-        }
-        return false;
     }
 
     public synchronized static PluginFileManager getInstance() {
@@ -148,6 +119,32 @@ public class PluginFileManager {
         }
         Optional<File> maxFile = Arrays.stream(files).max(Comparator.comparingLong(File::lastModified));
         return maxFile.orElse(null);
+    }
+
+    private void clearDir(File dir) {
+        File[] files = dir.listFiles();
+        if (files == null) {
+            return;
+        }
+        for (File file : files) {
+            //noinspection ResultOfMethodCallIgnored
+            file.delete();
+        }
+    }
+
+    @SuppressWarnings("UnusedReturnValue")
+    private boolean finallyDeleteRemovedFiles() {
+        File deletedFilesDir = Paths.get(logDirPath.toString(), DELETED_FILES).toFile();
+        if (!deletedFilesDir.exists() || !deletedFilesDir.isDirectory()) {
+            LOG.debug("Directory with deleted files was not found");
+            return false;
+        }
+        File[] files = deletedFilesDir.listFiles();
+        //noinspection SimplifiableIfStatement
+        if (files != null) {
+            return Arrays.stream(files).map(File::delete).anyMatch(res -> !res);
+        }
+        return false;
     }
 
     @Nullable
@@ -205,6 +202,7 @@ public class PluginFileManager {
         }
     }
 
+    @Nullable
     public synchronized File getStaticFile(String staticFileUri) {
         return Paths.get(
                 staticDirPath.toString(),
@@ -354,7 +352,7 @@ public class PluginFileManager {
         if (projectName.equals("uploaded-files")) {
             String converterId = deletedFile.getParentFile().getName();
             projectDirPath = Paths.get(logDirPath.toString(), UPLOADED_FILES, converterId).toFile();
-        } else  {
+        } else {
             projectDirPath = Paths.get(logDirPath.toString(), projectName).toFile();
         }
         if (projectDirPath == null) {

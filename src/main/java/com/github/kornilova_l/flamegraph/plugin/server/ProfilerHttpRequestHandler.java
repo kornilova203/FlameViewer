@@ -53,7 +53,7 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
 
     private static void sendBytes(ChannelHandlerContext context,
                                   String contentType,
-                                  byte[] bytes) {
+                                  @NotNull byte[] bytes) {
         FullHttpResponse response = new DefaultFullHttpResponse(
                 HttpVersion.HTTP_1_1,
                 HttpResponseStatus.OK,
@@ -102,12 +102,17 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
         return null;
     }
 
+    @NotNull
     private byte[] renderPage(String htmlFilePath,
                               @Nullable String fileName,
                               @NotNull String projectName,
                               @Nullable String include,
                               @Nullable String exclude) {
         File staticFile = fileManager.getStaticFile(htmlFilePath);
+        if (staticFile == null) {
+            throw new RuntimeException("Cannot render page " + htmlFilePath + " project: " +
+                    projectName + " file " + fileName + " include " + include + " exclude " + exclude);
+        }
         String filterParameters = getFilterAsGetParameters(include, exclude);
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(staticFile))) {
             return String.join("", bufferedReader.lines()
@@ -122,9 +127,9 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
                     )
                     .toArray(String[]::new)).getBytes();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Cannot render page " + htmlFilePath + " project: " +
+                    projectName + " file " + fileName + " include " + include + " exclude " + exclude, e);
         }
-        return null;
     }
 
     private String getFilterAsGetParameters(@Nullable String include, @Nullable String exclude) {
@@ -159,6 +164,9 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
                             String fileUri,
                             String contentType) throws IOException {
         File staticFile = fileManager.getStaticFile(fileUri);
+        if (staticFile == null) {
+            throw new RuntimeException("Cannot find static files. File uri: " + fileUri);
+        }
         try (InputStream inputStream = new FileInputStream(staticFile)) {
             sendBytes(context, contentType, IOUtils.toByteArray(inputStream));
         }
