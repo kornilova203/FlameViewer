@@ -82,9 +82,6 @@ module.exports.CallTreeDrawer = class CallTreeDrawer extends TreeDrawer.TreeDraw
         this.$section = this._createSection();
         this._prepareDraw();
         this.availableWidth = Math.max(this.canvasWidth, CallTreeDrawer._getElementWidth(this.$section));
-        this.stage = new createjs.Stage("canvas-" + this.id);
-        this.stage.id = "canvas-" + this.id;
-        this.stage.enableMouseOver(20);
 
         this._updateCanvasWidthDecorator()();
 
@@ -98,6 +95,19 @@ module.exports.CallTreeDrawer = class CallTreeDrawer extends TreeDrawer.TreeDraw
         this._enableResizeZoomedCanvas();
     };
 
+    /**
+     * @override
+     */
+    _createCanvas() {
+        console.log("create canvas");
+        this.stage = new createjs.Stage("canvas-" + this.id);
+        this.stage.id = "canvas-" + this.id;
+        this.stage.enableMouseOver(20);
+    }
+
+    /**
+     * @override
+     */
     _createSection() {
         const sectionContent = templates.tree.getCallTreeSection(
             {
