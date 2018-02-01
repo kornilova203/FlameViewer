@@ -36,17 +36,6 @@ class GetTreesTest : LightPlatformCodeInsightFixtureTestCase() {
                 File("$pathToDir/expected/ClassWithoutPackage-method.txt"))
     }
 
-    fun testGetPartOfTree() {
-        PluginFileManager.deleteAllUploadedFiles()
-        val serFile = File("$pathToDir/ClassWithoutPackage-2018-02-01-13_55_17.ser")
-        FilesUploaderTest.sendFile(serFile.name, serFile.readBytes())
-
-        val bytes = sendRequestForPartOfCallTree(serFile.name, listOf(0))
-        assertNotNull(bytes)
-        TestHelper.compare(Tree.parseFrom(ByteArrayInputStream(bytes)).toString(),
-                File("$pathToDir/expected/ClassWithoutPackage-part.txt"))
-    }
-
     companion object {
         fun sendRequestForCallTraces(fileName: String): ByteArray {
             val url = URL("http://localhost:${BuiltInServerManager.getInstance().port}" +
@@ -67,18 +56,6 @@ class GetTreesTest : LightPlatformCodeInsightFixtureTestCase() {
                     "&class=$className" +
                     "&method=$methodName" +
                     "&desc=$description")
-            val connection = url.openConnection() as HttpURLConnection
-            connection.requestMethod = "GET"
-
-            return FilesUploaderTest.getResponse(connection)
-        }
-
-        fun sendRequestForPartOfCallTree(fileName: String, path: List<Int>): ByteArray {
-            val url = URL("http://localhost:${BuiltInServerManager.getInstance().port}" +
-                    "/flamegraph-profiler/trees/outgoing-calls?" +
-                    "file=$fileName" +
-                    "&project=uploaded-files" +
-                    "&path=$path")
             val connection = url.openConnection() as HttpURLConnection
             connection.requestMethod = "GET"
 

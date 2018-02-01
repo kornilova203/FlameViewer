@@ -426,7 +426,7 @@ object PluginFileManager {
             try {
                 assert(dir.mkdir())
             } catch (se: SecurityException) {
-                se.printStackTrace()
+                LOG.error(se)
             }
 
         }
