@@ -22,9 +22,7 @@ message Tree {
         message NodeInfo {
             string method_name = 1;
             string class_name = 2;
-            string description = 7; // for building tree
-            bool is_static = 3;
-            //  int32 count = 8; // removed field. Do not use id 8 again. (how many times method was called)
+            string description = 3;
             repeated com.github.kornilova_l.flamegraph.proto.Parameter parameters = 4;
             oneof result { // only for ser_trees which save original call structure
                            com.github.kornilova_l.flamegraph.proto.Var return_value = 5;

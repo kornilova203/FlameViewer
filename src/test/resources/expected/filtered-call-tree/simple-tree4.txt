@@ -9,9 +9,9 @@ trees {
       node_info {
         method_name: "fun5"
         class_name: "com.github.kornilova_l.flamegraph.plugin.server.trees.generate_test_data.SimpleTree"
+        description: "()void"
         return_value {
         }
-        description: "()void"
       }
     }
   }

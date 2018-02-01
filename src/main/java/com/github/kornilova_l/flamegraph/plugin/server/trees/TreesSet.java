@@ -30,13 +30,12 @@ public abstract class TreesSet {
                                          Tree outgoingCalls,
                                          String className,
                                          String methodName,
-                                         String desc,
-                                         boolean isStatic) {
+                                         String desc) {
         if (sourceTree == null) {
             return null;
         }
         return new MethodAccumulativeTreeBuilder(
-                sourceTree, outgoingCalls, className, methodName, desc, isStatic
+                sourceTree, outgoingCalls, className, methodName, desc
         ).getTree();
     }
 
@@ -60,17 +59,16 @@ public abstract class TreesSet {
                               String className,
                               String methodName,
                               String desc,
-                              boolean isStatic,
                               @Nullable Filter filter) {
         Tree tree;
         switch (treeType) {
             case OUTGOING_CALLS:
                 getTree(TreeType.OUTGOING_CALLS, null);
-                tree = getTreeForMethod(outgoingCalls, outgoingCalls, className, methodName, desc, isStatic);
+                tree = getTreeForMethod(outgoingCalls, outgoingCalls, className, methodName, desc);
                 break;
             case INCOMING_CALLS:
                 getTree(TreeType.INCOMING_CALLS, null);
-                tree = getTreeForMethod(incomingCalls, outgoingCalls, className, methodName, desc, isStatic);
+                tree = getTreeForMethod(incomingCalls, outgoingCalls, className, methodName, desc);
                 break;
             default:
                 throw new IllegalArgumentException("Tree type is not supported");

@@ -9,9 +9,9 @@ trees {
       node_info {
         method_name: "run"
         class_name: "com.github.kornilova_l.flamegraph.plugin.server.trees.generate_test_data.MyTask"
+        description: "()void"
         return_value {
         }
-        description: "()void"
       }
       nodes {
         offset: 10
@@ -19,9 +19,9 @@ trees {
         node_info {
           method_name: "fun1"
           class_name: "com.github.kornilova_l.flamegraph.plugin.server.trees.generate_test_data.MyTask"
+          description: "()void"
           return_value {
           }
-          description: "()void"
         }
         nodes {
           offset: 10
@@ -29,9 +29,9 @@ trees {
           node_info {
             method_name: "fun2"
             class_name: "com.github.kornilova_l.flamegraph.plugin.server.trees.generate_test_data.MyTask"
+            description: "()void"
             return_value {
             }
-            description: "()void"
           }
         }
       }
@@ -41,9 +41,9 @@ trees {
         node_info {
           method_name: "fun3"
           class_name: "com.github.kornilova_l.flamegraph.plugin.server.trees.generate_test_data.MyTask"
+          description: "()void"
           return_value {
           }
-          description: "()void"
         }
         nodes {
           offset: 50
@@ -51,9 +51,9 @@ trees {
           node_info {
             method_name: "fun4"
             class_name: "com.github.kornilova_l.flamegraph.plugin.server.trees.generate_test_data.MyTask"
+            description: "()void"
             return_value {
             }
-            description: "()void"
           }
         }
       }
@@ -74,9 +74,9 @@ trees {
       node_info {
         method_name: "run"
         class_name: "com.github.kornilova_l.flamegraph.plugin.server.trees.generate_test_data.MyTask"
+        description: "()void"
         return_value {
         }
-        description: "()void"
       }
       nodes {
         offset: 10
@@ -84,9 +84,9 @@ trees {
         node_info {
           method_name: "fun1"
           class_name: "com.github.kornilova_l.flamegraph.plugin.server.trees.generate_test_data.MyTask"
+          description: "()void"
           return_value {
           }
-          description: "()void"
         }
         nodes {
           offset: 10
@@ -94,9 +94,9 @@ trees {
           node_info {
             method_name: "fun2"
             class_name: "com.github.kornilova_l.flamegraph.plugin.server.trees.generate_test_data.MyTask"
+            description: "()void"
             return_value {
             }
-            description: "()void"
           }
         }
       }
@@ -106,9 +106,9 @@ trees {
         node_info {
           method_name: "fun3"
           class_name: "com.github.kornilova_l.flamegraph.plugin.server.trees.generate_test_data.MyTask"
+          description: "()void"
           return_value {
           }
-          description: "()void"
         }
         nodes {
           offset: 50
@@ -116,9 +116,9 @@ trees {
           node_info {
             method_name: "fun4"
             class_name: "com.github.kornilova_l.flamegraph.plugin.server.trees.generate_test_data.MyTask"
+            description: "()void"
             return_value {
             }
-            description: "()void"
           }
         }
       }

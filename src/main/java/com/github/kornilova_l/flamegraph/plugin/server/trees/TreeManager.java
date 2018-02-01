@@ -106,14 +106,13 @@ public class TreeManager {
                                                 String className,
                                                 String methodName,
                                                 String desc,
-                                                boolean isStatic,
                                                 @Nullable Filter filter) {
         updateTreesSet(logFile);
         TreesSet currentTreesSet = this.currentTreesSet;
         if (currentTreesSet == null) {
             return null;
         }
-        return currentTreesSet.getTree(treeType, className, methodName, desc, isStatic, filter);
+        return currentTreesSet.getTree(treeType, className, methodName, desc, filter);
 
     }
 

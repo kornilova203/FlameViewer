@@ -23,7 +23,7 @@ class MethodAccumulativeTreeBuilderTest {
     fun testTimePercentInCallTraces() {
         val tree = getTree()
         val methodTree = MethodAccumulativeTreeBuilder(tree, tree, className, methodName,
-                description, false).tree
+                description).tree
 
         assertEquals(0.4f, methodTree.treeInfo.timePercent)
     }
@@ -38,7 +38,7 @@ class MethodAccumulativeTreeBuilderTest {
     fun testTimePercentInBackTraces() {
         val tree = getTree()
         val backTraces = IncomingCallsBuilder(tree).tree
-        val methodTree = MethodAccumulativeTreeBuilder(backTraces, tree, className, methodName, description, false).tree
+        val methodTree = MethodAccumulativeTreeBuilder(backTraces, tree, className, methodName, description).tree
         assertEquals(0.4f, methodTree.treeInfo.timePercent)
     }
 

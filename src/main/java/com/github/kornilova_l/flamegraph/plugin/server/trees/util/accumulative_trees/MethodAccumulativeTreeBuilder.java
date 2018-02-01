@@ -9,7 +9,6 @@ public class MethodAccumulativeTreeBuilder implements TreeBuilder {
     private final String className;
     private final String methodName;
     private final String desc;
-    private final boolean isStatic;
     private Tree.Builder treeBuilder;
     private Tree.Node.Builder wantedMethodNode;
     private int maxDepth = 0;
@@ -21,12 +20,10 @@ public class MethodAccumulativeTreeBuilder implements TreeBuilder {
                                          Tree outgoingTree,
                                          String className,
                                          String methodName,
-                                         String desc,
-                                         boolean isStatic) {
+                                         String desc) {
         this.className = className;
         this.methodName = methodName;
         this.desc = desc;
-        this.isStatic = isStatic;
         initTreeBuilder();
         traverseTreeAndFind(sourceTree.getBaseNode());
         TreesUtil.INSTANCE.setNodesOffsetRecursively(treeBuilder.getBaseNodeBuilder(), 0);
@@ -96,8 +93,7 @@ public class MethodAccumulativeTreeBuilder implements TreeBuilder {
                                 TreesUtil.INSTANCE.createNodeInfo(
                                         className,
                                         methodName,
-                                        desc,
-                                        isStatic
+                                        desc
                                 )
                         ));
         treeBuilder = Tree.newBuilder()

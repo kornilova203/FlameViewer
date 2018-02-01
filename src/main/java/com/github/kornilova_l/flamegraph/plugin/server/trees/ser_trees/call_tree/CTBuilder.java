@@ -69,7 +69,6 @@ class CTBuilder {
                                 .setDescription(
                                         getBeautifulDesc(methodEvent.getDesc())
                                 )
-                                .setIsStatic(methodEvent.getIsStatic())
                                 .addAllParameters(methodEvent.getParametersList())
                 );
         switch (methodEvent.getEndCase()) {

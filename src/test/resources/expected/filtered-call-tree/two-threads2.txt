@@ -9,9 +9,9 @@ trees {
       node_info {
         method_name: "run"
         class_name: "com.github.kornilova_l.flamegraph.plugin.server.trees.generate_test_data.MyTask"
+        description: "()void"
         return_value {
         }
-        description: "()void"
       }
     }
   }
@@ -30,9 +30,9 @@ trees {
       node_info {
         method_name: "run"
         class_name: "com.github.kornilova_l.flamegraph.plugin.server.trees.generate_test_data.MyTask"
+        description: "()void"
         return_value {
         }
-        description: "()void"
       }
     }
   }

@@ -9,18 +9,18 @@ trees {
       node_info {
         method_name: "fun1"
         class_name: "com.github.kornilova_l.flamegraph.plugin.server.trees.generate_test_data.SimpleTree"
+        description: "()void"
         return_value {
         }
-        description: "()void"
       }
       nodes {
         width: 5
         node_info {
           method_name: "fun2"
           class_name: "com.github.kornilova_l.flamegraph.plugin.server.trees.generate_test_data.SimpleTree"
+          description: "()void"
           return_value {
           }
-          description: "()void"
         }
       }
       nodes {
@@ -29,9 +29,9 @@ trees {
         node_info {
           method_name: "fun3"
           class_name: "com.github.kornilova_l.flamegraph.plugin.server.trees.generate_test_data.SimpleTree"
+          description: "()void"
           return_value {
           }
-          description: "()void"
         }
       }
     }
@@ -41,9 +41,9 @@ trees {
       node_info {
         method_name: "fun4"
         class_name: "com.github.kornilova_l.flamegraph.plugin.server.trees.generate_test_data.SimpleTree"
+        description: "()void"
         return_value {
         }
-        description: "()void"
       }
     }
     nodes {
@@ -52,9 +52,9 @@ trees {
       node_info {
         method_name: "fun5"
         class_name: "com.github.kornilova_l.flamegraph.plugin.server.trees.generate_test_data.SimpleTree"
+        description: "()void"
         return_value {
         }
-        description: "()void"
       }
     }
   }

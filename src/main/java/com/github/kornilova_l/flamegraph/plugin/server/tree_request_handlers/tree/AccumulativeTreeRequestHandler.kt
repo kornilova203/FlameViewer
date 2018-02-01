@@ -15,15 +15,11 @@ abstract class AccumulativeTreeRequestHandler internal constructor(urlDecoder: Q
 
     override fun getTree(logFile: File): Tree? {
         val methodName = getParameter(urlDecoder, "method")
-        var className = getParameter(urlDecoder, "class")
-        var desc = getParameter(urlDecoder, "desc")
-        val isStaticString = getParameter(urlDecoder, "isStatic")
-        return if (methodName != null) {
-            className = if (className != null) className else ""
-            desc = if (desc != null) desc else ""
-            val isStatic = isStaticString != null && isStaticString == "true"
+        val className = getParameter(urlDecoder, "class")
+        val desc = getParameter(urlDecoder, "desc")
+        return if (methodName != null && className != null && desc != null) {
             TreeManager.getInstance().getTree(logFile, type, className, methodName,
-                    desc, isStatic, filter)
+                    desc, filter)
         } else {
             TreeManager.getInstance().getTree(logFile, type, filter)
         }

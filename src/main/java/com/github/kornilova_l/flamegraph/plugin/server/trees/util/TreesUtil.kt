@@ -7,13 +7,11 @@ object TreesUtil {
 
     fun createNodeInfo(className: String,
                        methodName: String,
-                       desc: String,
-                       isStatic: Boolean): Tree.Node.NodeInfo.Builder {
+                       desc: String): Tree.Node.NodeInfo.Builder {
         return Node.NodeInfo.newBuilder()
                 .setClassName(className)
                 .setMethodName(methodName)
                 .setDescription(desc)
-                .setIsStatic(isStatic)
     }
 
     /**
@@ -85,7 +83,7 @@ object TreesUtil {
                                   time: Long): Tree.Node.Builder {
         return Node.newBuilder()
                 .setNodeInfo(
-                        createNodeInfo(className, methodName, desc, false)
+                        createNodeInfo(className, methodName, desc)
                 )
                 .setWidth(time)
     }
