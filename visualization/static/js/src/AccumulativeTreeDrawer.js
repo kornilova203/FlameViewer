@@ -60,6 +60,8 @@ module.exports.AccumulativeTreeDrawer = class AccumulativeTreeDrawer extends Tre
                 const zoomedTree = deserializer.deserializeTree(byteArray);
                 const zoomedNode = zoomedTree.getBaseNode().getNodesList()[0];
                 this._prepareTree(zoomedTree, node.depth - 1);
+                this._assignChildIndexRecursively(zoomedTree.getBaseNode());
+                zoomedNode.index = node.index;
                 zoomedNode.parent = node.parent;
                 super._doSetNodeZoomed(zoomedNode);
             };

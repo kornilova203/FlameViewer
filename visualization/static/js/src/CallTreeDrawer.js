@@ -83,8 +83,6 @@ module.exports.CallTreeDrawer = class CallTreeDrawer extends TreeDrawer.TreeDraw
         this._prepareDraw();
         this.availableWidth = Math.max(this.canvasWidth, CallTreeDrawer._getElementWidth(this.$section));
 
-        this._updateCanvasWidthDecorator()();
-
         this._createPopup();
 
         const childNodes = this.baseNode.getNodesList();
@@ -98,11 +96,11 @@ module.exports.CallTreeDrawer = class CallTreeDrawer extends TreeDrawer.TreeDraw
     /**
      * @override
      */
-    _createCanvas() {
-        console.log("create canvas");
+    _doCreateStages() {
         this.stage = new createjs.Stage("canvas-" + this.id);
         this.stage.id = "canvas-" + this.id;
         this.stage.enableMouseOver(20);
+        this._createZoomedStage();
     }
 
     /**
@@ -231,20 +229,22 @@ module.exports.CallTreeDrawer = class CallTreeDrawer extends TreeDrawer.TreeDraw
     _updateCanvasWidthDecorator() {
         const that = this;
         return () => {
-            setTimeout(() => {
-                that.$section.find(".canvas-zoomed").remove();
+            setTimeout(that._createZoomedStage, 300)
+        };
+    }
 
-                that._createZoomedCanvas();
+    _createZoomedStage() {
+        this.$section.find(".canvas-zoomed").remove();
 
-                that.zoomedStage = new createjs.Stage("canvas-zoomed-" + this.id);
-                that.$zoomedCanvas = $("#canvas-zoomed-" + this.id);
-                that.zoomedStage.id = "canvas-zoomed-" + this.id;
-                that.zoomedStage.enableMouseOver(20);
+        this._createZoomedCanvas();
 
-                if (that.zoomedNode !== null) {
-                    this._changeZoom(that.zoomedNode);
-                }
-            }, 300)
+        this.zoomedStage = new createjs.Stage("canvas-zoomed-" + this.id);
+        this.$zoomedCanvas = $("#canvas-zoomed-" + this.id);
+        this.zoomedStage.id = "canvas-zoomed-" + this.id;
+        this.zoomedStage.enableMouseOver(20);
+
+        if (this.zoomedNode !== null) {
+            this._changeZoom(this.zoomedNode);
         }
     }
 

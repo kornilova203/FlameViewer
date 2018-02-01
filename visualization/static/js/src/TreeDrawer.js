@@ -60,7 +60,7 @@ module.exports.TreeDrawer = class TreeDrawer {
     _prepareDraw() {
         this._prepareTree(this.tree, 0);
         this._enableSearch();
-        this._createCanvas();
+        this._createStages();
         this._createPopup(); // one for all nodes
     }
 
@@ -688,7 +688,7 @@ module.exports.TreeDrawer = class TreeDrawer {
         const that = this;
         return () => {
             setTimeout(() => {
-                that._createCanvas();
+                that._createStages();
                 if (that.zoomedNode !== null) {
                     this._changeZoom(that.zoomedNode);
                 }
@@ -697,7 +697,12 @@ module.exports.TreeDrawer = class TreeDrawer {
         }
     }
 
-    _createCanvas() {
+    _createStages() {
+        this._doCreateStages();
+        this.zoomedStage.addEventListener("drawend", common.hideLoader)
+    }
+
+    _doCreateStages() {
         this.$section.find(".canvas-wrapper canvas").remove();
         const canvasContent = templates.tree.getAccumulativeTreeCanvas(
             {
@@ -798,7 +803,6 @@ module.exports.TreeDrawer = class TreeDrawer {
         this.currentCanvasWidth = TreeDrawer._getCanvasWidth(this.$section.find(".canvas-zoomed"));
         common.showLoader(constants.loaderMessages.drawing, () => {
             this._doSetNodeZoomed(node);
-            common.hideLoader()
         });
     }
 
