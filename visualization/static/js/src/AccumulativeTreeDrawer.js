@@ -33,14 +33,15 @@ module.exports.AccumulativeTreeDrawer = class AccumulativeTreeDrawer extends Tre
     _prepareDraw() {
         super._prepareDraw();
         if (this.visibleDepth !== 0) { // if only part of tree displayed
-            this._moveSectionUp();
+            this._moveSectionUp(this.tree.getVisibleDepth());
         }
     }
 
     /**
+     * @param {number} visibleLayersCount
      * @abstract
      */
-    _moveSectionUp() {
+    _moveSectionUp(visibleLayersCount) {
 
     }
 
@@ -63,11 +64,22 @@ module.exports.AccumulativeTreeDrawer = class AccumulativeTreeDrawer extends Tre
                 this._setPackageColors();
                 this._prepareTree(zoomedTree, node.depth - 1);
                 this._assignChildIndexRecursively(zoomedTree.getBaseNode());
+                this._moveSectionUp(zoomedTree.getVisibleDepth() + node.depth);
                 zoomedNode.index = node.index;
                 zoomedNode.parent = node.parent;
                 super._doSetNodeZoomed(zoomedNode);
             };
             treeRequest.send();
+        }
+    }
+
+    /**
+     * @override
+     */
+    _resetZoom() {
+        super._resetZoom();
+        if (this.visibleDepth !== 0) { // if only part of tree displayed
+            this._moveSectionUp(this.tree.getVisibleDepth());
         }
     }
 

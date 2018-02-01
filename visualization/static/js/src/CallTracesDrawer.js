@@ -5,8 +5,8 @@ module.exports.CallTracesDrawer = class CallTracesDrawer extends AccumulativeTre
         super(tree);
     }
 
-    _moveSectionUp() {
-        const invisibleLayersCount = this.tree.getDepth() - this.tree.getVisibleDepth();
+    _moveSectionUp(visibleLayersCount) {
+        const invisibleLayersCount = this.tree.getDepth() - visibleLayersCount;
         this.$section.css("bottom", invisibleLayersCount * (constants.LAYER_HEIGHT + constants.LAYER_GAP) + "px");
     }
 

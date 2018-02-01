@@ -57,6 +57,7 @@ abstract class AccumulativeTreeRequestHandler internal constructor(urlDecoder: Q
         } else {
             LOG.error("There is no need to send sub-tree request if tree contains less than $maximumNodesCount nodes")
             subTree.baseNodeBuilder.addNodes(currentNode)
+            subTree.visibleDepth = tree.depth - path.size + 1 // the same as actual depth
         }
 
         subTree.depth = tree.depth - path.size + 1 // first element in path chooses one of trees of base node
