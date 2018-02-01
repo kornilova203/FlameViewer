@@ -70,7 +70,7 @@ abstract class TreeRequestHandler(urlDecoder: QueryStringDecoder,
                     currentLayerIndex++
                 }
             }
-            throw IllegalArgumentException("Tree contains less than $maximumNodesCount nodes")
+            return currentLayerIndex
         }
 
         internal fun cutTree(node: Tree.Node, nodeBuilder: Tree.Node.Builder, currentLayer: Int, lastAcceptedLayer: Int) {

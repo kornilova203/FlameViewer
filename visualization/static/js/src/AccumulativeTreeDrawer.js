@@ -7,6 +7,23 @@ const TreeDrawer = require('./TreeDrawer');
 module.exports.AccumulativeTreeDrawer = class AccumulativeTreeDrawer extends TreeDrawer.TreeDrawer {
     constructor(tree) {
         super(tree);
+        this.isFullTree = this.tree.getVisibleDepth() === 0;
+        this.visibleDepth = this.tree.getVisibleDepth();
+        if (!this.isFullTree) {
+            this._assignChildIndexRecursively(tree.getBaseNode());
+        }
+    }
+
+    /**
+     * Indices are needed to get hidden nodes when node is zoomed.
+     * @param node
+     */
+    _assignChildIndexRecursively(node) {
+        const children = node.getNodesList();
+        for (let i = 0; i < children.length; i++) {
+            children[i].index = i;
+            this._assignChildIndexRecursively(children[i]);
+        }
     }
 
     /**
@@ -15,8 +32,7 @@ module.exports.AccumulativeTreeDrawer = class AccumulativeTreeDrawer extends Tre
      */
     _prepareDraw() {
         super._prepareDraw();
-        const visibleDepth = this.tree.getVisibleDepth();
-        if (visibleDepth !== 0) { // if only part of tree displayed
+        if (this.visibleDepth !== 0) { // if only part of tree displayed
             this._moveSectionUp();
         }
     }
@@ -32,41 +48,23 @@ module.exports.AccumulativeTreeDrawer = class AccumulativeTreeDrawer extends Tre
      * @param node
      * @override
      */
-    _setNodeZoomed(node) {
-        this.zoomedNode = node;
-        const pathToNode = AccumulativeTreeDrawer._getPathToNode(node);
-        const treeRequest = AccumulativeTreeDrawer._createTreeRequest(pathToNode);
-        treeRequest.onload = () => {
-            const arrayBuffer = treeRequest.response;
-            const byteArray = new Uint8Array(arrayBuffer);
-            // noinspection JSUnresolvedFunction
-            const zoomedTree = deserializer.deserializeTree(byteArray);
-            this._prepareTree(zoomedTree);
-            this.currentCanvasWidth = AccumulativeTreeDrawer._getCanvasWidth(this.$section.find(".canvas-zoomed"));
-            common.showLoader(constants.loaderMessages.drawing, () => {
-                this.zoomedStage.removeAllChildren();
-                super._expandParents(node);
-                this._drawNodesRecursively(
-                    node,
-                    this._countScaleXForNode(node),
-                    this._countOffsetXForNode(node),
-                    true,
-                    this.zoomedStage,
-                    true,
-                    node.depth
-                );
-                this._addResetButton();
-                if (this.isHighlightedFunction !== null) {
-                    this._setHighlightOnZoomedStage();
-                } else {
-                    this.zoomedStage.update();
-                }
-                $("#" + this.stage.id).addClass("original-canvas-zoomed");
-                $("#" + this.zoomedStage.id).addClass("canvas-zoomed-show");
-                common.hideLoader()
-            });
-        };
-        treeRequest.send();
+    _doSetNodeZoomed(node) {
+        if (this.isFullTree) {
+            super._doSetNodeZoomed(node);
+        } else {
+            const pathToNode = AccumulativeTreeDrawer._getPathToNode(node);
+            const treeRequest = AccumulativeTreeDrawer._createTreeRequest(pathToNode);
+            treeRequest.onload = () => {
+                const arrayBuffer = treeRequest.response;
+                const byteArray = new Uint8Array(arrayBuffer);
+                const zoomedTree = deserializer.deserializeTree(byteArray);
+                const zoomedNode = zoomedTree.getBaseNode().getNodesList()[0];
+                this._prepareTree(zoomedTree, node.depth - 1);
+                zoomedNode.parent = node.parent;
+                super._doSetNodeZoomed(zoomedNode);
+            };
+            treeRequest.send();
+        }
     }
 
     /**

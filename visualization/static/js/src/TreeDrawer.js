@@ -58,7 +58,7 @@ module.exports.TreeDrawer = class TreeDrawer {
      * @protected
      */
     _prepareDraw() {
-        this._prepareTree(this.tree);
+        this._prepareTree(this.tree, 0);
         this._enableSearch();
         this._createCanvas();
         this._createPopup(); // one for all nodes
@@ -630,10 +630,13 @@ module.exports.TreeDrawer = class TreeDrawer {
         $("#" + this.stage.id).removeClass("original-canvas-zoomed");
     }
 
-
-
-    _prepareTree(tree) {
-        this._assignParentsAndDepthRecursively(tree.getBaseNode(), 0);
+    /**
+     * @param tree
+     * @param {number} initialDepth
+     * @private
+     */
+    _prepareTree(tree, initialDepth) {
+        this._assignParentsAndDepthRecursively(tree.getBaseNode(), initialDepth);
         this._setOriginalColorRecursively(tree.getBaseNode());
     }
 
@@ -787,11 +790,37 @@ module.exports.TreeDrawer = class TreeDrawer {
     }
 
     /**
-     * @abstract
      * @param node
-     * @protected
+     * @private
      */
     _setNodeZoomed(node) {
+        this.zoomedNode = node;
+        this.currentCanvasWidth = TreeDrawer._getCanvasWidth(this.$section.find(".canvas-zoomed"));
+        common.showLoader(constants.loaderMessages.drawing, () => {
+            this._doSetNodeZoomed(node);
+            common.hideLoader()
+        });
+    }
 
+    _doSetNodeZoomed(node) {
+        this.zoomedStage.removeAllChildren();
+        this._expandParents(node);
+        this._drawNodesRecursively(
+            node,
+            this._countScaleXForNode(node),
+            this._countOffsetXForNode(node),
+            true,
+            this.zoomedStage,
+            true,
+            node.depth
+        );
+        this._addResetButton();
+        if (this.isHighlightedFunction !== null) {
+            this._setHighlightOnZoomedStage();
+        } else {
+            this.zoomedStage.update();
+        }
+        $("#" + this.stage.id).addClass("original-canvas-zoomed");
+        $("#" + this.zoomedStage.id).addClass("canvas-zoomed-show");
     }
 };

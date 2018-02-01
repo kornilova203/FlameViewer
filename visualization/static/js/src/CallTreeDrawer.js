@@ -220,39 +220,8 @@ module.exports.CallTreeDrawer = class CallTreeDrawer extends TreeDrawer.TreeDraw
         //noinspection JSValidateTypes
         this.zoomedCanvasMargin = this.$callTreeWrapper.scrollLeft();
         this.$zoomedCanvas.css("margin-left", this.zoomedCanvasMargin);
-        this._doSetNodeZoomed(node);
+        super._setNodeZoomed(node);
         this.$callTreeWrapper.addClass("call-tree-wrapper-zoomed");
-    }
-
-    /**
-     * @param node
-     * @private
-     */
-    _doSetNodeZoomed(node) {
-        this.zoomedNode = node;
-        this.currentCanvasWidth = CallTreeDrawer._getCanvasWidth(this.$section.find(".canvas-zoomed"));
-        common.showLoader(constants.loaderMessages.drawing, () => {
-            this.zoomedStage.removeAllChildren();
-            this._expandParents(node);
-            this._drawNodesRecursively(
-                node,
-                this._countScaleXForNode(node),
-                this._countOffsetXForNode(node),
-                true,
-                this.zoomedStage,
-                true,
-                node.depth
-            );
-            this._addResetButton();
-            if (this.isHighlightedFunction !== null) {
-                this._setHighlightOnZoomedStage();
-            } else {
-                this.zoomedStage.update();
-            }
-            $("#" + this.stage.id).addClass("original-canvas-zoomed");
-            $("#" + this.zoomedStage.id).addClass("canvas-zoomed-show");
-            common.hideLoader()
-        });
     }
 
     /**

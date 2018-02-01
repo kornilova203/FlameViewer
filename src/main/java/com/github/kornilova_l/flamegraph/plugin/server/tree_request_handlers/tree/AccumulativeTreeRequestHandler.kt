@@ -46,7 +46,13 @@ abstract class AccumulativeTreeRequestHandler internal constructor(urlDecoder: Q
         val subTree = Tree.newBuilder()
         if (tree.treeInfo.nodesCount > maximumNodesCount) {
             val lastAcceptedLayer = getLastAcceptedLayerIndex(currentNode)
-            cutTree(currentNode, subTree.baseNodeBuilder, 1, lastAcceptedLayer)
+            val base = Tree.Node.newBuilder()
+                    .setWidth(currentNode.width)
+                    .setOffset(currentNode.offset)
+                    .setNodeInfo(currentNode.nodeInfo)
+            subTree.baseNodeBuilder.addNodes(base)
+            val addedBase = subTree.baseNodeBuilder.getNodesBuilder(subTree.baseNodeBuilder.nodesBuilderList.size - 1)
+            cutTree(currentNode, addedBase, 1, lastAcceptedLayer)
             subTree.visibleDepth = lastAcceptedLayer
         } else {
             LOG.error("There is no need to send sub-tree request if tree contains less than $maximumNodesCount nodes")
