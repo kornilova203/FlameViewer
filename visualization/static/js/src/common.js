@@ -113,8 +113,13 @@ common.getParametersString = (parameters) => {
     for (let i = 0; i < keys.length; i++) {
         const key = keys[i];
         const value = parameters[key];
-        string += `&${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
-
+        if (value instanceof Array) {
+            for (let i = 0; i < value.length; i++) {
+                string += `&${encodeURIComponent(key)}=${encodeURIComponent(value[i])}`;
+            }
+        } else {
+            string += `&${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
+        }
     }
     return string.substring(1, string.length); // remove first '&'
 };

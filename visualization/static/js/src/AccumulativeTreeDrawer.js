@@ -78,7 +78,9 @@ module.exports.AccumulativeTreeDrawer = class AccumulativeTreeDrawer extends Tre
     static _getPathToNode(node) {
         const reversedPath = [];
         while (node !== undefined) {
-            reversedPath.push(node.index);
+            if (node.index !== undefined) { // index of base node is undefined
+                reversedPath.push(node.index);
+            }
             node = node.parent;
         }
         return AccumulativeTreeDrawer._reverseList(reversedPath);
@@ -104,6 +106,7 @@ module.exports.AccumulativeTreeDrawer = class AccumulativeTreeDrawer extends Tre
     static _createTreeRequest(pathToNode) {
         const request = new XMLHttpRequest();
         request.open("GET", `/flamegraph-profiler/trees/outgoing-calls?` + AccumulativeTreeDrawer.getTreeGETParameters(pathToNode));
+        request.responseType = "arraybuffer";
         return request;
     }
 
@@ -114,7 +117,8 @@ module.exports.AccumulativeTreeDrawer = class AccumulativeTreeDrawer extends Tre
     static getTreeGETParameters(pathToNode) {
         return common.getParametersString({
             project: constants.projectName,
-            file: constants.fileName
+            file: constants.fileName,
+            path: pathToNode
         });
     }
 };
