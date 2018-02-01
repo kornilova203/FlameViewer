@@ -50,6 +50,17 @@ public abstract class TreesSet {
         return maxDepth;
     }
 
+    public static int getMaxDepthRecursively(Node nodeBuilder, int currentDepth) {
+        int maxDepth = currentDepth;
+        for (Node child : nodeBuilder.getNodesList()) {
+            int newDepth = getMaxDepthRecursively(child, currentDepth + 1);
+            if (newDepth > maxDepth) {
+                maxDepth = newDepth;
+            }
+        }
+        return maxDepth;
+    }
+
     public abstract TreesPreview getTreesPreview(@Nullable Filter filter);
 
     public abstract Tree getTree(TreeType treeType,

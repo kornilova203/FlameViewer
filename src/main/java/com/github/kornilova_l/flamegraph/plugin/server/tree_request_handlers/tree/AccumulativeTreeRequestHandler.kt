@@ -3,6 +3,7 @@ package com.github.kornilova_l.flamegraph.plugin.server.tree_request_handlers.tr
 import com.github.kornilova_l.flamegraph.plugin.server.ProfilerHttpRequestHandler.getParameter
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeManager
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeManager.TreeType
+import com.github.kornilova_l.flamegraph.plugin.server.trees.TreesSet.getMaxDepthRecursively
 import com.github.kornilova_l.flamegraph.plugin.server.trees.util.TreesUtil
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree
 import com.intellij.openapi.diagnostic.Logger
@@ -53,14 +54,14 @@ abstract class AccumulativeTreeRequestHandler internal constructor(urlDecoder: Q
             subTree.baseNodeBuilder.addNodes(base)
             val addedBase = subTree.baseNodeBuilder.getNodesBuilder(subTree.baseNodeBuilder.nodesBuilderList.size - 1)
             cutTree(currentNode, addedBase, 1, lastAcceptedLayer)
-            subTree.visibleDepth = lastAcceptedLayer
+            subTree.visibleDepth = lastAcceptedLayer + 1 // + 1 because currentNode was not counted
         } else {
             LOG.error("There is no need to send sub-tree request if tree contains less than $maximumNodesCount nodes")
             subTree.baseNodeBuilder.addNodes(currentNode)
-            subTree.visibleDepth = tree.depth - path.size + 1 // the same as actual depth
+            subTree.visibleDepth = getMaxDepthRecursively(subTree.baseNodeBuilder, 0)
         }
 
-        subTree.depth = tree.depth - path.size + 1 // first element in path chooses one of trees of base node
+        subTree.depth = getMaxDepthRecursively(currentNode, 1) // first element in path chooses one of trees of base node
 
         TreesUtil.setNodesOffsetRecursively(subTree.baseNodeBuilder, 0)
         TreesUtil.setTreeWidth(subTree)

@@ -9,19 +9,20 @@ module.exports.CallTracesDrawer = class CallTracesDrawer extends AccumulativeTre
         const $main = $('main');
         // noinspection JSValidateTypes
         const previousScroll = $main.scrollTop();
-        const currentShift = this._getCurrentMarginBottom(this.$section);
+        const currentShift = this._getMarginBottom(this.$section);
 
         const invisibleLayersCount = this.tree.getDepth() - visibleLayersCount;
 
-        const newShift = invisibleLayersCount * (constants.LAYER_HEIGHT + constants.LAYER_GAP);
+        const newShift = Math.min(this.initialCanvasShift, invisibleLayersCount * (constants.LAYER_HEIGHT + constants.LAYER_GAP));
         this.$section.css("bottom", newShift + "px");
 
         const delta = currentShift - newShift;
         // noinspection JSValidateTypes
         $main.scrollTop(previousScroll + delta);
+        return newShift;
     }
 
-    _getCurrentMarginBottom($element) {
+    _getMarginBottom($element) {
         const currentShiftString = $element.css("bottom");
         return Number.parseInt(currentShiftString.substring(0, currentShiftString.length - 2));
     }

@@ -7,10 +7,13 @@ const TreeDrawer = require('./TreeDrawer');
 module.exports.AccumulativeTreeDrawer = class AccumulativeTreeDrawer extends TreeDrawer.TreeDrawer {
     constructor(tree) {
         super(tree);
-        this.isFullTree = this.tree.getVisibleDepth() === 0;
+        this.isFullyVisible = this.tree.getVisibleDepth() === 0;
         this.visibleDepth = this.tree.getVisibleDepth();
-        if (!this.isFullTree) {
+        this.$fog = $(".fog");
+        this.initialCanvasShift = this.canvasHeight; // see _moveSectionUp method
+        if (!this.isFullyVisible) { // if some nodes are hidden
             this._assignChildIndexRecursively(tree.getBaseNode());
+            this.$fog.css("opacity", 1); // show fog
         }
     }
 
@@ -33,13 +36,17 @@ module.exports.AccumulativeTreeDrawer = class AccumulativeTreeDrawer extends Tre
     _prepareDraw() {
         super._prepareDraw();
         if (this.visibleDepth !== 0) { // if only part of tree displayed
-            this._moveSectionUp(this.tree.getVisibleDepth());
+            this.initialCanvasShift = this._moveSectionUp(this.tree.getVisibleDepth());
         }
     }
 
     /**
+     * This method shifts canvas so all available nodes are visible
+     * and there are no extra space above tree.
+     * New shift must not be bigger than this.initialCanvasShift.
      * @param {number} visibleLayersCount
      * @abstract
+     * @return {number} value of 'bottom' css attribute of canvas
      */
     _moveSectionUp(visibleLayersCount) {
 
@@ -50,7 +57,7 @@ module.exports.AccumulativeTreeDrawer = class AccumulativeTreeDrawer extends Tre
      * @override
      */
     _doSetNodeZoomed(node) {
-        if (this.isFullTree) {
+        if (this.isFullyVisible) {
             super._doSetNodeZoomed(node);
         } else {
             const pathToNode = AccumulativeTreeDrawer._getPathToNode(node);
@@ -64,12 +71,27 @@ module.exports.AccumulativeTreeDrawer = class AccumulativeTreeDrawer extends Tre
                 this._setPackageColors();
                 this._prepareTree(zoomedTree, node.depth - 1);
                 this._assignChildIndexRecursively(zoomedTree.getBaseNode());
-                this._moveSectionUp(zoomedTree.getVisibleDepth() + node.depth);
+                this._moveSectionUp(zoomedTree.getVisibleDepth() + node.depth - 1);
+                this._toggleFog(zoomedTree.getVisibleDepth(), zoomedTree.getDepth());
                 zoomedNode.index = node.index;
                 zoomedNode.parent = node.parent;
                 super._doSetNodeZoomed(zoomedNode);
             };
             treeRequest.send();
+        }
+    }
+
+    /**
+     * Hide fog if top nodes does not have children
+     * @param visibleLayersCount
+     * @param layersCount
+     * @private
+     */
+    _toggleFog(visibleLayersCount, layersCount) {
+        if (visibleLayersCount === layersCount) {
+            this.$fog.css("opacity", 0)
+        } else {
+            this.$fog.css("opacity", 1)
         }
     }
 
@@ -80,6 +102,7 @@ module.exports.AccumulativeTreeDrawer = class AccumulativeTreeDrawer extends Tre
         super._resetZoom();
         if (this.visibleDepth !== 0) { // if only part of tree displayed
             this._moveSectionUp(this.tree.getVisibleDepth());
+            this._toggleFog(this.tree.getVisibleDepth(), this.tree.getDepth());
         }
     }
 
