@@ -11,7 +11,7 @@ import java.util.*
 
 abstract class TreeRequestHandler(urlDecoder: QueryStringDecoder,
                                   context: ChannelHandlerContext) : RequestHandler(urlDecoder, context) {
-    private val maximumNodesCount = 20_000
+    private val maximumNodesCount = 15_000 // amount of visible nodes
 
     abstract fun getTree(logFile: File): Tree?
 
