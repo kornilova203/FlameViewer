@@ -1,16 +1,13 @@
 package com.github.kornilova_l.flamegraph.plugin.server.trees.converters
 
 import com.github.kornilova_l.flamegraph.plugin.PluginFileManager
-import com.github.kornilova_l.flamegraph.plugin.server.FilesUploaderTest.Companion.getResponse
 import com.github.kornilova_l.flamegraph.plugin.server.FilesUploaderTest.Companion.sendFile
+import com.github.kornilova_l.flamegraph.plugin.server.trees.GetTreesTest.Companion.sendRequestForCallTraces
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TestHelper
 import com.github.kornilova_l.flamegraph.proto.TreeProtos
 import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase
-import org.jetbrains.ide.BuiltInServerManager
 import java.io.ByteArrayInputStream
 import java.io.File
-import java.net.HttpURLConnection
-import java.net.URL
 
 class FileToCallTracesTest : LightPlatformCodeInsightFixtureTestCase() {
     fun testFlamegraph() {
@@ -37,16 +34,5 @@ class FileToCallTracesTest : LightPlatformCodeInsightFixtureTestCase() {
         assertNotNull(bytes)
         TestHelper.compare(TreeProtos.Tree.parseFrom(ByteArrayInputStream(bytes)).toString(),
                 File("src/test/resources/file_to_call_traces_converter/yourkit_csv/expected/$fileName.txt"))
-    }
-
-    private fun sendRequestForCallTraces(fileName: String): ByteArray {
-        val url = URL("http://localhost:${BuiltInServerManager.getInstance().port}" +
-                "/flamegraph-profiler/trees/outgoing-calls?" +
-                "file=$fileName&" +
-                "project=uploaded-files")
-        val connection = url.openConnection() as HttpURLConnection
-        connection.requestMethod = "GET"
-
-        return getResponse(connection)
     }
 }
