@@ -4,8 +4,8 @@ import com.github.kornilova_l.flamegraph.plugin.PluginFileManager;
 import com.github.kornilova_l.flamegraph.plugin.server.methods_count_handlers.AccumulativeTreesMethodCounter;
 import com.github.kornilova_l.flamegraph.plugin.server.methods_count_handlers.CallTreeMethodsCounter;
 import com.github.kornilova_l.flamegraph.plugin.server.tree_request_handlers.json.HotSpotsRequestHandler;
-import com.github.kornilova_l.flamegraph.plugin.server.tree_request_handlers.tree.IncomingCallsRequestHandler;
-import com.github.kornilova_l.flamegraph.plugin.server.tree_request_handlers.tree.OutgoingCallsRequestHandler;
+import com.github.kornilova_l.flamegraph.plugin.server.tree_request_handlers.tree.BackTracesRequestHandler;
+import com.github.kornilova_l.flamegraph.plugin.server.tree_request_handlers.tree.CallTracesRequestHandler;
 import com.github.kornilova_l.flamegraph.plugin.server.tree_request_handlers.trees.CallTreeRequestHandler;
 import com.github.kornilova_l.flamegraph.plugin.server.tree_request_handlers.trees.TreesPreviewHandler;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.Filter;
@@ -304,10 +304,10 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
                 new TreesPreviewHandler(urlDecoder, context).process();
                 return true;
             case ServerNames.OUTGOING_CALLS_JS_REQUEST:
-                new OutgoingCallsRequestHandler(urlDecoder, context).process();
+                new CallTracesRequestHandler(urlDecoder, context).process();
                 return true;
             case ServerNames.INCOMING_CALLS_JS_REQUEST:
-                new IncomingCallsRequestHandler(urlDecoder, context).process();
+                new BackTracesRequestHandler(urlDecoder, context).process();
                 return true;
             case ServerNames.CALL_TREE_COUNT:
                 new CallTreeMethodsCounter(urlDecoder, context).sendJson();

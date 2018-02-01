@@ -5,7 +5,7 @@ import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeManager.TreeTyp
 import io.netty.channel.ChannelHandlerContext
 import io.netty.handler.codec.http.QueryStringDecoder
 
-class OutgoingCallsRequestHandler(urlDecoder: QueryStringDecoder, context: ChannelHandlerContext) :
+class CallTracesRequestHandler(urlDecoder: QueryStringDecoder, context: ChannelHandlerContext) :
         AccumulativeTreeRequestHandler(urlDecoder, context) {
     override val type: TreeManager.TreeType = OUTGOING_CALLS
 }
