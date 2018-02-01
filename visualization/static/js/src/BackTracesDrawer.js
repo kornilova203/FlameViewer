@@ -33,7 +33,7 @@ module.exports.BackTracesDrawer = class BackTracesDrawer extends AccumulativeTre
     _setPopupPosition(offsetX, depth) {
         this.$popup
             .css("left", offsetX)
-            .css("margin-top", -this.canvasHeight + TreeDrawer._calcNormaOffsetY(depth + 1) - POPUP_MARGIN)
+            .css("margin-top", -this.canvasHeight + BackTracesDrawer._calcNormaOffsetY(depth + 1) - constants.POPUP_MARGIN)
     }
 
     /**

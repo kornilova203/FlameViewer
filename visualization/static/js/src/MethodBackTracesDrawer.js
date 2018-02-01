@@ -10,11 +10,11 @@ module.exports.MethodBackTracesDrawer = class MethodBackTracesDrawer extends Bac
     }
 
     _setHeader(className, methodName, desc, timePercent) {
-        const $header = TreeDrawer._createHeader(className, methodName, desc, timePercent);
+        const $header = MethodBackTracesDrawer._createHeader(className, methodName, desc, timePercent);
         $header.insertBefore(this.$section.find(".canvas-wrapper"));
     }
 
     getTreeGETParameters(pathToNode) {
         return methodFunctions.getTreeGETParameters.call(this, pathToNode);
     }
-}
+};

@@ -153,6 +153,7 @@ const constants = {
         CANVAS_PADDING: 35,
         LAYER_HEIGHT: 19,
         LAYER_GAP: 1,
+        POPUP_MARGIN: 6, // have no idea why there is a gap between popup and canvas
         loaderMessages: {
             drawing: "Drawing...",
             deserialization: "Deserialization of binary data...",
