@@ -11,7 +11,7 @@ import java.io.File
 class TreesPreviewHandler(urlDecoder: QueryStringDecoder,
                           context: ChannelHandlerContext) : RequestHandler(urlDecoder, context) {
     override fun doProcess(logFile: File) {
-        val preview = TreeManager.getInstance().getCallTreesPreview(logFile, filter)
+        val preview = TreeManager.getCallTreesPreview(logFile, filter)
         sendProto(context, preview)
     }
 }

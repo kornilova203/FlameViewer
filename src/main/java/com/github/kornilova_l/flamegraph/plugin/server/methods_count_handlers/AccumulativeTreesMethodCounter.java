@@ -36,10 +36,10 @@ public class AccumulativeTreesMethodCounter extends MethodsCounter {
         String className = getParameter(urlDecoder, "class");
         String desc = getParameter(urlDecoder, "desc");
         if (methodName != null && className != null && desc != null) {
-            return TreeManager.getInstance().getTree(
+            return TreeManager.INSTANCE.getTree(
                     logFile, treeType, className, methodName, desc, null);
         } else {
-            return TreeManager.getInstance().getTree(logFile, treeType, null);
+            return TreeManager.INSTANCE.getTree(logFile, treeType, null);
         }
     }
 }

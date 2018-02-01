@@ -15,6 +15,6 @@ class HotSpotsRequestHandler(urlDecoder: QueryStringDecoder,
         if (projectName == null || fileName == null) {
             return null
         }
-        return TreeManager.getInstance().getHotSpots(logFile)
+        return TreeManager.getHotSpots(logFile)
     }
 }

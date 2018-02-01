@@ -21,7 +21,7 @@ public class ShowLastResultAction extends AnAction implements DumbAware {
 
     @NotNull
     private static String getUri(@NotNull Project project) {
-        String fileName = PluginFileManager.getInstance().getLatestFileName(project.getName());
+        String fileName = PluginFileManager.INSTANCE.getLatestFileName(project.getName());
         if (fileName != null) {
             return ServerNames.CALL_TREE +
                     "?project=" +

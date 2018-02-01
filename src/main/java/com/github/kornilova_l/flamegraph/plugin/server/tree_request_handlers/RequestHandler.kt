@@ -13,7 +13,7 @@ abstract class RequestHandler internal constructor(protected val urlDecoder: Que
                                                    protected val context: ChannelHandlerContext) {
 
     protected val filter: Filter? = getFilter(urlDecoder)
-    private val logFile: File? = PluginFileManager.getInstance().getLogFile(urlDecoder)
+    private val logFile: File? = PluginFileManager.getLogFile(urlDecoder)
 
     fun process() {
         if (logFile == null) {

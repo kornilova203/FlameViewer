@@ -12,27 +12,39 @@ import java.net.URL
 
 
 class GetTreesTest : LightPlatformCodeInsightFixtureTestCase() {
+    private val pathToDir = "src/test/resources/com/github/kornilova_l/flamegraph/plugin/server/trees/ser"
+
     /**
      * Upload ser file that contains class without package
      * send request for method tree
      */
     fun testSerFileMethodTree() {
-        PluginFileManager.getInstance().deleteAllUploadedFiles()
-        val serFile = File("src/test/resources/com/github/kornilova_l/flamegraph/plugin/server/trees/ser/ClassWithoutPackage-2018-02-01-13_55_17.ser")
+        PluginFileManager.deleteAllUploadedFiles()
+        val serFile = File("$pathToDir/ClassWithoutPackage-2018-02-01-13_55_17.ser")
         FilesUploaderTest.sendFile(serFile.name, serFile.readBytes())
 
         /* test full tree */
         var bytes = sendRequestForCallTraces(serFile.name)
         assertNotNull(bytes)
         TestHelper.compare(Tree.parseFrom(ByteArrayInputStream(bytes)).toString(),
-                File("src/test/resources/com/github/kornilova_l/flamegraph/plugin/server/trees/ser/expected/ClassWithoutPackage.txt"))
+                File("$pathToDir/expected/ClassWithoutPackage.txt"))
 
         /* test method tree */
         bytes = sendRequestForMethodCallTraces(serFile.name, "ClassWithoutPackage", "fun1", "()void")
         assertNotNull(bytes)
         TestHelper.compare(Tree.parseFrom(ByteArrayInputStream(bytes)).toString(),
-                File("src/test/resources/com/github/kornilova_l/flamegraph/plugin/server/trees/ser/expected/ClassWithoutPackage-method.txt"))
+                File("$pathToDir/expected/ClassWithoutPackage-method.txt"))
+    }
 
+    fun testGetPartOfTree() {
+        PluginFileManager.deleteAllUploadedFiles()
+        val serFile = File("$pathToDir/ClassWithoutPackage-2018-02-01-13_55_17.ser")
+        FilesUploaderTest.sendFile(serFile.name, serFile.readBytes())
+
+        val bytes = sendRequestForPartOfCallTree(serFile.name, listOf(0))
+        assertNotNull(bytes)
+        TestHelper.compare(Tree.parseFrom(ByteArrayInputStream(bytes)).toString(),
+                File("$pathToDir/expected/ClassWithoutPackage-part.txt"))
     }
 
     companion object {
@@ -55,6 +67,18 @@ class GetTreesTest : LightPlatformCodeInsightFixtureTestCase() {
                     "&class=$className" +
                     "&method=$methodName" +
                     "&desc=$description")
+            val connection = url.openConnection() as HttpURLConnection
+            connection.requestMethod = "GET"
+
+            return FilesUploaderTest.getResponse(connection)
+        }
+
+        fun sendRequestForPartOfCallTree(fileName: String, path: List<Int>): ByteArray {
+            val url = URL("http://localhost:${BuiltInServerManager.getInstance().port}" +
+                    "/flamegraph-profiler/trees/outgoing-calls?" +
+                    "file=$fileName" +
+                    "&project=uploaded-files" +
+                    "&path=$path")
             val connection = url.openConnection() as HttpURLConnection
             connection.requestMethod = "GET"
 

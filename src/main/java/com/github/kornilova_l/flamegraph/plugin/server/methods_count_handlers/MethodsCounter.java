@@ -25,7 +25,7 @@ public abstract class MethodsCounter {
     private ChannelHandlerContext context;
 
     MethodsCounter(QueryStringDecoder urlDecoder, ChannelHandlerContext context) {
-        this.logFile = PluginFileManager.getInstance().getLogFile(urlDecoder);
+        this.logFile = PluginFileManager.INSTANCE.getLogFile(urlDecoder);
         this.filter = getFilter(urlDecoder);
         this.context = context;
         this.urlDecoder = urlDecoder;
@@ -72,7 +72,7 @@ public abstract class MethodsCounter {
 
     class NodesCount {
         @SuppressWarnings("unused")
-        private int nodesCount = 0;
+        private int nodesCount;
 
         NodesCount(int nodesCount) {
             this.nodesCount = nodesCount;

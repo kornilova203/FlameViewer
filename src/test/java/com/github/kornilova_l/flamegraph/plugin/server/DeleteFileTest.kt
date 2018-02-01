@@ -12,7 +12,7 @@ import java.nio.file.Paths
 
 class DeleteFileTest : LightPlatformCodeInsightFixtureTestCase() {
     fun testDeleteSerFile() {
-        PluginFileManager.getInstance().deleteAllUploadedFiles()
+        PluginFileManager.deleteAllUploadedFiles()
         val projectName = "my-project"
         val fileName = "file.ser"
         val file = createFile(projectName, fileName)
@@ -25,12 +25,12 @@ class DeleteFileTest : LightPlatformCodeInsightFixtureTestCase() {
     }
 
     fun testDeleteUploadedFile() {
-        PluginFileManager.getInstance().deleteAllUploadedFiles()
+        PluginFileManager.deleteAllUploadedFiles()
         val projectName = "uploaded-files"
         val fileName = "my-flamegraph.flamegraph"
         FilesUploaderTest.sendFile(fileName, "fun1;fun2 1".toByteArray())
 
-        val file = PluginFileManager.getInstance().getLogFile(projectName, fileName)
+        val file = PluginFileManager.getLogFile(projectName, fileName)
         assertNotNull(file) // file was sent
         assertTrue(file!!.exists())
 
@@ -45,9 +45,9 @@ class DeleteFileTest : LightPlatformCodeInsightFixtureTestCase() {
 
         /* check that file was mode to temp directory for deleted files */
         val fileInDeletedDir = if (converterId != null) {
-            Paths.get(PluginFileManager.getInstance().logDirPath.toString(), "deleted", converterId, fileName).toFile()
+            Paths.get(PluginFileManager.logDirPath.toString(), "deleted", converterId, fileName).toFile()
         } else {
-            Paths.get(PluginFileManager.getInstance().logDirPath.toString(), "deleted", fileName).toFile()
+            Paths.get(PluginFileManager.logDirPath.toString(), "deleted", fileName).toFile()
         }
         assertTrue(fileInDeletedDir.exists())
     }
@@ -85,7 +85,7 @@ class DeleteFileTest : LightPlatformCodeInsightFixtureTestCase() {
      * Creates file as if it was generated during profiling
      */
     private fun createFile(projectName: String, fileName: String): File {
-        val pluginFileManager = PluginFileManager.getInstance()
+        val pluginFileManager = PluginFileManager
         pluginFileManager.deleteAllUploadedFiles()
 
         val projectDir = Paths.get(pluginFileManager.logDirPath.toString(), projectName).toFile()

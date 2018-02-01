@@ -33,7 +33,7 @@ import java.util.Map;
 public class ProfilerHttpRequestHandler extends HttpRequestHandler {
 
     private static final Logger LOG = Logger.getInstance(ProfilerHttpRequestHandler.class);
-    private final PluginFileManager fileManager = PluginFileManager.getInstance();
+    private final PluginFileManager fileManager = PluginFileManager.INSTANCE;
     private final FileUploader fileUploader = new FileUploader();
 
     public static void sendProto(ChannelHandlerContext context,
@@ -263,7 +263,7 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
         if (!urlDecoder.uri().startsWith(ServerNames.MAIN_NAME)) {
             return false;
         }
-        TreeManager.getInstance().updateLastTime();
+        TreeManager.INSTANCE.updateLastTime();
         if (fullHttpRequest.method() == HttpMethod.POST) {
             return processPostMethod(urlDecoder, fullHttpRequest, context);
         } else {
@@ -350,7 +350,7 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
      */
     private void sendIfFileExist(FullHttpRequest fullHttpRequest, ChannelHandlerContext context) {
         String fileName = fullHttpRequest.headers().get("File-Name");
-        if (PluginFileManager.getInstance().getLogFile("uploaded-files", fileName) != null) {
+        if (fileManager.getLogFile("uploaded-files", fileName) != null) {
             sendStatus(HttpResponseStatus.FOUND, context.channel());
         } else {
             sendStatus(HttpResponseStatus.NOT_FOUND, context.channel());

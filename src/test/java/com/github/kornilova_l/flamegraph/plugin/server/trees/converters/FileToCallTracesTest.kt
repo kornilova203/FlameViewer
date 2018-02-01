@@ -11,7 +11,7 @@ import java.io.File
 
 class FileToCallTracesTest : LightPlatformCodeInsightFixtureTestCase() {
     fun testFlamegraph() {
-        PluginFileManager.getInstance().deleteAllUploadedFiles()
+        PluginFileManager.deleteAllUploadedFiles()
         val flamegraphFile = File("src/test/resources/StacksOCTreeBuilderTest/test_data01.txt")
         sendFile(flamegraphFile.name, flamegraphFile.readBytes())
         val bytes = sendRequestForCallTraces(flamegraphFile.name)
@@ -27,7 +27,7 @@ class FileToCallTracesTest : LightPlatformCodeInsightFixtureTestCase() {
     }
 
     private fun doTest(fileName: String) {
-        PluginFileManager.getInstance().deleteAllUploadedFiles()
+        PluginFileManager.deleteAllUploadedFiles()
         val yourkitCsvFile = File("src/test/resources/file_to_call_traces_converter/yourkit_csv/$fileName.csv")
         sendFile(yourkitCsvFile.name, yourkitCsvFile.readBytes())
         val bytes = sendRequestForCallTraces(yourkitCsvFile.name)

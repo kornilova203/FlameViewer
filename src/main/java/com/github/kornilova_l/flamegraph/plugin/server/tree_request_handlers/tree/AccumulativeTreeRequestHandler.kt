@@ -18,10 +18,10 @@ abstract class AccumulativeTreeRequestHandler internal constructor(urlDecoder: Q
         val className = getParameter(urlDecoder, "class")
         val desc = getParameter(urlDecoder, "desc")
         return if (methodName != null && className != null && desc != null) {
-            TreeManager.getInstance().getTree(logFile, type, className, methodName,
+            TreeManager.getTree(logFile, type, className, methodName,
                     desc, filter)
         } else {
-            TreeManager.getInstance().getTree(logFile, type, filter)
+            TreeManager.getTree(logFile, type, filter)
         }
     }
 }
