@@ -23,7 +23,7 @@ module.exports.TreeDrawer = class TreeDrawer {
         this.isFull = this.baseNode.getNodesList()[0].getNodeInfo().getClassName() !== "";
         this.packageList = {}; // map package name to color
         this._buildPackageListRecursively(this.baseNode);
-        this._setPackageColorsRecursively();
+        this._setPackageColors();
         this.baseNode.depth = 0;
         this.$popup = null;
         this.$canvasWrapper = null;
@@ -585,7 +585,7 @@ module.exports.TreeDrawer = class TreeDrawer {
         }
     }
 
-    _setPackageColorsRecursively() {
+    _setPackageColors() {
         const packages = Object.keys(this.packageList);
         packages.sort();
         const step = 1 / packages.length;
