@@ -1,3 +1,7 @@
 .fog {
     background: linear-gradient(to top, rgba(255, 255, 255, 1) 0%, rgba(125, 185, 232, 0) 100%)
 }
+
+section {
+    min-height: 100px;
+}

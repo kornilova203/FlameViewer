@@ -13,8 +13,12 @@ module.exports.AccumulativeTreeDrawer = class AccumulativeTreeDrawer extends Tre
         this.initialCanvasShift = this.canvasHeight; // see _moveSectionUp method
         if (!this.isFullyVisible) { // if some nodes are hidden
             this._assignChildIndexRecursively(tree.getBaseNode());
-            this.$fog.css("opacity", 1); // show fog
         }
+    }
+
+    draw() {
+        super.draw();
+        this._toggleFog(this.tree.getVisibleDepth(), this.tree.getDepth());
     }
 
     /**
