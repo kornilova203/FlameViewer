@@ -61,7 +61,7 @@ module.exports.AccumulativeTreeDrawer = class AccumulativeTreeDrawer extends Tre
             super._doSetNodeZoomed(node);
         } else {
             const pathToNode = AccumulativeTreeDrawer._getPathToNode(node);
-            const treeRequest = AccumulativeTreeDrawer._createTreeRequest(pathToNode);
+            const treeRequest = this._createTreeRequest(pathToNode);
             treeRequest.onload = () => {
                 const arrayBuffer = treeRequest.response;
                 const byteArray = new Uint8Array(arrayBuffer);
@@ -136,13 +136,21 @@ module.exports.AccumulativeTreeDrawer = class AccumulativeTreeDrawer extends Tre
     }
 
     /**
+     * @abstract
+     * @return {string}
+     */
+    _getTreeType() {
+
+    }
+
+    /**
      * @param {Array<number>} pathToNode
      * @return {XMLHttpRequest}
      * @private
      */
-    static _createTreeRequest(pathToNode) {
+    _createTreeRequest(pathToNode) {
         const request = new XMLHttpRequest();
-        request.open("GET", `/flamegraph-profiler/trees/outgoing-calls?` + AccumulativeTreeDrawer.getTreeGETParameters(pathToNode));
+        request.open("GET", `/flamegraph-profiler/trees/${this._getTreeType()}?` + AccumulativeTreeDrawer.getTreeGETParameters(pathToNode));
         request.responseType = "arraybuffer";
         return request;
     }

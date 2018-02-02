@@ -18,6 +18,13 @@ module.exports.BackTracesDrawer = class BackTracesDrawer extends AccumulativeTre
     }
 
     /**
+     * @override
+     */
+    _getTreeType() {
+        return "incoming-calls";
+    }
+
+    /**
      * @param {Number} offsetX
      * @param depth
      * @override
@@ -35,37 +42,5 @@ module.exports.BackTracesDrawer = class BackTracesDrawer extends AccumulativeTre
     _moveSectionUp(visibleLayersCount) {
         this.$fog.css("top", visibleLayersCount * (constants.LAYER_HEIGHT + constants.LAYER_GAP) + 59);
         return 0;
-    }
-
-    /**
-     * @override
-     * @param node
-     * @private
-     */
-    _setNodeZoomed(node) {
-        this.zoomedNode = node;
-        this.currentCanvasWidth = BackTracesDrawer._getCanvasWidth(this.$section.find(".canvas-zoomed"));
-        common.showLoader(constants.loaderMessages.drawing, () => {
-            this.zoomedStage.removeAllChildren();
-            this._expandParents(node);
-            this._drawNodesRecursively(
-                node,
-                this._countScaleXForNode(node),
-                this._countOffsetXForNode(node),
-                true,
-                this.zoomedStage,
-                true,
-                node.depth
-            );
-            this._addResetButton();
-            if (this.isHighlightedFunction !== null) {
-                this._setHighlightOnZoomedStage();
-            } else {
-                this.zoomedStage.update();
-            }
-            $("#" + this.stage.id).addClass("original-canvas-zoomed");
-            $("#" + this.zoomedStage.id).addClass("canvas-zoomed-show");
-            common.hideLoader()
-        });
     }
 };
