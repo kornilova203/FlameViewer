@@ -70,13 +70,6 @@ function drawBackTraces(tree, className, methodName, desc, percent) {
     } else {
         drawer = new BackTracesDrawer.BackTracesDrawer(tree);
     }
-    if (className === undefined && // if common tree
-        drawer.getNodesCount() > 20000) {
-        common.showMessage("Tree has more than 20 000 nodes. " +
-            "You can see back traces for particular method (for this go to Hot spots page)");
-        common.hideLoader();
-        return;
-    }
     common.hideLoader();
     drawAndShowLoader(drawer, className, methodName, desc, percent);
 }

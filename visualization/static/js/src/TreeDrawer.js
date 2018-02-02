@@ -36,11 +36,11 @@ module.exports.TreeDrawer = class TreeDrawer {
         this.currentlyShownNodes = [];
         this.baseNode.fillCommand = {};
         this.wasMainStageHighlighted = false;
+        this.$section = this._createSection();
     }
 
     draw() {
         console.log("start drawing");
-        this.$section = this._createSection();
         this._prepareDraw();
         const startTime = new Date().getTime();
 

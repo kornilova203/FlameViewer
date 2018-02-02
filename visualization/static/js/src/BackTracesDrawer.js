@@ -18,14 +18,6 @@ module.exports.BackTracesDrawer = class BackTracesDrawer extends AccumulativeTre
     }
 
     /**
-     * @return {number}
-     */
-    getNodesCount() {
-        console.log("nodes count: " + this.nodesCount);
-        return this.nodesCount;
-    }
-
-    /**
      * @param {Number} offsetX
      * @param depth
      * @override
