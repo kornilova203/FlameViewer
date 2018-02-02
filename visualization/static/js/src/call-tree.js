@@ -1,7 +1,5 @@
-/**
- * @type {{Trees: Trees}}
- */
-const TreesProto = require('../generated/trees_pb');
+const deserializer = require('./deserializer');
+const CallTreeDrawer = require('./CallTreeDrawer');
 
 /**
  * don't know why but just usual function cannot be seen from PreviewDrawer.
@@ -16,7 +14,7 @@ common.showCallTree = (threadId) => {
     request.onload = () => {
         const arrayBuffer = request.response;
         const byteArray = new Uint8Array(arrayBuffer);
-        const trees = TreesProto.Trees.deserializeBinary(byteArray).getTreesList();
+        const trees = deserializer.deserializeTrees(byteArray).getTreesList();
         drawTrees(trees);
     };
     request.send();
@@ -29,7 +27,7 @@ function drawTrees(trees) {
     common.showLoader(constants.loaderMessages.drawing, () => {
         $('.call-tree-wrapper').show();
         for (let i = 0; i < trees.length; i++) {
-            const drawer = new CallTreeDrawer(trees[i], i);
+            const drawer = new CallTreeDrawer.CallTreeDrawer(trees[i], i);
             drawer.draw();
         }
         bindHideDetailView();

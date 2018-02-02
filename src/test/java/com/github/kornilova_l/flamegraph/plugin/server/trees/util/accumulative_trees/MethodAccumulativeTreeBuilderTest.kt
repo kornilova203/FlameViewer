@@ -1,6 +1,6 @@
 package com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumulative_trees
 
-import com.github.kornilova_l.flamegraph.plugin.server.trees.TreesSet.setTreeWidth
+import com.github.kornilova_l.flamegraph.plugin.server.trees.util.TreesUtil
 import com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumulative_trees.incoming_calls.IncomingCallsBuilder
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree
 import org.junit.Assert.assertEquals
@@ -23,7 +23,7 @@ class MethodAccumulativeTreeBuilderTest {
     fun testTimePercentInCallTraces() {
         val tree = getTree()
         val methodTree = MethodAccumulativeTreeBuilder(tree, tree, className, methodName,
-                description, false).tree
+                description).tree
 
         assertEquals(0.4f, methodTree.treeInfo.timePercent)
     }
@@ -38,7 +38,7 @@ class MethodAccumulativeTreeBuilderTest {
     fun testTimePercentInBackTraces() {
         val tree = getTree()
         val backTraces = IncomingCallsBuilder(tree).tree
-        val methodTree = MethodAccumulativeTreeBuilder(backTraces, tree, className, methodName, description, false).tree
+        val methodTree = MethodAccumulativeTreeBuilder(backTraces, tree, className, methodName, description).tree
         assertEquals(0.4f, methodTree.treeInfo.timePercent)
     }
 
@@ -64,7 +64,8 @@ class MethodAccumulativeTreeBuilderTest {
                         )
                 )
         treeBuilder.baseNodeBuilder.addNodes(node)
-        setTreeWidth(treeBuilder)
+        TreesUtil.setTreeWidth(treeBuilder)
+        TreesUtil.setNodesCount(treeBuilder)
         return treeBuilder.build()
     }
 }

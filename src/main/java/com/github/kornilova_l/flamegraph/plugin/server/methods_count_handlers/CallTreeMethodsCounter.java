@@ -14,7 +14,7 @@ public class CallTreeMethodsCounter extends MethodsCounter {
     @Override
     @Nullable
     protected Trees getTrees() {
-        return TreeManager.getInstance().getCallTree(logFile, null, null);
+        return TreeManager.INSTANCE.getCallTree(logFile, null, null);
     }
 
 }

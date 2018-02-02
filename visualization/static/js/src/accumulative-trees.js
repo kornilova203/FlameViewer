@@ -1,7 +1,11 @@
 /**
  * Main function
  */
-const TreeProto = require('../generated/tree_pb');
+const deserializer = require('./deserializer');
+const CallTracesDrawer = require('./CallTracesDrawer');
+const MethodCallTracesDrawer = require('./MethodCallTracesDrawer');
+const BackTracesDrawer = require('./BackTracesDrawer');
+const MethodBackTracesDrawer = require('./MethodBackTracesDrawer');
 
 /**
  * @param tree
@@ -12,9 +16,9 @@ const TreeProto = require('../generated/tree_pb');
  */
 function drawTree(tree, className, methodName, desc, percent) {
     if (constants.pageName === "incoming-calls") {
-        drawIncomingCalls(tree, className, methodName, desc, percent);
+        drawBackTraces(tree, className, methodName, desc, percent);
     } else {
-        drawAccumulativeTree(tree, className, methodName, desc, percent);
+        drawCallTraces(tree, className, methodName, desc, percent);
     }
 }
 
@@ -25,14 +29,20 @@ function drawTree(tree, className, methodName, desc, percent) {
  * @param desc
  * @param {Number} percent
  */
-function drawAccumulativeTree(tree, className, methodName, desc, percent) {
-    const drawer = new AccumulativeTreeDrawer(tree);
+function drawCallTraces(tree, className, methodName, desc, percent) {
+    let drawer;
+    if (className !== undefined && methodName !== undefined && desc !== undefined) {
+        drawer = new MethodCallTracesDrawer.MethodCallTracesDrawer(tree, decodeURIComponent(className), decodeURIComponent(methodName),
+            decodeURIComponent(desc), percent);
+    } else {
+        drawer = new CallTracesDrawer.CallTracesDrawer(tree);
+    }
     common.hideLoader();
     drawAndShowLoader(drawer, className, methodName, desc, percent);
 }
 
 /**
- * @param {AccumulativeTreeDrawer} drawer
+ * @param drawer
  * @param {String} className
  * @param {String} methodName
  * @param {String} desc
@@ -40,14 +50,6 @@ function drawAccumulativeTree(tree, className, methodName, desc, percent) {
  */
 function drawAndShowLoader(drawer, className, methodName, desc, percent) {
     common.showLoader(constants.loaderMessages.drawing, () => {
-        if (className !== undefined && methodName !== undefined && desc !== undefined) {
-            drawer.setHeader(
-                decodeURIComponent(className),
-                decodeURIComponent(methodName),
-                decodeURIComponent(desc),
-                percent
-            );
-        }
         drawer.draw();
         common.hideLoader();
     });
@@ -60,14 +62,13 @@ function drawAndShowLoader(drawer, className, methodName, desc, percent) {
  * @param desc
  * @param {Number} percent
  */
-function drawIncomingCalls(tree, className, methodName, desc, percent) {
-    const drawer = new IncomingCallsDrawer(tree);
-    if (className === undefined && // if common tree
-        drawer.getNodesCount() > 20000) {
-        common.showMessage("Tree has more than 20 000 nodes. " +
-            "You can see back traces for particular method (for this go to Hot spots page)");
-        common.hideLoader();
-        return;
+function drawBackTraces(tree, className, methodName, desc, percent) {
+    let drawer;
+    if (className !== undefined && methodName !== undefined && desc !== undefined) {
+        drawer = new MethodBackTracesDrawer.MethodBackTracesDrawer(tree, decodeURIComponent(className), decodeURIComponent(methodName),
+            decodeURIComponent(desc), percent);
+    } else {
+        drawer = new BackTracesDrawer.BackTracesDrawer(tree);
     }
     common.hideLoader();
     drawAndShowLoader(drawer, className, methodName, desc, percent);
@@ -108,8 +109,7 @@ $(window).on("load", function () {
                     console.log("got response");
                     const arrayBuffer = request.response;
                     const byteArray = new Uint8Array(arrayBuffer);
-                    //noinspection JSUnresolvedVariable
-                    const tree = TreeProto.Tree.deserializeBinary(byteArray);
+                    const tree = deserializer.deserializeTree(byteArray);
                     if (!treeIsEmpty(tree)) {
                         let percent = 0;
                         if (tree.getTreeInfo() !== undefined && tree.getTreeInfo().getTimePercent()) {

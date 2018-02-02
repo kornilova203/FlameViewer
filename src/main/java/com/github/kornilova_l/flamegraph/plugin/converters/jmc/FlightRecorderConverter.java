@@ -18,6 +18,10 @@ class FlightRecorderConverter {
         this.stacks = removePackageInParameters(stacks);
     }
 
+    public Map<String, Integer> getStacks() {
+        return stacks;
+    }
+
     /**
      * com.github.kornilova_l.algorithm_synthesis.grid2D.vertex_set_generator.LabelingFunction com.github.kornilova_l.algorithm_synthesis.grid2D.vertex_set_generator.VertexSetSolverKt.tryToFindSolution(java.util.Set, com.github.kornilova_l.algorithm_synthesis.grid2D.tiles.collections.DirectedGraph);
      * ->

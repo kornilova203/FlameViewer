@@ -104,6 +104,27 @@ common.updateRareDecorator = (updateTime, callback) => {
 };
 
 /**
+ * @param {Object} parameters
+ * @return {string}
+ */
+common.getParametersString = (parameters) => {
+    const keys = Object.keys(parameters);
+    let string = "";
+    for (let i = 0; i < keys.length; i++) {
+        const key = keys[i];
+        const value = parameters[key];
+        if (value instanceof Array) {
+            for (let i = 0; i < value.length; i++) {
+                string += `&${encodeURIComponent(key)}=${encodeURIComponent(value[i])}`;
+            }
+        } else {
+            string += `&${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
+        }
+    }
+    return string.substring(1, string.length); // remove first '&'
+};
+
+/**
  * Show error message to user
  * @param {String} errorMessage
  */
@@ -116,27 +137,34 @@ common.showError = (errorMessage) => {
     }, 5000);
 };
 
-const constants = {};
-constants.$main = null;
-constants.$treePreviewWrapper = null;
-constants.$loaderBackground = null;
-constants.$loaderMessageP = null;
-constants.$arrowLeft = null;
-constants.$arrowRight = null;
-constants.projectName = common.getParameter("project");
-constants.fileName = common.getParameter("file");
-constants.$removeFilesButton = null;
-constants.$fullFileName = null;
-constants.pageName = /[^\/]*((?=\?)|(?=\.html))/.exec(window.location.href)[0];
-constants.loaderMessages = {
-    drawing: "Drawing...",
-    deserialization: "Deserialization of binary data...",
-    buildingTree: "Building tree...",
-    buildingTrees: "Building trees...",
-    countingTime: "Counting self-time of methods...",
-    convertingFile: "Converting file: ",
-    uploadingFile: "Uploading file: "
-};
+// noinspection JSValidateTypes
+const constants = {
+        $main: null,
+        $treePreviewWrapper: null,
+        $loaderBackground: null,
+        $loaderMessageP: null,
+        $arrowLeft: null,
+        $arrowRight: null,
+        projectName: common.getParameter("project") === undefined ? undefined : decodeURIComponent(common.getParameter("project")),
+        fileName: common.getParameter("file") === undefined ? undefined : decodeURIComponent(common.getParameter("file")),
+        $removeFilesButton: null,
+        $fullFileName: null,
+        pageName: /[^\/]*((?=\?)|(?=\.html))/.exec(window.location.href)[0],
+        CANVAS_PADDING: 35,
+        LAYER_HEIGHT: 19,
+        LAYER_GAP: 1,
+        POPUP_MARGIN: 6, // have no idea why there is a gap between popup and canvas
+        loaderMessages: {
+            drawing: "Drawing...",
+            deserialization: "Deserialization of binary data...",
+            buildingTree: "Building tree...",
+            buildingTrees: "Building trees...",
+            countingTime: "Counting self-time of methods...",
+            convertingFile: "Converting file: ",
+            uploadingFile: "Uploading file: "
+        }
+    }
+;
 
 $(window).on("load", () => {
     constants.$main = $("main");

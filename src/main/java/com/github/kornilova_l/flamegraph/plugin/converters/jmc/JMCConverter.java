@@ -35,10 +35,13 @@ public class JMCConverter extends ProfilerToFlamegraphConverter {
         File newFile = getFileNear(file);
         saveToFile(newFile, unzippedBytes);
         if (unzippedBytes.length > allowedSize) {
+            /* if this code is executed in test request it will fail
+             * because compiled classes for tests are stored in out/ directory
+             * and there are no jar libraries */
             LOG.info("File " + file + " is too big. It will be converted in separate process");
             startProcess(newFile);
         } else {
-            new FlightRecorderConverter(newFile).writeTo(newFile);
+            return new FlightRecorderConverter(newFile).getStacks();
         }
         Map<String, Integer> res = StacksParser.getStacks(newFile);
         boolean isDeleted = newFile.delete();

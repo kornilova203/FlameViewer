@@ -9,7 +9,7 @@ fun tryToConvertFileToFlamegraph(file: File): Boolean {
     var isSaved = false
     val stacks = ProfilerToFlamegraphConverter.convert(file)
     if (stacks != null) {
-        isSaved = PluginFileManager.getInstance().flamegraphFileSaver.save(stacks, file.name) != null
+        isSaved = PluginFileManager.flamegraphFileSaver.save(stacks, file.name) != null
     }
     return isSaved
 }

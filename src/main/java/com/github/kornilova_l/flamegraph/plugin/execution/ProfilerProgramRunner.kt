@@ -32,21 +32,20 @@ class ProfilerProgramRunner : DefaultJavaProgramRunner() {
                        beforeExecution: Boolean) {
         val config = configuration ?: return
         val name = projectName ?: return
-        val fileManager = PluginFileManager.getInstance()
-        val configFile = fileManager.getConfigurationFile(name)
+        val configFile = PluginFileManager.getConfigurationFile(name)
         PluginConfigManager.exportConfig(configFile, config)
-        val pathToAgent = fileManager.getPathToJar("javaagent.jar") ?: return
+        val pathToAgent = PluginFileManager.getPathToJar("javaagent.jar") ?: return
         /* add javaagent */
         javaParameters.vmParametersList.add(
                 "-javaagent:" +
                         pathToAgent +
                         "=" +
-                        fileManager.createLogFile(projectName!!, runProfile.name).absolutePath +
+                        PluginFileManager.createLogFile(projectName!!, runProfile.name).absolutePath +
                         "&" +
                         configFile.absolutePath
         )
         /* add Proxy class to classpath. It is for classes that do not have system classloader in chain */
-        javaParameters.classPath.add(fileManager.getPathToJar("proxy.jar"))
+        javaParameters.classPath.add(PluginFileManager.getPathToJar("proxy.jar"))
     }
 
     override fun getRunnerId(): String {
@@ -58,6 +57,6 @@ class ProfilerProgramRunner : DefaultJavaProgramRunner() {
     }
 
     companion object {
-        private val RUNNER_ID = "ProfileRunnerID"
+        private const val RUNNER_ID = "ProfileRunnerID"
     }
 }

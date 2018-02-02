@@ -2,9 +2,8 @@ package com.github.kornilova_l.flamegraph.plugin.server.trees.converters
 
 import com.github.kornilova_l.flamegraph.plugin.converters.ProfilerToFlamegraphConverter
 import com.github.kornilova_l.flamegraph.plugin.server.trees.FileToCallTracesConverter
-import com.github.kornilova_l.flamegraph.plugin.server.trees.TreesSet.setTreeWidth
-import com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumulative_trees.AccumulativeTreesHelper
-import com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumulative_trees.AccumulativeTreesHelper.setNodesOffsetRecursively
+import com.github.kornilova_l.flamegraph.plugin.server.trees.util.TreesUtil
+import com.github.kornilova_l.flamegraph.plugin.server.trees.util.TreesUtil.setNodesOffsetRecursively
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node
 import java.io.BufferedReader
@@ -59,6 +58,7 @@ class YourkitCsvToCallTracesConverter : FileToCallTracesConverter() {
     }
 
     override fun convert(file: File): Tree {
+        val uniqueStrings = UniqueStringsKeeper()
         val tree = createEmptyTree()
         val currentStack = ArrayList<Node.Builder>()
         var maxDepth = 0
@@ -66,19 +66,21 @@ class YourkitCsvToCallTracesConverter : FileToCallTracesConverter() {
         BufferedReader(FileReader(file), 1000 * 8192).use { reader ->
             var line = reader.readLine()
             while (line != null) {
-                maxDepth = processLine(line, currentStack, maxDepth)
+                maxDepth = processLine(line, currentStack, maxDepth, uniqueStrings)
                 line = reader.readLine()
             }
         }
         tree.depth = maxDepth
         setNodesOffsetRecursively(tree.baseNodeBuilder, 0)
-        setTreeWidth(tree)
+        TreesUtil.setTreeWidth(tree)
+        TreesUtil.setNodesCount(tree)
         return tree.build()
     }
 
     private fun processLine(line: String,
                             currentStack: ArrayList<Node.Builder>,
-                            maxDepth: Int): Int {
+                            maxDepth: Int,
+                            uniqueStrings: UniqueStringsKeeper): Int {
         val delimPos = line.indexOf("\",\"")
         if (delimPos == -1) {
             return maxDepth
@@ -110,11 +112,11 @@ class YourkitCsvToCallTracesConverter : FileToCallTracesConverter() {
             currentStack.removeAt(currentStack.size - 1)
         }
         val parametersPos = name.indexOf('(')
-        val newNode = AccumulativeTreesHelper.updateNodeList(
+        val newNode = TreesUtil.updateNodeList(
                 currentStack[currentStack.size - 1],
-                getClassName(name, parametersPos),
-                getMethodName(name, parametersPos),
-                getDescription(name, parametersPos),
+                uniqueStrings.getUniqueString(getClassName(name, parametersPos)),
+                uniqueStrings.getUniqueString(getMethodName(name, parametersPos)),
+                uniqueStrings.getUniqueString(getDescription(name, parametersPos)),
                 time
         )
         currentStack.add(newNode)

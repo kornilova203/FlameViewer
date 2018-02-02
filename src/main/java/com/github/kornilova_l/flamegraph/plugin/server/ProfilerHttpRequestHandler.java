@@ -3,10 +3,11 @@ package com.github.kornilova_l.flamegraph.plugin.server;
 import com.github.kornilova_l.flamegraph.plugin.PluginFileManager;
 import com.github.kornilova_l.flamegraph.plugin.server.methods_count_handlers.AccumulativeTreesMethodCounter;
 import com.github.kornilova_l.flamegraph.plugin.server.methods_count_handlers.CallTreeMethodsCounter;
-import com.github.kornilova_l.flamegraph.plugin.server.tree_request_handlers.CallTreeRequestHandler;
-import com.github.kornilova_l.flamegraph.plugin.server.tree_request_handlers.HotSpotsRequestHandler;
-import com.github.kornilova_l.flamegraph.plugin.server.tree_request_handlers.IncomingCallsRequestHandler;
-import com.github.kornilova_l.flamegraph.plugin.server.tree_request_handlers.OutgoingCallsRequestHandler;
+import com.github.kornilova_l.flamegraph.plugin.server.tree_request_handlers.json.HotSpotsRequestHandler;
+import com.github.kornilova_l.flamegraph.plugin.server.tree_request_handlers.tree.BackTracesRequestHandler;
+import com.github.kornilova_l.flamegraph.plugin.server.tree_request_handlers.tree.CallTracesRequestHandler;
+import com.github.kornilova_l.flamegraph.plugin.server.tree_request_handlers.trees.CallTreeRequestHandler;
+import com.github.kornilova_l.flamegraph.plugin.server.tree_request_handlers.trees.TreesPreviewHandler;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.Filter;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeManager;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeManager.TreeType;
@@ -32,7 +33,7 @@ import java.util.Map;
 public class ProfilerHttpRequestHandler extends HttpRequestHandler {
 
     private static final Logger LOG = Logger.getInstance(ProfilerHttpRequestHandler.class);
-    private final PluginFileManager fileManager = PluginFileManager.getInstance();
+    private final PluginFileManager fileManager = PluginFileManager.INSTANCE;
     private final FileUploader fileUploader = new FileUploader();
 
     public static void sendProto(ChannelHandlerContext context,
@@ -52,7 +53,7 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
 
     private static void sendBytes(ChannelHandlerContext context,
                                   String contentType,
-                                  byte[] bytes) {
+                                  @NotNull byte[] bytes) {
         FullHttpResponse response = new DefaultFullHttpResponse(
                 HttpVersion.HTTP_1_1,
                 HttpResponseStatus.OK,
@@ -101,12 +102,17 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
         return null;
     }
 
+    @NotNull
     private byte[] renderPage(String htmlFilePath,
                               @Nullable String fileName,
                               @NotNull String projectName,
                               @Nullable String include,
                               @Nullable String exclude) {
         File staticFile = fileManager.getStaticFile(htmlFilePath);
+        if (staticFile == null) {
+            throw new RuntimeException("Cannot render page " + htmlFilePath + " project: " +
+                    projectName + " file " + fileName + " include " + include + " exclude " + exclude);
+        }
         String filterParameters = getFilterAsGetParameters(include, exclude);
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(staticFile))) {
             return String.join("", bufferedReader.lines()
@@ -121,9 +127,9 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
                     )
                     .toArray(String[]::new)).getBytes();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Cannot render page " + htmlFilePath + " project: " +
+                    projectName + " file " + fileName + " include " + include + " exclude " + exclude, e);
         }
-        return null;
     }
 
     private String getFilterAsGetParameters(@Nullable String include, @Nullable String exclude) {
@@ -158,6 +164,9 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
                             String fileUri,
                             String contentType) throws IOException {
         File staticFile = fileManager.getStaticFile(fileUri);
+        if (staticFile == null) {
+            throw new RuntimeException("Cannot find static files. File uri: " + fileUri);
+        }
         try (InputStream inputStream = new FileInputStream(staticFile)) {
             sendBytes(context, contentType, IOUtils.toByteArray(inputStream));
         }
@@ -254,7 +263,7 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
         if (!urlDecoder.uri().startsWith(ServerNames.MAIN_NAME)) {
             return false;
         }
-        TreeManager.getInstance().updateLastTime();
+        TreeManager.INSTANCE.updateLastTime();
         if (fullHttpRequest.method() == HttpMethod.POST) {
             return processPostMethod(urlDecoder, fullHttpRequest, context);
         } else {
@@ -289,14 +298,16 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
         }
         switch (uri) {
             case ServerNames.CALL_TREE_JS_REQUEST:
-            case ServerNames.CALL_TREE_PREVIEW_JS_REQUEST:
                 new CallTreeRequestHandler(urlDecoder, context).process();
                 return true;
+            case ServerNames.CALL_TREE_PREVIEW_JS_REQUEST:
+                new TreesPreviewHandler(urlDecoder, context).process();
+                return true;
             case ServerNames.OUTGOING_CALLS_JS_REQUEST:
-                new OutgoingCallsRequestHandler(urlDecoder, context).process();
+                new CallTracesRequestHandler(urlDecoder, context).process();
                 return true;
             case ServerNames.INCOMING_CALLS_JS_REQUEST:
-                new IncomingCallsRequestHandler(urlDecoder, context).process();
+                new BackTracesRequestHandler(urlDecoder, context).process();
                 return true;
             case ServerNames.CALL_TREE_COUNT:
                 new CallTreeMethodsCounter(urlDecoder, context).sendJson();
@@ -339,7 +350,7 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
      */
     private void sendIfFileExist(FullHttpRequest fullHttpRequest, ChannelHandlerContext context) {
         String fileName = fullHttpRequest.headers().get("File-Name");
-        if (PluginFileManager.getInstance().getLogFile("uploaded-files", fileName) != null) {
+        if (fileManager.getLogFile("uploaded-files", fileName) != null) {
             sendStatus(HttpResponseStatus.FOUND, context.channel());
         } else {
             sendStatus(HttpResponseStatus.NOT_FOUND, context.channel());

@@ -5,6 +5,7 @@ import com.github.kornilova_l.flamegraph.plugin.server.trees.TestHelper;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeManager.TreeType;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.generate_test_data.SimpleTree;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.generate_test_data.TwoThreads;
+import com.github.kornilova_l.flamegraph.plugin.server.trees.util.TreesUtil;
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree;
 import com.github.kornilova_l.flamegraph.proto.TreesPreviewProtos.TreesPreview;
 import com.github.kornilova_l.flamegraph.proto.TreesProtos.Trees;
@@ -13,11 +14,8 @@ import org.junit.Test;
 
 import java.io.File;
 
-import static com.github.kornilova_l.flamegraph.plugin.server.trees.TreesSet.setTreeWidth;
 import static com.github.kornilova_l.flamegraph.plugin.server.trees.generate_test_data.TestHelper.generateSerFile;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class SerTreesSetTest {
     private Filter filter0 = new Filter("*", null);
@@ -145,7 +143,8 @@ public class SerTreesSetTest {
                 .setWidth(20);
         baseNode.addNodes(node);
 
-        setTreeWidth(tree);
+        TreesUtil.INSTANCE.setTreeWidth(tree);
+        TreesUtil.INSTANCE.setNodesCount(tree);
 
         assertEquals(30, tree.getWidth());
 
@@ -153,7 +152,8 @@ public class SerTreesSetTest {
         tree = Tree.newBuilder();
         tree.setBaseNode(Tree.Node.newBuilder());
 
-        setTreeWidth(tree);
+        TreesUtil.INSTANCE.setTreeWidth(tree);
+        TreesUtil.INSTANCE.setNodesCount(tree);
 
         assertEquals(0, tree.getWidth());
     }

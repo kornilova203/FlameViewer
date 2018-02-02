@@ -1,7 +1,7 @@
 package com.github.kornilova_l.flamegraph.plugin.server.trees;
 
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeManager.TreeType;
-import com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumulative_trees.AccumulativeTreesHelper;
+import com.github.kornilova_l.flamegraph.plugin.server.trees.util.TreesUtil;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumulative_trees.MethodAccumulativeTreeBuilder;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumulative_trees.incoming_calls.IncomingCallsBuilder;
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree;
@@ -12,12 +12,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.TreeMap;
-
-import static com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumulative_trees.AccumulativeTreesHelper.setNodesOffsetRecursively;
-import static com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumulative_trees.AccumulativeTreesHelper.updateNodeList;
 
 public abstract class TreesSet {
     private final List<HotSpot> hotSpots = new ArrayList<>();
@@ -33,13 +30,12 @@ public abstract class TreesSet {
                                          Tree outgoingCalls,
                                          String className,
                                          String methodName,
-                                         String desc,
-                                         boolean isStatic) {
+                                         String desc) {
         if (sourceTree == null) {
             return null;
         }
         return new MethodAccumulativeTreeBuilder(
-                sourceTree, outgoingCalls, className, methodName, desc, isStatic
+                sourceTree, outgoingCalls, className, methodName, desc
         ).getTree();
     }
 
@@ -54,22 +50,15 @@ public abstract class TreesSet {
         return maxDepth;
     }
 
-    /**
-     * This method must be called after offsets of nodes are set
-     * {@link AccumulativeTreesHelper#setNodesOffsetRecursively}
-     *
-     * @param treeBuilder set width to this tree
-     */
-    public static void setTreeWidth(Tree.Builder treeBuilder) {
-        Node.Builder baseNode = treeBuilder.getBaseNodeBuilder();
-        if (baseNode.getNodesCount() == 0) { // if tree is empty
-            treeBuilder.setWidth(0);
-            return;
+    public static int getMaxDepthRecursively(Node nodeBuilder, int currentDepth) {
+        int maxDepth = currentDepth;
+        for (Node child : nodeBuilder.getNodesList()) {
+            int newDepth = getMaxDepthRecursively(child, currentDepth + 1);
+            if (newDepth > maxDepth) {
+                maxDepth = newDepth;
+            }
         }
-        Node.Builder lastNode = baseNode.getNodesBuilder(baseNode.getNodesCount() - 1);
-        treeBuilder.setWidth(
-                lastNode.getOffset() + lastNode.getWidth()
-        );
+        return maxDepth;
     }
 
     public abstract TreesPreview getTreesPreview(@Nullable Filter filter);
@@ -81,17 +70,16 @@ public abstract class TreesSet {
                               String className,
                               String methodName,
                               String desc,
-                              boolean isStatic,
                               @Nullable Filter filter) {
         Tree tree;
         switch (treeType) {
             case OUTGOING_CALLS:
                 getTree(TreeType.OUTGOING_CALLS, null);
-                tree = getTreeForMethod(outgoingCalls, outgoingCalls, className, methodName, desc, isStatic);
+                tree = getTreeForMethod(outgoingCalls, outgoingCalls, className, methodName, desc);
                 break;
             case INCOMING_CALLS:
                 getTree(TreeType.INCOMING_CALLS, null);
-                tree = getTreeForMethod(incomingCalls, outgoingCalls, className, methodName, desc, isStatic);
+                tree = getTreeForMethod(incomingCalls, outgoingCalls, className, methodName, desc);
                 break;
             default:
                 throw new IllegalArgumentException("Tree type is not supported");
@@ -106,7 +94,8 @@ public abstract class TreesSet {
 
     public abstract TreesProtos.Trees getCallTree(@Nullable Filter filter, @Nullable List<Integer> threadsIds);
 
-    @NotNull List<HotSpot> getHotSpots() {
+    @NotNull
+    List<HotSpot> getHotSpots() {
         if (hotSpots.size() == 0) {
             if (outgoingCalls == null) {
                 outgoingCalls = getTree(TreeType.OUTGOING_CALLS, null);
@@ -114,7 +103,7 @@ public abstract class TreesSet {
             if (outgoingCalls == null) {
                 return new LinkedList<>();
             }
-            TreeMap<HotSpot, HotSpot> hotSpotTreeMap = new TreeMap<>();
+            HashMap<HotSpot, HotSpot> hotSpotTreeMap = new HashMap<>();
             for (Node node : outgoingCalls.getBaseNode().getNodesList()) { // avoid baseNode
                 getHotSpotsRecursively(node, hotSpotTreeMap);
             }
@@ -124,7 +113,7 @@ public abstract class TreesSet {
         return hotSpots;
     }
 
-    private void getHotSpotsRecursively(Node node, TreeMap<HotSpot, HotSpot> hotSpotTreeMap) {
+    private void getHotSpotsRecursively(Node node, HashMap<HotSpot, HotSpot> hotSpotTreeMap) {
         HotSpot hotSpot = new HotSpot(
                 node.getNodeInfo().getClassName(),
                 node.getNodeInfo().getMethodName(),
@@ -154,21 +143,21 @@ public abstract class TreesSet {
         filteredTree.setBaseNode(Node.newBuilder());
         if (isCallTree) {
             filteredTree.setTreeInfo(tree.getTreeInfo());
+            buildFilteredCallTreeRecursively(filteredTree.getBaseNodeBuilder(), tree.getBaseNode(), filter);
+        } else {
+            buildFilteredTreeRecursively(filteredTree.getBaseNodeBuilder(), tree.getBaseNode(), filter);
         }
-        buildFilteredTreeRecursively(filteredTree.getBaseNodeBuilder(),
-                tree.getBaseNode(),
-                filter,
-                isCallTree);
         if (filteredTree.getBaseNodeBuilder().getNodesCount() == 0) {
             return null;
         }
         int maxDepth = getMaxDepthRecursively(filteredTree.getBaseNodeBuilder(), 0);
         if (!isCallTree) {
-            setNodesOffsetRecursively(filteredTree.getBaseNodeBuilder(), 0);
+            TreesUtil.INSTANCE.setNodesOffsetRecursively(filteredTree.getBaseNodeBuilder(), 0);
         } else {
             updateOffset(filteredTree);
         }
-        setTreeWidth(filteredTree);
+        TreesUtil.INSTANCE.setTreeWidth(filteredTree);
+        TreesUtil.INSTANCE.setNodesCount(filteredTree);
         filteredTree.setDepth(maxDepth);
         return filteredTree.build();
     }
@@ -202,31 +191,47 @@ public abstract class TreesSet {
      * @param nodeBuilder to this node children will be added
      * @param node        children of this node will be added to nodeBuilder
      * @param filter      decides if child will be added
-     * @param isCallTree  if it is a call tree
      */
     private void buildFilteredTreeRecursively(Node.Builder nodeBuilder,
                                               Node node,
-                                              @NotNull Filter filter,
-                                              boolean isCallTree) {
+                                              @NotNull Filter filter) {
 
         for (Node child : node.getNodesList()) {
             if (filter.isNodeIncluded(child)) {
                 Node.Builder newNode;
-                if (isCallTree) {
-                    newNode = copyNode(child);
-                    newNode.setOffset(child.getOffset());
-                    nodeBuilder.addNodes(newNode);
-                    newNode = nodeBuilder.getNodesBuilderList().get(nodeBuilder.getNodesBuilderList().size() - 1);
-                } else {
-                    newNode = updateNodeList(nodeBuilder, child);
-                }
+                newNode = TreesUtil.INSTANCE.updateNodeList(nodeBuilder, child.getNodeInfo(), child.getWidth());
                 buildFilteredTreeRecursively(
                         newNode,
                         child,
-                        filter,
-                        isCallTree);
+                        filter);
             } else {
-                buildFilteredTreeRecursively(nodeBuilder, child, filter, isCallTree);
+                buildFilteredTreeRecursively(nodeBuilder, child, filter);
+            }
+        }
+    }
+
+    /**
+     * @param nodeBuilder to this node children will be added
+     * @param node        children of this node will be added to nodeBuilder
+     * @param filter      decides if child will be added
+     */
+    private void buildFilteredCallTreeRecursively(Node.Builder nodeBuilder,
+                                                  Node node,
+                                                  @NotNull Filter filter) {
+
+        for (Node child : node.getNodesList()) {
+            if (filter.isNodeIncluded(child)) {
+                Node.Builder newNode;
+                newNode = copyNode(child);
+                newNode.setOffset(child.getOffset());
+                nodeBuilder.addNodes(newNode);
+                newNode = nodeBuilder.getNodesBuilderList().get(nodeBuilder.getNodesBuilderList().size() - 1);
+                buildFilteredCallTreeRecursively(
+                        newNode,
+                        child,
+                        filter);
+            } else {
+                buildFilteredCallTreeRecursively(nodeBuilder, child, filter);
             }
         }
     }

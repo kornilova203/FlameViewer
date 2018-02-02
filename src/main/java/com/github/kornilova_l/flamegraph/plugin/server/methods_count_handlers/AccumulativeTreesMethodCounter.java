@@ -9,8 +9,6 @@ import io.netty.handler.codec.http.QueryStringDecoder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
-
 import static com.github.kornilova_l.flamegraph.plugin.server.ProfilerHttpRequestHandler.getParameter;
 
 public class AccumulativeTreesMethodCounter extends MethodsCounter {
@@ -37,14 +35,11 @@ public class AccumulativeTreesMethodCounter extends MethodsCounter {
         String methodName = getParameter(urlDecoder, "method");
         String className = getParameter(urlDecoder, "class");
         String desc = getParameter(urlDecoder, "desc");
-        String isStaticString = getParameter(urlDecoder, "isStatic");
         if (methodName != null && className != null && desc != null) {
-            boolean isStatic;
-            isStatic = isStaticString != null && Objects.equals(isStaticString, "true");
-            return TreeManager.getInstance().getTree(
-                    logFile, treeType, className, methodName, desc, isStatic, null);
+            return TreeManager.INSTANCE.getTree(
+                    logFile, treeType, className, methodName, desc, null);
         } else {
-            return TreeManager.getInstance().getTree(logFile, treeType, null);
+            return TreeManager.INSTANCE.getTree(logFile, treeType, null);
         }
     }
 }

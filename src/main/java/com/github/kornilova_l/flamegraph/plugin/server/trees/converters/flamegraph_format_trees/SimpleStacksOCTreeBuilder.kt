@@ -1,9 +1,11 @@
 package com.github.kornilova_l.flamegraph.plugin.server.trees.converters.flamegraph_format_trees
 
+import com.github.kornilova_l.flamegraph.plugin.server.trees.FileToCallTracesConverter.Companion.UniqueStringsKeeper
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeBuilder
-import com.github.kornilova_l.flamegraph.plugin.server.trees.TreesSet.setTreeWidth
-import com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumulative_trees.AccumulativeTreesHelper.setNodesOffsetRecursively
-import com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumulative_trees.AccumulativeTreesHelper.updateNodeList
+import com.github.kornilova_l.flamegraph.plugin.server.trees.util.TreesUtil
+import com.github.kornilova_l.flamegraph.plugin.server.trees.util.TreesUtil.setNodesCount
+import com.github.kornilova_l.flamegraph.plugin.server.trees.util.TreesUtil.setNodesOffsetRecursively
+import com.github.kornilova_l.flamegraph.plugin.server.trees.util.TreesUtil.updateNodeList
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree
 
 /**
@@ -14,7 +16,7 @@ open class SimpleStacksOCTreeBuilder(stacks: Map<String, Int>) : TreeBuilder {
     private val treeBuilder: Tree.Builder = Tree.newBuilder()
     private val tree: Tree
     private var maxDepth = 0
-    private val uniqueStrings = HashMap<String, String>()
+    private val uniqueStrings = UniqueStringsKeeper()
 
     init {
         tree = buildTree(stacks)
@@ -24,7 +26,8 @@ open class SimpleStacksOCTreeBuilder(stacks: Map<String, Int>) : TreeBuilder {
         treeBuilder.setBaseNode(Tree.Node.newBuilder())
         processStacks(stacks)
         setNodesOffsetRecursively(treeBuilder.baseNodeBuilder, 0)
-        setTreeWidth(treeBuilder)
+        TreesUtil.setTreeWidth(treeBuilder)
+        setNodesCount(treeBuilder)
         treeBuilder.depth = maxDepth
         return treeBuilder.build()
     }
@@ -44,15 +47,9 @@ open class SimpleStacksOCTreeBuilder(stacks: Map<String, Int>) : TreeBuilder {
         var nodeBuilder: Tree.Node.Builder = treeBuilder.baseNodeBuilder
         for (call in calls) {
             nodeBuilder = updateNodeList(nodeBuilder,
-                    getUniqueString(uniqueStrings, getClassName(call)),
-                    getUniqueString(uniqueStrings, getMethodName(call)),
-                    getUniqueString(uniqueStrings, getDescription(call)), width.toLong())
-        }
-    }
-
-    companion object {
-        fun getUniqueString(uniqueStrings: HashMap<String, String>, string: String): String {
-            return uniqueStrings.computeIfAbsent(string, { string })
+                    uniqueStrings.getUniqueString(getClassName(call)),
+                    uniqueStrings.getUniqueString(getMethodName(call)),
+                    uniqueStrings.getUniqueString(getDescription(call)), width.toLong())
         }
     }
 

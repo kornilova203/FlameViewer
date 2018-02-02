@@ -9,10 +9,9 @@ import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.nio.file.Paths
 
-private val partSize = 1_000_000 * 100 // 100MB
+private const val partSize = 1_000_000 * 100 // 100MB
 
 class FileUploader {
-    private val fileManager = PluginFileManager.getInstance()
     private val fileAccumulators = HashMap<String, FileAccumulator>()
 
     /**
@@ -32,7 +31,7 @@ class FileUploader {
                 fileAccumulators.remove(fileName)
                 if (ProfilerToFlamegraphConverter.getFileExtension(fileName) == "ser") {
                     /* move file to ser files */
-                    fileManager.serFileSaver.moveToDir(file, fileName)
+                    PluginFileManager.serFileSaver.moveToDir(file, fileName)
                     return
                 }
                 val res = tryToConvertFileToFlamegraph(file)
@@ -41,7 +40,7 @@ class FileUploader {
                     val converterId = FileToCallTracesConverter.isSupported(file)
                     if (converterId != null) { // if supported
                         /* move file to needed directory. */
-                        PluginFileManager.getInstance().moveFileToUploadedFiles(converterId, fileName, file)
+                        PluginFileManager.moveFileToUploadedFiles(converterId, fileName, file)
                         return // do not delete file
                     }
                 }
@@ -56,14 +55,14 @@ class FileUploader {
      */
     class FileAccumulator(private val fileName: String, partsCount: Int) {
         private val receivedParts = BooleanArray(partsCount)
-        private var tempFile = PluginFileManager.getInstance().tempFileSaver
+        private var tempFile = PluginFileManager.tempFileSaver
                 .save(ByteArray(0), fileName)!!
 
         /**
          * @param partIndex index of part [0, partsCount)
          */
         fun add(newBytes: ByteArray, partIndex: Int) {
-            val newFile = PluginFileManager.getInstance().tempFileSaver
+            val newFile = PluginFileManager.tempFileSaver
                     .save(ByteArray(0), fileName + System.currentTimeMillis())!!
             FileInputStream(tempFile).use { inputStream ->
                 FileOutputStream(newFile).use { outputStream ->

@@ -34,37 +34,40 @@
 {/template}
 
 /**
- * Get section template for base tree
  * @param className
  * @param methodName
  * @param returnValue
  * @param parameters
  * @param timePercent
  */
+{template .methodHeader}
+  <header>
+    <div class="class-name"><img src="img/class.png"/><code>{$className}</code></div>
+    <h2>
+      <img src="img/method.png"/>
+      <code class="return-value">{$returnValue} </code>
+      <code class="method-name">{$methodName}</code>
+      <wbr>
+      (
+        {foreach $parameter in $parameters}
+            {if $parameter}
+              <code class="parameter">{$parameter}</code>
+                {if not isLast($parameter)}
+                  <code>, </code>
+                {/if}
+            {/if}
+        {/foreach}
+      )
+    </h2>
+    <div class="time-percent"><p>time: {$timePercent}%</p></div>
+  </header>
+{/template}
+
+/**
+ * Get section template for base tree
+ */
 {template .getAccumulativeTreeSection}
 <section>
-    {if $className}
-        <header>
-            <div class="class-name"><img src="img/class.png"/><code>{$className}</code></div>
-            <h2>
-                <img src="img/method.png"/>
-                <code class="return-value">{$returnValue} </code>
-                <code class="method-name">{$methodName}</code>
-                <wbr>
-                    (
-                    {foreach $parameter in $parameters}
-                        {if $parameter}
-                            <code class="parameter">{$parameter}</code>
-                            {if not isLast($parameter)}
-                                <code>, </code>
-                            {/if}
-                        {/if}
-                    {/foreach}
-                    )
-            </h2>
-            <div class="time-percent"><p>time: {$timePercent}%</p></div>
-        </header>
-    {/if}
     <div class="canvas-wrapper"></div>
 </section>
 {/template}

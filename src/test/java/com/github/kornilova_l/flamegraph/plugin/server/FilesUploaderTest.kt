@@ -16,16 +16,16 @@ import java.util.*
 class FilesUploaderTest : LightPlatformCodeInsightFixtureTestCase() {
 
     fun testUploadSmallFiles() {
-        PluginFileManager.getInstance().deleteAllUploadedFiles()
+        PluginFileManager.deleteAllUploadedFiles()
         sendFile("small.ser", ByteArray(1000))
         fileReceivedTest("small.ser", 1000)
     }
 
     fun testUploadMediumFiles() {
-        PluginFileManager.getInstance().deleteAllUploadedFiles()
+        PluginFileManager.deleteAllUploadedFiles()
         val bytes = createBytes(bytesInMB * 10)
         sendFile("01_medium.ser", bytes)
-        val expectedFile = PluginFileManager.getInstance().tempFileSaver.save(bytes, "01_medium.ser")!!
+        val expectedFile = PluginFileManager.tempFileSaver.save(bytes, "01_medium.ser")!!
         fileReceivedTest("01_medium.ser", expectedFile)
 
         sendFile("02_medium.ser", ByteArray(bytesInMB * 90))
@@ -36,35 +36,35 @@ class FilesUploaderTest : LightPlatformCodeInsightFixtureTestCase() {
     }
 
     fun testUploadBigFiles() {
-        PluginFileManager.getInstance().deleteAllUploadedFiles()
+        PluginFileManager.deleteAllUploadedFiles()
         val bytes = createBytes(bytesInMB * 250)
         sendFile("big.ser", bytes)
-        var expectedFile = PluginFileManager.getInstance().tempFileSaver.save(bytes, "01_medium.ser")!!
+        var expectedFile = PluginFileManager.tempFileSaver.save(bytes, "01_medium.ser")!!
         fileReceivedTest("big.ser", expectedFile)
 
         /* send parts in reversed order */
-        PluginFileManager.getInstance().deleteAllUploadedFiles()
+        PluginFileManager.deleteAllUploadedFiles()
         sendFile("big.ser", bytes, true)
-        expectedFile = PluginFileManager.getInstance().tempFileSaver.save(bytes, "01_medium.ser")!!
+        expectedFile = PluginFileManager.tempFileSaver.save(bytes, "01_medium.ser")!!
         fileReceivedTest("big.ser", expectedFile)
     }
 
     fun testJfrFileUpload() {
-        PluginFileManager.getInstance().deleteAllUploadedFiles()
+        PluginFileManager.deleteAllUploadedFiles()
         val jmcFive = File("src/test/resources/jfr_files/jmc_5_recording.jfr")
         sendFile(jmcFive.name, jmcFive.readBytes())
         fileReceivedTest(jmcFive.name, File("src/test/resources/jfr_files/expected/jmc_5_recording.flamegraph"))
     }
 
     fun testFlamegraphFileUpload() {
-        PluginFileManager.getInstance().deleteAllUploadedFiles()
+        PluginFileManager.deleteAllUploadedFiles()
         val flamegraphFile = File("src/test/resources/StacksOCTreeBuilderTest/test_data01.txt")
         sendFile(flamegraphFile.name, flamegraphFile.readBytes())
         fileReceivedTest(flamegraphFile.name, flamegraphFile) // file should stay the same
     }
 
     fun testIfFileUploaded() {
-        PluginFileManager.getInstance().deleteAllUploadedFiles()
+        PluginFileManager.deleteAllUploadedFiles()
         var responseCode = sendRequestDoesFileExist("file-does-not-exist.txt")
         assertEquals(HttpResponseStatus.NOT_FOUND.code(), responseCode)
 
@@ -106,13 +106,13 @@ class FilesUploaderTest : LightPlatformCodeInsightFixtureTestCase() {
     }
 
     private fun fileReceivedTest(fileName: String, fileSize: Int) {
-        val file = PluginFileManager.getInstance().getLogFile("uploaded-files", fileName)
+        val file = PluginFileManager.getLogFile("uploaded-files", fileName)
         assertNotNull(file)
         assertEquals(fileSize, file!!.readBytes().size)
     }
 
     private fun fileReceivedTest(fileName: String, expectedFile: File) {
-        val file = PluginFileManager.getInstance().getLogFile("uploaded-files", fileName)
+        val file = PluginFileManager.getLogFile("uploaded-files", fileName)
         assertNotNull(file)
         BufferedReader(FileReader(file)).use { reader1 ->
             BufferedReader(FileReader(expectedFile)).use { reader2 ->

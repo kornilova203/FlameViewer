@@ -5,18 +5,19 @@
 
   <script src="js/external/easeljs-0.8.2.min.js"></script>
   <script src="js/external/soyutils.js"></script>
-  <script src="js/external/jquery-3.2.1.min.js"></script>
+  <script src="js/external/jquery-3.3.1.js"></script>
   <script src="js/generated/tree-templates.js"></script>
 
   <script src="js/src/common.js"></script>
   <script src="js/src/upload-file.js"></script>
   <script src="js/src/file-chooser.js"></script>
   <script src="js/src/filter.js"></script>
-  <script src="js/src/AccumulativeTreeDrawer.js"></script>
+  <script src="js/src/method-tree-functions.js"></script>
   <script src="js/out/accumulative-trees.js"></script>
 
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/accumulative-trees.css">
+  <link rel="stylesheet" href="css/call-traces.css">
   <title>Flamegraph</title>
 </head>
 <body>
@@ -85,6 +86,7 @@
   </ul>
 </nav>
 <main>
+  <div class="fog"></div>
 </main>
 <div class="loader-background">
   <div class="loader"></div>

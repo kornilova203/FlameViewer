@@ -158,6 +158,7 @@ function listenInput() {
     $('#file').on('change', (e) => {
         const reader = new FileReader();
         const theFile = e.target.files[0];
+        // noinspection JSValidateTypes
         reader.onload = ((file) => {
             if (file !== undefined) { // file is undefined if user clicked 'cancel'
                 common.hideMessage();

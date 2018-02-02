@@ -11,6 +11,7 @@ CURRENT_EXCLUDED = CURRENT_EXCLUDED === undefined ? "" : CURRENT_EXCLUDED;
 let methodsCountInCurrentTree = null;
 
 $(window).on("load", () => {
+    // noinspection JSValidateTypes
     if (common.getParameter("file") === undefined) {
         // TODO: disable filter button
         return;
