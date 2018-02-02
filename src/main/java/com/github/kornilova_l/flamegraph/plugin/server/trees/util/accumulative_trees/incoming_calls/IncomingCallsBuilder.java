@@ -65,8 +65,7 @@ public final class IncomingCallsBuilder implements TreeBuilder {
                 for (NodeBuilderAndTime returnedNodeBuilder : traverseTree(childNode, depth)) {
                     long time = returnedNodeBuilder.time;
                     TreeProtos.Tree.Node.Builder childOfReturnedNode =
-                            TreesUtil.INSTANCE.updateNodeList(returnedNodeBuilder.nodeBuilder, node.getNodeInfo().getClassName(),
-                                    node.getNodeInfo().getMethodName(), node.getNodeInfo().getDescription(), time);
+                            TreesUtil.INSTANCE.updateNodeList(returnedNodeBuilder.nodeBuilder, node.getNodeInfo(), time);
                     arrayList.add(
                             new NodeBuilderAndTime(
                                     childOfReturnedNode,
@@ -82,7 +81,7 @@ public final class IncomingCallsBuilder implements TreeBuilder {
     private List<NodeBuilderAndTime> addLeafToBaseNodeChildren(TreeProtos.Tree.Node node) {
         ArrayList<NodeBuilderAndTime> arrayList = new ArrayList<>();
         TreeProtos.Tree.Node.Builder newNode =
-                TreesUtil.INSTANCE.updateNodeList(treeBuilder.getBaseNodeBuilder(), node);
+                TreesUtil.INSTANCE.updateNodeList(treeBuilder.getBaseNodeBuilder(), node.getNodeInfo(), node.getWidth());
         arrayList.add(
                 new NodeBuilderAndTime(
                         newNode,

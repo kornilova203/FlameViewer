@@ -12,9 +12,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.TreeMap;
 
 public abstract class TreesSet {
     private final List<HotSpot> hotSpots = new ArrayList<>();
@@ -103,7 +103,7 @@ public abstract class TreesSet {
             if (outgoingCalls == null) {
                 return new LinkedList<>();
             }
-            TreeMap<HotSpot, HotSpot> hotSpotTreeMap = new TreeMap<>();
+            HashMap<HotSpot, HotSpot> hotSpotTreeMap = new HashMap<>();
             for (Node node : outgoingCalls.getBaseNode().getNodesList()) { // avoid baseNode
                 getHotSpotsRecursively(node, hotSpotTreeMap);
             }
@@ -113,7 +113,7 @@ public abstract class TreesSet {
         return hotSpots;
     }
 
-    private void getHotSpotsRecursively(Node node, TreeMap<HotSpot, HotSpot> hotSpotTreeMap) {
+    private void getHotSpotsRecursively(Node node, HashMap<HotSpot, HotSpot> hotSpotTreeMap) {
         HotSpot hotSpot = new HotSpot(
                 node.getNodeInfo().getClassName(),
                 node.getNodeInfo().getMethodName(),
@@ -143,11 +143,10 @@ public abstract class TreesSet {
         filteredTree.setBaseNode(Node.newBuilder());
         if (isCallTree) {
             filteredTree.setTreeInfo(tree.getTreeInfo());
+            buildFilteredCallTreeRecursively(filteredTree.getBaseNodeBuilder(), tree.getBaseNode(), filter);
+        } else {
+            buildFilteredTreeRecursively(filteredTree.getBaseNodeBuilder(), tree.getBaseNode(), filter);
         }
-        buildFilteredTreeRecursively(filteredTree.getBaseNodeBuilder(),
-                tree.getBaseNode(),
-                filter,
-                isCallTree);
         if (filteredTree.getBaseNodeBuilder().getNodesCount() == 0) {
             return null;
         }
@@ -192,31 +191,47 @@ public abstract class TreesSet {
      * @param nodeBuilder to this node children will be added
      * @param node        children of this node will be added to nodeBuilder
      * @param filter      decides if child will be added
-     * @param isCallTree  if it is a call tree
      */
     private void buildFilteredTreeRecursively(Node.Builder nodeBuilder,
                                               Node node,
-                                              @NotNull Filter filter,
-                                              boolean isCallTree) {
+                                              @NotNull Filter filter) {
 
         for (Node child : node.getNodesList()) {
             if (filter.isNodeIncluded(child)) {
                 Node.Builder newNode;
-                if (isCallTree) {
-                    newNode = copyNode(child);
-                    newNode.setOffset(child.getOffset());
-                    nodeBuilder.addNodes(newNode);
-                    newNode = nodeBuilder.getNodesBuilderList().get(nodeBuilder.getNodesBuilderList().size() - 1);
-                } else {
-                    newNode = TreesUtil.INSTANCE.updateNodeList(nodeBuilder, child);
-                }
+                newNode = TreesUtil.INSTANCE.updateNodeList(nodeBuilder, child.getNodeInfo(), child.getWidth());
                 buildFilteredTreeRecursively(
                         newNode,
                         child,
-                        filter,
-                        isCallTree);
+                        filter);
             } else {
-                buildFilteredTreeRecursively(nodeBuilder, child, filter, isCallTree);
+                buildFilteredTreeRecursively(nodeBuilder, child, filter);
+            }
+        }
+    }
+
+    /**
+     * @param nodeBuilder to this node children will be added
+     * @param node        children of this node will be added to nodeBuilder
+     * @param filter      decides if child will be added
+     */
+    private void buildFilteredCallTreeRecursively(Node.Builder nodeBuilder,
+                                                  Node node,
+                                                  @NotNull Filter filter) {
+
+        for (Node child : node.getNodesList()) {
+            if (filter.isNodeIncluded(child)) {
+                Node.Builder newNode;
+                newNode = copyNode(child);
+                newNode.setOffset(child.getOffset());
+                nodeBuilder.addNodes(newNode);
+                newNode = nodeBuilder.getNodesBuilderList().get(nodeBuilder.getNodesBuilderList().size() - 1);
+                buildFilteredCallTreeRecursively(
+                        newNode,
+                        child,
+                        filter);
+            } else {
+                buildFilteredCallTreeRecursively(nodeBuilder, child, filter);
             }
         }
     }

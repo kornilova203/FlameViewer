@@ -53,6 +53,32 @@ object TreesUtil {
         return addNodeToList(nodeBuilder, className, methodName, description, time, childCount) // no such method and it is biggest
     }
 
+    /**
+     * The same as previous function but it uses already existing NodeInfo.
+     * So there are no duplicate instances of NodeInfo
+     */
+    fun updateNodeList(nodeBuilder: Tree.Node.Builder,
+                       nodeInfo: Node.NodeInfo,
+                       time: Long): Tree.Node.Builder {
+        val childCount = nodeBuilder.nodesCount
+        val children = nodeBuilder.nodesBuilderList
+        val className = nodeInfo.className
+        val methodName = nodeInfo.methodName
+        val description = nodeInfo.description
+        val comparableName = className + methodName
+        for (i in 0 until childCount) {
+            val childNodeBuilder = children[i]
+            if (isSameMethod(childNodeBuilder, className, methodName, description)) {
+                addTimeToNode(childNodeBuilder, time)
+                return childNodeBuilder
+            }
+            if (comparableName < getComparableName(childNodeBuilder)) { // if insert between
+                return addNodeToList(nodeBuilder, nodeInfo, time, i)
+            }
+        }
+        return addNodeToList(nodeBuilder, nodeInfo, time, childCount) // no such method and it is biggest
+    }
+
     private fun getComparableName(node: Tree.NodeOrBuilder): String {
         val nodeInfo = node.nodeInfo ?: return ""
         return nodeInfo.className + nodeInfo.methodName
@@ -73,6 +99,15 @@ object TreesUtil {
                               time: Long,
                               pos: Int): Tree.Node.Builder {
         val newNodeBuilder = createNodeBuilder(className, methodName, desc, time)
+        nodeBuilder.addNodes(pos, newNodeBuilder)
+        return nodeBuilder.getNodesBuilder(pos)
+    }
+
+    private fun addNodeToList(nodeBuilder: Tree.Node.Builder,
+                              nodeInfo: Node.NodeInfo,
+                              time: Long,
+                              pos: Int): Node.Builder {
+        val newNodeBuilder = Node.newBuilder().setNodeInfo(nodeInfo).setWidth(time)
         nodeBuilder.addNodes(pos, newNodeBuilder)
         return nodeBuilder.getNodesBuilder(pos)
     }
