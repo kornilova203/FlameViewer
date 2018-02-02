@@ -29,6 +29,15 @@ module.exports.BackTracesDrawer = class BackTracesDrawer extends AccumulativeTre
     }
 
     /**
+     * Do not move section. Move only fog
+     * @override
+     */
+    _moveSectionUp(visibleLayersCount) {
+        this.$fog.css("top", visibleLayersCount * (constants.LAYER_HEIGHT + constants.LAYER_GAP) + 59);
+        return 0;
+    }
+
+    /**
      * @override
      * @param node
      * @private
