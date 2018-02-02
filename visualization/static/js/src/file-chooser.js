@@ -17,11 +17,11 @@ class FilesListManager {
         this.filesArray = [];
 
         /**
-         * @type {String|null}
+         * @type {(String|null)}
          */
         this.lastSelectedFileId = null;
         /**
-         * @type {String|null}
+         * @type {(String|null)}
          */
         this.lastDeselectedFileId = null;
 

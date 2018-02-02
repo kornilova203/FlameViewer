@@ -129,8 +129,12 @@ module.exports.TreeDrawer = class TreeDrawer {
         if (pixSizeX === 0) {
             offsetX = offsetX - 1;
         }
+        if (offsetX < 0) {
+            offsetX = 0;
+        }
+        offsetX = Math.round(offsetX);
         shape.setTransform(offsetX, offsetY, scaleX);
-        //noinspection JSUnresolvedFunction
+        // noinspection JSUnresolvedFunction
         stage.addChild(shape);
         return shape;
     }
