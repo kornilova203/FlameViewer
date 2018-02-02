@@ -132,7 +132,6 @@ module.exports.TreeDrawer = class TreeDrawer {
         if (offsetX < 0) {
             offsetX = 0;
         }
-        offsetX = Math.round(offsetX);
         shape.setTransform(offsetX, offsetY, scaleX);
         // noinspection JSUnresolvedFunction
         stage.addChild(shape);
