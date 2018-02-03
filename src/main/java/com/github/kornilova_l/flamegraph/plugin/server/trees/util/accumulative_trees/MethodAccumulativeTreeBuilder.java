@@ -13,11 +13,7 @@ public class MethodAccumulativeTreeBuilder implements TreeBuilder {
     private Tree.Node.Builder wantedMethodNode;
     private int maxDepth = 0;
 
-    /**
-     * @param outgoingTree is needed to calculate time
-     */
     public MethodAccumulativeTreeBuilder(Tree sourceTree,
-                                         Tree outgoingTree,
                                          String className,
                                          String methodName,
                                          String desc) {
@@ -29,19 +25,17 @@ public class MethodAccumulativeTreeBuilder implements TreeBuilder {
         TreesUtil.INSTANCE.setNodesOffsetRecursively(treeBuilder.getBaseNodeBuilder(), 0);
         TreesUtil.INSTANCE.setTreeWidth(treeBuilder);
         TreesUtil.INSTANCE.setNodesCount(treeBuilder);
-        setTimePercent(outgoingTree);
+        setTimePercent(sourceTree);
         treeBuilder.setDepth(maxDepth);
         tree = treeBuilder.build();
     }
 
     /**
-     * Does not matter is it call traces or back traces,
-     * to calculate time call traces are needed.
      * It calculates total time of method (not only self-time)
      */
-    private void setTimePercent(Tree outgoingTree) {
+    private void setTimePercent(Tree sourceTree) {
         treeBuilder.getTreeInfoBuilder().setTimePercent(
-                calculateTimeOfMethodRecursively(outgoingTree.getBaseNode()) / (float) outgoingTree.getWidth()
+                calculateTimeOfMethodRecursively(sourceTree.getBaseNode()) / (float) sourceTree.getWidth()
         );
     }
 

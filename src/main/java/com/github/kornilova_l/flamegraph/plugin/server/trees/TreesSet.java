@@ -35,7 +35,7 @@ public abstract class TreesSet {
             return null;
         }
         return new MethodAccumulativeTreeBuilder(
-                sourceTree, outgoingCalls, className, methodName, desc
+                sourceTree, className, methodName, desc
         ).getTree();
     }
 
