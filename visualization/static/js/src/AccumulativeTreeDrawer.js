@@ -18,7 +18,9 @@ module.exports.AccumulativeTreeDrawer = class AccumulativeTreeDrawer extends Tre
 
     draw() {
         super.draw();
-        this._toggleFog(this.tree.getVisibleDepth(), this.tree.getDepth());
+        if (!this.isFullyVisible) {
+            this._toggleFog(this.tree.getVisibleDepth(), this.tree.getDepth());
+        }
     }
 
     /**
