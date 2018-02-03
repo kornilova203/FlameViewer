@@ -151,7 +151,7 @@ object PluginFileManager {
         }
         val dirsInsideUploaded = uploadedFilesDir.listFiles() ?: return fileNames
         for (dir in dirsInsideUploaded) {
-            if (dir.isDirectory) {
+            if (dir.isDirectory && dir.name != NOT_CONVERTED) {
                 addFilesFromDirToList(dir, fileNames)
             }
         }
