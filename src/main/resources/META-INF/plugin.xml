@@ -6,9 +6,16 @@
     <vendor url="https://github.com/kornilova-l" email="kornilova203@gmail.com"/>
 
     <description><![CDATA[
-      Instrumentation Java Profiler & Flamegraph Visualizer<br>
-      <strong>Performance Recording</strong><br>
-      Plugin lets you record performance of Java program with instrumentation profiler.
+Instrumentation Java Profiler & Flamegraph Visualizer<br>
+<strong>Quick Start</strong><br>
+Use Flight Recorder to profile your program and then open flamegraph:
+<ol>
+    <li>Run JVM with following VM options: <code>-XX:+UnlockCommercialFeatures -XX:+FlightRecorder -XX:StartFlightRecording=duration=30s,filename=my_recording.jfr</code></li>
+    <li>Open visualizer <strong>Tools | Flamegraph Profiler | Upload File...</strong></li>
+    <li>Upload <i>my_recording.jfr<i></li>
+</ol>
+<strong>Performance Recording</strong><br>
+Plugin lets you record performance of Java program with instrumentation profiler.
 <ol>
     <li>To specify methods that will be recorded open <strong>Tools | Flamegraph Profiler | Edit Configuration...</strong></li>
     <li>To run program with profiler select the desired run configuration and choose <strong>Run <name> with profiler</strong></li>
