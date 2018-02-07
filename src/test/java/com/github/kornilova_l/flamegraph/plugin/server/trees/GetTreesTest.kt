@@ -36,12 +36,63 @@ class GetTreesTest : LightPlatformCodeInsightFixtureTestCase() {
                 File("$pathToDir/expected/ClassWithoutPackage-method.txt"))
     }
 
+    fun testGetPartOfTree() {
+        PluginFileManager.deleteAllUploadedFiles()
+        val tempFile = File("temp.flamegraph")
+        val nodesCount = 20_000 // it is more than maximumNodesCount
+        TreeGenerator(nodesCount).outputFlamegraph(tempFile)
+        FilesUploaderTest.sendFile(tempFile.name, tempFile.readBytes())
+
+        val bytes = sendRequestForCallTraces(tempFile.name)
+        assertNotNull(bytes)
+        val tree = Tree.parseFrom(ByteArrayInputStream(bytes))
+
+        assertTrue(tree.visibleDepth != 0)
+        assertTrue(tree.depth > tree.visibleDepth)
+        assertEquals(nodesCount, tree.treeInfo.nodesCount)
+
+        tempFile.delete()
+    }
+
+    fun testGetZoomedPartOfTree() {
+        PluginFileManager.deleteAllUploadedFiles()
+        val tempFile = File("temp.flamegraph")
+        val nodesCount = 50_000 // it is more than maximumNodesCount
+        val treeGenerator = TreeGenerator(nodesCount)
+        treeGenerator.outputFlamegraph(tempFile)
+        FilesUploaderTest.sendFile(tempFile.name, tempFile.readBytes())
+
+        val path = ArrayList<Int>()
+        val childCount = treeGenerator.root.children.size
+        path.add(childCount - 1) // last child in first layer
+        val zoomedNode = treeGenerator.root.children[childCount - 1] // get last
+
+        val bytes = sendRequestForCallTraces(tempFile.name, path)
+        assertNotNull(bytes)
+
+        val tree = Tree.parseFrom(ByteArrayInputStream(bytes))
+
+        assertEquals(1, tree.baseNode.nodesCount) // only zoomed node
+        assertEquals(zoomedNode.name, tree.baseNode.nodesList[0].nodeInfo.methodName)
+
+        tempFile.delete()
+    }
+
     companion object {
-        fun sendRequestForCallTraces(fileName: String): ByteArray {
-            val url = URL("http://localhost:${BuiltInServerManager.getInstance().port}" +
-                    "/flamegraph-profiler/trees/outgoing-calls?" +
-                    "file=$fileName&" +
-                    "project=uploaded-files")
+        /**
+         * @param path to zoomed node (null if node is not zoomed)
+         */
+        fun sendRequestForCallTraces(fileName: String, path: List<Int>? = null): ByteArray {
+            val address = StringBuilder().append("http://localhost:${BuiltInServerManager.getInstance().port}")
+                    .append("/flamegraph-profiler/trees/outgoing-calls?")
+                    .append("file=").append(fileName)
+                    .append("&project=uploaded-files")
+            if (path != null) { // if node is zoomed
+                for (index in path) {
+                    address.append("&path=").append(index)
+                }
+            }
+            val url = URL(address.toString())
             val connection = url.openConnection() as HttpURLConnection
             connection.requestMethod = "GET"
 
