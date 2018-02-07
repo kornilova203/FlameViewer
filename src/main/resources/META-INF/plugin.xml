@@ -1,7 +1,7 @@
 <idea-plugin url="https://github.com/kornilova-l/flamegraph-visualizer">
     <id>com.github.kornilovaL.flamegraphProfiler</id>
     <name>Flamegraph Profiler</name>
-    <version>0.7</version>
+    <version>0.8</version>
 
     <vendor url="https://github.com/kornilova-l" email="kornilova203@gmail.com"/>
 
@@ -41,8 +41,7 @@ Detailed description at <a href="https://github.com/kornilova-l/flamegraph-visua
 
     <change-notes><![CDATA[
     <ul>
-      <li>Show message if uploaded file already exist or is unsupported.</li>
-      <li>Optimized visualization of Yourkit files.</li>
+      <li>Optimized visualization of big trees.</li>
       <li>Bug fixes and minor improvements.</li>
     </ul>
     ]]>
