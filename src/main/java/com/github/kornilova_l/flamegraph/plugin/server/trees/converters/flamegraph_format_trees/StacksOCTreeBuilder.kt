@@ -23,7 +23,8 @@ class StacksOCTreeBuilder(stacks: Map<String, Int>) : SimpleStacksOCTreeBuilder(
         if (lastDot != -1) {
             return call.substring(lastDot + 1, call.indexOf('('))
         }
-        throw IllegalArgumentException("Method does not contain return value")
+        /* call does not contain class name */
+        return call.substring(0, call.indexOf('('))
     }
 
     override fun getClassName(call: String): String {
@@ -45,7 +46,8 @@ class StacksOCTreeBuilder(stacks: Map<String, Int>) : SimpleStacksOCTreeBuilder(
             }
             return call.substring(0, lastDot)
         }
-        throw IllegalArgumentException("Method does not contain return value")
+        /* call does not contain class name */
+        return ""
     }
 
     private fun getRetType(call: String): String {

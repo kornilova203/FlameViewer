@@ -38,7 +38,7 @@ class GetTreesTest : LightPlatformCodeInsightFixtureTestCase() {
 
     fun testGetPartOfTree() {
         PluginFileManager.deleteAllUploadedFiles()
-        val tempFile = File("temp.flamegraph")
+        val tempFile = File("temp01.flamegraph")
         val nodesCount = 20_000 // it is more than maximumNodesCount
         TreeGenerator(nodesCount).outputFlamegraph(tempFile)
         FilesUploaderTest.sendFile(tempFile.name, tempFile.readBytes())
@@ -56,7 +56,7 @@ class GetTreesTest : LightPlatformCodeInsightFixtureTestCase() {
 
     fun testGetZoomedPartOfTree() {
         PluginFileManager.deleteAllUploadedFiles()
-        val tempFile = File("temp.flamegraph")
+        val tempFile = File("temp02.flamegraph")
         val nodesCount = 50_000 // it is more than maximumNodesCount
         val treeGenerator = TreeGenerator(nodesCount)
         treeGenerator.outputFlamegraph(tempFile)
@@ -73,7 +73,7 @@ class GetTreesTest : LightPlatformCodeInsightFixtureTestCase() {
         val tree = Tree.parseFrom(ByteArrayInputStream(bytes))
 
         assertEquals(1, tree.baseNode.nodesCount) // only zoomed node
-        assertEquals(zoomedNode.name, tree.baseNode.nodesList[0].nodeInfo.methodName)
+        assertEquals(zoomedNode.name.substring(0, zoomedNode.name.length - 2), tree.baseNode.nodesList[0].nodeInfo.methodName)
 
         tempFile.delete()
     }
