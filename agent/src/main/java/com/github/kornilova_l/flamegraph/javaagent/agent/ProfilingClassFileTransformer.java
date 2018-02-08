@@ -35,10 +35,9 @@ class ProfilingClassFileTransformer implements ClassFileTransformer {
                             Class<?> classBeingRedefined,
                             ProtectionDomain protectionDomain,
                             byte[] classfileBuffer) {
-        if (!className.startsWith("com/github/kornilova_l/flamegraph/javaagent") &&
-                !className.startsWith("com/github/kornilova_l/flamegraph/proxy") &&
-                !className.startsWith("com/github/kornilova_l/flamegraph/proto") &&
-                !className.startsWith("com/github/kornilova_l/libs/com/google/protobuf")) { // exclude classes of agent
+        String classWithoutPackage = getClassWithoutPackage(className);
+        if (!isClassOfAgent(className) && // exclude classes of agent
+                !classWithoutPackage.toLowerCase().contains("classloader")) { // exclude classloaders
             List<MethodConfig> methodConfigs = configurationManager.findIncludingConfigs(className, loader == null);
             if (methodConfigs.size() != 0) {
                 boolean hasSystemClassLoaderInChain = hasSystemCLInChain(loader);
@@ -66,6 +65,25 @@ class ProfilingClassFileTransformer implements ClassFileTransformer {
             }
         }
         return classfileBuffer; // do not modify classes of the javaagent
+    }
+
+    private String getClassWithoutPackage(String className) {
+        int lastSlash = className.lastIndexOf('/');
+        if (lastSlash == -1) { // does not contain package
+            return className;
+        }
+        return className.substring(lastSlash + 1, className.length());
+    }
+
+    private boolean isClassOfAgent(String className) {
+        //noinspection SimplifiableIfStatement
+        if (className.startsWith("com/github/kornilova_l/flamegraph")) {
+            return className.startsWith("com/github/kornilova_l/flamegraph/javaagent/") ||
+                    className.startsWith("com/github/kornilova_l/flamegraph/proxy/") ||
+                    className.startsWith("com/github/kornilova_l/flamegraph/proto/") ||
+                    className.startsWith("com/github/kornilova_l/libs/com/google/protobuf/");
+        }
+        return false;
     }
 
     private boolean classLoaderCanFindProxy(ClassLoader loader) {
