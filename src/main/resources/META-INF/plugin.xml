@@ -12,7 +12,7 @@ Use Flight Recorder to profile your program and then open flamegraph:
 <ol>
     <li>Run JVM with following VM options: <code>-XX:+UnlockCommercialFeatures -XX:+FlightRecorder -XX:StartFlightRecording=duration=30s,filename=my_recording.jfr</code></li>
     <li>Open visualizer <strong>Tools | Flamegraph Profiler | Upload File...</strong></li>
-    <li>Upload <i>my_recording.jfr<i></li>
+    <li>Upload <i>my_recording.jfr</i></li>
 </ol>
 <strong>Performance Recording</strong><br>
 Plugin lets you record performance of Java program with instrumentation profiler.
