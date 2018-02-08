@@ -4,7 +4,6 @@
   "description": "flamegraph",
   "main": "index.html",
   "scripts": {
-    "watch-deserialize-tree": "watchify static/js/src/deserialize-tree.js -o static/js/out/deserialize-tree.js -dv",
     "watch-accumulative-trees": "watchify static/js/src/accumulative-trees.js -o static/js/out/accumulative-trees.js -dv",
     "watch-trees-preview": "watchify static/js/src/trees-preview.js -o static/js/out/trees-preview.js -dv",
     "watch-call-tree": "watchify static/js/src/call-tree.js -o static/js/out/call-tree.js -dv"
