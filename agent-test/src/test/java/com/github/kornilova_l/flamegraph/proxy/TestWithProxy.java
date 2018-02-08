@@ -67,7 +67,8 @@ public class TestWithProxy {
         try {
             Method method = urlClass.getDeclaredMethod("addURL", URL.class);
             method.setAccessible(true);
-            method.invoke(urlClassLoader, Paths.get(pathToAgentDir.toString(), "proxy.jar").toUri().toURL());
+            method.invoke(urlClassLoader,
+                    new URL(Paths.get(pathToAgentDir.toString(), "proxy.jar").toUri().toString().replaceAll("%20", " ")));
         } catch (NoSuchMethodException | IllegalAccessException | MalformedURLException | InvocationTargetException e) {
             e.printStackTrace();
         }
