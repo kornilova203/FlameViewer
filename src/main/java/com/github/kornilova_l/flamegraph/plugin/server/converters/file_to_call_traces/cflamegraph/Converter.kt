@@ -88,7 +88,7 @@ internal class CompressedFlamegraphConverter(file: File) {
     private fun getClassName(name: String, parametersPos: Int): String {
         var lastDot = -1
         var spacePos = -1
-        for (i in parametersPos - 1 downTo 0) {
+        for (i in 0 until parametersPos) {
             if (name[i] == '.') {
                 lastDot = i
             } else if (name[i] == ' ') {

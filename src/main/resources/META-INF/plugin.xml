@@ -68,10 +68,10 @@ Detailed description at <a href="https://github.com/kornilova-l/flamegraph-visua
     <extensions defaultExtensionNs="com.github.kornilovaL.flamegraphProfiler">
         <profilerToFlamegraphConverter
                 implementation="com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file.jmc.JMCConverter"/>
+        <profilerToCompressedFlamegraphConverter
+                implementation="com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file.yourkit_csv.YourkitCsvToCFlamegraphConverter"/>
         <fileToCallTracesConverter
                 implementation="com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_traces.flamegraph.FlamegraphToCallTracesConverter"/>
-        <fileToCallTracesConverter
-                implementation="com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_traces.yourkit.YourkitCsvToCallTracesConverter"/>
         <fileToCallTracesConverter
                 implementation="com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_traces.cflamegraph.CompressedFlamegraphToCallTracesConverter"/>
     </extensions>

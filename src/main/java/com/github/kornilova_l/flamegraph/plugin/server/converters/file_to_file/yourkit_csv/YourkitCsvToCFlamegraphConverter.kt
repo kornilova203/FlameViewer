@@ -1,17 +1,14 @@
-package com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_traces.yourkit
+package com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file.yourkit_csv
 
-import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_traces.FileToCallTracesConverter
+import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file.CFlamegraphLine
+import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file.ProfilerToCompressedFlamegraphConverter
 import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file.ProfilerToFlamegraphConverter
-import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree
 import java.io.BufferedReader
 import java.io.File
 import java.io.FileReader
 
-class YourkitCsvToCallTracesConverter : FileToCallTracesConverter() {
-    override fun getId(): String {
-        return "yourkit"
-    }
 
+class YourkitCsvToCFlamegraphConverter : ProfilerToCompressedFlamegraphConverter() {
     override fun isSupported(file: File): Boolean {
         if (ProfilerToFlamegraphConverter.getFileExtension(file.name) != "csv") {
             return false
@@ -53,5 +50,5 @@ class YourkitCsvToCallTracesConverter : FileToCallTracesConverter() {
                 openBracketPos < closeBracketPos
     }
 
-    override fun convert(file: File): Tree = Converter(file).tree
+    override fun convert(file: File): List<CFlamegraphLine> = Converter(file).cFlamegraphLines
 }
