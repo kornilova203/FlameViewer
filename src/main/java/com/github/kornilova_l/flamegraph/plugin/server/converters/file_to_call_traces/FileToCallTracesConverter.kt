@@ -1,4 +1,4 @@
-package com.github.kornilova_l.flamegraph.plugin.server.trees
+package com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_traces
 
 import com.github.kornilova_l.flamegraph.proto.TreeProtos
 import com.intellij.openapi.extensions.ExtensionPointName

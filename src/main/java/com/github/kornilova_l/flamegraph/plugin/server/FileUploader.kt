@@ -1,9 +1,9 @@
 package com.github.kornilova_l.flamegraph.plugin.server
 
 import com.github.kornilova_l.flamegraph.plugin.PluginFileManager
-import com.github.kornilova_l.flamegraph.plugin.converters.ProfilerToFlamegraphConverter
-import com.github.kornilova_l.flamegraph.plugin.converters.tryToConvertFileToFlamegraph
-import com.github.kornilova_l.flamegraph.plugin.server.trees.FileToCallTracesConverter
+import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_traces.FileToCallTracesConverter
+import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file.ProfilerToFlamegraphConverter
+import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file.tryToConvertFileToFlamegraph
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream

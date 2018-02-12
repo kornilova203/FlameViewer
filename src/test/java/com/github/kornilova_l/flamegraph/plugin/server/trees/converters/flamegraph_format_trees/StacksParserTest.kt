@@ -1,8 +1,9 @@
 package com.github.kornilova_l.flamegraph.plugin.server.trees.converters.flamegraph_format_trees
 
+import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_traces.flamegraph.StacksParser
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
-
-import org.junit.Assert.*
 
 class StacksParserTest {
 

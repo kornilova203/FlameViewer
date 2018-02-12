@@ -1,4 +1,4 @@
-package com.github.kornilova_l.flamegraph.plugin.converters
+package com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file
 
 import com.github.kornilova_l.flamegraph.plugin.PluginFileManager
 import com.intellij.openapi.extensions.ExtensionPointName

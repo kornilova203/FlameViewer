@@ -1,4 +1,4 @@
-package com.github.kornilova_l.flamegraph.plugin.converters.jmc;
+package com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file.jmc;
 
 import com.github.kornilova_l.flight_parser.FlightParser;
 

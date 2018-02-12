@@ -1,9 +1,10 @@
 package com.github.kornilova_l.flamegraph.plugin.server.trees
 
 import com.github.kornilova_l.flamegraph.plugin.PluginFileManager
-import com.github.kornilova_l.flamegraph.plugin.converters.ProfilerToFlamegraphConverter
+import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_traces.FileToCallTracesConverter
+import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_traces.flamegraph.TreesSetImpl
+import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file.ProfilerToFlamegraphConverter
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TreesSet.HotSpot
-import com.github.kornilova_l.flamegraph.plugin.server.trees.converters.flamegraph_format_trees.TreesSetImpl
 import com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees.SerTreesSet
 import com.github.kornilova_l.flamegraph.proto.TreeProtos
 import com.github.kornilova_l.flamegraph.proto.TreesPreviewProtos.TreesPreview

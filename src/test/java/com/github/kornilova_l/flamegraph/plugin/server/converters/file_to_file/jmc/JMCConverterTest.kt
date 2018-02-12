@@ -1,6 +1,6 @@
-package com.github.kornilova_l.flamegraph.plugin.converters.jmc
+package com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file.jmc
 
-import com.github.kornilova_l.flamegraph.plugin.converters.jmc.JMCConverter.*
+import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file.jmc.JMCConverter.*
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.io.File

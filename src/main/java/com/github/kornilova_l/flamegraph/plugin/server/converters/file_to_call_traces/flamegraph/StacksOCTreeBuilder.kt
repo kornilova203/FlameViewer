@@ -1,4 +1,4 @@
-package com.github.kornilova_l.flamegraph.plugin.server.trees.converters.flamegraph_format_trees
+package com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_traces.flamegraph
 
 /**
  * Builds tree in which methods contain parameters

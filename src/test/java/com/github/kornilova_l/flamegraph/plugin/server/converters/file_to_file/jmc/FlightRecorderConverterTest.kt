@@ -1,10 +1,8 @@
-package com.github.kornilova_l.flamegraph.plugin.converters.jmc
+package com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file.jmc
 
+import org.junit.Assert.assertEquals
 import org.junit.Test
-
 import java.io.File
-
-import org.junit.Assert.*
 
 private val jmcFive = File("src/test/resources/jfr_files/jmc_5_recording.jfr")
 private val jmcFiveCompressed = File("src/test/resources/jfr_files/compressed_jmc_5_recording.jfr")

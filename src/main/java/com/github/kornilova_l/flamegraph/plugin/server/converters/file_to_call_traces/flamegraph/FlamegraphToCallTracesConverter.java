@@ -1,8 +1,6 @@
-package com.github.kornilova_l.flamegraph.plugin.server.trees.converters;
+package com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_traces.flamegraph;
 
-import com.github.kornilova_l.flamegraph.plugin.server.trees.FileToCallTracesConverter;
-import com.github.kornilova_l.flamegraph.plugin.server.trees.converters.flamegraph_format_trees.SimpleStacksOCTreeBuilder;
-import com.github.kornilova_l.flamegraph.plugin.server.trees.converters.flamegraph_format_trees.StacksOCTreeBuilder;
+import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_traces.FileToCallTracesConverter;
 import com.github.kornilova_l.flamegraph.proto.TreeProtos;
 import com.intellij.openapi.diagnostic.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -10,8 +8,8 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.util.Map;
 
-import static com.github.kornilova_l.flamegraph.plugin.converters.jmc.JMCConverter.getBytes;
-import static com.github.kornilova_l.flamegraph.plugin.server.trees.converters.flamegraph_format_trees.StacksParser.*;
+import static com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_traces.flamegraph.StacksParser.*;
+import static com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file.jmc.JMCConverter.getBytes;
 
 public class FlamegraphToCallTracesConverter extends FileToCallTracesConverter {
     private Logger LOG = Logger.getInstance(FlamegraphToCallTracesConverter.class);

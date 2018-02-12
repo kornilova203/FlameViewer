@@ -1,5 +1,6 @@
 package com.github.kornilova_l.flamegraph.plugin.server.trees.converters.flamegraph_format_trees;
 
+import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_traces.flamegraph.StacksOCTreeBuilder;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TestHelper;
 import com.github.kornilova_l.flamegraph.proto.TreeProtos;
 import org.junit.Before;

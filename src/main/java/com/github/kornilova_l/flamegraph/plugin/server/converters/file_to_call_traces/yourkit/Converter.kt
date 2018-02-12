@@ -1,76 +1,24 @@
-package com.github.kornilova_l.flamegraph.plugin.server.trees.converters
+package com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_traces.yourkit
 
-import com.github.kornilova_l.flamegraph.plugin.converters.ProfilerToFlamegraphConverter
-import com.github.kornilova_l.flamegraph.plugin.server.trees.FileToCallTracesConverter
 import com.github.kornilova_l.flamegraph.plugin.server.trees.util.TreesUtil
-import com.github.kornilova_l.flamegraph.plugin.server.trees.util.TreesUtil.setNodesOffsetRecursively
 import com.github.kornilova_l.flamegraph.plugin.server.trees.util.UniqueStringsKeeper
-import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree
-import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node
+import com.github.kornilova_l.flamegraph.proto.TreeProtos
 import java.io.BufferedReader
 import java.io.File
 import java.io.FileReader
 import java.util.*
 
-class YourkitCsvToCallTracesConverter : FileToCallTracesConverter() {
-    override fun getId(): String {
-        return "yourkit"
-    }
 
-    override fun isSupported(file: File): Boolean {
-        if (ProfilerToFlamegraphConverter.getFileExtension(file.name) != "csv") {
-            return false
-        }
-        BufferedReader(FileReader(file)).use { reader ->
-
-            reader.readLine() // skip header
-            reader.readLine() // skip header
-
-            var line: String? = reader.readLine()
-
-            while (line != null) {
-                val parts = line.split("\",\"")
-                if (parts.size != 3) {
-                    return false
-                }
-                val firstString = parts[0].removePrefix("\"")
-                if (!isMethod(firstString) && !firstString.contains(':')) {
-                    return false
-                }
-                try {
-                    Integer.parseInt(parts[1]) // time
-                    Integer.parseInt(parts[2].removeSuffix("\"")) // level
-                } catch (e: NumberFormatException) {
-                    return false
-                }
-
-                line = reader.readLine()
-            }
-        }
-        return true
-    }
-
-    private fun isMethod(s: String): Boolean {
-        val openBracketPos = s.indexOf('(')
-        val closeBracketPos = s.indexOf(')')
-        return openBracketPos != -1 &&
-                closeBracketPos != -1 &&
-                openBracketPos < closeBracketPos
-    }
-
-    override fun convert(file: File): Tree = Converter(file).tree
-}
-
-private class Converter(file: File) {
-    val tree: Tree
-    val uniqueStringsClassName = UniqueStringsKeeper()
-    val uniqueStringsMethodName = UniqueStringsKeeper()
-    val uniqueStringsDesc = UniqueStringsKeeper()
+internal class Converter(file: File) {
+    val tree: TreeProtos.Tree
+    private val uniqueStringsClassName = UniqueStringsKeeper()
+    private val uniqueStringsMethodName = UniqueStringsKeeper()
+    private val uniqueStringsDesc = UniqueStringsKeeper()
     var maxDepth = 0
 
     init {
         val tree = createEmptyTree()
-        val currentStack = ArrayList<Node.Builder>()
+        val currentStack = ArrayList<TreeProtos.Tree.Node.Builder>()
         currentStack.add(tree.baseNodeBuilder)
         BufferedReader(FileReader(file), 1000 * 8192).use { reader ->
             var line = reader.readLine()
@@ -80,14 +28,14 @@ private class Converter(file: File) {
             }
         }
         tree.depth = maxDepth
-        setNodesOffsetRecursively(tree.baseNodeBuilder, 0)
+        TreesUtil.setNodesOffsetRecursively(tree.baseNodeBuilder, 0)
         TreesUtil.setTreeWidth(tree)
         TreesUtil.setNodesCount(tree)
         this.tree = tree.build()
     }
 
     private fun processLine(line: String,
-                            currentStack: ArrayList<Node.Builder>) {
+                            currentStack: ArrayList<TreeProtos.Tree.Node.Builder>) {
         val delimPos = line.indexOf("\",\"")
         if (delimPos == -1) {
             return
@@ -159,9 +107,9 @@ private class Converter(file: File) {
         return name.substring(lastDot + 1, parametersPos)
     }
 
-    private fun createEmptyTree(): Tree.Builder {
-        val tree = Tree.newBuilder()
-        tree.setBaseNode(Node.newBuilder())
+    private fun createEmptyTree(): TreeProtos.Tree.Builder {
+        val tree = TreeProtos.Tree.newBuilder()
+        tree.setBaseNode(TreeProtos.Tree.Node.newBuilder())
         return tree
     }
 

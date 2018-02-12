@@ -1,7 +1,7 @@
-package com.github.kornilova_l.flamegraph.plugin.converters.jmc;
+package com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file.jmc;
 
-import com.github.kornilova_l.flamegraph.plugin.converters.ProfilerToFlamegraphConverter;
-import com.github.kornilova_l.flamegraph.plugin.server.trees.converters.flamegraph_format_trees.StacksParser;
+import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_traces.flamegraph.StacksParser;
+import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file.ProfilerToFlamegraphConverter;
 import com.intellij.openapi.diagnostic.Logger;
 import org.apache.commons.lang.SystemUtils;
 import org.jetbrains.annotations.NotNull;

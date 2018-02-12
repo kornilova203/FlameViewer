@@ -51,9 +51,9 @@ Detailed description at <a href="https://github.com/kornilova-l/flamegraph-visua
 
     <extensionPoints>
         <extensionPoint name="profilerToFlamegraphConverter"
-                        interface="com.github.kornilova_l.flamegraph.plugin.converters.ProfilerToFlamegraphConverter"/>
+                        interface="com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file.ProfilerToFlamegraphConverter"/>
         <extensionPoint name="fileToCallTracesConverter"
-                        interface="com.github.kornilova_l.flamegraph.plugin.server.trees.FileToCallTracesConverter"/>
+                        interface="com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_traces.FileToCallTracesConverter"/>
     </extensionPoints>
 
     <extensions defaultExtensionNs="com.intellij">
@@ -65,13 +65,13 @@ Detailed description at <a href="https://github.com/kornilova-l/flamegraph-visua
 
     <extensions defaultExtensionNs="com.github.kornilovaL.flamegraphProfiler">
         <profilerToFlamegraphConverter
-                implementation="com.github.kornilova_l.flamegraph.plugin.converters.jmc.JMCConverter"/>
+                implementation="com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file.jmc.JMCConverter"/>
         <fileToCallTracesConverter
-                implementation="com.github.kornilova_l.flamegraph.plugin.server.trees.converters.FlamegraphToCallTracesConverter"/>
+                implementation="com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_traces.flamegraph.FlamegraphToCallTracesConverter"/>
         <fileToCallTracesConverter
-                implementation="com.github.kornilova_l.flamegraph.plugin.server.trees.converters.YourkitCsvToCallTracesConverter"/>
+                implementation="com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_traces.yourkit.YourkitCsvToCallTracesConverter"/>
         <fileToCallTracesConverter
-                implementation="com.github.kornilova_l.flamegraph.plugin.server.trees.converters.CompressedFlamegraphToCallTracesConverter"/>
+                implementation="com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_traces.cflamegraph.CompressedFlamegraphToCallTracesConverter"/>
     </extensions>
 
     <actions>
