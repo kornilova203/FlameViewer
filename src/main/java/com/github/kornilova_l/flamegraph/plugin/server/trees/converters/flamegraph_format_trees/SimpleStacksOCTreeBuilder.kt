@@ -1,11 +1,11 @@
 package com.github.kornilova_l.flamegraph.plugin.server.trees.converters.flamegraph_format_trees
 
-import com.github.kornilova_l.flamegraph.plugin.server.trees.FileToCallTracesConverter.Companion.UniqueStringsKeeper
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeBuilder
 import com.github.kornilova_l.flamegraph.plugin.server.trees.util.TreesUtil
 import com.github.kornilova_l.flamegraph.plugin.server.trees.util.TreesUtil.setNodesCount
 import com.github.kornilova_l.flamegraph.plugin.server.trees.util.TreesUtil.setNodesOffsetRecursively
 import com.github.kornilova_l.flamegraph.plugin.server.trees.util.TreesUtil.updateNodeList
+import com.github.kornilova_l.flamegraph.plugin.server.trees.util.UniqueStringsKeeper
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree
 
 /**

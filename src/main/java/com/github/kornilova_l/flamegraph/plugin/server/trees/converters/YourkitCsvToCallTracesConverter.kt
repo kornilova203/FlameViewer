@@ -4,6 +4,7 @@ import com.github.kornilova_l.flamegraph.plugin.converters.ProfilerToFlamegraphC
 import com.github.kornilova_l.flamegraph.plugin.server.trees.FileToCallTracesConverter
 import com.github.kornilova_l.flamegraph.plugin.server.trees.util.TreesUtil
 import com.github.kornilova_l.flamegraph.plugin.server.trees.util.TreesUtil.setNodesOffsetRecursively
+import com.github.kornilova_l.flamegraph.plugin.server.trees.util.UniqueStringsKeeper
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node
 import java.io.BufferedReader
@@ -57,16 +58,24 @@ class YourkitCsvToCallTracesConverter : FileToCallTracesConverter() {
                 openBracketPos < closeBracketPos
     }
 
-    override fun convert(file: File): Tree {
-        val uniqueStrings = UniqueStringsKeeper()
+    override fun convert(file: File): Tree = Converter(file).tree
+}
+
+private class Converter(file: File) {
+    val tree: Tree
+    val uniqueStringsClassName = UniqueStringsKeeper()
+    val uniqueStringsMethodName = UniqueStringsKeeper()
+    val uniqueStringsDesc = UniqueStringsKeeper()
+    var maxDepth = 0
+
+    init {
         val tree = createEmptyTree()
         val currentStack = ArrayList<Node.Builder>()
-        var maxDepth = 0
         currentStack.add(tree.baseNodeBuilder)
         BufferedReader(FileReader(file), 1000 * 8192).use { reader ->
             var line = reader.readLine()
             while (line != null) {
-                maxDepth = processLine(line, currentStack, maxDepth, uniqueStrings)
+                processLine(line, currentStack)
                 line = reader.readLine()
             }
         }
@@ -74,20 +83,18 @@ class YourkitCsvToCallTracesConverter : FileToCallTracesConverter() {
         setNodesOffsetRecursively(tree.baseNodeBuilder, 0)
         TreesUtil.setTreeWidth(tree)
         TreesUtil.setNodesCount(tree)
-        return tree.build()
+        this.tree = tree.build()
     }
 
     private fun processLine(line: String,
-                            currentStack: ArrayList<Node.Builder>,
-                            maxDepth: Int,
-                            uniqueStrings: UniqueStringsKeeper): Int {
+                            currentStack: ArrayList<Node.Builder>) {
         val delimPos = line.indexOf("\",\"")
         if (delimPos == -1) {
-            return maxDepth
+            return
         }
         var name = line.substring(1, delimPos) // remove prefix '"'
         if (!name.contains('(')) {
-            return maxDepth
+            return
         }
         var time = -1L
         var newDepth = -1
@@ -104,7 +111,7 @@ class YourkitCsvToCallTracesConverter : FileToCallTracesConverter() {
             e.printStackTrace()
         }
         if (time == -1L || newDepth == -1) {
-            return maxDepth
+            return
         }
         newDepth -= 1 // after this depth of first call is 1
         name = getCleanName(name)
@@ -114,16 +121,15 @@ class YourkitCsvToCallTracesConverter : FileToCallTracesConverter() {
         val parametersPos = name.indexOf('(')
         val newNode = TreesUtil.updateNodeList(
                 currentStack[currentStack.size - 1],
-                uniqueStrings.getUniqueString(getClassName(name, parametersPos)),
-                uniqueStrings.getUniqueString(getMethodName(name, parametersPos)),
-                uniqueStrings.getUniqueString(getDescription(name, parametersPos)),
+                uniqueStringsClassName.getUniqueString(getClassName(name, parametersPos)),
+                uniqueStringsMethodName.getUniqueString(getMethodName(name, parametersPos)),
+                uniqueStringsDesc.getUniqueString(getDescription(name, parametersPos)),
                 time
         )
         currentStack.add(newNode)
         if (currentStack.size - 1 > maxDepth) {
-            return currentStack.size - 1
+            maxDepth = currentStack.size - 1
         }
-        return maxDepth
     }
 
     private fun getDescription(name: String, parametersPos: Int): String {

@@ -29,14 +29,6 @@ abstract class FileToCallTracesConverter {
             }
             return null
         }
-
-        class UniqueStringsKeeper {
-            private val uniqueStrings = HashMap<String, String>()
-
-            fun getUniqueString(string: String): String {
-                return uniqueStrings.computeIfAbsent(string, { string })
-            }
-        }
     }
 
     /**
