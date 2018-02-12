@@ -14,7 +14,7 @@ internal class CompressedFlamegraphConverter(file: File) {
     private val uniqueStringsClassName = UniqueStringsKeeper()
     private val uniqueStringsMethodName = UniqueStringsKeeper()
     private val uniqueStringsDesc = UniqueStringsKeeper()
-    var maxDepth = 0
+    private var maxDepth = 0
 
     init {
         val tree = createEmptyTree()
@@ -49,17 +49,27 @@ internal class CompressedFlamegraphConverter(file: File) {
         }
         val openBracketPos = name.indexOf('(')
         val parametersPos = if (openBracketPos == -1) name.length else openBracketPos
+        val lastSpacePosBeforeParams = getLastSpacePosBeforeParams(name, openBracketPos)
         val newNode = TreesUtil.updateNodeList(
                 currentStack[currentStack.size - 1],
-                uniqueStringsClassName.getUniqueString(getClassName(name, parametersPos)),
+                uniqueStringsClassName.getUniqueString(getClassName(name, parametersPos, lastSpacePosBeforeParams)),
                 uniqueStringsMethodName.getUniqueString(getMethodName(name, parametersPos)),
-                uniqueStringsDesc.getUniqueString(getDescription(name, parametersPos)),
+                uniqueStringsDesc.getUniqueString(getDescription(name, parametersPos, lastSpacePosBeforeParams)),
                 width
         )
         currentStack.add(newNode)
         if (currentStack.size - 1 > maxDepth) {
             maxDepth = currentStack.size - 1
         }
+    }
+
+    private fun getLastSpacePosBeforeParams(name: String, openBracketPos: Int): Int {
+        for (i in openBracketPos - 1 downTo 0) {
+            if (name[i] == ' ') {
+                return i
+            }
+        }
+        return -1
     }
 
     private fun getNextSpacePos(line: String, prevSpacePos: Int): Int {
@@ -71,38 +81,31 @@ internal class CompressedFlamegraphConverter(file: File) {
         return -1
     }
 
-    private fun getDescription(name: String, parametersPos: Int): String {
+    private fun getDescription(name: String, parametersPos: Int, lastSpacePosBeforeParams: Int): String {
         val parameters = name.substring(parametersPos, name.length)
-        for (i in parametersPos - 1 downTo 0) {
-            if (name[i] == ' ') { // if contains return value
-                return parameters + name.substring(0, i)
-            }
+        return if (lastSpacePosBeforeParams != -1) {
+            parameters + name.substring(0, lastSpacePosBeforeParams)
+        } else {
+            parameters
         }
-        return parameters
     }
 
     /**
      * We do not know if name contains return value.
      * It may even not contain class name
      */
-    private fun getClassName(name: String, parametersPos: Int): String {
+    private fun getClassName(name: String, parametersPos: Int, lastSpacePosBeforeParams: Int): String {
         var lastDot = -1
-        var spacePos = -1
-        for (i in 0 until parametersPos) {
+        for (i in parametersPos - 1 downTo 0) {
             if (name[i] == '.') {
                 lastDot = i
-            } else if (name[i] == ' ') {
-                spacePos = i
+                break
             }
         }
         if (lastDot == -1) {
             return ""
         }
-        return if (spacePos == -1) {
-            name.substring(0, lastDot)
-        } else {
-            name.substring(spacePos + 1, lastDot)
-        }
+        return name.substring(lastSpacePosBeforeParams + 1, lastDot)
     }
 
     private fun getMethodName(name: String, parametersPos: Int): String {

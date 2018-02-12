@@ -7,12 +7,6 @@ class UniqueStringsKeeper {
         get() = uniqueStrings.size
 
     fun getUniqueString(string: String): String {
-        /* computeIfAbsent acquires lock */
-        val existingString = uniqueStrings[string]
-        if (existingString != null) {
-            return existingString
-        }
-        uniqueStrings[string] = string
-        return string
+        return uniqueStrings.putIfAbsent(string, string) ?: string
     }
 }
