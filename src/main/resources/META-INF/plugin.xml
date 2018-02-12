@@ -70,6 +70,8 @@ Detailed description at <a href="https://github.com/kornilova-l/flamegraph-visua
                 implementation="com.github.kornilova_l.flamegraph.plugin.server.trees.converters.FlamegraphToCallTracesConverter"/>
         <fileToCallTracesConverter
                 implementation="com.github.kornilova_l.flamegraph.plugin.server.trees.converters.YourkitCsvToCallTracesConverter"/>
+        <fileToCallTracesConverter
+                implementation="com.github.kornilova_l.flamegraph.plugin.server.trees.converters.CompressedFlamegraphToCallTracesConverter"/>
     </extensions>
 
     <actions>

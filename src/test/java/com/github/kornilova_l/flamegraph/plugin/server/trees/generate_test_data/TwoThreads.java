@@ -3,13 +3,13 @@ package com.github.kornilova_l.flamegraph.plugin.server.trees.generate_test_data
 import com.github.kornilova_l.flamegraph.proxy.StartData;
 
 /**
- * _       _
- * |2|_   _|4|
- * _|1__|_|3__|_
+ * .. _       _
+ * ..|2|_   _|4|
+ * ._|1__|_|3__|_
  * |run__________|
- * _       _
- * |2|_   _|4|
- * _|1__|_|3__|_
+ * ......_       _
+ * .....|2|_   _|4|
+ * ...._|1__|_|3__|_
  * ...|run__________|
  */
 public class TwoThreads implements Runnable {
