@@ -123,8 +123,8 @@ object TreeManager {
     }
 
     enum class TreeType {
-        OUTGOING_CALLS,
-        INCOMING_CALLS
+        CALL_TRACES,
+        BACK_TRACES
     }
 
     private val LOG = Logger.getInstance(PluginFileManager::class.java)

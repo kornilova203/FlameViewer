@@ -7,5 +7,5 @@ import io.netty.handler.codec.http.QueryStringDecoder
 
 class BackTracesRequestHandler(urlDecoder: QueryStringDecoder, context: ChannelHandlerContext) :
         AccumulativeTreeRequestHandler(urlDecoder, context) {
-    override val type: TreeType = TreeType.INCOMING_CALLS
+    override val type: TreeType = TreeType.BACK_TRACES
 }

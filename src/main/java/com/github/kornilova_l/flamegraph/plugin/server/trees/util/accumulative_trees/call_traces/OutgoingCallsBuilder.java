@@ -1,4 +1,4 @@
-package com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumulative_trees.outgoing_calls;
+package com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumulative_trees.call_traces;
 
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeBuilder;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.util.TreesUtil;

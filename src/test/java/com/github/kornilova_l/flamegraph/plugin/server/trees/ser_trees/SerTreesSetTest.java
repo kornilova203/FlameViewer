@@ -72,7 +72,7 @@ public class SerTreesSetTest {
     }
 
     private void testOutgoingCallsFilter(String fileName, Filter filter, int filterId) {
-        Tree tree = getTree(fileName, filter, TreeType.OUTGOING_CALLS);
+        Tree tree = getTree(fileName, filter, TreeType.CALL_TRACES);
         String res = tree == null ? "" : tree.toString();
         TestHelper.compare(res,
                 new File("src/test/resources/expected/filtered_outgoing_calls/" + fileName +
@@ -80,7 +80,7 @@ public class SerTreesSetTest {
     }
 
     private void testIncomingCallsFilter(String fileName, Filter filter, int filterId) {
-        Tree tree = getTree(fileName, filter, TreeType.INCOMING_CALLS);
+        Tree tree = getTree(fileName, filter, TreeType.BACK_TRACES);
         String res = tree == null ? "" : tree.toString();
         TestHelper.compare(res,
                 new File("src/test/resources/expected/filtered_incoming_calls/" + fileName +

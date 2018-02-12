@@ -1,4 +1,4 @@
-package com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumulative_trees.incoming_calls;
+package com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumulative_trees.back_traces;
 
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeBuilder;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.util.TreesUtil;
@@ -9,13 +9,13 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class IncomingCallsBuilder implements TreeBuilder {
+public final class BackTracesBuilder implements TreeBuilder {
     private TreeProtos.Tree.Builder treeBuilder;
     @Nullable
     private final TreeProtos.Tree tree;
     private int maxDepth = 0;
 
-    public IncomingCallsBuilder(@NotNull TreeProtos.Tree outgoingCalls) {
+    public BackTracesBuilder(@NotNull TreeProtos.Tree outgoingCalls) {
         initTreeBuilder();
         for (TreeProtos.Tree.Node node : outgoingCalls.getBaseNode().getNodesList()) {
             traverseTree(node, 0);

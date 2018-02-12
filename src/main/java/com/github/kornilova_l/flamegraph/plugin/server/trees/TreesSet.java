@@ -3,7 +3,7 @@ package com.github.kornilova_l.flamegraph.plugin.server.trees;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeManager.TreeType;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.util.TreesUtil;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumulative_trees.MethodAccumulativeTreeBuilder;
-import com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumulative_trees.incoming_calls.IncomingCallsBuilder;
+import com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumulative_trees.back_traces.BackTracesBuilder;
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree;
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node;
 import com.github.kornilova_l.flamegraph.proto.TreesPreviewProtos.TreesPreview;
@@ -21,13 +21,12 @@ public abstract class TreesSet {
     @Nullable
     protected TreesProtos.Trees callTree;
     @Nullable
-    protected Tree outgoingCalls;
+    protected Tree callTraces;
     @Nullable
-    private Tree incomingCalls;
+    private Tree backTraces;
 
     @Nullable
     private static Tree getTreeForMethod(Tree sourceTree,
-                                         Tree outgoingCalls,
                                          String className,
                                          String methodName,
                                          String desc) {
@@ -73,13 +72,13 @@ public abstract class TreesSet {
                               @Nullable Filter filter) {
         Tree tree;
         switch (treeType) {
-            case OUTGOING_CALLS:
-                getTree(TreeType.OUTGOING_CALLS, null);
-                tree = getTreeForMethod(outgoingCalls, outgoingCalls, className, methodName, desc);
+            case CALL_TRACES:
+                getTree(TreeType.CALL_TRACES, null);
+                tree = getTreeForMethod(callTraces, className, methodName, desc);
                 break;
-            case INCOMING_CALLS:
-                getTree(TreeType.INCOMING_CALLS, null);
-                tree = getTreeForMethod(incomingCalls, outgoingCalls, className, methodName, desc);
+            case BACK_TRACES:
+                getTree(TreeType.BACK_TRACES, null);
+                tree = getTreeForMethod(backTraces, className, methodName, desc);
                 break;
             default:
                 throw new IllegalArgumentException("Tree type is not supported");
@@ -97,14 +96,14 @@ public abstract class TreesSet {
     @NotNull
     List<HotSpot> getHotSpots() {
         if (hotSpots.size() == 0) {
-            if (outgoingCalls == null) {
-                outgoingCalls = getTree(TreeType.OUTGOING_CALLS, null);
+            if (callTraces == null) {
+                callTraces = getTree(TreeType.CALL_TRACES, null);
             }
-            if (outgoingCalls == null) {
+            if (callTraces == null) {
                 return new LinkedList<>();
             }
             HashMap<HotSpot, HotSpot> hotSpotTreeMap = new HashMap<>();
-            for (Node node : outgoingCalls.getBaseNode().getNodesList()) { // avoid baseNode
+            for (Node node : callTraces.getBaseNode().getNodesList()) { // avoid baseNode
                 getHotSpotsRecursively(node, hotSpotTreeMap);
             }
             hotSpots.addAll(hotSpotTreeMap.values());
@@ -120,8 +119,8 @@ public abstract class TreesSet {
                 node.getNodeInfo().getDescription()
         );
         hotSpot = hotSpotTreeMap.computeIfAbsent(hotSpot, k -> k);
-        assert outgoingCalls != null;
-        hotSpot.addTime((float) getSelfTime(node) / outgoingCalls.getWidth());
+        assert callTraces != null;
+        hotSpot.addTime((float) getSelfTime(node) / callTraces.getWidth());
         for (Node child : node.getNodesList()) {
             getHotSpotsRecursively(child, hotSpotTreeMap);
         }
@@ -246,22 +245,22 @@ public abstract class TreesSet {
 
     protected Tree getTreeMaybeFilter(TreeType treeType, @Nullable Filter filter) {
         switch (treeType) {
-            case OUTGOING_CALLS:
+            case CALL_TRACES:
                 if (filter == null) {
-                    return outgoingCalls;
+                    return callTraces;
                 }
-                return filterTree(outgoingCalls, filter, false);
-            case INCOMING_CALLS:
-                if (outgoingCalls == null) {
+                return filterTree(callTraces, filter, false);
+            case BACK_TRACES:
+                if (callTraces == null) {
                     return null;
                 }
-                if (incomingCalls == null) {
-                    incomingCalls = new IncomingCallsBuilder(outgoingCalls).getTree();
+                if (backTraces == null) {
+                    backTraces = new BackTracesBuilder(callTraces).getTree();
                 }
                 if (filter == null) {
-                    return incomingCalls;
+                    return backTraces;
                 }
-                return filterTree(incomingCalls, filter, false);
+                return filterTree(backTraces, filter, false);
             default:
                 throw new IllegalArgumentException("Tree type is not supported");
         }

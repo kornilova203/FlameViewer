@@ -5,7 +5,7 @@ import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeManager.TreeTyp
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TreesSet
 import com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees.call_tree.CallTreesBuilder
 import com.github.kornilova_l.flamegraph.plugin.server.trees.util.TreePreviewBuilder
-import com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumulative_trees.outgoing_calls.OutgoingCallsBuilder
+import com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumulative_trees.call_traces.OutgoingCallsBuilder
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree
 import com.github.kornilova_l.flamegraph.proto.TreesPreviewProtos.TreesPreview
 import com.github.kornilova_l.flamegraph.proto.TreesProtos.Trees
@@ -28,8 +28,8 @@ class SerTreesSet(logFile: File) : TreesSet() {
         if (callTree == null) {
             return null
         }
-        if (outgoingCalls == null) {
-            outgoingCalls = OutgoingCallsBuilder(callTree!!).tree
+        if (callTraces == null) {
+            callTraces = OutgoingCallsBuilder(callTree!!).tree
         }
         return getTreeMaybeFilter(treeType, filter)
     }

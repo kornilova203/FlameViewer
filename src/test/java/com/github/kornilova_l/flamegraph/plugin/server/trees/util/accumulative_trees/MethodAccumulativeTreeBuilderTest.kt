@@ -1,7 +1,7 @@
 package com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumulative_trees
 
 import com.github.kornilova_l.flamegraph.plugin.server.trees.util.TreesUtil
-import com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumulative_trees.incoming_calls.IncomingCallsBuilder
+import com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumulative_trees.back_traces.BackTracesBuilder
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -37,7 +37,7 @@ class MethodAccumulativeTreeBuilderTest {
     @Test
     fun testTimePercentInBackTraces() {
         val tree = getTree()
-        val backTraces = IncomingCallsBuilder(tree).tree
+        val backTraces = BackTracesBuilder(tree).tree
         val methodTree = MethodAccumulativeTreeBuilder(backTraces, className, methodName, description).tree
         assertEquals(1.0f, methodTree.treeInfo.timePercent)
     }

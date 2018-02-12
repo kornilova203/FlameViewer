@@ -313,10 +313,10 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
                 new CallTreeMethodsCounter(urlDecoder, context).sendJson();
                 return true;
             case ServerNames.OUTGOING_CALLS_COUNT:
-                new AccumulativeTreesMethodCounter(urlDecoder, context, TreeType.OUTGOING_CALLS).sendJson();
+                new AccumulativeTreesMethodCounter(urlDecoder, context, TreeType.CALL_TRACES).sendJson();
                 return true;
             case ServerNames.INCOMING_CALLS_COUNT:
-                new AccumulativeTreesMethodCounter(urlDecoder, context, TreeType.INCOMING_CALLS).sendJson();
+                new AccumulativeTreesMethodCounter(urlDecoder, context, TreeType.BACK_TRACES).sendJson();
                 return true;
         }
         switch (uri) {
