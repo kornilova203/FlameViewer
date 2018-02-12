@@ -2,8 +2,9 @@ package com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file
 
 import com.github.kornilova_l.flamegraph.plugin.server.FileToFileConverterFileSaver
 import com.intellij.openapi.extensions.ExtensionPointName
+import java.io.BufferedWriter
 import java.io.File
-import java.io.FileOutputStream
+import java.io.FileWriter
 
 
 class FlamegraphFileSaver : FileToFileConverterFileSaver() {
@@ -12,12 +13,12 @@ class FlamegraphFileSaver : FileToFileConverterFileSaver() {
     override fun tryToConvert(file: File): Boolean {
         val stacks = ProfilerToFlamegraphConverter.convert(file)
         if (stacks != null) {
-            FileOutputStream(file).use { outputStream ->
+            BufferedWriter(FileWriter(file)).use { writer ->
                 for ((key, value) in stacks) {
-                    outputStream.write(key.toByteArray())
-                    outputStream.write(" ".toByteArray())
-                    outputStream.write(value.toString().toByteArray())
-                    outputStream.write("\n".toByteArray())
+                    writer.write(key)
+                    writer.write(" ")
+                    writer.write(value.toString())
+                    writer.write("\n")
                 }
             }
             return true

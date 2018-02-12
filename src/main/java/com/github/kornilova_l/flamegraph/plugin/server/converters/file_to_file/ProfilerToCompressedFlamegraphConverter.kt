@@ -2,8 +2,9 @@ package com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file
 
 import com.github.kornilova_l.flamegraph.plugin.server.FileToFileConverterFileSaver
 import com.intellij.openapi.extensions.ExtensionPointName
+import java.io.BufferedWriter
 import java.io.File
-import java.io.FileOutputStream
+import java.io.FileWriter
 
 
 class CompressedFlamegraphFileSaver : FileToFileConverterFileSaver() {
@@ -12,14 +13,14 @@ class CompressedFlamegraphFileSaver : FileToFileConverterFileSaver() {
     override fun tryToConvert(file: File): Boolean {
         val lines = ProfilerToCompressedFlamegraphConverter.convert(file)
         if (lines != null) {
-            FileOutputStream(file).use { outputStream ->
+            BufferedWriter(FileWriter(file)).use { writer ->
                 for (line in lines) {
-                    outputStream.write(line.name.toByteArray())
-                    outputStream.write(" ".toByteArray())
-                    outputStream.write(line.width.toString().toByteArray())
-                    outputStream.write(" ".toByteArray())
-                    outputStream.write(line.depth.toString().toByteArray())
-                    outputStream.write("\n".toByteArray())
+                    writer.write(line.name)
+                    writer.write(" ")
+                    writer.write(line.width.toString())
+                    writer.write(" ")
+                    writer.write(line.depth.toString())
+                    writer.write("\n")
                 }
             }
             return true

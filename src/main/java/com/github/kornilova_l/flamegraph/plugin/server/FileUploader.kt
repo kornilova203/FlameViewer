@@ -5,9 +5,7 @@ import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_t
 import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file.CompressedFlamegraphFileSaver
 import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file.FlamegraphFileSaver
 import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file.ProfilerToFlamegraphConverter
-import java.io.File
-import java.io.FileInputStream
-import java.io.FileOutputStream
+import java.io.*
 import java.nio.file.Paths
 
 private const val partSize = 1_000_000 * 100 // 100MB
@@ -75,8 +73,8 @@ class FileUploader {
         fun add(newBytes: ByteArray, partIndex: Int) {
             val newFile = PluginFileManager.tempFileSaver
                     .save(ByteArray(0), fileName + System.currentTimeMillis())!!
-            FileInputStream(tempFile).use { inputStream ->
-                FileOutputStream(newFile).use { outputStream ->
+            BufferedInputStream(FileInputStream(tempFile)).use { inputStream ->
+                BufferedOutputStream(FileOutputStream(newFile)).use { outputStream ->
                     for (i in 0 until partIndex) { // copy all bytes that are located before new part
                         if (receivedParts[i]) { // if part was received
                             copyOnePart(outputStream, inputStream)
@@ -97,7 +95,7 @@ class FileUploader {
             tempFile = newFile
         }
 
-        private fun copyOnePart(outputStream: FileOutputStream, inputStream: FileInputStream) {
+        private fun copyOnePart(outputStream: OutputStream, inputStream: InputStream) {
             outputStream.write(inputStream.readBytes(partSize))
         }
 
