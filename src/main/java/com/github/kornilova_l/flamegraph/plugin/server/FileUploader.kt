@@ -2,8 +2,9 @@ package com.github.kornilova_l.flamegraph.plugin.server
 
 import com.github.kornilova_l.flamegraph.plugin.PluginFileManager
 import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_traces.FileToCallTracesConverter
+import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file.CompressedFlamegraphFileSaver
+import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file.FlamegraphFileSaver
 import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file.ProfilerToFlamegraphConverter
-import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file.tryToConvertFileToFlamegraph
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -34,19 +35,29 @@ class FileUploader {
                     PluginFileManager.serFileSaver.moveToDir(file, fileName)
                     return
                 }
-                val res = tryToConvertFileToFlamegraph(file)
-                /* if res == true then flamegraph was already saved to another file. And it is save to file.delete() */
-                if (!res) { // if no converter was found
-                    val converterId = FileToCallTracesConverter.isSupported(file)
-                    if (converterId != null) { // if supported
-                        /* move file to needed directory. */
-                        PluginFileManager.moveFileToUploadedFiles(converterId, fileName, file)
-                        return // do not delete file
-                    }
+                if (tryToConvertFileToAnotherFile(file)) { // this moves file to right place
+                    return
+                }
+                val converterId = FileToCallTracesConverter.isSupported(file) // if this format is supported
+                if (converterId != null) { // if supported
+                    /* move file to needed directory. */
+                    PluginFileManager.moveFileToUploadedFiles(converterId, fileName, file)
+                    return // do not delete file
                 }
                 file.delete()
             }
         }
+    }
+
+    private fun tryToConvertFileToAnotherFile(file: File): Boolean {
+        for (fileSaver in FileToFileConverterFileSaver.registeredFileSavers) {
+            val res = fileSaver.tryToConvert(file)
+            if (res) {
+                PluginFileManager.moveFileToUploadedFiles(fileSaver.extension, file.name, file)
+                return true
+            }
+        }
+        return false
     }
 
     /**
@@ -99,4 +110,25 @@ class FileUploader {
             return fileWithOriginalName
         }
     }
+}
+
+/**
+ * Each file-to-file converter must implement it's own FileToFileConverterFileSaver
+ * and register is at [FileToFileConverterFileSaver.registeredFileSavers]
+ */
+abstract class FileToFileConverterFileSaver {
+    companion object {
+        val registeredFileSavers = listOf(FlamegraphFileSaver(), CompressedFlamegraphFileSaver())
+    }
+
+    /**
+     * Extension must be supported by FileToCallTracesConverter
+     */
+    abstract val extension: String
+
+    /**
+     * Try to convert file
+     * If conversion was successful then overwrite content of file
+     */
+    abstract fun tryToConvert(file: File): Boolean
 }

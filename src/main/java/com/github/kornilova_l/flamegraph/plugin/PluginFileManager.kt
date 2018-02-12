@@ -17,13 +17,12 @@ import java.util.regex.Pattern
 /**
  * IDEA system dir
  * |-- flamegraph-profiler
- * |-- configuration // where configuration is exported after
- * |-- log
- * |-- deleted // deleted files temporary stored in this dir (they are returned back if `undo` is pressed)
- * |-- uploaded-files
- * |-- flamegraph // uploaded files in flamegraph format
- * |-- not-converted // files are stored here before conversion
- * \-- ser // uploaded .ser files
+ * ....|-- configuration // where configuration is exported after
+ * ....|-- log
+ * ....|-- deleted // deleted files temporary stored in this dir (they are returned back if `undo` is pressed)
+ * ....|-- uploaded-files
+ * ........|-- not-converted // files are stored here before conversion
+ * ........|-- ser // uploaded .ser files
  */
 object PluginFileManager {
     private val LOG = Logger.getInstance(PluginFileManager::class.java)
@@ -37,11 +36,9 @@ object PluginFileManager {
     private const val DELETED_FILES = "deleted"
     private const val NOT_CONVERTED = "not-converted"
     private const val SER_FILES = "ser"
-    private const val FLAMEGRAPH_FILES = "flamegraph"
 
     val serFileSaver: FileSaver
     val tempFileSaver: FileSaver // save files before converting
-    val flamegraphFileSaver: FlamegraphSaver
     val logDirPath: Path // for tests
     private val uploadedFilesDir: File
     private val configDirPath: Path
@@ -75,10 +72,6 @@ object PluginFileManager {
         val serFiles = Paths.get(uploadedFilesPath.toString(), SER_FILES)
         createDirIfNotExist(serFiles)
         serFileSaver = FileSaver(serFiles)
-        val flamegraphFiles = Paths.get(uploadedFilesPath.toString(), FLAMEGRAPH_FILES)
-        createDirIfNotExist(flamegraphFiles)
-        clearDir(File(notConvertedFiles.toString()))
-        flamegraphFileSaver = FlamegraphSaver(flamegraphFiles)
 
         finallyDeleteRemovedFiles()
     }
@@ -99,13 +92,6 @@ object PluginFileManager {
             }
             return ArrayList()
         }
-
-    private fun clearDir(dir: File) {
-        val files = dir.listFiles() ?: return
-        for (file in files) {
-            file.delete()
-        }
-    }
 
     private fun finallyDeleteRemovedFiles(): Boolean {
         val deletedFilesDir = Paths.get(logDirPath.toString(), DELETED_FILES).toFile()
@@ -398,25 +384,6 @@ object PluginFileManager {
                 return null
             }
             return newFile
-        }
-    }
-
-    class FlamegraphSaver internal constructor(dir: Path) : FileSaver(dir) {
-
-        fun save(stacks: Map<String, Int>, fileName: String): File? {
-            val file = Paths.get(dir.toString(), fileName).toFile()
-            try {
-                FileOutputStream(file).use { outputStream ->
-                    for ((key, value) in stacks) {
-                        outputStream.write((key + " " + value + "\n").toByteArray())
-                    }
-                    return file
-                }
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
-
-            return null
         }
     }
 

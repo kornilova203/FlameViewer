@@ -52,6 +52,8 @@ Detailed description at <a href="https://github.com/kornilova-l/flamegraph-visua
     <extensionPoints>
         <extensionPoint name="profilerToFlamegraphConverter"
                         interface="com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file.ProfilerToFlamegraphConverter"/>
+        <extensionPoint name="profilerToCompressedFlamegraphConverter"
+                        interface="com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file.ProfilerToCompressedFlamegraphConverter"/>
         <extensionPoint name="fileToCallTracesConverter"
                         interface="com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_traces.FileToCallTracesConverter"/>
     </extensionPoints>

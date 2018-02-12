@@ -1,21 +1,34 @@
 package com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file
 
-import com.github.kornilova_l.flamegraph.plugin.PluginFileManager
+import com.github.kornilova_l.flamegraph.plugin.server.FileToFileConverterFileSaver
 import com.intellij.openapi.extensions.ExtensionPointName
 import java.io.File
+import java.io.FileOutputStream
 
 
-fun tryToConvertFileToFlamegraph(file: File): Boolean {
-    var isSaved = false
-    val stacks = ProfilerToFlamegraphConverter.convert(file)
-    if (stacks != null) {
-        isSaved = PluginFileManager.flamegraphFileSaver.save(stacks, file.name) != null
+class FlamegraphFileSaver : FileToFileConverterFileSaver() {
+    override val extension = ProfilerToFlamegraphConverter.flamegraphExtension
+
+    override fun tryToConvert(file: File): Boolean {
+        val stacks = ProfilerToFlamegraphConverter.convert(file)
+        if (stacks != null) {
+            FileOutputStream(file).use { outputStream ->
+                for ((key, value) in stacks) {
+                    outputStream.write(key.toByteArray())
+                    outputStream.write(" ".toByteArray())
+                    outputStream.write(value.toString().toByteArray())
+                    outputStream.write("\n".toByteArray())
+                }
+            }
+            return true
+        }
+        return false
     }
-    return isSaved
 }
 
 abstract class ProfilerToFlamegraphConverter {
     companion object {
+        const val flamegraphExtension = "flamegraph"
         private val EP_NAME = ExtensionPointName.create<ProfilerToFlamegraphConverter>("com.github.kornilovaL.flamegraphProfiler.profilerToFlamegraphConverter")
 
         fun getFileExtension(fileName: String): String {
