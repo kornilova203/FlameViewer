@@ -105,7 +105,7 @@ class CTBuilder {
         treeBuilder.getTreeInfoBuilder().setStartTime(
                 threadStartTime - startTimeOfFirstThread
         );
-        int maxDepth = TreesSet.getMaxDepthRecursively(treeBuilder.getBaseNodeBuilder(), 0);
+        int maxDepth = TreesSet.Companion.getMaxDepthRecursively(treeBuilder.getBaseNodeBuilder(), 0);
         treeBuilder.setDepth(maxDepth);
         return treeBuilder.build();
     }

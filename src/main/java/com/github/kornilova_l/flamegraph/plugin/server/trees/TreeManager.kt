@@ -106,7 +106,7 @@ object TreeManager {
         logFile ?: return null
         updateTreesSet(logFile)
         val currentTreesSet = this.currentTreesSet ?: return null
-        return currentTreesSet.hotSpots
+        return currentTreesSet.getHotSpots()
     }
 
     @Synchronized

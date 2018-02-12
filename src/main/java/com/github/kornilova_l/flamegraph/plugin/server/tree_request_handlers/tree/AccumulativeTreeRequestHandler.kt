@@ -3,7 +3,7 @@ package com.github.kornilova_l.flamegraph.plugin.server.tree_request_handlers.tr
 import com.github.kornilova_l.flamegraph.plugin.server.ProfilerHttpRequestHandler.getParameter
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeManager
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeManager.TreeType
-import com.github.kornilova_l.flamegraph.plugin.server.trees.TreesSet.getMaxDepthRecursively
+import com.github.kornilova_l.flamegraph.plugin.server.trees.TreesSet.Companion.getMaxDepthRecursively
 import com.github.kornilova_l.flamegraph.plugin.server.trees.util.TreesUtil
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree
 import com.intellij.openapi.diagnostic.Logger

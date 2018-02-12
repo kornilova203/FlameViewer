@@ -13,7 +13,7 @@ import java.util.List;
 
 public class TreesSetImpl extends TreesSet {
     public TreesSetImpl(@NotNull TreeProtos.Tree callTraces) {
-        this.callTraces = callTraces;
+        this.setCallTraces(callTraces);
     }
 
     @Override
