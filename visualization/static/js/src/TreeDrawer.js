@@ -19,12 +19,13 @@ module.exports.TreeDrawer = class TreeDrawer {
         this.zoomedNode = null;
         this.$fileMenu = $(".file-menu");
         this.baseNode = this.tree.getBaseNode();
-        this.isFull = this.baseNode.getNodesList()[0].getNodeInfo().getClassName() !== "";
         this.packageList = {}; // map package name to color
         this._buildPackageListRecursively(this.baseNode);
         this._setPackageColors();
         this.baseNode.depth = 0;
         this.$popup = null;
+        this.$popupClassIcon = null;
+        this.$popupClassName = null;
         this.$canvasWrapper = null;
         this.$popupParameters = null;
         this.$popupIcon = null;
@@ -160,11 +161,11 @@ module.exports.TreeDrawer = class TreeDrawer {
     }
 
     _createPopup() {
-        const popupContent = templates.tree.accumulativeTreePopup({
-            isFull: this.isFull
-        }).content;
+        const popupContent = templates.tree.accumulativeTreePopup().content;
         this.$canvasWrapper = this.$section.find(".canvas-wrapper");
         this.$popup = $(popupContent).appendTo(this.$canvasWrapper);
+        this.$popupClassIcon = this.$popup.find(".class-icon");
+        this.$popupClassName = this.$popup.find(".class-name");
         this.$popupParameters = this.$popup.find(".parameters");
         this.$popupIcon = this.$popup.find(".parameter-icon");
     }
@@ -427,7 +428,15 @@ module.exports.TreeDrawer = class TreeDrawer {
      * @protected
      */
     _setPopupContent(node) {
-        this.$popup.find(".class-name").text(node.getNodeInfo().getClassName());
+        const className = node.getNodeInfo().getClassName();
+        if (className !== "") {
+            this.$popupClassIcon.show();
+            this.$popupClassName.show();
+            this.$popup.find(".class-name").text(className);
+        } else {
+            this.$popupClassIcon.hide();
+            this.$popupClassName.hide();
+        }
         this.$popup.find("h3").text(node.getNodeInfo().getMethodName());
         this.$popup.find(".outgoing-link").attr("href",
             `/flamegraph-profiler/outgoing-calls?` + TreeDrawer.getGETParameters(node)

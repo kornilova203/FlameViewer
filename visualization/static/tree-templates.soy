@@ -111,7 +111,6 @@
 
 /**
  * Generate popup for method in base tree
- * @param isFull
  */
 {template .accumulativeTreePopup}
 <div class="popup">
@@ -119,13 +118,13 @@
         <a class="outgoing-link"><img src="img/outgoing.png"/></a>
         <a class="incoming-link"><img src="img/incoming.png"/></a>
     </div>
-    {if $isFull}<img class="icon" src="img/class.png"/>{/if}
-    <p class="class-name{if $isFull} shift-right{/if}"></p>
-    {if $isFull}<img class="icon" src="img/method.png"/>{/if}
-    <h3 class="method-name{if $isFull} shift-right{/if}"></h3>
+  <img class="icon class-icon" src="img/class.png"/>
+  <p class="class-name shift-right"></p>
+  <img class="icon" src="img/method.png"/>
+  <h3 class="method-name shift-right"></h3>
     <p class="p-calls-num"></p>
-    {if $isFull}<img class="icon parameter-icon" src="img/parameter.png"/>{/if}
-    <div class="parameters{if $isFull} shift-right{/if}"></div>
+  <img class="icon parameter-icon" src="img/parameter.png"/>
+  <div class="parameters shift-right"></div>
 </div>
 {/template}
 

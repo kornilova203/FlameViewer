@@ -8,7 +8,8 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.util.Map;
 
-import static com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_traces.flamegraph.StacksParser.*;
+import static com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_traces.flamegraph.StacksParser.getStacks;
+import static com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_traces.flamegraph.StacksParser.isFlamegraph;
 import static com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file.jmc.JMCConverter.getBytes;
 
 public class FlamegraphToCallTracesConverter extends FileToCallTracesConverter {
@@ -31,11 +32,7 @@ public class FlamegraphToCallTracesConverter extends FileToCallTracesConverter {
             return TreeProtos.Tree.newBuilder().build();
         }
         TreeProtos.Tree tree;
-        if (doCallsContainParameters(stacks)) {
-            tree = new StacksOCTreeBuilder(stacks).getTree();
-        } else {
-            tree = new SimpleStacksOCTreeBuilder(stacks).getTree();
-        }
+        tree = new StacksToTreeBuilder(stacks).getTree();
         if (tree == null) {
             LOG.error("Cannot construct tree. File: " + file);
             return TreeProtos.Tree.newBuilder().build();

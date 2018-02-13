@@ -63,13 +63,52 @@ internal class Converter(file: File) {
         }
     }
 
-    private fun getLastSpacePosBeforeParams(name: String, openBracketPos: Int): Int {
-        for (i in openBracketPos - 1 downTo 0) {
-            if (name[i] == ' ') {
-                return i
+    companion object {
+        fun getLastSpacePosBeforeParams(name: String, openBracketPos: Int): Int {
+            for (i in openBracketPos - 1 downTo 0) {
+                if (name[i] == ' ') {
+                    return i
+                }
+            }
+            return -1
+        }
+
+        /**
+         * We do not know if name contains return value.
+         * It may even not contain class name
+         */
+        fun getClassName(name: String, parametersPos: Int, lastSpacePosBeforeParams: Int): String {
+            var lastDot = -1
+            for (i in parametersPos - 1 downTo 0) {
+                if (name[i] == '.') {
+                    lastDot = i
+                    break
+                }
+            }
+            if (lastDot == -1) {
+                return ""
+            }
+            return name.substring(lastSpacePosBeforeParams + 1, lastDot)
+        }
+
+        fun getDescription(name: String, parametersPos: Int, lastSpacePosBeforeParams: Int): String {
+            val parameters = name.substring(parametersPos, name.length)
+            return if (lastSpacePosBeforeParams != -1) {
+                parameters + name.substring(0, lastSpacePosBeforeParams)
+            } else {
+                parameters
             }
         }
-        return -1
+
+        fun getMethodName(name: String, parametersPos: Int): String {
+            for (i in parametersPos - 1 downTo 0) {
+                val c = name[i]
+                if (c == '.' || c == ' ') {
+                    return name.substring(i + 1, parametersPos)
+                }
+            }
+            return name.substring(0, parametersPos)
+        }
     }
 
     private fun getNextSpacePos(line: String, prevSpacePos: Int): Int {
@@ -79,43 +118,6 @@ internal class Converter(file: File) {
             }
         }
         return -1
-    }
-
-    private fun getDescription(name: String, parametersPos: Int, lastSpacePosBeforeParams: Int): String {
-        val parameters = name.substring(parametersPos, name.length)
-        return if (lastSpacePosBeforeParams != -1) {
-            parameters + name.substring(0, lastSpacePosBeforeParams)
-        } else {
-            parameters
-        }
-    }
-
-    /**
-     * We do not know if name contains return value.
-     * It may even not contain class name
-     */
-    private fun getClassName(name: String, parametersPos: Int, lastSpacePosBeforeParams: Int): String {
-        var lastDot = -1
-        for (i in parametersPos - 1 downTo 0) {
-            if (name[i] == '.') {
-                lastDot = i
-                break
-            }
-        }
-        if (lastDot == -1) {
-            return ""
-        }
-        return name.substring(lastSpacePosBeforeParams + 1, lastDot)
-    }
-
-    private fun getMethodName(name: String, parametersPos: Int): String {
-        for (i in parametersPos - 1 downTo 0) {
-            val c = name[i]
-            if (c == '.' || c == ' ') {
-                return name.substring(i + 1, parametersPos)
-            }
-        }
-        return name.substring(0, parametersPos)
     }
 
     private fun createEmptyTree(): TreeProtos.Tree.Builder {

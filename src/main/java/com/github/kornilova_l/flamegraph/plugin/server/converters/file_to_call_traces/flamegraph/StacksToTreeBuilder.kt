@@ -1,5 +1,9 @@
 package com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_traces.flamegraph
 
+import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_traces.cflamegraph.Converter.Companion.getClassName
+import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_traces.cflamegraph.Converter.Companion.getDescription
+import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_traces.cflamegraph.Converter.Companion.getLastSpacePosBeforeParams
+import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_traces.cflamegraph.Converter.Companion.getMethodName
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeBuilder
 import com.github.kornilova_l.flamegraph.plugin.server.trees.util.TreesUtil
 import com.github.kornilova_l.flamegraph.plugin.server.trees.util.TreesUtil.setNodesCount
@@ -8,11 +12,8 @@ import com.github.kornilova_l.flamegraph.plugin.server.trees.util.TreesUtil.upda
 import com.github.kornilova_l.flamegraph.plugin.server.trees.util.UniqueStringsKeeper
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree
 
-/**
- * Builds tree in which methods does not have
- * return value and parameters
- */
-open class SimpleStacksOCTreeBuilder(stacks: Map<String, Int>) : TreeBuilder {
+
+class StacksToTreeBuilder(stacks: Map<String, Int>) : TreeBuilder {
     private val treeBuilder: Tree.Builder = Tree.newBuilder()
     private val tree: Tree
     private var maxDepth = 0
@@ -45,19 +46,18 @@ open class SimpleStacksOCTreeBuilder(stacks: Map<String, Int>) : TreeBuilder {
             maxDepth = calls.size
         }
         var nodeBuilder: Tree.Node.Builder = treeBuilder.baseNodeBuilder
+
         for (call in calls) {
+            val openBracketPos = call.indexOf('(')
+            val parametersPos = if (openBracketPos == -1) call.length else openBracketPos
+            val lastSpacePosBeforeParams = getLastSpacePosBeforeParams(call, parametersPos)
+
             nodeBuilder = updateNodeList(nodeBuilder,
-                    uniqueStrings.getUniqueString(getClassName(call)),
-                    uniqueStrings.getUniqueString(getMethodName(call)),
-                    uniqueStrings.getUniqueString(getDescription(call)), width.toLong())
+                    uniqueStrings.getUniqueString(getClassName(call, parametersPos, lastSpacePosBeforeParams)),
+                    uniqueStrings.getUniqueString(getMethodName(call, parametersPos)),
+                    uniqueStrings.getUniqueString(getDescription(call, parametersPos, lastSpacePosBeforeParams)), width.toLong())
         }
     }
-
-    protected open fun getClassName(call: String): String = ""
-
-    protected open fun getMethodName(call: String): String = call
-
-    protected open fun getDescription(call: String): String = ""
 
     override fun getTree(): Tree? {
         return tree
