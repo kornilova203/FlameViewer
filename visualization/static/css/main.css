@@ -37,6 +37,7 @@ section header {
     align-items: center;
     position: relative;
     top: 30px;
+    height: 80px;
 }
 
 .header-call-traces {
