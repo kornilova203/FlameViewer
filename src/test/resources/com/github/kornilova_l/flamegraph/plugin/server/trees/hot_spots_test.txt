@@ -1,0 +1,6 @@
+[{"className":"","methodName":"a","parameters":[],"retVal":"","relativeTime":0.475},
+{"className":"","methodName":"e","parameters":[],"retVal":"","relativeTime":0.2},
+{"className":"","methodName":"d","parameters":[],"retVal":"","relativeTime":0.15},
+{"className":"","methodName":"c","parameters":["a","b"],"retVal":"ret","relativeTime":0.075},
+{"className":"","methodName":"f","parameters":[],"retVal":"","relativeTime":0.05},
+{"className":"","methodName":"b","parameters":[""],"retVal":"","relativeTime":0.05}]

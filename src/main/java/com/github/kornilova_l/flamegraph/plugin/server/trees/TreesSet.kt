@@ -2,6 +2,8 @@ package com.github.kornilova_l.flamegraph.plugin.server.trees
 
 import com.github.kornilova_l.flamegraph.plugin.server.tree_request_handlers.tree.maximumNodesCount
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeManager.TreeType
+import com.github.kornilova_l.flamegraph.plugin.server.trees.hot_spots.HotSpot
+import com.github.kornilova_l.flamegraph.plugin.server.trees.hot_spots.HotSpotsBuilder
 import com.github.kornilova_l.flamegraph.plugin.server.trees.util.TreesUtil
 import com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumulative_trees.CallTracesMethodBuilder
 import com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumulative_trees.back_traces.BackTracesBuilder
@@ -10,13 +12,10 @@ import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node
 import com.github.kornilova_l.flamegraph.proto.TreesPreviewProtos.TreesPreview
 import com.github.kornilova_l.flamegraph.proto.TreesProtos
-import java.util.ArrayList
-import java.util.HashMap
-import java.util.LinkedList
-import kotlin.Comparator
+import java.util.*
 
 abstract class TreesSet {
-    private val hotSpots = ArrayList<HotSpot>()
+    private var hotSpots: ArrayList<HotSpot>? = null
     protected var callTree: TreesProtos.Trees? = null
     protected var callTraces: Tree? = null
     private var backTraces: Tree? = null
@@ -53,35 +52,13 @@ abstract class TreesSet {
     abstract fun getCallTree(filter: Filter?, threadsIds: List<Int>?): TreesProtos.Trees?
 
     internal fun getHotSpots(): List<HotSpot> {
-        if (hotSpots.size == 0) {
-            if (callTraces == null) {
-                callTraces = getTree(TreeType.CALL_TRACES, null)
-            }
-            if (callTraces == null) {
-                return LinkedList()
-            }
-            val hotSpotTreeMap = HashMap<HotSpot, HotSpot>()
-            for (node in callTraces!!.baseNode.nodesList) { // avoid baseNode
-                getHotSpotsRecursively(node, hotSpotTreeMap)
-            }
-            hotSpots.addAll(hotSpotTreeMap.values)
-            hotSpots.sortWith(Comparator { hotSpot1, hotSpot2 -> java.lang.Float.compare(hotSpot2.relativeTime, hotSpot1.relativeTime) })
+        var hotSpots = hotSpots
+        if (hotSpots == null) {
+            val callTraces = getTree(TreeType.CALL_TRACES, null) ?: return ArrayList()
+            hotSpots = HotSpotsBuilder(callTraces).hotSpots
         }
+        this.hotSpots = hotSpots
         return hotSpots
-    }
-
-    private fun getHotSpotsRecursively(node: Node, hotSpotTreeMap: HashMap<HotSpot, HotSpot>) {
-        var hotSpot = HotSpot(
-                node.nodeInfo.className,
-                node.nodeInfo.methodName,
-                node.nodeInfo.description
-        )
-        hotSpot = hotSpotTreeMap.putIfAbsent(hotSpot, hotSpot) ?: hotSpot
-        assert(callTraces != null)
-        hotSpot.addTime(getSelfTime(node).toFloat() / callTraces!!.width)
-        for (child in node.nodesList) {
-            getHotSpotsRecursively(child, hotSpotTreeMap)
-        }
     }
 
     protected fun filterTree(tree: Tree?,
@@ -212,27 +189,6 @@ abstract class TreesSet {
         }
     }
 
-    class HotSpot internal constructor(private val className: String, private val methodName: String, description: String) : Comparable<HotSpot> {
-        private val parameters: Array<String>
-        private val retVal: String
-        internal var relativeTime = 0f
-
-        init {
-            val params = description.substring(1, description.indexOf(")"))
-            parameters = params.split(", ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-            retVal = description.substring(description.indexOf(")") + 1, description.length)
-        }
-
-        override fun compareTo(other: TreesSet.HotSpot): Int {
-            return (className + methodName + parameters.joinToString("")).compareTo(
-                    other.className + other.methodName + other.parameters.joinToString(""))
-        }
-
-        internal fun addTime(callRelativeTime: Float) {
-            relativeTime += callRelativeTime
-        }
-    }
-
     companion object {
 
         fun getMaxDepthRecursively(nodeBuilder: Node.Builder, currentDepth: Int): Int {
@@ -255,14 +211,6 @@ abstract class TreesSet {
                 }
             }
             return maxDepth
-        }
-
-        private fun getSelfTime(node: Node): Long {
-            var childTime: Long = 0
-            for (child in node.nodesList) {
-                childTime += child.width
-            }
-            return node.width - childTime
         }
     }
 }

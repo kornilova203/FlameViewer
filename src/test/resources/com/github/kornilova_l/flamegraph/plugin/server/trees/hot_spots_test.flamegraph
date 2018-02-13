@@ -1,0 +1,8 @@
+b();ret c(a, b);a;a;d 6
+b();ret c(a, b);a 4
+b();ret c(a, b) 3
+b();e;a 5
+b();e 8
+b() 2
+a;f 2
+a 10
