@@ -85,7 +85,7 @@ class CompressedFlamegraphToCallTracesConverter : FileToCallTracesConverter() {
         return true
     }
 
-    override fun convert(file: File): Tree = CompressedFlamegraphConverter(file).tree
+    override fun convert(file: File): Tree = Converter(file).tree
 
     private fun getStartPosOfTwoNumbers(line: String): Int {
         var numbersCount = 0

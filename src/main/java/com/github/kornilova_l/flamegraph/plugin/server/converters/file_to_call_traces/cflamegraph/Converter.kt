@@ -9,7 +9,7 @@ import java.io.FileReader
 import java.util.*
 
 
-internal class CompressedFlamegraphConverter(file: File) {
+internal class Converter(file: File) {
     val tree: TreeProtos.Tree
     private val uniqueStringsClassName = UniqueStringsKeeper()
     private val uniqueStringsMethodName = UniqueStringsKeeper()
@@ -49,7 +49,7 @@ internal class CompressedFlamegraphConverter(file: File) {
         }
         val openBracketPos = name.indexOf('(')
         val parametersPos = if (openBracketPos == -1) name.length else openBracketPos
-        val lastSpacePosBeforeParams = getLastSpacePosBeforeParams(name, openBracketPos)
+        val lastSpacePosBeforeParams = getLastSpacePosBeforeParams(name, parametersPos)
         val newNode = TreesUtil.updateNodeList(
                 currentStack[currentStack.size - 1],
                 uniqueStringsClassName.getUniqueString(getClassName(name, parametersPos, lastSpacePosBeforeParams)),
