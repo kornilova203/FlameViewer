@@ -8,7 +8,7 @@ import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree
 
 class BackTracesMethodBuilder(callTraces: Tree, className: String, methodName: String, desc: String) : TreeBuilder {
     private val backTraces: Tree
-    var maxDepth = 0
+    private var maxDepth = 0
 
     init {
         val treeBuilder = createTree(className, methodName, desc)
@@ -64,6 +64,9 @@ class BackTracesMethodBuilder(callTraces: Tree, className: String, methodName: S
                     for (countedNode in newList) {
                         width -= countedNode.width
                     }
+                }
+                if (width == 0L) {
+                    return list
                 }
                 methodNode.width = methodNode.width + width
                 list = list ?: ArrayList()

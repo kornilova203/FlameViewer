@@ -1,0 +1,44 @@
+tree_info {
+  time_percent: 1.0
+  nodes_count: 6
+}
+base_node {
+  nodes {
+    width: 10
+    node_info {
+      method_name: "b"
+    }
+    nodes {
+      width: 10
+      node_info {
+        method_name: "b"
+      }
+      nodes {
+        width: 10
+        node_info {
+          method_name: "b"
+        }
+        nodes {
+          width: 10
+          node_info {
+            method_name: "a"
+          }
+          nodes {
+            width: 10
+            node_info {
+              method_name: "b"
+            }
+            nodes {
+              width: 10
+              node_info {
+                method_name: "a"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+depth: 6
+width: 10

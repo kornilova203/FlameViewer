@@ -112,5 +112,19 @@ class GetTreesTest : LightPlatformCodeInsightFixtureTestCase() {
 
             return FilesUploaderTest.getResponse(connection)
         }
+
+        fun sendRequestForMethodBackTraces(fileName: String, className: String, methodName: String, description: String): ByteArray {
+            val url = URL("http://localhost:${BuiltInServerManager.getInstance().port}" +
+                    "/flamegraph-profiler/trees/incoming-calls?" +
+                    "file=$fileName" +
+                    "&project=uploaded-files" +
+                    "&class=$className" +
+                    "&method=$methodName" +
+                    "&desc=$description")
+            val connection = url.openConnection() as HttpURLConnection
+            connection.requestMethod = "GET"
+
+            return FilesUploaderTest.getResponse(connection)
+        }
     }
 }
