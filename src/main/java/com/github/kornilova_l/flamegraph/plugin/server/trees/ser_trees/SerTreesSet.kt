@@ -1,6 +1,7 @@
 package com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees
 
 import com.github.kornilova_l.flamegraph.plugin.server.trees.Filter
+import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeManager
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeManager.TreeType
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TreesSet
 import com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees.call_tree.CallTreesBuilder
@@ -31,7 +32,10 @@ class SerTreesSet(logFile: File) : TreesSet() {
         if (callTraces == null) {
             callTraces = OutgoingCallsBuilder(callTree!!).tree
         }
-        return getTreeMaybeFilter(treeType, filter)
+        return when (treeType) {
+            TreeManager.TreeType.BACK_TRACES -> getBackTracesMaybeFiltered(filter)
+            TreeManager.TreeType.CALL_TRACES -> getCallTracesMaybeFiltered(filter)
+        }
     }
 
     override fun getCallTree(filter: Filter?): Trees? {

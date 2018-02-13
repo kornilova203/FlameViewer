@@ -23,8 +23,15 @@ public class TreesSetImpl extends TreesSet {
 
     @Nullable
     @Override
-    public TreeProtos.Tree getTree(TreeManager.TreeType treeType, Filter filter) {
-        return getTreeMaybeFilter(treeType, filter);
+    public TreeProtos.Tree getTree(@NotNull TreeManager.TreeType treeType, Filter filter) {
+        switch (treeType) {
+            case BACK_TRACES:
+                return getBackTracesMaybeFiltered(filter);
+            case CALL_TRACES:
+                return getCallTracesMaybeFiltered(filter);
+            default:
+                throw new IllegalArgumentException("Tree type " + treeType + " is unsupported");
+        }
     }
 
     @Nullable

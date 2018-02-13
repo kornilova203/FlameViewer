@@ -17,7 +17,7 @@ abstract class RequestHandler internal constructor(protected val urlDecoder: Que
 
     fun process() {
         if (logFile == null) {
-            sendStatus(HttpResponseStatus.BAD_REQUEST, context.channel())
+            sendStatus(HttpResponseStatus.BAD_REQUEST, context.channel(), "Request does not contain logFile")
             return
         }
         doProcess(logFile)

@@ -1,5 +1,6 @@
 package com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumulative_trees.back_traces;
 
+import com.github.kornilova_l.flamegraph.plugin.server.tree_request_handlers.tree.TreeRequestHandlerKt;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeBuilder;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.util.TreesUtil;
 import com.github.kornilova_l.flamegraph.proto.TreeProtos;
@@ -9,6 +10,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class is used only if calltraces tree contains less than {@link TreeRequestHandlerKt#maximumNodesCount}
+ */
 public final class BackTracesBuilder implements TreeBuilder {
     private TreeProtos.Tree.Builder treeBuilder;
     @Nullable
@@ -16,6 +20,9 @@ public final class BackTracesBuilder implements TreeBuilder {
     private int maxDepth = 0;
 
     public BackTracesBuilder(@NotNull TreeProtos.Tree outgoingCalls) {
+        if (outgoingCalls.getTreeInfo().getNodesCount() > TreeRequestHandlerKt.maximumNodesCount) {
+            throw new IllegalArgumentException("Calltraces must contain less than " + TreeRequestHandlerKt.maximumNodesCount + " nodes");
+        }
         initTreeBuilder();
         for (TreeProtos.Tree.Node node : outgoingCalls.getBaseNode().getNodesList()) {
             traverseTree(node, 0);

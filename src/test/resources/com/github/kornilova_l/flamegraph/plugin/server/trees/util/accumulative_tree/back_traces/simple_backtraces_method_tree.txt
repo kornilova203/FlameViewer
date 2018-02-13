@@ -1,0 +1,38 @@
+tree_info {
+  time_percent: 0.4
+  nodes_count: 4
+}
+base_node {
+  nodes {
+    width: 80
+    node_info {
+      method_name: "method"
+      class_name: "MyClass"
+      description: "()void"
+    }
+    nodes {
+      width: 30
+      node_info {
+        class_name: "DifferentClass"
+      }
+    }
+    nodes {
+      offset: 30
+      width: 50
+      node_info {
+        method_name: "method"
+        class_name: "MyClass"
+        description: "()void"
+      }
+      nodes {
+        offset: 30
+        width: 50
+        node_info {
+          class_name: "DifferentClass"
+        }
+      }
+    }
+  }
+}
+depth: 3
+width: 80

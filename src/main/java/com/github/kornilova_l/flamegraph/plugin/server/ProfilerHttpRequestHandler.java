@@ -67,9 +67,19 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
     public static void sendStatus(HttpResponseStatus status, Channel channel) {
         DefaultFullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, status);
         HttpUtil.setContentLength(response, 0);
-        Responses.addCommonHeaders(response);
+        doSendStatus(response, channel);
+    }
+
+    public static void sendStatus(HttpResponseStatus status, Channel channel, String message) {
+        DefaultFullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, status,
+                Unpooled.wrappedBuffer(message.getBytes()));
+        HttpUtil.setContentLength(response, message.getBytes().length);
+        response.headers().set(HttpHeaderNames.CONTENT_TYPE, "text/plain; charset=UTF-8");
+        doSendStatus(response, channel);
+    }
+
+    private static void doSendStatus(DefaultFullHttpResponse response, Channel channel) {
         Responses.addNoCache(response);
-        response.headers().set("X-Frame-Options", "Deny");
         Responses.send(response, channel, true);
     }
 
@@ -214,7 +224,7 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
         String fileName = fullHttpRequest.headers().get("File-Name");
         int[] fileParts = getFileParts(fullHttpRequest);
         if (fileParts == null) {
-            sendStatus(context.channel(), false);
+            sendStatus(HttpResponseStatus.BAD_REQUEST, context.channel(), "Request does not contain File-Part header");
             return;
         }
         int currentPart = fileParts[0];
@@ -222,7 +232,7 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
         LOG.info("Got file: " + fileName);
         byte[] bytes = getBytes(fullHttpRequest.content());
         fileUploader.upload(fileName, bytes, currentPart, totalPartsCount);
-        sendStatus(context.channel(), true); // send OK
+        sendStatus(HttpResponseStatus.OK, context.channel(), "File part was successfully uploaded");
     }
 
     /**
@@ -240,14 +250,6 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
             LOG.error("Header File-Parts does not contain information in format '<current part>/<total parts>'. " + filePartsString, e);
         }
         return null;
-    }
-
-    private void sendStatus(Channel channel, boolean isOk) {
-        if (isOk) {
-            sendStatus(HttpResponseStatus.OK, channel);
-        } else {
-            sendStatus(HttpResponseStatus.BAD_REQUEST, channel);
-        }
     }
 
     private byte[] getBytes(ByteBuf byteBuf) {
@@ -351,9 +353,9 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
     private void sendIfFileExist(FullHttpRequest fullHttpRequest, ChannelHandlerContext context) {
         String fileName = fullHttpRequest.headers().get("File-Name");
         if (fileManager.getLogFile("uploaded-files", fileName) != null) {
-            sendStatus(HttpResponseStatus.FOUND, context.channel());
+            sendStatus(HttpResponseStatus.FOUND, context.channel(), "File " + fileName + " was found in uploaded messages");
         } else {
-            sendStatus(HttpResponseStatus.NOT_FOUND, context.channel());
+            sendStatus(HttpResponseStatus.NOT_FOUND, context.channel(), "File " + fileName + " was NOT found in uploaded messages");
         }
     }
 

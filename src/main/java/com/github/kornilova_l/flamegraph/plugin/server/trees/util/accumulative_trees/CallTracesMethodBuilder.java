@@ -4,7 +4,7 @@ import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeBuilder;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.util.TreesUtil;
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree;
 
-public class MethodAccumulativeTreeBuilder implements TreeBuilder {
+public class CallTracesMethodBuilder implements TreeBuilder {
     private final Tree tree;
     private final String className;
     private final String methodName;
@@ -13,10 +13,10 @@ public class MethodAccumulativeTreeBuilder implements TreeBuilder {
     private Tree.Node.Builder wantedMethodNode;
     private int maxDepth = 0;
 
-    public MethodAccumulativeTreeBuilder(Tree sourceTree,
-                                         String className,
-                                         String methodName,
-                                         String desc) {
+    public CallTracesMethodBuilder(Tree sourceTree,
+                                   String className,
+                                   String methodName,
+                                   String desc) {
         this.className = className;
         this.methodName = methodName;
         this.desc = desc;

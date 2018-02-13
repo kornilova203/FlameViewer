@@ -1,9 +1,11 @@
 package com.github.kornilova_l.flamegraph.plugin.server.trees
 
+import com.github.kornilova_l.flamegraph.plugin.server.tree_request_handlers.tree.maximumNodesCount
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeManager.TreeType
 import com.github.kornilova_l.flamegraph.plugin.server.trees.util.TreesUtil
-import com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumulative_trees.MethodAccumulativeTreeBuilder
+import com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumulative_trees.CallTracesMethodBuilder
 import com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumulative_trees.back_traces.BackTracesBuilder
+import com.github.kornilova_l.flamegraph.plugin.server.trees.util.accumulative_trees.back_traces.BackTracesMethodBuilder
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node
 import com.github.kornilova_l.flamegraph.proto.TreesPreviewProtos.TreesPreview
@@ -29,15 +31,14 @@ abstract class TreesSet {
                 methodName: String,
                 desc: String,
                 filter: Filter?): Tree? {
-        val tree: Tree?
-        when (treeType) {
+        getTree(TreeType.CALL_TRACES, null) // tree will be filtered later
+        val callTraces = callTraces ?: return null
+        val tree: Tree? = when (treeType) {
             TreeManager.TreeType.CALL_TRACES -> {
-                getTree(TreeType.CALL_TRACES, null)
-                tree = getTreeForMethod(callTraces, className, methodName, desc)
+                CallTracesMethodBuilder(callTraces, className, methodName, desc).tree
             }
             TreeManager.TreeType.BACK_TRACES -> {
-                getTree(TreeType.BACK_TRACES, null)
-                tree = getTreeForMethod(backTraces, className, methodName, desc)
+                BackTracesMethodBuilder(callTraces, className, methodName, desc).tree
             }
         }
         return if (filter == null) {
@@ -188,25 +189,26 @@ abstract class TreesSet {
         return nodeBuilder
     }
 
-    protected fun getTreeMaybeFilter(treeType: TreeType, filter: Filter?): Tree? {
-        when (treeType) {
-            TreeManager.TreeType.CALL_TRACES -> {
-                return if (filter == null) {
-                    callTraces
-                } else filterTree(callTraces, filter, false)
-            }
-            TreeManager.TreeType.BACK_TRACES -> {
-                if (callTraces == null) {
-                    return null
-                }
-                if (backTraces == null) {
-                    backTraces = BackTracesBuilder(callTraces!!).tree
-                }
-                return if (filter == null) {
-                    backTraces
-                } else filterTree(backTraces, filter, false)
-            }
-            else -> throw IllegalArgumentException("Tree type is not supported")
+    protected fun getCallTracesMaybeFiltered(filter: Filter?): Tree? {
+        return if (filter == null) {
+            callTraces
+        } else {
+            filterTree(callTraces, filter, false)
+        }
+    }
+
+    protected fun getBackTracesMaybeFiltered(filter: Filter?): Tree? {
+        val callTraces = callTraces ?: return null
+        if (callTraces.treeInfo.nodesCount > maximumNodesCount) {
+            throw IllegalArgumentException("Calltraces must contain less than $maximumNodesCount nodes")
+        }
+        if (backTraces == null) {
+            backTraces = BackTracesBuilder(callTraces).tree
+        }
+        return if (filter == null) {
+            backTraces
+        } else {
+            filterTree(backTraces, filter, false)
         }
     }
 
@@ -232,17 +234,6 @@ abstract class TreesSet {
     }
 
     companion object {
-
-        private fun getTreeForMethod(sourceTree: Tree?,
-                                     className: String,
-                                     methodName: String,
-                                     desc: String): Tree? {
-            return if (sourceTree == null) {
-                null
-            } else MethodAccumulativeTreeBuilder(
-                    sourceTree, className, methodName, desc
-            ).tree
-        }
 
         fun getMaxDepthRecursively(nodeBuilder: Node.Builder, currentDepth: Int): Int {
             var maxDepth = currentDepth
