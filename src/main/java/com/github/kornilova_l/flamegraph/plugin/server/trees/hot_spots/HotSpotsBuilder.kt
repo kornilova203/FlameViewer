@@ -28,7 +28,8 @@ class HotSpotsBuilder(callTraces: Tree) {
         )
         hotSpot = hotSpotTreeMap.putIfAbsent(hotSpot, hotSpot) ?: hotSpot
         hotSpot.addTime(getSelfTime(node).toFloat() / callTraces.width)
-        for (child in node.nodesList) {
+        for (i in 0 until node.nodesList.size) {
+            val child = node.nodesList[i]
             getHotSpotsRecursively(child, hotSpotTreeMap, callTraces)
         }
     }
