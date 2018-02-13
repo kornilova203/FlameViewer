@@ -473,8 +473,9 @@ button {
     text-align: center;
     color: #6a6a6a;
     position: fixed;
-    top: 50%;
+    top: 45%;
     width: 100%;
+    line-height: 20px;
 }
 
 .dim {

@@ -63,9 +63,17 @@ common.getParameter = (parameterName) => {
 
 /**
  * @param {string} message
+ * @param {string} align
  */
-common.showMessage = (message) => {
+common.showMessage = (message, align = "center") => {
     $("body").append(`<p class='message'>${message}</p>`);
+    const $message = $(".message");
+    $message.css("text-align", align);
+    if (align === "left") {
+        $message.css("padding-left", "700px");
+    } else {
+        $message.css("padding-left", ""); // clear property
+    }
 };
 
 common.hideMessage = () => {
@@ -139,32 +147,41 @@ common.showError = (errorMessage) => {
 
 // noinspection JSValidateTypes
 const constants = {
-        $main: null,
-        $treePreviewWrapper: null,
-        $loaderBackground: null,
-        $loaderMessageP: null,
-        $arrowLeft: null,
-        $arrowRight: null,
-        projectName: common.getParameter("project") === undefined ? undefined : decodeURIComponent(common.getParameter("project")),
-        fileName: common.getParameter("file") === undefined ? undefined : decodeURIComponent(common.getParameter("file")),
-        $removeFilesButton: null,
-        $fullFileName: null,
-        pageName: /[^\/]*((?=\?)|(?=\.html))/.exec(window.location.href)[0],
-        CANVAS_PADDING: 35,
-        LAYER_HEIGHT: 19,
-        LAYER_GAP: 1,
-        POPUP_MARGIN: 6, // have no idea why there is a gap between popup and canvas
-        loaderMessages: {
-            drawing: "Drawing...",
-            deserialization: "Deserialization of binary data...",
-            buildingTree: "Building tree...",
-            buildingTrees: "Building trees...",
-            countingTime: "Counting self-time of methods...",
-            convertingFile: "Converting file: ",
-            uploadingFile: "Uploading file: "
-        }
+    $main: null,
+    $treePreviewWrapper: null,
+    $loaderBackground: null,
+    $loaderMessageP: null,
+    $arrowLeft: null,
+    $arrowRight: null,
+    projectName: common.getParameter("project") === undefined ? undefined : decodeURIComponent(common.getParameter("project")),
+    fileName: common.getParameter("file") === undefined ? undefined : decodeURIComponent(common.getParameter("file")),
+    $removeFilesButton: null,
+    $fullFileName: null,
+    pageName: /[^\/]*((?=\?)|(?=\.html))/.exec(window.location.href)[0],
+    CANVAS_PADDING: 35,
+    LAYER_HEIGHT: 19,
+    LAYER_GAP: 1,
+    POPUP_MARGIN: 6, // have no idea why there is a gap between popup and canvas
+    loaderMessages: {
+        drawing: "Drawing...",
+        deserialization: "Deserialization of binary data...",
+        buildingTree: "Building tree...",
+        buildingTrees: "Building trees...",
+        countingTime: "Counting self-time of methods...",
+        convertingFile: "Converting file: ",
+        uploadingFile: "Uploading file: "
+    },
+    pageMessages: {
+        backtracesTooBig: "Sorry... this tree contains too many nodes :(</br>" +
+        "But you can see back traces for any method, there are two ways to do it:</br>" +
+        "* Open Call Traces page, click on back traces icon on method popup</br>" +
+        "* Open Hot Spots page, click on back traces icon beside any method that you like",
+        chooseFile: "Choose file",
+        chooseOrUploadFile: "Choose or upload file",
+        noCallRegistered: "No call was registered or all methods took <1ms",
+        callTreeUnavailable: "Call tree is unavailable for this file"
     }
-;
+};
 
 $(window).on("load", () => {
     constants.$main = $("main");

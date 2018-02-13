@@ -526,14 +526,14 @@ function enableHideFilesList() {
 
 function showChooseFile() {
     if (constants.projectName === "uploaded-files") {
-        common.showMessage("Choose or upload file");
+        common.showMessage(constants.pageMessages.chooseOrUploadFile);
     } else {
-        common.showMessage("Choose file");
+        common.showMessage(constants.pageMessages.chooseFile);
     }
 }
 
 function showNoDataFound() {
-    common.showMessage("No call was registered or all methods took <1ms");
+    common.showMessage(constants.pageMessages.noCallRegistered);
 }
 
 /**

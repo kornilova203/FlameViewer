@@ -87,16 +87,11 @@ $(window).on("load", function () {
             let className;
             let methodName;
             let desc;
-            const urlParts = window.location.href.split("?")[0].split("/");
-            let treeType = urlParts[urlParts.length - 1];
-            if (treeType.indexOf(".") !== -1) {
-                treeType = treeType.substring(0, treeType.indexOf("."));
-            }
             if (parameters.indexOf("method=") === -1) {
-                request.open("GET", `/flamegraph-profiler/trees/${treeType}?${parameters}`, true);
+                request.open("GET", `/flamegraph-profiler/trees/${constants.pageName}?${parameters}`, true);
             } else {
                 console.log(parameters);
-                request.open("GET", `/flamegraph-profiler/trees/${treeType}?${parameters}`, true);
+                request.open("GET", `/flamegraph-profiler/trees/${constants.pageName}?${parameters}`, true);
                 className = common.getParameter("class");
                 methodName = common.getParameter("method");
                 desc = decodeURIComponent(common.getParameter("desc"));
@@ -107,6 +102,11 @@ $(window).on("load", function () {
                 common.hideLoader(0);
                 common.showLoader(constants.loaderMessages.deserialization, () => {
                     console.log("got response");
+                    if (constants.pageName === "incoming-calls" && request.status === 400) { // tree contains too many nodes
+                        common.hideLoader();
+                        common.showMessage(constants.pageMessages.backtracesTooBig, "left");
+                        return;
+                    }
                     const arrayBuffer = request.response;
                     const byteArray = new Uint8Array(arrayBuffer);
                     const tree = deserializer.deserializeTree(byteArray);

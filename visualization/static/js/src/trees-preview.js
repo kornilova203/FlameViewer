@@ -6,7 +6,7 @@ $(window).on("load", function () {
         if (extension === "ser") {
             getAndShowTreesPreview();
         } else {
-            common.showMessage("Call tree is unavailable for this file")
+            common.showMessage(constants.pageMessages.callTreeUnavailable)
         }
     }
 });
@@ -21,7 +21,7 @@ function getAndShowTreesPreview() {
         request.onload = function () {
             common.hideLoader(0);
             if (request.status === 400) { // if file was not found
-                common.showMessage("Choose file");
+                common.showMessage(constants.pageMessages.chooseFile);
                 return;
             }
             common.showLoader(constants.loaderMessages.deserialization, () => {
