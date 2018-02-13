@@ -38,7 +38,7 @@ class BackTracesMethodBuilderTest : LightPlatformCodeInsightFixtureTestCase() {
         val file = File("$dirPath/multiple_occurrence_in_stack.flamegraph")
         FilesUploaderTest.sendFile(file.name, file.readBytes())
 
-        val bytes = GetTreesTest.sendRequestForMethodBackTraces(file.name, "", "b", "")
+        val bytes = GetTreesTest.sendRequestForMethodBackTraces(file.name, "", "a", "")
         assertNotNull(bytes)
         val tree = TreeProtos.Tree.parseFrom(ByteArrayInputStream(bytes))
         assertEquals(File("$dirPath/multiple_occurrence_in_stack.txt").readText(), tree.toString())

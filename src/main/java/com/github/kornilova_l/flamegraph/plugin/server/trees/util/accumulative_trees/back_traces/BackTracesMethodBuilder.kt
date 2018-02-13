@@ -13,9 +13,7 @@ class BackTracesMethodBuilder(callTraces: Tree, className: String, methodName: S
     init {
         val treeBuilder = createTree(className, methodName, desc)
         val methodNode = treeBuilder.baseNodeBuilder.nodesBuilderList[0]
-        for (node in callTraces.baseNode.nodesList) { // avoid base node
-            buildTreeRecursively(node, methodNode, className, methodName, desc, 1)
-        }
+        buildTreeRecursively(callTraces.baseNode, methodNode, className, methodName, desc, ArrayList(callTraces.depth))
         TreesUtil.setNodesOffsetRecursively(treeBuilder.baseNodeBuilder, 0)
         TreesUtil.setTreeWidth(treeBuilder)
         TreesUtil.setNodesCount(treeBuilder)
@@ -25,58 +23,41 @@ class BackTracesMethodBuilder(callTraces: Tree, className: String, methodName: S
     }
 
     /**
-     * @return list of node builders.
-     *         In each call all children of a node are checked:
-     *         1. Do recursive call with a child
-     *         2. If list is returned then append current node to children of each item in list. (add created nodes to new list)
-     *         3. If child is the searched method
-     *              3.1 Expand width of a base node in tree by width of child minus sum of width of all items in returned list
-     *                  (this is needed to calculate only 'top' width of nodes)
-     *              3.2 Append current node to base node children.
-     *              3.3 Add new node to new list
+     * @return long number - how much time from this stack was added to backtraces
+     *         this value is needed when there are multiple occurrences of needed method in one stack,
+     *         so only 'free top part' width of each node is added to backtraces.
      */
     private fun buildTreeRecursively(node: Tree.Node,
                                      methodNode: Tree.Node.Builder,
                                      className: String,
                                      methodName: String,
                                      desc: String,
-                                     depth: Int): MutableList<Tree.Node.Builder>? {
-        var list: MutableList<Tree.Node.Builder>? = null
-        for (child in node.nodesList) {
-            val newList =
-                    buildTreeRecursively(child, methodNode, className, methodName, desc, depth + 1)
-            if (newList != null) {
-                list = list ?: ArrayList()
-                for (i in 0 until newList.size) {
-                    val previousNode = newList[i]
-                    val nodeInfo = node.nodeInfo
-                    val updatedNode = updateNodeList(previousNode, nodeInfo.className,
-                            nodeInfo.methodName, nodeInfo.description, previousNode.width)
-                    list.add(updatedNode) // replace item
-                }
-            }
-            if (isSameMethod(child, className, methodName, desc)) { // if it is the last occurrence in subtree
-                if (depth + 1 > maxDepth) {
-                    maxDepth = depth + 1
-                }
-                var width = child.width
-                if (newList != null) {
-                    for (countedNode in newList) {
-                        width -= countedNode.width
-                    }
-                }
-                if (width == 0L) {
-                    return list
-                }
-                methodNode.width = methodNode.width + width
-                list = list ?: ArrayList()
-                val nodeInfo = node.nodeInfo
-                list.add(
-                        updateNodeList(methodNode, nodeInfo.className, nodeInfo.methodName, nodeInfo.description, width)
-                )
-            }
+                                     currentStack: MutableList<Tree.Node>): Long {
+        var alreadyAddedWidth = 0L
+        currentStack.add(node)
+        for (i in 0 until node.nodesList.size) {
+            val child = node.nodesList[i]
+            alreadyAddedWidth += buildTreeRecursively(child, methodNode, className, methodName, desc, currentStack)
         }
-        return list
+        currentStack.removeAt(currentStack.size - 1)
+        if (isSameMethod(node, className, methodName, desc)) {
+            addStack(methodNode, currentStack, node.width - alreadyAddedWidth)
+            return node.width
+        }
+        return alreadyAddedWidth
+    }
+
+    private fun addStack(methodNode: Tree.Node.Builder, currentStack: MutableList<Tree.Node>, width: Long) {
+        methodNode.width = methodNode.width + width
+        if (currentStack.size > maxDepth) {
+            maxDepth = currentStack.size
+        }
+        var currentBuilder = methodNode
+        for (i in currentStack.size - 1 downTo 1) { // first node is base node
+            val nodeInfo = currentStack[i].nodeInfo
+            currentBuilder = updateNodeList(currentBuilder, nodeInfo.className,
+                    nodeInfo.methodName, nodeInfo.description, width)
+        }
     }
 
     /**
