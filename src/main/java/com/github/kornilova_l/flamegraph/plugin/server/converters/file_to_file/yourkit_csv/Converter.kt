@@ -3,6 +3,8 @@ package com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file.
 import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_traces.flamegraph.StacksToTreeBuilder
 import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file.CFlamegraph
 import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file.CFlamegraphLine
+import com.github.kornilova_l.flamegraph.plugin.server.trees.util.TreesUtil.parsePositiveInt
+import com.github.kornilova_l.flamegraph.plugin.server.trees.util.TreesUtil.parsePositiveLong
 import java.io.BufferedReader
 import java.io.File
 import java.io.FileReader
@@ -42,8 +44,8 @@ class Converter(file: File) {
             /* find next delimiter */
             for (i in delimPos + 1 until line.length - 2) {
                 if (line[i] == '"' && line[i + 1] == ',' && line[i + 2] == '"') {
-                    width = java.lang.Long.parseLong(line.substring(delimPos + 3, i))
-                    depth = Integer.parseInt(line.substring(i + 3, line.length - 1))
+                    width = parsePositiveLong(line, delimPos + 3, i)
+                    depth = parsePositiveInt(line, i + 3, line.length - 1)
                     break
                 }
             }

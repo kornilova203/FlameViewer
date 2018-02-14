@@ -2,6 +2,8 @@ package com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_
 
 import com.github.kornilova_l.flamegraph.plugin.pleaseReportIssue
 import com.github.kornilova_l.flamegraph.plugin.server.trees.util.TreesUtil
+import com.github.kornilova_l.flamegraph.plugin.server.trees.util.TreesUtil.parsePositiveInt
+import com.github.kornilova_l.flamegraph.plugin.server.trees.util.TreesUtil.parsePositiveLong
 import com.github.kornilova_l.flamegraph.proto.TreeProtos
 import java.io.BufferedReader
 import java.io.File
@@ -58,7 +60,7 @@ internal class Converter(file: File) {
             for (i in 0 until linesCount) {
                 val mapLine = reader.readLine()
                 val lastSpacePos = mapLine.lastIndexOf(' ')
-                val id = Integer.parseInt(mapLine.substring(lastSpacePos + 1))
+                val id = parsePositiveInt(mapLine, lastSpacePos + 1, mapLine.length)
                 val name = mapLine.substring(0, lastSpacePos)
                 currentMap[id] = name
             }
@@ -100,7 +102,7 @@ internal class Converter(file: File) {
         while (depth < currentStack.size) { // if some calls are finished
             currentStack.removeAt(currentStack.size - 1)
         }
-        val newNode = TreesUtil.updateNodeListWithoutIsSameMethodCheck(
+        val newNode = TreesUtil.updateNodeList(
                 currentStack[currentStack.size - 1],
                 className ?: "",
                 methodName,
@@ -114,11 +116,11 @@ internal class Converter(file: File) {
     }
 
     private fun getParamIntValue(line: String, paramPos: Int, nextSpacePos: Int): Int {
-        return Integer.parseInt(line.substring(paramPos + 2, nextSpacePos))
+        return parsePositiveInt(line, paramPos + 2, nextSpacePos)
     }
 
     private fun getParamLongValue(line: String, paramPos: Int, nextSpacePos: Int): Long {
-        return java.lang.Long.parseLong(line.substring(paramPos + 2, nextSpacePos))
+        return parsePositiveLong(line, paramPos + 2, nextSpacePos)
     }
 
     private fun getNextSpacePos(line: String, startIndex: Int): Int {

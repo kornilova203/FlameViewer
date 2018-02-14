@@ -54,26 +54,6 @@ object TreesUtil {
     }
 
     /**
-     * This method is used when it is known that parent cannot already have the same child
-     */
-    fun updateNodeListWithoutIsSameMethodCheck(nodeBuilder: Tree.Node.Builder,
-                                               className: String,
-                                               methodName: String,
-                                               description: String,
-                                               time: Long): Tree.Node.Builder {
-        val childCount = nodeBuilder.nodesCount
-        val children = nodeBuilder.nodesBuilderList
-        val comparableName = className + methodName
-        for (i in 0 until childCount) {
-            val childNodeBuilder = children[i]
-            if (comparableName < getComparableName(childNodeBuilder)) { // if insert between
-                return addNodeToList(nodeBuilder, className, methodName, description, time, i)
-            }
-        }
-        return addNodeToList(nodeBuilder, className, methodName, description, time, childCount) // no such method and it is biggest
-    }
-
-    /**
      * The same as previous function but it uses already existing NodeInfo.
      * So there are no duplicate instances of NodeInfo
      */
@@ -151,8 +131,8 @@ object TreesUtil {
                      methodName: String,
                      desc: String): Boolean {
         val nodeBuilderInfo = nodeBuilder.nodeInfoBuilder
-        return className == nodeBuilderInfo.className &&
-                methodName == nodeBuilderInfo.methodName &&
+        return methodName == nodeBuilderInfo.methodName &&
+                className == nodeBuilderInfo.className &&
                 desc == nodeBuilderInfo.description
     }
 
@@ -195,5 +175,26 @@ object TreesUtil {
         }
         val lastNode = baseNode.getNodesBuilder(baseNode.nodesCount - 1)
         treeBuilder.width = lastNode.offset + lastNode.width
+    }
+
+    /**
+     * substring method takes so much time
+     * so I decided to implement method that parses integer without need to
+     * create substring
+     */
+    fun parsePositiveInt(line: String, startIndex: Int, endIndex: Int): Int {
+        var res = 0
+        for (i in startIndex until endIndex) {
+            res = res * 10 + (line[i] - '0')
+        }
+        return res
+    }
+
+    fun parsePositiveLong(line: String, startIndex: Int, endIndex: Int): Long {
+        var res = 0L
+        for (i in startIndex until endIndex) {
+            res = res * 10 + (line[i] - '0')
+        }
+        return res
     }
 }
