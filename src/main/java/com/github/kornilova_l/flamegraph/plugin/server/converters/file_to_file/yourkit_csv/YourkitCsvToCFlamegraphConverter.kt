@@ -1,6 +1,6 @@
 package com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file.yourkit_csv
 
-import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file.CFlamegraphLine
+import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file.CFlamegraph
 import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file.ProfilerToCompressedFlamegraphConverter
 import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file.ProfilerToFlamegraphConverter
 import java.io.BufferedReader
@@ -50,5 +50,5 @@ class YourkitCsvToCFlamegraphConverter : ProfilerToCompressedFlamegraphConverter
                 openBracketPos < closeBracketPos
     }
 
-    override fun convert(file: File): List<CFlamegraphLine> = Converter(file).cFlamegraphLines
+    override fun convert(file: File): CFlamegraph = Converter(file).cFlamegraph
 }

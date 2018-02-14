@@ -10,31 +10,67 @@ import java.io.ByteArrayInputStream
 import java.io.File
 
 private const val simpleFileContent = """
-a 100 1
-b 40 2
-c 5 3
-d 5 3
-e 5 2
-f 5 1
+--M-- 6
+a 0
+b 1
+c 2
+d 3
+e 4
+f 5
+M=0 w=100 d=1
+M=1 w=40 d=2
+M=2 w=5 d=3
+M=3 w=5 d=3
+M=4 w=5 d=2
+M=5 w=5 d=1
 """
 
 private const val fileWithParameters = """
-a(a, b) 100 1
-b(c) 40 2
-c(hello) 5 3
-d() 5 3
-e(e, se, ef) 5 2
-f() 5 1
+--M-- 6
+a 0
+b 1
+c 2
+d 3
+e 4
+f 5
+--D-- 5
+(a, b) 0
+(c) 1
+(hello) 2
+() 3
+(e, se, ef) 4
+M=0 D=0 w=100 d=1
+M=1 D=1 w=40 d=2
+M=2 D=2 w=5 d=3
+M=3 D=3 w=5 d=3
+M=4 D=4 w=5 d=2
+M=5 D=3 w=5 d=1
 """
 
 private const val mixedContent = """
-retVal a(a, b) 100 1
-Class.b 40 2
-Class.c(hello) 5 3
-ret Class.c(hello) 5 3
-myRetVal d 5 3
-e(e, se, ef) 5 2
-f 5 1
+--M-- 6
+a 0
+b 1
+c 2
+d 3
+e 4
+f 5
+--C-- 1
+Class 0
+--D-- 5
+(a, b)retVal 0
+(hello) 1
+(hello)ret 2
+()myRetVal 3
+(e, se, ef) 4
+
+M=0 D=0 w=100 d=1
+C=0 M=1 w=40 d=2
+C=0 M=2 D=1 w=5 d=3
+C=0 M=2 D=2 w=5 d=3
+M=3 D=3 w=5 d=3
+M=4 D=4 w=5 d=2
+M=5 f w=5 d=1
 """
 
 class CompressedFlamegraphToCallTracesConverterTest : LightPlatformCodeInsightFixtureTestCase() {

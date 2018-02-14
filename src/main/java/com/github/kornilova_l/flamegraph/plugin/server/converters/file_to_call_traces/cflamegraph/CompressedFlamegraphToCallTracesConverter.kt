@@ -3,9 +3,7 @@ package com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_
 import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_traces.FileToCallTracesConverter
 import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file.ProfilerToFlamegraphConverter
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree
-import java.io.BufferedReader
 import java.io.File
-import java.io.FileReader
 
 
 /**
@@ -13,24 +11,46 @@ import java.io.FileReader
  * because it has lots of duplicate parts of call traces.
  * cflamegraph (compressed flamegraph) solves this problem.
  *
- * Each line of cflamegraph contains information in following format:
- * method-call width depth
+ * Header of file contains ids of class names, method names and descriptions.
+ * For example:
+ * C
+ * ClassName1 0
+ * ClassName2 1
+ * M
+ * method1 0
+ * method2 1
+ * D
+ * () 0
+ * (int)int 1
  *
- * where method-call line may contain any characters (also spaces)
- * width and depth are integers
+ * Each line of cflamegraph contains information in following format:
+ * C=<class name id> M=<method name id> D=<description id> w=<width> d=<depth>
+ *
+ * C and D are optional.
  *
  * Example:
  * ._ _
  * |c|d|___ _
- * |b______|e|_______ _
- * |a________________|f|
+ * |b()____|e|_______ _
+ * |Class.a__________|f|
  *
- * a 100 1
- * b 40 2
- * c 5 3
- * d 5 3
- * e 5 2
- * f 5 1
+ * C 1
+ * Class 0
+ * M 6
+ * a 0
+ * b 1
+ * c 2
+ * d 3
+ * e 4
+ * f 5
+ * D 1
+ * () 0
+ * C=0 M=0 w=100 d=1
+ * M=1 w=40 d=2
+ * M=2 w=5 d=3
+ * M=3 w=5 d=3
+ * M=4 w=5 d=2
+ * M=5 w=5 d=1
  *
  * As you can see order of lines matters
  * because if a call has bigger depth than previous it means that
@@ -43,7 +63,8 @@ import java.io.FileReader
  * a;e 5
  * a 50
  * f 5
- * it has 2 times more call names that compact version of flamegraph.
+ *
+ * In cflamegraph files strings are not duplicated and equal parts of stacktraces are also not duplicated
  */
 class CompressedFlamegraphToCallTracesConverter : FileToCallTracesConverter() {
     val extension = "cflamegraph"
@@ -58,52 +79,11 @@ class CompressedFlamegraphToCallTracesConverter : FileToCallTracesConverter() {
         if (ProfilerToFlamegraphConverter.getFileExtension(file.name) != extension) {
             return false
         }
-        BufferedReader(FileReader(file)).use { reader ->
-
-            var line: String? = reader.readLine()
-
-            while (line != null) {
-                if (line.isNotBlank()) {
-                    val startPosOfTwoNumbers = getStartPosOfTwoNumbers(line)
-                    if (startPosOfTwoNumbers == -1) { // must contain two numbers
-                        return false
-                    }
-                    var containsNonSpaceChar = false
-                    for (i in 0 until startPosOfTwoNumbers) { // must contain non-space characters before two numbers
-                        if (line[i] != ' ') {
-                            containsNonSpaceChar = true // if contains then we can go to next line
-                            break
-                        }
-                    }
-                    if (!containsNonSpaceChar) {
-                        return false
-                    }
-                }
-                line = reader.readLine()
-            }
-        }
+        /* since nobody knows about this format only my plugin will generate cflamegraph files
+         * so there is no need to validate cflamegraph files
+         * (there is also another very important reason for this: I am hungry) */
         return true
     }
 
     override fun convert(file: File): Tree = Converter(file).tree
-
-    private fun getStartPosOfTwoNumbers(line: String): Int {
-        var numbersCount = 0
-        var wasNumberPresent = false
-        for (i in line.length - 1 downTo 0) {
-            val c = line[i]
-            if (c == ' ' && wasNumberPresent) {
-                numbersCount++
-                wasNumberPresent = false
-                if (numbersCount == 2) {
-                    return i + 1
-                }
-            } else if (c in '0'..'9') {
-                wasNumberPresent = true
-            } else {
-                return -1
-            }
-        }
-        return -1
-    }
 }

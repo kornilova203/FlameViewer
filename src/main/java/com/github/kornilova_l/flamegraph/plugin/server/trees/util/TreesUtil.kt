@@ -54,6 +54,26 @@ object TreesUtil {
     }
 
     /**
+     * This method is used when it is known that parent cannot already have the same child
+     */
+    fun updateNodeListWithoutIsSameMethodCheck(nodeBuilder: Tree.Node.Builder,
+                                               className: String,
+                                               methodName: String,
+                                               description: String,
+                                               time: Long): Tree.Node.Builder {
+        val childCount = nodeBuilder.nodesCount
+        val children = nodeBuilder.nodesBuilderList
+        val comparableName = className + methodName
+        for (i in 0 until childCount) {
+            val childNodeBuilder = children[i]
+            if (comparableName < getComparableName(childNodeBuilder)) { // if insert between
+                return addNodeToList(nodeBuilder, className, methodName, description, time, i)
+            }
+        }
+        return addNodeToList(nodeBuilder, className, methodName, description, time, childCount) // no such method and it is biggest
+    }
+
+    /**
      * The same as previous function but it uses already existing NodeInfo.
      * So there are no duplicate instances of NodeInfo
      */
