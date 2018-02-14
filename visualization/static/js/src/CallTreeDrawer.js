@@ -128,6 +128,8 @@ module.exports.CallTreeDrawer = class CallTreeDrawer extends TreeDrawer.TreeDraw
     _createPopup() {
         const popupContent = templates.tree.callTreePopup().content;
         this.$popup = $(popupContent).appendTo(this.$section);
+        this.$popupClassIcon = this.$popup.find(".class-icon");
+        this.$popupClassName = this.$popup.find(".class-name");
         this.$popupParameters = this.$popup.find(".parameters");
         this.$popupIcon = this.$popup.find(".parameter-icon");
         this.$returnValueType = this.$popup.find(".return-value-type");

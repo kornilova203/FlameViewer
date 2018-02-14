@@ -352,7 +352,8 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
      */
     private void sendIfFileExist(FullHttpRequest fullHttpRequest, ChannelHandlerContext context) {
         String fileName = fullHttpRequest.headers().get("File-Name");
-        if (fileManager.getLogFile("uploaded-files", fileName) != null) {
+        String projectName = fullHttpRequest.headers().get("Project-Name");
+        if (fileManager.getLogFile(projectName, fileName) != null) {
             sendStatus(HttpResponseStatus.FOUND, context.channel(), "File " + fileName + " was found in uploaded messages");
         } else {
             sendStatus(HttpResponseStatus.NOT_FOUND, context.channel(), "File " + fileName + " was NOT found in uploaded messages");

@@ -78,55 +78,62 @@ function treeIsEmpty(tree) {
     return tree.getBaseNode() === undefined;
 }
 
+function sendRequestForTree() {
+    console.log("prepare request");
+    const request = new XMLHttpRequest();
+    const parameters = window.location.href.split("?")[1];
+    let className, methodName, desc;
+    if (parameters.indexOf("method=") === -1) {
+        request.open("GET", `/flamegraph-profiler/trees/${constants.pageName}?${parameters}`, true);
+    } else {
+        request.open("GET", `/flamegraph-profiler/trees/${constants.pageName}?${parameters}`, true);
+        className = common.getParameter("class");
+        methodName = common.getParameter("method");
+        desc = decodeURIComponent(common.getParameter("desc"));
+    }
+    request.responseType = "arraybuffer";
+
+    request.onload = function () {
+        common.hideLoader(0);
+        common.showLoader(constants.loaderMessages.deserialization, () => {
+            console.log("got response");
+            if (constants.pageName === "incoming-calls" && request.status === 400) { // tree contains too many nodes
+                common.hideLoader();
+                common.showMessage(constants.pageMessages.backtracesTooBig, "left");
+                return;
+            }
+            const arrayBuffer = request.response;
+            const byteArray = new Uint8Array(arrayBuffer);
+            const tree = deserializer.deserializeTree(byteArray);
+            if (!treeIsEmpty(tree)) {
+                let percent = 0;
+                if (tree.getTreeInfo() !== undefined && tree.getTreeInfo().getTimePercent()) {
+                    percent = common.roundRelativeTime(
+                        tree.getTreeInfo().getTimePercent());
+                }
+                drawTree(tree, className, methodName, desc, percent);
+            } else {
+                common.hideLoader();
+                showNoDataFound();
+            }
+            common.resizeLoaderBackground();
+        });
+    };
+    console.log("send request");
+    request.send();
+}
+
 $(window).on("load", function () {
     if (constants.fileName !== undefined) {
         common.showLoader(constants.loaderMessages.buildingTree, () => {
-            console.log("prepare request");
-            const request = new XMLHttpRequest();
-            const parameters = window.location.href.split("?")[1];
-            let className;
-            let methodName;
-            let desc;
-            if (parameters.indexOf("method=") === -1) {
-                request.open("GET", `/flamegraph-profiler/trees/${constants.pageName}?${parameters}`, true);
-            } else {
-                console.log(parameters);
-                request.open("GET", `/flamegraph-profiler/trees/${constants.pageName}?${parameters}`, true);
-                className = common.getParameter("class");
-                methodName = common.getParameter("method");
-                desc = decodeURIComponent(common.getParameter("desc"));
-            }
-            request.responseType = "arraybuffer";
-
-            request.onload = function () {
-                common.hideLoader(0);
-                common.showLoader(constants.loaderMessages.deserialization, () => {
-                    console.log("got response");
-                    if (constants.pageName === "incoming-calls" && request.status === 400) { // tree contains too many nodes
-                        common.hideLoader();
-                        common.showMessage(constants.pageMessages.backtracesTooBig, "left");
-                        return;
-                    }
-                    const arrayBuffer = request.response;
-                    const byteArray = new Uint8Array(arrayBuffer);
-                    const tree = deserializer.deserializeTree(byteArray);
-                    if (!treeIsEmpty(tree)) {
-                        let percent = 0;
-                        if (tree.getTreeInfo() !== undefined && tree.getTreeInfo().getTimePercent()) {
-                            percent = common.roundRelativeTime(
-                                tree.getTreeInfo().getTimePercent());
-                        }
-                        drawTree(tree, className, methodName, desc, percent);
-                    } else {
-                        common.hideLoader();
-                        showNoDataFound();
-                    }
-                    common.resizeLoaderBackground();
-                });
-            };
-            console.log("send request");
-            request.send();
-
+            common.doCallbackIfFileExists(
+                constants.fileName,
+                constants.projectName,
+                sendRequestForTree,
+                () => { // if does not exist
+                    common.redirect({project: constants.projectName})
+                }
+            );
         });
     }
 });

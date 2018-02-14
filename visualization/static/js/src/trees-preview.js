@@ -1,13 +1,24 @@
 const deserializer = require('./deserializer');
 
+function sendRequestForTreesPreview() {
+    const extension = common.getExtension(constants.fileName);
+    if (extension === "ser") {
+        getAndShowTreesPreview();
+    } else {
+        common.showMessage(constants.pageMessages.callTreeUnavailable)
+    }
+}
+
 $(window).on("load", function () {
     if (constants.fileName !== undefined) {
-        const extension = common.getExtension(constants.fileName);
-        if (extension === "ser") {
-            getAndShowTreesPreview();
-        } else {
-            common.showMessage(constants.pageMessages.callTreeUnavailable)
-        }
+        common.doCallbackIfFileExists(
+            constants.fileName,
+            constants.projectName,
+            sendRequestForTreesPreview,
+            () => { // if does not exist
+                common.redirect({project: constants.projectName})
+            }
+        );
     }
 });
 

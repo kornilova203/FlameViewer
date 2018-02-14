@@ -182,8 +182,15 @@ object PluginFileManager {
     @Synchronized
     fun getLogFile(projectName: String, fileName: String): File? {
         return if (projectName != UPLOADED_FILES) {
-            Paths.get(logDirPath.toString(), projectName, fileName).toFile()
-        } else findFileInSubDirectories(fileName, uploadedFilesDir)
+            val file = Paths.get(logDirPath.toString(), projectName, fileName).toFile()
+            if (file.exists()) {
+                file
+            } else {
+                null
+            }
+        } else {
+            findFileInSubDirectories(fileName, uploadedFilesDir)
+        }
     }
 
     @Synchronized

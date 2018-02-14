@@ -20,82 +20,68 @@ class FileUploader {
             common.showError("File is empty");
             return;
         }
+        const that = this;
         /* upload file if it was not previously uploaded */
-        this.checkIfFileWasUploaded(FileUploader.uploadFile)
+        common.doCallbackIfFileExists(this.file.name, constants.projectName,
+            () => {
+                common.showError("File already exists");
+            },
+            () => {
+                FileUploader.uploadFile(that);
+            });
     }
 
     /**
      * @param {FileUploader} that
-     * @param {boolean} ifWasFound
      */
-    static uploadFile(that, ifWasFound) {
-        if (ifWasFound) { // if file with this name exist
-            common.showError("File already exists");
-        } else {
-            const bytesInMB = 1000000;
-            const fileSizeMegabytes = that.file.size / bytesInMB;
-            common.resizeLoaderBackground(700);
-            common.showLoader(that.loaderMessage + that.file.name, () => {
-                /* send file by 100MB parts because IDEA server does not allow to send large files */
-                const partsCount = Math.ceil(fileSizeMegabytes / 100);
-                let countFilesSent = 0; // how many parts were received by server
-                let success = true; // if all parts were successfully sent
-                for (let i = 0; i < partsCount; i++) {
-                    const request = new XMLHttpRequest();
-                    request.onload = () => {
-                        countFilesSent++;
-                        if (request.status !== 200) { // if something went wrong during upload
-                            success = false;
-                        }
-                        if (countFilesSent === partsCount) { // if all parts uploaded
-                            that.endFileUpload(success)
-                        }
-                    };
-                    request.open("POST", "/flamegraph-profiler/upload-file", true);
-                    request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-                    request.setRequestHeader('File-Name', that.file.name);
-                    request.setRequestHeader('File-Part', (i + 1) + "/" + partsCount);
-                    request.send(that.file.slice(i * bytesInMB * 100, Math.min((i + 1) * bytesInMB * 100, that.file.size)));
-                }
-            });
-        }
+    static uploadFile(that) {
+        const bytesInMB = 1000000;
+        const fileSizeMegabytes = that.file.size / bytesInMB;
+        common.resizeLoaderBackground(700);
+        common.showLoader(that.loaderMessage + that.file.name, () => {
+            /* send file by 100MB parts because IDEA server does not allow to send large files */
+            const partsCount = Math.ceil(fileSizeMegabytes / 100);
+            let countFilesSent = 0; // how many parts were received by server
+            let success = true; // if all parts were successfully sent
+            for (let i = 0; i < partsCount; i++) {
+                const request = new XMLHttpRequest();
+                request.onload = () => {
+                    countFilesSent++;
+                    if (request.status !== 200) { // if something went wrong during upload
+                        success = false;
+                    }
+                    if (countFilesSent === partsCount) { // if all parts uploaded
+                        that.endFileUpload(success)
+                    }
+                };
+                request.open("POST", "/flamegraph-profiler/upload-file", true);
+                request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                request.setRequestHeader('File-Name', that.file.name);
+                request.setRequestHeader('File-Part', (i + 1) + "/" + partsCount);
+                request.send(that.file.slice(i * bytesInMB * 100, Math.min((i + 1) * bytesInMB * 100, that.file.size)));
+            }
+        });
+
     }
 
     endFileUpload(success) {
         common.hideLoader();
+        const that = this;
         if (success) {
             console.log("File was sent");
-            this.checkIfFileWasUploaded(FileUploader.reloadToNewFile);
+            common.doCallbackIfFileExists(this.file.name, constants.projectName,
+                () => {
+                    redirectToFile(that.file.name); // reload to new file
+                },
+                () => {
+                    common.showError("File format is unsupported");
+                    console.error("File was not uploaded");
+                }
+            );
         } else {
             common.showError("File was not sent");
             console.error("File was not sent");
         }
-    }
-
-    /**
-     * @param {FileUploader} that
-     * @param {boolean} ifFileWasFound
-     */
-    static reloadToNewFile(that, ifFileWasFound) {
-        if (ifFileWasFound) {
-            redirectToFile(that.file.name);
-        } else {
-            common.showError("File format is unsupported");
-            console.error("File was not uploaded");
-        }
-    }
-
-    /**
-     * @param {Function} callback
-     */
-    checkIfFileWasUploaded(callback) {
-        const request = new XMLHttpRequest();
-        request.onload = () => {
-            callback(this, request.status === 302); // if was found
-        };
-        request.open("GET", "/flamegraph-profiler/does-file-exist", true);
-        request.setRequestHeader('File-Name', this.file.name);
-        request.send();
     }
 }
 
@@ -135,11 +121,11 @@ function showSupportedFormats($input) {
 
     $button.click(() => {
         /* toggle visibility */
-       if ($info.hasClass("visible")) {
-           $info.removeClass("visible");
-       } else {
-           $info.addClass("visible");
-       }
+        if ($info.hasClass("visible")) {
+            $info.removeClass("visible");
+        } else {
+            $info.addClass("visible");
+        }
     });
 
     $closeButton.click(() => {

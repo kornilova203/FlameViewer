@@ -174,7 +174,10 @@ class FilesListManager {
 
     highlightCurrentFile() {
         if (constants.fileName !== undefined) {
-            $("#" + this.getFileId(constants.fileName)).addClass("current-file");
+            const fieldId = this.getFileId(constants.fileName);
+            if (fieldId != null) {
+                $("#" + fieldId).addClass("current-file");
+            }
         }
     }
 
@@ -184,7 +187,7 @@ class FilesListManager {
                 return this.filesArray[i].id;
             }
         }
-        return "";
+        return null;
     }
 
     /**
