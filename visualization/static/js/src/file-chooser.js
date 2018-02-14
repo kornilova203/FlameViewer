@@ -111,13 +111,12 @@ class FilesListManager {
      */
     showUndoDelete(fileNames, $list, selectedFilesIds) {
         const $undoDeleteButton = $(".undo-delete");
-        $(".search-form").removeClass("visible");
         $undoDeleteButton.addClass("visible");
+        $undoDeleteButton.text(`Undo delete ${fileNames.length} file${fileNames.length > 1 ? "s" : ""}`);
         setTimeout(() => {
             $undoDeleteButton.removeClass("visible");
-            $(".search-form").addClass("visible");
             $undoDeleteButton.off();
-        }, 4000);
+        }, 10000);
 
         $undoDeleteButton.click(() => { // undo delete
             for (let i = 0; i < fileNames.length; i++) {
@@ -132,7 +131,6 @@ class FilesListManager {
             }
             $undoDeleteButton.off();
             $undoDeleteButton.removeClass("visible");
-            $(".search-form").addClass("visible");
         });
     }
 

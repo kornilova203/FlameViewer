@@ -738,11 +738,11 @@ button:focus {
     right: 10px;
 }
 
-.cancel-filter:hover, .clear-filter:hover, .do-not-confirm:hover, .undo-delete:hover {
+.cancel-filter:hover, .clear-filter:hover, .do-not-confirm:hover {
     background-color: #8a8a8a;
 }
 
-.cancel-filter:active, .clear-filter:active, .do-not-confirm:active, .undo-delete:active {
+.cancel-filter:active, .clear-filter:active, .do-not-confirm:active {
     background-color: #696969;
 }
 
@@ -859,18 +859,26 @@ canvas {
 
 .undo-delete {
     position: absolute;
-    width: 80px;
-    top: 8px;
-    left: 100px;
     text-align: center;
-    background-color: #ababab;
+    background-color: #777;
     color: white;
     font-size: 14px;
-    padding: 7px 0;
-    transition: background-color, opacity 300ms;
+    padding: 5px 0;
+    transition: background-color 300ms, opacity 300ms;
     opacity: 0;
     pointer-events: none;
     z-index: 1;
+    bottom: 5px;
+    left: 47px;
+    width: 155px;
+}
+
+.undo-delete:hover {
+    background-color: #666;
+}
+
+.undo-delete:active {
+    background-color: #555;
 }
 
 .full-file-name {
