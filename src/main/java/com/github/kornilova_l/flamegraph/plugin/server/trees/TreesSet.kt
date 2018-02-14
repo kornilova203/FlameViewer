@@ -1,5 +1,6 @@
 package com.github.kornilova_l.flamegraph.plugin.server.trees
 
+import com.github.kornilova_l.flamegraph.plugin.pleaseReportIssue
 import com.github.kornilova_l.flamegraph.plugin.server.tree_request_handlers.tree.maximumNodesCount
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TreeManager.TreeType
 import com.github.kornilova_l.flamegraph.plugin.server.trees.hot_spots.HotSpot
@@ -177,7 +178,7 @@ abstract class TreesSet {
     protected fun getBackTracesMaybeFiltered(filter: Filter?): Tree? {
         val callTraces = callTraces ?: return null
         if (callTraces.treeInfo.nodesCount > maximumNodesCount) {
-            throw IllegalArgumentException("Calltraces must contain less than $maximumNodesCount nodes")
+            throw IllegalArgumentException("$pleaseReportIssue: Calltraces must contain less than $maximumNodesCount nodes")
         }
         if (backTraces == null) {
             backTraces = BackTracesBuilder(callTraces).tree

@@ -36,7 +36,7 @@ base_node {
         width: 5
         node_info {
           method_name: "d"
-          description: "myRetVal"
+          description: "()myRetVal"
         }
       }
     }

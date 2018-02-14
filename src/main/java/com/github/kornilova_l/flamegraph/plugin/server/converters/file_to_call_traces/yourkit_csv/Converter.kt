@@ -1,6 +1,8 @@
 package com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_traces.yourkit_csv
 
 import com.github.kornilova_l.flamegraph.plugin.server.trees.util.TreesUtil
+import com.github.kornilova_l.flamegraph.plugin.server.trees.util.TreesUtil.parsePositiveInt
+import com.github.kornilova_l.flamegraph.plugin.server.trees.util.TreesUtil.parsePositiveLong
 import com.github.kornilova_l.flamegraph.plugin.server.trees.util.UniqueStringsKeeper
 import com.github.kornilova_l.flamegraph.proto.TreeProtos
 import java.io.BufferedReader
@@ -50,8 +52,8 @@ internal class Converter(file: File) {
             /* find next delimiter */
             for (i in delimPos + 1 until line.length - 2) {
                 if (line[i] == '"' && line[i + 1] == ',' && line[i + 2] == '"') {
-                    time = java.lang.Long.parseLong(line.substring(delimPos + 3, i))
-                    newDepth = Integer.parseInt(line.substring(i + 3, line.length - 1))
+                    time = parsePositiveLong(line, delimPos + 3, i)
+                    newDepth = parsePositiveInt(line, i + 3, line.length - 1)
                     break
                 }
             }
