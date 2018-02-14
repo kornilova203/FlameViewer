@@ -169,7 +169,15 @@ const common = {
         };
         request.open("GET", "/flamegraph-profiler/does-file-exist", true);
         request.setRequestHeader('Project-Name', projectName);
-        request.setRequestHeader('File-Name', fileName);
+        try {
+            request.setRequestHeader('File-Name', fileName);
+        } catch (err) {
+            common.showError("File name should contain only ascii characters");
+            setTimeout(() => { // it does not work without timeout. I do know why
+                constants.$loaderBackground.hide();
+            }, 50);
+            return; // do not send request
+        }
         request.send();
     }
 };
