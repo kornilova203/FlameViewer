@@ -1,6 +1,10 @@
 package com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file.yourkit_csv
 
+import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_traces.flamegraph.StacksToTreeBuilder
+import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file.CFlamegraph
 import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file.CFlamegraphLine
+import com.github.kornilova_l.flamegraph.plugin.server.trees.util.TreesUtil.parsePositiveInt
+import com.github.kornilova_l.flamegraph.plugin.server.trees.util.TreesUtil.parsePositiveLong
 import java.io.BufferedReader
 import java.io.File
 import java.io.FileReader
@@ -8,7 +12,11 @@ import java.util.*
 
 
 class Converter(file: File) {
-    val cFlamegraphLines = ArrayList<CFlamegraphLine>()
+    private val cFlamegraphLines = ArrayList<CFlamegraphLine>()
+    private val classNames = HashMap<String, Int>()
+    private val methodNames = HashMap<String, Int>()
+    private val descriptions = HashMap<String, Int>()
+    val cFlamegraph: CFlamegraph
 
     init {
         BufferedReader(FileReader(file), 1000 * 8192).use { reader ->
@@ -18,6 +26,7 @@ class Converter(file: File) {
                 line = reader.readLine()
             }
         }
+        cFlamegraph = CFlamegraph(cFlamegraphLines, classNames, methodNames, descriptions)
     }
 
     private fun processLine(line: String) {
@@ -35,8 +44,8 @@ class Converter(file: File) {
             /* find next delimiter */
             for (i in delimPos + 1 until line.length - 2) {
                 if (line[i] == '"' && line[i + 1] == ',' && line[i + 2] == '"') {
-                    width = java.lang.Long.parseLong(line.substring(delimPos + 3, i))
-                    depth = Integer.parseInt(line.substring(i + 3, line.length - 1))
+                    width = parsePositiveLong(line, delimPos + 3, i)
+                    depth = parsePositiveInt(line, i + 3, line.length - 1)
                     break
                 }
             }
@@ -48,8 +57,31 @@ class Converter(file: File) {
         }
         depth -= 1 // after this depth of first call is 1
         name = getCleanName(name)
-        cFlamegraphLines.add(CFlamegraphLine(name, width, depth))
+        val openBracketPos = name.indexOf('(')
+        val parametersPos = if (openBracketPos == -1) name.length else openBracketPos
+        val lastSpacePosBeforeParams = StacksToTreeBuilder.getLastSpacePosBeforeParams(name, parametersPos)
+        val className = StacksToTreeBuilder.getClassName(name, parametersPos, lastSpacePosBeforeParams)
+        val methodName = StacksToTreeBuilder.getMethodName(name, parametersPos)
+        val desc = StacksToTreeBuilder.getDescription(name, parametersPos, lastSpacePosBeforeParams)
+        cFlamegraphLines.add(
+                CFlamegraphLine(
+                        if (className == null) null else getId(classNames, className),
+                        getId(methodNames, methodName),
+                        if (desc == null) null else getId(descriptions, desc),
+                        width,
+                        depth
+                )
+        )
+    }
 
+    private fun getId(map: HashMap<String, Int>, name: String): Int {
+        val id = map[name]
+        if (id == null) {
+            val newId = map.size
+            map[name] = newId
+            return newId
+        }
+        return id
     }
 
     private fun getCleanName(name: String): String {

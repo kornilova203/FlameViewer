@@ -1,5 +1,6 @@
 package com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees.call_tree
 
+import com.github.kornilova_l.flamegraph.plugin.pleaseReportIssue
 import com.github.kornilova_l.flamegraph.proto.EventProtos
 import com.github.kornilova_l.flamegraph.proto.TreesProtos
 import java.io.File
@@ -36,8 +37,8 @@ class CallTreesBuilder(logFile: File) {
                 EventProtos.Event.TypeCase.METHODEVENT -> addMethodEvent(event)
                 EventProtos.Event.TypeCase.NEWCLASS -> registerClass(event)
                 EventProtos.Event.TypeCase.NEWTHREAD -> threadsNames[event.newThread.id] = event.newThread.name
-                EventProtos.Event.TypeCase.TYPE_NOT_SET -> throw RuntimeException("Event without type")
-                else -> throw RuntimeException("Event without type")
+                EventProtos.Event.TypeCase.TYPE_NOT_SET -> throw RuntimeException("$pleaseReportIssue: Event without type")
+                else -> throw RuntimeException("$pleaseReportIssue: Event without type")
             }
             event = EventProtos.Event.parseDelimitedFrom(inputStream)
         }
@@ -51,7 +52,8 @@ class CallTreesBuilder(logFile: File) {
     private fun addMethodEvent(event: EventProtos.Event) {
         val methodEvent = event.methodEvent
         val ctBuilder = getCTBuilder(methodEvent)
-        val className = classNames[methodEvent.classNameId] ?: throw RuntimeException("Class name is not known")
+        val className = classNames[methodEvent.classNameId]
+                ?: throw RuntimeException("$pleaseReportIssue (also please upload this ser file): Class name is not known. id = ${methodEvent.classNameId}")
         ctBuilder.addEvent(methodEvent, className)
     }
 

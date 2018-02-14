@@ -1,5 +1,6 @@
 package com.github.kornilova_l.flamegraph.plugin.server.trees.util
 
+import com.github.kornilova_l.flamegraph.plugin.pleaseReportIssue
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node
 
@@ -131,8 +132,8 @@ object TreesUtil {
                      methodName: String,
                      desc: String): Boolean {
         val nodeBuilderInfo = nodeBuilder.nodeInfoBuilder
-        return className == nodeBuilderInfo.className &&
-                methodName == nodeBuilderInfo.methodName &&
+        return methodName == nodeBuilderInfo.methodName &&
+                className == nodeBuilderInfo.className &&
                 desc == nodeBuilderInfo.description
     }
 
@@ -175,5 +176,34 @@ object TreesUtil {
         }
         val lastNode = baseNode.getNodesBuilder(baseNode.nodesCount - 1)
         treeBuilder.width = lastNode.offset + lastNode.width
+    }
+
+    /**
+     * substring method takes so much time
+     * so I decided to implement method that parses integer without need to
+     * create substring
+     */
+    fun parsePositiveInt(line: String, startIndex: Int, endIndex: Int): Int {
+        var res = 0
+        for (i in startIndex until endIndex) {
+            val c = line[i]
+            if (c !in '0'..'9') {
+                throw NumberFormatException("$pleaseReportIssue Cannot parse number. Line: $line startIndex: $startIndex. endIndex $endIndex")
+            }
+            res = res * 10 + (c - '0')
+        }
+        return res
+    }
+
+    fun parsePositiveLong(line: String, startIndex: Int, endIndex: Int): Long {
+        var res = 0L
+        for (i in startIndex until endIndex) {
+            val c = line[i]
+            if (c !in '0'..'9') {
+                throw NumberFormatException("$pleaseReportIssue Cannot parse number. Line: $line startIndex: $startIndex. endIndex $endIndex")
+            }
+            res = res * 10 + (c - '0')
+        }
+        return res
     }
 }

@@ -56,7 +56,7 @@ object PluginFileManager {
         try {
             staticDirPath = Paths.get(javaClass.getResource("/" + STATIC_DIR_NAME).toURI())
         } catch (e: URISyntaxException) {
-            throw AssertionError("Cannot find static dir.", e)
+            throw AssertionError("$pleaseReportIssue: Cannot find static dir: ${javaClass.getResource("/" + STATIC_DIR_NAME)}", e)
         }
 
         val uploadedFilesPath = Paths.get(logDirPath.toString(), UPLOADED_FILES)

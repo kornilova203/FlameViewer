@@ -42,6 +42,8 @@ main::-webkit-scrollbar-thumb, .call-tree-wrapper::-webkit-scrollbar-thumb {
 .class-name code {
     padding-left: 12px;
     color: #666;
+    position: relative;
+    top: -10px;
 }
 
 .total-time {
@@ -62,6 +64,8 @@ main::-webkit-scrollbar-thumb, .call-tree-wrapper::-webkit-scrollbar-thumb {
     margin-left: 320px;
     margin-top: 0;
     margin-bottom: 0;
+    position: relative;
+    top: -10px;
 }
 
 .code-margin {

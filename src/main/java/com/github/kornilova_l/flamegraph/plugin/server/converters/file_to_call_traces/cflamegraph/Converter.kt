@@ -1,19 +1,23 @@
 package com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_traces.cflamegraph
 
+import com.github.kornilova_l.flamegraph.plugin.pleaseReportIssue
 import com.github.kornilova_l.flamegraph.plugin.server.trees.util.TreesUtil
-import com.github.kornilova_l.flamegraph.plugin.server.trees.util.UniqueStringsKeeper
+import com.github.kornilova_l.flamegraph.plugin.server.trees.util.TreesUtil.parsePositiveInt
+import com.github.kornilova_l.flamegraph.plugin.server.trees.util.TreesUtil.parsePositiveLong
 import com.github.kornilova_l.flamegraph.proto.TreeProtos
 import java.io.BufferedReader
 import java.io.File
 import java.io.FileReader
 import java.util.*
+import java.util.regex.Pattern
 
 
 internal class Converter(file: File) {
     val tree: TreeProtos.Tree
-    private val uniqueStringsClassName = UniqueStringsKeeper()
-    private val uniqueStringsMethodName = UniqueStringsKeeper()
-    private val uniqueStringsDesc = UniqueStringsKeeper()
+    private val classNames = HashMap<Int, String>()
+    private val methodNames = HashMap<Int, String>()
+    private val descriptions = HashMap<Int, String>()
+    private val headerPattern = Pattern.compile("--[CMD]-- \\d+")
     private var maxDepth = 0
 
     init {
@@ -21,7 +25,7 @@ internal class Converter(file: File) {
         val currentStack = ArrayList<TreeProtos.Tree.Node.Builder>()
         currentStack.add(tree.baseNodeBuilder)
         BufferedReader(FileReader(file), 1000 * 8192).use { reader ->
-            var line = reader.readLine()
+            var line: String? = initMaps(reader)
             while (line != null) {
                 if (line.isNotBlank()) {
                     processLine(line, currentStack)
@@ -36,25 +40,69 @@ internal class Converter(file: File) {
         this.tree = tree.build()
     }
 
+    private fun initMaps(reader: BufferedReader): String {
+        var line = reader.readLine()
+        while (line.isEmpty() || headerPattern.matcher(line).matches()) {
+            if (line.isEmpty()) {
+                line = reader.readLine()
+                continue
+            }
+            val linesCount = Integer.parseInt(line.substring(6))
+            val value = line[2]
+            val currentMap = when (value) {
+                'C' -> classNames
+                'M' -> methodNames
+                'D' -> descriptions
+                else ->
+                    /* this should never happen because we checked line with regexp */
+                    throw IllegalArgumentException("$pleaseReportIssue: Cannot read header $line")
+            }
+            for (i in 0 until linesCount) {
+                val mapLine = reader.readLine()
+                val lastSpacePos = mapLine.lastIndexOf(' ')
+                val id = parsePositiveInt(mapLine, lastSpacePos + 1, mapLine.length)
+                val name = mapLine.substring(0, lastSpacePos)
+                currentMap[id] = name
+            }
+            line = reader.readLine()
+        }
+        return line
+    }
+
     private fun processLine(line: String,
                             currentStack: ArrayList<TreeProtos.Tree.Node.Builder>) {
-        val lastSpacePos = line.lastIndexOf(' ')
-        val newDepth = Integer.parseInt(line.substring(lastSpacePos + 1, line.length))
-        val secondSpacePos = getNextSpacePos(line, lastSpacePos)
-        val width = java.lang.Long.parseLong(line.substring(secondSpacePos + 1, lastSpacePos))
-
-        val name = line.substring(0, secondSpacePos)
-        while (newDepth < currentStack.size) { // if some calls are finished
+        var className: String? = null
+        var methodName: String? = null
+        var desc: String? = null
+        var width = -1L
+        var depth = -1
+        var i = 0
+        while (i < line.length - 1) {
+            val c = line[i]
+            val endOfNumPos = getNextEndOfNum(line, i + 2)
+            when (c) {
+                'C' -> className = classNames[getParamIntValue(line, i, endOfNumPos)]!!
+                'M' -> methodName = methodNames[getParamIntValue(line, i, endOfNumPos)]!!
+                'D' -> desc = descriptions[getParamIntValue(line, i, endOfNumPos)]!!
+                'd' -> depth = getParamIntValue(line, i, endOfNumPos)
+                'w' -> width = getParamLongValue(line, i, endOfNumPos)
+            }
+            i = endOfNumPos
+        }
+        if (depth == -1 || width == -1L) {
+            throw IllegalArgumentException("$pleaseReportIssue: Cannot find depth or width value in line: $line")
+        }
+        if (methodName == null) {
+            throw IllegalArgumentException("$pleaseReportIssue: Line must contain method name: $line")
+        }
+        while (depth < currentStack.size) { // if some calls are finished
             currentStack.removeAt(currentStack.size - 1)
         }
-        val openBracketPos = name.indexOf('(')
-        val parametersPos = if (openBracketPos == -1) name.length else openBracketPos
-        val lastSpacePosBeforeParams = getLastSpacePosBeforeParams(name, parametersPos)
         val newNode = TreesUtil.updateNodeList(
                 currentStack[currentStack.size - 1],
-                uniqueStringsClassName.getUniqueString(getClassName(name, parametersPos, lastSpacePosBeforeParams)),
-                uniqueStringsMethodName.getUniqueString(getMethodName(name, parametersPos)),
-                uniqueStringsDesc.getUniqueString(getDescription(name, parametersPos, lastSpacePosBeforeParams)),
+                className ?: "",
+                methodName,
+                desc ?: "",
                 width
         )
         currentStack.add(newNode)
@@ -63,61 +111,21 @@ internal class Converter(file: File) {
         }
     }
 
-    companion object {
-        fun getLastSpacePosBeforeParams(name: String, openBracketPos: Int): Int {
-            for (i in openBracketPos - 1 downTo 0) {
-                if (name[i] == ' ') {
-                    return i
-                }
-            }
-            return -1
-        }
-
-        /**
-         * We do not know if name contains return value.
-         * It may even not contain class name
-         */
-        fun getClassName(name: String, parametersPos: Int, lastSpacePosBeforeParams: Int): String {
-            var lastDot = -1
-            for (i in parametersPos - 1 downTo 0) {
-                if (name[i] == '.') {
-                    lastDot = i
-                    break
-                }
-            }
-            if (lastDot == -1) {
-                return ""
-            }
-            return name.substring(lastSpacePosBeforeParams + 1, lastDot)
-        }
-
-        fun getDescription(name: String, parametersPos: Int, lastSpacePosBeforeParams: Int): String {
-            val parameters = name.substring(parametersPos, name.length)
-            return if (lastSpacePosBeforeParams != -1) {
-                parameters + name.substring(0, lastSpacePosBeforeParams)
-            } else {
-                parameters
-            }
-        }
-
-        fun getMethodName(name: String, parametersPos: Int): String {
-            for (i in parametersPos - 1 downTo 0) {
-                val c = name[i]
-                if (c == '.' || c == ' ') {
-                    return name.substring(i + 1, parametersPos)
-                }
-            }
-            return name.substring(0, parametersPos)
-        }
+    private fun getParamIntValue(line: String, paramPos: Int, endOfNumPos: Int): Int {
+        return parsePositiveInt(line, paramPos + 1, endOfNumPos)
     }
 
-    private fun getNextSpacePos(line: String, prevSpacePos: Int): Int {
-        for (i in prevSpacePos - 1 downTo 0) {
-            if (line[i] == ' ') {
+    private fun getParamLongValue(line: String, paramPos: Int, endOfNumPos: Int): Long {
+        return parsePositiveLong(line, paramPos + 1, endOfNumPos)
+    }
+
+    private fun getNextEndOfNum(line: String, startIndex: Int): Int {
+        for (i in startIndex until line.length) {
+            if (line[i] !in '0'..'9') {
                 return i
             }
         }
-        return -1
+        return line.length
     }
 
     private fun createEmptyTree(): TreeProtos.Tree.Builder {
