@@ -674,7 +674,7 @@ button:focus {
     right: 0;
     display: none;
     padding: 20px;
-    z-index: 1;
+    z-index: 2;
 }
 
 .filter-content input {
