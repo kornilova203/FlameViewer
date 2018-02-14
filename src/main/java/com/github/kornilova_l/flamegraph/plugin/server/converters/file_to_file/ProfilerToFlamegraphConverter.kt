@@ -33,7 +33,7 @@ abstract class ProfilerToFlamegraphConverter {
         private val EP_NAME = ExtensionPointName.create<ProfilerToFlamegraphConverter>("com.github.kornilovaL.flamegraphProfiler.profilerToFlamegraphConverter")
 
         fun getFileExtension(fileName: String): String {
-            val dot = fileName.indexOf(".")
+            val dot = fileName.lastIndexOf(".")
             if (dot == -1) {
                 return ""
             }
