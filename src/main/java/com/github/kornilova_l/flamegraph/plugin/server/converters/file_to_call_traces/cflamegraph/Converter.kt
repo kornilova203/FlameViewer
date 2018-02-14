@@ -79,19 +79,15 @@ internal class Converter(file: File) {
         var i = 0
         while (i < line.length - 1) {
             val c = line[i]
-            if (line[i + 1] == '=') {
-                val nextSpacePos = getNextSpacePos(line, i + 3)
-                when (c) {
-                    'C' -> className = classNames[getParamIntValue(line, i, nextSpacePos)]!!
-                    'M' -> methodName = methodNames[getParamIntValue(line, i, nextSpacePos)]!!
-                    'D' -> desc = descriptions[getParamIntValue(line, i, nextSpacePos)]!!
-                    'd' -> depth = getParamIntValue(line, i, nextSpacePos)
-                    'w' -> width = getParamLongValue(line, i, nextSpacePos)
-                }
-                i = nextSpacePos + 1
-            } else {
-                i++
+            val endOfNumPos = getNextEndOfNum(line, i + 2)
+            when (c) {
+                'C' -> className = classNames[getParamIntValue(line, i, endOfNumPos)]!!
+                'M' -> methodName = methodNames[getParamIntValue(line, i, endOfNumPos)]!!
+                'D' -> desc = descriptions[getParamIntValue(line, i, endOfNumPos)]!!
+                'd' -> depth = getParamIntValue(line, i, endOfNumPos)
+                'w' -> width = getParamLongValue(line, i, endOfNumPos)
             }
+            i = endOfNumPos
         }
         if (depth == -1 || width == -1L) {
             throw IllegalArgumentException("$pleaseReportIssue: Cannot find depth or width value in line: $line")
@@ -115,17 +111,17 @@ internal class Converter(file: File) {
         }
     }
 
-    private fun getParamIntValue(line: String, paramPos: Int, nextSpacePos: Int): Int {
-        return parsePositiveInt(line, paramPos + 2, nextSpacePos)
+    private fun getParamIntValue(line: String, paramPos: Int, endOfNumPos: Int): Int {
+        return parsePositiveInt(line, paramPos + 1, endOfNumPos)
     }
 
-    private fun getParamLongValue(line: String, paramPos: Int, nextSpacePos: Int): Long {
-        return parsePositiveLong(line, paramPos + 2, nextSpacePos)
+    private fun getParamLongValue(line: String, paramPos: Int, endOfNumPos: Int): Long {
+        return parsePositiveLong(line, paramPos + 1, endOfNumPos)
     }
 
-    private fun getNextSpacePos(line: String, startIndex: Int): Int {
+    private fun getNextEndOfNum(line: String, startIndex: Int): Int {
         for (i in startIndex until line.length) {
-            if (line[i] == ' ') {
+            if (line[i] !in '0'..'9') {
                 return i
             }
         }

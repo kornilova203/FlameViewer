@@ -17,12 +17,12 @@ c 2
 d 3
 e 4
 f 5
-M=0 w=100 d=1
-M=1 w=40 d=2
-M=2 w=5 d=3
-M=3 w=5 d=3
-M=4 w=5 d=2
-M=5 w=5 d=1
+M0w100d1
+M1w40d2
+M2w5d3
+M3w5d3
+M4w5d2
+M5w5d1
 """
 
 private const val fileWithParameters = """
@@ -39,12 +39,12 @@ f 5
 (hello) 2
 () 3
 (e, se, ef) 4
-M=0 D=0 w=100 d=1
-M=1 D=1 w=40 d=2
-M=2 D=2 w=5 d=3
-M=3 D=3 w=5 d=3
-M=4 D=4 w=5 d=2
-M=5 D=3 w=5 d=1
+M0D0w100d1
+M1D1w40d2
+M2D2w5d3
+M3D3w5d3
+M4D4w5d2
+M5D3w5d1
 """
 
 private const val mixedContent = """
@@ -64,13 +64,13 @@ Class 0
 ()myRetVal 3
 (e, se, ef) 4
 
-M=0 D=0 w=100 d=1
-C=0 M=1 w=40 d=2
-C=0 M=2 D=1 w=5 d=3
-C=0 M=2 D=2 w=5 d=3
-M=3 D=3 w=5 d=3
-M=4 D=4 w=5 d=2
-M=5 f w=5 d=1
+M0D0w100d1
+C0M1w40d2
+C0M2D1w5d3
+C0M2D2w5d3
+M3D3w5d3
+M4D4w5d2
+M5w5d1
 """
 
 class CompressedFlamegraphToCallTracesConverterTest : LightPlatformCodeInsightFixtureTestCase() {

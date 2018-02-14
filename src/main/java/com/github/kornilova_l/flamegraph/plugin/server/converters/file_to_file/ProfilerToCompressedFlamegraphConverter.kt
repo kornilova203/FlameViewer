@@ -19,21 +19,18 @@ class CompressedFlamegraphFileSaver : FileToFileConverterFileSaver() {
                 writeMap(cFlamegraph.descriptions, writer, 'D')
                 for (line in cFlamegraph.lines) {
                     if (line.classNameId != null) {
-                        writer.write("C=")
+                        writer.write("C")
                         writer.write(line.classNameId.toString())
-                        writer.write(" ")
                     }
-                    writer.write("M=")
+                    writer.write("M")
                     writer.write(line.methodNameId.toString())
-                    writer.write(" ")
                     if (line.descId != null) {
-                        writer.write("D=")
+                        writer.write("D")
                         writer.write(line.descId.toString())
-                        writer.write(" ")
                     }
-                    writer.write("d=")
+                    writer.write("d")
                     writer.write(line.depth.toString())
-                    writer.write(" w=")
+                    writer.write("w")
                     writer.write(line.width.toString())
                     writer.write("\n")
                 }

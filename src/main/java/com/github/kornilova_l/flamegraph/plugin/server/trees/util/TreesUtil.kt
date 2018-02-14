@@ -1,5 +1,6 @@
 package com.github.kornilova_l.flamegraph.plugin.server.trees.util
 
+import com.github.kornilova_l.flamegraph.plugin.pleaseReportIssue
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node
 
@@ -185,7 +186,11 @@ object TreesUtil {
     fun parsePositiveInt(line: String, startIndex: Int, endIndex: Int): Int {
         var res = 0
         for (i in startIndex until endIndex) {
-            res = res * 10 + (line[i] - '0')
+            val c = line[i]
+            if (c !in '0'..'9') {
+                throw NumberFormatException("$pleaseReportIssue Cannot parse number. Line: $line startIndex: $startIndex. endIndex $endIndex")
+            }
+            res = res * 10 + (c - '0')
         }
         return res
     }
@@ -193,7 +198,11 @@ object TreesUtil {
     fun parsePositiveLong(line: String, startIndex: Int, endIndex: Int): Long {
         var res = 0L
         for (i in startIndex until endIndex) {
-            res = res * 10 + (line[i] - '0')
+            val c = line[i]
+            if (c !in '0'..'9') {
+                throw NumberFormatException("$pleaseReportIssue Cannot parse number. Line: $line startIndex: $startIndex. endIndex $endIndex")
+            }
+            res = res * 10 + (c - '0')
         }
         return res
     }
