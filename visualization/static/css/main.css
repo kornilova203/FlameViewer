@@ -913,7 +913,7 @@ canvas {
 .error-message-block {
     position: absolute;
     bottom: 25px;
-    right: 20px;
+    left: 260px;
     width: 300px;
     background-color: #e5e5e5;
     padding: 15px 20px;
