@@ -20,9 +20,10 @@ https://plugins.jetbrains.com/plugin/10305-flamegraph-profiler
     
 ## Quick Start
 Use Flight Recorder to profile your program and then open flamegraphs:
-1. Run JVM with following VM options: `-XX:+UnlockCommercialFeatures -XX:+FlightRecorder -XX:StartFlightRecording=duration=30s,filename=my_recording.jfr`
-2. Open visualizer **Tools | Flamegraph Profiler | Upload File...**
-3. Upload my_recording.jfr
+1. Make sure that you are using Oracle JDK (not OpenJDK) because Java Mission Control comes only with Oracle JDK. To do it open **File | Project Structure... | Project** then click **Edit** beside **Project SDK**, look at **JDK home path** it should be something like this: `.../jdk1.8.0_162` **not** like this: `.../java-8-openjdk-amd64`. You can download needed version from Oracle website: [JDK 8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) [JDK 9](http://www.oracle.com/technetwork/java/javase/downloads/jdk9-downloads-3848520.html)
+2. Run JVM with following VM options: `-XX:+UnlockCommercialFeatures -XX:+FlightRecorder -XX:StartFlightRecording=duration=30s,filename=my_recording.jfr`
+3. Open visualizer **Tools | Flamegraph Profiler | Upload File...**
+4. Upload my_recording.jfr
 
 ## Performance Recording
 Plugin lets you record performance of Java program with instrumentation profiler.
