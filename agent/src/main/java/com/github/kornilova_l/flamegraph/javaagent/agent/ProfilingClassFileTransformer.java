@@ -77,7 +77,7 @@ class ProfilingClassFileTransformer implements ClassFileTransformer {
 
     private boolean isClassOfAgent(String className) {
         //noinspection SimplifiableIfStatement
-        if (className.startsWith("com/github/kornilova_l/flamegraph")) {
+        if (className.startsWith("com/github/kornilova_l/")) {
             return className.startsWith("com/github/kornilova_l/flamegraph/javaagent/") ||
                     className.startsWith("com/github/kornilova_l/flamegraph/proxy/") ||
                     className.startsWith("com/github/kornilova_l/flamegraph/proto/") ||
