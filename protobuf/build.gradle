@@ -1,7 +1,7 @@
 apply plugin: 'java'
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['protobuf-java-kornilova-l-3.3.0.jar'])
+    compile fileTree(dir: 'libs', include: ['protobuf-java-kornilova-l-3.5.1.jar'])
 }
 
 sourceSets.main.java.srcDir new File('src/main/gen')

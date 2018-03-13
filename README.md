@@ -110,7 +110,7 @@ You can see popup with detailed information about method if you place the cursor
 
 
 ## Building
-Install [google protobuf](https://github.com/google/protobuf) and generate java files from .proto files. Script is [here](protobuf/README.md)
+Install [google protobuf](https://github.com/google/protobuf) version 3.5.1 and generate java files from .proto files. Script is [here](protobuf/README.md)
 
 Install [node.js](https://nodejs.org/en/) and link [js files](/visualization/README.md)
 
