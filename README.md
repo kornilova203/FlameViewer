@@ -17,6 +17,9 @@ https://plugins.jetbrains.com/plugin/10305-flamegraph-profiler
     * [Hot Spots](#hot-spots)    
     * [Call Tree](#call-tree)    
     * [Detailed View of Thread](#detailed-view-of-thread)
+* [Roadmap](#roadmap)
+* [Contribution](#contribution)
+* [Building from sources](#building-from-sources)
     
 ## Quick Start
 Use Flight Recorder to profile your program and then open flamegraphs:
@@ -108,8 +111,20 @@ On this page you can see what was happening inside some thread. All method calls
 You can see popup with detailed information about method if you place the cursor on the method (also there are parameters and return value if they were saved).  
 ![](screenshots/thread.png)
 
+## Roadmap
+1. Start using [Cap'n Proto](https://capnproto.org/) instead of [Google Protobuf](https://github.com/google/protobuf) for client-server communications. This will speed up visualization and reduce memory consumption.
+2. Add subsecond-offset heatmap
 
-## Building
+## Contribution
+If you would like to contribute please ping me on telegram @lkornilova, there are plenty of tasks to do :)
+
+If you have any suggestions, just [open an issue](https://github.com/kornilova-l/flamegraph-visualizer/issues)
+
+## Building from sources
+If only want to use plugin then you should simply install ready-to-use [jar](https://plugins.jetbrains.com/plugin/10305-flamegraph-profiler).
+
+Building plugin from sources might not be an easy task (because of google protobuf) if you have any problems please [open an issue](https://github.com/kornilova-l/flamegraph-visualizer/issues)
+
 Install [google protobuf](https://github.com/google/protobuf) version 3.5.1 and generate java files from .proto files. Script is [here](protobuf/README.md)
 
 Install [node.js](https://nodejs.org/en/) and link [js files](/visualization/README.md)
