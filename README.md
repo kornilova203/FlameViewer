@@ -123,7 +123,7 @@ If you have any suggestions, just [open an issue](https://github.com/kornilova-l
 ## Building from sources
 If only want to use plugin then you should simply install ready-to-use [jar](https://plugins.jetbrains.com/plugin/10305-flamegraph-profiler).
 
-Important: currently it is not possible to build project because I removed flight recorder parser from the repo. This will be fixed in couple of days.
+Important: currently it is not possible to build project because I removed flight recorder parser from the repo. I will fix it soon.
 
 Building plugin from sources might not be an easy task (because of google protobuf) if you have any problems please [open an issue](https://github.com/kornilova-l/flamegraph-visualizer/issues)
 
