@@ -3,7 +3,9 @@ package com.github.kornilova_l.flamegraph.plugin.server.trees
 import com.github.kornilova_l.flamegraph.plugin.PluginFileManager
 import com.github.kornilova_l.flamegraph.plugin.server.FilesUploaderTest
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree
+import com.github.kornilova_l.flamegraph.proto.TreesProtos.Trees
 import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase
+import junit.framework.Assert
 import org.jetbrains.ide.BuiltInServerManager
 import java.io.ByteArrayInputStream
 import java.io.File
@@ -32,8 +34,24 @@ class GetTreesTest : LightPlatformCodeInsightFixtureTestCase() {
         /* test method tree */
         bytes = sendRequestForMethodCallTraces(serFile.name, "ClassWithoutPackage", "fun1", "()void")
         assertNotNull(bytes)
-        TestHelper.compare(Tree.parseFrom(ByteArrayInputStream(bytes)).toString(),
-                File("$pathToDir/expected/ClassWithoutPackage-method.txt"))
+        Assert.assertEquals(File("$pathToDir/expected/ClassWithoutPackage-method.txt").readText(),
+                Tree.parseFrom(ByteArrayInputStream(bytes)).toString())
+    }
+
+    /**
+     * Upload ser file that contains class without package
+     * send request for method tree
+     */
+    fun testSerFileWithStrangeName() {
+        PluginFileManager.deleteAllUploadedFiles()
+        val serFile = File("$pathToDir/twoDots.and space.ser")
+        FilesUploaderTest.sendFile(serFile.name, serFile.readBytes())
+
+        /* test call tree */
+        val bytes = sendRequestForCallTree(serFile.name)
+        assertNotNull(bytes)
+        Assert.assertEquals(File("$pathToDir/expected/twoDots.and space.txt").readText(),
+                Trees.parseFrom(ByteArrayInputStream(bytes)).toString())
     }
 
     fun testGetPartOfTree() {
@@ -93,6 +111,17 @@ class GetTreesTest : LightPlatformCodeInsightFixtureTestCase() {
                 }
             }
             val url = URL(address.toString())
+            val connection = url.openConnection() as HttpURLConnection
+            connection.requestMethod = "GET"
+
+            return FilesUploaderTest.getResponse(connection)
+        }
+
+        fun sendRequestForCallTree(fileName: String): ByteArray {
+            val url = URL("http://localhost:${BuiltInServerManager.getInstance().port}" +
+                    "/flamegraph-profiler/trees/call-tree?" +
+                    "file=${fileName.replace(" ", "%20")}" +
+                    "&project=uploaded-files")
             val connection = url.openConnection() as HttpURLConnection
             connection.requestMethod = "GET"
 

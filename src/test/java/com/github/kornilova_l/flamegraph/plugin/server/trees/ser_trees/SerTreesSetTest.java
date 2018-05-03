@@ -46,21 +46,21 @@ public class SerTreesSetTest {
     }
 
     @Test
-    public void filterOutgoingTree() {
-        testOutgoingCallsFilter(TwoThreads.fileName, filter0, 0);
-        testOutgoingCallsFilter(TwoThreads.fileName, filter1, 1);
-        testOutgoingCallsFilter(TwoThreads.fileName, filter2, 2);
-        testOutgoingCallsFilter(TwoThreads.fileName, filter3, 3);
-        testOutgoingCallsFilter(TwoThreads.fileName, filter4, 4);
+    public void filterCallTraces() {
+        testCallTracesFilter(TwoThreads.fileName, filter0, 0);
+        testCallTracesFilter(TwoThreads.fileName, filter1, 1);
+        testCallTracesFilter(TwoThreads.fileName, filter2, 2);
+        testCallTracesFilter(TwoThreads.fileName, filter3, 3);
+        testCallTracesFilter(TwoThreads.fileName, filter4, 4);
     }
 
     @Test
-    public void filterIncomingTree() {
-        testIncomingCallsFilter(TwoThreads.fileName, filter0, 0);
-        testIncomingCallsFilter(TwoThreads.fileName, filter1, 1);
-        testIncomingCallsFilter(TwoThreads.fileName, filter2, 2);
-        testIncomingCallsFilter(TwoThreads.fileName, filter3, 3);
-        testIncomingCallsFilter(TwoThreads.fileName, filter4, 4);
+    public void filterBackTraces() {
+        testBackTracesFilter(TwoThreads.fileName, filter0, 0);
+        testBackTracesFilter(TwoThreads.fileName, filter1, 1);
+        testBackTracesFilter(TwoThreads.fileName, filter2, 2);
+        testBackTracesFilter(TwoThreads.fileName, filter3, 3);
+        testBackTracesFilter(TwoThreads.fileName, filter4, 4);
     }
 
     private void testCallTreeFilter(String fileName, Filter filter, int filterId) {
@@ -71,7 +71,7 @@ public class SerTreesSetTest {
                         "" + filterId + ".txt"));
     }
 
-    private void testOutgoingCallsFilter(String fileName, Filter filter, int filterId) {
+    private void testCallTracesFilter(String fileName, Filter filter, int filterId) {
         Tree tree = getTree(fileName, filter, TreeType.CALL_TRACES);
         String res = tree == null ? "" : tree.toString();
         TestHelper.compare(res,
@@ -79,7 +79,7 @@ public class SerTreesSetTest {
                         "" + filterId + ".txt"));
     }
 
-    private void testIncomingCallsFilter(String fileName, Filter filter, int filterId) {
+    private void testBackTracesFilter(String fileName, Filter filter, int filterId) {
         Tree tree = getTree(fileName, filter, TreeType.BACK_TRACES);
         String res = tree == null ? "" : tree.toString();
         TestHelper.compare(res,
@@ -95,7 +95,7 @@ public class SerTreesSetTest {
 
     private void callTreeTest(String fileName) {
         Trees callTree = getCallTree(fileName, null);
-        assertTrue(callTree != null);
+        assertNotNull(callTree);
 
         StringBuilder actual = new StringBuilder();
         for (Tree tree : callTree.getTreesList()) {
