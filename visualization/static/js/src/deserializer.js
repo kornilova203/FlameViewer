@@ -1,6 +1,6 @@
-const TreeProto = require('../generated/tree_pb');
-const TreesProto = require('../generated/trees_pb');
-const TreesPreviewProtos = require('../generated/trees_preview_pb');
+const TreeProto = require('../generated/tree');
+const TreesProto = require('../generated/trees');
+const TreesPreviewProtos = require('../generated/treespreview');
 
 
 module.exports.deserializeTree = function (byteArray) {

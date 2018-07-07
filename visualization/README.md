@@ -29,6 +29,4 @@ npm run watch-trees-preview
 java -jar visualization/node_modules/google-closure-templates/javascript/SoyToJsSrcCompiler.jar \
     --outputPathFormat visualization/static/js/generated/tree-templates.js \
     --srcs visualization/static/tree-templates.soy 
-    
-cp -r static/* /home/lk/.flamegraph-profiler/static
 ```

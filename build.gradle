@@ -1,7 +1,8 @@
 buildscript {
-    ext.kotlin_version = '1.2.40'
+    ext.kotlin_version = '1.2.51'
     repositories {
         jcenter()
+        mavenCentral()
         maven {
             url "https://plugins.gradle.org/m2/"
         }
@@ -12,22 +13,28 @@ buildscript {
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "me.champeau.gradle:jmh-gradle-plugin:0.3.1"
+        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.6'
     }
 }
 
 plugins {
-    id "org.jetbrains.intellij" version "0.1.10"
+    id 'org.jetbrains.intellij' version '0.1.10'
+    id 'me.champeau.gradle.jmh' version '0.3.1'
+    id 'com.google.protobuf' version '0.8.6'
 }
-
-apply plugin: 'org.jetbrains.intellij'
-apply plugin: "idea"
-apply plugin: 'me.champeau.gradle.jmh'
 
 allprojects {
     apply plugin: 'java'
     apply plugin: 'kotlin'
     group = 'com.gitgub.kornilova_l'
     version = '0.8'
+}
+
+subprojects { subproject ->
+    if (subproject.name == 'protobuf') {
+        apply plugin: 'com.google.protobuf'
+        apply plugin: 'idea'
+    }
 }
 
 repositories {
@@ -38,7 +45,6 @@ configurations {
     intellij.updateSinceUntilBuild = false
     intellij.downloadSources = false
     intellij.pluginName = "FlamegraphProfiler"
-    intellij.version = "2017.3.3"
 }
 
 dependencies {
@@ -51,8 +57,7 @@ dependencies {
     testCompile project('agent')
 }
 
-
-task copyStatic(type: Copy) {
+task copyStatic(type: Copy, dependsOn: ':protobuf:copyJSProto') {
     from 'visualization/static'
     into 'build/classes/main/static'
     doLast {
@@ -66,11 +71,8 @@ task copyAgent(type: Copy) {
     into 'build/classes/main'
 }
 
-task('prepareAndRunIde', dependsOn: [copyStatic, build, jar]) {
-    doLast {
-        runIdea.execute()
-    }
-}
+task compilePlugin (dependsOn: [':agent:agentJar', ':agent:proxyJar', copyAgent, copyStatic]) {}
+
 compileKotlin {
     kotlinOptions {
         jvmTarget = "1.8"
