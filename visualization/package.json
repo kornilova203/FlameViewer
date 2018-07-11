@@ -4,9 +4,9 @@
   "description": "flamegraph",
   "main": "index.html",
   "scripts": {
-    "watch-accumulative-trees": "watchify static/js/src/accumulative-trees.js -o static/js/out/accumulative-trees.js -dv",
-    "watch-trees-preview": "watchify static/js/src/trees-preview.js -o static/js/out/trees-preview.js -dv",
-    "watch-call-tree": "watchify static/js/src/call-tree.js -o static/js/out/call-tree.js -dv"
+    "browserify-accumulative-trees": "browserify static/js/src/accumulative-trees.js -o static/js/out/accumulative-trees.js -dv",
+    "browserify-trees-preview": "browserify static/js/src/trees-preview.js -o static/js/out/trees-preview.js -dv",
+    "browserify-call-tree": "browserify static/js/src/call-tree.js -o static/js/out/call-tree.js -dv"
   },
   "author": "Liudmila Kornilova",
   "license": "ISC",
@@ -15,7 +15,7 @@
     "google-protobuf": "3.5.0"
   },
   "devDependencies": {
-    "watchify": "latest",
+    "browserify": "latest",
     "google-closure-templates": "20150410.0.0"
   }
 }

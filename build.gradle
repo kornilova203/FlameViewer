@@ -9,18 +9,25 @@ buildscript {
         maven {
             url 'http://dl.bintray.com/jetbrains/intellij-plugin-service'
         }
+        maven {
+            url 'https://repository-cdn.liferay.com/nexus/content/groups/public'
+        }
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "me.champeau.gradle:jmh-gradle-plugin:0.3.1"
         classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.6'
+        classpath 'com.moowork.gradle:gradle-node-plugin:1.2.0'
+        classpath 'com.liferay:com.liferay.gradle.plugins.soy:3.1.6'
     }
 }
 
 plugins {
     id 'org.jetbrains.intellij' version '0.1.10'
     id 'me.champeau.gradle.jmh' version '0.3.1'
-    id 'com.google.protobuf' version '0.8.6'
+    id 'com.google.protobuf' version '0.8.6' apply false
+    id 'com.moowork.node' version '1.2.0'
+    id 'com.liferay.soy' version '3.1.6'
 }
 
 allprojects {
@@ -57,7 +64,38 @@ dependencies {
     testCompile project('agent')
 }
 
-task copyStatic(type: Copy, dependsOn: ':protobuf:copyJSProto') {
+node {
+    version = '10.6.0'
+    npmVersion = '6.1.0'
+    download = true
+    nodeModulesDir = file('visualization')
+}
+
+def npmRun(String command) {
+    return tasks.create(command, NpmTask) {
+        args = ['run', command]
+        dependsOn ':protobuf:copyJSProto'
+    }
+}
+
+task browserify(dependsOn: [npmRun('browserify-accumulative-trees'),
+                            npmRun('browserify-trees-preview'),
+                            npmRun('browserify-call-tree')]) {
+}
+
+browserify.dependsOn npmInstall
+
+buildSoy {
+    source 'visualization/static/tree-templates.soy'
+}
+
+task moveGeneratedTemplates(dependsOn: buildSoy) {
+    doLast {
+        file('visualization/static/tree-templates.soy.js').renameTo(file('visualization/static/js/generated/tree-templates.js'))
+    }
+}
+
+task copyStatic(type: Copy, dependsOn: [browserify, moveGeneratedTemplates]) {
     from 'visualization/static'
     into 'build/classes/main/static'
     doLast {
@@ -71,7 +109,7 @@ task copyAgent(type: Copy) {
     into 'build/classes/main'
 }
 
-task compilePlugin (dependsOn: [':agent:agentJar', ':agent:proxyJar', copyAgent, copyStatic]) {}
+task compilePlugin(dependsOn: [':agent:agentJar', ':agent:proxyJar', copyAgent, copyStatic]) {}
 
 compileKotlin {
     kotlinOptions {
