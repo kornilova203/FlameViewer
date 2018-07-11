@@ -1,14 +1,61 @@
-apply plugin: 'java'
-
 dependencies {
     compile fileTree(dir: 'libs', include: ['protobuf-java-kornilova-l-3.5.1.jar'])
 }
 
-sourceSets.main.java.srcDir new File('src/main/gen')
+repositories {
+    repositories {
+        mavenCentral()
+    }
+}
 
+protobuf {
+    protoc {
+        artifact = 'com.google.protobuf:protoc:3.5.1'
+    }
+
+    generatedFilesBaseDir = "$projectDir/generated"
+
+    generateProtoTasks {
+        all().each { task ->
+            task.builtins {
+                java {}
+                js {
+                    option 'import_style=commonjs'
+                    option 'binary'
+                }
+            }
+            if (task.name == 'generateProto') {
+                copyJSProto.dependsOn task
+                renameProtobufPackage.dependsOn task
+            }
+        }
+    }
+}
+
+sourceSets.main.java.srcDir new File(protobuf.generatedFilesBaseDir + '/main/java')
 idea {
     module {
-        // Marks the already(!) added srcDir as "generated"
-        generatedSourceDirs += file('src/main/gen')
+        generatedSourceDirs += file(protobuf.generatedFilesBaseDir + '/main/java')
     }
+}
+
+/**
+ * Rename imports in generated java sources
+ * from com.google.protobuf
+ * to com.github.kornilova_l.libs.com.google.protobuf
+ */
+task renameProtobufPackage { // depends on generateProto task (dependency is set above)
+    doLast {
+        ant.replaceregexp(match: '(?<!com\\.github\\.kornilova_l\\.libs\\.)com\\.google\\.protobuf',
+                replace: 'com.github.kornilova_l.libs.com.google.protobuf', flags: 'g', byline: true) {
+            fileset(dir: protobuf.generatedFilesBaseDir + '/main/java')
+        }
+    }
+}
+
+compileKotlin.dependsOn renameProtobufPackage
+
+task copyJSProto(type: Copy, dependsOn: renameProtobufPackage) {
+    from protobuf.generatedFilesBaseDir + '/main/js'
+    into '../visualization/static/js/generated'
 }

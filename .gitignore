@@ -7,3 +7,4 @@ visualization/node_modules/
 /.idea/
 /protobuf/src/main/gen/*
 /visualization/static/js/generated/*
+protobuf/generated/main/
