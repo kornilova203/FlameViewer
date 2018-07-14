@@ -42,7 +42,7 @@ object PluginFileManager {
     val logDirPath: Path // for tests
     private val uploadedFilesDir: File
     private val configDirPath: Path
-    private val staticDirPath: Path
+    private val staticDirPath: Path?
 
     init {
         val systemDirPath = PathManager.getSystemPath()
@@ -54,7 +54,14 @@ object PluginFileManager {
         configDirPath = Paths.get(pluginDir.toString(), CONFIG_DIR_NAME)
         createDirIfNotExist(configDirPath)
         try {
-            staticDirPath = Paths.get(javaClass.getResource("/" + STATIC_DIR_NAME).toURI())
+            val staticDirUrl = javaClass.getResource("/" + STATIC_DIR_NAME)
+            if (staticDirUrl != null) {
+                staticDirPath = Paths.get(staticDirUrl.toURI())
+            } else {
+                /* happens when tests are run from IDE */
+                staticDirPath = null
+                LOG.warn("$pleaseReportIssue: Cannot find static dir. javaClass.getResource returned null")
+            }
         } catch (e: URISyntaxException) {
             throw AssertionError("$pleaseReportIssue: Cannot find static dir: ${javaClass.getResource("/" + STATIC_DIR_NAME)}", e)
         }

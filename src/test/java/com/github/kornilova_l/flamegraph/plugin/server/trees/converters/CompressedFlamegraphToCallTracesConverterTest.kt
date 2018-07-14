@@ -73,26 +73,49 @@ M4D4w5d2
 M5w5d1
 """
 
+private const val stacktracesAreNotMerged = """
+--M-- 3
+a 0
+b 1
+c 2
+
+M0w100d1
+M1w10d2
+M2w5d3
+M1w5d2
+M0w100d1
+M1w10d2
+"""
+
 class CompressedFlamegraphToCallTracesConverterTest : LightPlatformCodeInsightFixtureTestCase() {
+
+    private val pathToFolder = "src/test/resources/com/github/kornilova_l/flamegraph/plugin/server/trees/converters"
 
     fun testSimpleFile() {
         doTest("simpleFile.cflamegraph",
                 simpleFileContent.toByteArray(),
-                File("src/test/resources/com/github/kornilova_l/flamegraph/plugin/server/trees/converters/simple-cflamegraph-result.txt")
+                File("$pathToFolder/simple-cflamegraph-result.txt")
         )
     }
 
     fun testFileWithParameters() {
         doTest("fileWithParameters.cflamegraph",
                 fileWithParameters.toByteArray(),
-                File("src/test/resources/com/github/kornilova_l/flamegraph/plugin/server/trees/converters/with-parameters-cflamegraph-result.txt")
+                File("$pathToFolder/with-parameters-cflamegraph-result.txt")
         )
     }
 
     fun testFileWithMixedContent() {
         doTest("fileWithMixedContent.cflamegraph",
                 mixedContent.toByteArray(),
-                File("src/test/resources/com/github/kornilova_l/flamegraph/plugin/server/trees/converters/mixed-content-cflamegraph-result.txt")
+                File("$pathToFolder/mixed-content-cflamegraph-result.txt")
+        )
+    }
+
+    fun testFileWhereStacktracesAreNotMerged() {
+        doTest("fileWhereStacktracesAreNotMerged.cflamegraph",
+                stacktracesAreNotMerged.toByteArray(),
+                File("$pathToFolder/stacktraces-are-not-merged-result.txt")
         )
     }
 
