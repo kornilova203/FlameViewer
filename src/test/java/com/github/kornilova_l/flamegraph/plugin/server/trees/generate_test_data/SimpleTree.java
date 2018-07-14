@@ -1,5 +1,6 @@
 package com.github.kornilova_l.flamegraph.plugin.server.trees.generate_test_data;
 
+import com.github.kornilova_l.flamegraph.javaagent.logger.LoggerQueue;
 import com.github.kornilova_l.flamegraph.proxy.StartData;
 
 /**
@@ -18,49 +19,51 @@ public class SimpleTree implements Runnable {
         fun4();
         fun5();
         startData.setDuration(195);
-//        if (startData.getDuration() > 1) {
-//            LoggerQueue.addToQueue(null,
-//                    startData.getStartTime(),
-//                    startData.getDuration(),
-//                    startData.getParameters(),
-//                    Thread.currentThread(),
-//                    "com/github/kornilova_l/flamegraph/plugin/server/trees/generate_test_data/SimpleTree",
-//                    "run",
-//                    "()V",
-//                    false);
-//        }
+        if (startData.getDuration() > 1) {
+            LoggerQueue.addToQueue(null,
+                    startData.getStartTime(),
+                    startData.getDuration(),
+                    startData.getParameters(),
+                    Thread.currentThread(),
+                    "com/github/kornilova_l/flamegraph/plugin/server/trees/generate_test_data/SimpleTree",
+                    "run",
+                    "()V",
+                    false,
+                    "");
+        }
     }
 
     private void fun5() {
         StartData startData = new StartData(190, null);
         startData.setDuration(195);
-//        if (startData.getDuration() > 1) {
-//            LoggerQueue.addToQueue(null,
-//                    startData.getStartTime(),
-//                    startData.getDuration(),
-//                    startData.getParameters(),
-//                    Thread.currentThread(),
-//                    "com/github/kornilova_l/flamegraph/plugin/server/trees/generate_test_data/SimpleTree",
-//                    "fun5",
-//                    "()V",
-//                    false);
-//        }
+        if (startData.getDuration() > 1) {
+            LoggerQueue.addToQueue(null,
+                    startData.getStartTime(),
+                    startData.getDuration(),
+                    startData.getParameters(),
+                    Thread.currentThread(),
+                    "com/github/kornilova_l/flamegraph/plugin/server/trees/generate_test_data/SimpleTree",
+                    "fun5",
+                    "()V",
+                    false,
+                    "");
+        }
     }
 
     private void fun4() {
         StartData startData = new StartData(160, null);
         startData.setDuration(165);
-//        if (startData.getDuration() > 1) {
-//            LoggerQueue.addToQueue(null,
-//                    startData.getStartTime(),
-//                    startData.getDuration(),
-//                    startData.getParameters(),
-//                    Thread.currentThread(),
-//                    "com/github/kornilova_l/flamegraph/plugin/server/trees/generate_test_data/SimpleTree",
-//                    "fun4",
-//                    "()V",
-//                    false);
-//        }
+        if (startData.getDuration() > 1) {
+            LoggerQueue.addToQueue(null,
+                    startData.getStartTime(),
+                    startData.getDuration(),
+                    startData.getParameters(),
+                    Thread.currentThread(),
+                    "com/github/kornilova_l/flamegraph/plugin/server/trees/generate_test_data/SimpleTree",
+                    "fun4",
+                    "()V",
+                    false, "");
+        }
     }
 
     private void fun1() {
@@ -68,48 +71,51 @@ public class SimpleTree implements Runnable {
         fun2();
         fun3();
         startData.setDuration(135);
-//        if (startData.getDuration() > 1) {
-//            LoggerQueue.addToQueue(null,
-//                    startData.getStartTime(),
-//                    startData.getDuration(),
-//                    startData.getParameters(),
-//                    Thread.currentThread(),
-//                    "com/github/kornilova_l/flamegraph/plugin/server/trees/generate_test_data/SimpleTree",
-//                    "fun1",
-//                    "()V",
-//                    false);
-//        }
+        if (startData.getDuration() > 1) {
+            LoggerQueue.addToQueue(null,
+                    startData.getStartTime(),
+                    startData.getDuration(),
+                    startData.getParameters(),
+                    Thread.currentThread(),
+                    "com/github/kornilova_l/flamegraph/plugin/server/trees/generate_test_data/SimpleTree",
+                    "fun1",
+                    "()V",
+                    false,
+                    "");
+        }
     }
 
     private void fun2() {
         StartData startData = new StartData(100, null);
         startData.setDuration(105);
-//        if (startData.getDuration() > 1) {
-//            LoggerQueue.addToQueue(null,
-//                    startData.getStartTime(),
-//                    startData.getDuration(),
-//                    startData.getParameters(),
-//                    Thread.currentThread(),
-//                    "com/github/kornilova_l/flamegraph/plugin/server/trees/generate_test_data/SimpleTree",
-//                    "fun2",
-//                    "()V",
-//                    false);
-//        }
+        if (startData.getDuration() > 1) {
+            LoggerQueue.addToQueue(null,
+                    startData.getStartTime(),
+                    startData.getDuration(),
+                    startData.getParameters(),
+                    Thread.currentThread(),
+                    "com/github/kornilova_l/flamegraph/plugin/server/trees/generate_test_data/SimpleTree",
+                    "fun2",
+                    "()V",
+                    false,
+                    "");
+        }
     }
 
     private void fun3() {
         StartData startData = new StartData(120, null);
         startData.setDuration(125);
-//        if (startData.getDuration() > 1) {
-//            LoggerQueue.addToQueue(null,
-//                    startData.getStartTime(),
-//                    startData.getDuration(),
-//                    startData.getParameters(),
-//                    Thread.currentThread(),
-//                    "com/github/kornilova_l/flamegraph/plugin/server/trees/generate_test_data/SimpleTree",
-//                    "fun3",
-//                    "()V",
-//                    false);
-//        }
+        if (startData.getDuration() > 1) {
+            LoggerQueue.addToQueue(null,
+                    startData.getStartTime(),
+                    startData.getDuration(),
+                    startData.getParameters(),
+                    Thread.currentThread(),
+                    "com/github/kornilova_l/flamegraph/plugin/server/trees/generate_test_data/SimpleTree",
+                    "fun3",
+                    "()V",
+                    false,
+                    "");
+        }
     }
 }

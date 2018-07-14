@@ -25,8 +25,14 @@ public class SerTreesSetTest {
     private Filter filter4 = new Filter("*fun4", null);
     private Filter filter5 = new Filter("*fun5", null);
 
+    /**
+     * Generates ser file for given Runnable using Logger.
+     * Runnable should have code that would be inserted by Java agent.
+     *
+     * It is possible to run it before executing test but generation must be done in
+     * separate process.
+     */
     public static void main(String[] args) {
-//        generateSerFile(new SimpleTree(), SimpleTree.fileName);
         generateSerFile(new TwoThreads(), TwoThreads.fileName);
     }
 
@@ -107,13 +113,13 @@ public class SerTreesSetTest {
 
     private Trees getCallTree(String fileName, @Nullable Filter filter) {
         SerTreesSet treesSet = new SerTreesSet(
-                new File("src/test/resources/out/" + fileName + ".ser"));
+                new File("src/test/resources/generated/" + fileName + ".ser"));
         return treesSet.getCallTree(filter);
     }
 
     private Tree getTree(String fileName, @Nullable Filter filter, TreeType treeType) {
         SerTreesSet treesSet = new SerTreesSet(
-                new File("src/test/resources/out/" + fileName + ".ser"));
+                new File("src/test/resources/generated/" + fileName + ".ser"));
         return treesSet.getTree(treeType, filter);
     }
 
@@ -125,7 +131,7 @@ public class SerTreesSetTest {
 
     private void testTreesPreview(String fileName) {
         SerTreesSet treesSet = new SerTreesSet(
-                new File("src/test/resources/out/" + fileName + ".ser"));
+                new File("src/test/resources/generated/" + fileName + ".ser"));
         TreesPreview treesPreview = treesSet.getTreesPreview(null);
         assertNotNull(treesPreview);
         TestHelper.compare(treesPreview.toString(),

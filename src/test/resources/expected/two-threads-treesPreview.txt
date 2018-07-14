@@ -1,6 +1,6 @@
 trees_preview {
   tree_info {
-    thread_name: "Thread-1"
+    thread_name: "Thread-0"
   }
   depth: 3
   width: 65
@@ -53,7 +53,7 @@ trees_preview {
 trees_preview {
   tree_info {
     start_time: 15
-    thread_name: "Thread-2"
+    thread_name: "Thread-1"
   }
   depth: 3
   width: 65

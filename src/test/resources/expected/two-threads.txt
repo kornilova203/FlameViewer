@@ -1,5 +1,5 @@
 tree_info {
-  thread_name: "Thread-1"
+  thread_name: "Thread-0"
   nodes_count: 5
 }
 base_node {
@@ -62,7 +62,7 @@ depth: 3
 width: 65
 tree_info {
   start_time: 15
-  thread_name: "Thread-2"
+  thread_name: "Thread-1"
   nodes_count: 5
 }
 base_node {
