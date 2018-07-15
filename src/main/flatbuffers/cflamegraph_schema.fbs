@@ -1,0 +1,22 @@
+namespace com.github.kornilova_l.flamegraph.cflamegraph;
+
+table Names {
+  class_names:[string];
+  method_names:[string];
+  descriptions:[string];
+}
+
+struct Node {
+  class_name_id:int; // -1 if class name is not set
+  method_name_id:int;
+  description_id:int; // -1 if description is not set
+  width:int;
+  depth:int;
+}
+
+table Tree {
+  names:Names;
+  nodes:[Node];
+}
+
+root_type Tree;
