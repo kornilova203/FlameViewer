@@ -123,8 +123,6 @@ If you have any suggestions, just [open an issue](https://github.com/kornilova-l
 ## Building from sources
 If only want to use plugin then you should simply install ready-to-use [jar](https://plugins.jetbrains.com/plugin/10305-flamegraph-profiler).
 
-Install [node.js](https://nodejs.org/en/) and link [js files](/visualization/README.md)
-
 Windows:
 ```
 gradlew compilePlugin
