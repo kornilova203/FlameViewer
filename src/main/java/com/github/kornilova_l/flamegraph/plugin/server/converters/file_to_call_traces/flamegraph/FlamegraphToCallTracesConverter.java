@@ -12,6 +12,15 @@ import static com.github.kornilova_l.flamegraph.plugin.server.converters.file_to
 import static com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_traces.flamegraph.StacksParser.isFlamegraph;
 import static com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file.jmc.JMCConverter.getBytes;
 
+/**
+ * Converts file in flamegraph format to call traces.
+ *
+ * This format does not allow unmerged stacktraces.
+ * So if a file has following content:
+ * a() 5
+ * a() 5
+ * Second line will be ignored.
+ */
 public class FlamegraphToCallTracesConverter extends FileToCallTracesConverter {
     private Logger LOG = Logger.getInstance(FlamegraphToCallTracesConverter.class);
 

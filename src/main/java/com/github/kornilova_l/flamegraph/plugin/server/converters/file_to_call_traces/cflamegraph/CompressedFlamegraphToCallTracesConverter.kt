@@ -64,7 +64,9 @@ import java.io.File
  * a 50
  * f 5
  *
- * In cflamegraph files strings are not duplicated and equal parts of stacktraces are also not duplicated
+ * In cflamegraph files strings are not duplicated and equal parts of stacktraces are also not duplicated.
+ *
+ * Converter merges unmerged stacktraces.
  */
 class CompressedFlamegraphToCallTracesConverter : FileToCallTracesConverter() {
     private val extension = "cflamegraph"
