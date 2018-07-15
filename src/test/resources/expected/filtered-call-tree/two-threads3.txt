@@ -1,6 +1,6 @@
 trees {
   tree_info {
-    thread_name: "Thread-1"
+    thread_name: "Thread-0"
     nodes_count: 4
   }
   base_node {
@@ -53,7 +53,7 @@ trees {
 trees {
   tree_info {
     start_time: 15
-    thread_name: "Thread-2"
+    thread_name: "Thread-1"
     nodes_count: 4
   }
   base_node {

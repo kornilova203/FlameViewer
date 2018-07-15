@@ -1,8 +1,8 @@
 package com.github.kornilova_l.flamegraph.plugin.server.trees.generate_test_data;
 
-import com.github.kornilova_l.flamegraph.javaagent.AgentFileManager;
 import com.github.kornilova_l.flamegraph.javaagent.logger.Logger;
 import com.github.kornilova_l.flamegraph.javaagent.logger.LoggerQueue;
+import com.github.kornilova_l.flamegraph.javaagent.logger.WaitingLoggingToFinish;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,29 +14,22 @@ import java.util.Comparator;
 import java.util.Optional;
 
 public class TestHelper {
-    private static Path path = Paths.get("src", "test", "resources", "out");
+    private static Path path = Paths.get("src", "test", "resources", "generated");
 
     public static void generateSerFile(Runnable runnable, String fileName) {
-//        LoggerQueue.initLoggerQueue();
-//        Logger logger = new Logger();
-//
-//        startLogger(logger);
-//
-//        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-//            logger.finish();
-//            File file = getLatestFile();
-//            TestHelper.renameFile(file, fileName + ".ser");
-//        }));
-//
-//        runnable.run();
+        LoggerQueue.initLoggerQueue();
+        Logger logger = new Logger(Paths.get(path.toString(), fileName + ".ser").toFile());
 
+        startLogger(logger);
+
+        runnable.run();
     }
 
     private static void startLogger(Logger logger) {
         Thread loggerThread = new Thread(logger, "logging thread");
         loggerThread.setDaemon(true);
         loggerThread.start();
-        System.out.println("new thread " + loggerThread.getId());
+        Runtime.getRuntime().addShutdownHook(new WaitingLoggingToFinish("shutdown-hook", logger));
     }
 
     private static File getLatestFile() {

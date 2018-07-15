@@ -34,23 +34,23 @@ import java.io.File
  * |b()____|e|_______ _
  * |Class.a__________|f|
  *
- * C 1
+ * --C-- 1
  * Class 0
- * M 6
+ * --M-- 6
  * a 0
  * b 1
  * c 2
  * d 3
  * e 4
  * f 5
- * D 1
+ * --D-- 1
  * () 0
- * C=0 M=0 w=100 d=1
- * M=1 w=40 d=2
- * M=2 w=5 d=3
- * M=3 w=5 d=3
- * M=4 w=5 d=2
- * M=5 w=5 d=1
+ * C0M0w100d1
+ * M1w40d2
+ * M2w5d3
+ * M3w5d3
+ * M4w5d2
+ * M5w5d1
  *
  * As you can see order of lines matters
  * because if a call has bigger depth than previous it means that
@@ -67,22 +67,16 @@ import java.io.File
  * In cflamegraph files strings are not duplicated and equal parts of stacktraces are also not duplicated
  */
 class CompressedFlamegraphToCallTracesConverter : FileToCallTracesConverter() {
-    val extension = "cflamegraph"
+    private val extension = "cflamegraph"
 
     override fun getId(): String = extension
 
     /**
-     * Each line must contain non-space characters and two numbers.
-     * I do not use patterns here because they are slow
+     * Simply checks extension.
+     * There is not need to validate the file because cflamegraph format is known only by the plugin.
      */
     override fun isSupported(file: File): Boolean {
-        if (ProfilerToFlamegraphConverter.getFileExtension(file.name) != extension) {
-            return false
-        }
-        /* since nobody knows about this format only my plugin will generate cflamegraph files
-         * so there is no need to validate cflamegraph files
-         * (there is also another very important reason for this: I am hungry) */
-        return true
+        return ProfilerToFlamegraphConverter.getFileExtension(file.name) == extension
     }
 
     override fun convert(file: File): Tree = Converter(file).tree

@@ -5,7 +5,7 @@ import org.junit.Test;
 import java.io.File;
 
 public class LoggerTest {
-    private static final File logDir = new File("src/test/out");
+    private static final File logDir = new File("src/test/generated");
 
     @Test
     public void addToQueue() throws Exception {
