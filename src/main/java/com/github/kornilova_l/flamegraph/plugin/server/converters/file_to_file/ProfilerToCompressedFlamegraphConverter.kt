@@ -1,65 +1,67 @@
 package com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file
 
+import com.github.kornilova_l.flamegraph.cflamegraph.Names
+import com.github.kornilova_l.flamegraph.cflamegraph.Node
+import com.github.kornilova_l.flamegraph.cflamegraph.Tree
 import com.github.kornilova_l.flamegraph.plugin.server.FileToFileConverterFileSaver
+import com.google.flatbuffers.FlatBufferBuilder
 import com.intellij.openapi.extensions.ExtensionPointName
-import java.io.BufferedWriter
 import java.io.File
-import java.io.FileWriter
+import java.io.FileOutputStream
 
 
 class CompressedFlamegraphFileSaver : FileToFileConverterFileSaver() {
     override val extension = ProfilerToCompressedFlamegraphConverter.cFlamegraphExtension
 
     override fun tryToConvert(file: File): Boolean {
-        val cFlamegraph = ProfilerToCompressedFlamegraphConverter.convert(file)
-        if (cFlamegraph != null) {
-            BufferedWriter(FileWriter(file)).use { writer ->
-                writeMap(cFlamegraph.classNames, writer, 'C')
-                writeMap(cFlamegraph.methodNames, writer, 'M')
-                writeMap(cFlamegraph.descriptions, writer, 'D')
-                for (line in cFlamegraph.lines) {
-                    if (line.classNameId != null) {
-                        writer.write("C")
-                        writer.write(line.classNameId.toString())
-                    }
-                    writer.write("M")
-                    writer.write(line.methodNameId.toString())
-                    if (line.descId != null) {
-                        writer.write("D")
-                        writer.write(line.descId.toString())
-                    }
-                    writer.write("d")
-                    writer.write(line.depth.toString())
-                    writer.write("w")
-                    writer.write(line.width.toString())
-                    writer.write("\n")
-                }
-            }
-            return true
-        }
-        return false
-    }
+        val cFlamegraph = ProfilerToCompressedFlamegraphConverter.convert(file) ?: return false
+        val builder = FlatBufferBuilder(1024)
 
-    private fun writeMap(map: Map<String, Int>, writer: BufferedWriter, letter: Char) {
-        if (map.isNotEmpty()) {
-            writer.write("--$letter-- ${map.size}\n")
-            for (entry in map.entries) {
-                writer.write(entry.key)
-                writer.write(" ")
-                writer.write(entry.value.toString())
-                writer.write("\n")
-            }
+        val classNamesOffsets = IntArray(cFlamegraph.classNames.size)
+        for (i in 0 until cFlamegraph.classNames.size) {
+            classNamesOffsets[i] = builder.createString(cFlamegraph.classNames[i])
         }
+        val classNames = Names.createClassNamesVector(builder, classNamesOffsets)
+
+        val methodNamesOffsets = IntArray(cFlamegraph.methodNames.size)
+        for (i in 0 until cFlamegraph.methodNames.size) {
+            methodNamesOffsets[i] = builder.createString(cFlamegraph.methodNames[i])
+        }
+        val methodNames = Names.createMethodNamesVector(builder, methodNamesOffsets)
+
+        val descriptionsOffsets = IntArray(cFlamegraph.descriptions.size)
+        for (i in 0 until cFlamegraph.descriptions.size) {
+            descriptionsOffsets[i] = builder.createString(cFlamegraph.descriptions[i])
+        }
+        val descriptions = Names.createDescriptionsVector(builder, descriptionsOffsets)
+
+        val names = Names.createNames(builder, classNames, methodNames, descriptions)
+
+        Tree.startNodesVector(builder, cFlamegraph.lines.size)
+        for (i in cFlamegraph.lines.size - 1 downTo 0) {
+            val line = cFlamegraph.lines[i]
+            Node.createNode(builder, line.classNameId ?: -1, line.methodNameId,
+                    line.descId ?: -1, line.width, line.depth)
+        }
+        val nodes = builder.endVector()
+
+        val tree = Tree.createTree(builder, names, nodes)
+
+        builder.finish(tree)
+        FileOutputStream(file).write(builder.sizedByteArray())
+
+        return true
     }
 }
 
+@Suppress("ArrayInDataClass") // Instances of the class will not be compared
 data class CFlamegraph(val lines: List<CFlamegraphLine>,
-                       val classNames: Map<String, Int>,
-                       val methodNames: Map<String, Int>,
-                       val descriptions: Map<String, Int>)
+                       val classNames: Array<String>, // a "map" from id to class name
+                       val methodNames: Array<String>, // a "map" from id to method name
+                       val descriptions: Array<String>) // a "map" from id to description
 
 
-data class CFlamegraphLine(val classNameId: Int?, val methodNameId: Int, val descId: Int?, val width: Long, val depth: Int)
+data class CFlamegraphLine(val classNameId: Int?, val methodNameId: Int, val descId: Int?, val width: Int, val depth: Int)
 
 abstract class ProfilerToCompressedFlamegraphConverter {
     companion object {

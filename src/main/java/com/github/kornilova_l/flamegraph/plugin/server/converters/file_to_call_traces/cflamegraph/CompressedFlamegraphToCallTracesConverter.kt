@@ -13,17 +13,17 @@ import java.io.File
  * It uses FlatBuffers for data serialization and does not duplicate
  * class names, method names and descriptions.
  *
- * See scheme in /src/main/flatbuffers/cflamegraph_schema.fbs
+ * See schema in /src/main/flatbuffers/cflamegraph_schema.fbs
  *
  * Example:
  * ._ _
- * |c|d|___ _
- * |b()____|e|_______ _
- * |Class.a__________|f|
+ * |c|d|____ _
+ * |void b()|e|_______ _
+ * |Class.a___________|f|
  *
  * In original flamegraph format this example would look like this:
  * a;b();c 5
- * a;b();d 5
+ * a;void b();d 5
  * a;b() 10
  * a;e 5
  * a 50
@@ -33,7 +33,7 @@ import java.io.File
  * Names: {
  *   classNames: ["Class"],
  *   methodNames: ["a", "b", "c", "d", "e", "f"],
- *   descriptions: ["()"]
+ *   descriptions: ["()void"]
  * }
  * Tree: {
  *   nodes: [
