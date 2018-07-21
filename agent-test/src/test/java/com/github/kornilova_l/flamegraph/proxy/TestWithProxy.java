@@ -130,7 +130,7 @@ public class TestWithProxy {
         try (InputStream inputStream = new FileInputStream(outputFile)) {
             assertNewClass(inputStream, "com/github/kornilova_l/proxy_test_classes/ReturnsValue");
 
-            assertNewThread(inputStream, "main");
+            assertNewThread(inputStream, "Test worker");
 
             assertMethodEvent(inputStream, "(JLjava/lang/String;D)I", false);
 

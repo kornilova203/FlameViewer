@@ -71,6 +71,10 @@ node {
     nodeModulesDir = file('visualization')
 }
 
+test {
+    maxHeapSize = "2G" // for com.github.kornilova_l.flamegraph.plugin.server.FilesUploaderTest.testUploadBigFiles
+}
+
 def npmRun(String command) {
     return tasks.create(command, NpmTask) {
         args = ['run', command]

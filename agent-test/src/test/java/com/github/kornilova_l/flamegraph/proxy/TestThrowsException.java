@@ -32,7 +32,7 @@ public class TestThrowsException {
         try (InputStream inputStream = new FileInputStream(outputFile)) {
             assertNewClass(inputStream, "com/github/kornilova_l/proxy_test_classes/ThrowsException");
 
-            assertNewThread(inputStream, "main");
+            assertNewThread(inputStream, "Test worker");
 
             assertMethodEvent(inputStream, "(JLjava/lang/String;D)I", true);
 
