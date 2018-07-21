@@ -118,8 +118,6 @@ task copyAgent(type: Copy, dependsOn: [':agent:agentJar', ':agent:proxyJar']) {
     into 'build/classes/main'
 }
 
-task compilePlugin(dependsOn: [copyAgent, copyStatic]) {}
-
 compileKotlin {
     kotlinOptions {
         jvmTarget = "1.8"
@@ -140,6 +138,8 @@ task compileFlatBuffers(type: FlatBuffers) {
     inputDir = file("src/main/flatbuffers")
     outputDir = file("src/gen/java")
 }
+
+task compilePlugin(dependsOn: [copyAgent, copyStatic, compileFlatBuffers]) {}
 
 sourceSets.main.java.srcDir file('src/gen/java')
 idea {

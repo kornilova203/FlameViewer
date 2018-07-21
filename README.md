@@ -17,7 +17,6 @@ https://plugins.jetbrains.com/plugin/10305-flamegraph-profiler
     * [Hot Spots](#hot-spots)    
     * [Call Tree](#call-tree)    
     * [Detailed View of Thread](#detailed-view-of-thread)
-* [Roadmap](#roadmap)
 * [Contribution](#contribution)
 * [Building from sources](#building-from-sources)
     
@@ -111,17 +110,29 @@ On this page you can see what was happening inside some thread. All method calls
 You can see popup with detailed information about method if you place the cursor on the method (also there are parameters and return value if they were saved).  
 ![](screenshots/thread.png)
 
-## Roadmap
-1. Start using [Cap'n Proto](https://capnproto.org/) instead of [Google Protobuf](https://github.com/google/protobuf) for client-server communications. This will speed up visualization and reduce memory consumption.
-2. Add subsecond-offset heatmap
-
 ## Contribution
 If you would like to contribute please ping me on telegram @lkornilova, there are plenty of tasks to do :)
 
-If you have any suggestions, just [open an issue](https://github.com/kornilova-l/flamegraph-visualizer/issues)
+If you have a suggestions or found a bug [open an issue]
 
 ## Building from sources
 If only want to use plugin then you should simply install ready-to-use [jar](https://plugins.jetbrains.com/plugin/10305-flamegraph-profiler).
+
+To build plugin from sources FlatBuffers compiler version 1.9.0 should be installed on the system.
+
+For information on building and installing the compiler please refer to the [FlatBuffers Documentation] or follow 
+the instructions:
+ * Ubuntu:
+     ```bash
+     $ git clone https://github.com/google/flatbuffers.git
+     $ cd flatbuffers
+     $ git checkout tags/v1.9.0
+     $ mkdir target
+     $ cd target
+     $ cmake .. -G "Unix Makefiles"
+     $ make
+     $ sudo mv flatc /usr/local/bin/
+     ```
 
 Windows:
 ```
@@ -134,3 +145,6 @@ Linux:
 ./gradlew compilePlugin
 ./gradlew runIdea
 ```
+
+ [FlatBuffers Documentation]: https://google.github.io/flatbuffers/flatbuffers_guide_building.html
+ [open an issue]: https://github.com/kornilova-l/flamegraph-visualizer/issues
