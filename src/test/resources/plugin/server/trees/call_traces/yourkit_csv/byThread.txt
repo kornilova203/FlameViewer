@@ -1,0 +1,174 @@
+tree_info {
+  nodes_count: 20
+}
+base_node {
+  nodes {
+    width: 42774
+    node_info {
+      method_name: "run"
+      class_name: "com.intellij.rt.execution.application.AppMainV2$1"
+      description: "()"
+    }
+    nodes {
+      width: 42736
+      node_info {
+        method_name: "readLine"
+        class_name: "java.io.BufferedReader"
+        description: "()"
+      }
+      nodes {
+        width: 42736
+        node_info {
+          method_name: "readLine"
+          class_name: "java.io.BufferedReader"
+          description: "(boolean)"
+        }
+        nodes {
+          width: 42736
+          node_info {
+            method_name: "fill"
+            class_name: "java.io.BufferedReader"
+            description: "()"
+          }
+          nodes {
+            width: 42736
+            node_info {
+              method_name: "read"
+              class_name: "java.io.InputStreamReader"
+              description: "(char[], int, int)"
+            }
+            nodes {
+              width: 42736
+              node_info {
+                method_name: "read"
+                class_name: "sun.nio.cs.StreamDecoder"
+                description: "(char[], int, int)"
+              }
+              nodes {
+                width: 42736
+                node_info {
+                  method_name: "implRead"
+                  class_name: "sun.nio.cs.StreamDecoder"
+                  description: "(char[], int, int)"
+                }
+                nodes {
+                  width: 42736
+                  node_info {
+                    method_name: "readBytes"
+                    class_name: "sun.nio.cs.StreamDecoder"
+                    description: "()"
+                  }
+                  nodes {
+                    width: 42736
+                    node_info {
+                      method_name: "read"
+                      class_name: "java.net.SocketInputStream"
+                      description: "(byte[], int, int)"
+                    }
+                    nodes {
+                      width: 42736
+                      node_info {
+                        method_name: "read"
+                        class_name: "java.net.SocketInputStream"
+                        description: "(byte[], int, int, int)"
+                      }
+                      nodes {
+                        width: 42736
+                        node_info {
+                          method_name: "socketRead"
+                          class_name: "java.net.SocketInputStream"
+                          description: "(FileDescriptor, byte[], int, int, int)"
+                        }
+                        nodes {
+                          width: 42736
+                          node_info {
+                            method_name: "socketRead0"
+                            class_name: "java.net.SocketInputStream"
+                            description: "(FileDescriptor, byte[], int, int, int)"
+                          }
+                          nodes {
+                            width: 11
+                            node_info {
+                              method_name: "findNative"
+                              class_name: "java.lang.ClassLoader"
+                              description: "(ClassLoader, String)"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    nodes {
+      offset: 42736
+      width: 19
+      node_info {
+        method_name: "<init>"
+        class_name: "java.net.Socket"
+        description: "(String, int)"
+      }
+      nodes {
+        offset: 42736
+        width: 19
+        node_info {
+          method_name: "<init>"
+          class_name: "java.net.Socket"
+          description: "(SocketAddress, SocketAddress, boolean)"
+        }
+        nodes {
+          offset: 42736
+          width: 19
+          node_info {
+            method_name: "connect"
+            class_name: "java.net.Socket"
+            description: "(SocketAddress)"
+          }
+          nodes {
+            offset: 42736
+            width: 19
+            node_info {
+              method_name: "connect"
+              class_name: "java.net.Socket"
+              description: "(SocketAddress, int)"
+            }
+            nodes {
+              offset: 42736
+              width: 19
+              node_info {
+                method_name: "connect"
+                class_name: "java.net.SocksSocketImpl"
+                description: "(SocketAddress, int)"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  nodes {
+    offset: 42774
+    width: 1
+    node_info {
+      method_name: "run"
+      class_name: "java.lang.Thread"
+      description: "()"
+    }
+    nodes {
+      offset: 42774
+      width: 1
+      node_info {
+        method_name: "run"
+        class_name: "javax.swing.TimerQueue"
+        description: "()"
+      }
+    }
+  }
+}
+depth: 13
+width: 42775

@@ -19,7 +19,6 @@ object UploadFileUtil {
         /* do not pause in following block while debugging. It may break connection */
         val list = if (reverseOrder) partsCount - 1 downTo 0 else 0 until partsCount
         for (i in list) {
-            println("request")
             //Create connection
             val url = URL("http://localhost:${BuiltInServerManager.getInstance().port}/flamegraph-profiler/upload-file")
             val connection = url.openConnection() as HttpURLConnection
@@ -36,6 +35,8 @@ object UploadFileUtil {
             connection.setRequestProperty("Content-Length", Integer.toString(contentLength))
             connection.setRequestProperty("File-Part", "${i + 1}/$partsCount")
             connection.setRequestProperty("File-Name", fileName)
+
+            println("$url $fileName ${i + 1}/$partsCount")
 
             //Send request
             val wr = DataOutputStream(

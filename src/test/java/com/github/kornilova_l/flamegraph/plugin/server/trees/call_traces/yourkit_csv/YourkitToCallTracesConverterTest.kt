@@ -9,4 +9,6 @@ class YourkitToCallTracesConverterTest : ConverterTestCase("csv", "trees/outgoin
     fun testSimple2() = doTest()
 
     fun testRealData() = doTest()
+
+    fun testByThread() = doTest()
 }
