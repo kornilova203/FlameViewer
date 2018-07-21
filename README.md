@@ -1,6 +1,8 @@
 # Flamegraph Profiler
 Instrumentation Java Profiler & Flamegraph Visualizer.
 
+[![Build Status](https://travis-ci.org/kornilova-l/flamegraph-visualizer.svg?branch=master)](https://travis-ci.org/kornilova-l/flamegraph-visualizer)
+
 ## Download Plugin
 https://plugins.jetbrains.com/plugin/10305-flamegraph-profiler
 
