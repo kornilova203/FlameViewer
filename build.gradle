@@ -74,7 +74,7 @@ node {
 def npmRun(String command) {
     return tasks.create(command, NpmTask) {
         args = ['run', command]
-        dependsOn ':protobuf:copyJSProto'
+        dependsOn = [':protobuf:copyJSProto', npmInstall]
     }
 }
 
@@ -104,12 +104,12 @@ task copyStatic(type: Copy, dependsOn: [browserify, moveGeneratedTemplates]) {
     }
 }
 
-task copyAgent(type: Copy) {
+task copyAgent(type: Copy, dependsOn: [':agent:agentJar', ':agent:proxyJar']) {
     from 'agent/build/libs'
     into 'build/classes/main'
 }
 
-task compilePlugin(dependsOn: [':agent:agentJar', ':agent:proxyJar', copyAgent, copyStatic]) {}
+task compilePlugin(dependsOn: [copyAgent, copyStatic]) {}
 
 compileKotlin {
     kotlinOptions {
