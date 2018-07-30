@@ -1,0 +1,1004 @@
+tree_info {
+  nodes_count: 111
+}
+base_node {
+  nodes {
+    width: 646
+    node_info {
+      method_name: "main"
+      class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.CheckAllKt"
+      description: "(String[])void"
+    }
+    nodes {
+      width: 1
+      node_info {
+        method_name: "isSolvable"
+        class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.CheckAllKt"
+        description: "(long, TLongArrayList)boolean"
+      }
+    }
+    nodes {
+      offset: 1
+      width: 645
+      node_info {
+        method_name: "tryToFindSolutionForEachRulesSet$default"
+        class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.TwoOrThreeNeighboursKt"
+        description: "(List, Writer, int, Object)Set"
+      }
+      nodes {
+        offset: 1
+        width: 645
+        node_info {
+          method_name: "tryToFindSolutionForEachRulesSet"
+          class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.TwoOrThreeNeighboursKt"
+          description: "(List, Writer)Set"
+        }
+        nodes {
+          offset: 1
+          width: 645
+          node_info {
+            method_name: "useFileToFindSolutions"
+            class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.TwoOrThreeNeighboursKt"
+            description: "(List, File, Writer, Set, int, int, int)void"
+          }
+          nodes {
+            offset: 1
+            width: 24
+            node_info {
+              method_name: "<init>"
+              class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.tiles.collections.DirectedGraph"
+              description: "(TileSet)void"
+            }
+            nodes {
+              offset: 1
+              width: 13
+              node_info {
+                method_name: "<init>"
+                class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.tiles.Tile"
+                description: "(Tile, POSITION)void"
+              }
+              nodes {
+                offset: 1
+                width: 2
+                node_info {
+                  method_name: "add"
+                  class_name: "java.util.ArrayList"
+                  description: "(Object)boolean"
+                }
+                nodes {
+                  offset: 1
+                  width: 2
+                  node_info {
+                    method_name: "ensureCapacityInternal"
+                    class_name: "java.util.ArrayList"
+                    description: "(int)void"
+                  }
+                  nodes {
+                    offset: 1
+                    width: 2
+                    node_info {
+                      method_name: "ensureExplicitCapacity"
+                      class_name: "java.util.ArrayList"
+                      description: "(int)void"
+                    }
+                    nodes {
+                      offset: 1
+                      width: 2
+                      node_info {
+                        method_name: "grow"
+                        class_name: "java.util.ArrayList"
+                        description: "(int)void"
+                      }
+                      nodes {
+                        offset: 1
+                        width: 2
+                        node_info {
+                          method_name: "copyOf"
+                          class_name: "java.util.Arrays"
+                          description: "(Object[], int)Object[]"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+              nodes {
+                offset: 3
+                width: 1
+                node_info {
+                  method_name: "iterator"
+                  class_name: "kotlin.ranges.LongProgression"
+                  description: "()Iterator"
+                }
+                nodes {
+                  offset: 3
+                  width: 1
+                  node_info {
+                    method_name: "iterator"
+                    class_name: "kotlin.ranges.LongProgression"
+                    description: "()LongIterator"
+                  }
+                }
+              }
+              nodes {
+                offset: 4
+                width: 1
+                node_info {
+                  method_name: "until"
+                  class_name: "kotlin.ranges.RangesKt___RangesKt"
+                  description: "(long, int)LongRange"
+                }
+                nodes {
+                  offset: 4
+                  width: 1
+                  node_info {
+                    method_name: "<init>"
+                    class_name: "kotlin.ranges.LongRange"
+                    description: "(long, long)void"
+                  }
+                }
+              }
+            }
+            nodes {
+              offset: 14
+              width: 1
+              node_info {
+                method_name: "<init>"
+                class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.tiles.collections.DirectedGraph$Neighbourhood"
+                description: "(Tile, Tile, Tile, Tile, Tile)void"
+              }
+              nodes {
+                offset: 14
+                width: 1
+                node_info {
+                  method_name: "put"
+                  class_name: "java.util.HashMap"
+                  description: "(Object, Object)Object"
+                }
+                nodes {
+                  offset: 14
+                  width: 1
+                  node_info {
+                    method_name: "putVal"
+                    class_name: "java.util.HashMap"
+                    description: "(int, Object, Object, boolean, boolean)Object"
+                  }
+                  nodes {
+                    offset: 14
+                    width: 1
+                    node_info {
+                      method_name: "resize"
+                      class_name: "java.util.HashMap"
+                      description: "()HashMap$Node[]"
+                    }
+                  }
+                }
+              }
+            }
+            nodes {
+              offset: 15
+              width: 2
+              node_info {
+                method_name: "getIfAlreadyCreated"
+                class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.tiles.collections.DirectedGraph"
+                description: "(Tile)Tile"
+              }
+              nodes {
+                offset: 15
+                width: 2
+                node_info {
+                  method_name: "get"
+                  class_name: "org.apache.commons.collections4.bidimap.AbstractDualBidiMap"
+                  description: "(Object)Object"
+                }
+                nodes {
+                  offset: 15
+                  width: 2
+                  node_info {
+                    method_name: "get"
+                    class_name: "java.util.HashMap"
+                    description: "(Object)Object"
+                  }
+                  nodes {
+                    offset: 15
+                    width: 2
+                    node_info {
+                      method_name: "getNode"
+                      class_name: "java.util.HashMap"
+                      description: "(int, Object)HashMap$Node"
+                    }
+                    nodes {
+                      offset: 15
+                      width: 1
+                      node_info {
+                        method_name: "equals"
+                        class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.tiles.Tile"
+                        description: "(Object)boolean"
+                      }
+                      nodes {
+                        offset: 15
+                        width: 1
+                        node_info {
+                          method_name: "iterator"
+                          class_name: "kotlin.ranges.IntProgression"
+                          description: "()Iterator"
+                        }
+                        nodes {
+                          offset: 15
+                          width: 1
+                          node_info {
+                            method_name: "iterator"
+                            class_name: "kotlin.ranges.IntProgression"
+                            description: "()IntIterator"
+                          }
+                          nodes {
+                            offset: 15
+                            width: 1
+                            node_info {
+                              method_name: "<init>"
+                              class_name: "kotlin.ranges.IntProgressionIterator"
+                              description: "(int, int, int)void"
+                            }
+                          }
+                        }
+                      }
+                    }
+                    nodes {
+                      offset: 16
+                      width: 1
+                      node_info {
+                        method_name: "getTreeNode"
+                        class_name: "java.util.HashMap$TreeNode"
+                        description: "(int, Object)HashMap$TreeNode"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+            nodes {
+              offset: 17
+              width: 4
+              node_info {
+                method_name: "add"
+                class_name: "java.util.HashSet"
+                description: "(Object)boolean"
+              }
+              nodes {
+                offset: 17
+                width: 4
+                node_info {
+                  method_name: "put"
+                  class_name: "java.util.HashMap"
+                  description: "(Object, Object)Object"
+                }
+                nodes {
+                  offset: 17
+                  width: 1
+                  node_info {
+                    method_name: "hash"
+                    class_name: "java.util.HashMap"
+                    description: "(Object)int"
+                  }
+                  nodes {
+                    offset: 17
+                    width: 1
+                    node_info {
+                      method_name: "hashCode"
+                      class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.tiles.collections.DirectedGraph$Neighbourhood"
+                      description: "()int"
+                    }
+                    nodes {
+                      offset: 17
+                      width: 1
+                      node_info {
+                        method_name: "get"
+                        class_name: "java.util.HashMap"
+                        description: "(Object)Object"
+                      }
+                      nodes {
+                        offset: 17
+                        width: 1
+                        node_info {
+                          method_name: "getNode"
+                          class_name: "java.util.HashMap"
+                          description: "(int, Object)HashMap$Node"
+                        }
+                      }
+                    }
+                  }
+                }
+                nodes {
+                  offset: 18
+                  width: 3
+                  node_info {
+                    method_name: "putVal"
+                    class_name: "java.util.HashMap"
+                    description: "(int, Object, Object, boolean, boolean)Object"
+                  }
+                  nodes {
+                    offset: 18
+                    width: 3
+                    node_info {
+                      method_name: "equals"
+                      class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.tiles.collections.DirectedGraph$Neighbourhood"
+                      description: "(Object)boolean"
+                    }
+                    nodes {
+                      offset: 18
+                      width: 1
+                      node_info {
+                        method_name: "get"
+                        class_name: "java.util.HashMap"
+                        description: "(Object)Object"
+                      }
+                      nodes {
+                        offset: 18
+                        width: 1
+                        node_info {
+                          method_name: "getNode"
+                          class_name: "java.util.HashMap"
+                          description: "(int, Object)HashMap$Node"
+                        }
+                      }
+                    }
+                    nodes {
+                      offset: 19
+                      width: 1
+                      node_info {
+                        method_name: "areEqual"
+                        class_name: "kotlin.jvm.internal.Intrinsics"
+                        description: "(Object, Object)boolean"
+                      }
+                      nodes {
+                        offset: 19
+                        width: 1
+                        node_info {
+                          method_name: "equals"
+                          class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.tiles.Tile"
+                          description: "(Object)boolean"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+          nodes {
+            offset: 25
+            width: 5
+            node_info {
+              method_name: "<init>"
+              class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.tiles.collections.TileSet"
+              description: "(File)void"
+            }
+            nodes {
+              offset: 25
+              width: 5
+              node_info {
+                method_name: "read"
+                class_name: "java.io.BufferedReader"
+                description: "()int"
+              }
+              nodes {
+                offset: 25
+                width: 1
+                node_info {
+                  method_name: "ensureOpen"
+                  class_name: "java.io.BufferedReader"
+                  description: "()void"
+                }
+              }
+              nodes {
+                offset: 26
+                width: 3
+                node_info {
+                  method_name: "fill"
+                  class_name: "java.io.BufferedReader"
+                  description: "()void"
+                }
+                nodes {
+                  offset: 26
+                  width: 3
+                  node_info {
+                    method_name: "read"
+                    class_name: "java.io.InputStreamReader"
+                    description: "(char[], int, int)int"
+                  }
+                  nodes {
+                    offset: 26
+                    width: 3
+                    node_info {
+                      method_name: "read"
+                      class_name: "sun.nio.cs.StreamDecoder"
+                      description: "(char[], int, int)int"
+                    }
+                    nodes {
+                      offset: 26
+                      width: 3
+                      node_info {
+                        method_name: "implRead"
+                        class_name: "sun.nio.cs.StreamDecoder"
+                        description: "(char[], int, int)int"
+                      }
+                      nodes {
+                        offset: 26
+                        width: 3
+                        node_info {
+                          method_name: "decode"
+                          class_name: "java.nio.charset.CharsetDecoder"
+                          description: "(ByteBuffer, CharBuffer, boolean)CoderResult"
+                        }
+                        nodes {
+                          offset: 26
+                          width: 3
+                          node_info {
+                            method_name: "decodeLoop"
+                            class_name: "sun.nio.cs.UTF_8$Decoder"
+                            description: "(ByteBuffer, CharBuffer)CoderResult"
+                          }
+                          nodes {
+                            offset: 26
+                            width: 3
+                            node_info {
+                              method_name: "decodeArrayLoop"
+                              class_name: "sun.nio.cs.UTF_8$Decoder"
+                              description: "(ByteBuffer, CharBuffer)CoderResult"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+          nodes {
+            offset: 30
+            width: 614
+            node_info {
+              method_name: "tryToFindSolution"
+              class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.vertex_set_generator.VertexSetSolverKt"
+              description: "(Set, DirectedGraph)LabelingFunction"
+            }
+            nodes {
+              offset: 30
+              width: 30
+              node_info {
+                method_name: "solve"
+                class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.vertex_set_generator.SatSolverProcessManagerKt"
+                description: "(List, int)List"
+              }
+              nodes {
+                offset: 30
+                width: 30
+                node_info {
+                  method_name: "initSat"
+                  class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.vertex_set_generator.SatSolverProcessManagerKt"
+                  description: "(List)JPicoSat"
+                }
+                nodes {
+                  offset: 30
+                  width: 7
+                  node_info {
+                    method_name: "subList"
+                    class_name: "gnu.trove.list.array.TIntArrayList"
+                    description: "(int, int)TIntList"
+                  }
+                  nodes {
+                    offset: 30
+                    width: 7
+                    node_info {
+                      method_name: "<init>"
+                      class_name: "gnu.trove.list.array.TIntArrayList"
+                      description: "(int)void"
+                    }
+                    nodes {
+                      offset: 30
+                      width: 7
+                      node_info {
+                        method_name: "<init>"
+                        class_name: "gnu.trove.list.array.TIntArrayList"
+                        description: "(int, int)void"
+                      }
+                    }
+                  }
+                }
+                nodes {
+                  offset: 37
+                  width: 1
+                  node_info {
+                    method_name: "<clinit>"
+                    class_name: "jnisat.JPicoSat"
+                    description: "()void"
+                  }
+                  nodes {
+                    offset: 37
+                    width: 1
+                    node_info {
+                      method_name: "loadLibrary"
+                      class_name: "jnisat.LibDetect"
+                      description: "(String)void"
+                    }
+                    nodes {
+                      offset: 37
+                      width: 1
+                      node_info {
+                        method_name: "createTempFile"
+                        class_name: "java.io.File"
+                        description: "(String, String)File"
+                      }
+                      nodes {
+                        offset: 37
+                        width: 1
+                        node_info {
+                          method_name: "createTempFile"
+                          class_name: "java.io.File"
+                          description: "(String, String, File)File"
+                        }
+                        nodes {
+                          offset: 37
+                          width: 1
+                          node_info {
+                            method_name: "<clinit>"
+                            class_name: "java.io.File$TempDirectory"
+                            description: "()void"
+                          }
+                          nodes {
+                            offset: 37
+                            width: 1
+                            node_info {
+                              method_name: "<init>"
+                              class_name: "java.security.SecureRandom"
+                              description: "()void"
+                            }
+                            nodes {
+                              offset: 37
+                              width: 1
+                              node_info {
+                                method_name: "getDefaultPRNG"
+                                class_name: "java.security.SecureRandom"
+                                description: "(boolean, byte[])void"
+                              }
+                              nodes {
+                                offset: 37
+                                width: 1
+                                node_info {
+                                  method_name: "getPrngAlgorithm"
+                                  class_name: "java.security.SecureRandom"
+                                  description: "()String"
+                                }
+                                nodes {
+                                  offset: 37
+                                  width: 1
+                                  node_info {
+                                    method_name: "getServices"
+                                    class_name: "java.security.Provider"
+                                    description: "()Set"
+                                  }
+                                  nodes {
+                                    offset: 37
+                                    width: 1
+                                    node_info {
+                                      method_name: "ensureLegacyParsed"
+                                      class_name: "java.security.Provider"
+                                      description: "()void"
+                                    }
+                                    nodes {
+                                      offset: 37
+                                      width: 1
+                                      node_info {
+                                        method_name: "parseLegacyPut"
+                                        class_name: "java.security.Provider"
+                                        description: "(String, String)void"
+                                      }
+                                      nodes {
+                                        offset: 37
+                                        width: 1
+                                        node_info {
+                                          method_name: "toLowerCase"
+                                          class_name: "java.lang.String"
+                                          description: "(Locale)String"
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+                nodes {
+                  offset: 38
+                  width: 21
+                  node_info {
+                    method_name: "addClause"
+                    class_name: "jnisat.JPicoSat"
+                    description: "(int[])void"
+                  }
+                }
+              }
+            }
+            nodes {
+              offset: 60
+              width: 584
+              node_info {
+                method_name: "toDimacs"
+                class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.vertex_set_generator.VertexSetSolverKt"
+                description: "(DirectedGraph, Set)List"
+              }
+              nodes {
+                offset: 60
+                width: 567
+                node_info {
+                  method_name: "formClause"
+                  class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.vertex_set_generator.VertexSetSolverKt"
+                  description: "(DirectedGraph$Neighbourhood, Set, List)void"
+                }
+                nodes {
+                  offset: 60
+                  width: 51
+                  node_info {
+                    method_name: "isIncluded"
+                    class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.vertex_set_generator.rule.VertexRule"
+                    description: "(POSITION)boolean"
+                  }
+                  nodes {
+                    offset: 60
+                    width: 51
+                    node_info {
+                      method_name: "get"
+                      class_name: "org.apache.commons.collections4.bidimap.AbstractDualBidiMap"
+                      description: "(Object)Object"
+                    }
+                    nodes {
+                      offset: 60
+                      width: 51
+                      node_info {
+                        method_name: "get"
+                        class_name: "java.util.HashMap"
+                        description: "(Object)Object"
+                      }
+                      nodes {
+                        offset: 60
+                        width: 51
+                        node_info {
+                          method_name: "getNode"
+                          class_name: "java.util.HashMap"
+                          description: "(int, Object)HashMap$Node"
+                        }
+                      }
+                    }
+                  }
+                }
+                nodes {
+                  offset: 111
+                  width: 4
+                  node_info {
+                    method_name: "contains"
+                    class_name: "gnu.trove.impl.hash.TIntHash"
+                    description: "(int)boolean"
+                  }
+                  nodes {
+                    offset: 111
+                    width: 4
+                    node_info {
+                      method_name: "index"
+                      class_name: "gnu.trove.impl.hash.TIntHash"
+                      description: "(int)int"
+                    }
+                    nodes {
+                      offset: 111
+                      width: 4
+                      node_info {
+                        method_name: "indexRehashed"
+                        class_name: "gnu.trove.impl.hash.TIntHash"
+                        description: "(int, int, int, byte)int"
+                      }
+                    }
+                  }
+                }
+                nodes {
+                  offset: 115
+                  width: 135
+                  node_info {
+                    method_name: "addAll"
+                    class_name: "gnu.trove.list.array.TIntArrayList"
+                    description: "(TIntCollection)boolean"
+                  }
+                  nodes {
+                    offset: 115
+                    width: 17
+                    node_info {
+                      method_name: "hasNext"
+                      class_name: "gnu.trove.impl.hash.THashPrimitiveIterator"
+                      description: "()boolean"
+                    }
+                    nodes {
+                      offset: 115
+                      width: 17
+                      node_info {
+                        method_name: "nextIndex"
+                        class_name: "gnu.trove.impl.hash.THashPrimitiveIterator"
+                        description: "()int"
+                      }
+                    }
+                  }
+                  nodes {
+                    offset: 132
+                    width: 76
+                    node_info {
+                      method_name: "next"
+                      class_name: "gnu.trove.set.hash.TIntHashSet$TIntHashIterator"
+                      description: "()int"
+                    }
+                    nodes {
+                      offset: 132
+                      width: 76
+                      node_info {
+                        method_name: "moveToNextIndex"
+                        class_name: "gnu.trove.impl.hash.THashPrimitiveIterator"
+                        description: "()void"
+                      }
+                      nodes {
+                        offset: 132
+                        width: 76
+                        node_info {
+                          method_name: "nextIndex"
+                          class_name: "gnu.trove.impl.hash.THashPrimitiveIterator"
+                          description: "()int"
+                        }
+                      }
+                    }
+                  }
+                }
+                nodes {
+                  offset: 250
+                  width: 69
+                  node_info {
+                    method_name: "<init>"
+                    class_name: "gnu.trove.set.hash.TIntHashSet"
+                    description: "()void"
+                  }
+                  nodes {
+                    offset: 250
+                    width: 69
+                    node_info {
+                      method_name: "<init>"
+                      class_name: "gnu.trove.impl.hash.TIntHash"
+                      description: "()void"
+                    }
+                    nodes {
+                      offset: 250
+                      width: 69
+                      node_info {
+                        method_name: "<init>"
+                        class_name: "gnu.trove.impl.hash.TPrimitiveHash"
+                        description: "()void"
+                      }
+                      nodes {
+                        offset: 250
+                        width: 69
+                        node_info {
+                          method_name: "<init>"
+                          class_name: "gnu.trove.impl.hash.THash"
+                          description: "()void"
+                        }
+                        nodes {
+                          offset: 250
+                          width: 68
+                          node_info {
+                            method_name: "<init>"
+                            class_name: "gnu.trove.impl.hash.THash"
+                            description: "(int, float)void"
+                          }
+                          nodes {
+                            offset: 250
+                            width: 68
+                            node_info {
+                              method_name: "setUp"
+                              class_name: "gnu.trove.impl.hash.TIntHash"
+                              description: "(int)int"
+                            }
+                            nodes {
+                              offset: 250
+                              width: 67
+                              node_info {
+                                method_name: "setUp"
+                                class_name: "gnu.trove.impl.hash.TPrimitiveHash"
+                                description: "(int)int"
+                              }
+                              nodes {
+                                offset: 250
+                                width: 67
+                                node_info {
+                                  method_name: "setUp"
+                                  class_name: "gnu.trove.impl.hash.THash"
+                                  description: "(int)int"
+                                }
+                                nodes {
+                                  offset: 250
+                                  width: 67
+                                  node_info {
+                                    method_name: "nextPrime"
+                                    class_name: "gnu.trove.impl.PrimeFinder"
+                                    description: "(int)int"
+                                  }
+                                  nodes {
+                                    offset: 250
+                                    width: 67
+                                    node_info {
+                                      method_name: "binarySearch"
+                                      class_name: "java.util.Arrays"
+                                      description: "(int[], int)int"
+                                    }
+                                    nodes {
+                                      offset: 250
+                                      width: 21
+                                      node_info {
+                                        method_name: "binarySearch0"
+                                        class_name: "java.util.Arrays"
+                                        description: "(int[], int, int, int)int"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+                nodes {
+                  offset: 319
+                  width: 8
+                  node_info {
+                    method_name: "add"
+                    class_name: "gnu.trove.set.hash.TIntHashSet"
+                    description: "(int)boolean"
+                  }
+                  nodes {
+                    offset: 319
+                    width: 8
+                    node_info {
+                      method_name: "postInsertHook"
+                      class_name: "gnu.trove.impl.hash.THash"
+                      description: "(boolean)void"
+                    }
+                  }
+                }
+                nodes {
+                  offset: 327
+                  width: 142
+                  node_info {
+                    method_name: "get"
+                    class_name: "java.util.HashMap"
+                    description: "(Object)Object"
+                  }
+                  nodes {
+                    offset: 327
+                    width: 142
+                    node_info {
+                      method_name: "getNode"
+                      class_name: "java.util.HashMap"
+                      description: "(int, Object)HashMap$Node"
+                    }
+                  }
+                }
+                nodes {
+                  offset: 469
+                  width: 1
+                  node_info {
+                    method_name: "iterator"
+                    class_name: "java.util.HashSet"
+                    description: "()Iterator"
+                  }
+                }
+              }
+              nodes {
+                offset: 627
+                width: 10
+                node_info {
+                  method_name: "reverseRules"
+                  class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.vertex_set_generator.rule.UtilKt"
+                  description: "(Set)Set"
+                }
+                nodes {
+                  offset: 627
+                  width: 1
+                  node_info {
+                    method_name: "<init>"
+                    class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.vertex_set_generator.rule.VertexRule"
+                    description: "(int)void"
+                  }
+                }
+                nodes {
+                  offset: 628
+                  width: 9
+                  node_info {
+                    method_name: "add"
+                    class_name: "java.util.HashSet"
+                    description: "(Object)boolean"
+                  }
+                  nodes {
+                    offset: 628
+                    width: 9
+                    node_info {
+                      method_name: "put"
+                      class_name: "java.util.HashMap"
+                      description: "(Object, Object)Object"
+                    }
+                    nodes {
+                      offset: 628
+                      width: 9
+                      node_info {
+                        method_name: "putVal"
+                        class_name: "java.util.HashMap"
+                        description: "(int, Object, Object, boolean, boolean)Object"
+                      }
+                    }
+                  }
+                }
+              }
+              nodes {
+                offset: 637
+                width: 1
+                node_info {
+                  method_name: "next"
+                  class_name: "java.util.HashMap$KeyIterator"
+                  description: "()Object"
+                }
+                nodes {
+                  offset: 637
+                  width: 1
+                  node_info {
+                    method_name: "nextNode"
+                    class_name: "java.util.HashMap$HashIterator"
+                    description: "()HashMap$Node"
+                  }
+                }
+              }
+            }
+          }
+          nodes {
+            offset: 644
+            width: 2
+            node_info {
+              method_name: "rotateRuleSet$default"
+              class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.vertex_set_generator.rule.VertexRuleKt"
+              description: "(Set, int, int, Object)Set"
+            }
+            nodes {
+              offset: 644
+              width: 2
+              node_info {
+                method_name: "rotateRuleSet"
+                class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.vertex_set_generator.rule.VertexRuleKt"
+                description: "(Set, int)Set"
+              }
+              nodes {
+                offset: 644
+                width: 1
+                node_info {
+                  method_name: "toSet"
+                  class_name: "kotlin.collections.CollectionsKt___CollectionsKt"
+                  description: "(Iterable)Set"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+depth: 19
+width: 646

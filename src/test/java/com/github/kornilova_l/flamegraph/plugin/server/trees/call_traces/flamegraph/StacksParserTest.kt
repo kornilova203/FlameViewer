@@ -1,0 +1,36 @@
+package com.github.kornilova_l.flamegraph.plugin.server.trees.call_traces.flamegraph
+
+import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_traces.flamegraph.StacksParser
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
+import org.junit.Test
+
+class StacksParserTest {
+
+    @Test
+    fun doCallsContainParametersTest() {
+        var stacks = hashMapOf(Pair("1", 1))
+        assertFalse(StacksParser.doCallsContainParameters(stacks))
+
+        stacks = hashMapOf(Pair("1;2", 1), Pair("void hello();void hello()", 1))
+        assertFalse(StacksParser.doCallsContainParameters(stacks))
+
+        stacks = hashMapOf(Pair("void hello()", 1), Pair("1", 1))
+        assertFalse(StacksParser.doCallsContainParameters(stacks))
+
+        stacks = hashMapOf(Pair("void a();void a()", 1))
+        assertTrue(StacksParser.doCallsContainParameters(stacks))
+
+        stacks = hashMapOf(Pair(" ()", 1))
+        assertTrue(StacksParser.doCallsContainParameters(stacks))
+
+        stacks = hashMapOf(Pair("a ()", 1))
+        assertTrue(StacksParser.doCallsContainParameters(stacks))
+
+        stacks = hashMapOf(Pair("void a(); a()", 1))
+        assertTrue(StacksParser.doCallsContainParameters(stacks))
+
+        stacks = hashMapOf(Pair("void a();void a)(", 1))
+        assertFalse(StacksParser.doCallsContainParameters(stacks))
+    }
+}

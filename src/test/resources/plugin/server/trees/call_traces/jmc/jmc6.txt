@@ -1,0 +1,1706 @@
+tree_info {
+  nodes_count: 189
+}
+base_node {
+  nodes {
+    width: 617
+    node_info {
+      method_name: "main"
+      class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.CheckAllKt"
+      description: "(String[])void"
+    }
+    nodes {
+      width: 1
+      node_info {
+        method_name: "isSolvable"
+        class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.CheckAllKt"
+        description: "(long, TLongArrayList)boolean"
+      }
+    }
+    nodes {
+      offset: 1
+      width: 2
+      node_info {
+        method_name: "parseLongs"
+        class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.CheckAllKt"
+        description: "(File)TLongArrayList"
+      }
+      nodes {
+        offset: 1
+        width: 1
+        node_info {
+          method_name: "<init>"
+          class_name: "java.util.Scanner"
+          description: "(File)void"
+        }
+        nodes {
+          offset: 1
+          width: 1
+          node_info {
+            method_name: "<init>"
+            class_name: "java.util.Scanner"
+            description: "(ReadableByteChannel)void"
+          }
+          nodes {
+            offset: 1
+            width: 1
+            node_info {
+              method_name: "<init>"
+              class_name: "java.util.Scanner"
+              description: "(Readable, Pattern)void"
+            }
+            nodes {
+              offset: 1
+              width: 1
+              node_info {
+                method_name: "useLocale"
+                class_name: "java.util.Scanner"
+                description: "(Locale)Scanner"
+              }
+              nodes {
+                offset: 1
+                width: 1
+                node_info {
+                  method_name: "getNumberInstance"
+                  class_name: "java.text.NumberFormat"
+                  description: "(Locale)NumberFormat"
+                }
+                nodes {
+                  offset: 1
+                  width: 1
+                  node_info {
+                    method_name: "getInstance"
+                    class_name: "java.text.NumberFormat"
+                    description: "(Locale, int)NumberFormat"
+                  }
+                  nodes {
+                    offset: 1
+                    width: 1
+                    node_info {
+                      method_name: "getInstance"
+                      class_name: "java.text.NumberFormat"
+                      description: "(LocaleProviderAdapter, Locale, int)NumberFormat"
+                    }
+                    nodes {
+                      offset: 1
+                      width: 1
+                      node_info {
+                        method_name: "getNumberInstance"
+                        class_name: "sun.util.locale.provider.NumberFormatProviderImpl"
+                        description: "(Locale)NumberFormat"
+                      }
+                      nodes {
+                        offset: 1
+                        width: 1
+                        node_info {
+                          method_name: "getInstance"
+                          class_name: "sun.util.locale.provider.NumberFormatProviderImpl"
+                          description: "(Locale, int)NumberFormat"
+                        }
+                        nodes {
+                          offset: 1
+                          width: 1
+                          node_info {
+                            method_name: "getInstance"
+                            class_name: "java.text.DecimalFormatSymbols"
+                            description: "(Locale)DecimalFormatSymbols"
+                          }
+                          nodes {
+                            offset: 1
+                            width: 1
+                            node_info {
+                              method_name: "getAdapter"
+                              class_name: "sun.util.locale.provider.LocaleProviderAdapter"
+                              description: "(Class, Locale)LocaleProviderAdapter"
+                            }
+                            nodes {
+                              offset: 1
+                              width: 1
+                              node_info {
+                                method_name: "findAdapter"
+                                class_name: "sun.util.locale.provider.LocaleProviderAdapter"
+                                description: "(Class, Locale)LocaleProviderAdapter"
+                              }
+                              nodes {
+                                offset: 1
+                                width: 1
+                                node_info {
+                                  method_name: "getLocaleServiceProvider"
+                                  class_name: "sun.util.locale.provider.JRELocaleProviderAdapter"
+                                  description: "(Class)LocaleServiceProvider"
+                                }
+                                nodes {
+                                  offset: 1
+                                  width: 1
+                                  node_info {
+                                    method_name: "getDecimalFormatSymbolsProvider"
+                                    class_name: "sun.util.locale.provider.JRELocaleProviderAdapter"
+                                    description: "()DecimalFormatSymbolsProvider"
+                                  }
+                                  nodes {
+                                    offset: 1
+                                    width: 1
+                                    node_info {
+                                      method_name: "linkMethodHandleConstant"
+                                      class_name: "java.lang.invoke.MethodHandleNatives"
+                                      description: "(Class, int, Class, String, Object)MethodHandle"
+                                    }
+                                    nodes {
+                                      offset: 1
+                                      width: 1
+                                      node_info {
+                                        method_name: "linkMethodHandleConstant"
+                                        class_name: "java.lang.invoke.MethodHandles$Lookup"
+                                        description: "(byte, Class, String, Object)MethodHandle"
+                                      }
+                                      nodes {
+                                        offset: 1
+                                        width: 1
+                                        node_info {
+                                          method_name: "getDirectMethodForConstant"
+                                          class_name: "java.lang.invoke.MethodHandles$Lookup"
+                                          description: "(byte, Class, MemberName)MethodHandle"
+                                        }
+                                        nodes {
+                                          offset: 1
+                                          width: 1
+                                          node_info {
+                                            method_name: "getDirectMethodNoSecurityManager"
+                                            class_name: "java.lang.invoke.MethodHandles$Lookup"
+                                            description: "(byte, Class, MemberName, Class)MethodHandle"
+                                          }
+                                          nodes {
+                                            offset: 1
+                                            width: 1
+                                            node_info {
+                                              method_name: "getDirectMethodCommon"
+                                              class_name: "java.lang.invoke.MethodHandles$Lookup"
+                                              description: "(byte, Class, MemberName, boolean, boolean, Class)MethodHandle"
+                                            }
+                                            nodes {
+                                              offset: 1
+                                              width: 1
+                                              node_info {
+                                                method_name: "make"
+                                                class_name: "java.lang.invoke.DirectMethodHandle"
+                                                description: "(byte, Class, MemberName)DirectMethodHandle"
+                                              }
+                                              nodes {
+                                                offset: 1
+                                                width: 1
+                                                node_info {
+                                                  method_name: "preparedLambdaForm"
+                                                  class_name: "java.lang.invoke.DirectMethodHandle"
+                                                  description: "(MemberName)LambdaForm"
+                                                }
+                                                nodes {
+                                                  offset: 1
+                                                  width: 1
+                                                  node_info {
+                                                    method_name: "preparedLambdaForm"
+                                                    class_name: "java.lang.invoke.DirectMethodHandle"
+                                                    description: "(MethodType, int)LambdaForm"
+                                                  }
+                                                  nodes {
+                                                    offset: 1
+                                                    width: 1
+                                                    node_info {
+                                                      method_name: "cachedLambdaForm"
+                                                      class_name: "java.lang.invoke.MethodTypeForm"
+                                                      description: "(int)LambdaForm"
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      nodes {
+        offset: 2
+        width: 1
+        node_info {
+          method_name: "hasNextLong"
+          class_name: "java.util.Scanner"
+          description: "()boolean"
+        }
+        nodes {
+          offset: 2
+          width: 1
+          node_info {
+            method_name: "hasNextLong"
+            class_name: "java.util.Scanner"
+            description: "(int)boolean"
+          }
+          nodes {
+            offset: 2
+            width: 1
+            node_info {
+              method_name: "hasNext"
+              class_name: "java.util.Scanner"
+              description: "(Pattern)boolean"
+            }
+            nodes {
+              offset: 2
+              width: 1
+              node_info {
+                method_name: "getCompleteTokenInBuffer"
+                class_name: "java.util.Scanner"
+                description: "(Pattern)String"
+              }
+              nodes {
+                offset: 2
+                width: 1
+                node_info {
+                  method_name: "find"
+                  class_name: "java.util.regex.Matcher"
+                  description: "()boolean"
+                }
+                nodes {
+                  offset: 2
+                  width: 1
+                  node_info {
+                    method_name: "search"
+                    class_name: "java.util.regex.Matcher"
+                    description: "(int)boolean"
+                  }
+                  nodes {
+                    offset: 2
+                    width: 1
+                    node_info {
+                      method_name: "match"
+                      class_name: "java.util.regex.Pattern$Start"
+                      description: "(Matcher, int, CharSequence)boolean"
+                    }
+                    nodes {
+                      offset: 2
+                      width: 1
+                      node_info {
+                        method_name: "match"
+                        class_name: "java.util.regex.Pattern$CharPropertyGreedy"
+                        description: "(Matcher, int, CharSequence)boolean"
+                      }
+                      nodes {
+                        offset: 2
+                        width: 1
+                        node_info {
+                          method_name: "codePointAt"
+                          class_name: "java.lang.Character"
+                          description: "(CharSequence, int)int"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    nodes {
+      offset: 3
+      width: 1
+      node_info {
+        method_name: "toSetOfVertexRules"
+        class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.CheckAllKt"
+        description: "(long)Set"
+      }
+      nodes {
+        offset: 3
+        width: 1
+        node_info {
+          method_name: "loadClass"
+          class_name: "java.lang.ClassLoader"
+          description: "(String)Class"
+        }
+        nodes {
+          offset: 3
+          width: 1
+          node_info {
+            method_name: "loadClass"
+            class_name: "jdk.internal.loader.ClassLoaders$AppClassLoader"
+            description: "(String, boolean)Class"
+          }
+          nodes {
+            offset: 3
+            width: 1
+            node_info {
+              method_name: "loadClass"
+              class_name: "jdk.internal.loader.BuiltinClassLoader"
+              description: "(String, boolean)Class"
+            }
+            nodes {
+              offset: 3
+              width: 1
+              node_info {
+                method_name: "loadClassOrNull"
+                class_name: "jdk.internal.loader.BuiltinClassLoader"
+                description: "(String, boolean)Class"
+              }
+              nodes {
+                offset: 3
+                width: 1
+                node_info {
+                  method_name: "findClassOnClassPathOrNull"
+                  class_name: "jdk.internal.loader.BuiltinClassLoader"
+                  description: "(String)Class"
+                }
+                nodes {
+                  offset: 3
+                  width: 1
+                  node_info {
+                    method_name: "defineClass"
+                    class_name: "jdk.internal.loader.BuiltinClassLoader"
+                    description: "(String, Resource)Class"
+                  }
+                  nodes {
+                    offset: 3
+                    width: 1
+                    node_info {
+                      method_name: "defineClass"
+                      class_name: "java.security.SecureClassLoader"
+                      description: "(String, byte[], int, int, CodeSource)Class"
+                    }
+                    nodes {
+                      offset: 3
+                      width: 1
+                      node_info {
+                        method_name: "defineClass"
+                        class_name: "java.lang.ClassLoader"
+                        description: "(String, byte[], int, int, ProtectionDomain)Class"
+                      }
+                      nodes {
+                        offset: 3
+                        width: 1
+                        node_info {
+                          method_name: "defineClass1"
+                          class_name: "java.lang.ClassLoader"
+                          description: "(ClassLoader, String, byte[], int, int, ProtectionDomain, String)Class"
+                        }
+                        nodes {
+                          offset: 3
+                          width: 1
+                          node_info {
+                            method_name: "loadClass"
+                            class_name: "java.lang.ClassLoader"
+                            description: "(String)Class"
+                          }
+                          nodes {
+                            offset: 3
+                            width: 1
+                            node_info {
+                              method_name: "loadClass"
+                              class_name: "jdk.internal.loader.ClassLoaders$AppClassLoader"
+                              description: "(String, boolean)Class"
+                            }
+                            nodes {
+                              offset: 3
+                              width: 1
+                              node_info {
+                                method_name: "loadClass"
+                                class_name: "jdk.internal.loader.BuiltinClassLoader"
+                                description: "(String, boolean)Class"
+                              }
+                              nodes {
+                                offset: 3
+                                width: 1
+                                node_info {
+                                  method_name: "loadClassOrNull"
+                                  class_name: "jdk.internal.loader.BuiltinClassLoader"
+                                  description: "(String, boolean)Class"
+                                }
+                                nodes {
+                                  offset: 3
+                                  width: 1
+                                  node_info {
+                                    method_name: "findClassOnClassPathOrNull"
+                                    class_name: "jdk.internal.loader.BuiltinClassLoader"
+                                    description: "(String)Class"
+                                  }
+                                  nodes {
+                                    offset: 3
+                                    width: 1
+                                    node_info {
+                                      method_name: "getResource"
+                                      class_name: "jdk.internal.loader.URLClassPath"
+                                      description: "(String, boolean)Resource"
+                                    }
+                                    nodes {
+                                      offset: 3
+                                      width: 1
+                                      node_info {
+                                        method_name: "getResource"
+                                        class_name: "jdk.internal.loader.URLClassPath$FileLoader"
+                                        description: "(String, boolean)Resource"
+                                      }
+                                      nodes {
+                                        offset: 3
+                                        width: 1
+                                        node_info {
+                                          method_name: "<init>"
+                                          class_name: "java.io.File"
+                                          description: "(File, String)void"
+                                        }
+                                        nodes {
+                                          offset: 3
+                                          width: 1
+                                          node_info {
+                                            method_name: "resolve"
+                                            class_name: "java.io.UnixFileSystem"
+                                            description: "(String, String)String"
+                                          }
+                                          nodes {
+                                            offset: 3
+                                            width: 1
+                                            node_info {
+                                              method_name: "append"
+                                              class_name: "java.lang.StringBuilder"
+                                              description: "(char)StringBuilder"
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    nodes {
+      offset: 4
+      width: 612
+      node_info {
+        method_name: "tryToFindSolutionForEachRulesSet$default"
+        class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.TwoOrThreeNeighboursKt"
+        description: "(List, Writer, int, Object)Set"
+      }
+      nodes {
+        offset: 4
+        width: 612
+        node_info {
+          method_name: "tryToFindSolutionForEachRulesSet"
+          class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.TwoOrThreeNeighboursKt"
+          description: "(List, Writer)Set"
+        }
+        nodes {
+          offset: 4
+          width: 612
+          node_info {
+            method_name: "useFileToFindSolutions"
+            class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.TwoOrThreeNeighboursKt"
+            description: "(List, File, Writer, Set, int, int, int)void"
+          }
+          nodes {
+            offset: 4
+            width: 19
+            node_info {
+              method_name: "<init>"
+              class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.tiles.collections.DirectedGraph"
+              description: "(TileSet)void"
+            }
+            nodes {
+              offset: 4
+              width: 9
+              node_info {
+                method_name: "<init>"
+                class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.tiles.Tile"
+                description: "(Tile, POSITION)void"
+              }
+              nodes {
+                offset: 4
+                width: 1
+                node_info {
+                  method_name: "next"
+                  class_name: "kotlin.collections.LongIterator"
+                  description: "()Object"
+                }
+                nodes {
+                  offset: 4
+                  width: 1
+                  node_info {
+                    method_name: "next"
+                    class_name: "kotlin.collections.LongIterator"
+                    description: "()Long"
+                  }
+                  nodes {
+                    offset: 4
+                    width: 1
+                    node_info {
+                      method_name: "valueOf"
+                      class_name: "java.lang.Long"
+                      description: "(long)Long"
+                    }
+                  }
+                }
+              }
+              nodes {
+                offset: 5
+                width: 1
+                node_info {
+                  method_name: "iterator"
+                  class_name: "kotlin.ranges.LongProgression"
+                  description: "()Iterator"
+                }
+              }
+              nodes {
+                offset: 6
+                width: 1
+                node_info {
+                  method_name: "set"
+                  class_name: "org.apache.lucene.util.OpenBitSet"
+                  description: "(long)void"
+                }
+              }
+            }
+            nodes {
+              offset: 13
+              width: 5
+              node_info {
+                method_name: "getIfAlreadyCreated"
+                class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.tiles.collections.DirectedGraph"
+                description: "(Tile)Tile"
+              }
+              nodes {
+                offset: 13
+                width: 5
+                node_info {
+                  method_name: "get"
+                  class_name: "org.apache.commons.collections4.bidimap.AbstractDualBidiMap"
+                  description: "(Object)Object"
+                }
+                nodes {
+                  offset: 13
+                  width: 5
+                  node_info {
+                    method_name: "get"
+                    class_name: "java.util.HashMap"
+                    description: "(Object)Object"
+                  }
+                  nodes {
+                    offset: 13
+                    width: 4
+                    node_info {
+                      method_name: "getNode"
+                      class_name: "java.util.HashMap"
+                      description: "(int, Object)HashMap$Node"
+                    }
+                    nodes {
+                      offset: 13
+                      width: 2
+                      node_info {
+                        method_name: "equals"
+                        class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.tiles.Tile"
+                        description: "(Object)boolean"
+                      }
+                    }
+                    nodes {
+                      offset: 15
+                      width: 1
+                      node_info {
+                        method_name: "getTreeNode"
+                        class_name: "java.util.HashMap$TreeNode"
+                        description: "(int, Object)HashMap$TreeNode"
+                      }
+                      nodes {
+                        offset: 15
+                        width: 1
+                        node_info {
+                          method_name: "find"
+                          class_name: "java.util.HashMap$TreeNode"
+                          description: "(int, Object, Class)HashMap$TreeNode"
+                        }
+                        nodes {
+                          offset: 15
+                          width: 1
+                          node_info {
+                            method_name: "equals"
+                            class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.tiles.Tile"
+                            description: "(Object)boolean"
+                          }
+                        }
+                      }
+                    }
+                  }
+                  nodes {
+                    offset: 17
+                    width: 1
+                    node_info {
+                      method_name: "hash"
+                      class_name: "java.util.HashMap"
+                      description: "(Object)int"
+                    }
+                    nodes {
+                      offset: 17
+                      width: 1
+                      node_info {
+                        method_name: "hashCode"
+                        class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.tiles.Tile"
+                        description: "()int"
+                      }
+                      nodes {
+                        offset: 17
+                        width: 1
+                        node_info {
+                          method_name: "hashCode"
+                          class_name: "org.apache.lucene.util.OpenBitSet"
+                          description: "()int"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+            nodes {
+              offset: 18
+              width: 5
+              node_info {
+                method_name: "add"
+                class_name: "java.util.HashSet"
+                description: "(Object)boolean"
+              }
+              nodes {
+                offset: 18
+                width: 5
+                node_info {
+                  method_name: "put"
+                  class_name: "java.util.HashMap"
+                  description: "(Object, Object)Object"
+                }
+                nodes {
+                  offset: 18
+                  width: 5
+                  node_info {
+                    method_name: "putVal"
+                    class_name: "java.util.HashMap"
+                    description: "(int, Object, Object, boolean, boolean)Object"
+                  }
+                  nodes {
+                    offset: 18
+                    width: 5
+                    node_info {
+                      method_name: "equals"
+                      class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.tiles.collections.DirectedGraph$Neighbourhood"
+                      description: "(Object)boolean"
+                    }
+                    nodes {
+                      offset: 18
+                      width: 5
+                      node_info {
+                        method_name: "areEqual"
+                        class_name: "kotlin.jvm.internal.Intrinsics"
+                        description: "(Object, Object)boolean"
+                      }
+                      nodes {
+                        offset: 18
+                        width: 4
+                        node_info {
+                          method_name: "equals"
+                          class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.tiles.Tile"
+                          description: "(Object)boolean"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+          nodes {
+            offset: 23
+            width: 5
+            node_info {
+              method_name: "<init>"
+              class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.tiles.collections.TileSet"
+              description: "(File)void"
+            }
+            nodes {
+              offset: 23
+              width: 3
+              node_info {
+                method_name: "read"
+                class_name: "java.io.BufferedReader"
+                description: "()int"
+              }
+              nodes {
+                offset: 23
+                width: 1
+                node_info {
+                  method_name: "ensureOpen"
+                  class_name: "java.io.BufferedReader"
+                  description: "()void"
+                }
+              }
+            }
+            nodes {
+              offset: 26
+              width: 1
+              node_info {
+                method_name: "nextInt"
+                class_name: "java.util.Scanner"
+                description: "()int"
+              }
+              nodes {
+                offset: 26
+                width: 1
+                node_info {
+                  method_name: "nextInt"
+                  class_name: "java.util.Scanner"
+                  description: "(int)int"
+                }
+                nodes {
+                  offset: 26
+                  width: 1
+                  node_info {
+                    method_name: "integerPattern"
+                    class_name: "java.util.Scanner"
+                    description: "()Pattern"
+                  }
+                  nodes {
+                    offset: 26
+                    width: 1
+                    node_info {
+                      method_name: "forName"
+                      class_name: "java.util.Scanner$PatternLRUCache"
+                      description: "(String)Pattern"
+                    }
+                    nodes {
+                      offset: 26
+                      width: 1
+                      node_info {
+                        method_name: "compile"
+                        class_name: "java.util.regex.Pattern"
+                        description: "(String)Pattern"
+                      }
+                      nodes {
+                        offset: 26
+                        width: 1
+                        node_info {
+                          method_name: "<init>"
+                          class_name: "java.util.regex.Pattern"
+                          description: "(String, int)void"
+                        }
+                        nodes {
+                          offset: 26
+                          width: 1
+                          node_info {
+                            method_name: "compile"
+                            class_name: "java.util.regex.Pattern"
+                            description: "()void"
+                          }
+                          nodes {
+                            offset: 26
+                            width: 1
+                            node_info {
+                              method_name: "RemoveQEQuoting"
+                              class_name: "java.util.regex.Pattern"
+                              description: "()void"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+          nodes {
+            offset: 28
+            width: 588
+            node_info {
+              method_name: "tryToFindSolution"
+              class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.vertex_set_generator.VertexSetSolverKt"
+              description: "(Set, DirectedGraph)LabelingFunction"
+            }
+            nodes {
+              offset: 28
+              width: 28
+              node_info {
+                method_name: "solve"
+                class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.vertex_set_generator.SatSolverProcessManagerKt"
+                description: "(List, int)List"
+              }
+              nodes {
+                offset: 28
+                width: 28
+                node_info {
+                  method_name: "initSat"
+                  class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.vertex_set_generator.SatSolverProcessManagerKt"
+                  description: "(List)JPicoSat"
+                }
+                nodes {
+                  offset: 28
+                  width: 25
+                  node_info {
+                    method_name: "subList"
+                    class_name: "gnu.trove.list.array.TIntArrayList"
+                    description: "(int, int)TIntList"
+                  }
+                  nodes {
+                    offset: 28
+                    width: 25
+                    node_info {
+                      method_name: "<init>"
+                      class_name: "gnu.trove.list.array.TIntArrayList"
+                      description: "(int)void"
+                    }
+                    nodes {
+                      offset: 28
+                      width: 25
+                      node_info {
+                        method_name: "<init>"
+                        class_name: "gnu.trove.list.array.TIntArrayList"
+                        description: "(int, int)void"
+                      }
+                    }
+                  }
+                }
+                nodes {
+                  offset: 53
+                  width: 1
+                  node_info {
+                    method_name: "<clinit>"
+                    class_name: "jnisat.JPicoSat"
+                    description: "()void"
+                  }
+                  nodes {
+                    offset: 53
+                    width: 1
+                    node_info {
+                      method_name: "loadLibrary"
+                      class_name: "jnisat.LibDetect"
+                      description: "(String)void"
+                    }
+                    nodes {
+                      offset: 53
+                      width: 1
+                      node_info {
+                        method_name: "getResourceAsStream"
+                        class_name: "java.lang.Class"
+                        description: "(String)InputStream"
+                      }
+                      nodes {
+                        offset: 53
+                        width: 1
+                        node_info {
+                          method_name: "getResourceAsStream"
+                          class_name: "java.lang.ClassLoader"
+                          description: "(String)InputStream"
+                        }
+                        nodes {
+                          offset: 53
+                          width: 1
+                          node_info {
+                            method_name: "getResource"
+                            class_name: "java.lang.ClassLoader"
+                            description: "(String)URL"
+                          }
+                          nodes {
+                            offset: 53
+                            width: 1
+                            node_info {
+                              method_name: "getResource"
+                              class_name: "java.lang.ClassLoader"
+                              description: "(String)URL"
+                            }
+                            nodes {
+                              offset: 53
+                              width: 1
+                              node_info {
+                                method_name: "findResource"
+                                class_name: "jdk.internal.loader.BuiltinClassLoader"
+                                description: "(String)URL"
+                              }
+                              nodes {
+                                offset: 53
+                                width: 1
+                                node_info {
+                                  method_name: "findMiscResource"
+                                  class_name: "jdk.internal.loader.BuiltinClassLoader"
+                                  description: "(String)List"
+                                }
+                                nodes {
+                                  offset: 53
+                                  width: 1
+                                  node_info {
+                                    method_name: "doPrivileged"
+                                    class_name: "java.security.AccessController"
+                                    description: "(PrivilegedExceptionAction)Object"
+                                  }
+                                  nodes {
+                                    offset: 53
+                                    width: 1
+                                    node_info {
+                                      method_name: "run"
+                                      class_name: "jdk.internal.loader.BuiltinClassLoader$2"
+                                      description: "()Object"
+                                    }
+                                    nodes {
+                                      offset: 53
+                                      width: 1
+                                      node_info {
+                                        method_name: "run"
+                                        class_name: "jdk.internal.loader.BuiltinClassLoader$2"
+                                        description: "()List"
+                                      }
+                                      nodes {
+                                        offset: 53
+                                        width: 1
+                                        node_info {
+                                          method_name: "find"
+                                          class_name: "jdk.internal.module.SystemModuleFinder$ImageModuleReader"
+                                          description: "(String)Optional"
+                                        }
+                                        nodes {
+                                          offset: 53
+                                          width: 1
+                                          node_info {
+                                            method_name: "findImageLocation"
+                                            class_name: "jdk.internal.module.SystemModuleFinder$ImageModuleReader"
+                                            description: "(String)ImageLocation"
+                                          }
+                                          nodes {
+                                            offset: 53
+                                            width: 1
+                                            node_info {
+                                              method_name: "findLocation"
+                                              class_name: "jdk.internal.jimage.ImageReader"
+                                              description: "(String, String)ImageLocation"
+                                            }
+                                            nodes {
+                                              offset: 53
+                                              width: 1
+                                              node_info {
+                                                method_name: "findLocation"
+                                                class_name: "jdk.internal.jimage.BasicImageReader"
+                                                description: "(String, String)ImageLocation"
+                                              }
+                                              nodes {
+                                                offset: 53
+                                                width: 1
+                                                node_info {
+                                                  method_name: "hashCode"
+                                                  class_name: "jdk.internal.jimage.ImageStringsReader"
+                                                  description: "(String, String)int"
+                                                }
+                                                nodes {
+                                                  offset: 53
+                                                  width: 1
+                                                  node_info {
+                                                    method_name: "hashCode"
+                                                    class_name: "jdk.internal.jimage.ImageStringsReader"
+                                                    description: "(String, String, int)int"
+                                                  }
+                                                  nodes {
+                                                    offset: 53
+                                                    width: 1
+                                                    node_info {
+                                                      method_name: "unmaskedHashCode"
+                                                      class_name: "jdk.internal.jimage.ImageStringsReader"
+                                                      description: "(String, int)int"
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+                nodes {
+                  offset: 54
+                  width: 2
+                  node_info {
+                    method_name: "addClause"
+                    class_name: "jnisat.JPicoSat"
+                    description: "(int[])void"
+                  }
+                }
+              }
+            }
+            nodes {
+              offset: 56
+              width: 560
+              node_info {
+                method_name: "toDimacs"
+                class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.vertex_set_generator.VertexSetSolverKt"
+                description: "(DirectedGraph, Set)List"
+              }
+              nodes {
+                offset: 56
+                width: 541
+                node_info {
+                  method_name: "formClause"
+                  class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.vertex_set_generator.VertexSetSolverKt"
+                  description: "(DirectedGraph$Neighbourhood, Set, List)void"
+                }
+                nodes {
+                  offset: 56
+                  width: 34
+                  node_info {
+                    method_name: "isIncluded"
+                    class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.vertex_set_generator.rule.VertexRule"
+                    description: "(POSITION)boolean"
+                  }
+                  nodes {
+                    offset: 56
+                    width: 34
+                    node_info {
+                      method_name: "get"
+                      class_name: "org.apache.commons.collections4.bidimap.AbstractDualBidiMap"
+                      description: "(Object)Object"
+                    }
+                    nodes {
+                      offset: 56
+                      width: 34
+                      node_info {
+                        method_name: "get"
+                        class_name: "java.util.HashMap"
+                        description: "(Object)Object"
+                      }
+                      nodes {
+                        offset: 56
+                        width: 34
+                        node_info {
+                          method_name: "getNode"
+                          class_name: "java.util.HashMap"
+                          description: "(int, Object)HashMap$Node"
+                        }
+                      }
+                    }
+                  }
+                }
+                nodes {
+                  offset: 90
+                  width: 79
+                  node_info {
+                    method_name: "contains"
+                    class_name: "gnu.trove.impl.hash.TIntHash"
+                    description: "(int)boolean"
+                  }
+                  nodes {
+                    offset: 90
+                    width: 78
+                    node_info {
+                      method_name: "index"
+                      class_name: "gnu.trove.impl.hash.TIntHash"
+                      description: "(int)int"
+                    }
+                    nodes {
+                      offset: 90
+                      width: 78
+                      node_info {
+                        method_name: "indexRehashed"
+                        class_name: "gnu.trove.impl.hash.TIntHash"
+                        description: "(int, int, int, byte)int"
+                      }
+                    }
+                  }
+                }
+                nodes {
+                  offset: 169
+                  width: 1
+                  node_info {
+                    method_name: "add"
+                    class_name: "gnu.trove.list.array.TIntArrayList"
+                    description: "(int)boolean"
+                  }
+                }
+                nodes {
+                  offset: 170
+                  width: 114
+                  node_info {
+                    method_name: "addAll"
+                    class_name: "gnu.trove.list.array.TIntArrayList"
+                    description: "(TIntCollection)boolean"
+                  }
+                  nodes {
+                    offset: 170
+                    width: 16
+                    node_info {
+                      method_name: "hasNext"
+                      class_name: "gnu.trove.impl.hash.THashPrimitiveIterator"
+                      description: "()boolean"
+                    }
+                    nodes {
+                      offset: 170
+                      width: 16
+                      node_info {
+                        method_name: "nextIndex"
+                        class_name: "gnu.trove.impl.hash.THashPrimitiveIterator"
+                        description: "()int"
+                      }
+                    }
+                  }
+                  nodes {
+                    offset: 186
+                    width: 64
+                    node_info {
+                      method_name: "next"
+                      class_name: "gnu.trove.set.hash.TIntHashSet$TIntHashIterator"
+                      description: "()int"
+                    }
+                    nodes {
+                      offset: 186
+                      width: 64
+                      node_info {
+                        method_name: "moveToNextIndex"
+                        class_name: "gnu.trove.impl.hash.THashPrimitiveIterator"
+                        description: "()void"
+                      }
+                      nodes {
+                        offset: 186
+                        width: 64
+                        node_info {
+                          method_name: "nextIndex"
+                          class_name: "gnu.trove.impl.hash.THashPrimitiveIterator"
+                          description: "()int"
+                        }
+                      }
+                    }
+                  }
+                }
+                nodes {
+                  offset: 284
+                  width: 28
+                  node_info {
+                    method_name: "<init>"
+                    class_name: "gnu.trove.set.hash.TIntHashSet"
+                    description: "()void"
+                  }
+                  nodes {
+                    offset: 284
+                    width: 28
+                    node_info {
+                      method_name: "<init>"
+                      class_name: "gnu.trove.impl.hash.TIntHash"
+                      description: "()void"
+                    }
+                    nodes {
+                      offset: 284
+                      width: 28
+                      node_info {
+                        method_name: "<init>"
+                        class_name: "gnu.trove.impl.hash.TPrimitiveHash"
+                        description: "()void"
+                      }
+                      nodes {
+                        offset: 284
+                        width: 28
+                        node_info {
+                          method_name: "<init>"
+                          class_name: "gnu.trove.impl.hash.THash"
+                          description: "()void"
+                        }
+                        nodes {
+                          offset: 284
+                          width: 28
+                          node_info {
+                            method_name: "<init>"
+                            class_name: "gnu.trove.impl.hash.THash"
+                            description: "(int, float)void"
+                          }
+                          nodes {
+                            offset: 284
+                            width: 28
+                            node_info {
+                              method_name: "setUp"
+                              class_name: "gnu.trove.impl.hash.TIntHash"
+                              description: "(int)int"
+                            }
+                            nodes {
+                              offset: 284
+                              width: 28
+                              node_info {
+                                method_name: "setUp"
+                                class_name: "gnu.trove.impl.hash.TPrimitiveHash"
+                                description: "(int)int"
+                              }
+                              nodes {
+                                offset: 284
+                                width: 28
+                                node_info {
+                                  method_name: "setUp"
+                                  class_name: "gnu.trove.impl.hash.THash"
+                                  description: "(int)int"
+                                }
+                                nodes {
+                                  offset: 284
+                                  width: 28
+                                  node_info {
+                                    method_name: "nextPrime"
+                                    class_name: "gnu.trove.impl.PrimeFinder"
+                                    description: "(int)int"
+                                  }
+                                  nodes {
+                                    offset: 284
+                                    width: 28
+                                    node_info {
+                                      method_name: "binarySearch"
+                                      class_name: "java.util.Arrays"
+                                      description: "(int[], int)int"
+                                    }
+                                    nodes {
+                                      offset: 284
+                                      width: 14
+                                      node_info {
+                                        method_name: "binarySearch0"
+                                        class_name: "java.util.Arrays"
+                                        description: "(int[], int, int, int)int"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+                nodes {
+                  offset: 312
+                  width: 13
+                  node_info {
+                    method_name: "add"
+                    class_name: "gnu.trove.set.hash.TIntHashSet"
+                    description: "(int)boolean"
+                  }
+                  nodes {
+                    offset: 312
+                    width: 1
+                    node_info {
+                      method_name: "postInsertHook"
+                      class_name: "gnu.trove.impl.hash.THash"
+                      description: "(boolean)void"
+                    }
+                  }
+                  nodes {
+                    offset: 313
+                    width: 12
+                    node_info {
+                      method_name: "insertKey"
+                      class_name: "gnu.trove.impl.hash.TIntHash"
+                      description: "(int)int"
+                    }
+                    nodes {
+                      offset: 313
+                      width: 12
+                      node_info {
+                        method_name: "insertKeyRehash"
+                        class_name: "gnu.trove.impl.hash.TIntHash"
+                        description: "(int, int, int, byte)int"
+                      }
+                    }
+                  }
+                }
+                nodes {
+                  offset: 325
+                  width: 117
+                  node_info {
+                    method_name: "next"
+                    class_name: "java.util.HashMap$KeyIterator"
+                    description: "()Object"
+                  }
+                  nodes {
+                    offset: 325
+                    width: 117
+                    node_info {
+                      method_name: "nextNode"
+                      class_name: "java.util.HashMap$HashIterator"
+                      description: "()HashMap$Node"
+                    }
+                  }
+                }
+                nodes {
+                  offset: 442
+                  width: 59
+                  node_info {
+                    method_name: "get"
+                    class_name: "java.util.HashMap"
+                    description: "(Object)Object"
+                  }
+                  nodes {
+                    offset: 442
+                    width: 59
+                    node_info {
+                      method_name: "getNode"
+                      class_name: "java.util.HashMap"
+                      description: "(int, Object)HashMap$Node"
+                    }
+                  }
+                }
+                nodes {
+                  offset: 501
+                  width: 17
+                  node_info {
+                    method_name: "iterator"
+                    class_name: "java.util.HashSet"
+                    description: "()Iterator"
+                  }
+                  nodes {
+                    offset: 501
+                    width: 17
+                    node_info {
+                      method_name: "iterator"
+                      class_name: "java.util.HashMap$KeySet"
+                      description: "()Iterator"
+                    }
+                    nodes {
+                      offset: 501
+                      width: 17
+                      node_info {
+                        method_name: "<init>"
+                        class_name: "java.util.HashMap$KeyIterator"
+                        description: "(HashMap)void"
+                      }
+                      nodes {
+                        offset: 501
+                        width: 17
+                        node_info {
+                          method_name: "<init>"
+                          class_name: "java.util.HashMap$HashIterator"
+                          description: "(HashMap)void"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+              nodes {
+                offset: 597
+                width: 16
+                node_info {
+                  method_name: "reverseRules"
+                  class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.vertex_set_generator.rule.UtilKt"
+                  description: "(Set)Set"
+                }
+                nodes {
+                  offset: 597
+                  width: 2
+                  node_info {
+                    method_name: "add"
+                    class_name: "java.util.HashSet"
+                    description: "(Object)boolean"
+                  }
+                  nodes {
+                    offset: 597
+                    width: 2
+                    node_info {
+                      method_name: "put"
+                      class_name: "java.util.HashMap"
+                      description: "(Object, Object)Object"
+                    }
+                    nodes {
+                      offset: 597
+                      width: 2
+                      node_info {
+                        method_name: "putVal"
+                        class_name: "java.util.HashMap"
+                        description: "(int, Object, Object, boolean, boolean)Object"
+                      }
+                      nodes {
+                        offset: 597
+                        width: 1
+                        node_info {
+                          method_name: "resize"
+                          class_name: "java.util.HashMap"
+                          description: "()HashMap$Node[]"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    nodes {
+      offset: 616
+      width: 1
+      node_info {
+        method_name: "loadClass"
+        class_name: "java.lang.ClassLoader"
+        description: "(String)Class"
+      }
+      nodes {
+        offset: 616
+        width: 1
+        node_info {
+          method_name: "loadClass"
+          class_name: "jdk.internal.loader.ClassLoaders$AppClassLoader"
+          description: "(String, boolean)Class"
+        }
+        nodes {
+          offset: 616
+          width: 1
+          node_info {
+            method_name: "loadClass"
+            class_name: "jdk.internal.loader.BuiltinClassLoader"
+            description: "(String, boolean)Class"
+          }
+          nodes {
+            offset: 616
+            width: 1
+            node_info {
+              method_name: "loadClassOrNull"
+              class_name: "jdk.internal.loader.BuiltinClassLoader"
+              description: "(String, boolean)Class"
+            }
+            nodes {
+              offset: 616
+              width: 1
+              node_info {
+                method_name: "findClassOnClassPathOrNull"
+                class_name: "jdk.internal.loader.BuiltinClassLoader"
+                description: "(String)Class"
+              }
+              nodes {
+                offset: 616
+                width: 1
+                node_info {
+                  method_name: "defineClass"
+                  class_name: "jdk.internal.loader.BuiltinClassLoader"
+                  description: "(String, Resource)Class"
+                }
+                nodes {
+                  offset: 616
+                  width: 1
+                  node_info {
+                    method_name: "getByteBuffer"
+                    class_name: "jdk.internal.loader.Resource"
+                    description: "()ByteBuffer"
+                  }
+                  nodes {
+                    offset: 616
+                    width: 1
+                    node_info {
+                      method_name: "cachedInputStream"
+                      class_name: "jdk.internal.loader.Resource"
+                      description: "()InputStream"
+                    }
+                    nodes {
+                      offset: 616
+                      width: 1
+                      node_info {
+                        method_name: "getInputStream"
+                        class_name: "jdk.internal.loader.URLClassPath$JarLoader$2"
+                        description: "()InputStream"
+                      }
+                      nodes {
+                        offset: 616
+                        width: 1
+                        node_info {
+                          method_name: "getInputStream"
+                          class_name: "java.util.jar.JarFile"
+                          description: "(ZipEntry)InputStream"
+                        }
+                        nodes {
+                          offset: 616
+                          width: 1
+                          node_info {
+                            method_name: "initializeVerifier"
+                            class_name: "java.util.jar.JarFile"
+                            description: "()void"
+                          }
+                          nodes {
+                            offset: 616
+                            width: 1
+                            node_info {
+                              method_name: "<clinit>"
+                              class_name: "sun.security.util.SignatureFileVerifier"
+                              description: "()void"
+                            }
+                            nodes {
+                              offset: 616
+                              width: 1
+                              node_info {
+                                method_name: "<init>"
+                                class_name: "sun.security.util.DisabledAlgorithmConstraints"
+                                description: "(String)void"
+                              }
+                              nodes {
+                                offset: 616
+                                width: 1
+                                node_info {
+                                  method_name: "<init>"
+                                  class_name: "sun.security.util.DisabledAlgorithmConstraints"
+                                  description: "(String, AlgorithmDecomposer)void"
+                                }
+                                nodes {
+                                  offset: 616
+                                  width: 1
+                                  node_info {
+                                    method_name: "getAlgorithms"
+                                    class_name: "sun.security.util.AbstractAlgorithmConstraints"
+                                    description: "(String)String[]"
+                                  }
+                                  nodes {
+                                    offset: 616
+                                    width: 1
+                                    node_info {
+                                      method_name: "doPrivileged"
+                                      class_name: "java.security.AccessController"
+                                      description: "(PrivilegedAction)Object"
+                                    }
+                                    nodes {
+                                      offset: 616
+                                      width: 1
+                                      node_info {
+                                        method_name: "run"
+                                        class_name: "sun.security.util.AbstractAlgorithmConstraints$1"
+                                        description: "()Object"
+                                      }
+                                      nodes {
+                                        offset: 616
+                                        width: 1
+                                        node_info {
+                                          method_name: "run"
+                                          class_name: "sun.security.util.AbstractAlgorithmConstraints$1"
+                                          description: "()String"
+                                        }
+                                        nodes {
+                                          offset: 616
+                                          width: 1
+                                          node_info {
+                                            method_name: "<clinit>"
+                                            class_name: "java.security.Security"
+                                            description: "()void"
+                                          }
+                                          nodes {
+                                            offset: 616
+                                            width: 1
+                                            node_info {
+                                              method_name: "doPrivileged"
+                                              class_name: "java.security.AccessController"
+                                              description: "(PrivilegedAction)Object"
+                                            }
+                                            nodes {
+                                              offset: 616
+                                              width: 1
+                                              node_info {
+                                                method_name: "run"
+                                                class_name: "java.security.Security$1"
+                                                description: "()Object"
+                                              }
+                                              nodes {
+                                                offset: 616
+                                                width: 1
+                                                node_info {
+                                                  method_name: "run"
+                                                  class_name: "java.security.Security$1"
+                                                  description: "()Void"
+                                                }
+                                                nodes {
+                                                  offset: 616
+                                                  width: 1
+                                                  node_info {
+                                                    method_name: "access$000"
+                                                    class_name: "java.security.Security"
+                                                    description: "()void"
+                                                  }
+                                                  nodes {
+                                                    offset: 616
+                                                    width: 1
+                                                    node_info {
+                                                      method_name: "initialize"
+                                                      class_name: "java.security.Security"
+                                                      description: "()void"
+                                                    }
+                                                    nodes {
+                                                      offset: 616
+                                                      width: 1
+                                                      node_info {
+                                                        method_name: "load"
+                                                        class_name: "java.util.Properties"
+                                                        description: "(InputStream)void"
+                                                      }
+                                                      nodes {
+                                                        offset: 616
+                                                        width: 1
+                                                        node_info {
+                                                          method_name: "load0"
+                                                          class_name: "java.util.Properties"
+                                                          description: "(Properties$LineReader)void"
+                                                        }
+                                                        nodes {
+                                                          offset: 616
+                                                          width: 1
+                                                          node_info {
+                                                            method_name: "readLine"
+                                                            class_name: "java.util.Properties$LineReader"
+                                                            description: "()int"
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+depth: 28
+width: 617
