@@ -32,7 +32,7 @@ class ChangeConfigurationDialogTest : LightCodeInsightFixtureTestCase() {
     }
 
     fun testRemoveMethodInEditor() {
-        val file = myFixture.copyFileToProject("src/test/resources/com/github/kornilova_l/flamegraph/plugin/ui/config_dialog/Main.java")
+        val file = myFixture.copyFileToProject("src/test/resources/plugin/ui/config_dialog/Main.java")
         myFixture.openFileInEditor(file)
 
         val className = "*.Main"
@@ -47,15 +47,16 @@ class ChangeConfigurationDialogTest : LightCodeInsightFixtureTestCase() {
         val lineMarkerHolder = project.getComponent(LineMarkersHolder::class.java)
         assertEquals(1, lineMarkerHolder.lineMarkersCount)
 
-        ApplicationManager.getApplication().runWriteAction({
-            file.setBinaryContent(("package com.github.kornilova_l.flamegraph.plugin.ui.config_dialog;\n" +
-                    "\n" +
-                    "public class Main {\n" +
-                    "    public static void newMain(String[] args) {\n" +
-                    "\n" +
-                    "    }\n" +
-                    "}").toByteArray())
-        })
+        ApplicationManager.getApplication().runWriteAction {
+            file.setBinaryContent(("""
+                |package com.github.kornilova_l.flamegraph.plugin.ui.config_dialog;
+                |
+                |public class Main {
+                |    public static void newMain(String[] args) {
+                |
+                |    }
+                |}""".trimMargin()).toByteArray())
+        }
 
         myFixture.doHighlighting() // rebuild tree
 

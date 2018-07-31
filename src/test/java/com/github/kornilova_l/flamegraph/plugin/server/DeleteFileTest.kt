@@ -1,6 +1,7 @@
 package com.github.kornilova_l.flamegraph.plugin.server
 
 import com.github.kornilova_l.flamegraph.plugin.PluginFileManager
+import com.github.kornilova_l.flamegraph.plugin.server.UploadFileUtil.sendFile
 import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase
 import io.netty.handler.codec.http.HttpResponseStatus
 import org.jetbrains.ide.BuiltInServerManager
@@ -28,7 +29,7 @@ class DeleteFileTest : LightPlatformCodeInsightFixtureTestCase() {
         PluginFileManager.deleteAllUploadedFiles()
         val projectName = "uploaded-files"
         val fileName = "my-flamegraph.flamegraph"
-        FilesUploaderTest.sendFile(fileName, "fun1;fun2 1".toByteArray())
+        sendFile(fileName, "fun1;fun2 1".toByteArray())
 
         val file = PluginFileManager.getLogFile(projectName, fileName)
         assertNotNull(file) // file was sent
