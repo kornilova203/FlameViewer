@@ -15,7 +15,7 @@ class FilesUploaderTest : LightPlatformCodeInsightFixtureTestCase() {
 
     fun testUploadBigFiles() {
         PluginFileManager.deleteAllUploadedFiles()
-        val bytes = createBytes(bytesInMB * 250)
+        val bytes = createBytes(bytesInMB * 50)
         sendFile("big.ser", bytes)
         var expectedFile = PluginFileManager.tempFileSaver.save(bytes, "01_medium.ser")!!
         fileReceivedTest("big.ser", expectedFile)

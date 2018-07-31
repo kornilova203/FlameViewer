@@ -1,5 +1,6 @@
 package com.github.kornilova_l.flamegraph.plugin.server.trees.hot_spots
 
+import com.github.kornilova_l.flamegraph.plugin.server.trees.util.TreesUtil.getSelfTime
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree
 import java.util.*
 import kotlin.Comparator
@@ -32,15 +33,6 @@ class HotSpotsBuilder(callTraces: Tree) {
             val child = node.nodesList[i]
             getHotSpotsRecursively(child, hotSpotTreeMap, callTraces)
         }
-    }
-
-    private fun getSelfTime(node: Tree.Node): Long {
-        var childTime: Long = 0
-        for (i in 0 until node.nodesList.size) {
-            val child = node.nodesList[i]
-            childTime += child.width
-        }
-        return node.width - childTime
     }
 }
 

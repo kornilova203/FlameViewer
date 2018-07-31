@@ -3,7 +3,7 @@ tree_info {
 }
 base_node {
   nodes {
-    width: 20
+    width: 130
     node_info {
       method_name: "run"
       class_name: "com.github.kornilova_l.flamegraph.plugin.server.trees.generate_test_data.MyTask"
@@ -12,4 +12,4 @@ base_node {
   }
 }
 depth: 1
-width: 20
+width: 130
