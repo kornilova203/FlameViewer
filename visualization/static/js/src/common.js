@@ -192,12 +192,12 @@ const common = {
         if (ratio !== 1) {
             const width = canvas.width;
             const height = canvas.height;
-            canvas.width = width * 2;
-            canvas.height = height * 2;
+            canvas.width = width * ratio;
+            canvas.height = height * ratio;
             canvas.style.width = width + "px";
             canvas.style.height = height + "px";
-            stage.scaleX = 2;
-            stage.scaleY = 2;
+            stage.scaleX = ratio;
+            stage.scaleY = ratio;
             stage.update();
         }
         stage.id = canvasName;

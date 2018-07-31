@@ -652,7 +652,8 @@ module.exports.TreeDrawer = class TreeDrawer {
     }
 
     static _getCanvasWidth($canvas) {
-        return Number.parseInt($canvas.attr("width"));
+        const ratio = window.devicePixelRatio || 1;
+        return Number.parseInt($canvas.attr("width")) / ratio;
     }
 
     /**
