@@ -56,6 +56,10 @@ internal class Converter(file: File) {
             currentStack.removeAt(currentStack.size - 1)
         }
 
+        if (node.depth() != currentStack.size) {
+            throw AssertionError("$pleaseReportIssue: depth of node cannot increase by 2 or more.")
+        }
+
         val newNode = TreesUtil.updateNodeList(
                 currentStack[currentStack.size - 1],
                 if (node.classNameId() >= 0) classNames[node.classNameId()]!! else "",

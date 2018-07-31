@@ -70,15 +70,17 @@ class Converter(file: File) {
         val className = StacksToTreeBuilder.getClassName(name, parametersPos, lastSpacePosBeforeParams)
         val methodName = StacksToTreeBuilder.getMethodName(name, parametersPos)
         val desc = StacksToTreeBuilder.getDescription(name, parametersPos, lastSpacePosBeforeParams)
-        cFlamegraphLines.add(
-                CFlamegraphLine(
-                        if (className == null) null else getId(classNames, className),
-                        getId(methodNames, methodName),
-                        if (desc == null) null else getId(descriptions, desc),
-                        width,
-                        depth
-                )
-        )
+        if (width > 0) {
+            cFlamegraphLines.add(
+                    CFlamegraphLine(
+                            if (className == null) null else getId(classNames, className),
+                            getId(methodNames, methodName),
+                            if (desc == null) null else getId(descriptions, desc),
+                            width,
+                            depth
+                    )
+            )
+        }
     }
 
     private fun getId(map: HashMap<String, Int>, name: String): Int {
