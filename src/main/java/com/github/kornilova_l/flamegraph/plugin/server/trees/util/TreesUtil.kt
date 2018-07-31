@@ -206,4 +206,13 @@ object TreesUtil {
         }
         return res
     }
+
+    fun getSelfTime(node: Tree.Node): Long {
+        var childTime: Long = 0
+        for (i in 0 until node.nodesList.size) {
+            val child = node.nodesList[i]
+            childTime += child.width
+        }
+        return node.width - childTime
+    }
 }

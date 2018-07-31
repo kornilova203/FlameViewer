@@ -9,7 +9,7 @@ import java.util.*
 
 object UploadFileUtil {
     const val bytesInMB = 1_000_000
-    private const val megabytesInOnePart = 100
+    private const val megabytesInOnePart = 20
 
     fun sendFile(fileName: String, bytes: ByteArray, reverseOrder: Boolean = false) {
         var partsCount = bytes.size / (bytesInMB * megabytesInOnePart)

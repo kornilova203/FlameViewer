@@ -1,0 +1,132 @@
+tree_info {
+  nodes_count: 18
+}
+base_node {
+  nodes {
+    width: 10
+    node_info {
+      method_name: "a"
+    }
+  }
+  nodes {
+    offset: 10
+    width: 15
+    node_info {
+      method_name: "b"
+    }
+    nodes {
+      offset: 10
+      width: 15
+      node_info {
+        method_name: "a"
+      }
+    }
+  }
+  nodes {
+    offset: 25
+    width: 15
+    node_info {
+      method_name: "c"
+    }
+    nodes {
+      offset: 25
+      width: 5
+      node_info {
+        method_name: "a"
+      }
+    }
+    nodes {
+      offset: 30
+      width: 5
+      node_info {
+        method_name: "b"
+      }
+      nodes {
+        offset: 30
+        width: 5
+        node_info {
+          method_name: "a"
+        }
+      }
+    }
+    nodes {
+      offset: 35
+      width: 5
+      node_info {
+        method_name: "d"
+      }
+      nodes {
+        offset: 35
+        width: 5
+        node_info {
+          method_name: "a"
+        }
+      }
+    }
+  }
+  nodes {
+    offset: 40
+    width: 1
+    node_info {
+      method_name: "d"
+    }
+    nodes {
+      offset: 40
+      width: 1
+      node_info {
+        method_name: "a"
+      }
+    }
+  }
+  nodes {
+    offset: 41
+    width: 5
+    node_info {
+      method_name: "e"
+    }
+  }
+  nodes {
+    offset: 46
+    width: 5
+    node_info {
+      method_name: "f"
+    }
+    nodes {
+      offset: 46
+      width: 5
+      node_info {
+        method_name: "c"
+      }
+      nodes {
+        offset: 46
+        width: 5
+        node_info {
+          method_name: "f"
+        }
+        nodes {
+          offset: 46
+          width: 5
+          node_info {
+            method_name: "e"
+          }
+        }
+      }
+    }
+  }
+  nodes {
+    offset: 51
+    width: 5
+    node_info {
+      method_name: "g"
+    }
+    nodes {
+      offset: 51
+      width: 5
+      node_info {
+        method_name: "e"
+      }
+    }
+  }
+}
+depth: 4
+width: 56
