@@ -33,7 +33,7 @@ class PreviewDrawer {
             this.$section.css("border", "none");
         }
         this.bindShowCallTree();
-        this.stage = new createjs.Stage("canvas-preview-" + this.id);
+        this.stage = common.createStage("canvas-preview-" + this.id);
         this._drawShape();
         this._resizeCanvas();
     }

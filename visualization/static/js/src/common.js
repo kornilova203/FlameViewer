@@ -179,6 +179,29 @@ const common = {
             return; // do not send request
         }
         request.send();
+    },
+
+    /**
+     * Rescales canvas for retina displays
+     * @return {createjs.Stage}
+     */
+    createStage: (canvasName) => {
+        const canvas = document.getElementById(canvasName);
+        const ratio = window.devicePixelRatio || 1;
+        const stage = new createjs.Stage(canvas);
+        if (ratio !== 1) {
+            const width = canvas.width;
+            const height = canvas.height;
+            canvas.width = width * 2;
+            canvas.height = height * 2;
+            canvas.style.width = width + "px";
+            canvas.style.height = height + "px";
+            stage.scaleX = 2;
+            stage.scaleY = 2;
+            stage.update();
+        }
+        stage.id = canvasName;
+        return stage;
     }
 };
 
@@ -197,7 +220,7 @@ const constants = {
     $fullFileName: null,
     pageName: /[^\/]*((?=\?)|(?=\.html))/.exec(window.location.href)[0],
     CANVAS_PADDING: 35,
-    LAYER_HEIGHT: 19,
+    LAYER_HEIGHT: 18,
     LAYER_GAP: 1,
     POPUP_MARGIN: 6, // have no idea why there is a gap between popup and canvas
     METHOD_HEADER_HEIGHT: 80,

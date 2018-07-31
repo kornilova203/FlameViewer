@@ -724,10 +724,8 @@ module.exports.TreeDrawer = class TreeDrawer {
         ).content;
         this.$section.find(".canvas-wrapper").prepend($(canvasContent));
 
-        this.stage = new createjs.Stage("canvas");
-        this.stage.id = "canvas";
-        this.zoomedStage = new createjs.Stage("canvas-zoomed");
-        this.zoomedStage.id = "canvas-zoomed";
+        this.stage = common.createStage("canvas");
+        this.zoomedStage = common.createStage("canvas-zoomed");
         this.stage.enableMouseOver(20);
         this.zoomedStage.enableMouseOver(20);
     }

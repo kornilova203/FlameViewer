@@ -97,8 +97,7 @@ module.exports.CallTreeDrawer = class CallTreeDrawer extends TreeDrawer.TreeDraw
      * @override
      */
     _doCreateStages() {
-        this.stage = new createjs.Stage("canvas-" + this.id);
-        this.stage.id = "canvas-" + this.id;
+        this.stage = common.createStage("canvas-" + this.id);
         this.stage.enableMouseOver(20);
         this._createZoomedStage();
     }
@@ -240,9 +239,8 @@ module.exports.CallTreeDrawer = class CallTreeDrawer extends TreeDrawer.TreeDraw
 
         this._createZoomedCanvas();
 
-        this.zoomedStage = new createjs.Stage("canvas-zoomed-" + this.id);
+        this.zoomedStage = common.createStage("canvas-zoomed-" + this.id);
         this.$zoomedCanvas = $("#canvas-zoomed-" + this.id);
-        this.zoomedStage.id = "canvas-zoomed-" + this.id;
         this.zoomedStage.enableMouseOver(20);
 
         if (this.zoomedNode !== null) {
