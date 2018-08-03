@@ -13,7 +13,7 @@ class FlamegraphToCallTracesConverterTest : ConverterTestCase("flamegraph", "tre
 
     fun testNodesCountBiggerThanLimit() {
         PluginFileManager.deleteAllUploadedFiles()
-        val tempFile = File("$testDataPath/nodesCountBiggerThanLimit.flamegraph")
+        val tempFile = File("${getProfilerFilesPath()}/nodesCountBiggerThanLimit.flamegraph")
         try {
             val nodesCount = 20_000 // it is more than maximumNodesCount
             TreeGenerator(nodesCount).outputFlamegraph(tempFile)
@@ -31,7 +31,7 @@ class FlamegraphToCallTracesConverterTest : ConverterTestCase("flamegraph", "tre
 
     fun testZoomedPartOfBigTree() {
         PluginFileManager.deleteAllUploadedFiles()
-        val tempFile = File("$testDataPath/zoomedPartOfBigTree.flamegraph")
+        val tempFile = File("${getProfilerFilesPath()}/zoomedPartOfBigTree.flamegraph")
         try {
             val nodesCount = 50_000 // it is more than maximumNodesCount
             val treeGenerator = TreeGenerator(nodesCount)

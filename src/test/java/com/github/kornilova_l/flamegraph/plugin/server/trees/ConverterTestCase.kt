@@ -12,11 +12,25 @@ import java.net.HttpURLConnection
 
 abstract class ConverterTestCase(private val fileExtension: String, private val type: String) : LightPlatformCodeInsightFixtureTestCase() {
 
-    override fun getTestDataPath(): String {
+    private val commonSourceFilesPath = "src/test/resources/plugin/server/trees/profiler-files"
+
+    private fun getClassNameUniquePart(): String {
         val className = this::class.java.canonicalName
-        val relativePath = className.substring("com.github.kornilova_l.flamegraph.".length, className.lastIndexOf('.'))
-                .replace('.', '/')
+        return className.substring("com.github.kornilova_l.flamegraph.".length, className.lastIndexOf('.'))
+    }
+
+    override fun getTestDataPath(): String {
+        val relativePath = getClassNameUniquePart().replace('.', '/')
         return "src/test/resources/$relativePath"
+    }
+
+    private fun getId(): String {
+        val classNameUniquePart = getClassNameUniquePart()
+        return classNameUniquePart.substring(classNameUniquePart.lastIndexOf('.') + 1)
+    }
+
+    protected fun getProfilerFilesPath(): String {
+        return "$commonSourceFilesPath/${getId()}"
     }
 
     protected fun getTreeBytes(path: List<Int> = ArrayList(), className: String? = null,
@@ -26,7 +40,7 @@ abstract class ConverterTestCase(private val fileExtension: String, private val 
 
         val name = fileName ?: getTestName(true)
 
-        val fileToUpload = File("$testDataPath/$name.$fileExtension")
+        val fileToUpload = File("${getProfilerFilesPath()}/$name.$fileExtension")
 
         PluginFileManager.deleteAllUploadedFiles()
         UploadFileUtil.sendFile(fileToUpload.name, fileToUpload.readBytes())
