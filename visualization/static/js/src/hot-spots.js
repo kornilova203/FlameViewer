@@ -65,7 +65,13 @@ function removeShowMore() {
  * @param {Number} biggestRelativeTime
  */
 function appendHotSpot(hotSpot, biggestRelativeTime) {
-    let relativeTime =  common.roundRelativeTime(hotSpot.relativeTime);
+    let relativeTime = common.roundRelativeTime(hotSpot.relativeTime);
+    /* Restore original description.
+     * If parameters array is empty - the original desc is also empty (it does not even contain brackets)
+     * If parameters array contains only one empty string then the original description contains empty brackets */
+    const desc = (hotSpot.parameters.length === 0)
+        ? ""
+        : "(" + hotSpot.parameters.join(', ') + ")" + hotSpot.retVal;
     const hotSpotBlock = $(templates.tree.hotSpot(
         {
             methodName: hotSpot.methodName,
@@ -75,7 +81,7 @@ function appendHotSpot(hotSpot, biggestRelativeTime) {
             relativeTime: relativeTime,
             fileName: constants.fileName,
             projectName: constants.projectName,
-            desc: "(" + hotSpot.parameters.join(', ') + ")" + hotSpot.retVal
+            desc: desc
         }
     ).content);
     $(hotSpotBlock).find(".method-time").css("width", Math.round(hotSpot.relativeTime / biggestRelativeTime * 194));

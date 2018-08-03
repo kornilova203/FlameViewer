@@ -4,6 +4,11 @@ package com.github.kornilova_l.flamegraph.plugin.server.trees.hot_spots
 class HotSpot internal constructor(tempHotSpot: TempHotSpot) {
     private val className: String
     private val methodName: String
+    /**
+     * if method does not have a description then parameters array is empty.
+     * If method has a description without parameters then the array has one empty string.
+     * This differentiation is needed to correctly restore original description on client side.
+     */
     private val parameters: Array<String>
     private val retVal: String
     internal val relativeTime: Float
