@@ -42,11 +42,6 @@ public class AgentFileManager {
         return string.toString();
     }
 
-    public File createLogFile() {
-        int max = getLargestFileNum();
-        return new File(logDir.getAbsolutePath() + DELIMITER + intToString(max + 1) + ".ser");
-    }
-
     @Nullable
     private File getLatestFile() {
         File[] files = logDir.listFiles();

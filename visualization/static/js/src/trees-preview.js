@@ -2,7 +2,7 @@ const deserializer = require('./deserializer');
 
 function sendRequestForTreesPreview() {
     const extension = common.getExtension(constants.fileName);
-    if (extension === "ser") {
+    if (extension === "ser" || extension === "fierix") {
         getAndShowTreesPreview();
     } else {
         common.showMessage(constants.pageMessages.callTreeUnavailable)

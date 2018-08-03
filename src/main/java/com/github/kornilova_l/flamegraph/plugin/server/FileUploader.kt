@@ -21,16 +21,17 @@ class FileUploader {
      */
     fun upload(fileName: String, bytes: ByteArray, currentPart: Int, partsCount: Int) {
         synchronized(this) {
-            val fileAccumulator = fileAccumulators.computeIfAbsent(fileName, { FileAccumulator(fileName, partsCount) })
+            val fileAccumulator = fileAccumulators.computeIfAbsent(fileName) { FileAccumulator(fileName, partsCount) }
             fileAccumulator.add(bytes, currentPart - 1)
             if (fileAccumulator.fullFileReceived()) {
                 /* here we are not interested if file will be saved/converted
                  * client will send a request to check if file was saved/converted */
                 val file = fileAccumulator.getFile()
                 fileAccumulators.remove(fileName)
-                if (ProfilerToFlamegraphConverter.getFileExtension(fileName) == "ser") {
+                val extension = ProfilerToFlamegraphConverter.getFileExtension(fileName)
+                if (extension == "ser" || extension == "fierix") {
                     /* move file to ser files */
-                    PluginFileManager.serFileSaver.moveToDir(file, fileName)
+                    PluginFileManager.fierixFileSaver.moveToDir(file, fileName)
                     return
                 }
                 if (tryToConvertFileToAnotherFile(file)) { // this moves file to right place

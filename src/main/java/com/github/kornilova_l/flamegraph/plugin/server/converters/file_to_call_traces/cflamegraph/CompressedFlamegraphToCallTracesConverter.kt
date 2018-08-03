@@ -58,7 +58,7 @@ class CompressedFlamegraphToCallTracesConverter : FileToCallTracesConverter() {
     override fun getId(): String = extension
 
     /**
-     * Simply checks extension.
+     * Simply checks EXTENSION.
      * There is not need to validate the file because cflamegraph format is known only by the plugin.
      */
     override fun isSupported(file: File): Boolean {

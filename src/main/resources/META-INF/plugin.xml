@@ -54,6 +54,8 @@ Detailed description at <a href="https://github.com/kornilova-l/flamegraph-visua
                         interface="com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file.ProfilerToFlamegraphConverter"/>
         <extensionPoint name="profilerToCompressedFlamegraphConverter"
                         interface="com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file.ProfilerToCompressedFlamegraphConverter"/>
+        <extensionPoint name="fileToCallTreeConverter"
+                        interface="com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_tree.FileToCallTreeConverter"/>
         <extensionPoint name="fileToCallTracesConverter"
                         interface="com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_traces.FileToCallTracesConverter"/>
     </extensionPoints>
@@ -76,6 +78,8 @@ Detailed description at <a href="https://github.com/kornilova-l/flamegraph-visua
                 implementation="com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_traces.flamegraph.FlamegraphToCallTracesConverter"/>
         <fileToCallTracesConverter
                 implementation="com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_traces.cflamegraph.CompressedFlamegraphToCallTracesConverter"/>
+        <fileToCallTreeConverter
+                implementation="com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_tree.fierix.FierixToCallTreeConverter"/>
     </extensions>
 
     <actions>

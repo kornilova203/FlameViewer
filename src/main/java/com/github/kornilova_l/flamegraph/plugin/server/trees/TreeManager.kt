@@ -2,10 +2,10 @@ package com.github.kornilova_l.flamegraph.plugin.server.trees
 
 import com.github.kornilova_l.flamegraph.plugin.PluginFileManager
 import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_traces.FileToCallTracesConverter
-import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_traces.flamegraph.TreesSetImpl
+import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_tree.FileToCallTreeConverter
+import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_tree.fierix.FierixToCallTreeConverter
 import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file.ProfilerToFlamegraphConverter
 import com.github.kornilova_l.flamegraph.plugin.server.trees.hot_spots.HotSpot
-import com.github.kornilova_l.flamegraph.plugin.server.trees.ser_trees.SerTreesSet
 import com.github.kornilova_l.flamegraph.proto.TreeProtos
 import com.github.kornilova_l.flamegraph.proto.TreesPreviewProtos.TreesPreview
 import com.github.kornilova_l.flamegraph.proto.TreesProtos
@@ -61,21 +61,34 @@ object TreeManager {
     private fun updateTreesSet(logFile: File) {
         if (currentFile == null || logFile.absolutePath != currentFile!!.absolutePath) {
             currentFile = logFile
-            if (ProfilerToFlamegraphConverter.getFileExtension(logFile.name) == "ser") {
-                currentTreesSet = SerTreesSet(logFile)
+            val extension = ProfilerToFlamegraphConverter.getFileExtension(logFile.name)
+            if (extension == "ser" || extension == "fierix") {
+                currentTreesSet = TreesSetImpl(FileToCallTreeConverter.convert("fierix", logFile)!!)
                 return
             }
-            val parentDirName = PluginFileManager.getParentDirName(logFile)
+            var parentDirName = PluginFileManager.getParentDirName(logFile)
             if (parentDirName == null) {
-                LOG.error("Cannot find parent directory of log file")
+                LOG.error("Cannot find parent directory of the log file: ${logFile.absolutePath}")
                 return
             }
-            val callTraces = FileToCallTracesConverter.convert(parentDirName, logFile)
-            if (callTraces == null) {
-                LOG.error("Cannot convert file " + logFile)
-                return
+            if (parentDirName == "ser") {
+                /* ser extension is deprecated */
+                parentDirName = FierixToCallTreeConverter.EXTENSION
             }
-            currentTreesSet = TreesSetImpl(callTraces)
+            /* try to convert to call tree */
+            val callTree = FileToCallTreeConverter.convert(parentDirName, logFile)
+            currentTreesSet =
+                    if (callTree != null) {
+                        TreesSetImpl(callTree)
+                    } else {
+                        /* try to convert to call traces */
+                        val callTraces = FileToCallTracesConverter.convert(parentDirName, logFile)
+                        if (callTraces == null) {
+                            LOG.error("Cannot convert file: ${logFile.absolutePath}")
+                            return
+                        }
+                        TreesSetImpl(callTraces)
+                    }
         }
     }
 
