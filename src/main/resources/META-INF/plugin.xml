@@ -1,6 +1,6 @@
 <idea-plugin url="https://github.com/kornilova-l/flamegraph-visualizer">
     <id>com.github.kornilovaL.flamegraphProfiler</id>
-    <name>Flamegraph Profiler</name>
+    <name>FlameViewer</name>
     <version>0.8.1-SNAPSHOT</version>
 
     <vendor url="https://github.com/kornilova-l" email="kornilova203@gmail.com"/>
@@ -86,20 +86,20 @@ Detailed description at <a href="https://github.com/kornilova-l/flamegraph-visua
         <group id="com.github.kornilova_l.flamegraph" text="Flamegraph Profiler" popup="true"
                icon="ProfilerIcons.flameIcon">
             <action class="com.github.kornilova_l.flamegraph.plugin.ui.config_dialog.ShowProfilerDialogAction"
-                    id="flamegraph-profiler.ShowProfilerDialog" text="Edit Configuration..."/>
-            <action id="java-profiling-plugin.server"
+                    id="fierix.EditConfiguration" text="Edit Configuration..."/>
+            <action id="fierix.OpenResults"
                     class="com.github.kornilova_l.flamegraph.plugin.server.ShowLastResultAction"
                     text="Open Results..." description=""/>
             <action class="com.github.kornilova_l.flamegraph.plugin.server.ShowUploadFilePageAction"
-                    id="flamegraph-profiler.ShowUploadFilePageAction" text="Upload File..."/>
+                    id="FlameViewer.UploadFile" text="Upload File..."/>
             <add-to-group group-id="ToolsMenu" anchor="last"/>
         </group>
         <group>
             <add-to-group group-id="EditorPopupMenu" anchor="last"/>
-            <action id="flamegraph-profiler.AddMethodToConfigAction"
+            <action id="fierix.AddMethodToConfigAction"
                     class="com.github.kornilova_l.flamegraph.plugin.ui.line_markers.add_remove_actions.AddMethodToConfigAction"
                     text="Add method to Profiler Config"/>
-            <action id="flamegraph-profiler.RemoveMethodToConfigAction"
+            <action id="fierix.RemoveMethodToConfigAction"
                     class="com.github.kornilova_l.flamegraph.plugin.ui.line_markers.add_remove_actions.RemoveMethodFromConfigAction"
                     text="Remove method from Profiler Config"/>
         </group>

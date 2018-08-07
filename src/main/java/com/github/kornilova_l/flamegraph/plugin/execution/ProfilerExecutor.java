@@ -10,7 +10,7 @@ import javax.swing.*;
 import static icons.ProfilerIcons.runIcon;
 
 public class ProfilerExecutor extends Executor {
-    public static final String EXECUTOR_ID = "Flamegraph-Profiler-Executor";
+    public static final String EXECUTOR_ID = "Fierix-Executor";
 
     @Override
     public String getToolWindowId() {

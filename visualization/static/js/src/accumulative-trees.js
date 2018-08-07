@@ -84,9 +84,9 @@ function sendRequestForTree() {
     const parameters = window.location.href.split("?")[1];
     let className, methodName, desc;
     if (parameters.indexOf("method=") === -1) {
-        request.open("GET", `/flamegraph-profiler/trees/${constants.pageName}?${parameters}`, true);
+        request.open("GET", `${serverNames.MAIN_NAME}/trees/${constants.pageName}?${parameters}`, true);
     } else {
-        request.open("GET", `/flamegraph-profiler/trees/${constants.pageName}?${parameters}`, true);
+        request.open("GET", `${serverNames.MAIN_NAME}/trees/${constants.pageName}?${parameters}`, true);
         className = common.getParameter("class");
         methodName = common.getParameter("method");
         desc = decodeURIComponent(common.getParameter("desc"));
@@ -135,5 +135,7 @@ $(window).on("load", function () {
                 }
             );
         });
+    } else {
+        console.log("File is not specified.");
     }
 });

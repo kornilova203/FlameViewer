@@ -9,7 +9,7 @@ $(window).on("load", () => {
 });
 
 function getRequestAddress() {
-    return "/flamegraph-profiler/hot-spots-json?project=" +
+    return serverNames.HOT_SPOTS_JS_REQUEST + "?project=" +
         constants.projectName +
         "&" +
         "file=" +

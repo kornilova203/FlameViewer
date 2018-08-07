@@ -20,7 +20,7 @@ object UploadFileUtil {
         val list = if (reverseOrder) partsCount - 1 downTo 0 else 0 until partsCount
         for (i in list) {
             //Create connection
-            val url = URL("http://localhost:${BuiltInServerManager.getInstance().port}/flamegraph-profiler/upload-file")
+            val url = URL("http://localhost:${BuiltInServerManager.getInstance().port}${ServerNames.UPLOAD_FILE}")
             val connection = url.openConnection() as HttpURLConnection
             connection.requestMethod = "POST"
             connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded")
@@ -63,5 +63,5 @@ object UploadFileUtil {
             .scheme("http")
             .host("localhost")
             .port(BuiltInServerManager.getInstance().port)
-            .addPathSegments("flamegraph-profiler")
+            .addPathSegments(ServerNames.NAME)
 }

@@ -50,7 +50,7 @@ class FilesUploaderTest : LightPlatformCodeInsightFixtureTestCase() {
     }
 
     private fun sendRequestDoesFileExist(fileName: String): Int {
-        val url = URL("http://localhost:${BuiltInServerManager.getInstance().port}/flamegraph-profiler/does-file-exist")
+        val url = URL("http://localhost:${BuiltInServerManager.getInstance().port}${ServerNames.DOES_FILE_EXIST}")
         val connection = url.openConnection() as HttpURLConnection
         connection.requestMethod = "GET"
 

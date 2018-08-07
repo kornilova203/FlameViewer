@@ -139,7 +139,7 @@
 <li id="{$file.id}">
     <input id="checkbox-{$file.id}" class="file-checkbox" name="{$file.id}" type="checkbox">
     <label for="checkbox-{$file.id}" class="file-checkbox-label"></label>
-    <a href="/flamegraph-profiler/{$pageName}?file={$file.fullName}&amp;project={$projectName}">
+  <a href="/FlameViewer/{$pageName}?file={$file.fullName}&amp;project={$projectName}">
         <p>{$file.name}<br><span>{$file.date}</span></p>
     </a>
 </li>
@@ -179,9 +179,11 @@
 {template .hotSpot}
 <div class="hot-spot">
     <!--suppress HtmlUnknownTarget -->
-  <a href="/flamegraph-profiler/outgoing-calls?file={$fileName}&amp;project={$projectName}&amp;method={$methodName}&amp;class={$className}&amp;desc={$desc}"><img src="img/outgoing.png"/></a>
+  <a href="/FlameViewer/outgoing-calls?file={$fileName}&amp;project={$projectName}&amp;method={$methodName}&amp;class={$className}&amp;desc={$desc}"><img
+          src="img/outgoing.png"/></a>
     <!--suppress HtmlUnknownTarget -->
-  <a href="/flamegraph-profiler/incoming-calls?file={$fileName}&amp;project={$projectName}&amp;method={$methodName}&amp;class={$className}&amp;desc={$desc}"><img src="img/incoming.png"/></a>
+  <a href="/FlameViewer/incoming-calls?file={$fileName}&amp;project={$projectName}&amp;method={$methodName}&amp;class={$className}&amp;desc={$desc}"><img
+          src="img/incoming.png"/></a>
     <div class="outer-time-div">
         <p class="relative-time">{$relativeTime}%</p>
         <div class="total-time"><div class="method-time"></div></div>

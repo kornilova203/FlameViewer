@@ -1007,7 +1007,7 @@ canvas {
     top: 61px;
     z-index: 1;
     width: 100%;
-    background: linear-gradient(to bottom, rgba(255,255,255,1) 0%,rgba(125,185,232,0) 100%);
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
     pointer-events: none;
     opacity: 0;
 }

@@ -1,6 +1,7 @@
 package com.github.kornilova_l.flamegraph.plugin
 
 import com.github.kornilova_l.flamegraph.plugin.server.ProfilerHttpRequestHandler.getParameter
+import com.github.kornilova_l.flamegraph.plugin.server.ServerNames
 import com.intellij.openapi.application.PathManager
 import com.intellij.openapi.diagnostic.Logger
 import io.netty.handler.codec.http.QueryStringDecoder
@@ -32,7 +33,7 @@ object PluginFileManager {
     private const val LOG_DIR_NAME = "log"
     private const val CONFIG_DIR_NAME = "configuration"
     private const val STATIC_DIR_NAME = "static"
-    private const val REQUEST_PREFIX = "/flamegraph-profiler/"
+    private const val REQUEST_PREFIX = "/${ServerNames.NAME}/"
     private const val UPLOADED_FILES = "uploaded-files"
     private const val DELETED_FILES = "deleted"
     private const val NOT_CONVERTED = "not-converted"

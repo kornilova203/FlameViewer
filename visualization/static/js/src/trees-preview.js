@@ -26,7 +26,7 @@ function getAndShowTreesPreview() {
     common.showLoader(constants.loaderMessages.buildingTrees, () => {
         const request = new XMLHttpRequest();
         const parameters = window.location.href.split("?")[1];
-        request.open("GET", "/flamegraph-profiler/trees/call-tree/preview?" + parameters, true);
+        request.open("GET", serverNames.CALL_TREE_PREVIEW_JS_REQUEST + "?" + parameters, true);
         request.responseType = "arraybuffer";
 
         request.onload = function () {

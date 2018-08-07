@@ -71,7 +71,7 @@ class FilesListManager {
             FilesListManager.removeFromLists($list, selectedFilesIds, filesArray);
             for (let i = 0; i < fileNames.length; i++) {
                 const request = new XMLHttpRequest();
-                request.open("POST", "/flamegraph-profiler/delete-file", true);
+                request.open("POST", serverNames.DELETE_FILE, true);
                 request.setRequestHeader('File-Name', fileNames[i]);
                 request.setRequestHeader('Project-Name', constants.projectName);
                 request.send();
@@ -121,7 +121,7 @@ class FilesListManager {
         $undoDeleteButton.click(() => { // undo delete
             for (let i = 0; i < fileNames.length; i++) {
                 const request = new XMLHttpRequest();
-                request.open("POST", "/flamegraph-profiler/undo-delete-file", true);
+                request.open("POST", serverNames.UNDO_DELETE_FILE, true);
                 request.setRequestHeader('File-Name', fileNames[i]);
                 request.setRequestHeader('Project-Name', constants.projectName);
                 request.onload = () => {
@@ -194,7 +194,7 @@ class FilesListManager {
      */
     updateFilesList() {
         const request = new XMLHttpRequest();
-        request.open("GET", "/flamegraph-profiler/file-list?project=" + this.projectName, true);
+        request.open("GET", serverNames.FILE_LIST + "?project=" + this.projectName, true);
         request.responseType = "json";
 
         request.onload = () => {
@@ -555,7 +555,7 @@ function appendProject(project) {
         (project === "Uploaded files" && constants.projectName === "uploaded-files")) {
         return;
     }
-    const link = "/flamegraph-profiler/" +
+    const link = serverNames.MAIN_NAME + "/" +
         constants.pageName +
         "?project=" +
         (project === "Uploaded files" ? "uploaded-files" : project);
@@ -573,7 +573,7 @@ function showProjectsList() {
         $(".project-name").text(constants.projectName);
     }
     const request = new XMLHttpRequest();
-    request.open("GET", "/flamegraph-profiler/list-projects", true);
+    request.open("GET", serverNames.LIST_PROJECTS, true);
     request.responseType = "json";
 
     request.onload = function () {

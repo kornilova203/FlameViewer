@@ -1,4 +1,4 @@
-rootProject.name = 'java-profiling-plugin'
+rootProject.name = 'FlameViewer'
 include 'protobuf', 'agent', 'configuration'
 include 'agent-test'
 
