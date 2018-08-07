@@ -51,7 +51,7 @@ Detailed description at <a href="https://github.com/kornilova-l/FlameViewer">git
     ]]>
     </change-notes>
 
-    <idea-version since-build="162"/>
+    <idea-version since-build="171"/>
 
     <!-- Enable in all IDEs -->
     <depends>com.intellij.modules.lang</depends>
