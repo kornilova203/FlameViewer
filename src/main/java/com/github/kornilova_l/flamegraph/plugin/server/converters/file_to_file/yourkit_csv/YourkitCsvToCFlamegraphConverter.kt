@@ -26,7 +26,7 @@ class YourkitCsvToCFlamegraphConverter : ProfilerToCompressedFlamegraphConverter
                     return false
                 }
                 val firstString = parts[0].removePrefix("\"")
-                if (!isMethod(firstString) && !firstString.contains(':')) {
+                if (!isMethod(firstString) && !firstString.contains(':') && !firstString.startsWith('[')) {
                     return false
                 }
                 try {

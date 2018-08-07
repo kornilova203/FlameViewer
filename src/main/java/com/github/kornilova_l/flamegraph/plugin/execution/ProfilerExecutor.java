@@ -10,7 +10,7 @@ import javax.swing.*;
 import static icons.ProfilerIcons.runIcon;
 
 public class ProfilerExecutor extends Executor {
-    public static final String EXECUTOR_ID = "Flamegraph-Profiler-Executor";
+    public static final String EXECUTOR_ID = "Fierix-Executor";
 
     @Override
     public String getToolWindowId() {
@@ -53,7 +53,7 @@ public class ProfilerExecutor extends Executor {
     @NotNull
     @Override
     public String getStartActionText() {
-        return "Run with profiler";
+        return "Run with Fierix";
     }
 
     @Override
@@ -61,7 +61,7 @@ public class ProfilerExecutor extends Executor {
         final String name = configurationName != null ?
                 escapeMnemonicsInConfigurationName(StringUtil.first(configurationName, 30, true)) :
                 null;
-        return "Run" + (StringUtil.isEmpty(name) ? "" :  " '" + name + "'") + " with profiler";
+        return "Run" + (StringUtil.isEmpty(name) ? "" : " '" + name + "'") + " with Fierix";
     }
 
     private static String escapeMnemonicsInConfigurationName(String configurationName) {

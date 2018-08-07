@@ -17,14 +17,22 @@ class FilesUploaderTest : LightPlatformCodeInsightFixtureTestCase() {
         PluginFileManager.deleteAllUploadedFiles()
         val bytes = createBytes(bytesInMB * 50)
         sendFile("big.ser", bytes)
-        var expectedFile = PluginFileManager.tempFileSaver.save(bytes, "01_medium.ser")!!
+        var expectedFile = PluginFileManager.tempFileSaver.save(bytes, "big.ser")!!
         fileReceivedTest("big.ser", expectedFile)
 
         /* send parts in reversed order */
         PluginFileManager.deleteAllUploadedFiles()
         sendFile("big.ser", bytes, true)
-        expectedFile = PluginFileManager.tempFileSaver.save(bytes, "01_medium.ser")!!
+        expectedFile = PluginFileManager.tempFileSaver.save(bytes, "big.ser")!!
         fileReceivedTest("big.ser", expectedFile)
+    }
+
+    fun testUploadFierixFiles() {
+        PluginFileManager.deleteAllUploadedFiles()
+        val bytes = createBytes(bytesInMB * 50)
+        sendFile("my.fierix", bytes)
+        val expectedFile = PluginFileManager.tempFileSaver.save(bytes, "my.fierix")!!
+        fileReceivedTest("my.fierix", expectedFile)
     }
 
     fun testGetNonExistingFiles() {
@@ -42,7 +50,7 @@ class FilesUploaderTest : LightPlatformCodeInsightFixtureTestCase() {
     }
 
     private fun sendRequestDoesFileExist(fileName: String): Int {
-        val url = URL("http://localhost:${BuiltInServerManager.getInstance().port}/flamegraph-profiler/does-file-exist")
+        val url = URL("http://localhost:${BuiltInServerManager.getInstance().port}${ServerNames.DOES_FILE_EXIST}")
         val connection = url.openConnection() as HttpURLConnection
         connection.requestMethod = "GET"
 

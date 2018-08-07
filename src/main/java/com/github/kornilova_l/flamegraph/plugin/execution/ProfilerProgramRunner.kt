@@ -40,7 +40,7 @@ class ProfilerProgramRunner : DefaultJavaProgramRunner() {
                 "-javaagent:" +
                         pathToAgent +
                         "=" +
-                        PluginFileManager.createLogFile(projectName!!, runProfile.name).absolutePath +
+                        PluginFileManager.createOutputFierixFile(projectName!!, runProfile.name).absolutePath +
                         "&" +
                         configFile.absolutePath
         )

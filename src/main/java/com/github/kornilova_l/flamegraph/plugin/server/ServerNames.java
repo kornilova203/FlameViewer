@@ -3,14 +3,14 @@ package com.github.kornilova_l.flamegraph.plugin.server;
 import java.util.regex.Pattern;
 
 public class ServerNames {
-    private static final String NAME = "flamegraph-profiler";
+    public static final String NAME = "FlameViewer";
     static final String MAIN_NAME = "/" + NAME;
     static final String FILE_LIST = MAIN_NAME + "/file-list";
     static final String CALL_TREE = MAIN_NAME + "/call-tree";
     static final String LIST_PROJECTS = MAIN_NAME + "/list-projects";
-    public static final String CALL_TREE_JS_REQUEST = MAIN_NAME + "/trees/call-tree";
+    static final String CALL_TREE_JS_REQUEST = MAIN_NAME + "/trees/call-tree";
     static final String CALL_TREE_COUNT = CALL_TREE_JS_REQUEST + "/count";
-    public static final String CALL_TREE_PREVIEW_JS_REQUEST = CALL_TREE_JS_REQUEST + "/preview";
+    static final String CALL_TREE_PREVIEW_JS_REQUEST = CALL_TREE_JS_REQUEST + "/preview";
     static final String OUTGOING_CALLS = MAIN_NAME + "/outgoing-calls";
     static final String OUTGOING_CALLS_JS_REQUEST = MAIN_NAME + "/trees/outgoing-calls";
     static final String OUTGOING_CALLS_COUNT = OUTGOING_CALLS_JS_REQUEST + "/count";

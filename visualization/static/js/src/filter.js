@@ -59,7 +59,7 @@ $(window).on("load", () => {
 });
 
 function setCurrentPrefix() {
-    CURRENT_PREFIX = "/flamegraph-profiler/" + constants.pageName;
+    CURRENT_PREFIX = serverNames.MAIN_NAME + "/" + constants.pageName;
 }
 
 /**
@@ -126,7 +126,7 @@ function setMethodsCount(nodesCount) {
 function countMethodsForFilter(includingInputText, excludingInputText) {
     const request = new XMLHttpRequest();
     request.open("GET",
-        "/flamegraph-profiler/trees/" + constants.pageName + "/count?" +
+        serverNames.MAIN_NAME + "/trees/" + constants.pageName + "/count?" +
         getParametersWithFilter(includingInputText, excludingInputText), true);
     request.responseType = "json";
     request.onload = () => {
@@ -140,7 +140,7 @@ function countMethodsForFilter(includingInputText, excludingInputText) {
 function countMethodsInCurrentTree() {
     const request = new XMLHttpRequest();
     request.open("GET",
-        "/flamegraph-profiler/trees/" + constants.pageName + "/count?" +
+        serverNames.MAIN_NAME + "/trees/" + constants.pageName + "/count?" +
         getParametersWithFilter(CURRENT_INCLUDED, CURRENT_EXCLUDED), true);
     request.responseType = "json";
     request.onload = () => {

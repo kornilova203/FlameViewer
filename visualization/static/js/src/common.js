@@ -19,6 +19,7 @@ const common = {
     getExtension: (fileName) => {
         return fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length);
     },
+
     /**
      * @param {Number} [time]
      */
@@ -147,7 +148,7 @@ const common = {
      * @param {Object} parameters
      */
     redirect: (parameters) => {
-        window.location.href = `/flamegraph-profiler/${constants.pageName}?${common.getParametersString(parameters)}`
+        window.location.href = `${serverNames.MAIN_NAME}/${constants.pageName}?${common.getParametersString(parameters)}`
     },
 
     /**
@@ -167,7 +168,7 @@ const common = {
                 }
             }
         };
-        request.open("GET", "/flamegraph-profiler/does-file-exist", true);
+        request.open("GET", serverNames.DOES_FILE_EXIST, true);
         request.setRequestHeader('Project-Name', projectName);
         try {
             request.setRequestHeader('File-Name', fileName);
@@ -235,14 +236,33 @@ const constants = {
     },
     pageMessages: {
         backtracesTooBig: "Sorry... this tree contains too many nodes :(</br>" +
-        "But you can see back traces for any method, there are two ways to do it:</br>" +
-        "* Open Call Traces page, click on back traces icon on method popup</br>" +
-        "* Open Hot Spots page, click on back traces icon beside any method that you like",
+            "But you can see back traces for any method, there are two ways to do it:</br>" +
+            "* Open Call Traces page, click on back traces icon on method popup</br>" +
+            "* Open Hot Spots page, click on back traces icon beside any method that you like",
         chooseFile: "Choose file",
         chooseOrUploadFile: "Choose or upload file",
         noCallRegistered: "No call was registered or all methods took <1ms",
         callTreeUnavailable: "Call tree is unavailable for this file"
     }
+};
+
+const _MAIN_NAME = "/FlameViewer";
+const _CALL_TREE_JS_REQUEST = _MAIN_NAME + "/trees/call-tree";
+
+const serverNames = {
+    MAIN_NAME: _MAIN_NAME,
+    FILE_LIST: _MAIN_NAME + "/file-list",
+    LIST_PROJECTS: _MAIN_NAME + "/list-projects",
+    CALL_TREE_JS_REQUEST: _CALL_TREE_JS_REQUEST,
+    CALL_TREE_PREVIEW_JS_REQUEST: _CALL_TREE_JS_REQUEST + "/preview",
+    OUTGOING_CALLS: _MAIN_NAME + "/outgoing-calls",
+    INCOMING_CALLS: _MAIN_NAME + "/incoming-calls",
+    CONNECTION_ALIVE: _MAIN_NAME + "/trees/alive",
+    HOT_SPOTS_JS_REQUEST: _MAIN_NAME + "/hot-spots-json",
+    UPLOAD_FILE: _MAIN_NAME + "/upload-file",
+    DOES_FILE_EXIST: _MAIN_NAME + "/does-file-exist",
+    DELETE_FILE: _MAIN_NAME + "/delete-file",
+    UNDO_DELETE_FILE: _MAIN_NAME + "/undo-delete-file"
 };
 
 $(window).on("load", () => {
@@ -262,7 +282,7 @@ $(window).on("load", () => {
  */
 setInterval(() => {
     const request = new XMLHttpRequest();
-    request.open("POST", "/flamegraph-profiler/trees/alive", true);
+    request.open("POST", serverNames.CONNECTION_ALIVE, true);
     request.onload = () => {
 
     };

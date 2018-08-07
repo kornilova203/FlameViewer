@@ -156,7 +156,7 @@ module.exports.AccumulativeTreeDrawer = class AccumulativeTreeDrawer extends Tre
      */
     _createTreeRequest(pathToNode) {
         const request = new XMLHttpRequest();
-        request.open("GET", `/flamegraph-profiler/trees/${this._getTreeType()}?` + this.getTreeGETParameters(pathToNode));
+        request.open("GET", `${serverNames.MAIN_NAME}/trees/${this._getTreeType()}?` + this.getTreeGETParameters(pathToNode));
         request.responseType = "arraybuffer";
         return request;
     }

@@ -1,7 +1,7 @@
 import io.netifi.flatbuffers.plugin.tasks.FlatBuffers
 
 buildscript {
-    ext.kotlin_version = '1.2.51'
+    ext.kotlin_version = '1.2.60'
     repositories {
         jcenter()
         mavenCentral()
@@ -17,7 +17,6 @@ buildscript {
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "me.champeau.gradle:jmh-gradle-plugin:0.3.1"
         classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.6'
         classpath 'com.moowork.gradle:gradle-node-plugin:1.2.0'
         classpath 'com.liferay:com.liferay.gradle.plugins.soy:3.1.6'
@@ -26,7 +25,6 @@ buildscript {
 
 plugins {
     id 'org.jetbrains.intellij' version '0.1.10'
-    id 'me.champeau.gradle.jmh' version '0.3.1'
     id 'com.google.protobuf' version '0.8.6' apply false
     id 'com.moowork.node' version '1.2.0'
     id 'com.liferay.soy' version '3.1.6'
@@ -55,7 +53,7 @@ repositories {
 configurations {
     intellij.updateSinceUntilBuild = false
     intellij.downloadSources = false
-    intellij.pluginName = "FlamegraphProfiler"
+    intellij.pluginName = "FlameViewer"
 }
 
 dependencies {
@@ -143,13 +141,4 @@ idea {
     module {
         generatedSourceDirs += file('src/gen/java')
     }
-}
-
-/* if have some problems with jmh - execute clean first */
-jmh {
-    /* jmh Jar warns about duplicate dependencies
-     * currently I do not know how to fix it */
-    zip64 = true
-    duplicateClassesStrategy = DuplicatesStrategy.WARN
-    include = 'benchmarks.CallTracesBenchmark'
 }

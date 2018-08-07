@@ -54,7 +54,7 @@ class FileUploader {
                         that.endFileUpload(success)
                     }
                 };
-                request.open("POST", "/flamegraph-profiler/upload-file", true);
+                request.open("POST", serverNames.UPLOAD_FILE, true);
                 request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
                 request.setRequestHeader('File-Name', that.file.name);
                 request.setRequestHeader('File-Part', (i + 1) + "/" + partsCount);
@@ -100,7 +100,7 @@ class JfrUploader extends FileUploader {
  * @param name
  */
 function redirectToFile(name) {
-    window.location.href = `/flamegraph-profiler/${constants.pageName}?file=${encodeURIComponent(name)}&project=${encodeURIComponent(constants.projectName)}`
+    window.location.href = `${serverNames.MAIN_NAME}/${constants.pageName}?file=${encodeURIComponent(name)}&project=${encodeURIComponent(constants.projectName)}`
 }
 
 /**

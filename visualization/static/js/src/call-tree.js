@@ -9,7 +9,7 @@ const CallTreeDrawer = require('./CallTreeDrawer');
 common.showCallTree = (threadId) => {
     const request = new XMLHttpRequest();
     const parameters = window.location.href.split("?")[1];
-    request.open("GET", "/flamegraph-profiler/trees/call-tree?threads=" + threadId + "&" + parameters, true);
+    request.open("GET", serverNames.CALL_TREE_JS_REQUEST + "?threads=" + threadId + "&" + parameters, true);
     request.responseType = "arraybuffer";
     request.onload = () => {
         const arrayBuffer = request.response;

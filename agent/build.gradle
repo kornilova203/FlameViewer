@@ -1,5 +1,5 @@
 buildscript {
-    ext.kotlin_version = '1.2.51'
+    ext.kotlin_version = '1.2.60'
     repositories {
         jcenter()
         maven {
@@ -54,11 +54,6 @@ task proxyJar(type: Jar) {
     proxyJar.archiveName = 'proxy.jar'
 }
 
-task runAgent(type: JavaExec, dependsOn: build) {
-    classpath = sourceSets.main.runtimeClasspath
-    main = "temp.Test"
-    jvmArgs += ["-javaagent:${jar.getArchivePath()}=/home/lk/java-profiling-plugin/build/idea-sandbox/system&/home/lk/java-profiling-plugin/build/idea-sandbox/system/flamegraph-profiler/configuration/my-configuration.configuration"]
-}
 compileKotlin {
     kotlinOptions {
         jvmTarget = "1.8"

@@ -439,10 +439,10 @@ module.exports.TreeDrawer = class TreeDrawer {
         }
         this.$popup.find("h3").text(node.getNodeInfo().getMethodName());
         this.$popup.find(".outgoing-link").attr("href",
-            `/flamegraph-profiler/outgoing-calls?` + TreeDrawer.getGETParameters(node)
+            serverNames.OUTGOING_CALLS + "?" + TreeDrawer.getGETParameters(node)
         );
         this.$popup.find(".incoming-link").attr("href",
-            `/flamegraph-profiler/incoming-calls?` + TreeDrawer.getGETParameters(node)
+            serverNames.INCOMING_CALLS + "?" + TreeDrawer.getGETParameters(node)
         );
         this._setParameters(node);
         this._setPopupReturnValue(node);
