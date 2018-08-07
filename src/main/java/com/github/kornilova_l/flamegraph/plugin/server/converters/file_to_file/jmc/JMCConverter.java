@@ -69,7 +69,7 @@ public class JMCConverter extends ProfilerToFlamegraphConverter {
         String dirPath = getDirPath(FlightRecorderConverter.class);
         System.out.println(dirPath);
         if (dirPath == null) {
-            LOG.error("Cannot find directory of FlightRecorderConverter.class. Please submit the report to https://github.com/kornilova-l/flamegraph-visualizer/issues");
+            LOG.error("Cannot find directory of FlightRecorderConverter.class. Please submit the report to https://github.com/kornilova-l/FlameViewer/issues");
             return;
         }
         processBuilder.redirectError(new File("error.txt"));

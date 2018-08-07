@@ -1,4 +1,4 @@
-<idea-plugin url="https://github.com/kornilova-l/flamegraph-visualizer">
+<idea-plugin url="https://github.com/kornilova-l/FlameViewer">
     <id>com.github.kornilovaL.flamegraphProfiler</id>
     <name>FlameViewer</name>
     <version>0.8.1-SNAPSHOT</version>
@@ -20,8 +20,8 @@ Flamegraph Viewer & Instrumentation Java Profiler Fierix<br>
     </li>
 </ol>
 
-<strong>Java performance recording quick start</strong><br>
-Use Flight Recorder to profile your program and then open flamegraph:
+<strong>Java performance recording. Quick start</strong><br>
+Use Flight Recorder to profile your program and then open FlameViewer:
 <ol>
     <li>Run JVM with following VM options: <code>-XX:+UnlockCommercialFeatures -XX:+FlightRecorder -XX:StartFlightRecording=duration=30s,filename=my_recording.jfr -XX:FlightRecorderOptions=stackdepth=256</code></li>
     <li>Open FlameViewer <strong>Tools | Open FlameViewer...</strong></li>
@@ -36,7 +36,7 @@ Fierix is a bundled instrumentation Java profiler that allows to save parameters
     <li>To open results click <strong>Tools | Fierix | Open Results...</strong></li>
 </ol>
 
-Detailed description at <a href="https://github.com/kornilova-l/flamegraph-visualizer">github.com/kornilova-l/flamegraph-visualizer</a>
+Detailed description at <a href="https://github.com/kornilova-l/FlameViewer">github.com/kornilova-l/FlameViewer</a>
     ]]></description>
 
     <change-notes><![CDATA[
