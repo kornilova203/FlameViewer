@@ -1,7 +1,7 @@
 <idea-plugin url="https://github.com/kornilova-l/FlameViewer">
     <id>com.github.kornilovaL.flamegraphProfiler</id>
     <name>FlameViewer</name>
-    <version>0.8.1-SNAPSHOT</version>
+    <version>0.8.1</version>
 
     <vendor url="https://github.com/kornilova-l" email="kornilova203@gmail.com"/>
 
@@ -41,8 +41,12 @@ Detailed description at <a href="https://github.com/kornilova-l/FlameViewer">git
 
     <change-notes><![CDATA[
     <ul>
-      <li>Optimized visualization of big trees.</li>
-      <li>Bug fixes and minor improvements.</li>
+        <li>Implemented internal representation of flamegraph that speeds up visualization.</li>
+        <li>Fixed visualization of yourkit csv files when some of nodes have zero width.</li>
+        <li>Fixed visualization of whole backtraces tree, now all nodes with non-zero self time are added.</li>
+        <li>Added support for retina displays.</li>
+        <li>Profiler is renamed to Fierix, Flamegraph Visualizer to FlameViewer. Added FlameViewer support to IDEs.</li>
+        <li>Improved visualization of method back traces tree.</li>
     </ul>
     ]]>
     </change-notes>
