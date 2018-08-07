@@ -55,7 +55,7 @@ repositories {
 configurations {
     intellij.updateSinceUntilBuild = false
     intellij.downloadSources = false
-    intellij.pluginName = "FlamegraphProfiler"
+    intellij.pluginName = "FlameViewer"
 }
 
 dependencies {
