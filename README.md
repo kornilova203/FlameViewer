@@ -1,10 +1,10 @@
 # FlameViewer
 Flamegraph Viewer & Instrumentation Java Profiler Fierix
 
-[![Build Status](https://travis-ci.org/kornilova-l/flamegraph-visualizer.svg?branch=master)](https://travis-ci.org/kornilova-l/flamegraph-visualizer)
+[![Build Status](https://travis-ci.org/kornilova-l/FlameViewer.svg?branch=master)](https://travis-ci.org/kornilova-l/FlameViewer)
 
 ## Download Plugin
-https://plugins.jetbrains.com/plugin/10305-flamegraph-profiler
+https://plugins.jetbrains.com/plugin/10305-flameviewer
 
 ## Table of contents
 * [Uploading file to FlameViewer](#uploading-file-to-flameviewer)
