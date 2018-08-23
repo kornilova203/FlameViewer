@@ -132,8 +132,8 @@ the instructions:
 
 Windows:
 ```
-gradlew compilePlugin
-gradlew runIdea
+.\gradlew.bat compilePlugin
+.\gradlew.bat runIdea
 ```
 
 Linux:
