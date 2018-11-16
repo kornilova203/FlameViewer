@@ -82,6 +82,9 @@ Click on a rectangle to zoom in on it.
 If you want to see method that are located in some particular package you can apply filter.  
 ![](screenshots/filter.png)
 
+Wildcards are supported with `*` and multiple filters can be specified using the pipe `|` character.
+![](screenshots/multiple_filters.png)
+
 ### Search
 You can find any method, class or package using search.
 
