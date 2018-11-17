@@ -135,7 +135,7 @@ task compileFlatBuffers(type: FlatBuffers) {
     outputDir = file("src/gen/java")
 }
 
-task compilePlugin(dependsOn: [copyAgent, copyStatic, compileFlatBuffers]) {}
+task compilePlugin(dependsOn: [copyAgent, copyStatic]) {}
 
 sourceSets.main.java.srcDir file('src/gen/java')
 idea {

@@ -117,22 +117,6 @@ If you have a suggestions or found a bug [open an issue]
 ## Building from sources
 If only want to use plugin then you should simply install ready-to-use [jar](https://plugins.jetbrains.com/plugin/10305-flamegraph-profiler).
 
-To build plugin from sources FlatBuffers compiler version 1.9.0 should be installed on the system.
-
-For information on building and installing the compiler please refer to the [FlatBuffers Documentation] or follow 
-the instructions:
- * Ubuntu:
-     ```bash
-     $ git clone https://github.com/google/flatbuffers.git
-     $ cd flatbuffers
-     $ git checkout tags/v1.9.0
-     $ mkdir target
-     $ cd target
-     $ cmake .. -G "Unix Makefiles"
-     $ make
-     $ sudo mv flatc /usr/local/bin/
-     ```
-
 Windows:
 ```
 .\gradlew.bat compilePlugin
@@ -145,5 +129,4 @@ Linux:
 ./gradlew runIdea
 ```
 
- [FlatBuffers Documentation]: https://google.github.io/flatbuffers/flatbuffers_guide_building.html
  [open an issue]: https://github.com/kornilova-l/FlameViewer/issues
