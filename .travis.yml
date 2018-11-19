@@ -18,6 +18,6 @@ before_install:
 install: true
 
 script:
- - ./gradlew compilePlugin
+  - ./gradlew prepareStaticAndAgent
  - ./gradlew test -x :agent-test:test
  - ./gradlew buildPlugin

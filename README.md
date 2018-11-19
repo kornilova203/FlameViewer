@@ -119,13 +119,13 @@ If only want to use plugin then you should simply install ready-to-use [jar](htt
 
 Windows:
 ```
-.\gradlew.bat compilePlugin
+.\gradlew.bat prepareStaticAndAgent
 .\gradlew.bat runIdea
 ```
 
 Linux:
 ```bash
-./gradlew compilePlugin
+./gradlew prepareStaticAndAgent
 ./gradlew runIdea
 ```
 
