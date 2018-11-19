@@ -8,3 +8,4 @@ visualization/node_modules/
 /protobuf/src/main/gen/*
 /visualization/static/js/generated/*
 protobuf/generated/main/
+/src/main/generated-resources/

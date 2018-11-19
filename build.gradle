@@ -102,7 +102,7 @@ task moveGeneratedTemplates(dependsOn: buildSoy) {
 
 task copyStatic(type: Copy, dependsOn: [browserify, moveGeneratedTemplates]) {
     from 'visualization/static'
-    into 'build/classes/main/static'
+    into 'src/main/generated-resources/static'
     doLast {
         /* this is for running tests from IDEA interface */
         mkdir "out/test/classes/static"
@@ -111,7 +111,7 @@ task copyStatic(type: Copy, dependsOn: [browserify, moveGeneratedTemplates]) {
 
 task copyAgent(type: Copy, dependsOn: [':agent:agentJar', ':agent:proxyJar']) {
     from 'agent/build/libs'
-    into 'build/classes/main'
+    into 'src/main/generated-resources'
 }
 
 compileKotlin {
@@ -137,6 +137,7 @@ task compileFlatBuffers(type: FlatBuffers) {
 
 task compilePlugin(dependsOn: [copyAgent, copyStatic]) {}
 
+sourceSets.main.resources.srcDirs "src/main/resources", "src/main/generated-resources"
 sourceSets.main.java.srcDir file('src/gen/java')
 idea {
     module {
