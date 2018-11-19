@@ -2,6 +2,7 @@ package com.github.kornilova_l.flamegraph.plugin.server.converters.calltraces.cf
 
 import com.github.kornilova_l.flamegraph.plugin.server.converters.calltraces.FileToCallTracesConverter
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree
+import com.intellij.openapi.util.text.StringUtil
 import com.intellij.util.PathUtil
 import java.io.File
 
@@ -53,16 +54,18 @@ import java.io.File
  * Converter merges unmerged stacktraces.
  */
 class CompressedFlamegraphToCallTracesConverter : FileToCallTracesConverter {
-    private val extension = "cflamegraph"
+    companion object {
+        private const val EXTENSION = "cflamegraph"
+    }
 
-    override fun getId(): String = extension
+    override fun getId(): String = EXTENSION
 
     /**
      * Simply checks EXTENSION.
      * There is not need to validate the file because cflamegraph format is known only by the plugin.
      */
     override fun isSupported(file: File): Boolean {
-        return PathUtil.getFileExtension(file.name) == extension
+        return StringUtil.equalsIgnoreCase(PathUtil.getFileExtension(file.name), EXTENSION)
     }
 
     override fun convert(file: File): Tree = Converter(file).tree

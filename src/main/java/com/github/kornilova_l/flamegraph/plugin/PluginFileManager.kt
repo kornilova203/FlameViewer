@@ -56,7 +56,7 @@ object PluginFileManager {
         configDirPath = Paths.get(pluginDir.toString(), CONFIG_DIR_NAME)
         createDirIfNotExist(configDirPath)
         try {
-            val staticDirUrl = javaClass.getResource("/" + STATIC_DIR_NAME)
+            val staticDirUrl = javaClass.getResource("/$STATIC_DIR_NAME")
             if (staticDirUrl != null) {
                 staticDirPath = Paths.get(staticDirUrl.toURI())
             } else {
@@ -65,7 +65,7 @@ object PluginFileManager {
                 LOG.warn("$pleaseReportIssue: Cannot find static dir. javaClass.getResource returned null")
             }
         } catch (e: URISyntaxException) {
-            throw AssertionError("$pleaseReportIssue: Cannot find static dir: ${javaClass.getResource("/" + STATIC_DIR_NAME)}", e)
+            throw AssertionError("$pleaseReportIssue: Cannot find static dir: ${javaClass.getResource("/$STATIC_DIR_NAME")}", e)
         }
 
         val uploadedFilesPath = Paths.get(logDirPath.toString(), UPLOADED_FILES)
@@ -124,7 +124,7 @@ object PluginFileManager {
 
     @Synchronized
     fun getConfigurationFile(projectName: String): File {
-        val path = Paths.get(configDirPath.toString(), projectName + ".config")
+        val path = Paths.get(configDirPath.toString(), "$projectName.config")
         return File(path.toString())
     }
 
@@ -179,7 +179,7 @@ object PluginFileManager {
 
     @Synchronized
     fun getPathToJar(jarName: String): String? {
-        val url = javaClass.getResource("/" + jarName)
+        val url = javaClass.getResource("/$jarName")
         try {
             return Paths.get(url.toURI()).toString()
         } catch (e: URISyntaxException) {
@@ -245,7 +245,7 @@ object PluginFileManager {
                 for (file in files) {
                     val res = file.delete()
                     if (!res) {
-                        System.err.println("Cannot delete file: " + file)
+                        System.err.println("Cannot delete file: $file")
                     }
                 }
             }
@@ -278,7 +278,7 @@ object PluginFileManager {
             res = file.renameTo(Paths.get(logDirPath.toString(), DELETED_FILES, fileName).toFile())
         }
         if (!res) {
-            LOG.warn("Cannot move file to DELETED_FILES directory. File: " + file)
+            LOG.warn("Cannot move file to DELETED_FILES directory. File: $file")
         }
     }
 
@@ -286,7 +286,7 @@ object PluginFileManager {
     fun undoDeleteFile(fileName: String, projectName: String) {
         val deletedFile = getDeletedFile(fileName, projectName)
         if (deletedFile == null || !deletedFile.exists()) {
-            LOG.debug("Undo delete. Cannot find file to undo delete: " + fileName)
+            LOG.debug("Undo delete. Cannot find file to undo delete: $fileName")
             return
         }
         val projectDirPath = if (projectName == "uploaded-files") {
@@ -298,7 +298,7 @@ object PluginFileManager {
 
         val res = deletedFile.renameTo(Paths.get(projectDirPath.toString(), fileName).toFile())
         if (!res) {
-            LOG.warn("Cannot move file back from temp directory. File: " + fileName)
+            LOG.warn("Cannot move file back from temp directory. File: $fileName")
         }
     }
 
@@ -376,7 +376,7 @@ object PluginFileManager {
         }
     }
 
-    open class FileSaver internal constructor(internal val dir: Path) {
+    open class FileSaver internal constructor(private val dir: Path) {
 
         fun save(bytes: ByteArray, fileName: String): File? {
             val file = Paths.get(dir.toString(), fileName).toFile()

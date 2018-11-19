@@ -4,6 +4,7 @@ import com.github.kornilova_l.flamegraph.plugin.PluginFileManager
 import com.github.kornilova_l.flamegraph.plugin.server.converters.calltraces.FileToCallTracesConverter
 import com.github.kornilova_l.flamegraph.plugin.server.converters.calltree.FileToCallTreeConverter
 import com.github.kornilova_l.flamegraph.plugin.server.converters.calltree.fierix.FierixToCallTreeConverter
+import com.github.kornilova_l.flamegraph.plugin.server.converters.calltree.fierix.FierixToCallTreeConverter.Companion.isFierixExtension
 import com.github.kornilova_l.flamegraph.plugin.server.trees.hot_spots.HotSpot
 import com.github.kornilova_l.flamegraph.proto.TreeProtos
 import com.github.kornilova_l.flamegraph.proto.TreesPreviewProtos.TreesPreview
@@ -62,7 +63,7 @@ object TreeManager {
         if (currentFile == null || logFile.absolutePath != currentFile!!.absolutePath) {
             currentFile = logFile
             val extension = PathUtil.getFileExtension(logFile.name)
-            if (extension == "ser" || extension == "fierix") {
+            if (isFierixExtension(extension)) {
                 currentTreesSet = TreesSetImpl(FileToCallTreeConverter.convert("fierix", logFile)!!)
                 return
             }

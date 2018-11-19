@@ -158,16 +158,8 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
     }
 
     private void sendListProjects(ChannelHandlerContext context) {
-        String json = new Gson().toJson(
-                fileManager.getProjectList()
-        );
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        try {
-            outputStream.write(json.getBytes());
-            sendBytes(context, "application/json", outputStream.toByteArray());
-        } catch (IOException e) {
-            LOG.error(e);
-        }
+        String json = new Gson().toJson(fileManager.getProjectList());
+        sendJson(context, json);
     }
 
     private void sendStatic(ChannelHandlerContext context,
@@ -259,9 +251,9 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
     }
 
     @Override
-    public boolean process(QueryStringDecoder urlDecoder,
-                           FullHttpRequest fullHttpRequest,
-                           ChannelHandlerContext context) {
+    public boolean process(@NotNull QueryStringDecoder urlDecoder,
+                           @NotNull FullHttpRequest fullHttpRequest,
+                           @NotNull ChannelHandlerContext context) {
         if (!urlDecoder.uri().startsWith(ServerNames.MAIN_NAME)) {
             return false;
         }
@@ -274,7 +266,7 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
     }
 
     @Override
-    public boolean isSupported(FullHttpRequest request) {
+    public boolean isSupported(@NotNull FullHttpRequest request) {
         return request.method() == HttpMethod.POST ||
                 request.method() == HttpMethod.GET;
     }
