@@ -6,7 +6,7 @@ import java.io.BufferedWriter
 import java.io.File
 import java.io.FileWriter
 
-
+@Deprecated("The class will be removed when ProfilerToFlamegraphConverter is no longer used")
 class FlamegraphFileSaver : FileToFileConverterFileSaver() {
     override val extension = ProfilerToFlamegraphConverter.flamegraphExtension
 
@@ -27,6 +27,7 @@ class FlamegraphFileSaver : FileToFileConverterFileSaver() {
     }
 }
 
+@Deprecated("Implement ProfilerToCompressedFlamegraphConverter instead")
 abstract class ProfilerToFlamegraphConverter {
     companion object {
         const val flamegraphExtension = "flamegraph"

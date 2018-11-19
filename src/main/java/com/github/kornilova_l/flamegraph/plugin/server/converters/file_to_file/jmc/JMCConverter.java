@@ -18,6 +18,9 @@ import java.util.Objects;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.ZipException;
 
+/**
+ * @deprecated should be replaced with implementation of ProfilerToCompressedFlamegraphConverter
+ */
 public class JMCConverter extends ProfilerToFlamegraphConverter {
     private static final Logger LOG = Logger.getInstance(ProfilerToFlamegraphConverter.class);
     @SuppressWarnings("FieldCanBeLocal")
