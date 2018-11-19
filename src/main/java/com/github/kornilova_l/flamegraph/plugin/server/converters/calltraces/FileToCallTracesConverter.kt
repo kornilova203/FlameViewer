@@ -1,18 +1,18 @@
-package com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_tree
+package com.github.kornilova_l.flamegraph.plugin.server.converters.calltraces
 
-import com.github.kornilova_l.flamegraph.proto.TreesProtos
+import com.github.kornilova_l.flamegraph.proto.TreeProtos
 import com.intellij.openapi.extensions.ExtensionPointName
 import java.io.File
 
 /**
- * Builds call tree
+ * Builds call traces
  */
-abstract class FileToCallTreeConverter {
+interface FileToCallTracesConverter {
 
     companion object {
-        private val EP_NAME = ExtensionPointName.create<FileToCallTreeConverter>("com.github.kornilovaL.flamegraphProfiler.fileToCallTreeConverter")
+        private val EP_NAME = ExtensionPointName.create<FileToCallTracesConverter>("com.github.kornilovaL.flamegraphProfiler.fileToCallTracesConverter")
 
-        fun convert(converterId: String, file: File): TreesProtos.Trees? {
+        fun convert(converterId: String, file: File): TreeProtos.Tree? {
             for (extension in EP_NAME.extensions) {
                 if (extension.getId() == converterId) {
                     return extension.convert(file)
@@ -35,16 +35,16 @@ abstract class FileToCallTreeConverter {
      * String id that will be used as a directory name
      * for supported files.
      */
-    abstract fun getId(): String
+    fun getId(): String
 
     /**
      * Is file supported by this builder.
      * This method is called ones when file is uploaded.
      */
-    abstract fun isSupported(file: File): Boolean
+    fun isSupported(file: File): Boolean
 
     /**
-     * Convert file to call tree.
+     * Converts file to call traces tree.
      */
-    abstract fun convert(file: File): TreesProtos.Trees
+    fun convert(file: File): TreeProtos.Tree
 }

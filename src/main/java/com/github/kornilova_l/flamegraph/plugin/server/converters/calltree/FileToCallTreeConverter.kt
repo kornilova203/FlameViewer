@@ -1,18 +1,18 @@
-package com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_traces
+package com.github.kornilova_l.flamegraph.plugin.server.converters.calltree
 
-import com.github.kornilova_l.flamegraph.proto.TreeProtos
+import com.github.kornilova_l.flamegraph.proto.TreesProtos
 import com.intellij.openapi.extensions.ExtensionPointName
 import java.io.File
 
 /**
- * Builds call traces
+ * Builds call tree
  */
-abstract class FileToCallTracesConverter {
+abstract class FileToCallTreeConverter {
 
     companion object {
-        private val EP_NAME = ExtensionPointName.create<FileToCallTracesConverter>("com.github.kornilovaL.flamegraphProfiler.fileToCallTracesConverter")
+        private val EP_NAME = ExtensionPointName.create<FileToCallTreeConverter>("com.github.kornilovaL.flamegraphProfiler.fileToCallTreeConverter")
 
-        fun convert(converterId: String, file: File): TreeProtos.Tree? {
+        fun convert(converterId: String, file: File): TreesProtos.Trees? {
             for (extension in EP_NAME.extensions) {
                 if (extension.getId() == converterId) {
                     return extension.convert(file)
@@ -44,7 +44,7 @@ abstract class FileToCallTracesConverter {
     abstract fun isSupported(file: File): Boolean
 
     /**
-     * Converts file to call traces tree.
+     * Convert file to call tree.
      */
-    abstract fun convert(file: File): TreeProtos.Tree
+    abstract fun convert(file: File): TreesProtos.Trees
 }

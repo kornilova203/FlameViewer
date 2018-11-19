@@ -1,4 +1,4 @@
-package com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_traces.cflamegraph
+package com.github.kornilova_l.flamegraph.plugin.server.converters.calltraces.cflamegraph
 
 import com.github.kornilova_l.flamegraph.cflamegraph.Node
 import com.github.kornilova_l.flamegraph.cflamegraph.Tree

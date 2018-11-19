@@ -1,8 +1,8 @@
-package com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file.yourkit_csv
+package com.github.kornilova_l.flamegraph.plugin.server.converters.file.yourkit.csv
 
-import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_traces.flamegraph.StacksToTreeBuilder
-import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file.CFlamegraph
-import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file.CFlamegraphLine
+import com.github.kornilova_l.flamegraph.plugin.server.converters.calltraces.flamegraph.StacksToTreeBuilder
+import com.github.kornilova_l.flamegraph.plugin.server.converters.file.CFlamegraph
+import com.github.kornilova_l.flamegraph.plugin.server.converters.file.CFlamegraphLine
 import com.github.kornilova_l.flamegraph.plugin.server.trees.util.TreesUtil.parsePositiveInt
 import java.io.BufferedReader
 import java.io.File

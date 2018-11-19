@@ -1,16 +1,17 @@
-package com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file.yourkit_csv
+package com.github.kornilova_l.flamegraph.plugin.server.converters.file.yourkit.csv
 
-import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file.CFlamegraph
-import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file.ProfilerToCompressedFlamegraphConverter
-import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file.ProfilerToFlamegraphConverter
+import com.github.kornilova_l.flamegraph.plugin.server.converters.file.CFlamegraph
+import com.github.kornilova_l.flamegraph.plugin.server.converters.file.ProfilerToCompressedFlamegraphConverter
+import com.intellij.openapi.util.text.StringUtil
+import com.intellij.util.PathUtil
 import java.io.BufferedReader
 import java.io.File
 import java.io.FileReader
 
 
-class YourkitCsvToCFlamegraphConverter : ProfilerToCompressedFlamegraphConverter() {
+class YourkitCsvToCFlamegraphConverter : ProfilerToCompressedFlamegraphConverter {
     override fun isSupported(file: File): Boolean {
-        if (ProfilerToFlamegraphConverter.getFileExtension(file.name) != "csv") {
+        if (!StringUtil.equalsIgnoreCase(PathUtil.getFileExtension(file.name), "csv")) {
             return false
         }
         BufferedReader(FileReader(file)).use { reader ->

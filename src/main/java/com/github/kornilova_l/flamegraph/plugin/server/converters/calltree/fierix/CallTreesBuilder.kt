@@ -1,4 +1,4 @@
-package com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_tree.fierix
+package com.github.kornilova_l.flamegraph.plugin.server.converters.calltree.fierix
 
 import com.github.kornilova_l.flamegraph.plugin.pleaseReportIssue
 import com.github.kornilova_l.flamegraph.proto.EventProtos

@@ -1,15 +1,15 @@
 package com.github.kornilova_l.flamegraph.plugin.server.trees
 
 import com.github.kornilova_l.flamegraph.plugin.PluginFileManager
-import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_traces.FileToCallTracesConverter
-import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_tree.FileToCallTreeConverter
-import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_tree.fierix.FierixToCallTreeConverter
-import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file.ProfilerToFlamegraphConverter
+import com.github.kornilova_l.flamegraph.plugin.server.converters.calltraces.FileToCallTracesConverter
+import com.github.kornilova_l.flamegraph.plugin.server.converters.calltree.FileToCallTreeConverter
+import com.github.kornilova_l.flamegraph.plugin.server.converters.calltree.fierix.FierixToCallTreeConverter
 import com.github.kornilova_l.flamegraph.plugin.server.trees.hot_spots.HotSpot
 import com.github.kornilova_l.flamegraph.proto.TreeProtos
 import com.github.kornilova_l.flamegraph.proto.TreesPreviewProtos.TreesPreview
 import com.github.kornilova_l.flamegraph.proto.TreesProtos
 import com.intellij.openapi.diagnostic.Logger
+import com.intellij.util.PathUtil
 import java.io.File
 
 object TreeManager {
@@ -61,7 +61,7 @@ object TreeManager {
     private fun updateTreesSet(logFile: File) {
         if (currentFile == null || logFile.absolutePath != currentFile!!.absolutePath) {
             currentFile = logFile
-            val extension = ProfilerToFlamegraphConverter.getFileExtension(logFile.name)
+            val extension = PathUtil.getFileExtension(logFile.name)
             if (extension == "ser" || extension == "fierix") {
                 currentTreesSet = TreesSetImpl(FileToCallTreeConverter.convert("fierix", logFile)!!)
                 return

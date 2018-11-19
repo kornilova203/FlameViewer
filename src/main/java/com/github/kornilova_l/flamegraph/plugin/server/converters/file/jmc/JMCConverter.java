@@ -1,8 +1,10 @@
-package com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file.jmc;
+package com.github.kornilova_l.flamegraph.plugin.server.converters.file.jmc;
 
-import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_traces.flamegraph.StacksParser;
-import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file.ProfilerToFlamegraphConverter;
+import com.github.kornilova_l.flamegraph.plugin.server.converters.calltraces.flamegraph.StacksParser;
+import com.github.kornilova_l.flamegraph.plugin.server.converters.file.ProfilerToFlamegraphConverter;
 import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.util.PathUtil;
 import org.apache.commons.lang.SystemUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -14,21 +16,20 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.ZipException;
 
 /**
  * @deprecated should be replaced with implementation of ProfilerToCompressedFlamegraphConverter
  */
-public class JMCConverter extends ProfilerToFlamegraphConverter {
+public class JMCConverter implements ProfilerToFlamegraphConverter {
     private static final Logger LOG = Logger.getInstance(ProfilerToFlamegraphConverter.class);
     @SuppressWarnings("FieldCanBeLocal")
     private int allowedSize = 20000000; // in bytes. It is 20MB
 
     @Override
     public boolean isSupported(@NotNull File file) {
-        return Objects.equals(ProfilerToFlamegraphConverter.Companion.getFileExtension(file.getName()), "jfr");
+        return StringUtil.equalsIgnoreCase(PathUtil.getFileExtension(file.getName()), "jfr");
     }
 
     @NotNull

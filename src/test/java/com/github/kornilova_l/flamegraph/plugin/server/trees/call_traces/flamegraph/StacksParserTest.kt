@@ -1,6 +1,6 @@
 package com.github.kornilova_l.flamegraph.plugin.server.trees.call_traces.flamegraph
 
-import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_traces.flamegraph.StacksParser
+import com.github.kornilova_l.flamegraph.plugin.server.converters.calltraces.flamegraph.StacksParser
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test

@@ -1,4 +1,4 @@
-package com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file
+package com.github.kornilova_l.flamegraph.plugin.server.converters.file
 
 import com.github.kornilova_l.flamegraph.plugin.server.FileToFileConverterFileSaver
 import com.intellij.openapi.extensions.ExtensionPointName
@@ -28,18 +28,10 @@ class FlamegraphFileSaver : FileToFileConverterFileSaver() {
 }
 
 @Deprecated("Implement ProfilerToCompressedFlamegraphConverter instead")
-abstract class ProfilerToFlamegraphConverter {
+interface ProfilerToFlamegraphConverter {
     companion object {
         const val flamegraphExtension = "flamegraph"
         private val EP_NAME = ExtensionPointName.create<ProfilerToFlamegraphConverter>("com.github.kornilovaL.flamegraphProfiler.profilerToFlamegraphConverter")
-
-        fun getFileExtension(fileName: String): String {
-            val dot = fileName.lastIndexOf(".")
-            if (dot == -1) {
-                return ""
-            }
-            return fileName.substring(dot + 1, fileName.length)
-        }
 
         fun convert(file: File): Map<String, Int>? {
             return EP_NAME.extensions
@@ -48,11 +40,11 @@ abstract class ProfilerToFlamegraphConverter {
         }
     }
 
-    abstract fun isSupported(file: File): Boolean
+    fun isSupported(file: File): Boolean
 
     /**
      * Convert file to flamegraph format
      * File in parameters will be deleted after calling this method
      */
-    abstract fun convert(file: File): Map<String, Int>
+    fun convert(file: File): Map<String, Int>
 }

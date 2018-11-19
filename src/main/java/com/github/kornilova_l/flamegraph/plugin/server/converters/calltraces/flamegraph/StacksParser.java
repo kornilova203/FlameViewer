@@ -1,4 +1,4 @@
-package com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_traces.flamegraph;
+package com.github.kornilova_l.flamegraph.plugin.server.converters.calltraces.flamegraph;
 
 import org.jetbrains.annotations.Nullable;
 

@@ -1,10 +1,10 @@
 package com.github.kornilova_l.flamegraph.plugin.server
 
 import com.github.kornilova_l.flamegraph.plugin.PluginFileManager
-import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_traces.FileToCallTracesConverter
-import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file.CompressedFlamegraphFileSaver
-import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file.FlamegraphFileSaver
-import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file.ProfilerToFlamegraphConverter
+import com.github.kornilova_l.flamegraph.plugin.server.converters.calltraces.FileToCallTracesConverter
+import com.github.kornilova_l.flamegraph.plugin.server.converters.file.CompressedFlamegraphFileSaver
+import com.github.kornilova_l.flamegraph.plugin.server.converters.file.FlamegraphFileSaver
+import com.intellij.util.PathUtil
 import java.io.*
 import java.nio.file.Paths
 
@@ -28,7 +28,7 @@ class FileUploader {
                  * client will send a request to check if file was saved/converted */
                 val file = fileAccumulator.getFile()
                 fileAccumulators.remove(fileName)
-                val extension = ProfilerToFlamegraphConverter.getFileExtension(fileName)
+                val extension = PathUtil.getFileExtension(fileName)
                 if (extension == "ser" || extension == "fierix") {
                     /* move file to ser files */
                     PluginFileManager.fierixFileSaver.moveToDir(file, fileName)

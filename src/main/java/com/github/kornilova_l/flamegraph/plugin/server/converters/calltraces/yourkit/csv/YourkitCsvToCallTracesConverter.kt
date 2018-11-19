@@ -1,8 +1,9 @@
-package com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_traces.yourkit_csv
+package com.github.kornilova_l.flamegraph.plugin.server.converters.calltraces.yourkit.csv
 
-import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_traces.FileToCallTracesConverter
-import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file.ProfilerToFlamegraphConverter
+import com.github.kornilova_l.flamegraph.plugin.server.converters.calltraces.FileToCallTracesConverter
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree
+import com.intellij.openapi.util.text.StringUtil
+import com.intellij.util.PathUtil
 import java.io.BufferedReader
 import java.io.File
 import java.io.FileReader
@@ -10,13 +11,11 @@ import java.io.FileReader
 
 @Deprecated("When a new csv file is added it's converted with YourkitCsvToCFlamegraphConverter. " +
         "This converter is to support already uploaded csv files.")
-class YourkitCsvToCallTracesConverter : FileToCallTracesConverter() {
-    override fun getId(): String {
-        return "yourkit"
-    }
+class YourkitCsvToCallTracesConverter : FileToCallTracesConverter {
+    override fun getId(): String = "yourkit"
 
     override fun isSupported(file: File): Boolean {
-        if (ProfilerToFlamegraphConverter.getFileExtension(file.name) != "csv") {
+        if (!StringUtil.equalsIgnoreCase(PathUtil.getFileExtension(file.name), "csv")) {
             return false
         }
         BufferedReader(FileReader(file)).use { reader ->

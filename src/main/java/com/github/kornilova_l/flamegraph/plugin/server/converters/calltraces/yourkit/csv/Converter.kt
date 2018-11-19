@@ -1,4 +1,4 @@
-package com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_traces.yourkit_csv
+package com.github.kornilova_l.flamegraph.plugin.server.converters.calltraces.yourkit.csv
 
 import com.github.kornilova_l.flamegraph.plugin.server.trees.util.TreesUtil
 import com.github.kornilova_l.flamegraph.plugin.server.trees.util.TreesUtil.parsePositiveInt

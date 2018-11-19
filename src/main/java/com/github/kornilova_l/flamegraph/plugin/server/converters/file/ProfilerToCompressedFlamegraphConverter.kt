@@ -1,4 +1,4 @@
-package com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file
+package com.github.kornilova_l.flamegraph.plugin.server.converters.file
 
 import com.github.kornilova_l.flamegraph.cflamegraph.Names
 import com.github.kornilova_l.flamegraph.cflamegraph.Node
@@ -63,7 +63,7 @@ data class CFlamegraph(val lines: List<CFlamegraphLine>,
 
 data class CFlamegraphLine(val classNameId: Int?, val methodNameId: Int, val descId: Int?, val width: Int, val depth: Int)
 
-abstract class ProfilerToCompressedFlamegraphConverter {
+interface ProfilerToCompressedFlamegraphConverter {
     companion object {
         const val cFlamegraphExtension = "cflamegraph"
 

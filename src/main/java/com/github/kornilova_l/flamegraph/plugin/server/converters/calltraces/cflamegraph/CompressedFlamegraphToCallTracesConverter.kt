@@ -1,8 +1,8 @@
-package com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_traces.cflamegraph
+package com.github.kornilova_l.flamegraph.plugin.server.converters.calltraces.cflamegraph
 
-import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_traces.FileToCallTracesConverter
-import com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file.ProfilerToFlamegraphConverter
+import com.github.kornilova_l.flamegraph.plugin.server.converters.calltraces.FileToCallTracesConverter
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree
+import com.intellij.util.PathUtil
 import java.io.File
 
 
@@ -52,7 +52,7 @@ import java.io.File
  *
  * Converter merges unmerged stacktraces.
  */
-class CompressedFlamegraphToCallTracesConverter : FileToCallTracesConverter() {
+class CompressedFlamegraphToCallTracesConverter : FileToCallTracesConverter {
     private val extension = "cflamegraph"
 
     override fun getId(): String = extension
@@ -62,7 +62,7 @@ class CompressedFlamegraphToCallTracesConverter : FileToCallTracesConverter() {
      * There is not need to validate the file because cflamegraph format is known only by the plugin.
      */
     override fun isSupported(file: File): Boolean {
-        return ProfilerToFlamegraphConverter.getFileExtension(file.name) == extension
+        return PathUtil.getFileExtension(file.name) == extension
     }
 
     override fun convert(file: File): Tree = Converter(file).tree

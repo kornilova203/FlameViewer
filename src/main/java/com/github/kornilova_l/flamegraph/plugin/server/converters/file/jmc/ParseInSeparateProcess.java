@@ -1,4 +1,4 @@
-package com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_file.jmc;
+package com.github.kornilova_l.flamegraph.plugin.server.converters.file.jmc;
 
 import java.io.File;
 

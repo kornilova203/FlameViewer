@@ -1,4 +1,4 @@
-package com.github.kornilova_l.flamegraph.plugin.server.converters.file_to_call_tree.fierix;
+package com.github.kornilova_l.flamegraph.plugin.server.converters.calltree.fierix;
 
 import com.github.kornilova_l.flamegraph.plugin.server.trees.TreesSet;
 import com.github.kornilova_l.flamegraph.plugin.server.trees.util.TreesUtil;
