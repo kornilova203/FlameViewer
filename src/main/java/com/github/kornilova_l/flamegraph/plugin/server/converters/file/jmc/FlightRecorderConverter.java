@@ -1,5 +1,6 @@
 package com.github.kornilova_l.flamegraph.plugin.server.converters.file.jmc;
 
+import com.github.kornilova_l.flamegraph.plugin.server.converters.file.CFlamegraph;
 import com.github.kornilova_l.flight_parser.FlightParser;
 
 import java.io.BufferedWriter;
@@ -11,6 +12,7 @@ import java.util.Map;
 
 class FlightRecorderConverter {
     private Map<String, Integer> stacks;
+    private CFlamegraph cFlamegraph;
 
     FlightRecorderConverter(File file) {
         FlightParser flightParser = new FlightParser(file);
@@ -20,6 +22,10 @@ class FlightRecorderConverter {
 
     public Map<String, Integer> getStacks() {
         return stacks;
+    }
+
+    public CFlamegraph getCompressedFlamegraph() {
+        return cFlamegraph;
     }
 
     /**

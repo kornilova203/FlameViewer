@@ -118,7 +118,7 @@ class FileUploader {
  */
 abstract class FileToFileConverterFileSaver {
     companion object {
-        val registeredFileSavers = listOf(FlamegraphFileSaver(), CompressedFlamegraphFileSaver())
+        val registeredFileSavers = listOf(CompressedFlamegraphFileSaver())
     }
 
     /**
