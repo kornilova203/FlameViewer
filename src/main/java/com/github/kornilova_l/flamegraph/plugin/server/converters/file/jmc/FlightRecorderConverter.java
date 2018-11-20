@@ -18,6 +18,7 @@ class FlightRecorderConverter {
         FlightParser flightParser = new FlightParser(file);
         Map<String, Integer> stacks = flightParser.getStacksMap();
         this.stacks = removePackageInParameters(stacks);
+        // TODO: Parse the FlightRecorder file into a CFlamegraph
     }
 
     public Map<String, Integer> getStacks() {
