@@ -12,21 +12,15 @@ import java.util.Map;
 
 class FlightRecorderConverter {
     private Map<String, Integer> stacks;
-    private CFlamegraph cFlamegraph;
 
     FlightRecorderConverter(File file) {
         FlightParser flightParser = new FlightParser(file);
         Map<String, Integer> stacks = flightParser.getStacksMap();
         this.stacks = removePackageInParameters(stacks);
-        // TODO: Parse the FlightRecorder file into a CFlamegraph
     }
 
     public Map<String, Integer> getStacks() {
         return stacks;
-    }
-
-    public CFlamegraph getCompressedFlamegraph() {
-        return cFlamegraph;
     }
 
     /**

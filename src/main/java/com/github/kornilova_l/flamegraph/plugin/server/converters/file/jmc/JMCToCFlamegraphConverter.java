@@ -43,10 +43,10 @@ public class JMCToCFlamegraphConverter implements ProfilerToCompressedFlamegraph
             LOG.info("File " + file + " is too big. It will be converted in separate process");
             startProcess(newFile);
         } else {
-            return new FlightRecorderConverter(newFile).getCompressedFlamegraph();
+            return new FlightRecorderCompressedConverter(newFile).getCFlamegraph();
         }
 
-        CFlamegraph res = new FlightRecorderConverter(newFile).getCompressedFlamegraph();
+        CFlamegraph res = new FlightRecorderCompressedConverter(newFile).getCFlamegraph();
         boolean isDeleted = newFile.delete();
         if (!isDeleted) {
             LOG.warn("File " + newFile + " was not deleted");
