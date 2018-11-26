@@ -49,7 +49,9 @@ class CompressedFlamegraphFileSaver : FileToFileConverterFileSaver() {
         val tree = Tree.createTree(builder, names, nodes)
 
         builder.finish(tree)
-        FileOutputStream(file).write(builder.sizedByteArray())
+        val outStream = FileOutputStream(file)
+        outStream.write(builder.sizedByteArray())
+        outStream.close()
 
         return true
     }
