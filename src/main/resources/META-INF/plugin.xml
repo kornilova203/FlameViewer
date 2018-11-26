@@ -74,7 +74,7 @@ Detailed description at <a href="https://github.com/kornilova-l/FlameViewer">git
 
     <extensions defaultExtensionNs="com.github.kornilovaL.flamegraphProfiler">
         <profilerToCompressedFlamegraphConverter
-                implementation="com.github.kornilova_l.flamegraph.plugin.server.converters.file.jmc.JMCToCFlamegraphConverter"/>
+                implementation="com.github.kornilova_l.flamegraph.plugin.server.converters.file.jmc.JMCConverter"/>
         <profilerToCompressedFlamegraphConverter
                 implementation="com.github.kornilova_l.flamegraph.plugin.server.converters.file.yourkit.csv.YourkitCsvToCFlamegraphConverter"/>
         <fileToCallTracesConverter

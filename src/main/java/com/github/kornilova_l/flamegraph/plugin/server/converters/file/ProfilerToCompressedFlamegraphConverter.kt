@@ -8,6 +8,7 @@ import com.google.flatbuffers.FlatBufferBuilder
 import com.intellij.openapi.extensions.ExtensionPointName
 import java.io.File
 import java.io.FileOutputStream
+import java.util.HashMap
 
 
 class CompressedFlamegraphFileSaver : FileToFileConverterFileSaver() {
@@ -83,4 +84,5 @@ interface ProfilerToCompressedFlamegraphConverter {
      * File in parameters will be deleted after calling this method
      */
     abstract fun convert(file: File): CFlamegraph
+
 }

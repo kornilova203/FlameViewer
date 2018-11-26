@@ -7,7 +7,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
+import java.util.TreeMap;
 
 class FlightRecorderCompressedConverter extends FlightRecorderConverter {
     private CFlamegraph cFlamegraph;
@@ -18,8 +18,9 @@ class FlightRecorderCompressedConverter extends FlightRecorderConverter {
         parseAsCFlamegraph();
     }
 
-    CFlamegraph getCFlamegraph() {
-        return cFlamegraph;
+    @Override
+    public CFlamegraph getCFlamegraph() {
+        return this.cFlamegraph;
     }
 
     private void parseAsCFlamegraph() {
@@ -28,42 +29,82 @@ class FlightRecorderCompressedConverter extends FlightRecorderConverter {
         HashMap<String, Integer> methodNames = new HashMap<>();
         HashMap<String, Integer> descriptions = new HashMap<>();
 
-        Map<String, Integer> stacks = this.getStacks();
-        Set<String> stackFrames = stacks.keySet();
+        TreeMap<String, Integer> sortedStacks = new TreeMap<>(this.getStacks());
 
-        for(String frame : stackFrames) {
-            Integer width = stacks.get(frame);
+        // todo: it's better to split stacks beforehand.
+        //  Currently split(";") is called n^2 times (in for loop and in getWidth method)
+        //  Maybe something like: List<Stack> sortedStacks
+        //  class Stack { String[] frames; int width }
+        //  also it's good to filter here stacks with 0 width
+        for (Map.Entry<String, Integer> stack : sortedStacks.entrySet()) {
+            String[] frames = stack.getKey().split(";");
+            boolean skippingDuplicates = true;
+            for (int depth = 1; depth <= frames.length; depth++) {
+                // I don't remember what was the problem about depth = 0
+                // probably something related to serialization. So it should start with 1
+                String frame = frames[depth - 1];
+                String className = getClassName(frame);
+                int classNameId = getId(classNames, className);
+                String methodName = getMethodName(frame);
+                int methodNameId = getId(methodNames, methodName);
 
-            String[] calls = frame.split(";");
-            Integer depth = calls.length;
-            String topFrame = calls[calls.length - 1]; //TODO: Add a check on length before this access
-            String className = getClassName(topFrame);
-            String methodName = getMethodName(topFrame);
+                if (skippingDuplicates && lastNodeIsTheSame(cFlamegraphLines, classNameId, methodNameId, depth)) {
+                    continue;
+                }
 
-            CFlamegraphLine line = new CFlamegraphLine(
-                    getId(classNames, className),
-                    getId(methodNames, methodName),
-                    null,
-                    width,
-                    depth);
-            cFlamegraphLines.add(line);
+                skippingDuplicates = false;
+                int width = getWidth(sortedStacks, frame, depth);
+
+                if (width == 0) {
+                    continue;
+                }
+
+                cFlamegraphLines.add(new CFlamegraphLine(
+                        classNameId,
+                        methodNameId,
+                        null,
+                        width,
+                        depth
+                ));
+            }
         }
 
-        this.cFlamegraph = new CFlamegraph(cFlamegraphLines, toArray(classNames), toArray(methodNames), toArray(descriptions));
+        this.cFlamegraph = new CFlamegraph(
+                cFlamegraphLines,
+                toArray(classNames),
+                toArray(methodNames),
+                toArray(descriptions)
+        );
     }
 
-    private Integer getId(HashMap<String, Integer> map, String name) {
-        Integer id = map.get(name);
-        if (id == null) {
-            Integer newId = map.size();
-            map.put(name, newId);
-            return newId;
+    private boolean lastNodeIsTheSame(ArrayList<CFlamegraphLine> cFlamegraphLines, int classNameId, int methodNameId, int depth) {
+        if (cFlamegraphLines.isEmpty()) return false;
+        // todo: check description
+        for (int i = cFlamegraphLines.size() - 1; i >= 0; i--) {
+            CFlamegraphLine cFlamegraphLine = cFlamegraphLines.get(i);
+            if (cFlamegraphLine.getDepth() == depth) {
+                Integer clNameId = cFlamegraphLine.getClassNameId();
+                return clNameId != null && clNameId == classNameId && cFlamegraphLine.getMethodNameId() == methodNameId;
+            }
         }
-        return id;
+        return false;
     }
 
-    private String[] toArray(HashMap<String, Integer> names)  {
-        return names.keySet().toArray(new String[0]);
+    private int getWidth(Map<String, Integer> stacks, String frame, int depth) {
+        // todo: bug here.
+        //  We need to calc width across all neighbouring frames on the same depth
+        //  (not across all frames on the same depth).
+        //  This can be fixed after we solve above problem ^^ about splitting stacks beforehand.
+        int width = 0;
+
+        for (Map.Entry<String, Integer> stack : stacks.entrySet()) {
+            String[] frames = stack.getKey().split(";");
+            if (depth > frames.length) continue;
+            String currentFrame = frames[depth - 1];
+            if (currentFrame.equals(frame)) width += stack.getValue();
+        }
+
+        return width;
     }
 
     private String getClassName(String call) {
