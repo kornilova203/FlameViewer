@@ -1,6 +1,7 @@
 package com.github.kornilova_l.flamegraph.plugin.server.converters.file.jmc;
 
-import com.github.kornilova_l.flamegraph.plugin.server.converters.calltraces.flamegraph.StacksParser;
+import com.github.kornilova_l.flamegraph.plugin.server.converters.file.CFlamegraph;
+import com.github.kornilova_l.flamegraph.plugin.server.converters.file.ProfilerToCompressedFlamegraphConverter;
 import com.github.kornilova_l.flamegraph.plugin.server.converters.file.ProfilerToFlamegraphConverter;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.text.StringUtil;
@@ -14,16 +15,11 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.ZipException;
 
-/**
- * @deprecated should be replaced with implementation of ProfilerToCompressedFlamegraphConverter
- */
-public class JMCConverter implements ProfilerToFlamegraphConverter {
-    private static final Logger LOG = Logger.getInstance(ProfilerToFlamegraphConverter.class);
+public class JMCConverter implements ProfilerToCompressedFlamegraphConverter {
+    private static final Logger LOG = Logger.getInstance(ProfilerToCompressedFlamegraphConverter.class);
     @SuppressWarnings("FieldCanBeLocal")
     private int allowedSize = 20000000; // in bytes. It is 20MB
 
@@ -34,7 +30,7 @@ public class JMCConverter implements ProfilerToFlamegraphConverter {
 
     @NotNull
     @Override
-    public Map<String, Integer> convert(@NotNull File file) {
+    public CFlamegraph convert(@NotNull File file) {
         byte[] unzippedBytes = getUnzippedBytes(file);
         File newFile = getFileNear(file);
         saveToFile(newFile, unzippedBytes);
@@ -45,14 +41,15 @@ public class JMCConverter implements ProfilerToFlamegraphConverter {
             LOG.info("File " + file + " is too big. It will be converted in separate process");
             startProcess(newFile);
         } else {
-            return new FlightRecorderConverter(newFile).getStacks();
+            return new FlightRecorderCompressedConverter(newFile).getCFlamegraph();
         }
-        Map<String, Integer> res = StacksParser.getStacks(newFile);
+
+        CFlamegraph res = new FlightRecorderCompressedConverter(newFile).getCFlamegraph();
         boolean isDeleted = newFile.delete();
         if (!isDeleted) {
             LOG.warn("File " + newFile + " was not deleted");
         }
-        return res != null ? res : new HashMap<>();
+        return res;
     }
 
     static File getFileNear(@NotNull File file) {

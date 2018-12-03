@@ -3,6 +3,7 @@ package com.github.kornilova_l.flamegraph.plugin.server.converters.file.yourkit.
 import com.github.kornilova_l.flamegraph.plugin.server.converters.calltraces.flamegraph.StacksToTreeBuilder
 import com.github.kornilova_l.flamegraph.plugin.server.converters.file.CFlamegraph
 import com.github.kornilova_l.flamegraph.plugin.server.converters.file.CFlamegraphLine
+import com.github.kornilova_l.flamegraph.plugin.server.converters.file.AbstractConverter
 import com.github.kornilova_l.flamegraph.plugin.server.trees.util.TreesUtil.parsePositiveInt
 import java.io.BufferedReader
 import java.io.File
@@ -10,12 +11,12 @@ import java.io.FileReader
 import java.util.*
 
 
-class Converter(file: File) {
+class Converter(file: File) : AbstractConverter() {
     private val cFlamegraphLines = ArrayList<CFlamegraphLine>()
     private val classNames = HashMap<String, Int>()
     private val methodNames = HashMap<String, Int>()
     private val descriptions = HashMap<String, Int>()
-    val cFlamegraph: CFlamegraph
+    private val cFlamegraph: CFlamegraph
 
     init {
         BufferedReader(FileReader(file), 1000 * 8192).use { reader ->
@@ -25,15 +26,14 @@ class Converter(file: File) {
                 line = reader.readLine()
             }
         }
-        cFlamegraph = CFlamegraph(cFlamegraphLines, toArray(classNames), toArray(methodNames), toArray(descriptions))
+        cFlamegraph = CFlamegraph(cFlamegraphLines,
+                toArray(classNames),
+                toArray(methodNames),
+                toArray(descriptions))
     }
 
-    private fun toArray(names: HashMap<String, Int>): Array<String> {
-        val array = Array(names.size) { "" }
-        for (entry in names) {
-            array[entry.value] = entry.key
-        }
-        return array
+    override fun getCFlamegraph(): CFlamegraph {
+        return this.cFlamegraph
     }
 
     private fun processLine(line: String) {
@@ -81,16 +81,6 @@ class Converter(file: File) {
                     )
             )
         }
-    }
-
-    private fun getId(map: HashMap<String, Int>, name: String): Int {
-        val id = map[name]
-        if (id == null) {
-            val newId = map.size
-            map[name] = newId
-            return newId
-        }
-        return id
     }
 
     private fun getCleanName(name: String): String {
