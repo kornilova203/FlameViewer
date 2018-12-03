@@ -1,9 +1,10 @@
-package com.github.korniloval.flameviewer.converters.flamegraph.jfr;
+package com.github.korniloval.flameviewer.converters.cflamegraph.jfr;
 
-import com.github.korniloval.flameviewer.converters.calltraces.flamegraph.StacksParser;
-import com.github.korniloval.flameviewer.converters.flamegraph.ProfilerToFlamegraphConverter;
-import com.github.korniloval.flameviewer.converters.flamegraph.ProfilerToFlamegraphConverterFactory;
+import com.github.korniloval.flameviewer.converters.cflamegraph.ToCFlamegraphConverter;
+import com.github.korniloval.flameviewer.converters.cflamegraph.ProfilerToCFlamegraphConverterFactory;
 import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.util.PathUtil;
 import org.apache.commons.lang.SystemUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -13,45 +14,38 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.ZipException;
 
-/**
- * @author Liudmila Kornilova
- **/
-public class JfrToFlamegraphConverter implements ProfilerToFlamegraphConverter {
-    private static final Logger LOG = Logger.getInstance(ProfilerToFlamegraphConverterFactory.class);
+public class JfrToCFlamegraphConverterFactory implements ProfilerToCFlamegraphConverterFactory {
+    private static final Logger LOG = Logger.getInstance(JfrToCFlamegraphConverterFactory.class);
     @SuppressWarnings("FieldCanBeLocal")
     private int allowedSize = 20000000; // in bytes. It is 20MB
-    private final File file;
 
-    JfrToFlamegraphConverter(@NotNull File file) {
-        this.file = file;
-    }
-
-    @NotNull
+    @Nullable
     @Override
-    public Map<String, Integer> convert() {
+    public ToCFlamegraphConverter create(@NotNull File file) {
+        if (!isSupported(file)) return null;
         byte[] unzippedBytes = getUnzippedBytes(file);
         File newFile = getFileNear(file);
         saveToFile(newFile, unzippedBytes);
-        if (unzippedBytes.length > allowedSize) {
-            /* if this code is executed in test request it will fail
-             * because compiled classes for tests are stored in out/ directory
-             * and there are no jar libraries */
-            LOG.info("File " + file + " is too big. It will be converted in separate process");
-            startProcess(newFile);
-        } else {
-            return new JfrToStacksConverter(newFile).getStacks();
+        if (unzippedBytes.length <= allowedSize) {
+            return () -> {
+                Map<String, Integer> stacks = new JfrToStacksConverter(file).getStacks();
+                return new StacksToCFlamegraphConverter(stacks).convert();
+            };
         }
-        Map<String, Integer> res = StacksParser.getStacks(newFile);
-        boolean isDeleted = newFile.delete();
-        if (!isDeleted) {
-            LOG.warn("File " + newFile + " was not deleted");
-        }
-        return res != null ? res : new HashMap<>();
+        /* if this code is executed in test request it will fail
+         * because compiled classes for tests are stored in out/ directory
+         * and there are no jar libraries */
+        LOG.info("File " + file + " is too big. It will be converted in separate process");
+        // todo: convert in remote process
+        return null;
+    }
+
+    private boolean isSupported(@NotNull File file) {
+        return StringUtil.equalsIgnoreCase(PathUtil.getFileExtension(file.getName()), "jfr");
     }
 
     private static File getFileNear(@NotNull File file) {
@@ -103,7 +97,7 @@ public class JfrToFlamegraphConverter implements ProfilerToFlamegraphConverter {
 
     @Nullable
     private String getPathToJar(@NotNull String jarFileName) {
-        String classesDir = getDirPath(JfrToFlamegraphConverter.class);
+        String classesDir = getDirPath(JfrToCFlamegraphConverterFactory.class);
         if (classesDir == null) {
             return null;
         }

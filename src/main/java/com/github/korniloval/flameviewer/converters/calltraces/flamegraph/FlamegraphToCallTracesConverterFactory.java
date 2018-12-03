@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 
 import static com.github.korniloval.flameviewer.converters.calltraces.flamegraph.StacksParser.isFlamegraph;
-import static com.github.korniloval.flameviewer.converters.flamegraph.jfr.JfrToFlamegraphConverter.getBytes;
+import static com.github.korniloval.flameviewer.converters.cflamegraph.jfr.JfrToCFlamegraphConverterFactory.getBytes;
 
 /**
  * Converts file in flamegraph format to call traces.
@@ -20,7 +20,7 @@ import static com.github.korniloval.flameviewer.converters.flamegraph.jfr.JfrToF
  */
 public class FlamegraphToCallTracesConverterFactory implements FileToCallTracesConverterFactory {
 
-    public static final String EXTENSION = "flamegraph";
+    private static final String EXTENSION = "flamegraph";
 
     @NotNull
     public String getId() {

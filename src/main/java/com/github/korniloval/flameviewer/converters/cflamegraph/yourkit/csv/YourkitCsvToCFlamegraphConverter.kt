@@ -1,6 +1,9 @@
 package com.github.korniloval.flameviewer.converters.cflamegraph.yourkit.csv
 
-import com.github.korniloval.flameviewer.converters.calltraces.flamegraph.StacksToTreeBuilder
+import com.github.korniloval.flameviewer.converters.FramesParsingUtil.getClassName
+import com.github.korniloval.flameviewer.converters.FramesParsingUtil.getDescription
+import com.github.korniloval.flameviewer.converters.FramesParsingUtil.getLastSpacePosBeforeParams
+import com.github.korniloval.flameviewer.converters.FramesParsingUtil.getMethodName
 import com.github.korniloval.flameviewer.converters.cflamegraph.*
 import com.github.korniloval.flameviewer.trees.util.TreesUtil.parsePositiveInt
 import java.io.BufferedReader
@@ -9,7 +12,7 @@ import java.io.FileReader
 import java.util.*
 
 
-class YourkitCsvToCFlamegraphConverter(private val file: File) : ProfilerToCFlamegraphConverter {
+class YourkitCsvToCFlamegraphConverter(private val file: File) : ToCFlamegraphConverter {
     private val cFlamegraphLines = ArrayList<CFlamegraphLine>()
     private val classNames = HashMap<String, Int>()
     private val methodNames = HashMap<String, Int>()
@@ -23,7 +26,10 @@ class YourkitCsvToCFlamegraphConverter(private val file: File) : ProfilerToCFlam
                 line = reader.readLine()
             }
         }
-        return CFlamegraph(cFlamegraphLines, toArray(classNames), toArray(methodNames), toArray(descriptions))
+        return CFlamegraph(cFlamegraphLines,
+                toArray(classNames),
+                toArray(methodNames),
+                toArray(descriptions))
     }
 
     private fun processLine(line: String) {
@@ -56,10 +62,10 @@ class YourkitCsvToCFlamegraphConverter(private val file: File) : ProfilerToCFlam
         name = getCleanName(name)
         val openBracketPos = name.indexOf('(')
         val parametersPos = if (openBracketPos == -1) name.length else openBracketPos
-        val lastSpacePosBeforeParams = StacksToTreeBuilder.getLastSpacePosBeforeParams(name, parametersPos)
-        val className = StacksToTreeBuilder.getClassName(name, parametersPos, lastSpacePosBeforeParams)
-        val methodName = StacksToTreeBuilder.getMethodName(name, parametersPos)
-        val desc = StacksToTreeBuilder.getDescription(name, parametersPos, lastSpacePosBeforeParams)
+        val lastSpacePosBeforeParams = getLastSpacePosBeforeParams(name, parametersPos)
+        val className = getClassName(name, parametersPos, lastSpacePosBeforeParams)
+        val methodName = getMethodName(name, parametersPos)
+        val desc = getDescription(name, parametersPos, lastSpacePosBeforeParams)
         if (width > 0) {
             cFlamegraphLines.add(
                     CFlamegraphLine(

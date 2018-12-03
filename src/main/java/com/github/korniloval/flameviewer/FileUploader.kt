@@ -1,10 +1,8 @@
 package com.github.korniloval.flameviewer
 
-import com.github.korniloval.flameviewer.PluginFileManager
 import com.github.korniloval.flameviewer.converters.calltraces.FileToCallTracesConverterFactory
 import com.github.korniloval.flameviewer.converters.calltree.fierix.FierixToCallTreeConverterFactory.Companion.isFierixExtension
 import com.github.korniloval.flameviewer.converters.cflamegraph.CFlamegraphFileSaver
-import com.github.korniloval.flameviewer.converters.flamegraph.FlamegraphFileSaver
 import com.intellij.util.PathUtil
 import java.io.*
 import java.nio.file.Paths
@@ -118,7 +116,7 @@ class FileUploader {
  */
 abstract class FileToFileConverterFileSaver {
     companion object {
-        val registeredFileSavers = listOf(FlamegraphFileSaver(), CFlamegraphFileSaver())
+        val registeredFileSavers = listOf(CFlamegraphFileSaver())
     }
 
     /**
