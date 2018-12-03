@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 
 import static com.github.kornilova_l.flamegraph.plugin.server.converters.calltraces.flamegraph.StacksParser.isFlamegraph;
-import static com.github.kornilova_l.flamegraph.plugin.server.converters.flamegraph.jfr.JfrToFlamegraphConverter.getBytes;
+import static com.github.kornilova_l.flamegraph.plugin.server.converters.cflamegraph.jfr.JfrToCFlamegraphConverterFactory.getBytes;
 
 /**
  * Converts file in flamegraph format to call traces.

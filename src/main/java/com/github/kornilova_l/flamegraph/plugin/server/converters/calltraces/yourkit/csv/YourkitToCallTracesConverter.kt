@@ -12,6 +12,8 @@ import java.io.FileReader
 import java.util.*
 
 
+@Deprecated("When a new csv file is added it's converted with YourkitCsvToCFlamegraphConverterFactory. " +
+        "This converter is to support already uploaded csv files.")
 class YourkitToCallTracesConverter(file: File) : FileToCallTracesConverterBase(file) {
     private val uniqueStringsClassName = UniqueStringsKeeper()
     private val uniqueStringsMethodName = UniqueStringsKeeper()

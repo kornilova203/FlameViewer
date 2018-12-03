@@ -1,4 +1,4 @@
-package com.github.kornilova_l.flamegraph.plugin.server.converters.flamegraph.jfr;
+package com.github.kornilova_l.flamegraph.plugin.server.converters.cflamegraph.jfr;
 
 import com.github.kornilova_l.flight_parser.FlightParser;
 
@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-class JfrToStacksConverter {
+abstract class JfrToStacksConverter {
     private Map<String, Integer> stacks;
 
     JfrToStacksConverter(File file) {

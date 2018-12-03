@@ -23,7 +23,10 @@ class YourkitCsvToCFlamegraphConverter(private val file: File) : ProfilerToCFlam
                 line = reader.readLine()
             }
         }
-        return CFlamegraph(cFlamegraphLines, toArray(classNames), toArray(methodNames), toArray(descriptions))
+        return CFlamegraph(cFlamegraphLines,
+                toArray(classNames),
+                toArray(methodNames),
+                toArray(descriptions))
     }
 
     private fun processLine(line: String) {

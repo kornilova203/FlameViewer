@@ -59,8 +59,6 @@ Detailed description at <a href="https://github.com/kornilova-l/FlameViewer">git
     <depends optional="true" config-file="Fierix.xml">com.intellij.modules.java</depends>
 
     <extensionPoints>
-        <extensionPoint name="profilerToFlamegraphConverterFactory"
-                        interface="com.github.kornilova_l.flamegraph.plugin.server.converters.flamegraph.ProfilerToFlamegraphConverterFactory"/>
         <extensionPoint name="profilerToCFlamegraphConverterFactory"
                         interface="com.github.kornilova_l.flamegraph.plugin.server.converters.cflamegraph.ProfilerToCFlamegraphConverterFactory"/>
         <extensionPoint name="fileToCallTreeConverterFactory"
@@ -75,8 +73,8 @@ Detailed description at <a href="https://github.com/kornilova-l/FlameViewer">git
     </extensions>
 
     <extensions defaultExtensionNs="com.github.kornilovaL.flamegraphProfiler">
-        <profilerToFlamegraphConverterFactory
-                implementation="com.github.kornilova_l.flamegraph.plugin.server.converters.flamegraph.jfr.JfrToFlamegraphConverterFactory"/>
+        <profilerToCFlamegraphConverterFactory
+                implementation="com.github.kornilova_l.flamegraph.plugin.server.converters.cflamegraph.jfr.JfrToCFlamegraphConverterFactory"/>
         <profilerToCFlamegraphConverterFactory
                 implementation="com.github.kornilova_l.flamegraph.plugin.server.converters.cflamegraph.yourkit.csv.YourkitCsvToCFlamegraphConverterFactory"/>
         <fileToCallTracesConverterFactory
