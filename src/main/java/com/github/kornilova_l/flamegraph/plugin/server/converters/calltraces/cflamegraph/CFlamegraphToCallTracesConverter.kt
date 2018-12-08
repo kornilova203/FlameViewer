@@ -3,6 +3,7 @@ package com.github.kornilova_l.flamegraph.plugin.server.converters.calltraces.cf
 import com.github.kornilova_l.flamegraph.cflamegraph.Node
 import com.github.kornilova_l.flamegraph.cflamegraph.Tree
 import com.github.kornilova_l.flamegraph.plugin.pleaseReportIssue
+import com.github.kornilova_l.flamegraph.plugin.server.converters.calltraces.FileToCallTracesConverterBase
 import com.github.kornilova_l.flamegraph.plugin.server.trees.util.TreesUtil
 import com.github.kornilova_l.flamegraph.proto.TreeProtos
 import java.io.File
@@ -10,21 +11,22 @@ import java.nio.ByteBuffer
 import java.util.*
 
 
-internal class Converter(file: File) {
-    val tree: TreeProtos.Tree
+class CFlamegraphToCallTracesConverter(file: File) : FileToCallTracesConverterBase(file) {
+    private val cflamegraphTree: Tree = Tree.getRootAsTree(ByteBuffer.wrap(file.readBytes()))
     private val classNames: Map<Int, String>
     private val methodNames: Map<Int, String>
     private val descriptions: Map<Int, String>
     private var maxDepth = 0
 
     init {
-        val tree = createEmptyTree()
-        val cflamegraphTree = Tree.getRootAsTree(ByteBuffer.wrap(file.readBytes()))
-
         val names = cflamegraphTree.names()
         classNames = convertNamesToMap(names.classNamesLength()) { names.classNames(it) }
         methodNames = convertNamesToMap(names.methodNamesLength()) { names.methodNames(it) }
         descriptions = convertNamesToMap(names.descriptionsLength()) { names.descriptions(it) }
+    }
+
+    override fun convert(): TreeProtos.Tree {
+        val tree = createEmptyTree()
 
         val currentStack = ArrayList<TreeProtos.Tree.Node.Builder>()
         currentStack.add(tree.baseNodeBuilder)
@@ -37,7 +39,7 @@ internal class Converter(file: File) {
         TreesUtil.setNodesOffsetRecursively(tree.baseNodeBuilder, 0)
         TreesUtil.setTreeWidth(tree)
         TreesUtil.setNodesCount(tree)
-        this.tree = tree.build()
+        return tree.build()
     }
 
     private fun convertNamesToMap(itemsCount: Int, getter: (Int) -> String): Map<Int, String> {

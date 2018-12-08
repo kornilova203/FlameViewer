@@ -1,8 +1,9 @@
-package com.github.kornilova_l.flamegraph.plugin.server.converters.file.yourkit.csv
+package com.github.kornilova_l.flamegraph.plugin.server.converters.cflamegraph.csv.yourkit
 
 import com.github.kornilova_l.flamegraph.plugin.server.converters.calltraces.flamegraph.StacksToTreeBuilder
-import com.github.kornilova_l.flamegraph.plugin.server.converters.file.CFlamegraph
-import com.github.kornilova_l.flamegraph.plugin.server.converters.file.CFlamegraphLine
+import com.github.kornilova_l.flamegraph.plugin.server.converters.cflamegraph.CFlamegraph
+import com.github.kornilova_l.flamegraph.plugin.server.converters.cflamegraph.CFlamegraphLine
+import com.github.kornilova_l.flamegraph.plugin.server.converters.cflamegraph.ProfilerToCFlamegraphConverterBase
 import com.github.kornilova_l.flamegraph.plugin.server.trees.util.TreesUtil.parsePositiveInt
 import java.io.BufferedReader
 import java.io.File
@@ -10,14 +11,13 @@ import java.io.FileReader
 import java.util.*
 
 
-class Converter(file: File) {
+class YourkitCsvToCFlamegraphConverter(file: File) : ProfilerToCFlamegraphConverterBase(file) {
     private val cFlamegraphLines = ArrayList<CFlamegraphLine>()
     private val classNames = HashMap<String, Int>()
     private val methodNames = HashMap<String, Int>()
     private val descriptions = HashMap<String, Int>()
-    val cFlamegraph: CFlamegraph
 
-    init {
+    override fun convert(): CFlamegraph {
         BufferedReader(FileReader(file), 1000 * 8192).use { reader ->
             var line = reader.readLine()
             while (line != null) {
@@ -25,7 +25,7 @@ class Converter(file: File) {
                 line = reader.readLine()
             }
         }
-        cFlamegraph = CFlamegraph(cFlamegraphLines, toArray(classNames), toArray(methodNames), toArray(descriptions))
+        return CFlamegraph(cFlamegraphLines, toArray(classNames), toArray(methodNames), toArray(descriptions))
     }
 
     private fun toArray(names: HashMap<String, Int>): Array<String> {

@@ -1,7 +1,6 @@
 package com.github.kornilova_l.flamegraph.plugin.server.converters.calltraces.cflamegraph
 
-import com.github.kornilova_l.flamegraph.plugin.server.converters.calltraces.FileToCallTracesConverter
-import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree
+import com.github.kornilova_l.flamegraph.plugin.server.converters.calltraces.FileToCallTracesConverterFactory
 import com.intellij.openapi.util.text.StringUtil
 import com.intellij.util.PathUtil
 import java.io.File
@@ -51,9 +50,9 @@ import java.io.File
  * If a call has bigger depth than previous it means that the call is a child
  * of previous call.
  *
- * Converter merges unmerged stacktraces.
+ * YourkitCsvToCFlamegraphConverter merges unmerged stacktraces.
  */
-class CompressedFlamegraphToCallTracesConverter : FileToCallTracesConverter {
+class CFlamegraphToCallTracesConverterFactory : FileToCallTracesConverterFactory {
     companion object {
         private const val EXTENSION = "cflamegraph"
     }
@@ -68,5 +67,5 @@ class CompressedFlamegraphToCallTracesConverter : FileToCallTracesConverter {
         return StringUtil.equalsIgnoreCase(PathUtil.getFileExtension(file.name), EXTENSION)
     }
 
-    override fun convert(file: File): Tree = Converter(file).tree
+    override fun create(file: File) = CFlamegraphToCallTracesConverter(file)
 }

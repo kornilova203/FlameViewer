@@ -1,10 +1,9 @@
-package com.github.kornilova_l.flamegraph.plugin.server.converters.file.jmc;
+package com.github.kornilova_l.flamegraph.plugin.server.converters.flamegraph.jfr;
 
 import com.github.kornilova_l.flamegraph.plugin.server.converters.calltraces.flamegraph.StacksParser;
-import com.github.kornilova_l.flamegraph.plugin.server.converters.file.ProfilerToFlamegraphConverter;
+import com.github.kornilova_l.flamegraph.plugin.server.converters.flamegraph.ProfilerToFlamegraphConverter;
+import com.github.kornilova_l.flamegraph.plugin.server.converters.flamegraph.ProfilerToFlamegraphConverterFactory;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.util.PathUtil;
 import org.apache.commons.lang.SystemUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -20,21 +19,21 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.ZipException;
 
 /**
- * @deprecated should be replaced with implementation of ProfilerToCompressedFlamegraphConverter
- */
-public class JMCConverter implements ProfilerToFlamegraphConverter {
-    private static final Logger LOG = Logger.getInstance(ProfilerToFlamegraphConverter.class);
+ * @author Liudmila Kornilova
+ **/
+public class JfrToFlamegraphConverter implements ProfilerToFlamegraphConverter {
+    private static final Logger LOG = Logger.getInstance(ProfilerToFlamegraphConverterFactory.class);
     @SuppressWarnings("FieldCanBeLocal")
     private int allowedSize = 20000000; // in bytes. It is 20MB
+    private final File file;
 
-    @Override
-    public boolean isSupported(@NotNull File file) {
-        return StringUtil.equalsIgnoreCase(PathUtil.getFileExtension(file.getName()), "jfr");
+    JfrToFlamegraphConverter(@NotNull File file) {
+        this.file = file;
     }
 
     @NotNull
     @Override
-    public Map<String, Integer> convert(@NotNull File file) {
+    public Map<String, Integer> convert() {
         byte[] unzippedBytes = getUnzippedBytes(file);
         File newFile = getFileNear(file);
         saveToFile(newFile, unzippedBytes);
@@ -45,7 +44,7 @@ public class JMCConverter implements ProfilerToFlamegraphConverter {
             LOG.info("File " + file + " is too big. It will be converted in separate process");
             startProcess(newFile);
         } else {
-            return new FlightRecorderConverter(newFile).getStacks();
+            return new JfrToStacksConverter(newFile).getStacks();
         }
         Map<String, Integer> res = StacksParser.getStacks(newFile);
         boolean isDeleted = newFile.delete();
@@ -55,12 +54,12 @@ public class JMCConverter implements ProfilerToFlamegraphConverter {
         return res != null ? res : new HashMap<>();
     }
 
-    static File getFileNear(@NotNull File file) {
+    private static File getFileNear(@NotNull File file) {
         Path dir = Paths.get(file.toURI()).toAbsolutePath().getParent();
         return Paths.get(dir.toString(), "temp-" + System.currentTimeMillis()).toFile();
     }
 
-    static void saveToFile(@NotNull File file, byte[] unzippedBytes) {
+    private static void saveToFile(@NotNull File file, byte[] unzippedBytes) {
         try (OutputStream outputStream = new FileOutputStream(file)) {
             outputStream.write(unzippedBytes);
         } catch (IOException e) {
@@ -70,10 +69,10 @@ public class JMCConverter implements ProfilerToFlamegraphConverter {
 
     private void startProcess(File file) {
         ProcessBuilder processBuilder = createProcessBuilder(file);
-        String dirPath = getDirPath(FlightRecorderConverter.class);
+        String dirPath = getDirPath(JfrToStacksConverter.class);
         System.out.println(dirPath);
         if (dirPath == null) {
-            LOG.error("Cannot find directory of FlightRecorderConverter.class. Please submit the report to https://github.com/kornilova-l/FlameViewer/issues");
+            LOG.error("Cannot find directory of JfrToStacksConverter.class. Please submit the report to https://github.com/kornilova-l/FlameViewer/issues");
             return;
         }
         processBuilder.redirectError(new File("error.txt"));
@@ -104,7 +103,7 @@ public class JMCConverter implements ProfilerToFlamegraphConverter {
 
     @Nullable
     private String getPathToJar(@NotNull String jarFileName) {
-        String classesDir = getDirPath(JMCConverter.class);
+        String classesDir = getDirPath(JfrToFlamegraphConverter.class);
         if (classesDir == null) {
             return null;
         }
@@ -158,7 +157,7 @@ public class JMCConverter implements ProfilerToFlamegraphConverter {
         return new byte[0];
     }
 
-    static byte[] getUnzippedBytes(File file) {
+    private static byte[] getUnzippedBytes(File file) {
         try (FileInputStream inputStream = new FileInputStream(file)) {
             try (GZIPInputStream gzipInputStream = new GZIPInputStream(inputStream)) {
                 ByteArrayOutputStream bout = new ByteArrayOutputStream();

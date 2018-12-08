@@ -1,20 +1,18 @@
-package com.github.kornilova_l.flamegraph.plugin.server.converters.file
+package com.github.kornilova_l.flamegraph.plugin.server.converters.cflamegraph
 
 import com.github.kornilova_l.flamegraph.cflamegraph.Names
 import com.github.kornilova_l.flamegraph.cflamegraph.Node
 import com.github.kornilova_l.flamegraph.cflamegraph.Tree
 import com.github.kornilova_l.flamegraph.plugin.server.FileToFileConverterFileSaver
 import com.google.flatbuffers.FlatBufferBuilder
-import com.intellij.openapi.extensions.ExtensionPointName
 import java.io.File
 import java.io.FileOutputStream
 
-
-class CompressedFlamegraphFileSaver : FileToFileConverterFileSaver() {
-    override val extension = ProfilerToCompressedFlamegraphConverter.cFlamegraphExtension
+class CFlamegraphFileSaver : FileToFileConverterFileSaver() {
+    override val extension = ProfilerToCFlamegraphConverterFactory.cFlamegraphExtension
 
     override fun tryToConvert(file: File): Boolean {
-        val cFlamegraph = ProfilerToCompressedFlamegraphConverter.convert(file) ?: return false
+        val cFlamegraph = ProfilerToCFlamegraphConverterFactory.convert(file) ?: return false
         val builder = FlatBufferBuilder(1024)
 
         val classNamesOffsets = IntArray(cFlamegraph.classNames.size)
@@ -52,35 +50,4 @@ class CompressedFlamegraphFileSaver : FileToFileConverterFileSaver() {
 
         return true
     }
-}
-
-@Suppress("ArrayInDataClass") // Instances of the class will not be compared
-data class CFlamegraph(val lines: List<CFlamegraphLine>,
-                       val classNames: Array<String>, // a "map" from id to class name
-                       val methodNames: Array<String>, // a "map" from id to method name
-                       val descriptions: Array<String>) // a "map" from id to description
-
-
-data class CFlamegraphLine(val classNameId: Int?, val methodNameId: Int, val descId: Int?, val width: Int, val depth: Int)
-
-interface ProfilerToCompressedFlamegraphConverter {
-    companion object {
-        const val cFlamegraphExtension = "cflamegraph"
-
-        private val EP_NAME = ExtensionPointName.create<ProfilerToCompressedFlamegraphConverter>("com.github.kornilovaL.flamegraphProfiler.profilerToCompressedFlamegraphConverter")
-
-        fun convert(file: File): CFlamegraph? {
-            return EP_NAME.extensions
-                    .firstOrNull { it.isSupported(file) }
-                    ?.convert(file) ?: return null
-        }
-    }
-
-    abstract fun isSupported(file: File): Boolean
-
-    /**
-     * Convert file to cflamegraph format
-     * File in parameters will be deleted after calling this method
-     */
-    abstract fun convert(file: File): CFlamegraph
 }
