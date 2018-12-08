@@ -1,5 +1,6 @@
 package com.github.kornilova_l.flamegraph.plugin.server.converters.file.jmc;
 
+import com.github.kornilova_l.flamegraph.plugin.server.converters.file.AbstractConverter;
 import com.github.kornilova_l.flight_parser.FlightParser;
 
 import java.io.BufferedWriter;
@@ -9,7 +10,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-class FlightRecorderConverter {
+abstract class FlightRecorderConverter extends AbstractConverter {
     private Map<String, Integer> stacks;
 
     FlightRecorderConverter(File file) {

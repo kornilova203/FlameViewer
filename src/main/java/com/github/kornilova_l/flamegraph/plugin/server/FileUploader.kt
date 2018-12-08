@@ -4,7 +4,6 @@ import com.github.kornilova_l.flamegraph.plugin.PluginFileManager
 import com.github.kornilova_l.flamegraph.plugin.server.converters.calltraces.FileToCallTracesConverter
 import com.github.kornilova_l.flamegraph.plugin.server.converters.calltree.fierix.FierixToCallTreeConverter.Companion.isFierixExtension
 import com.github.kornilova_l.flamegraph.plugin.server.converters.file.CompressedFlamegraphFileSaver
-import com.github.kornilova_l.flamegraph.plugin.server.converters.file.FlamegraphFileSaver
 import com.intellij.util.PathUtil
 import java.io.*
 import java.nio.file.Paths
@@ -118,7 +117,7 @@ class FileUploader {
  */
 abstract class FileToFileConverterFileSaver {
     companion object {
-        val registeredFileSavers = listOf(FlamegraphFileSaver(), CompressedFlamegraphFileSaver())
+        val registeredFileSavers = listOf(CompressedFlamegraphFileSaver())
     }
 
     /**

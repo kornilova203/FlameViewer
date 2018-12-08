@@ -18,6 +18,6 @@ public class ParseInSeparateProcess {
         }
         File file = new File(fileName);
         System.out.println(file);
-        new FlightRecorderConverter(file).writeTo(file);
+        new FlightRecorderCompressedConverter(file).writeTo(file);
     }
 }
