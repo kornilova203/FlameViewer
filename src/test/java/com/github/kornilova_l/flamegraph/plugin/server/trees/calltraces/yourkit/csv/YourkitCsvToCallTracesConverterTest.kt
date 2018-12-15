@@ -1,8 +1,8 @@
-package com.github.kornilova_l.flamegraph.plugin.server.trees.call_traces.yourkit_csv
+package com.github.kornilova_l.flamegraph.plugin.server.trees.calltraces.yourkit.csv
 
 import com.github.kornilova_l.flamegraph.plugin.server.trees.ConverterTestCase
 
-class YourkitToCallTracesConverterTest : ConverterTestCase("csv", "trees/outgoing-calls") {
+class YourkitCsvToCallTracesConverterTest : ConverterTestCase("csv", "trees/outgoing-calls") {
 
     fun testSimple() = doTest()
 

@@ -1,4 +1,4 @@
-package com.github.kornilova_l.flamegraph.plugin.server.trees.call_traces.fierix
+package com.github.kornilova_l.flamegraph.plugin.server.trees.calltraces.fierix
 
 import com.github.kornilova_l.flamegraph.plugin.server.trees.ConverterTestCase
 

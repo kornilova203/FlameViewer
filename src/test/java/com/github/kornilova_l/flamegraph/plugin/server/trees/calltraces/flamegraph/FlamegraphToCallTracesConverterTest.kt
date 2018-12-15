@@ -1,4 +1,4 @@
-package com.github.kornilova_l.flamegraph.plugin.server.trees.call_traces.flamegraph
+package com.github.kornilova_l.flamegraph.plugin.server.trees.calltraces.flamegraph
 
 import com.github.kornilova_l.flamegraph.plugin.PluginFileManager
 import com.github.kornilova_l.flamegraph.plugin.server.trees.ConverterTestCase

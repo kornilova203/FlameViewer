@@ -1,8 +1,8 @@
-package com.github.kornilova_l.flamegraph.plugin.server.trees.call_traces.jmc
+package com.github.kornilova_l.flamegraph.plugin.server.trees.calltraces.jfr
 
 import com.github.kornilova_l.flamegraph.plugin.server.trees.ConverterTestCase
 
-class JmcToCallTracesConverterTest : ConverterTestCase("jfr", "trees/outgoing-calls") {
+class JfrToCallTracesConverterTest : ConverterTestCase("jfr", "trees/outgoing-calls") {
 
     fun testJmc5() = doTest()
 
