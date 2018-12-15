@@ -1,4 +1,4 @@
-package com.github.kornilova_l.flamegraph.plugin.server.converters.file.jmc;
+package com.github.kornilova_l.flamegraph.plugin.server.converters.flamegraph.jfr;
 
 import com.github.kornilova_l.flight_parser.FlightParser;
 
@@ -9,16 +9,16 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-class FlightRecorderConverter {
+class JfrToStacksConverter {
     private Map<String, Integer> stacks;
 
-    FlightRecorderConverter(File file) {
+    JfrToStacksConverter(File file) {
         FlightParser flightParser = new FlightParser(file);
         Map<String, Integer> stacks = flightParser.getStacksMap();
         this.stacks = removePackageInParameters(stacks);
     }
 
-    public Map<String, Integer> getStacks() {
+    Map<String, Integer> getStacks() {
         return stacks;
     }
 
@@ -39,8 +39,8 @@ class FlightRecorderConverter {
                 String returnValue = call.substring(0, spacePos);
                 newStack.append(removePackage(returnValue));
                 int openBracketPos = call.indexOf('(');
-                newStack.append(call.substring(spacePos, openBracketPos)).append('('); // class and name of method
-                String parameters[] = call.substring(openBracketPos + 1, call.length() - 1).split(" *, *");
+                newStack.append(call, spacePos, openBracketPos).append('('); // class and name of method
+                String[] parameters = call.substring(openBracketPos + 1, call.length() - 1).split(" *, *");
                 for (int j = 0; j < parameters.length; j++) {
                     newStack.append(removePackage(parameters[j]));
                     if (j != parameters.length - 1) {
@@ -60,7 +60,7 @@ class FlightRecorderConverter {
     private static String removePackage(String type) {
         int dot = type.lastIndexOf('.');
         if (dot != -1) {
-            return type.substring(dot + 1, type.length());
+            return type.substring(dot + 1);
         }
         return type;
     }

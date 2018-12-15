@@ -1,4 +1,4 @@
-package com.github.kornilova_l.flamegraph.plugin.server.converters.file.jmc;
+package com.github.kornilova_l.flamegraph.plugin.server.converters.flamegraph.jfr;
 
 import java.io.File;
 
@@ -18,6 +18,6 @@ public class ParseInSeparateProcess {
         }
         File file = new File(fileName);
         System.out.println(file);
-        new FlightRecorderConverter(file).writeTo(file);
+        new JfrToStacksConverter(file).writeTo(file);
     }
 }

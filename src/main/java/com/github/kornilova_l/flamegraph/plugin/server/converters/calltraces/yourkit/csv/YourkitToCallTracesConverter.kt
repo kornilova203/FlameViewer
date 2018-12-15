@@ -1,5 +1,6 @@
 package com.github.kornilova_l.flamegraph.plugin.server.converters.calltraces.yourkit.csv
 
+import com.github.kornilova_l.flamegraph.plugin.server.converters.calltraces.FileToCallTracesConverterBase
 import com.github.kornilova_l.flamegraph.plugin.server.trees.util.TreesUtil
 import com.github.kornilova_l.flamegraph.plugin.server.trees.util.TreesUtil.parsePositiveInt
 import com.github.kornilova_l.flamegraph.plugin.server.trees.util.TreesUtil.parsePositiveLong
@@ -11,14 +12,13 @@ import java.io.FileReader
 import java.util.*
 
 
-internal class Converter(file: File) {
-    val tree: TreeProtos.Tree
+class YourkitToCallTracesConverter(file: File) : FileToCallTracesConverterBase(file) {
     private val uniqueStringsClassName = UniqueStringsKeeper()
     private val uniqueStringsMethodName = UniqueStringsKeeper()
     private val uniqueStringsDesc = UniqueStringsKeeper()
     var maxDepth = 0
 
-    init {
+    override fun convert(): TreeProtos.Tree {
         val tree = createEmptyTree()
         val currentStack = ArrayList<TreeProtos.Tree.Node.Builder>()
         currentStack.add(tree.baseNodeBuilder)
@@ -33,7 +33,7 @@ internal class Converter(file: File) {
         TreesUtil.setNodesOffsetRecursively(tree.baseNodeBuilder, 0)
         TreesUtil.setTreeWidth(tree)
         TreesUtil.setNodesCount(tree)
-        this.tree = tree.build()
+        return tree.build()
     }
 
     private fun processLine(line: String,
