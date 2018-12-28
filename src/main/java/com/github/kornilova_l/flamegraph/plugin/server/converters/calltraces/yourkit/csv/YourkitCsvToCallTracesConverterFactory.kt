@@ -1,7 +1,7 @@
 package com.github.kornilova_l.flamegraph.plugin.server.converters.calltraces.yourkit.csv
 
 import com.github.kornilova_l.flamegraph.plugin.server.converters.calltraces.FileToCallTracesConverterFactory
-import com.github.kornilova_l.flamegraph.plugin.server.converters.cflamegraph.csv.yourkit.YourkitCsvToCFlamegraphConverterFactory.Companion.isYourkitCsv
+import com.github.kornilova_l.flamegraph.plugin.server.converters.cflamegraph.yourkit.csv.YourkitCsvToCFlamegraphConverterFactory.Companion.isYourkitCsv
 import java.io.File
 
 

@@ -1,4 +1,4 @@
-package com.github.kornilova_l.flamegraph.plugin.server.converters.cflamegraph.csv.yourkit
+package com.github.kornilova_l.flamegraph.plugin.server.converters.cflamegraph.yourkit.csv
 
 import com.github.kornilova_l.flamegraph.plugin.server.converters.calltraces.flamegraph.StacksToTreeBuilder
 import com.github.kornilova_l.flamegraph.plugin.server.converters.cflamegraph.CFlamegraph
