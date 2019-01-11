@@ -1,10 +1,9 @@
 package com.github.kornilova_l.flamegraph.plugin.server
 
 import com.github.kornilova_l.flamegraph.plugin.PluginFileManager
-import com.github.kornilova_l.flamegraph.plugin.server.converters.calltraces.FileToCallTracesConverter
-import com.github.kornilova_l.flamegraph.plugin.server.converters.calltree.fierix.FierixToCallTreeConverter.Companion.isFierixExtension
-import com.github.kornilova_l.flamegraph.plugin.server.converters.file.CompressedFlamegraphFileSaver
-import com.github.kornilova_l.flamegraph.plugin.server.converters.file.FlamegraphFileSaver
+import com.github.kornilova_l.flamegraph.plugin.server.converters.calltraces.FileToCallTracesConverterFactory
+import com.github.kornilova_l.flamegraph.plugin.server.converters.calltree.fierix.FierixToCallTreeConverterFactory.Companion.isFierixExtension
+import com.github.kornilova_l.flamegraph.plugin.server.converters.cflamegraph.CFlamegraphFileSaver
 import com.intellij.util.PathUtil
 import java.io.*
 import java.nio.file.Paths
@@ -38,7 +37,7 @@ class FileUploader {
                 if (tryToConvertFileToAnotherFile(file)) { // this moves file to right place
                     return
                 }
-                val converterId = FileToCallTracesConverter.isSupported(file) // if this format is supported
+                val converterId = FileToCallTracesConverterFactory.isSupported(file) // if this format is supported
                 if (converterId != null) { // if supported
                     /* move file to needed directory. */
                     PluginFileManager.moveFileToUploadedFiles(converterId, fileName, file)
@@ -118,11 +117,11 @@ class FileUploader {
  */
 abstract class FileToFileConverterFileSaver {
     companion object {
-        val registeredFileSavers = listOf(FlamegraphFileSaver(), CompressedFlamegraphFileSaver())
+        val registeredFileSavers = listOf(CFlamegraphFileSaver())
     }
 
     /**
-     * Extension must be supported by FileToCallTracesConverter
+     * Extension must be supported by FileToCallTracesConverterFactory
      */
     abstract val extension: String
 

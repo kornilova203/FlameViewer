@@ -59,14 +59,12 @@ Detailed description at <a href="https://github.com/kornilova-l/FlameViewer">git
     <depends optional="true" config-file="Fierix.xml">com.intellij.modules.java</depends>
 
     <extensionPoints>
-        <extensionPoint name="profilerToFlamegraphConverter"
-                        interface="com.github.kornilova_l.flamegraph.plugin.server.converters.file.ProfilerToFlamegraphConverter"/>
-        <extensionPoint name="profilerToCompressedFlamegraphConverter"
-                        interface="com.github.kornilova_l.flamegraph.plugin.server.converters.file.ProfilerToCompressedFlamegraphConverter"/>
-        <extensionPoint name="fileToCallTreeConverter"
-                        interface="com.github.kornilova_l.flamegraph.plugin.server.converters.calltree.FileToCallTreeConverter"/>
-        <extensionPoint name="fileToCallTracesConverter"
-                        interface="com.github.kornilova_l.flamegraph.plugin.server.converters.calltraces.FileToCallTracesConverter"/>
+        <extensionPoint name="profilerToCFlamegraphConverterFactory"
+                        interface="com.github.kornilova_l.flamegraph.plugin.server.converters.cflamegraph.ProfilerToCFlamegraphConverterFactory"/>
+        <extensionPoint name="fileToCallTreeConverterFactory"
+                        interface="com.github.kornilova_l.flamegraph.plugin.server.converters.calltree.FileToCallTreeConverterFactory"/>
+        <extensionPoint name="fileToCallTracesConverterFactory"
+                        interface="com.github.kornilova_l.flamegraph.plugin.server.converters.calltraces.FileToCallTracesConverterFactory"/>
     </extensionPoints>
 
     <extensions defaultExtensionNs="com.intellij">
@@ -75,18 +73,18 @@ Detailed description at <a href="https://github.com/kornilova-l/FlameViewer">git
     </extensions>
 
     <extensions defaultExtensionNs="com.github.kornilovaL.flamegraphProfiler">
-        <profilerToFlamegraphConverter
-                implementation="com.github.kornilova_l.flamegraph.plugin.server.converters.file.jmc.JMCConverter"/>
-        <profilerToCompressedFlamegraphConverter
-                implementation="com.github.kornilova_l.flamegraph.plugin.server.converters.file.yourkit.csv.YourkitCsvToCFlamegraphConverter"/>
-        <fileToCallTracesConverter
-                implementation="com.github.kornilova_l.flamegraph.plugin.server.converters.calltraces.yourkit.csv.YourkitCsvToCallTracesConverter"/>
-        <fileToCallTracesConverter
-                implementation="com.github.kornilova_l.flamegraph.plugin.server.converters.calltraces.flamegraph.FlamegraphToCallTracesConverter"/>
-        <fileToCallTracesConverter
-                implementation="com.github.kornilova_l.flamegraph.plugin.server.converters.calltraces.cflamegraph.CompressedFlamegraphToCallTracesConverter"/>
-        <fileToCallTreeConverter
-                implementation="com.github.kornilova_l.flamegraph.plugin.server.converters.calltree.fierix.FierixToCallTreeConverter"/>
+        <profilerToCFlamegraphConverterFactory
+                implementation="com.github.kornilova_l.flamegraph.plugin.server.converters.cflamegraph.jfr.JfrToCFlamegraphConverterFactory"/>
+        <profilerToCFlamegraphConverterFactory
+                implementation="com.github.kornilova_l.flamegraph.plugin.server.converters.cflamegraph.yourkit.csv.YourkitCsvToCFlamegraphConverterFactory"/>
+        <fileToCallTracesConverterFactory
+                implementation="com.github.kornilova_l.flamegraph.plugin.server.converters.calltraces.yourkit.csv.YourkitCsvToCallTracesConverterFactory"/>
+        <fileToCallTracesConverterFactory
+                implementation="com.github.kornilova_l.flamegraph.plugin.server.converters.calltraces.flamegraph.FlamegraphToCallTracesConverterFactory"/>
+        <fileToCallTracesConverterFactory
+                implementation="com.github.kornilova_l.flamegraph.plugin.server.converters.calltraces.cflamegraph.CFlamegraphToCallTracesConverterFactory"/>
+        <fileToCallTreeConverterFactory
+                implementation="com.github.kornilova_l.flamegraph.plugin.server.converters.calltree.fierix.FierixToCallTreeConverterFactory"/>
     </extensions>
 
     <actions>
