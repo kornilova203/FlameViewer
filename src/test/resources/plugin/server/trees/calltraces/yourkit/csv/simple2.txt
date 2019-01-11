@@ -1,0 +1,44 @@
+tree_info {
+  nodes_count: 5
+}
+base_node {
+  nodes {
+    width: 110
+    node_info {
+      method_name: "fun1"
+      description: "()"
+    }
+    nodes {
+      width: 95
+      node_info {
+        method_name: "fun2"
+        description: "()"
+      }
+      nodes {
+        width: 80
+        node_info {
+          method_name: "fun3"
+          description: "()"
+        }
+      }
+    }
+    nodes {
+      offset: 95
+      width: 1
+      node_info {
+        method_name: "fun4"
+        description: "()"
+      }
+    }
+  }
+  nodes {
+    offset: 110
+    width: 10
+    node_info {
+      method_name: "fun5"
+      description: "()"
+    }
+  }
+}
+depth: 3
+width: 120

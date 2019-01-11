@@ -1,0 +1,63 @@
+tree_info {
+  nodes_count: 7
+}
+base_node {
+  nodes {
+    width: 1
+    node_info {
+      method_name: "run"
+      class_name: "java.util.concurrent.ForkJoinWorkerThread"
+      description: "()void"
+    }
+    nodes {
+      width: 1
+      node_info {
+        method_name: "runWorker"
+        class_name: "java.util.concurrent.ForkJoinPool"
+        description: "(ForkJoinPool$WorkQueue)void"
+      }
+      nodes {
+        width: 1
+        node_info {
+          method_name: "isEmpty"
+          class_name: "scala.collection.generic.TraversableForwarder$class"
+          description: "(TraversableForwarder)boolean"
+        }
+        nodes {
+          width: 1
+          node_info {
+            method_name: "underlying"
+            class_name: "scala.collection.mutable.ListBuffer"
+            description: "()List"
+          }
+          nodes {
+            width: 1
+            node_info {
+              method_name: "scala$collection$mutable$ListBuffer$$start"
+              class_name: "scala.collection.mutable.ListBuffer"
+              description: "()List"
+            }
+            nodes {
+              width: 1
+              node_info {
+                method_name: "do"
+                class_name: "NoPackage"
+                description: "()void"
+              }
+              nodes {
+                width: 1
+                node_info {
+                  method_name: "multipleArgs"
+                  class_name: "my_package.MyClass"
+                  description: "(ScExpression, TypingContext, boolean, boolean)void"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+depth: 7
+width: 1

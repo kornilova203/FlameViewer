@@ -1,0 +1,60 @@
+tree_info {
+  time_percent: 0.75
+  nodes_count: 8
+}
+base_node {
+  nodes {
+    width: 30
+    node_info {
+      method_name: "a"
+    }
+    nodes {
+      width: 5
+      node_info {
+        method_name: "a"
+      }
+      nodes {
+        width: 5
+        node_info {
+          method_name: "c"
+        }
+        nodes {
+          width: 5
+          node_info {
+            method_name: "b"
+          }
+        }
+      }
+    }
+    nodes {
+      offset: 5
+      width: 5
+      node_info {
+        method_name: "c"
+      }
+      nodes {
+        offset: 5
+        width: 5
+        node_info {
+          method_name: "b"
+        }
+      }
+    }
+    nodes {
+      offset: 10
+      width: 5
+      node_info {
+        method_name: "e"
+      }
+      nodes {
+        offset: 10
+        width: 5
+        node_info {
+          method_name: "b"
+        }
+      }
+    }
+  }
+}
+depth: 4
+width: 30

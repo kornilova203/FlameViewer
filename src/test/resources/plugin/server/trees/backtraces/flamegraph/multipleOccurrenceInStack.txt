@@ -1,0 +1,109 @@
+tree_info {
+  nodes_count: 15
+}
+base_node {
+  nodes {
+    width: 20
+    node_info {
+      method_name: "a"
+    }
+    nodes {
+      width: 5
+      node_info {
+        method_name: "c"
+      }
+      nodes {
+        width: 5
+        node_info {
+          method_name: "b"
+        }
+      }
+    }
+    nodes {
+      offset: 5
+      width: 5
+      node_info {
+        method_name: "e"
+      }
+      nodes {
+        offset: 5
+        width: 5
+        node_info {
+          method_name: "b"
+        }
+      }
+    }
+  }
+  nodes {
+    offset: 20
+    width: 5
+    node_info {
+      method_name: "b"
+    }
+  }
+  nodes {
+    offset: 25
+    width: 5
+    node_info {
+      method_name: "c"
+    }
+    nodes {
+      offset: 25
+      width: 5
+      node_info {
+        method_name: "b"
+      }
+    }
+  }
+  nodes {
+    offset: 30
+    width: 5
+    node_info {
+      method_name: "d"
+    }
+    nodes {
+      offset: 30
+      width: 5
+      node_info {
+        method_name: "a"
+      }
+      nodes {
+        offset: 30
+        width: 5
+        node_info {
+          method_name: "a"
+        }
+        nodes {
+          offset: 30
+          width: 5
+          node_info {
+            method_name: "c"
+          }
+          nodes {
+            offset: 30
+            width: 5
+            node_info {
+              method_name: "b"
+            }
+          }
+        }
+      }
+    }
+  }
+  nodes {
+    offset: 35
+    width: 5
+    node_info {
+      method_name: "f"
+    }
+    nodes {
+      offset: 35
+      width: 5
+      node_info {
+        method_name: "a"
+      }
+    }
+  }
+}
+depth: 5
+width: 40

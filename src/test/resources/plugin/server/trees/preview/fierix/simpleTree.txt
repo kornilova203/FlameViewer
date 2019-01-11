@@ -1,0 +1,59 @@
+trees_preview {
+  tree_info {
+    thread_name: "main"
+  }
+  depth: 3
+  width: 95
+  vectors {
+    y: 3
+  }
+  vectors {
+    x: 5
+  }
+  vectors {
+    y: -1
+  }
+  vectors {
+    x: 15
+  }
+  vectors {
+    y: 1
+  }
+  vectors {
+    x: 5
+  }
+  vectors {
+    y: -1
+  }
+  vectors {
+    x: 10
+  }
+  vectors {
+    y: -1
+  }
+  vectors {
+    x: 25
+  }
+  vectors {
+    y: 1
+  }
+  vectors {
+    x: 5
+  }
+  vectors {
+    y: -1
+  }
+  vectors {
+    x: 25
+  }
+  vectors {
+    y: 1
+  }
+  vectors {
+    x: 5
+  }
+  vectors {
+    y: -2
+  }
+}
+fullDuration: 95
