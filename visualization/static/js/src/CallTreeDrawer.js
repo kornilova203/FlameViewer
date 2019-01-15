@@ -33,7 +33,15 @@ module.exports.CallTreeDrawer = class CallTreeDrawer extends TreeDrawer.TreeDraw
      */
     _setPopupContent(node) {
         super._setPopupContent(node);
-        this.$popup.find(".duration").text(node.getWidth() + " ms");
+    }
+
+    /**
+     * @returns {string}
+     * @private
+     * @override
+     */
+    _getTimeUnit() {
+        return "ms";
     }
 
     /**
