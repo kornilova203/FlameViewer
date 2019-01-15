@@ -46,7 +46,9 @@ class CFlamegraphFileSaver : FileToFileConverterFileSaver() {
         val tree = Tree.createTree(builder, names, nodes)
 
         builder.finish(tree)
-        FileOutputStream(file).write(builder.sizedByteArray())
+        val foStream = FileOutputStream(file)
+        foStream.write(builder.sizedByteArray())
+        foStream.close()
 
         return true
     }
