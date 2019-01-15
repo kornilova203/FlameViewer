@@ -446,6 +446,27 @@ module.exports.TreeDrawer = class TreeDrawer {
         );
         this._setParameters(node);
         this._setPopupReturnValue(node);
+
+        this.$popup.find(".duration").text(node.getWidth() + this._getTimeUnitDisplay());
+
+    }
+
+    /**
+     * Retrieve the time unit (frames, ms, etc) for this node
+     * @returns {string}
+     * @private
+     */
+    _getTimeUnit() {
+        return "";
+    }
+
+    _getTimeUnitDisplay() {
+        const timeUnits = this._getTimeUnit();
+        if("" !== timeUnits) {
+            return " " + timeUnits;
+        }
+
+        return "";
     }
 
     static getGETParameters(node) {
