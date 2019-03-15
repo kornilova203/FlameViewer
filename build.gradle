@@ -25,26 +25,17 @@ buildscript {
 
 plugins {
     id 'org.jetbrains.intellij' version '0.1.10'
-    id 'com.google.protobuf' version '0.8.6' apply false
+    id 'com.google.protobuf' version '0.8.6'
     id 'com.moowork.node' version '1.2.0'
     id 'com.liferay.soy' version '3.1.6'
     id "io.netifi.flatbuffers" version "1.0.4"
     id 'idea'
 }
 
-allprojects {
-    apply plugin: 'java'
-    apply plugin: 'kotlin'
-    group = 'com.gitgub.kornilova_l'
-    version = '0.8.2-SNAPSHOT'
-}
-
-subprojects { subproject ->
-    if (subproject.name == 'protobuf') {
-        apply plugin: 'com.google.protobuf'
-        apply plugin: 'idea'
-    }
-}
+apply plugin: 'java'
+apply plugin: 'kotlin'
+group = 'com.github.korniloval'
+version = '0.8.2-SNAPSHOT'
 
 repositories {
     mavenCentral()
@@ -63,9 +54,7 @@ dependencies {
     compile fileTree(dir: 'lib', include: ['com.jrockit.mc.flightrecorder_5.5.1.172852.jar'])
     compile fileTree(dir: 'lib', include: ['com.jrockit.mc.common_5.5.1.172852.jar'])
     compile fileTree(dir: 'lib', include: ['flight-recorder-parser-for-java-9.jar'])
-    compile project('configuration')
-    compile project('protobuf')
-    testCompile project('agent')
+    compile fileTree(dir: 'lib', include: ['protobuf-java-kornilova-l-3.5.1.jar'])
     testCompile group: 'com.squareup.okhttp3', name: 'okhttp', version: '3.11.0'
 }
 
@@ -79,7 +68,7 @@ node {
 def npmRun(String command) {
     return tasks.create(command, NpmTask) {
         args = ['run', command]
-        dependsOn = [':protobuf:copyJSProto', npmInstall]
+        dependsOn = ["copyJSProto", npmInstall]
     }
 }
 
@@ -109,11 +98,6 @@ task copyStatic(type: Copy, dependsOn: [browserify, moveGeneratedTemplates]) {
     }
 }
 
-task copyAgent(type: Copy, dependsOn: [':agent:agentJar', ':agent:proxyJar']) {
-    from 'agent/build/libs'
-    into 'src/main/generated-resources'
-}
-
 compileKotlin {
     kotlinOptions {
         jvmTarget = "1.8"
@@ -135,12 +119,58 @@ task compileFlatBuffers(type: FlatBuffers) {
     outputDir = file("src/gen/java")
 }
 
-task prepareStaticAndAgent(dependsOn: [copyAgent, copyStatic]) {}
-
 sourceSets.main.resources.srcDirs "src/main/resources", "src/main/generated-resources"
+
+protobuf {
+    protoc {
+        artifact = 'com.google.protobuf:protoc:3.5.1'
+    }
+
+    generatedFilesBaseDir = "$projectDir/generated"
+
+    generateProtoTasks {
+        all().each { task ->
+            task.builtins {
+                java {}
+                js {
+                    option 'import_style=commonjs'
+                    option 'binary'
+                }
+            }
+            if (task.name == 'generateProto') {
+                copyJSProto.dependsOn task
+                renameProtobufPackage.dependsOn task
+            }
+        }
+    }
+}
+
+sourceSets.main.java.srcDir new File(protobuf.generatedFilesBaseDir + '/main/java')
 sourceSets.main.java.srcDir file('src/gen/java')
 idea {
     module {
         generatedSourceDirs += file('src/gen/java')
+        generatedSourceDirs += file(protobuf.generatedFilesBaseDir + '/main/java')
     }
+}
+
+/**
+ * Rename imports in generated java sources
+ * from com.google.protobuf
+ * to com.github.kornilova_l.libs.com.google.protobuf
+ */
+task renameProtobufPackage { // depends on generateProto task (dependency is set above)
+    doLast {
+        ant.replaceregexp(match: '(?<!com\\.github\\.kornilova_l\\.libs\\.)com\\.google\\.protobuf',
+                replace: 'com.github.kornilova_l.libs.com.google.protobuf', flags: 'g', byline: true) {
+            fileset(dir: protobuf.generatedFilesBaseDir + '/main/java')
+        }
+    }
+}
+
+compileKotlin.dependsOn renameProtobufPackage
+
+task copyJSProto(type: Copy, dependsOn: renameProtobufPackage) {
+    from protobuf.generatedFilesBaseDir + '/main/js'
+    into 'visualization/static/js/generated'
 }

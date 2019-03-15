@@ -6,7 +6,7 @@
     <vendor url="https://github.com/kornilova-l" email="kornilova203@gmail.com"/>
 
     <description><![CDATA[
-Flamegraph Viewer & Instrumentation Java Profiler Fierix<br>
+Flamegraph Viewer<br>
 <strong>Upload file to FlameViewer</strong>
 <ol>
     <li>Click <strong>Tools | Open FlameViewer...</strong></li>
@@ -55,8 +55,6 @@ Detailed description at <a href="https://github.com/kornilova-l/FlameViewer">git
 
     <!-- Enable in all IDEs -->
     <depends>com.intellij.modules.lang</depends>
-
-    <depends optional="true" config-file="Fierix.xml">com.intellij.modules.java</depends>
 
     <extensionPoints>
         <extensionPoint name="profilerToFlamegraphConverterFactory"

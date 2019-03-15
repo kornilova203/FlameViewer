@@ -123,20 +123,6 @@ object PluginFileManager {
     }
 
     @Synchronized
-    fun getConfigurationFile(projectName: String): File {
-        val path = Paths.get(configDirPath.toString(), "$projectName.config")
-        return File(path.toString())
-    }
-
-    @Synchronized
-    fun createOutputFierixFile(projectName: String, configurationName: String): File {
-        val logDir = getLogDirPath(projectName)
-        val logFile = Paths.get(logDir.toString(),
-                configurationName + "-" + SimpleDateFormat("yyyy-MM-dd-HH_mm_ss").format(Date()) + ".fierix")
-        return File(logFile.toString())
-    }
-
-    @Synchronized
     fun getFileNameList(projectName: String): List<FileNameAndDate> {
         val projectLogDir = getLogDirPath(projectName)
         val fileNames = ArrayList<FileNameAndDate>()
@@ -178,17 +164,6 @@ object PluginFileManager {
     }
 
     @Synchronized
-    fun getPathToJar(jarName: String): String? {
-        val url = javaClass.getResource("/$jarName")
-        try {
-            return Paths.get(url.toURI()).toString()
-        } catch (e: URISyntaxException) {
-            LOG.error(e)
-        }
-        return null
-    }
-
-    @Synchronized
     fun getLogFile(projectName: String, fileName: String): File? {
         return if (projectName != UPLOADED_FILES) {
             val file = Paths.get(logDirPath.toString(), projectName, fileName).toFile()
@@ -200,17 +175,6 @@ object PluginFileManager {
         } else {
             findFileInSubDirectories(fileName, uploadedFilesDir)
         }
-    }
-
-    @Synchronized
-    fun getLatestFileName(projectName: String): String? {
-        val dirPath = Paths.get(logDirPath.toString(), projectName)
-        val dir = File(dirPath.toString())
-        if (dir.exists() && dir.isDirectory) {
-            val latestFile = getLatestFile(dir) ?: return null
-            return latestFile.name
-        }
-        return null
     }
 
     private fun removeEmptyProjects() {
@@ -361,7 +325,7 @@ object PluginFileManager {
                     stringBuilder.append('_')
                 }
             }
-            this.id = "id-" + stringBuilder.toString()
+            this.id = "id-$stringBuilder"
             val matcher = nameWithoutDate.matcher(this.fullName)
             if (matcher.find()) {
                 this.name = matcher.group()
@@ -413,11 +377,6 @@ object PluginFileManager {
             }
 
         }
-    }
-
-    private fun getLatestFile(dir: File): File? {
-        val files = dir.listFiles() ?: return null
-        return files.maxBy { it.lastModified() } ?: return null
     }
 
     fun getParentDirName(file: File): String? {

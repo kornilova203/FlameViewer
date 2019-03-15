@@ -1,11 +1,8 @@
 out/
 build/
 /.gradle/
-/src/main/java/temp/
 visualization/node_modules/
-/agent/src/test/resources/actual/*
 /.idea/
-/protobuf/src/main/gen/*
 /visualization/static/js/generated/*
-protobuf/generated/main/
+/generated/main/
 /src/main/generated-resources/
