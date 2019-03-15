@@ -58,37 +58,37 @@ Detailed description at <a href="https://github.com/kornilova-l/FlameViewer">git
 
     <extensionPoints>
         <extensionPoint name="profilerToFlamegraphConverterFactory"
-                        interface="com.github.kornilova_l.flamegraph.plugin.server.converters.flamegraph.ProfilerToFlamegraphConverterFactory"/>
+                        interface="com.github.korniloval.flameviewer.converters.flamegraph.ProfilerToFlamegraphConverterFactory"/>
         <extensionPoint name="profilerToCFlamegraphConverterFactory"
-                        interface="com.github.kornilova_l.flamegraph.plugin.server.converters.cflamegraph.ProfilerToCFlamegraphConverterFactory"/>
+                        interface="com.github.korniloval.flameviewer.converters.cflamegraph.ProfilerToCFlamegraphConverterFactory"/>
         <extensionPoint name="fileToCallTreeConverterFactory"
-                        interface="com.github.kornilova_l.flamegraph.plugin.server.converters.calltree.FileToCallTreeConverterFactory"/>
+                        interface="com.github.korniloval.flameviewer.converters.calltree.FileToCallTreeConverterFactory"/>
         <extensionPoint name="fileToCallTracesConverterFactory"
-                        interface="com.github.kornilova_l.flamegraph.plugin.server.converters.calltraces.FileToCallTracesConverterFactory"/>
+                        interface="com.github.korniloval.flameviewer.converters.calltraces.FileToCallTracesConverterFactory"/>
     </extensionPoints>
 
     <extensions defaultExtensionNs="com.intellij">
         <httpRequestHandler
-                implementation="com.github.kornilova_l.flamegraph.plugin.server.ProfilerHttpRequestHandler"/>
+                implementation="com.github.korniloval.flameviewer.ProfilerHttpRequestHandler"/>
     </extensions>
 
     <extensions defaultExtensionNs="com.github.kornilovaL.flamegraphProfiler">
         <profilerToFlamegraphConverterFactory
-                implementation="com.github.kornilova_l.flamegraph.plugin.server.converters.flamegraph.jfr.JfrToFlamegraphConverterFactory"/>
+                implementation="com.github.korniloval.flameviewer.converters.flamegraph.jfr.JfrToFlamegraphConverterFactory"/>
         <profilerToCFlamegraphConverterFactory
-                implementation="com.github.kornilova_l.flamegraph.plugin.server.converters.cflamegraph.yourkit.csv.YourkitCsvToCFlamegraphConverterFactory"/>
+                implementation="com.github.korniloval.flameviewer.converters.cflamegraph.yourkit.csv.YourkitCsvToCFlamegraphConverterFactory"/>
         <fileToCallTracesConverterFactory
-                implementation="com.github.kornilova_l.flamegraph.plugin.server.converters.calltraces.yourkit.csv.YourkitCsvToCallTracesConverterFactory"/>
+                implementation="com.github.korniloval.flameviewer.converters.calltraces.yourkit.csv.YourkitCsvToCallTracesConverterFactory"/>
         <fileToCallTracesConverterFactory
-                implementation="com.github.kornilova_l.flamegraph.plugin.server.converters.calltraces.flamegraph.FlamegraphToCallTracesConverterFactory"/>
+                implementation="com.github.korniloval.flameviewer.converters.calltraces.flamegraph.FlamegraphToCallTracesConverterFactory"/>
         <fileToCallTracesConverterFactory
-                implementation="com.github.kornilova_l.flamegraph.plugin.server.converters.calltraces.cflamegraph.CFlamegraphToCallTracesConverterFactory"/>
+                implementation="com.github.korniloval.flameviewer.converters.calltraces.cflamegraph.CFlamegraphToCallTracesConverterFactory"/>
         <fileToCallTreeConverterFactory
-                implementation="com.github.kornilova_l.flamegraph.plugin.server.converters.calltree.fierix.FierixToCallTreeConverterFactory"/>
+                implementation="com.github.korniloval.flameviewer.converters.calltree.fierix.FierixToCallTreeConverterFactory"/>
     </extensions>
 
     <actions>
-        <action class="com.github.kornilova_l.flamegraph.plugin.server.ShowUploadFilePageAction"
+        <action class="com.github.korniloval.flameviewer.ShowUploadFilePageAction"
                 id="FlameViewer.UploadFile" text="Open FlameViewer..." icon="ProfilerIcons.flameIcon">
             <add-to-group group-id="ToolsMenu" anchor="last"/>
         </action>
