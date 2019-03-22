@@ -18,7 +18,6 @@ import java.util.regex.Pattern
 /**
  * IDEA system dir
  * |-- flamegraph-profiler
- * ....|-- configuration // where configuration is exported after
  * ....|-- log
  * ....|-- deleted // deleted files temporary stored in this dir (they are returned back if `undo` is pressed)
  * ....|-- uploaded-files

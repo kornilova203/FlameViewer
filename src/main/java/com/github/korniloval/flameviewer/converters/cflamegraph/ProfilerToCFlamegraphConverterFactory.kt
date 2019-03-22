@@ -1,5 +1,8 @@
 package com.github.korniloval.flameviewer.converters.cflamegraph
 
+import com.github.korniloval.flameviewer.converters.ConverterFactory
+import com.github.korniloval.flameviewer.converters.tryConvert
+import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.extensions.ExtensionPointName
 import java.io.File
 
@@ -12,24 +15,13 @@ data class CFlamegraph(val lines: List<CFlamegraphLine>,
 
 data class CFlamegraphLine(val classNameId: Int?, val methodNameId: Int, val descId: Int?, val width: Int, val depth: Int)
 
-interface ProfilerToCFlamegraphConverterFactory {
+interface ProfilerToCFlamegraphConverterFactory : ConverterFactory<CFlamegraph> {
     companion object {
-        const val cFlamegraphExtension = "cflamegraph"
-
         private val EP_NAME = ExtensionPointName.create<ProfilerToCFlamegraphConverterFactory>("com.github.kornilovaL.flamegraphProfiler.profilerToCFlamegraphConverterFactory")
+        private val LOG = Logger.getInstance(ProfilerToCFlamegraphConverterFactory::class.java)
 
-        fun convert(file: File): CFlamegraph? {
-            return EP_NAME.extensions
-                    .firstOrNull { it.isSupported(file) }
-                    ?.create(file)?.convert() ?: return null
-        }
+        fun convert(file: File): CFlamegraph? = tryConvert(EP_NAME.extensions, file) { LOG.error(it) }
     }
 
-    fun isSupported(file: File): Boolean
-
-    /**
-     * Convert file to cflamegraph format
-     * File in parameters will be deleted after calling this method
-     */
-    fun create(file: File): ProfilerToCFlamegraphConverter
+    override fun create(file: File): ProfilerToCFlamegraphConverter?
 }

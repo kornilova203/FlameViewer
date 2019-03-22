@@ -8,7 +8,7 @@ import java.io.File
 @Deprecated("When a new csv file is added it's converted with YourkitCsvToCFlamegraphConverterFactory. " +
         "This converter is to support already uploaded csv files.")
 class YourkitCsvToCallTracesConverterFactory : FileToCallTracesConverterFactory {
-    override fun getId(): String = "yourkit"
+    override val id = "yourkit"
 
     override fun isSupported(file: File): Boolean = isYourkitCsv(file)
 

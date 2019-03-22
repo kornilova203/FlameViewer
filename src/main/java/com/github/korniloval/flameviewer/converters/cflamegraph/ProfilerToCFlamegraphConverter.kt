@@ -1,8 +1,7 @@
 package com.github.korniloval.flameviewer.converters.cflamegraph
 
-/**
- * @author Liudmila Kornilova
- **/
-interface ProfilerToCFlamegraphConverter {
-    fun convert(): CFlamegraph
+import com.github.korniloval.flameviewer.converters.Converter
+
+interface ProfilerToCFlamegraphConverter : Converter<CFlamegraph> {
+    override fun convert(): CFlamegraph
 }

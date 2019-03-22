@@ -4,12 +4,13 @@ import com.github.korniloval.flameviewer.cflamegraph.Names
 import com.github.korniloval.flameviewer.cflamegraph.Node
 import com.github.korniloval.flameviewer.cflamegraph.Tree
 import com.github.korniloval.flameviewer.FileToFileConverterFileSaver
+import com.github.korniloval.flameviewer.converters.calltraces.cflamegraph.CFlamegraphToCallTracesConverterFactory
 import com.google.flatbuffers.FlatBufferBuilder
 import java.io.File
 import java.io.FileOutputStream
 
 class CFlamegraphFileSaver : FileToFileConverterFileSaver() {
-    override val extension = ProfilerToCFlamegraphConverterFactory.cFlamegraphExtension
+    override val extension = CFlamegraphToCallTracesConverterFactory.EXTENSION
 
     override fun tryToConvert(file: File): Boolean {
         val cFlamegraph = ProfilerToCFlamegraphConverterFactory.convert(file) ?: return false

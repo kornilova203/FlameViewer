@@ -64,7 +64,7 @@ object TreeManager {
             currentFile = logFile
             val extension = PathUtil.getFileExtension(logFile.name)
             if (isFierixExtension(extension)) {
-                currentTreesSet = TreesSetImpl(FileToCallTreeConverterFactory.convert("fierix", logFile)!!)
+                currentTreesSet = TreesSetImpl(FileToCallTreeConverterFactory.convert(FierixToCallTreeConverterFactory.EXTENSION, logFile)!!)
                 return
             }
             var parentDirName = PluginFileManager.getParentDirName(logFile)

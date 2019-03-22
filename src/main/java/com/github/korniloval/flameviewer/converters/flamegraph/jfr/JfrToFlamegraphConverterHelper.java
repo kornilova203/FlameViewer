@@ -5,6 +5,7 @@ import com.github.korniloval.flameviewer.converters.flamegraph.ProfilerToFlamegr
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.util.PathUtil;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 
@@ -13,14 +14,14 @@ import java.io.File;
  */
 class JfrToFlamegraphConverterFactory implements ProfilerToFlamegraphConverterFactory {
 
-    @Override
-    public boolean isSupported(@NotNull File file) {
+    private boolean isSupported(@NotNull File file) {
         return StringUtil.equalsIgnoreCase(PathUtil.getFileExtension(file.getName()), "jfr");
     }
 
-    @NotNull
+    @Nullable
     @Override
     public ProfilerToFlamegraphConverter create(@NotNull File file) {
+        if (!isSupported(file)) return null;
         return new JfrToFlamegraphConverter(file);
     }
 }

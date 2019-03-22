@@ -20,9 +20,11 @@ import static com.github.korniloval.flameviewer.converters.flamegraph.jfr.JfrToF
  */
 public class FlamegraphToCallTracesConverterFactory implements FileToCallTracesConverterFactory {
 
+    public static final String EXTENSION = "flamegraph";
+
     @NotNull
     public String getId() {
-        return "flamegraph";
+        return EXTENSION;
     }
 
     public boolean isSupported(@NotNull File file) {

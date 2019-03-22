@@ -1,50 +1,25 @@
 package com.github.korniloval.flameviewer.converters.calltree
 
 import com.github.kornilova_l.flamegraph.proto.TreesProtos
+import com.github.korniloval.flameviewer.converters.IdentifiedConverterFactory
+import com.github.korniloval.flameviewer.converters.tryConvert
+import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.extensions.ExtensionPointName
 import java.io.File
 
 /**
  * Builds call tree
  */
-interface FileToCallTreeConverterFactory {
+interface FileToCallTreeConverterFactory : IdentifiedConverterFactory<TreesProtos.Trees> {
 
     companion object {
         private val EP_NAME = ExtensionPointName.create<FileToCallTreeConverterFactory>("com.github.kornilovaL.flamegraphProfiler.fileToCallTreeConverterFactory")
+        private val LOG = Logger.getInstance(FileToCallTreeConverterFactory::class.java)
 
         fun convert(converterId: String, file: File): TreesProtos.Trees? {
-            for (extension in EP_NAME.extensions) {
-                if (extension.getId() == converterId) {
-                    return extension.create(file).convert()
-                }
-            }
-            return null
-        }
-
-        fun isSupported(file: File): String? {
-            for (extension in EP_NAME.extensions) {
-                if (extension.isSupported(file)) {
-                    return extension.getId()
-                }
-            }
-            return null
+            return tryConvert(EP_NAME.extensions, converterId, file) { LOG.error(it) }
         }
     }
 
-    /**
-     * String id that will be used as a directory name
-     * for supported files.
-     */
-    fun getId(): String
-
-    /**
-     * Is file supported by this builder.
-     * This method is called ones when file is uploaded.
-     */
-    fun isSupported(file: File): Boolean
-
-    /**
-     * Convert file to call tree.
-     */
-    fun create(file: File): FileToCallTreeConverter
+    override fun create(file: File): FileToCallTreeConverter?
 }

@@ -54,10 +54,10 @@ import java.io.File
  */
 class CFlamegraphToCallTracesConverterFactory : FileToCallTracesConverterFactory {
     companion object {
-        private const val EXTENSION = "cflamegraph"
+        const val EXTENSION = "cflamegraph"
     }
 
-    override fun getId(): String = EXTENSION
+    override val id = EXTENSION
 
     /**
      * Simply checks EXTENSION.

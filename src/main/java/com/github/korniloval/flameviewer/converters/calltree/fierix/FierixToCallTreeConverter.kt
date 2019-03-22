@@ -4,6 +4,7 @@ import com.github.korniloval.flameviewer.pleaseReportIssue
 import com.github.korniloval.flameviewer.converters.calltree.FileToCallTreeConverterBase
 import com.github.kornilova_l.flamegraph.proto.EventProtos
 import com.github.kornilova_l.flamegraph.proto.TreesProtos
+import com.github.korniloval.flameviewer.converters.ConversionException
 import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
@@ -15,7 +16,8 @@ class FierixToCallTreeConverter(file: File) : FileToCallTreeConverterBase(file) 
     private val classNames = HashMap<Long, String>()
     private val threadsNames = HashMap<Long, String>()
 
-    override fun convert(): TreesProtos.Trees? {
+    @Throws(ConversionException::class)
+    override fun convert(): TreesProtos.Trees {
         try {
             FileInputStream(file).use { inputStream ->
                 processEvents(inputStream)
@@ -23,9 +25,8 @@ class FierixToCallTreeConverter(file: File) : FileToCallTreeConverterBase(file) 
                 return hashMapToTrees(treesMap, startTimeOfFirstThread)
             }
         } catch (e: IOException) {
-            LOG.error(e)
+            throw ConversionException("Failed to read fierix file", e)
         }
-        return null
     }
 
     @Throws(IOException::class)
@@ -88,7 +89,7 @@ class FierixToCallTreeConverter(file: File) : FileToCallTreeConverterBase(file) 
         private val LOG = com.intellij.openapi.diagnostic.Logger.getInstance(FierixToCallTreeConverter::class.java)
 
         private fun hashMapToTrees(trees: Map<Long, CTBuilder>,
-                                   startTimeOfFirstThread: Long): TreesProtos.Trees? {
+                                   startTimeOfFirstThread: Long): TreesProtos.Trees {
             val treesBuilder = TreesProtos.Trees.newBuilder()
             for (oTBuilder in trees.values) {
                 val tree = oTBuilder.getBuiltTree(startTimeOfFirstThread)
@@ -99,7 +100,7 @@ class FierixToCallTreeConverter(file: File) : FileToCallTreeConverterBase(file) 
                 }
             }
             return if (treesBuilder.treesCount == 0) {
-                null
+                throw ConversionException("Failed to read fierix file. Call tree contains 0 nodes.")
             } else treesBuilder.build()
         }
     }
