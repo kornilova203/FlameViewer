@@ -78,9 +78,7 @@ abstract class ConverterTestCase(private val fileExtension: String, private val 
             expectedCallTracesName += "-exclude=$exclude"
         }
 
-        val expectedCallTraces = File("$expectedCallTracesName.txt")
-
-        assertEquals(expectedCallTraces.readText(), actual)
+        assertSameLinesWithFile("$expectedCallTracesName.txt", actual)
     }
 
     private fun sendRequestForTree(fileName: String, path: List<Int>, className: String?,

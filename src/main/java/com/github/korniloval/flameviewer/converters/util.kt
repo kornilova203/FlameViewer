@@ -1,6 +1,8 @@
 package com.github.korniloval.flameviewer.converters
 
 import java.io.File
+import java.io.FileInputStream
+import java.io.IOException
 
 fun <T> tryConvert(factories: Array<out ConverterFactory<T>>, file: File, errorHandler: (e: ConversionException) -> Unit): T? {
     for (factory in factories) {
@@ -79,5 +81,19 @@ object FramesParsingUtil {
         }
         return name.substring(0, parametersPos)
     }
+}
+
+fun getBytes(file: File, errorHandler: (e: IOException) -> Unit): ByteArray? {
+    try {
+        FileInputStream(file).use { inputStream ->
+            val bytes = ByteArray(inputStream.available())
+            inputStream.read(bytes)
+            return bytes
+        }
+    } catch (e: IOException) {
+        errorHandler(e)
+    }
+
+    return null
 }
 

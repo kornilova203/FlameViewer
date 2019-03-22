@@ -1,25 +1,24 @@
 package com.github.korniloval.flameviewer.converters.cflamegraph.jfr;
 
 import com.github.kornilova_l.flight_parser.FlightParser;
+import com.github.korniloval.flameviewer.converters.Converter;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-class JfrToStacksConverter {
-    private Map<String, Integer> stacks;
+public class JfrToStacksConverter implements Converter<Map<String, Integer>> {
+    private final File file;
 
     JfrToStacksConverter(File file) {
-        FlightParser flightParser = new FlightParser(file);
-        Map<String, Integer> stacks = flightParser.getStacksMap();
-        this.stacks = removePackageInParameters(stacks);
+        this.file = file;
     }
 
-    Map<String, Integer> getStacks() {
-        return stacks;
+    @Override
+    public Map<String, Integer> convert() {
+        FlightParser flightParser = new FlightParser(file);
+        Map<String, Integer> stacks = flightParser.getStacksMap();
+        return removePackageInParameters(stacks);
     }
 
     /**
@@ -63,16 +62,5 @@ class JfrToStacksConverter {
             return type.substring(dot + 1);
         }
         return type;
-    }
-
-    void writeTo(File file) {
-        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file))) {
-            for (Map.Entry<String, Integer> entry : stacks.entrySet()) {
-                bufferedWriter.write(String.format("%s %d%n", entry.getKey(), entry.getValue()));
-            }
-            bufferedWriter.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }

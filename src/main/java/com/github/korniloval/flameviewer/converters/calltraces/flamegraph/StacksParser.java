@@ -1,5 +1,6 @@
 package com.github.korniloval.flameviewer.converters.calltraces.flamegraph;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.*;
@@ -23,8 +24,7 @@ public class StacksParser {
                     .forEach(line -> stacks.put(
                             line.substring(0, line.lastIndexOf(" ")),
                             Integer.parseInt(line.substring(
-                                    line.lastIndexOf(" ") + 1,
-                                    line.length()
+                                    line.lastIndexOf(" ") + 1
                             ))));
             return stacks;
         } catch (IOException e) {
@@ -33,7 +33,7 @@ public class StacksParser {
         return null;
     }
 
-    public static boolean isFlamegraph(byte[] bytes) {
+    static boolean isFlamegraph(@NotNull byte[] bytes) {
         boolean hasValidLine = false;
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(
                 new ByteArrayInputStream(bytes)
@@ -63,5 +63,18 @@ public class StacksParser {
             }
         }
         return true;
+    }
+
+    public static boolean writeTo(Map<String, Integer> stacks, File file) {
+        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file))) {
+            for (Map.Entry<String, Integer> entry : stacks.entrySet()) {
+                bufferedWriter.write(String.format("%s %d%n", entry.getKey(), entry.getValue()));
+            }
+            bufferedWriter.flush();
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }
