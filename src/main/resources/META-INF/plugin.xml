@@ -73,8 +73,8 @@ Detailed description at <a href="https://github.com/kornilova-l/FlameViewer">git
     </extensions>
 
     <extensions defaultExtensionNs="com.github.kornilovaL.flamegraphProfiler">
-        <profilerToFlamegraphConverterFactory
-                implementation="com.github.korniloval.flameviewer.converters.flamegraph.jfr.JfrToFlamegraphConverterFactory"/>
+        <profilerToCFlamegraphConverterFactory
+                implementation="com.github.korniloval.flameviewer.converters.cflamegraph.jfr.JfrToCFlamegraphConverterFactory"/>
         <profilerToCFlamegraphConverterFactory
                 implementation="com.github.korniloval.flameviewer.converters.cflamegraph.yourkit.csv.YourkitCsvToCFlamegraphConverterFactory"/>
         <fileToCallTracesConverterFactory

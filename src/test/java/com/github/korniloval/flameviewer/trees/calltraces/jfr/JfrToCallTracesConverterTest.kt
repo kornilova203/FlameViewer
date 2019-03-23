@@ -10,6 +10,8 @@ class JfrToCallTracesConverterTest : ConverterTestCase("jfr", "trees/outgoing-ca
 
     fun testCompressedJmc5() = doTest()
 
-    /* jar files cannot be located */
-    // fun testBigCompressedJmc5() = doTest()
+    /* test file is too big to upload it to git.
+     * to get test data add `systemProperty "idea.tests.overwrite.data", "true"`
+     * to `test` block in build.gradle and run the test */
+    //fun testBigCompressedJmc5() = doTest()
 }

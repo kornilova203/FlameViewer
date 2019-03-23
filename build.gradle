@@ -174,3 +174,7 @@ task copyJSProto(type: Copy, dependsOn: renameProtobufPackage) {
     from protobuf.generatedFilesBaseDir + '/main/js'
     into 'visualization/static/js/generated'
 }
+
+test {
+    maxHeapSize = "1024m"
+}

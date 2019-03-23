@@ -23,5 +23,5 @@ interface ProfilerToCFlamegraphConverterFactory : ConverterFactory<CFlamegraph> 
         fun convert(file: File): CFlamegraph? = tryConvert(EP_NAME.extensions, file) { LOG.error(it) }
     }
 
-    override fun create(file: File): ProfilerToCFlamegraphConverter?
+    override fun create(file: File): ToCFlamegraphConverter?
 }
