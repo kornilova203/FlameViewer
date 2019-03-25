@@ -1,0 +1,58 @@
+buildscript {
+    dependencies {
+        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.6'
+    }
+}
+
+plugins {
+    id 'com.google.protobuf' version '0.8.6'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile fileTree(dir: 'lib', include: ['protobuf-java-kornilova-l-3.5.1.jar'])
+}
+
+protobuf {
+    protoc {
+        artifact = 'com.google.protobuf:protoc:3.5.1'
+    }
+
+    generatedFilesBaseDir = "$projectDir/generated"
+
+    generateProtoTasks {
+        all().each { task ->
+            task.builtins {
+                java {}
+                js {
+                    option 'import_style=commonjs'
+                    option 'binary'
+                }
+            }
+            if (task.name == 'generateProto') {
+                renameProtobufPackage.dependsOn task
+            }
+        }
+    }
+}
+
+sourceSets.main.java.srcDir new File(protobuf.generatedFilesBaseDir + '/main/java')
+
+/**
+ * Rename imports in generated java sources
+ * from com.google.protobuf
+ * to com.github.kornilova_l.libs.com.google.protobuf
+ */
+task renameProtobufPackage { // depends on generateProto task (dependency is set above)
+    doLast {
+        ant.replaceregexp(match: '(?<!com\\.github\\.kornilova_l\\.libs\\.)com\\.google\\.protobuf',
+                replace: 'com.github.kornilova_l.libs.com.google.protobuf', flags: 'g', byline: true) {
+            fileset(dir: protobuf.generatedFilesBaseDir + '/main/java')
+        }
+    }
+}
+
+compileKotlin.dependsOn renameProtobufPackage

@@ -97,16 +97,9 @@ If you have a suggestions or found a bug [open an issue]
 ## Building from sources
 If only want to use plugin then you should simply install ready-to-use [jar](https://plugins.jetbrains.com/plugin/10305-flamegraph-profiler).
 
-Windows:
-```
-.\gradlew.bat prepareStaticAndAgent
-.\gradlew.bat runIdea
-```
-
-Linux:
 ```bash
-./gradlew prepareStaticAndAgent
-./gradlew runIdea
+./gradlew :intellij-plugin:copyStatic
+./gradlew :intellij-plugin:runIdea
 ```
 
  [open an issue]: https://github.com/kornilova-l/FlameViewer/issues

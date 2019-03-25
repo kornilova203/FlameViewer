@@ -3,6 +3,5 @@ build/
 /.gradle/
 visualization/node_modules/
 /.idea/
-/visualization/static/js/generated/*
-/generated/main/
-/src/main/generated-resources/
+generated-resources/
+generated/
