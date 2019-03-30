@@ -1,0 +1,10 @@
+dependencies {
+    compile project(":converters")
+    compile group: 'io.netty', name: 'netty-all', version: '4.1.34.Final'
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'com.github.korniloval.flameviewer.cli.Main'
+    }
+}
