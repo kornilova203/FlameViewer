@@ -1,6 +1,6 @@
 rootProject.name = 'FlameViewer'
 include 'intellij-plugin'
-include 'converters'
+include 'core'
 include 'proto'
 include 'visualization'
 include 'cli'
