@@ -57,12 +57,12 @@ Detailed description at <a href="https://github.com/kornilova-l/FlameViewer">git
     <depends>com.intellij.modules.lang</depends>
 
     <extensionPoints>
-        <extensionPoint name="profilerToCFlamegraphConverterFactory"
-                        interface="com.github.korniloval.flameviewer.converters.cflamegraph.ProfilerToCFlamegraphConverterFactory"/>
+        <extensionPoint name="toCFlamegraphConverterFactory"
+                        interface="com.github.korniloval.flameviewer.converters.cflamegraph.ToCFlamegraphConverterFactory"/>
         <extensionPoint name="fileToCallTreeConverterFactory"
-                        interface="com.github.korniloval.flameviewer.converters.calltree.FileToCallTreeConverterFactory"/>
-        <extensionPoint name="fileToCallTracesConverterFactory"
-                        interface="com.github.korniloval.flameviewer.converters.calltraces.FileToCallTracesConverterFactory"/>
+                        interface="com.github.korniloval.flameviewer.converters.calltree.ToCallTreeIdentifiedConverterFactory"/>
+        <extensionPoint name="toCallTracesConverterFactory"
+                        interface="com.github.korniloval.flameviewer.converters.calltraces.ToCallTracesIdentifiedConverterFactory"/>
     </extensionPoints>
 
     <extensions defaultExtensionNs="com.intellij">
@@ -71,15 +71,15 @@ Detailed description at <a href="https://github.com/kornilova-l/FlameViewer">git
     </extensions>
 
     <extensions defaultExtensionNs="com.github.kornilovaL.flamegraphProfiler">
-        <profilerToCFlamegraphConverterFactory
+        <toCFlamegraphConverterFactory
                 implementation="com.github.korniloval.flameviewer.converters.cflamegraph.JfrToCFlamegraphConverterFactory"/>
-        <profilerToCFlamegraphConverterFactory
+        <toCFlamegraphConverterFactory
                 implementation="com.github.korniloval.flameviewer.converters.cflamegraph.YourkitCsvToCFlamegraphConverterFactory"/>
-        <fileToCallTracesConverterFactory
+        <toCallTracesConverterFactory
                 implementation="com.github.korniloval.flameviewer.converters.calltraces.YourkitCsvToCallTracesConverterFactory"/>
-        <fileToCallTracesConverterFactory
+        <toCallTracesConverterFactory
                 implementation="com.github.korniloval.flameviewer.converters.calltraces.FlamegraphToCallTracesConverterFactory"/>
-        <fileToCallTracesConverterFactory
+        <toCallTracesConverterFactory
                 implementation="com.github.korniloval.flameviewer.converters.calltraces.CFlamegraphToCallTracesConverterFactory"/>
         <fileToCallTreeConverterFactory
                 implementation="com.github.korniloval.flameviewer.converters.calltree.FierixToCallTreeConverterFactory"/>

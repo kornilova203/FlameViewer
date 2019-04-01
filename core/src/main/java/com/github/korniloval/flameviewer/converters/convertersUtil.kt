@@ -4,34 +4,6 @@ import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
 
-fun <T> tryConvert(factories: Array<out ConverterFactory<T>>, file: File, errorHandler: (e: ConversionException) -> Unit): T? {
-    for (factory in factories) {
-        val converter = factory.create(file)
-        if (converter != null) return try {
-            converter.convert()
-        } catch (e: ConversionException) {
-            errorHandler(e)
-            null
-        }
-    }
-    return null
-}
-
-fun <T> tryConvert(factories: Array<out IdentifiedConverterFactory<T>>, converterId: String, file: File, errorHandler: (e: ConversionException) -> Unit): T? {
-    for (factory in factories) {
-        if (factory.id == converterId) {
-            val converter = factory.create(file) ?: return null
-            return try {
-                converter.convert()
-            } catch (e: ConversionException) {
-                errorHandler(e)
-                null
-            }
-        }
-    }
-    return null
-}
-
 object FramesParsingUtil {
     fun getLastSpacePosBeforeParams(name: String, openBracketPos: Int): Int {
         for (i in openBracketPos - 1 downTo 0) {

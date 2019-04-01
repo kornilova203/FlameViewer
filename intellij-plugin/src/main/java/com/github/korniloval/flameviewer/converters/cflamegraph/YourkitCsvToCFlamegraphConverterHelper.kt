@@ -8,7 +8,7 @@ import java.io.File
 import java.io.FileReader
 
 
-class YourkitCsvToCFlamegraphConverterFactory : ProfilerToCFlamegraphConverterFactory {
+class YourkitCsvToCFlamegraphConverterFactory : ToCFlamegraphConverterFactory {
     private fun isSupported(file: File): Boolean = isYourkitCsv(file)
 
     override fun create(file: File) = if (isSupported(file)) YourkitCsvToCFlamegraphConverter(file) else null

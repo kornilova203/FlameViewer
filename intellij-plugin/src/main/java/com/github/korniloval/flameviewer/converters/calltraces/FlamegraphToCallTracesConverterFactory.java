@@ -1,6 +1,6 @@
 package com.github.korniloval.flameviewer.converters.calltraces;
 
-import com.github.korniloval.flameviewer.converters.UtilKt;
+import com.github.korniloval.flameviewer.converters.ConvertersUtilKt;
 import com.github.korniloval.flameviewer.converters.calltraces.flamegraph.FlamegraphToCallTracesConverter;
 import com.intellij.openapi.diagnostic.Logger;
 import kotlin.Unit;
@@ -19,7 +19,7 @@ import static com.github.korniloval.flameviewer.converters.calltraces.flamegraph
  * a() 5
  * Second line will be ignored.
  */
-public class FlamegraphToCallTracesConverterFactory implements FileToCallTracesConverterFactory {
+public class FlamegraphToCallTracesConverterFactory implements ToCallTracesIdentifiedConverterFactory {
     private static final Logger LOG = Logger.getInstance(FlamegraphToCallTracesConverterFactory.class);
     private static final String EXTENSION = "flamegraph";
 
@@ -29,7 +29,7 @@ public class FlamegraphToCallTracesConverterFactory implements FileToCallTracesC
     }
 
     public boolean isSupported(@NotNull File file) {
-        byte[] bytes = UtilKt.getBytes(file, e -> { LOG.error(e); return Unit.INSTANCE; });
+        byte[] bytes = ConvertersUtilKt.getBytes(file, e -> { LOG.error(e); return Unit.INSTANCE; });
         if (bytes == null) return false;
         return isFlamegraph(bytes);
     }

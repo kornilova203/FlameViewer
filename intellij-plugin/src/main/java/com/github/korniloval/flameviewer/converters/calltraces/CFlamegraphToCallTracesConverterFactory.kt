@@ -52,7 +52,7 @@ import java.io.File
  *
  * YourkitCsvToCFlamegraphConverter merges unmerged stacktraces.
  */
-class CFlamegraphToCallTracesConverterFactory : FileToCallTracesConverterFactory {
+class CFlamegraphToCallTracesConverterFactory : ToCallTracesIdentifiedConverterFactory {
     companion object {
         const val EXTENSION = "cflamegraph"
     }

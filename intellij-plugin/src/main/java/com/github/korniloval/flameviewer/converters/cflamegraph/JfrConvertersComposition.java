@@ -2,7 +2,7 @@ package com.github.korniloval.flameviewer.converters.cflamegraph;
 
 import com.github.kornilova_l.flight_parser.FlightParser;
 import com.github.korniloval.flameviewer.converters.ConversionException;
-import com.github.korniloval.flameviewer.converters.UtilKt;
+import com.github.korniloval.flameviewer.converters.ConvertersUtilKt;
 import com.github.korniloval.flameviewer.converters.calltraces.flamegraph.StacksParser;
 import com.github.korniloval.flameviewer.converters.cflamegraph.jfr.JfrToStacksConverter;
 import com.github.korniloval.flameviewer.converters.cflamegraph.jfr.StacksToCFlamegraphConverter;
@@ -139,7 +139,7 @@ class JfrConvertersComposition implements ToCFlamegraphConverter {
                 return bout.toByteArray();
 
             } catch (ZipException zip) {
-                return UtilKt.getBytes(file, e -> {
+                return ConvertersUtilKt.getBytes(file, e -> {
                     LOG.error(e);
                     return Unit.INSTANCE;
                 });

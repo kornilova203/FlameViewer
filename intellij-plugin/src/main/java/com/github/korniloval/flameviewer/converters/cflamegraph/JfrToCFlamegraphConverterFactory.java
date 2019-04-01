@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 
-public class JfrToCFlamegraphConverterFactory implements ProfilerToCFlamegraphConverterFactory {
+public class JfrToCFlamegraphConverterFactory implements ToCFlamegraphConverterFactory {
 
     @Nullable
     @Override
