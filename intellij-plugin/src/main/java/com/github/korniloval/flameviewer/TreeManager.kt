@@ -12,12 +12,13 @@ import com.github.korniloval.flameviewer.converters.trees.TreesSetImpl
 import com.github.korniloval.flameviewer.converters.trees.hotspots.HotSpot
 import com.intellij.openapi.diagnostic.Logger
 import java.io.File
+import java.util.concurrent.atomic.AtomicLong
+import java.util.concurrent.atomic.AtomicReference
 
 object TreeManager {
-    private var currentFile: File? = null
-    @Volatile
-    private var currentTreesSet: TreesSet? = null
-    private var lastUpdate: Long = 0
+    private val currentFile = AtomicReference<File?>()
+    private val currentTreesSet = AtomicReference<TreesSet?>()
+    private val lastUpdate = AtomicLong(0)
 
     init {
         val watchLastUpdate = Thread {
@@ -27,43 +28,37 @@ object TreeManager {
                 } catch (e: InterruptedException) {
                     e.printStackTrace()
                 }
-
-                if (longTimePassedSinceUpdate()) {
-                    removeTreesSet()
-                }
+                checkLastUpdate()
             }
         }
         watchLastUpdate.isDaemon = true
         watchLastUpdate.start()
     }
 
-    private fun removeTreesSet() {
-        currentTreesSet = null
-        currentFile = null
-        lastUpdate = System.currentTimeMillis()
+    @Synchronized
+    private fun checkLastUpdate() {
+        if (System.currentTimeMillis() - lastUpdate.get() >= 30000) {
+            currentTreesSet.set(null)
+            currentFile.set(null)
+            lastUpdate.set(System.currentTimeMillis())
+        }
     }
 
     @Synchronized
-    private fun longTimePassedSinceUpdate(): Boolean {
-        return System.currentTimeMillis() - lastUpdate >= 30000
-    }
-
-    @Synchronized
-    fun getCallTree(logFile: File?,
+    fun getCallTree(logFile: File,
                     filter: Filter?,
                     threadsIds: List<Int>?): TreesProtos.Trees? {
-        logFile ?: return null
         updateTreesSet(logFile)
-        val currentTreesSet = currentTreesSet ?: return null
-        return currentTreesSet.getCallTree(filter, threadsIds)
+        return currentTreesSet.get()?.getCallTree(filter, threadsIds)
     }
 
     private fun updateTreesSet(logFile: File) {
-        if (currentFile == null || logFile.absolutePath != currentFile!!.absolutePath) {
-            currentFile = logFile
+        val curFile = currentFile.get()
+        if (curFile == null || logFile.absolutePath != curFile.absolutePath) {
+            currentFile.set(logFile)
             /* try to convert to call tree */
             val callTree = IntellijToCallTreeConverterFactory.create(logFile)?.convert()
-            currentTreesSet =
+            currentTreesSet.set(
                     if (callTree != null) {
                         TreesSetImpl(callTree)
                     } else {
@@ -74,51 +69,43 @@ object TreeManager {
                             return
                         }
                         TreesSetImpl(callTraces)
-                    }
+                    })
         }
     }
 
     @Synchronized
-    fun getTree(logFile: File?, treeType: TreeType, filter: Filter?): TreeProtos.Tree? {
-        logFile ?: return null
+    fun getTree(logFile: File, treeType: TreeType, filter: Filter?): TreeProtos.Tree? {
         updateTreesSet(logFile)
-        val currentTreesSet = currentTreesSet ?: return null
-        return currentTreesSet.getTree(treeType, filter)
+        return currentTreesSet.get()?.getTree(treeType, filter)
     }
 
     @Synchronized
-    fun getTree(logFile: File?,
+    fun getTree(logFile: File,
                 treeType: TreeType,
                 className: String,
                 methodName: String,
                 desc: String,
                 filter: Filter?): TreeProtos.Tree? {
-        logFile ?: return null
         updateTreesSet(logFile)
-        val currentTreesSet = currentTreesSet ?: return null
-        return currentTreesSet.getTree(treeType, className, methodName, desc, filter)
+        return currentTreesSet.get()?.getTree(treeType, className, methodName, desc, filter)
 
     }
 
     @Synchronized
-    fun getHotSpots(logFile: File?): List<HotSpot>? {
-        logFile ?: return null
+    fun getHotSpots(logFile: File): List<HotSpot>? {
         updateTreesSet(logFile)
-        val currentTreesSet = currentTreesSet ?: return null
-        return currentTreesSet.getHotSpots()
+        return currentTreesSet.get()?.getHotSpots()
     }
 
     @Synchronized
     fun updateLastTime() {
-        lastUpdate = System.currentTimeMillis()
+        lastUpdate.set(System.currentTimeMillis())
     }
 
     @Synchronized
-    fun getCallTreesPreview(logFile: File?, filter: Filter?): TreesPreview? {
-        logFile ?: return null
+    fun getCallTreesPreview(logFile: File, filter: Filter?): TreesPreview? {
         updateTreesSet(logFile)
-        val currentTreesSet = currentTreesSet ?: return null
-        return currentTreesSet.getTreesPreview(filter)
+        return currentTreesSet.get()?.getTreesPreview(filter)
     }
 
     private val LOG = Logger.getInstance(PluginFileManager::class.java)
