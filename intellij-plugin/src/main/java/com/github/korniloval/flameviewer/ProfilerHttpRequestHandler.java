@@ -2,6 +2,7 @@ package com.github.korniloval.flameviewer;
 
 import com.github.kornilova_l.libs.com.google.protobuf.Message;
 import com.github.korniloval.flameviewer.converters.trees.Filter;
+import com.github.korniloval.flameviewer.converters.trees.IntellijToTreesSetConverterFactory;
 import com.github.korniloval.flameviewer.converters.trees.TreeType;
 import com.github.korniloval.flameviewer.handlers.methods.count.AccumulativeTreesMethodCounter;
 import com.github.korniloval.flameviewer.handlers.methods.count.CallTreeMethodsCounter;
@@ -33,6 +34,7 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
 
     private static final Logger LOG = Logger.getInstance(ProfilerHttpRequestHandler.class);
     private final PluginFileManager fileManager = PluginFileManager.INSTANCE;
+    private final TreeManager treeManager = new TreeManager(IntellijToTreesSetConverterFactory.INSTANCE);
     private final FileUploader fileUploader = new FileUploader();
 
     public static void sendProto(ChannelHandlerContext context,
@@ -256,7 +258,7 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
         if (!urlDecoder.uri().startsWith(ServerNames.MAIN_NAME)) {
             return false;
         }
-        TreeManager.INSTANCE.updateLastTime();
+        treeManager.updateLastTime();
         if (fullHttpRequest.method() == HttpMethod.POST) {
             return processPostMethod(urlDecoder, fullHttpRequest, context);
         } else {
@@ -283,7 +285,7 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
                 }
                 return true;
             case ServerNames.HOT_SPOTS_JS_REQUEST:
-                new HotSpotsRequestHandler(urlDecoder, context).process();
+                new HotSpotsRequestHandler(urlDecoder, context, treeManager).process();
                 return true;
             case ServerNames.DOES_FILE_EXIST:
                 sendIfFileExist(fullHttpRequest, context);
@@ -291,25 +293,25 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
         }
         switch (uri) {
             case ServerNames.CALL_TREE_JS_REQUEST:
-                new CallTreeRequestHandler(urlDecoder, context).process();
+                new CallTreeRequestHandler(urlDecoder, context, treeManager).process();
                 return true;
             case ServerNames.CALL_TREE_PREVIEW_JS_REQUEST:
-                new TreesPreviewHandler(urlDecoder, context).process();
+                new TreesPreviewHandler(urlDecoder, context, treeManager).process();
                 return true;
             case ServerNames.OUTGOING_CALLS_JS_REQUEST:
-                new CallTracesRequestHandler(urlDecoder, context).process();
+                new CallTracesRequestHandler(urlDecoder, context, treeManager).process();
                 return true;
             case ServerNames.INCOMING_CALLS_JS_REQUEST:
-                new BackTracesRequestHandler(urlDecoder, context).process();
+                new BackTracesRequestHandler(urlDecoder, context, treeManager).process();
                 return true;
             case ServerNames.CALL_TREE_COUNT:
-                new CallTreeMethodsCounter(urlDecoder, context).sendJson();
+                new CallTreeMethodsCounter(urlDecoder, context, treeManager).sendJson();
                 return true;
             case ServerNames.OUTGOING_CALLS_COUNT:
-                new AccumulativeTreesMethodCounter(urlDecoder, context, TreeType.CALL_TRACES).sendJson();
+                new AccumulativeTreesMethodCounter(urlDecoder, context, TreeType.CALL_TRACES, treeManager).sendJson();
                 return true;
             case ServerNames.INCOMING_CALLS_COUNT:
-                new AccumulativeTreesMethodCounter(urlDecoder, context, TreeType.BACK_TRACES).sendJson();
+                new AccumulativeTreesMethodCounter(urlDecoder, context, TreeType.BACK_TRACES, treeManager).sendJson();
                 return true;
         }
         switch (uri) {

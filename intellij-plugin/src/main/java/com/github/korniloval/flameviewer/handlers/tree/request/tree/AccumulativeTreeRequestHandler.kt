@@ -13,7 +13,8 @@ import io.netty.handler.codec.http.QueryStringDecoder
 import java.io.File
 
 abstract class AccumulativeTreeRequestHandler internal constructor(urlDecoder: QueryStringDecoder,
-                                                                   context: ChannelHandlerContext) : TreeRequestHandler(urlDecoder, context) {
+                                                                   context: ChannelHandlerContext,
+                                                                   treeManager: TreeManager) : TreeRequestHandler(urlDecoder, context, treeManager) {
     private val LOG = Logger.getInstance(AccumulativeTreeRequestHandler::class.java)
     abstract val type: TreeType
 
@@ -22,10 +23,10 @@ abstract class AccumulativeTreeRequestHandler internal constructor(urlDecoder: Q
         val className = getParameter(urlDecoder, "class")
         val desc = getParameter(urlDecoder, "desc")
         val tree = if (methodName != null && className != null && desc != null) {
-            TreeManager.getTree(logFile, type, className, methodName,
+            treeManager.getTree(logFile, type, className, methodName,
                     desc, filter)
         } else {
-            TreeManager.getTree(logFile, type, filter)
+            treeManager.getTree(logFile, type, filter)
         } ?: return null
         val path = urlDecoder.parameters()["path"] ?: return tree
         return getSubTree(tree, path.map { Integer.parseInt(it) })

@@ -7,7 +7,8 @@ import io.netty.handler.codec.http.QueryStringDecoder
 import java.io.File
 
 class HotSpotsRequestHandler(urlDecoder: QueryStringDecoder,
-                             context: ChannelHandlerContext) : JsonRequestHandler(urlDecoder, context) {
+                             context: ChannelHandlerContext,
+                             private val treeManager: TreeManager) : JsonRequestHandler(urlDecoder, context) {
 
     override fun getJsonObject(logFile: File): Any? {
         val projectName = getParameter(urlDecoder, "project")
@@ -15,6 +16,6 @@ class HotSpotsRequestHandler(urlDecoder: QueryStringDecoder,
         if (projectName == null || fileName == null) {
             return null
         }
-        return TreeManager.getHotSpots(logFile)
+        return treeManager.getHotSpots(logFile)
     }
 }

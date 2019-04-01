@@ -3,6 +3,7 @@ package com.github.korniloval.flameviewer.handlers.tree.request.tree
 import com.github.korniloval.flameviewer.ProfilerHttpRequestHandler.sendProto
 import com.github.korniloval.flameviewer.handlers.tree.request.RequestHandler
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree
+import com.github.korniloval.flameviewer.TreeManager
 import com.github.korniloval.flameviewer.converters.trees.maximumNodesCount
 import io.netty.channel.ChannelHandlerContext
 import io.netty.handler.codec.http.QueryStringDecoder
@@ -11,7 +12,8 @@ import java.util.*
 
 
 abstract class TreeRequestHandler(urlDecoder: QueryStringDecoder,
-                                  context: ChannelHandlerContext) : RequestHandler(urlDecoder, context) {
+                                  context: ChannelHandlerContext,
+                                  protected val treeManager: TreeManager) : RequestHandler(urlDecoder, context) {
 
     abstract fun getTree(logFile: File): Tree?
 

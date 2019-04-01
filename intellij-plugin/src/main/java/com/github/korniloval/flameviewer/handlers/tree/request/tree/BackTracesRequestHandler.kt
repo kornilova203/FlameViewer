@@ -10,12 +10,12 @@ import io.netty.handler.codec.http.QueryStringDecoder
 import java.io.File
 
 
-class BackTracesRequestHandler(urlDecoder: QueryStringDecoder, context: ChannelHandlerContext) :
-        AccumulativeTreeRequestHandler(urlDecoder, context) {
+class BackTracesRequestHandler(urlDecoder: QueryStringDecoder, context: ChannelHandlerContext, treeManager: TreeManager) :
+        AccumulativeTreeRequestHandler(urlDecoder, context, treeManager) {
     override val type: TreeType = TreeType.BACK_TRACES
 
     override fun doProcess(logFile: File) {
-        val callTraces = TreeManager.getTree(logFile, TreeType.CALL_TRACES, filter)
+        val callTraces = treeManager.getTree(logFile, TreeType.CALL_TRACES, filter)
         if (callTraces == null) { // it is not possible to get backtraces without calltraces
             ProfilerHttpRequestHandler.sendProto(context, null)
             return

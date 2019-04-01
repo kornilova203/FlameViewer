@@ -3,19 +3,16 @@ package com.github.korniloval.flameviewer
 import com.github.kornilova_l.flamegraph.proto.TreeProtos
 import com.github.kornilova_l.flamegraph.proto.TreesPreviewProtos.TreesPreview
 import com.github.kornilova_l.flamegraph.proto.TreesProtos
-import com.github.korniloval.flameviewer.converters.calltraces.IntellijToCallTracesConverterFactory
-import com.github.korniloval.flameviewer.converters.calltree.IntellijToCallTreeConverterFactory
 import com.github.korniloval.flameviewer.converters.trees.Filter
+import com.github.korniloval.flameviewer.converters.trees.ToTreesSetConverterFactory
 import com.github.korniloval.flameviewer.converters.trees.TreeType
 import com.github.korniloval.flameviewer.converters.trees.TreesSet
-import com.github.korniloval.flameviewer.converters.trees.TreesSetImpl
 import com.github.korniloval.flameviewer.converters.trees.hotspots.HotSpot
-import com.intellij.openapi.diagnostic.Logger
 import java.io.File
 import java.util.concurrent.atomic.AtomicLong
 import java.util.concurrent.atomic.AtomicReference
 
-object TreeManager {
+class TreeManager(private val toTreesSetConverterFactory: ToTreesSetConverterFactory) {
     private val currentFile = AtomicReference<File?>()
     private val currentTreesSet = AtomicReference<TreesSet?>()
     private val lastUpdate = AtomicLong(0)
@@ -52,24 +49,11 @@ object TreeManager {
         return currentTreesSet.get()?.getCallTree(filter, threadsIds)
     }
 
-    private fun updateTreesSet(logFile: File) {
+    private fun updateTreesSet(file: File) {
         val curFile = currentFile.get()
-        if (curFile == null || logFile.absolutePath != curFile.absolutePath) {
-            currentFile.set(logFile)
-            /* try to convert to call tree */
-            val callTree = IntellijToCallTreeConverterFactory.create(logFile)?.convert()
-            currentTreesSet.set(
-                    if (callTree != null) {
-                        TreesSetImpl(callTree)
-                    } else {
-                        /* try to convert to call traces */
-                        val callTraces = IntellijToCallTracesConverterFactory.create(logFile)?.convert()
-                        if (callTraces == null) {
-                            LOG.error("Cannot convert file: ${logFile.absolutePath}")
-                            return
-                        }
-                        TreesSetImpl(callTraces)
-                    })
+        if (curFile == null || file.absolutePath != curFile.absolutePath) {
+            currentFile.set(file)
+            currentTreesSet.set(toTreesSetConverterFactory.create(file)?.convert())
         }
     }
 
@@ -107,7 +91,5 @@ object TreeManager {
         updateTreesSet(logFile)
         return currentTreesSet.get()?.getTreesPreview(filter)
     }
-
-    private val LOG = Logger.getInstance(PluginFileManager::class.java)
 }
 

@@ -18,14 +18,14 @@ import java.util.Set;
 import static com.github.korniloval.flameviewer.ProfilerHttpRequestHandler.getFilter;
 
 public abstract class MethodsCounter {
-    final File logFile;
+    final File file;
     private final Filter filter;
     final QueryStringDecoder urlDecoder;
     private final Set<String> methods = new HashSet<>();
     private ChannelHandlerContext context;
 
     MethodsCounter(QueryStringDecoder urlDecoder, ChannelHandlerContext context) {
-        this.logFile = PluginFileManager.INSTANCE.getLogFile(urlDecoder);
+        this.file = PluginFileManager.INSTANCE.getLogFile(urlDecoder);
         this.filter = getFilter(urlDecoder);
         this.context = context;
         this.urlDecoder = urlDecoder;

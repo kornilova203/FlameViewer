@@ -13,12 +13,15 @@ import static com.github.korniloval.flameviewer.ProfilerHttpRequestHandler.getPa
 
 public class AccumulativeTreesMethodCounter extends MethodsCounter {
     private final TreeType treeType;
+    private final TreeManager treeManager;
 
     public AccumulativeTreesMethodCounter(QueryStringDecoder urlDecoder,
                                           ChannelHandlerContext context,
-                                          @NotNull TreeType treeType) {
+                                          @NotNull TreeType treeType,
+                                          @NotNull TreeManager treeManager) {
         super(urlDecoder, context);
         this.treeType = treeType;
+        this.treeManager = treeManager;
     }
 
     @Nullable
@@ -35,11 +38,10 @@ public class AccumulativeTreesMethodCounter extends MethodsCounter {
         String methodName = getParameter(urlDecoder, "method");
         String className = getParameter(urlDecoder, "class");
         String desc = getParameter(urlDecoder, "desc");
+        if (file == null) return null;
         if (methodName != null && className != null && desc != null) {
-            return TreeManager.INSTANCE.getTree(
-                    logFile, treeType, className, methodName, desc, null);
-        } else {
-            return TreeManager.INSTANCE.getTree(logFile, treeType, null);
+            return treeManager.getTree(file, treeType, className, methodName, desc, null);
         }
+        return treeManager.getTree(file, treeType, null);
     }
 }

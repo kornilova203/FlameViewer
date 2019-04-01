@@ -10,9 +10,10 @@ import java.io.File
 import java.util.*
 
 class CallTreeRequestHandler(urlDecoder: QueryStringDecoder,
-                             context: ChannelHandlerContext) : RequestHandler(urlDecoder, context) {
+                             context: ChannelHandlerContext,
+                             private val treeManager: TreeManager) : RequestHandler(urlDecoder, context) {
     override fun doProcess(logFile: File) {
-        val trees = TreeManager.getCallTree(logFile, filter, getThreadsIds(urlDecoder))
+        val trees = treeManager.getCallTree(logFile, filter, getThreadsIds(urlDecoder))
         sendProto(context, trees)
     }
 
