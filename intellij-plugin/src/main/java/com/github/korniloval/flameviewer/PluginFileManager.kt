@@ -29,7 +29,6 @@ object PluginFileManager {
 
     private const val PLUGIN_DIR_NAME = "flamegraph-profiler"
     private const val LOG_DIR_NAME = "log"
-    private const val CONFIG_DIR_NAME = "configuration"
     private const val STATIC_DIR_NAME = "static"
     private const val REQUEST_PREFIX = "/${ServerNames.NAME}/"
     private const val UPLOADED_FILES = "uploaded-files"
@@ -41,7 +40,6 @@ object PluginFileManager {
     val tempFileSaver: FileSaver // save files before converting
     val logDirPath: Path // for tests
     private val uploadedFilesDir: File
-    private val configDirPath: Path
     private val staticDirPath: Path?
 
     init {
@@ -51,8 +49,6 @@ object PluginFileManager {
         createDirIfNotExist(pluginDir)
         logDirPath = Paths.get(pluginDir.toString(), LOG_DIR_NAME)
         createDirIfNotExist(logDirPath)
-        configDirPath = Paths.get(pluginDir.toString(), CONFIG_DIR_NAME)
-        createDirIfNotExist(configDirPath)
         try {
             val staticDirUrl = javaClass.getResource("/$STATIC_DIR_NAME")
             if (staticDirUrl != null) {
@@ -376,10 +372,4 @@ object PluginFileManager {
 
         }
     }
-
-    fun getParentDirName(file: File): String? {
-        val parentFile = file.parentFile ?: return null
-        return parentFile.name
-    }
-
 }
