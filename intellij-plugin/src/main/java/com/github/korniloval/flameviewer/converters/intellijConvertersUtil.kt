@@ -17,3 +17,12 @@ fun <T> tryCreate(factories: Array<out IdentifiedConverterFactory<T>>, file: Fil
     }
     return null
 }
+
+fun getConverterId(factories: Array<out IdentifiedConverterFactory<*>>, file: File): String? {
+    for (factory in factories) {
+        if (factory.isSupported(file)) {
+            return factory.id
+        }
+    }
+    return null
+}

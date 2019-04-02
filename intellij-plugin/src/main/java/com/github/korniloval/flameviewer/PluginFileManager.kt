@@ -34,9 +34,7 @@ object PluginFileManager {
     private const val UPLOADED_FILES = "uploaded-files"
     private const val DELETED_FILES = "deleted"
     private const val NOT_CONVERTED = "not-converted"
-    private const val FIERIX_FILES = "fierix"
 
-    val fierixFileSaver: FileSaver
     val tempFileSaver: FileSaver // save files before converting
     val logDirPath: Path // for tests
     private val uploadedFilesDir: File
@@ -72,9 +70,6 @@ object PluginFileManager {
         val notConvertedFiles = Paths.get(uploadedFilesPath.toString(), NOT_CONVERTED)
         createDirIfNotExist(notConvertedFiles)
         tempFileSaver = FileSaver(notConvertedFiles)
-        val fierixFiles = Paths.get(uploadedFilesPath.toString(), FIERIX_FILES)
-        createDirIfNotExist(fierixFiles)
-        fierixFileSaver = FileSaver(fierixFiles)
 
         finallyDeleteRemovedFiles()
     }
@@ -348,16 +343,6 @@ object PluginFileManager {
             }
 
             return null
-        }
-
-        fun moveToDir(file: File, newFileName: String): File? {
-            val newFile = Paths.get(dir.toString(), newFileName).toFile()
-            val success = file.renameTo(newFile)
-            if (!success) {
-                LOG.error("Cannot move file $file")
-                return null
-            }
-            return newFile
         }
     }
 

@@ -1,9 +1,8 @@
 package com.github.korniloval.flameviewer
 
 import com.github.korniloval.flameviewer.converters.calltraces.IntellijToCallTracesConverterFactory
-import com.github.korniloval.flameviewer.converters.calltree.FierixToCallTreeConverterFactory.Companion.isFierixExtension
+import com.github.korniloval.flameviewer.converters.calltree.IntellijToCallTreeConverterFactory
 import com.github.korniloval.flameviewer.converters.cflamegraph.CFlamegraphFileSaver
-import com.intellij.util.PathUtil
 import java.io.*
 import java.nio.file.Paths
 
@@ -27,16 +26,10 @@ class FileUploader {
                  * client will send a request to check if file was saved/converted */
                 val file = fileAccumulator.getFile()
                 fileAccumulators.remove(fileName)
-                val extension = PathUtil.getFileExtension(fileName)
-                if (isFierixExtension(extension)) {
-                    /* move file to ser files */
-                    PluginFileManager.fierixFileSaver.moveToDir(file, fileName)
-                    return
-                }
                 if (tryToConvertFileToAnotherFile(file)) { // this moves file to right place
                     return
                 }
-                val converterId = IntellijToCallTracesConverterFactory.isSupported(file) // if this format is supported
+                val converterId = IntellijToCallTracesConverterFactory.getConverterId(file) ?: IntellijToCallTreeConverterFactory.getConverterId(file) // if this format is supported
                 if (converterId != null) { // if supported
                     /* move file to needed directory. */
                     PluginFileManager.moveFileToUploadedFiles(converterId, fileName, file)
