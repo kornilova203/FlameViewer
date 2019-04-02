@@ -1,5 +1,6 @@
 package com.github.korniloval.flameviewer.converters
 
+import com.github.korniloval.flameviewer.FlameLogger
 import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
@@ -55,7 +56,7 @@ object FramesParsingUtil {
     }
 }
 
-fun getBytes(file: File, errorHandler: (e: IOException) -> Unit): ByteArray? {
+fun getBytes(file: File, logger: FlameLogger): ByteArray? {
     try {
         FileInputStream(file).use { inputStream ->
             val bytes = ByteArray(inputStream.available())
@@ -63,7 +64,7 @@ fun getBytes(file: File, errorHandler: (e: IOException) -> Unit): ByteArray? {
             return bytes
         }
     } catch (e: IOException) {
-        errorHandler(e)
+        logger.error("Failed to read bytes from file", e)
     }
 
     return null

@@ -20,7 +20,6 @@ import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.*;
-import kotlin.Unit;
 import org.apache.commons.compress.utils.IOUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -32,7 +31,7 @@ import java.util.Map;
 
 public class ProfilerHttpRequestHandler extends HttpRequestHandler {
 
-    private static final Logger LOG = Logger.getInstance(ProfilerHttpRequestHandler.class);
+    private static final FlameLogger logger = new LoggerAdapter(Logger.getInstance(ProfilerHttpRequestHandler.class));
     private final PluginFileManager fileManager = PluginFileManager.INSTANCE;
     private final TreeManager treeManager = new TreeManager(IntellijToTreesSetConverterFactory.INSTANCE);
     private final FileUploader fileUploader = new FileUploader();
@@ -48,7 +47,7 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
             message.writeTo(outputStream);
             sendBytes(context, "application/octet-stream", outputStream.toByteArray());
         } catch (IOException e) {
-            LOG.error(e);
+            logger.error("Failed to send proto", e);
         }
     }
 
@@ -99,7 +98,7 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
             outputStream.write(json.getBytes());
             sendBytes(context, "application/json", outputStream.toByteArray());
         } catch (IOException e) {
-            LOG.error(e);
+            logger.error("Failed to send json", e);
         }
     }
 
@@ -108,7 +107,7 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
         if (urlDecoder.parameters().containsKey("include") || urlDecoder.parameters().containsKey("exclude")) {
             String includingConfigsString = getParameter(urlDecoder, "include");
             String excludingConfigsString = getParameter(urlDecoder, "exclude");
-            return new Filter(includingConfigsString, excludingConfigsString, (e) -> { LOG.error(e); return Unit.INSTANCE; });
+            return new Filter(includingConfigsString, excludingConfigsString, logger);
         }
         return null;
     }
@@ -202,11 +201,11 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
         }
         switch (uri) {
             case ServerNames.DELETE_FILE:
-                LOG.info("Delete file: " + fileName + " project: " + projectName);
+                logger.info("Delete file: " + fileName + " project: " + projectName);
                 fileManager.deleteFile(fileName, projectName);
                 break;
             case ServerNames.UNDO_DELETE_FILE:
-                LOG.info("Undo delete file: " + fileName + " project: " + projectName);
+                logger.info("Undo delete file: " + fileName + " project: " + projectName);
                 fileManager.undoDeleteFile(fileName, projectName);
         }
         sendStatus(HttpResponseStatus.OK, context.channel());
@@ -222,7 +221,7 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
         }
         int currentPart = fileParts[0];
         int totalPartsCount = fileParts[1];
-        LOG.info("Got file: " + fileName);
+        logger.info("Got file: " + fileName);
         byte[] bytes = getBytes(fullHttpRequest.content());
         fileUploader.upload(fileName, bytes, currentPart, totalPartsCount);
         sendStatus(HttpResponseStatus.OK, context.channel(), "File part was successfully uploaded");
@@ -235,12 +234,12 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
         String filePartsString = fullHttpRequest.headers().get("File-Part");
         String[] fileParts = filePartsString.split("/");
         if (fileParts.length != 2) {
-            LOG.error("Header File-Parts does not contain information in format '<current part>/<total parts>'. " + filePartsString);
+            logger.error("Header File-Parts does not contain information in format '<current part>/<total parts>'. " + filePartsString, null);
         }
         try {
             return new int[]{Integer.parseInt(fileParts[0]), Integer.parseInt(fileParts[1])};
         } catch (NumberFormatException e) {
-            LOG.error("Header File-Parts does not contain information in format '<current part>/<total parts>'. " + filePartsString, e);
+            logger.error("Header File-Parts does not contain information in format '<current part>/<total parts>'. " + filePartsString, e);
         }
         return null;
     }

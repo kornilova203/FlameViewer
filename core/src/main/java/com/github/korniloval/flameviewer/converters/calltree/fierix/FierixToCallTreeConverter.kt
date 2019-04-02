@@ -2,6 +2,7 @@ package com.github.korniloval.flameviewer.converters.calltree.fierix
 
 import com.github.kornilova_l.flamegraph.proto.EventProtos
 import com.github.kornilova_l.flamegraph.proto.TreesProtos
+import com.github.korniloval.flameviewer.FlameLogger
 import com.github.korniloval.flameviewer.converters.ConversionException
 import com.github.korniloval.flameviewer.converters.calltree.ToCallTreeConverter
 import java.io.File
@@ -10,7 +11,7 @@ import java.io.IOException
 import java.io.InputStream
 import java.util.*
 
-class FierixToCallTreeConverter(private val file: File, private val warningsHandler: (message: String) -> Unit) : ToCallTreeConverter {
+class FierixToCallTreeConverter(private val file: File, private val logger: FlameLogger) : ToCallTreeConverter {
     private val treesMap = HashMap<Long, CTBuilder>()
     private val classNames = HashMap<Long, String>()
     private val threadsNames = HashMap<Long, String>()
@@ -59,7 +60,7 @@ class FierixToCallTreeConverter(private val file: File, private val warningsHand
     private fun getCTBuilder(methodEvent: EventProtos.Event.MethodEvent): CTBuilder {
         val threadName = threadsNames[methodEvent.threadId]
         if (threadName == null) {
-            warningsHandler("Thread name is not known. MethodEvent: $methodEvent")
+            logger.warn("Thread name is not known. MethodEvent: $methodEvent")
             return treesMap.computeIfAbsent(
                     methodEvent.threadId
             ) { CTBuilder(methodEvent.startTime, "") }

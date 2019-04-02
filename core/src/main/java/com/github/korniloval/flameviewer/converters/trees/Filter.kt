@@ -1,10 +1,11 @@
 package com.github.korniloval.flameviewer.converters.trees
 
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node
+import com.github.korniloval.flameviewer.FlameLogger
 import java.util.regex.Pattern
 import java.util.regex.PatternSyntaxException
 
-class Filter(include: String?, exclude: String?, private val errorHandler: (e: Exception) -> Unit) {
+class Filter(include: String?, exclude: String?, private val logger: FlameLogger) {
     private val include: Pattern?
     private val exclude: Pattern?
 
@@ -22,7 +23,7 @@ class Filter(include: String?, exclude: String?, private val errorHandler: (e: E
                                 .replace("$", """\$""")
                 )
             } catch (e: PatternSyntaxException) {
-                errorHandler(e)
+                logger.warn("Failed to compile filter pattern", e)
                 null
             }
         }

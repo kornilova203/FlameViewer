@@ -1,6 +1,8 @@
 package com.github.korniloval.flameviewer.converters.cflamegraph;
 
 import com.github.kornilova_l.flight_parser.FlightParser;
+import com.github.korniloval.flameviewer.FlameLogger;
+import com.github.korniloval.flameviewer.LoggerAdapter;
 import com.github.korniloval.flameviewer.converters.ConversionException;
 import com.github.korniloval.flameviewer.converters.ConvertersUtilKt;
 import com.github.korniloval.flameviewer.converters.calltraces.flamegraph.StacksParser;
@@ -29,11 +31,13 @@ import java.util.Scanner;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.ZipException;
 
+import static com.github.korniloval.flameviewer.converters.ConvertersUtilKt.getBytes;
+
 /**
  * @author Liudmila Kornilova
  **/
 class JfrConvertersComposition implements ToCFlamegraphConverter {
-    private static final Logger LOG = Logger.getInstance(JfrConvertersComposition.class);
+    private static final FlameLogger logger = new LoggerAdapter(Logger.getInstance(JfrConvertersComposition.class));
     @SuppressWarnings("FieldCanBeLocal")
     private int allowedSize = 20000000; // 20MB
     private final File file;
@@ -55,12 +59,12 @@ class JfrConvertersComposition implements ToCFlamegraphConverter {
             Map<String, Integer> stacks = new JfrToStacksConverter(file).convert();
             return new StacksToCFlamegraphConverter(stacks).convert();
         }
-        LOG.info("File size is bigger than " + (allowedSize / 1000 * 1000) + "MB. It will be converted in separate process to avoid OutOfMemoryException. File: " + file);
+        logger.info("File size is bigger than " + (allowedSize / 1000 * 1000) + "MB. It will be converted in separate process to avoid OutOfMemoryException. File: " + file);
         parseInSeparateProcess(unzippedFile);
         Map<String, Integer> stacks = StacksParser.getStacks(unzippedFile);
         if (stacks == null) throw new ConversionException("Failed to parse stacks from file " + unzippedFile);
         boolean isDeleted = unzippedFile.delete();
-        if (!isDeleted) LOG.warn("File " + unzippedFile + " was not deleted");
+        if (!isDeleted) logger.warn("File " + unzippedFile + " was not deleted", null);
         return new StacksToCFlamegraphConverter(stacks).convert();
     }
 
@@ -139,10 +143,7 @@ class JfrConvertersComposition implements ToCFlamegraphConverter {
                 return bout.toByteArray();
 
             } catch (ZipException zip) {
-                return ConvertersUtilKt.getBytes(file, e -> {
-                    LOG.error(e);
-                    return Unit.INSTANCE;
-                });
+                return getBytes(file, logger);
             } catch (IOException e) {
                 e.printStackTrace();
             }
