@@ -16,16 +16,19 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static com.github.korniloval.flameviewer.ProfilerHttpRequestHandler.getFilter;
+import static com.github.korniloval.flameviewer.ProfilerHttpRequestHandler.getParameter;
 
 public abstract class MethodsCounter {
-    final File file;
+    protected final File file;
     private final Filter filter;
     final QueryStringDecoder urlDecoder;
     private final Set<String> methods = new HashSet<>();
     private ChannelHandlerContext context;
 
     MethodsCounter(QueryStringDecoder urlDecoder, ChannelHandlerContext context) {
-        this.file = PluginFileManager.INSTANCE.getLogFile(urlDecoder);
+        String fileName = getParameter(urlDecoder, "file");
+        if (fileName == null) this.file = null;
+        else this.file = PluginFileManager.INSTANCE.getLogFile(fileName);
         this.filter = getFilter(urlDecoder);
         this.context = context;
         this.urlDecoder = urlDecoder;

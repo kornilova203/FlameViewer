@@ -78,7 +78,7 @@ class FilesUploaderTest : LightPlatformCodeInsightFixtureTestCase() {
     }
 
     private fun fileReceivedTest(fileName: String, expectedFile: File) {
-        val file = PluginFileManager.getLogFile("uploaded-files", fileName)
+        val file = PluginFileManager.getLogFile(fileName)
         assertNotNull(file)
         assertEquals(file!!.readLines(), expectedFile.readLines())
     }

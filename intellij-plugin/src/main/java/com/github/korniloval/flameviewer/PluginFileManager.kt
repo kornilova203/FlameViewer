@@ -1,9 +1,9 @@
 package com.github.korniloval.flameviewer
 
-import com.github.korniloval.flameviewer.ProfilerHttpRequestHandler.getParameter
+import com.github.korniloval.flameviewer.converters.calltree.FierixToCallTreeConverterFactory
 import com.intellij.openapi.application.PathManager
 import com.intellij.openapi.diagnostic.Logger
-import io.netty.handler.codec.http.QueryStringDecoder
+import org.jetbrains.annotations.TestOnly
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -72,24 +72,8 @@ object PluginFileManager {
         tempFileSaver = FileSaver(notConvertedFiles)
 
         finallyDeleteRemovedFiles()
+        removeEmptyProjects()
     }
-
-    val projectList: List<String>
-        @Synchronized get() {
-            removeEmptyProjects()
-            val logDir = logDirPath.toFile()
-            if (logDir.exists() && logDir.isDirectory) {
-                val files = logDir.listFiles()
-                if (files != null) {
-                    return files.filter { file ->
-                        file.name != UPLOADED_FILES &&
-                                file.name != DELETED_FILES &&
-                                file.isDirectory
-                    }.map { it.name }
-                }
-            }
-            return ArrayList()
-        }
 
     private fun finallyDeleteRemovedFiles(): Boolean {
         val deletedFilesDir = Paths.get(logDirPath.toString(), DELETED_FILES).toFile()
@@ -102,93 +86,72 @@ object PluginFileManager {
         return files.map { it.delete() }.all { it } // all files were deleted
     }
 
-    @Synchronized
-    fun getLogFile(urlDecoder: QueryStringDecoder): File? {
-        val projectName = getParameter(urlDecoder, "project")
-        val fileName = getParameter(urlDecoder, "file")
-        return if (projectName == null || fileName == null) {
-            null
-        } else getLogFile(projectName, fileName)
+    private fun getAllStoredFiles(): List<File> {
+        val files = mutableListOf<File>()
+        val dirs = logDirPath.toFile().listFiles() ?: return emptyList()
+        for (dir in dirs) {
+            if (!dir.exists() || !dir.isDirectory || dir.name == DELETED_FILES) continue
+            if (dir.name == UPLOADED_FILES) {
+                dir.listFiles()?.filter { it.name != NOT_CONVERTED }?.forEach { addFiles(it, files) }
+            } else {
+                addFiles(dir, files)
+            }
+        }
+        return files
+    }
+
+    private fun addFiles(dir: File, fileList: MutableList<File>) {
+        if (!dir.exists() || !dir.isDirectory) return
+        val files = dir.listFiles() ?: return
+        for (file in files) {
+            if (file.isFile) fileList.add(file)
+        }
+    }
+
+    private fun forEachStoredFile(file: File, action: (File) -> Unit) {
+        if (file.isFile) action(file)
+        else if (file.isDirectory) {
+            val files = file.listFiles() ?: return
+            for (innerFile in files) forEachStoredFile(innerFile, action)
+        }
     }
 
     @Synchronized
-    fun getFileNameList(projectName: String): List<FileNameAndDate> {
-        val projectLogDir = getLogDirPath(projectName)
+    fun getFileNameList(): List<FileNameAndDate> {
         val fileNames = ArrayList<FileNameAndDate>()
-        if (projectName != UPLOADED_FILES) {
-            addFilesFromDirToList(projectLogDir, fileNames)
-            return fileNames
-        }
-        val dirsInsideUploaded = uploadedFilesDir.listFiles() ?: return fileNames
-        for (dir in dirsInsideUploaded) {
-            if (dir.isDirectory && dir.name != NOT_CONVERTED) {
-                addFilesFromDirToList(dir, fileNames)
-            }
-        }
+        val files = getAllStoredFiles()
+        files.sortedBy { it.lastModified() }
+                .mapTo(fileNames) { FileNameAndDate(it) }
         return fileNames
     }
 
-    private fun addFilesFromDirToList(projectLogDir: File, fileNames: MutableList<FileNameAndDate>) {
-        val files = projectLogDir.listFiles() ?: return
-        files.sortBy { it.lastModified() }
-        for (file in files) {
-            if (file.isFile) {
-                fileNames.add(FileNameAndDate(file))
-            }
-        }
-    }
-
     @Synchronized
-    fun getStaticFile(staticFileUri: String): File? {
+    fun getStaticFile(staticFileUri: String): File {
         return Paths.get(
                 staticDirPath.toString(),
                 staticFileUri.substring(REQUEST_PREFIX.length, staticFileUri.length)
         ).toFile()
     }
 
-    private fun getLogDirPath(projectName: String): File {
-        val path = Paths.get(logDirPath.toString(), projectName)
-        createDirIfNotExist(path)
-        return path.toFile()
-    }
-
     @Synchronized
-    fun getLogFile(projectName: String, fileName: String): File? {
-        return if (projectName != UPLOADED_FILES) {
-            val file = Paths.get(logDirPath.toString(), projectName, fileName).toFile()
-            if (file.exists()) {
-                file
-            } else {
-                null
-            }
-        } else {
-            findFileInSubDirectories(fileName, uploadedFilesDir)
-        }
-    }
+    fun getLogFile(fileName: String): File? = getAllStoredFiles().firstOrNull { it.name == fileName }
 
     private fun removeEmptyProjects() {
-        val logDir = File(logDirPath.toString())
-        if (logDir.exists() && logDir.isDirectory) {
-            val projects = logDir.listFiles()
-            if (projects != null) {
-                for (project in projects) {
-                    if (project.isDirectory) {
-                        if (project.name == UPLOADED_FILES || project.name == DELETED_FILES) {
-                            continue
-                        }
-                        val projectFiles = project.listFiles()
-                        if (projectFiles == null || projectFiles.isEmpty()) {
-                            project.delete()
-                        }
-                    }
-                }
+        val logDir = logDirPath.toFile()
+        val projects = logDir.listFiles() ?: return
+        for (project in projects) {
+            if (!project.isDirectory) continue
+            if (project.name == UPLOADED_FILES || project.name == DELETED_FILES) {
+                continue
+            }
+            val projectFiles = project.listFiles()
+            if (projectFiles == null || projectFiles.isEmpty()) {
+                project.delete()
             }
         }
     }
 
-    /**
-     * Mainly used for test
-     */
+    @TestOnly
     @Synchronized
     fun deleteAllUploadedFiles() {
         val dirsInsideUploadedFiles = uploadedFilesDir.listFiles() ?: return
@@ -206,48 +169,44 @@ object PluginFileManager {
     }
 
     @Synchronized
-    fun deleteFile(fileName: String, projectName: String) {
-        val file = getLogFile(projectName, fileName)
-        if (file == null || !file.exists()) {
-            return
-        }
+    fun deleteFile(fileName: String) {
+        val file = getLogFile(fileName) ?: return
         /* uploaded files are stored in separate directories
          * (name of a directory is an id of converter that is responsible for the file)
          * when we move file to temporal directory we want to save converter id,
          * so if delete action is undone we can move file back to needed directory */
-        val res: Boolean
-        @Suppress("LiftReturnOrAssignment")
-        if (projectName == "uploaded-files") {
-            val converterId = file.parentFile.name
-            val newDir = Paths.get(logDirPath.toString(), DELETED_FILES, converterId).toFile()
-            if (!newDir.exists()) {
-                if (!newDir.mkdir()) {
-                    LOG.warn("Cannot create directory to move deleted file. File: $file Dir: $newDir")
-                    return
-                }
+        if (file.parentFile?.parentFile?.name != "uploaded-files") {
+            file.renameTo(Paths.get(logDirPath.toString(), DELETED_FILES, fileName).toFile())
+            return
+        }
+        val converterId = file.parentFile.name
+        val newDir = Paths.get(logDirPath.toString(), DELETED_FILES, converterId).toFile()
+        if (!newDir.exists()) {
+            if (!newDir.mkdir()) {
+                LOG.warn("Cannot create directory to move deleted file. File: $file Dir: $newDir")
+                return
             }
-            res = file.renameTo(Paths.get(newDir.toString(), fileName).toFile())
-        } else {
-            res = file.renameTo(Paths.get(logDirPath.toString(), DELETED_FILES, fileName).toFile())
         }
-        if (!res) {
-            LOG.warn("Cannot move file to DELETED_FILES directory. File: $file")
-        }
+        file.renameTo(Paths.get(newDir.toString(), fileName).toFile())
     }
 
     @Synchronized
-    fun undoDeleteFile(fileName: String, projectName: String) {
-        val deletedFile = getDeletedFile(fileName, projectName)
+    fun undoDeleteFile(fileName: String) {
+        val deletedFile = getDeletedFile(fileName)
         if (deletedFile == null || !deletedFile.exists()) {
             LOG.debug("Undo delete. Cannot find file to undo delete: $fileName")
             return
         }
-        val projectDirPath = if (projectName == "uploaded-files") {
+        val projectDirPath = if (deletedFile.parentFile?.parentFile?.name == DELETED_FILES) {
             val converterId = deletedFile.parentFile.name
             Paths.get(logDirPath.toString(), UPLOADED_FILES, converterId).toFile()
         } else {
-            Paths.get(logDirPath.toString(), projectName).toFile()
-        } ?: return
+            // some fierix files were stored in project-specific directories. This layout is deprecated.
+            // So move them to fierix dir.
+            Paths.get(logDirPath.toString(), UPLOADED_FILES, FierixToCallTreeConverterFactory.EXTENSION).toFile()
+        }
+
+        createDirIfNotExist(projectDirPath.toPath())
 
         val res = deletedFile.renameTo(Paths.get(projectDirPath.toString(), fileName).toFile())
         if (!res) {
@@ -255,44 +214,24 @@ object PluginFileManager {
         }
     }
 
-    private fun getDeletedFile(fileName: String, projectName: String): File? {
+    private fun getDeletedFile(fileName: String): File? {
         val deletedFilesDir = Paths.get(logDirPath.toString(), DELETED_FILES).toFile()
-        return if (projectName == "uploaded-files") {
-            findFileInSubDirectories(fileName, deletedFilesDir)
-        } else {
-            Paths.get(deletedFilesDir.toString(), fileName).toFile()
-        }
-    }
-
-    private fun findFileInSubDirectories(fileName: String, dir: File): File? {
-        val subDirs = dir.listFiles() ?: return null
-        for (subDir in subDirs) {
-            if (subDir.isDirectory && subDir.name != DELETED_FILES && subDir.name != NOT_CONVERTED) {
-                val files = subDir.listFiles() ?: continue
-                for (file in files) {
-                    if (file.name == fileName) {
-                        return file
-                    }
-                }
+        var file: File? = null
+        forEachStoredFile(deletedFilesDir) { f ->
+            if (f.name == fileName) {
+                file = f
+                return@forEachStoredFile
             }
         }
-        return null
+        return file
     }
 
     fun moveFileToUploadedFiles(converterId: String, fileName: String, file: File) {
-        val dir = Paths.get(uploadedFilesDir.toString(), converterId).toFile()
-        if (!dir.exists()) {
-            val res = dir.mkdir()
-            if (!res) {
-                LOG.error("Cannot save file $fileName to $converterId directory.")
-                return
-            }
-        }
+        val dir = Paths.get(uploadedFilesDir.toString(), converterId)
+        createDirIfNotExist(dir)
         val newFile = Paths.get(dir.toString(), fileName).toFile()
-        val success = file.renameTo(newFile)
-        if (!success) {
+        if (!file.renameTo(newFile))
             LOG.error("Cannot move file $file to $converterId directory.")
-        }
     }
 
     class FileNameAndDate(file: File) {
@@ -329,8 +268,7 @@ object PluginFileManager {
         }
     }
 
-    open class FileSaver internal constructor(private val dir: Path) {
-
+    class FileSaver internal constructor(private val dir: Path) {
         fun save(bytes: ByteArray, fileName: String): File? {
             val file = Paths.get(dir.toString(), fileName).toFile()
             try {
@@ -354,7 +292,6 @@ object PluginFileManager {
             } catch (se: SecurityException) {
                 LOG.error(se)
             }
-
         }
     }
 }

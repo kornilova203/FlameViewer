@@ -27,6 +27,7 @@ import org.jetbrains.ide.HttpRequestHandler;
 import org.jetbrains.io.Responses;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Map;
 
 public class ProfilerHttpRequestHandler extends HttpRequestHandler {
@@ -64,7 +65,7 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
         f.addListener(ChannelFutureListener.CLOSE);
     }
 
-    public static void sendStatus(HttpResponseStatus status, Channel channel) {
+    private static void sendStatus(HttpResponseStatus status, Channel channel) {
         DefaultFullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, status);
         HttpUtil.setContentLength(response, 0);
         doSendStatus(response, channel);
@@ -119,10 +120,6 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
                               @Nullable String include,
                               @Nullable String exclude) {
         File staticFile = fileManager.getStaticFile(htmlFilePath);
-        if (staticFile == null) {
-            throw new RuntimeException("Cannot render page " + htmlFilePath + " project: " +
-                    projectName + " file " + fileName + " include " + include + " exclude " + exclude);
-        }
         String filterParameters = getFilterAsGetParameters(include, exclude);
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(staticFile))) {
             return String.join("", bufferedReader.lines()
@@ -153,12 +150,12 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
         return res;
     }
 
-    private void sendFileList(ChannelHandlerContext context, String projectName) {
-        sendJson(context, new Gson().toJson(fileManager.getFileNameList(projectName)));
+    private void sendFileList(ChannelHandlerContext context) {
+        sendJson(context, new Gson().toJson(fileManager.getFileNameList()));
     }
 
     private void sendListProjects(ChannelHandlerContext context) {
-        String json = new Gson().toJson(fileManager.getProjectList());
+        String json = new Gson().toJson(new ArrayList<String>());
         sendJson(context, json);
     }
 
@@ -166,9 +163,6 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
                             String fileUri,
                             String contentType) throws IOException {
         File staticFile = fileManager.getStaticFile(fileUri);
-        if (staticFile == null) {
-            throw new RuntimeException("Cannot find static files. File uri: " + fileUri);
-        }
         try (InputStream inputStream = new FileInputStream(staticFile)) {
             sendBytes(context, contentType, IOUtils.toByteArray(inputStream));
         }
@@ -195,18 +189,17 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
                               ChannelHandlerContext context,
                               String uri) {
         String fileName = fullHttpRequest.headers().get("File-Name");
-        String projectName = fullHttpRequest.headers().get("Project-Name");
-        if (fileName == null || projectName == null) {
+        if (fileName == null) {
             return;
         }
         switch (uri) {
             case ServerNames.DELETE_FILE:
-                logger.info("Delete file: " + fileName + " project: " + projectName);
-                fileManager.deleteFile(fileName, projectName);
+                logger.info("Delete file: " + fileName);
+                fileManager.deleteFile(fileName);
                 break;
             case ServerNames.UNDO_DELETE_FILE:
-                logger.info("Undo delete file: " + fileName + " project: " + projectName);
-                fileManager.undoDeleteFile(fileName, projectName);
+                logger.info("Undo delete file: " + fileName);
+                fileManager.undoDeleteFile(fileName);
         }
         sendStatus(HttpResponseStatus.OK, context.channel());
     }
@@ -278,10 +271,7 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
                 sendListProjects(context);
                 return true;
             case ServerNames.FILE_LIST:
-                String project = getParameter(urlDecoder, "project");
-                if (project != null) {
-                    sendFileList(context, project);
-                }
+                sendFileList(context);
                 return true;
             case ServerNames.HOT_SPOTS_JS_REQUEST:
                 new HotSpotsRequestHandler(urlDecoder, context, treeManager).process();
@@ -344,8 +334,7 @@ public class ProfilerHttpRequestHandler extends HttpRequestHandler {
      */
     private void sendIfFileExist(FullHttpRequest fullHttpRequest, ChannelHandlerContext context) {
         String fileName = fullHttpRequest.headers().get("File-Name");
-        String projectName = fullHttpRequest.headers().get("Project-Name");
-        if (fileManager.getLogFile(projectName, fileName) != null) {
+        if (fileManager.getLogFile(fileName) != null) {
             sendStatus(HttpResponseStatus.FOUND, context.channel(), "File " + fileName + " was found in uploaded messages");
         } else {
             sendStatus(HttpResponseStatus.NOT_FOUND, context.channel(), "File " + fileName + " was NOT found in uploaded messages");
