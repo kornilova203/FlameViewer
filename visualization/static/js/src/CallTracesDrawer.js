@@ -31,7 +31,7 @@ module.exports.CallTracesDrawer = class CallTracesDrawer extends AccumulativeTre
      * @override
      */
     _getTreeType() {
-        return "outgoing-calls";
+        return "call-traces";
     }
 
     /**

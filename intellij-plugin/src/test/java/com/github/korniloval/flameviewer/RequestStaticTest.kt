@@ -1,6 +1,6 @@
 package com.github.korniloval.flameviewer
 
-import com.github.korniloval.flameviewer.server.OUTGOING_CALLS
+import com.github.korniloval.flameviewer.server.CALL_TRACES_NAME
 import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase
 import junit.framework.TestCase
 import java.io.ByteArrayInputStream
@@ -8,7 +8,7 @@ import java.net.HttpURLConnection
 import java.util.*
 
 class RequestStaticTest : LightPlatformCodeInsightFixtureTestCase() {
-    fun testRequestHtml() = doTest(OUTGOING_CALLS, "Back Traces")
+    fun testRequestHtml() = doTest(CALL_TRACES_NAME, "Call Traces")
     fun testRequestCss() = doTest("css/main.css", "body {")
     fun testRequestJs() = doTest("js/out/accumulative-trees.js", "drawCallTraces")
 

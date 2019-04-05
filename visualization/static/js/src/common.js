@@ -220,7 +220,7 @@ const constants = {
     fileName: common.getParameter("file") === undefined ? undefined : decodeURIComponent(common.getParameter("file")),
     $removeFilesButton: null,
     $fullFileName: null,
-    pageName: /[^\/]*((?=\?)|(?=\.html))/.exec(window.location.href)[0],
+    pageName: parsePageName(window.location.href),
     CANVAS_PADDING: 35,
     LAYER_HEIGHT: 18,
     LAYER_GAP: 1,
@@ -246,6 +246,18 @@ const constants = {
     }
 };
 
+/**
+ * @param {string} href
+ */
+function parsePageName(href) {
+    const lastSlash = href.lastIndexOf("/");
+    if (lastSlash === -1) console.error("Cannot parse page name", href);
+
+    const question = href.lastIndexOf("?");
+    if (question > lastSlash) return href.substring(lastSlash + 1, question);
+    return href.substring(lastSlash + 1);
+}
+
 const _MAIN_NAME = "/FlameViewer";
 const _CALL_TREE_JS_REQUEST = _MAIN_NAME + "/trees/call-tree";
 
@@ -254,8 +266,8 @@ const serverNames = {
     FILE_LIST: _MAIN_NAME + "/file-list",
     CALL_TREE_JS_REQUEST: _CALL_TREE_JS_REQUEST,
     CALL_TREE_PREVIEW_JS_REQUEST: _CALL_TREE_JS_REQUEST + "/preview",
-    OUTGOING_CALLS: _MAIN_NAME + "/outgoing-calls",
-    INCOMING_CALLS: _MAIN_NAME + "/incoming-calls",
+    CALL_TRACES: _MAIN_NAME + "/call-traces",
+    BACK_TRACES: _MAIN_NAME + "/back-traces",
     CONNECTION_ALIVE: _MAIN_NAME + "/trees/alive",
     HOT_SPOTS_JS_REQUEST: _MAIN_NAME + "/hot-spots-json",
     UPLOAD_FILE: _MAIN_NAME + "/upload-file",

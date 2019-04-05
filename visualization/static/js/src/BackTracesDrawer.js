@@ -21,7 +21,7 @@ module.exports.BackTracesDrawer = class BackTracesDrawer extends AccumulativeTre
      * @override
      */
     _getTreeType() {
-        return "incoming-calls";
+        return "back-traces";
     }
 
     /**

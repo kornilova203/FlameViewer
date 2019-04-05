@@ -438,11 +438,11 @@ module.exports.TreeDrawer = class TreeDrawer {
             this.$popupClassName.hide();
         }
         this.$popup.find("h3").text(node.getNodeInfo().getMethodName());
-        this.$popup.find(".outgoing-link").attr("href",
-            serverNames.OUTGOING_CALLS + "?" + TreeDrawer.getGETParameters(node)
+        this.$popup.find(".call-traces-link").attr("href",
+            serverNames.CALL_TRACES + "?" + TreeDrawer.getGETParameters(node)
         );
-        this.$popup.find(".incoming-link").attr("href",
-            serverNames.INCOMING_CALLS + "?" + TreeDrawer.getGETParameters(node)
+        this.$popup.find(".back-traces-link").attr("href",
+            serverNames.BACK_TRACES + "?" + TreeDrawer.getGETParameters(node)
         );
         this._setParameters(node);
         this._setPopupReturnValue(node);

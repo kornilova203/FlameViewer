@@ -96,8 +96,8 @@
 <div class="popup">
     <p class="duration"></p>
     <div class="method-links">
-        <a class="outgoing-link"><img src="img/outgoing.png"/></a>
-        <a class="incoming-link"><img src="img/incoming.png"/></a>
+        <a class="call-traces-link"><img src="img/call-traces.png"/></a>
+        <a class="back-traces-link"><img src="img/back-traces.png"/></a>
     </div>
   <img class="icon class-icon" src="img/class.png"/>
   <p class="class-name shift-right"></p>
@@ -117,8 +117,8 @@
 <div class="popup">
     <p class="duration"></p>
     <div class="method-links">
-        <a class="outgoing-link"><img src="img/outgoing.png"/></a>
-        <a class="incoming-link"><img src="img/incoming.png"/></a>
+        <a class="call-traces-link"><img src="img/call-traces.png"/></a>
+        <a class="back-traces-link"><img src="img/back-traces.png"/></a>
     </div>
   <img class="icon class-icon" src="img/class.png"/>
   <p class="class-name shift-right"></p>
@@ -178,11 +178,11 @@
 {template .hotSpot}
 <div class="hot-spot">
     <!--suppress HtmlUnknownTarget -->
-  <a href="/FlameViewer/outgoing-calls?file={$fileName}&amp;method={$methodName}&amp;class={$className}&amp;desc={$desc}"><img
-          src="img/outgoing.png"/></a>
+  <a href="/FlameViewer/call-traces?file={$fileName}&amp;method={$methodName}&amp;class={$className}&amp;desc={$desc}"><img
+          src="img/call-traces.png"/></a>
     <!--suppress HtmlUnknownTarget -->
-  <a href="/FlameViewer/incoming-calls?file={$fileName}&amp;method={$methodName}&amp;class={$className}&amp;desc={$desc}"><img
-          src="img/incoming.png"/></a>
+  <a href="/FlameViewer/back-traces?file={$fileName}&amp;method={$methodName}&amp;class={$className}&amp;desc={$desc}"><img
+          src="img/back-traces.png"/></a>
     <div class="outer-time-div">
         <p class="relative-time">{$relativeTime}%</p>
         <div class="total-time"><div class="method-time"></div></div>

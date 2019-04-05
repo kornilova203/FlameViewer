@@ -15,7 +15,7 @@ const MethodBackTracesDrawer = require('./MethodBackTracesDrawer');
  * @param {Number} percent
  */
 function drawTree(tree, className, methodName, desc, percent) {
-    if (constants.pageName === "incoming-calls") {
+    if (constants.pageName === "back-traces") {
         drawBackTraces(tree, className, methodName, desc, percent);
     } else {
         drawCallTraces(tree, className, methodName, desc, percent);
@@ -97,7 +97,7 @@ function sendRequestForTree() {
         common.hideLoader(0);
         common.showLoader(constants.loaderMessages.deserialization, () => {
             console.log("got response");
-            if (constants.pageName === "incoming-calls" && request.status === 400) { // tree contains too many nodes
+            if (constants.pageName === "back-traces" && request.status === 400) { // tree contains too many nodes
                 common.hideLoader();
                 common.showMessage(constants.pageMessages.backtracesTooBig, "left");
                 return;

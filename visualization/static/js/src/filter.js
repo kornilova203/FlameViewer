@@ -1,8 +1,8 @@
 let parametersWithoutFilter;
 let CURRENT_PREFIX;
 let $callTreeA;
-let $outgoingCallsA;
-let $incomingCallsA;
+let $callTracesA;
+let $backTracesA;
 let $filteredNodesCountSpan;
 let CURRENT_INCLUDED = common.getParameter("include");
 CURRENT_INCLUDED = CURRENT_INCLUDED === undefined ? "" : CURRENT_INCLUDED;
@@ -20,8 +20,8 @@ $(window).on("load", () => {
     const $filterContent = $(".filter-content");
     const $applyAnchor = $filterContent.find("a");
     $callTreeA = $(".call-tree-a");
-    $outgoingCallsA = $(".outgoing-calls-a");
-    $incomingCallsA = $(".incoming-calls-a");
+    $callTracesA = $(".call-traces-a");
+    $backTracesA = $(".back-traces-a");
     $filteredNodesCountSpan = $(".filtered-methods-count span");
     parametersWithoutFilter = getParametersWithoutFilter();
     setCurrentPrefix();
