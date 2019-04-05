@@ -1,4 +1,4 @@
-package com.github.korniloval.flameviewer
+package com.github.korniloval.flameviewer.server
 
 import com.github.kornilova_l.flamegraph.proto.TreeProtos
 import com.github.kornilova_l.flamegraph.proto.TreesPreviewProtos.TreesPreview
@@ -16,6 +16,7 @@ class TreeManager(private val toTreesSetConverterFactory: ToTreesSetConverterFac
     private val currentFile = AtomicReference<File?>()
     private val currentTreesSet = AtomicReference<TreesSet?>()
     private val lastUpdate = AtomicLong(0)
+    private val timeDelta = 1000 * 60 * 2
 
     init {
         val watchLastUpdate = Thread {
@@ -34,7 +35,7 @@ class TreeManager(private val toTreesSetConverterFactory: ToTreesSetConverterFac
 
     @Synchronized
     private fun checkLastUpdate() {
-        if (System.currentTimeMillis() - lastUpdate.get() >= 30000) {
+        if (System.currentTimeMillis() - lastUpdate.get() >= timeDelta) {
             currentTreesSet.set(null)
             currentFile.set(null)
             lastUpdate.set(System.currentTimeMillis())
@@ -42,10 +43,10 @@ class TreeManager(private val toTreesSetConverterFactory: ToTreesSetConverterFac
     }
 
     @Synchronized
-    fun getCallTree(logFile: File,
+    fun getCallTree(file: File,
                     filter: Filter?,
                     threadsIds: List<Int>?): TreesProtos.Trees? {
-        updateTreesSet(logFile)
+        updateTreesSet(file)
         return currentTreesSet.get()?.getCallTree(filter, threadsIds)
     }
 
@@ -55,6 +56,7 @@ class TreeManager(private val toTreesSetConverterFactory: ToTreesSetConverterFac
             currentFile.set(file)
             currentTreesSet.set(toTreesSetConverterFactory.create(file)?.convert())
         }
+        updateLastTime()
     }
 
     @Synchronized
@@ -64,21 +66,16 @@ class TreeManager(private val toTreesSetConverterFactory: ToTreesSetConverterFac
     }
 
     @Synchronized
-    fun getTree(logFile: File,
-                treeType: TreeType,
-                className: String,
-                methodName: String,
-                desc: String,
-                filter: Filter?): TreeProtos.Tree? {
+    fun getTree(logFile: File, treeType: TreeType, className: String, methodName: String, desc: String, filter: Filter?): TreeProtos.Tree? {
         updateTreesSet(logFile)
         return currentTreesSet.get()?.getTree(treeType, className, methodName, desc, filter)
 
     }
 
     @Synchronized
-    fun getHotSpots(logFile: File): List<HotSpot>? {
-        updateTreesSet(logFile)
-        return currentTreesSet.get()?.getHotSpots()
+    fun getHotSpots(file: File): List<HotSpot> {
+        updateTreesSet(file)
+        return currentTreesSet.get()?.getHotSpots() ?: emptyList()
     }
 
     @Synchronized
@@ -87,8 +84,8 @@ class TreeManager(private val toTreesSetConverterFactory: ToTreesSetConverterFac
     }
 
     @Synchronized
-    fun getCallTreesPreview(logFile: File, filter: Filter?): TreesPreview? {
-        updateTreesSet(logFile)
+    fun getCallTreesPreview(file: File, filter: Filter?): TreesPreview? {
+        updateTreesSet(file)
         return currentTreesSet.get()?.getTreesPreview(filter)
     }
 }

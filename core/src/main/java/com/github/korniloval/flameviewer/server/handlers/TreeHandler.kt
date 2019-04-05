@@ -1,32 +1,38 @@
-package com.github.korniloval.flameviewer.handlers.tree.request.tree
+package com.github.korniloval.flameviewer.server.handlers
 
-import com.github.korniloval.flameviewer.ProfilerHttpRequestHandler.sendProto
-import com.github.korniloval.flameviewer.handlers.tree.request.RequestHandler
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree
-import com.github.korniloval.flameviewer.TreeManager
 import com.github.korniloval.flameviewer.converters.trees.maximumNodesCount
+import com.github.korniloval.flameviewer.FlameLogger
+import com.github.korniloval.flameviewer.server.FindFile
+import com.github.korniloval.flameviewer.server.RequestHandler
+import com.github.korniloval.flameviewer.server.ServerUtil.sendProto
+import com.sun.xml.internal.ws.handler.HandlerException
 import io.netty.channel.ChannelHandlerContext
+import io.netty.handler.codec.http.FullHttpRequest
 import io.netty.handler.codec.http.QueryStringDecoder
 import java.io.File
 import java.util.*
 
 
-abstract class TreeRequestHandler(urlDecoder: QueryStringDecoder,
-                                  context: ChannelHandlerContext,
-                                  protected val treeManager: TreeManager) : RequestHandler(urlDecoder, context) {
+abstract class TreeHandler(protected val logger: FlameLogger, private val findFile: FindFile) : RequestHandler {
 
-    abstract fun getTree(logFile: File): Tree?
+    abstract fun getTree(file: File, decoder: QueryStringDecoder): Tree?
 
-    override fun doProcess(logFile: File) {
-        val tree = getTree(logFile)
-        if (tree != null) {
-            if (tree.treeInfo.nodesCount > maximumNodesCount) {
-                val cutTree = cutTree(tree)
-                sendProto(context, cutTree)
-                return
-            }
+    final override fun process(request: FullHttpRequest, ctx: ChannelHandlerContext): Boolean {
+        val decoder = QueryStringDecoder(request.uri())
+        val file = findFile(getFileName(decoder)) ?: throw HandlerException("File not found. Uri: ${decoder.uri()}")
+        doProcess(ctx, file, decoder)
+        return true
+    }
+
+    protected open fun doProcess(ctx: ChannelHandlerContext, file: File, decoder: QueryStringDecoder) {
+        val tree = getTree(file, decoder)
+        if (tree != null && tree.treeInfo.nodesCount > maximumNodesCount) {
+            val cutTree = cutTree(tree)
+            sendProto(ctx, cutTree, logger)
+        } else {
+            sendProto(ctx, tree, logger)
         }
-        sendProto(context, tree)
     }
 
     private fun cutTree(tree: Tree): Tree {

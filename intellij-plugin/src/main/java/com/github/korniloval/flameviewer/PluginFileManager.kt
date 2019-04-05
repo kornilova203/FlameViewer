@@ -1,6 +1,7 @@
 package com.github.korniloval.flameviewer
 
-import com.github.korniloval.flameviewer.converters.calltree.FierixToCallTreeConverterFactory
+import com.github.korniloval.flameviewer.converters.calltree.fierix.FierixToCallTreeConverter
+import com.github.korniloval.flameviewer.server.NAME
 import com.intellij.openapi.application.PathManager
 import com.intellij.openapi.diagnostic.Logger
 import org.jetbrains.annotations.TestOnly
@@ -30,7 +31,7 @@ object PluginFileManager {
     private const val PLUGIN_DIR_NAME = "flamegraph-profiler"
     private const val LOG_DIR_NAME = "log"
     private const val STATIC_DIR_NAME = "static"
-    private const val REQUEST_PREFIX = "/${ServerNames.NAME}/"
+    private const val REQUEST_PREFIX = "/$NAME/"
     private const val UPLOADED_FILES = "uploaded-files"
     private const val DELETED_FILES = "deleted"
     private const val NOT_CONVERTED = "not-converted"
@@ -203,7 +204,7 @@ object PluginFileManager {
         } else {
             // some fierix files were stored in project-specific directories. This layout is deprecated.
             // So move them to fierix dir.
-            Paths.get(logDirPath.toString(), UPLOADED_FILES, FierixToCallTreeConverterFactory.EXTENSION).toFile()
+            Paths.get(logDirPath.toString(), UPLOADED_FILES, FierixToCallTreeConverter.EXTENSION).toFile()
         }
 
         createDirIfNotExist(projectDirPath.toPath())

@@ -1,6 +1,8 @@
 package com.github.korniloval.flameviewer
 
 import com.github.korniloval.flameviewer.UploadFileUtil.sendFile
+import com.github.korniloval.flameviewer.server.DELETE_FILE
+import com.github.korniloval.flameviewer.server.UNDO_DELETE_FILE
 import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase
 import io.netty.handler.codec.http.HttpResponseStatus
 import org.jetbrains.ide.BuiltInServerManager
@@ -61,7 +63,7 @@ class DeleteFileTest : LightPlatformCodeInsightFixtureTestCase() {
     }
 
     private fun sendUndoDeleteRequest(fileName: String): Int {
-        val url = URL("http://localhost:${BuiltInServerManager.getInstance().port}${ServerNames.UNDO_DELETE_FILE}")
+        val url = URL("http://localhost:${BuiltInServerManager.getInstance().port}$UNDO_DELETE_FILE")
         val connection = url.openConnection() as HttpURLConnection
         connection.requestMethod = "POST"
 
@@ -71,7 +73,7 @@ class DeleteFileTest : LightPlatformCodeInsightFixtureTestCase() {
     }
 
     private fun sendDeleteFileRequest(fileName: String): Int {
-        val url = URL("http://localhost:${BuiltInServerManager.getInstance().port}${ServerNames.DELETE_FILE}")
+        val url = URL("http://localhost:${BuiltInServerManager.getInstance().port}$DELETE_FILE")
         val connection = url.openConnection() as HttpURLConnection
         connection.requestMethod = "POST"
 

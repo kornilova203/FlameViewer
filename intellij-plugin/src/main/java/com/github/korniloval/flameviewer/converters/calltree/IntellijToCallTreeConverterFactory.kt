@@ -1,8 +1,9 @@
 package com.github.korniloval.flameviewer.converters.calltree
 
-import com.github.korniloval.flameviewer.converters.calltree.FierixToCallTreeConverterFactory.Companion.isFierixExtension
-import com.github.korniloval.flameviewer.converters.tryCreate
+import com.github.korniloval.flameviewer.converters.calltree.fierix.FierixToCallTreeConverter
+import com.github.korniloval.flameviewer.converters.calltree.fierix.FierixToCallTreeConverter.Companion.isFierixExtension
 import com.github.korniloval.flameviewer.converters.getConverterId
+import com.github.korniloval.flameviewer.converters.tryCreate
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.extensions.ExtensionPointName
 import com.intellij.openapi.util.io.FileUtilRt.getExtension
@@ -22,7 +23,7 @@ object IntellijToCallTreeConverterFactory : ToCallTreeConverterFactory {
     private fun checkFierix(file: File): ToCallTreeConverter? {
         if (isFierixExtension(getExtension(file.name))) {
             return EP_NAME.extensions
-                    .firstOrNull { it.id == FierixToCallTreeConverterFactory.EXTENSION }
+                    .firstOrNull { it.id == FierixToCallTreeConverter.EXTENSION }
                     ?.create(file)
         }
         return null

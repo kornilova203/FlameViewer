@@ -2,6 +2,7 @@ package com.github.korniloval.flameviewer
 
 import com.github.korniloval.flameviewer.UploadFileUtil.bytesInMB
 import com.github.korniloval.flameviewer.UploadFileUtil.sendFile
+import com.github.korniloval.flameviewer.server.DOES_FILE_EXIST
 import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase
 import io.netty.handler.codec.http.HttpResponseStatus
 import org.jetbrains.ide.BuiltInServerManager
@@ -49,7 +50,7 @@ class FilesUploaderTest : LightPlatformCodeInsightFixtureTestCase() {
     }
 
     private fun sendRequestDoesFileExist(fileName: String): Int {
-        val url = URL("http://localhost:${BuiltInServerManager.getInstance().port}${ServerNames.DOES_FILE_EXIST}")
+        val url = URL("http://localhost:${BuiltInServerManager.getInstance().port}$DOES_FILE_EXIST")
         val connection = url.openConnection() as HttpURLConnection
         connection.requestMethod = "GET"
 

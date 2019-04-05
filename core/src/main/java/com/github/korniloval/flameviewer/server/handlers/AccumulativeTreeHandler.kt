@@ -1,34 +1,31 @@
-package com.github.korniloval.flameviewer.handlers.tree.request.tree
+package com.github.korniloval.flameviewer.server.handlers
 
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree
-import com.github.korniloval.flameviewer.ProfilerHttpRequestHandler.getParameter
-import com.github.korniloval.flameviewer.TreeManager
+import com.github.korniloval.flameviewer.FlameLogger
 import com.github.korniloval.flameviewer.converters.trees.TreeType
 import com.github.korniloval.flameviewer.converters.trees.TreesSet.Companion.getMaxDepthRecursively
-import com.github.korniloval.flameviewer.converters.trees.maximumNodesCount
 import com.github.korniloval.flameviewer.converters.trees.TreesUtil
-import com.intellij.openapi.diagnostic.Logger
-import io.netty.channel.ChannelHandlerContext
+import com.github.korniloval.flameviewer.converters.trees.maximumNodesCount
+import com.github.korniloval.flameviewer.server.ServerUtil.getParameter
+import com.github.korniloval.flameviewer.server.TreeManager
+import com.github.korniloval.flameviewer.server.FindFile
 import io.netty.handler.codec.http.QueryStringDecoder
 import java.io.File
 
-abstract class AccumulativeTreeRequestHandler internal constructor(urlDecoder: QueryStringDecoder,
-                                                                   context: ChannelHandlerContext,
-                                                                   treeManager: TreeManager) : TreeRequestHandler(urlDecoder, context, treeManager) {
-    private val LOG = Logger.getInstance(AccumulativeTreeRequestHandler::class.java)
-    abstract val type: TreeType
+abstract class AccumulativeTreeHandler(protected val treeManager: TreeManager, logger: FlameLogger,
+                                       private val type: TreeType, findFile: FindFile) : TreeHandler(logger, findFile) {
+    override fun getTree(file: File, decoder: QueryStringDecoder): Tree? {
+        val filter = getFilter(decoder, logger)
 
-    override fun getTree(logFile: File): Tree? {
-        val methodName = getParameter(urlDecoder, "method")
-        val className = getParameter(urlDecoder, "class")
-        val desc = getParameter(urlDecoder, "desc")
+        val methodName = getParameter(decoder, "method")
+        val className = getParameter(decoder, "class")
+        val desc = getParameter(decoder, "desc")
         val tree = if (methodName != null && className != null && desc != null) {
-            treeManager.getTree(logFile, type, className, methodName,
-                    desc, filter)
+            treeManager.getTree(file, type, className, methodName, desc, filter)
         } else {
-            treeManager.getTree(logFile, type, filter)
+            treeManager.getTree(file, type, filter)
         } ?: return null
-        val path = urlDecoder.parameters()["path"] ?: return tree
+        val path = decoder.parameters()["path"] ?: return tree
         return getSubTree(tree, path.map { Integer.parseInt(it) })
     }
 
@@ -38,7 +35,7 @@ abstract class AccumulativeTreeRequestHandler internal constructor(urlDecoder: Q
      * @param path to first node of subtree. Each number in path - index of child
      * @return subtree that contains less than [maximumNodesCount]
      * (Note: it would be more convenient to return a subtree that contains more than [maximumNodesCount], so it will be
-     * cut in [TreeRequestHandler].
+     * cut in [TreeHandler].
      * But it means that there will be a duplicate of tree, this duplicate might be really large)
      */
     private fun getSubTree(tree: Tree, path: List<Int>): Tree? {
@@ -58,7 +55,7 @@ abstract class AccumulativeTreeRequestHandler internal constructor(urlDecoder: Q
             cutTree(currentNode, addedBase, 1, lastAcceptedLayer)
             subTree.visibleDepth = lastAcceptedLayer + 1 // + 1 because currentNode was not counted
         } else {
-            LOG.error("There is no need to send sub-tree request if tree contains less than $maximumNodesCount nodes")
+            logger.warn("There is no need to send sub-tree request if tree contains less than $maximumNodesCount nodes")
             subTree.baseNodeBuilder.addNodes(currentNode)
             subTree.visibleDepth = getMaxDepthRecursively(subTree.baseNodeBuilder, 0)
         }

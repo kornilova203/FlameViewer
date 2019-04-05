@@ -86,6 +86,7 @@ class FierixToCallTreeConverter(private val file: File, private val logger: Flam
     }
 
     companion object {
+        const val EXTENSION = "fierix"
         private fun hashMapToTrees(trees: Map<Long, CTBuilder>,
                                    startTimeOfFirstThread: Long): TreesProtos.Trees {
             val treesBuilder = TreesProtos.Trees.newBuilder()
@@ -100,6 +101,13 @@ class FierixToCallTreeConverter(private val file: File, private val logger: Flam
             return if (treesBuilder.treesCount == 0) {
                 throw ConversionException("Failed to read fierix file. Call tree contains 0 nodes.")
             } else treesBuilder.build()
+        }
+
+        fun isFierixExtension(extension: String?): Boolean {
+            /* .ser is an old deprecated extension */
+            if (extension == null) return false
+            val lower = extension.toLowerCase()
+            return lower == EXTENSION || lower == "ser"
         }
     }
 }

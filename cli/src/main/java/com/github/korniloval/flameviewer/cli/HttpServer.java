@@ -45,17 +45,15 @@ class HttpServer {
         }
     }
 
-    public static class HttpServerHandler extends SimpleChannelInboundHandler<HttpObject> {
+    public static class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
 
         @Override
-        protected void channelRead0(ChannelHandlerContext ctx, HttpObject msg) {
-            if (msg instanceof LastHttpContent) {
-                ByteBuf content = Unpooled.copiedBuffer("Hello World.", CharsetUtil.UTF_8);
-                FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK, content);
-                response.headers().set(HttpHeaderNames.CONTENT_TYPE, "text/plain");
-                response.headers().set(HttpHeaderNames.CONTENT_LENGTH, content.readableBytes());
-                ctx.write(response);
-            }
+        protected void channelRead0(ChannelHandlerContext ctx, FullHttpRequest request) {
+            ByteBuf content = Unpooled.copiedBuffer("Hello World.", CharsetUtil.UTF_8);
+            FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK, content);
+            response.headers().set(HttpHeaderNames.CONTENT_TYPE, "text/plain");
+            response.headers().set(HttpHeaderNames.CONTENT_LENGTH, content.readableBytes());
+            ctx.write(response);
         }
 
         @Override

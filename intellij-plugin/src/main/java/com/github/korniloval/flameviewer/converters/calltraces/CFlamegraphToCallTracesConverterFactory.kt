@@ -60,7 +60,7 @@ class CFlamegraphToCallTracesConverterFactory : ToCallTracesIdentifiedConverterF
     override val id = EXTENSION
 
     /**
-     * Simply checks EXTENSION.
+     * Simply checks extension.
      * There is not need to validate the file because cflamegraph format is known only by the plugin.
      */
     override fun isSupported(file: File): Boolean {
