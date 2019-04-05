@@ -66,7 +66,7 @@ Detailed description at <a href="https://github.com/kornilova-l/FlameViewer">git
     </extensionPoints>
 
     <extensions defaultExtensionNs="com.intellij">
-        <httpRequestHandler implementation="com.github.korniloval.flameviewer.FlameViewerRequestHandler"/>
+        <httpRequestHandler implementation="com.github.korniloval.flameviewer.IntellijRequestHandler"/>
     </extensions>
 
     <extensions defaultExtensionNs="com.github.kornilovaL.flamegraphProfiler">

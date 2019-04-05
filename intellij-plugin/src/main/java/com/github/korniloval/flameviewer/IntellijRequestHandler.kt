@@ -1,6 +1,8 @@
 package com.github.korniloval.flameviewer
 
-import com.github.korniloval.flameviewer.converters.trees.IntellijToTreesSetConverterFactory
+import com.github.korniloval.flameviewer.converters.calltraces.IntellijToCallTracesConverterFactory
+import com.github.korniloval.flameviewer.converters.calltree.IntellijToCallTreeConverterFactory
+import com.github.korniloval.flameviewer.converters.trees.ToTreesSetConverterFactory
 import com.github.korniloval.flameviewer.converters.trees.TreeType.BACK_TRACES
 import com.github.korniloval.flameviewer.converters.trees.TreeType.CALL_TRACES
 import com.github.korniloval.flameviewer.handlers.*
@@ -13,9 +15,9 @@ import io.netty.handler.codec.http.HttpMethod
 import io.netty.handler.codec.http.QueryStringDecoder
 import org.jetbrains.ide.HttpRequestHandler
 
-class FlameViewerRequestHandler : HttpRequestHandler() {
-    private val logger = LoggerAdapter(Logger.getInstance(FlameViewerRequestHandler::class.java))
-    private val treeManager = TreeManager(IntellijToTreesSetConverterFactory)
+class IntellijRequestHandler : HttpRequestHandler() {
+    private val logger = LoggerAdapter(Logger.getInstance(IntellijRequestHandler::class.java))
+    private val treeManager = TreeManager(ToTreesSetConverterFactory(IntellijToCallTreeConverterFactory, IntellijToCallTracesConverterFactory))
     private val findFile: FindFile = { name -> PluginFileManager.getLogFile(name) }
     private val handler = DelegatingRequestHandler(
             mapOf(FILE_LIST to FileListHandler(logger),
