@@ -1,4 +1,4 @@
-package com.github.korniloval.flameviewer.converters.calltree.fierix;
+package com.github.korniloval.flameviewer.converters.calltree;
 
 import com.github.korniloval.flameviewer.converters.trees.TreesSet;
 import com.github.korniloval.flameviewer.converters.trees.TreesUtil;

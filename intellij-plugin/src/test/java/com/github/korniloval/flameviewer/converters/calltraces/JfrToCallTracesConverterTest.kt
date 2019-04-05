@@ -1,8 +1,9 @@
-package com.github.korniloval.flameviewer.converters.calltraces.jfr
+package com.github.korniloval.flameviewer.converters.calltraces
 
 import com.github.korniloval.flameviewer.converters.ConverterTestCase
+import com.github.korniloval.flameviewer.converters.ResultType.CALLTRACES
 
-class JfrToCallTracesConverterTest : ConverterTestCase("jfr", "trees/outgoing-calls") {
+class JfrToCallTracesConverterTest : ConverterTestCase("jfr", CALLTRACES) {
 
     fun testJmc5() = doTest()
 

@@ -1,7 +1,7 @@
-package com.github.korniloval.flameviewer.converters.calltraces.yourkit.csv
+package com.github.korniloval.flameviewer.converters.calltraces
 
 import com.github.kornilova_l.flamegraph.proto.TreeProtos
-import com.github.korniloval.flameviewer.converters.calltraces.ToCallTracesConverter
+import com.github.korniloval.flameviewer.converters.Converter
 import com.github.korniloval.flameviewer.converters.trees.TreesUtil
 import com.github.korniloval.flameviewer.converters.trees.TreesUtil.parsePositiveInt
 import com.github.korniloval.flameviewer.converters.trees.TreesUtil.parsePositiveLong
@@ -14,7 +14,7 @@ import java.util.*
 
 @Deprecated("When a new csv file is added it's converted with YourkitCsvToCFlamegraphConverterFactory. " +
         "This converter is to support already uploaded csv files.")
-class YourkitToCallTracesConverter(private val file: File) : ToCallTracesConverter {
+class YourkitToCallTracesConverter(private val file: File) : Converter<TreeProtos.Tree> {
     private val uniqueStringsClassName = UniqueStringsKeeper()
     private val uniqueStringsMethodName = UniqueStringsKeeper()
     private val uniqueStringsDesc = UniqueStringsKeeper()

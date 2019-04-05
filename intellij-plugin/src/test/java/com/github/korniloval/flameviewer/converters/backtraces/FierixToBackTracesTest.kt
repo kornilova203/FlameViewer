@@ -1,8 +1,9 @@
-package com.github.korniloval.flameviewer.converters.backtraces.fierix
+package com.github.korniloval.flameviewer.converters.backtraces
 
 import com.github.korniloval.flameviewer.converters.ConverterTestCase
+import com.github.korniloval.flameviewer.converters.ResultType.BACKTRACES
 
-class FierixToBackTracesTest : ConverterTestCase("fierix", "trees/incoming-calls") {
+class FierixToBackTracesTest : ConverterTestCase("fierix", BACKTRACES) {
     fun testTwoThreads() {
         doTest(include = "*")
         doTest(exclude = "*")

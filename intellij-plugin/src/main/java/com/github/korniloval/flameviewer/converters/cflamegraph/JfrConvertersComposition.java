@@ -4,10 +4,8 @@ import com.github.kornilova_l.flight_parser.FlightParser;
 import com.github.korniloval.flameviewer.FlameLogger;
 import com.github.korniloval.flameviewer.LoggerAdapter;
 import com.github.korniloval.flameviewer.converters.ConversionException;
-import com.github.korniloval.flameviewer.converters.ConvertersUtilKt;
-import com.github.korniloval.flameviewer.converters.calltraces.flamegraph.StacksParser;
-import com.github.korniloval.flameviewer.converters.cflamegraph.jfr.JfrToStacksConverter;
-import com.github.korniloval.flameviewer.converters.cflamegraph.jfr.StacksToCFlamegraphConverter;
+import com.github.korniloval.flameviewer.converters.Converter;
+import com.github.korniloval.flameviewer.converters.calltraces.StacksParser;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.configurations.SimpleJavaParameters;
@@ -17,7 +15,6 @@ import com.intellij.openapi.projectRoots.SimpleJavaSdkType;
 import com.intellij.util.PathUtil;
 import com.intellij.util.PathsList;
 import com.intellij.util.SystemProperties;
-import kotlin.Unit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -36,7 +33,7 @@ import static com.github.korniloval.flameviewer.converters.ConvertersUtilKt.getB
 /**
  * @author Liudmila Kornilova
  **/
-class JfrConvertersComposition implements ToCFlamegraphConverter {
+class JfrConvertersComposition implements Converter<CFlamegraph> {
     private static final FlameLogger logger = new LoggerAdapter(Logger.getInstance(JfrConvertersComposition.class));
     @SuppressWarnings("FieldCanBeLocal")
     private int allowedSize = 20000000; // 20MB

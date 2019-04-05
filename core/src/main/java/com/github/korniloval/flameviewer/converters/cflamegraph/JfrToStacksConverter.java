@@ -1,4 +1,4 @@
-package com.github.korniloval.flameviewer.converters.cflamegraph.jfr;
+package com.github.korniloval.flameviewer.converters.cflamegraph;
 
 import com.github.kornilova_l.flight_parser.FlightParser;
 import com.github.korniloval.flameviewer.converters.Converter;

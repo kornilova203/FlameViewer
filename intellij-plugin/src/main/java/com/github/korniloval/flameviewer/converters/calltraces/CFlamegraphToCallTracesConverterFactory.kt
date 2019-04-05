@@ -1,6 +1,5 @@
 package com.github.korniloval.flameviewer.converters.calltraces
 
-import com.github.korniloval.flameviewer.converters.calltraces.cflamegraph.CFlamegraphToCallTracesConverter
 import com.intellij.openapi.util.text.StringUtil
 import com.intellij.util.PathUtil
 import java.io.File

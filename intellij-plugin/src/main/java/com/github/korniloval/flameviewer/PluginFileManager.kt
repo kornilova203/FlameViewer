@@ -1,6 +1,6 @@
 package com.github.korniloval.flameviewer
 
-import com.github.korniloval.flameviewer.converters.calltree.fierix.FierixToCallTreeConverter
+import com.github.korniloval.flameviewer.converters.calltree.FierixToCallTreeConverter
 import com.github.korniloval.flameviewer.server.NAME
 import com.intellij.openapi.application.PathManager
 import com.intellij.openapi.diagnostic.Logger

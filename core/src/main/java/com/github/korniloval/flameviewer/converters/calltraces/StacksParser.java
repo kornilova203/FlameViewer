@@ -1,4 +1,4 @@
-package com.github.korniloval.flameviewer.converters.calltraces.flamegraph;
+package com.github.korniloval.flameviewer.converters.calltraces;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

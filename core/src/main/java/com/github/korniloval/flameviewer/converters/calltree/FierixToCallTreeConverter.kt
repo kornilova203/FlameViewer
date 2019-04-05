@@ -1,17 +1,17 @@
-package com.github.korniloval.flameviewer.converters.calltree.fierix
+package com.github.korniloval.flameviewer.converters.calltree
 
 import com.github.kornilova_l.flamegraph.proto.EventProtos
 import com.github.kornilova_l.flamegraph.proto.TreesProtos
 import com.github.korniloval.flameviewer.FlameLogger
 import com.github.korniloval.flameviewer.converters.ConversionException
-import com.github.korniloval.flameviewer.converters.calltree.ToCallTreeConverter
+import com.github.korniloval.flameviewer.converters.Converter
 import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
 import java.io.InputStream
 import java.util.*
 
-class FierixToCallTreeConverter(private val file: File, private val logger: FlameLogger) : ToCallTreeConverter {
+class FierixToCallTreeConverter(private val file: File, private val logger: FlameLogger) : Converter<TreesProtos.Trees> {
     private val treesMap = HashMap<Long, CTBuilder>()
     private val classNames = HashMap<Long, String>()
     private val threadsNames = HashMap<Long, String>()

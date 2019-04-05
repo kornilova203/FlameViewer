@@ -1,6 +1,5 @@
 package com.github.korniloval.flameviewer.converters.cflamegraph
 
-import com.github.korniloval.flameviewer.converters.cflamegraph.yourkit.csv.YourkitCsvToCFlamegraphConverter
 import com.intellij.openapi.util.text.StringUtil
 import com.intellij.util.PathUtil
 import java.io.BufferedReader

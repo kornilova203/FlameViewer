@@ -1,16 +1,16 @@
-package com.github.korniloval.flameviewer.converters.calltraces.cflamegraph
+package com.github.korniloval.flameviewer.converters.calltraces
 
 import com.github.kornilova_l.flamegraph.proto.TreeProtos
 import com.github.korniloval.flameviewer.cflamegraph.Node
 import com.github.korniloval.flameviewer.cflamegraph.Tree
-import com.github.korniloval.flameviewer.converters.calltraces.ToCallTracesConverter
+import com.github.korniloval.flameviewer.converters.Converter
 import com.github.korniloval.flameviewer.converters.trees.TreesUtil
 import java.io.File
 import java.nio.ByteBuffer
 import java.util.*
 
 
-class CFlamegraphToCallTracesConverter(file: File) : ToCallTracesConverter {
+class CFlamegraphToCallTracesConverter(file: File) : Converter<TreeProtos.Tree> {
     private val cflamegraphTree: Tree = Tree.getRootAsTree(ByteBuffer.wrap(file.readBytes()))
     private val classNames: Map<Int, String>
     private val methodNames: Map<Int, String>

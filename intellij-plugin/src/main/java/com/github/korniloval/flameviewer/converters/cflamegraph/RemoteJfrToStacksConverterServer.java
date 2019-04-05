@@ -1,7 +1,6 @@
 package com.github.korniloval.flameviewer.converters.cflamegraph;
 
-import com.github.korniloval.flameviewer.converters.calltraces.flamegraph.StacksParser;
-import com.github.korniloval.flameviewer.converters.cflamegraph.jfr.JfrToStacksConverter;
+import com.github.korniloval.flameviewer.converters.calltraces.StacksParser;
 
 import java.io.File;
 import java.util.Map;

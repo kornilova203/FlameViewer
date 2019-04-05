@@ -1,4 +1,4 @@
-package com.github.korniloval.flameviewer.converters.calltraces.flamegraph
+package com.github.korniloval.flameviewer.converters.calltraces
 
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree
 import com.github.korniloval.flameviewer.converters.FramesParsingUtil.getClassName

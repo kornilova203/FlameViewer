@@ -1,14 +1,14 @@
 package com.github.korniloval.flameviewer.converters.trees
 
+import com.github.kornilova_l.flamegraph.proto.TreeProtos
+import com.github.kornilova_l.flamegraph.proto.TreesProtos
 import com.github.korniloval.flameviewer.converters.ConversionException
 import com.github.korniloval.flameviewer.converters.Converter
 import com.github.korniloval.flameviewer.converters.ConverterFactory
-import com.github.korniloval.flameviewer.converters.calltraces.ToCallTracesConverterFactory
-import com.github.korniloval.flameviewer.converters.calltree.ToCallTreeConverterFactory
 import java.io.File
 
-class ToTreesSetConverterFactory(private val toCallTree: ToCallTreeConverterFactory,
-                                 private val toCallTraces: ToCallTracesConverterFactory) : ConverterFactory<TreesSet> {
+class ToTreesSetConverterFactory(private val toCallTree: ConverterFactory<TreesProtos.Trees>,
+                                 private val toCallTraces: ConverterFactory<TreeProtos.Tree>) : ConverterFactory<TreesSet> {
     @Throws(ConversionException::class)
     override fun create(file: File): Converter<TreesSet>? {
         val toCallTreeConverter = toCallTree.create(file)

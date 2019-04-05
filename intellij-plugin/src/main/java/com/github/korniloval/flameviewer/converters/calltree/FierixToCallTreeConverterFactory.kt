@@ -2,9 +2,8 @@ package com.github.korniloval.flameviewer.converters.calltree
 
 import com.github.korniloval.flameviewer.FlameLogger
 import com.github.korniloval.flameviewer.LoggerAdapter
-import com.github.korniloval.flameviewer.converters.calltree.fierix.FierixToCallTreeConverter
-import com.github.korniloval.flameviewer.converters.calltree.fierix.FierixToCallTreeConverter.Companion.EXTENSION
-import com.github.korniloval.flameviewer.converters.calltree.fierix.FierixToCallTreeConverter.Companion.isFierixExtension
+import com.github.korniloval.flameviewer.converters.calltree.FierixToCallTreeConverter.Companion.EXTENSION
+import com.github.korniloval.flameviewer.converters.calltree.FierixToCallTreeConverter.Companion.isFierixExtension
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.util.PathUtil
 import java.io.File

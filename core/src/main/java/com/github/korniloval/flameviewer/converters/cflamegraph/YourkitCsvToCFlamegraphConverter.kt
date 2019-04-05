@@ -1,10 +1,10 @@
-package com.github.korniloval.flameviewer.converters.cflamegraph.yourkit.csv
+package com.github.korniloval.flameviewer.converters.cflamegraph
 
+import com.github.korniloval.flameviewer.converters.Converter
 import com.github.korniloval.flameviewer.converters.FramesParsingUtil.getClassName
 import com.github.korniloval.flameviewer.converters.FramesParsingUtil.getDescription
 import com.github.korniloval.flameviewer.converters.FramesParsingUtil.getLastSpacePosBeforeParams
 import com.github.korniloval.flameviewer.converters.FramesParsingUtil.getMethodName
-import com.github.korniloval.flameviewer.converters.cflamegraph.*
 import com.github.korniloval.flameviewer.converters.trees.TreesUtil.parsePositiveInt
 import java.io.BufferedReader
 import java.io.File
@@ -12,7 +12,7 @@ import java.io.FileReader
 import java.util.*
 
 
-class YourkitCsvToCFlamegraphConverter(private val file: File) : ToCFlamegraphConverter {
+class YourkitCsvToCFlamegraphConverter(private val file: File) : Converter<CFlamegraph> {
     private val cFlamegraphLines = ArrayList<CFlamegraphLine>()
     private val classNames = HashMap<String, Int>()
     private val methodNames = HashMap<String, Int>()

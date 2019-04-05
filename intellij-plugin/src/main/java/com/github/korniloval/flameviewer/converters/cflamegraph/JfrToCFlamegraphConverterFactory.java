@@ -1,5 +1,6 @@
 package com.github.korniloval.flameviewer.converters.cflamegraph;
 
+import com.github.korniloval.flameviewer.converters.Converter;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.util.PathUtil;
 import org.jetbrains.annotations.NotNull;
@@ -11,7 +12,7 @@ public class JfrToCFlamegraphConverterFactory implements ToCFlamegraphConverterF
 
     @Nullable
     @Override
-    public ToCFlamegraphConverter create(@NotNull File file) {
+    public Converter<CFlamegraph> create(@NotNull File file) {
         if (!isSupported(file)) return null;
         return new JfrConvertersComposition(file);
     }

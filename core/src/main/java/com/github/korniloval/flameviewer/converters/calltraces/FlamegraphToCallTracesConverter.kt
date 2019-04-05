@@ -1,15 +1,15 @@
-package com.github.korniloval.flameviewer.converters.calltraces.flamegraph
+package com.github.korniloval.flameviewer.converters.calltraces
 
 import com.github.kornilova_l.flamegraph.proto.TreeProtos
 import com.github.korniloval.flameviewer.converters.ConversionException
-import com.github.korniloval.flameviewer.converters.calltraces.ToCallTracesConverter
-import com.github.korniloval.flameviewer.converters.calltraces.flamegraph.StacksParser.getStacks
+import com.github.korniloval.flameviewer.converters.Converter
+import com.github.korniloval.flameviewer.converters.calltraces.StacksParser.getStacks
 import java.io.File
 
 /**
  * @author Liudmila Kornilova
  **/
-class FlamegraphToCallTracesConverter(private val file: File) : ToCallTracesConverter {
+class FlamegraphToCallTracesConverter(private val file: File) : Converter<TreeProtos.Tree> {
     @Throws(ConversionException::class)
     override fun convert(): TreeProtos.Tree {
         val stacks = getStacks(file) ?: throw ConversionException("Cannot get stacks from file")

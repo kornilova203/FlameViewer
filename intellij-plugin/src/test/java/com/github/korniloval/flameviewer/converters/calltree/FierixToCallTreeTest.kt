@@ -1,8 +1,9 @@
-package com.github.korniloval.flameviewer.converters.calltree.fierix
+package com.github.korniloval.flameviewer.converters.calltree
 
 import com.github.korniloval.flameviewer.converters.ConverterTestCase
+import com.github.korniloval.flameviewer.converters.ResultType.CALLTREE
 
-class FierixToCallTreeTest : ConverterTestCase("fierix", "trees/call-tree") {
+class FierixToCallTreeTest : ConverterTestCase("fierix", CALLTREE) {
     fun testFileWithWeirdName() = doTest(fileName = "twoDots.and space")
 
     fun testSimpleTree() {

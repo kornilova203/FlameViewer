@@ -1,8 +1,9 @@
-package com.github.korniloval.flameviewer.converters.calltraces.fierix
+package com.github.korniloval.flameviewer.converters.calltraces
 
 import com.github.korniloval.flameviewer.converters.ConverterTestCase
+import com.github.korniloval.flameviewer.converters.ResultType.CALLTRACES
 
-class FierixToCallTracesTest : ConverterTestCase("fierix", "trees/outgoing-calls") {
+class FierixToCallTracesTest : ConverterTestCase("fierix", CALLTRACES) {
     fun testClassWithoutPackage() {
         doTest()
         doTest(className = "ClassWithoutPackage", methodName = "fun1", description = "()void")

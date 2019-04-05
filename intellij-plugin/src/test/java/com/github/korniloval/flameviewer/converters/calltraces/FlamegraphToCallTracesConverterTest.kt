@@ -1,13 +1,14 @@
-package com.github.korniloval.flameviewer.converters.calltraces.flamegraph
+package com.github.korniloval.flameviewer.converters.calltraces
 
 import com.github.kornilova_l.flamegraph.proto.TreeProtos
 import com.github.korniloval.flameviewer.PluginFileManager
 import com.github.korniloval.flameviewer.converters.ConverterTestCase
+import com.github.korniloval.flameviewer.converters.ResultType.CALLTRACES
 import com.github.korniloval.flameviewer.converters.TreeGenerator
 import java.io.ByteArrayInputStream
 import java.io.File
 
-class FlamegraphToCallTracesConverterTest : ConverterTestCase("flamegraph", "trees/outgoing-calls") {
+class FlamegraphToCallTracesConverterTest : ConverterTestCase("flamegraph", CALLTRACES) {
 
     fun testOneStacktrace() = doTest()
 

@@ -1,15 +1,16 @@
 package com.github.korniloval.flameviewer.converters.calltraces;
 
+import com.github.kornilova_l.flamegraph.proto.TreeProtos;
 import com.github.korniloval.flameviewer.FlameLogger;
 import com.github.korniloval.flameviewer.LoggerAdapter;
-import com.github.korniloval.flameviewer.converters.calltraces.flamegraph.FlamegraphToCallTracesConverter;
+import com.github.korniloval.flameviewer.converters.Converter;
 import com.intellij.openapi.diagnostic.Logger;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 
 import static com.github.korniloval.flameviewer.converters.ConvertersUtilKt.getBytes;
-import static com.github.korniloval.flameviewer.converters.calltraces.flamegraph.StacksParser.isFlamegraph;
+import static com.github.korniloval.flameviewer.converters.calltraces.StacksParser.isFlamegraph;
 
 /**
  * Converts file in flamegraph format to call traces.
@@ -37,7 +38,7 @@ public class FlamegraphToCallTracesConverterFactory implements ToCallTracesIdent
 
     @NotNull
     @Override
-    public ToCallTracesConverter create(@NotNull File file) {
+    public Converter<TreeProtos.Tree> create(@NotNull File file) {
         return new FlamegraphToCallTracesConverter(file);
     }
 }

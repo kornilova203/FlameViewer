@@ -1,13 +1,13 @@
-package com.github.korniloval.flameviewer.converters.cflamegraph.jfr
+package com.github.korniloval.flameviewer.converters.cflamegraph
 
+import com.github.korniloval.flameviewer.converters.Converter
 import com.github.korniloval.flameviewer.converters.FramesParsingUtil
 import com.github.korniloval.flameviewer.converters.FramesParsingUtil.getClassName
 import com.github.korniloval.flameviewer.converters.FramesParsingUtil.getDescription
 import com.github.korniloval.flameviewer.converters.FramesParsingUtil.getMethodName
-import com.github.korniloval.flameviewer.converters.cflamegraph.*
 import java.util.*
 
-class StacksToCFlamegraphConverter(private val stacks: Map<String, Int>) : ToCFlamegraphConverter {
+class StacksToCFlamegraphConverter(private val stacks: Map<String, Int>) : Converter<CFlamegraph> {
 
     override fun convert(): CFlamegraph {
         val cflamegraphLines = ArrayList<CFlamegraphLine>()

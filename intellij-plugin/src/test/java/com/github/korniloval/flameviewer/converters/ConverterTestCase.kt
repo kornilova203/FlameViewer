@@ -5,32 +5,24 @@ import com.github.korniloval.flameviewer.UploadFileUtil
 import com.github.kornilova_l.flamegraph.proto.TreeProtos
 import com.github.kornilova_l.flamegraph.proto.TreesPreviewProtos
 import com.github.kornilova_l.flamegraph.proto.TreesProtos
+import com.github.korniloval.flameviewer.converters.ResultType.CALLTREE
+import com.github.korniloval.flameviewer.converters.ResultType.PREVIEW
+import com.github.korniloval.flameviewer.converters.ResultType.HOTSPOTS
 import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase
 import java.io.ByteArrayInputStream
 import java.io.File
 import java.net.HttpURLConnection
 
-abstract class ConverterTestCase(private val fileExtension: String, private val type: String) : LightPlatformCodeInsightFixtureTestCase() {
+abstract class ConverterTestCase(private val fileExtension: String, private val resultType: ResultType) : LightPlatformCodeInsightFixtureTestCase() {
 
     private val commonSourceFilesPath = "src/test/resources/profiler-files"
 
-    private fun getClassNameUniquePart(): String {
-        val className = this::class.java.canonicalName
-        return className.substring("com.github.korniloval.flameviewer.converters.".length, className.lastIndexOf('.'))
-    }
-
     override fun getTestDataPath(): String {
-        val relativePath = getClassNameUniquePart().replace('.', '/')
-        return "src/test/resources/$relativePath"
-    }
-
-    private fun getId(): String {
-        val classNameUniquePart = getClassNameUniquePart()
-        return classNameUniquePart.substring(classNameUniquePart.lastIndexOf('.') + 1)
+        return "src/test/resources/${resultType.name.toLowerCase()}/$fileExtension"
     }
 
     protected fun getProfilerFilesPath(): String {
-        return "$commonSourceFilesPath/${getId()}"
+        return "$commonSourceFilesPath/$fileExtension"
     }
 
     protected fun getTreeBytes(path: List<Int> = ArrayList(), className: String? = null,
@@ -56,10 +48,10 @@ abstract class ConverterTestCase(private val fileExtension: String, private val 
 
         val bytes = getTreeBytes(path, className, methodName, description, fileName, include, exclude)
 
-        val actual = when (type) {
-            "trees/call-tree" -> TreesProtos.Trees.parseFrom(ByteArrayInputStream(bytes)).toString()
-            "trees/call-tree/preview" -> TreesPreviewProtos.TreesPreview.parseFrom(ByteArrayInputStream(bytes)).toString()
-            "hot-spots-json" -> String(bytes).replace("},{", "},\n{")
+        val actual = when (resultType) {
+            CALLTREE -> TreesProtos.Trees.parseFrom(ByteArrayInputStream(bytes)).toString()
+            PREVIEW -> TreesPreviewProtos.TreesPreview.parseFrom(ByteArrayInputStream(bytes)).toString()
+            HOTSPOTS -> String(bytes).replace("},{", "},\n{")
             else -> TreeProtos.Tree.parseFrom(ByteArrayInputStream(bytes)).toString()
         }
 
@@ -85,7 +77,7 @@ abstract class ConverterTestCase(private val fileExtension: String, private val 
                                    methodName: String?, description: String?,
                                    include: String?, exclude: String?): ByteArray {
         val urlBuilder = UploadFileUtil.getUrlBuilderBase()
-                .addPathSegments(type)
+                .addPathSegments(resultType.url)
                 .addQueryParameter("file", fileName)
                 .addQueryParameter("project", "uploaded-files")
         path.forEach { index -> urlBuilder.addQueryParameter("path", index.toString()) }

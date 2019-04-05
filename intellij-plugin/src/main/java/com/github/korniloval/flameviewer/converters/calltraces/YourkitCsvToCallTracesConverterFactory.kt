@@ -1,6 +1,5 @@
 package com.github.korniloval.flameviewer.converters.calltraces
 
-import com.github.korniloval.flameviewer.converters.calltraces.yourkit.csv.YourkitToCallTracesConverter
 import com.github.korniloval.flameviewer.converters.cflamegraph.YourkitCsvToCFlamegraphConverterFactory.Companion.isYourkitCsv
 import java.io.File
 
