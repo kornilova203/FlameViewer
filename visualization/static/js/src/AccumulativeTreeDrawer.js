@@ -167,7 +167,6 @@ module.exports.AccumulativeTreeDrawer = class AccumulativeTreeDrawer extends Tre
      */
     getTreeGETParameters(pathToNode) {
         return common.getParametersString({
-            project: constants.projectName,
             file: constants.fileName,
             path: pathToNode
         });

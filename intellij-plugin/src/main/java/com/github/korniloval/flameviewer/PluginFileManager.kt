@@ -166,7 +166,7 @@ object PluginFileManager {
          * (name of a directory is an id of converter that is responsible for the file)
          * when we move file to temporal directory we want to save converter id,
          * so if delete action is undone we can move file back to needed directory */
-        if (file.parentFile?.parentFile?.name != "uploaded-files") {
+        if (file.parentFile?.parentFile?.name != UPLOADED_FILES) {
             file.renameTo(Paths.get(logDirPath.toString(), DELETED_FILES, fileName).toFile())
             return
         }

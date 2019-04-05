@@ -148,16 +148,19 @@ const common = {
      * @param {Object} parameters
      */
     redirect: (parameters) => {
-        window.location.href = `${serverNames.MAIN_NAME}/${constants.pageName}?${common.getParametersString(parameters)}`
+        const parametersString = common.getParametersString(parameters);
+        const res = `${serverNames.MAIN_NAME}/${constants.pageName}`;
+
+        if (parametersString.length === 0) window.location.href = res;
+        else window.location.href = `${res}?${parametersString}`
     },
 
     /**
      * @param {String} fileName
-     * @param {String} projectName
      * @param {Function} callbackIfExists
      * @param {Function} callbackIfDoesNotExist
      */
-    doCallbackIfFileExists: (fileName, projectName, callbackIfExists, callbackIfDoesNotExist) => {
+    doCallbackIfFileExists: (fileName, callbackIfExists, callbackIfDoesNotExist) => {
         const request = new XMLHttpRequest();
         request.onload = () => {
             if (request.status === 302) { // if was found
@@ -169,7 +172,6 @@ const common = {
             }
         };
         request.open("GET", serverNames.DOES_FILE_EXIST, true);
-        request.setRequestHeader('Project-Name', projectName);
         try {
             request.setRequestHeader('File-Name', fileName);
         } catch (err) {
@@ -215,7 +217,6 @@ const constants = {
     $loaderMessageP: null,
     $arrowLeft: null,
     $arrowRight: null,
-    projectName: common.getParameter("project") === undefined ? undefined : decodeURIComponent(common.getParameter("project")),
     fileName: common.getParameter("file") === undefined ? undefined : decodeURIComponent(common.getParameter("file")),
     $removeFilesButton: null,
     $fullFileName: null,
@@ -239,7 +240,6 @@ const constants = {
             "But you can see back traces for any method, there are two ways to do it:</br>" +
             "* Open Call Traces page, click on back traces icon on method popup</br>" +
             "* Open Hot Spots page, click on back traces icon beside any method that you like",
-        chooseFile: "Choose file",
         chooseOrUploadFile: "Choose or upload file",
         noCallRegistered: "No call was registered or all methods took <1ms",
         callTreeUnavailable: "Call tree is unavailable for this file"
@@ -252,7 +252,6 @@ const _CALL_TREE_JS_REQUEST = _MAIN_NAME + "/trees/call-tree";
 const serverNames = {
     MAIN_NAME: _MAIN_NAME,
     FILE_LIST: _MAIN_NAME + "/file-list",
-    LIST_PROJECTS: _MAIN_NAME + "/list-projects",
     CALL_TREE_JS_REQUEST: _CALL_TREE_JS_REQUEST,
     CALL_TREE_PREVIEW_JS_REQUEST: _CALL_TREE_JS_REQUEST + "/preview",
     OUTGOING_CALLS: _MAIN_NAME + "/outgoing-calls",

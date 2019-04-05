@@ -55,7 +55,6 @@ class FilesUploaderTest : LightPlatformCodeInsightFixtureTestCase() {
         connection.requestMethod = "GET"
 
         connection.setRequestProperty("File-Name", fileName)
-        connection.setRequestProperty("Project-Name", "uploaded-files")
 
         return connection.responseCode
     }

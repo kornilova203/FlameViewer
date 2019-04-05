@@ -79,7 +79,6 @@ abstract class ConverterTestCase(private val fileExtension: String, private val 
         val urlBuilder = UploadFileUtil.getUrlBuilderBase()
                 .addPathSegments(resultType.url)
                 .addQueryParameter("file", fileName)
-                .addQueryParameter("project", "uploaded-files")
         path.forEach { index -> urlBuilder.addQueryParameter("path", index.toString()) }
 
         if (className != null && methodName != null && description != null) {

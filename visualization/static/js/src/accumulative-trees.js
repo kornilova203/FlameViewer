@@ -128,10 +128,9 @@ $(window).on("load", function () {
         common.showLoader(constants.loaderMessages.buildingTree, () => {
             common.doCallbackIfFileExists(
                 constants.fileName,
-                constants.projectName,
                 sendRequestForTree,
                 () => { // if does not exist
-                    common.redirect({project: constants.projectName})
+                    common.redirect({})
                 }
             );
         });

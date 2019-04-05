@@ -22,7 +22,7 @@ class FileUploader {
         }
         const that = this;
         /* upload file if it was not previously uploaded */
-        common.doCallbackIfFileExists(this.file.name, constants.projectName,
+        common.doCallbackIfFileExists(this.file.name,
             () => {
                 common.showError("File already exists");
             },
@@ -69,7 +69,7 @@ class FileUploader {
         const that = this;
         if (success) {
             console.log("File was sent");
-            common.doCallbackIfFileExists(this.file.name, constants.projectName,
+            common.doCallbackIfFileExists(this.file.name,
                 () => {
                     redirectToFile(that.file.name); // reload to new file
                 },
@@ -100,7 +100,7 @@ class JfrUploader extends FileUploader {
  * @param name
  */
 function redirectToFile(name) {
-    window.location.href = `${serverNames.MAIN_NAME}/${constants.pageName}?file=${encodeURIComponent(name)}&project=${encodeURIComponent(constants.projectName)}`
+    window.location.href = `${serverNames.MAIN_NAME}/${constants.pageName}?file=${encodeURIComponent(name)}}`
 }
 
 /**

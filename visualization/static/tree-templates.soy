@@ -132,7 +132,6 @@
 
 /**
  * Generate list of files
- * @param projectName
  * @param pageName
  * @param file
  */
@@ -140,7 +139,7 @@
 <li id="{$file.id}">
     <input id="checkbox-{$file.id}" class="file-checkbox" name="{$file.id}" type="checkbox">
     <label for="checkbox-{$file.id}" class="file-checkbox-label"></label>
-  <a href="/FlameViewer/{$pageName}?file={$file.fullName}&amp;project={$projectName}">
+  <a href="/FlameViewer/{$pageName}?file={$file.fullName}">
         <p>{$file.name}<br><span>{$file.date}</span></p>
     </a>
 </li>
@@ -174,16 +173,15 @@
  * @param parameters
  * @param relativeTime
  * @param fileName
- * @param projectName
  * @param desc
  */
 {template .hotSpot}
 <div class="hot-spot">
     <!--suppress HtmlUnknownTarget -->
-  <a href="/FlameViewer/outgoing-calls?file={$fileName}&amp;project={$projectName}&amp;method={$methodName}&amp;class={$className}&amp;desc={$desc}"><img
+  <a href="/FlameViewer/outgoing-calls?file={$fileName}&amp;method={$methodName}&amp;class={$className}&amp;desc={$desc}"><img
           src="img/outgoing.png"/></a>
     <!--suppress HtmlUnknownTarget -->
-  <a href="/FlameViewer/incoming-calls?file={$fileName}&amp;project={$projectName}&amp;method={$methodName}&amp;class={$className}&amp;desc={$desc}"><img
+  <a href="/FlameViewer/incoming-calls?file={$fileName}&amp;method={$methodName}&amp;class={$className}&amp;desc={$desc}"><img
           src="img/incoming.png"/></a>
     <div class="outer-time-div">
         <p class="relative-time">{$relativeTime}%</p>

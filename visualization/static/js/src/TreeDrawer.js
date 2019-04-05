@@ -471,7 +471,6 @@ module.exports.TreeDrawer = class TreeDrawer {
 
     static getGETParameters(node) {
         return common.getParametersString({
-            project: constants.projectName,
             file: constants.fileName,
             method: node.getNodeInfo().getMethodName(),
             class: node.getNodeInfo().getClassName(),

@@ -13,10 +13,9 @@ $(window).on("load", function () {
     if (constants.fileName !== undefined) {
         common.doCallbackIfFileExists(
             constants.fileName,
-            constants.projectName,
             sendRequestForTreesPreview,
             () => { // if does not exist
-                common.redirect({project: constants.projectName})
+                common.redirect({})
             }
         );
     }

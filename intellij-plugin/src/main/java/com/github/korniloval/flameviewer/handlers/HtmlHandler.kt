@@ -18,7 +18,6 @@ object HtmlHandler : RequestHandler {
                 renderPage(
                         "${decoder.path()}.html",
                         getParameter(decoder, "file"),
-                        "",
                         getParameter(decoder, "include"),
                         getParameter(decoder, "exclude")
                 )
@@ -28,19 +27,17 @@ object HtmlHandler : RequestHandler {
 
     private fun renderPage(htmlFilePath: String,
                            fileName: String?,
-                           projectName: String,
                            include: String?,
                            exclude: String?): ByteArray {
         val bytes = PluginFileManager.getStaticFile(htmlFilePath)
-                ?: throw RequestHandlingException("Cannot render page $htmlFilePath project: $projectName file $fileName include $include exclude $exclude")
+                ?: throw RequestHandlingException("Cannot render page $htmlFilePath file $fileName include $include exclude $exclude")
         val fileContent = String(bytes)
         val filterParameters = getFilterAsGetParameters(include, exclude)
         val replacement = if (fileName == null) "" else "file=$fileName&"
 
         return fileContent
                 .lines().map { line ->
-                    line.replace("{{ projectName }}", projectName)
-                            .replace("{{ fileParam }}", replacement)
+                    line.replace("{{ fileParam }}", replacement)
                             .replace("{{ filter }}", filterParameters)
                 }
                 .toList().joinToString("").toByteArray()

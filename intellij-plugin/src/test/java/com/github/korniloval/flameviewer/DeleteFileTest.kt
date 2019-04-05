@@ -14,6 +14,7 @@ import java.nio.file.Paths
 
 class DeleteFileTest : LightPlatformCodeInsightFixtureTestCase() {
     fun testDeleteSerFile() {
+        // test legacy functionality
         PluginFileManager.deleteAllUploadedFiles()
         val projectName = "my-project"
         val fileName = "file.ser"

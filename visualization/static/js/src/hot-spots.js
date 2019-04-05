@@ -2,18 +2,13 @@ let hotSpots = null;
 let iteration = 0;
 
 $(window).on("load", () => {
-    if (constants.fileName !== undefined &&
-        constants.projectName !== undefined) {
+    if (constants.fileName !== undefined) {
         loadHotSpots();
     }
 });
 
 function getRequestAddress() {
-    return serverNames.HOT_SPOTS_JS_REQUEST + "?project=" +
-        constants.projectName +
-        "&" +
-        "file=" +
-        constants.fileName;
+    return serverNames.HOT_SPOTS_JS_REQUEST + "?file=" + constants.fileName;
 }
 
 function loadHotSpots() {
@@ -80,7 +75,6 @@ function appendHotSpot(hotSpot, biggestRelativeTime) {
             parameters: hotSpot.parameters,
             relativeTime: relativeTime,
             fileName: constants.fileName,
-            projectName: constants.projectName,
             desc: desc
         }
     ).content);

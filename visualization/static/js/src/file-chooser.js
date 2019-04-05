@@ -2,11 +2,9 @@ const KEYCODE_DELETE = 46;
 
 class FilesListManager {
     /**
-     * @param {String} projectName
      * @param $fileList a place to append project list
      */
-    constructor(projectName, $fileList) {
-        this.projectName = projectName;
+    constructor($fileList) {
         this.$fileList = $fileList;
 
         /**
@@ -37,12 +35,8 @@ class FilesListManager {
         this.bindDelete();
         this.enableFilesSearch();
 
-        if (constants.projectName === "uploaded-files") {
-            appendInput(this.$fileList); // 'upload new file' input
-            listenInput();
-        } else {
-            $fileList.css("height", "calc(100vh - 130px)")
-        }
+        appendInput(this.$fileList); // 'upload new file' input
+        listenInput();
     }
 
     bindDelete() {
@@ -73,7 +67,6 @@ class FilesListManager {
                 const request = new XMLHttpRequest();
                 request.open("POST", serverNames.DELETE_FILE, true);
                 request.setRequestHeader('File-Name', fileNames[i]);
-                request.setRequestHeader('Project-Name', constants.projectName);
                 request.send();
             }
             this.showUndoDelete(fileNames, $list, selectedFilesIds);
@@ -123,7 +116,6 @@ class FilesListManager {
                 const request = new XMLHttpRequest();
                 request.open("POST", serverNames.UNDO_DELETE_FILE, true);
                 request.setRequestHeader('File-Name', fileNames[i]);
-                request.setRequestHeader('Project-Name', constants.projectName);
                 request.onload = () => {
                     this.updateFilesList();
                 };
@@ -194,7 +186,7 @@ class FilesListManager {
      */
     updateFilesList() {
         const request = new XMLHttpRequest();
-        request.open("GET", serverNames.FILE_LIST + "?project=" + this.projectName, true);
+        request.open("GET", serverNames.FILE_LIST, true);
         request.responseType = "json";
 
         request.onload = () => {
@@ -277,7 +269,6 @@ class FilesListManager {
     appendFile(fileName) {
         const $file = $(templates.tree.file({
             file: fileName,
-            projectName: constants.projectName,
             pageName: constants.pageName
         }).content);
         if (!fileName.fullName.toLowerCase().includes(this.currentSearch)) { // if is excluded by search
@@ -428,7 +419,7 @@ class FilesListManager {
 }
 
 $(window).on("load", () => {
-    const filesListManager = new FilesListManager(constants.projectName, $(".file-list"));
+    const filesListManager = new FilesListManager($(".file-list"));
     filesListManager.updateFilesList();
 
     /* check for new files */
@@ -436,7 +427,6 @@ $(window).on("load", () => {
         filesListManager.updateFilesList();
     }, 1000);
 
-    showProjectsList();
     if (constants.fileName === undefined) {
         showChooseFile();
     }
@@ -444,19 +434,13 @@ $(window).on("load", () => {
 });
 
 /**
- * @param $projectsDropdown
  * @param $fileListActions
  * @param $verticalProjectName
  * @param $loaderBackground
  */
-function showFilesList($projectsDropdown, $fileListActions,
-                       $verticalProjectName, $loaderBackground) {
+function showFilesList($fileListActions, $verticalProjectName, $loaderBackground) {
     $loaderBackground.css("left", "calc((100vw - 250px) / 2 + 250px - 80px)");
     $(".file-menu").css("width", 250);
-    $projectsDropdown.css("transition", "opacity 300ms");
-    $projectsDropdown.css("opacity", 1);
-    $projectsDropdown.css("pointer-events", "auto");
-    $projectsDropdown.css("position", "relative");
     $fileListActions.show();
     $(".file-form").show();
     constants.$arrowLeft.show();
@@ -468,43 +452,14 @@ function showFilesList($projectsDropdown, $fileListActions,
     $(".tree-preview-wrapper").removeClass("tree-preview-wrapper-without-files");
 }
 
-function showProjectsOnClick($projectsDropdown) {
-    const $content = $projectsDropdown.find(".projects-dropdown-content");
-    let isOpen = false;
-
-    function closeContent() {
-        isOpen = false;
-        $content.off();
-        $content.hide();
-        $projectsDropdown.unbind("mouseleave");
-    }
-
-    $projectsDropdown.click(() => {
-        if (!isOpen) {
-            $content.show();
-            isOpen = true;
-            $projectsDropdown.mouseleave(closeContent)
-        } else {
-            closeContent();
-        }
-    });
-}
-
 function enableHideFilesList() {
-    const $projectsDropdown = $(".projects-dropdown");
-    showProjectsOnClick($projectsDropdown);
-
     const $fileListActions = $(".file-list-actions");
     const $verticalProjectName = $(".vertical-project-name");
     const $loaderBackground = $(".loader-background");
-    $verticalProjectName.html(constants.projectName === "uploaded-files" ? "Uploaded files" : constants.projectName);
+    $verticalProjectName.html("Uploaded files");
     constants.$arrowLeft.click(() => { // hide
         $loaderBackground.css("left", "calc((100vw - 40px) / 2 + 40px - 80px)");
-        $projectsDropdown.css("opacity", 0);
         $(".file-menu").css("width", 40);
-        $projectsDropdown.css("transition", "opacity 50ms");
-        $projectsDropdown.css("pointer-events", "none");
-        $projectsDropdown.css("position", "absolute");
         $fileListActions.hide();
         $(".file-form").hide();
         constants.$arrowLeft.hide();
@@ -516,21 +471,15 @@ function enableHideFilesList() {
         $(".file-list").hide();
     });
     constants.$arrowRight.click(() => { // show
-        showFilesList($projectsDropdown, $fileListActions,
-            $verticalProjectName, $loaderBackground);
+        showFilesList($fileListActions, $verticalProjectName, $loaderBackground);
     });
     $verticalProjectName.click(() => {
-        showFilesList($projectsDropdown, $fileListActions,
-            $verticalProjectName, $loaderBackground);
+        showFilesList($fileListActions, $verticalProjectName, $loaderBackground);
     });
 }
 
 function showChooseFile() {
-    if (constants.projectName === "uploaded-files") {
-        common.showMessage(constants.pageMessages.chooseOrUploadFile);
-    } else {
-        common.showMessage(constants.pageMessages.chooseFile);
-    }
+    common.showMessage(constants.pageMessages.chooseOrUploadFile);
 }
 
 function showNoDataFound() {
@@ -548,40 +497,4 @@ function bindKey(KEY_CODE, callback) {
             callback();
         }
     });
-}
-
-function appendProject(project) {
-    if (project === constants.projectName ||
-        (project === "Uploaded files" && constants.projectName === "uploaded-files")) {
-        return;
-    }
-    const link = serverNames.MAIN_NAME + "/" +
-        constants.pageName +
-        "?project=" +
-        (project === "Uploaded files" ? "uploaded-files" : project);
-    const newElem = $(`<a href='${link}'>${project}</a>`);
-    if (project === "Uploaded files") {
-        newElem.addClass("uploaded-files-drop-down");
-    }
-    newElem.appendTo($(".projects-dropdown-content"));
-}
-
-function showProjectsList() {
-    if (constants.projectName === "uploaded-files") {
-        $(".project-name").text("Uploaded files");
-    } else {
-        $(".project-name").text(constants.projectName);
-    }
-    const request = new XMLHttpRequest();
-    request.open("GET", serverNames.LIST_PROJECTS, true);
-    request.responseType = "json";
-
-    request.onload = function () {
-        const projects = request.response;
-        for (let i = 0; i < projects.length; i++) {
-            appendProject(projects[i]);
-        }
-        appendProject("Uploaded files");
-    };
-    request.send();
 }

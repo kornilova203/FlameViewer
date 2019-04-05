@@ -409,65 +409,9 @@ nav ul li a:focus {
     color: white;
 }
 
-.dropButton {
-    height: 45px;
-    font-size: 16px;
-    border: none;
-    cursor: pointer;
-    background-color: #d0d0d0;
-    color: #111;
-    display: flex;
-    align-items: center;
-}
-
 button {
     border: none;
     cursor: pointer;
-}
-
-.projects-dropdown {
-    display: inline-block;
-    width: 100%;
-}
-
-.projects-dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #f9f9f9;
-    width: 100%;
-    overflow: hidden;
-    z-index: 1;
-    border: solid #888 1px;
-    box-sizing: border-box;
-}
-
-.projects-dropdown-content a {
-    color: black;
-    padding: 12px 30px 12px 16px;
-    text-decoration: none;
-    display: block;
-}
-
-.projects-dropdown-content a:hover {
-    background-color: #d8d8d8
-}
-
-.projects-dropdown:hover .dropButton {
-    background-color: #c4c4c4;
-}
-
-.projects-dropdown p {
-    width: 200px;
-    overflow: hidden;
-    padding-left: 20px;
-    padding-right: 10px;
-    margin: 0;
-}
-
-.drop-down-arrow {
-    position: absolute;
-    margin-top: -35px;
-    margin-left: 220px;
 }
 
 .message {
@@ -941,7 +885,7 @@ canvas {
     width: 24px;
     height: 24px;
     position: absolute;
-    top: 67px;
+    top: 22px;
     left: 200px;
 }
 

@@ -8,7 +8,6 @@ const methodFunctions = {
      */
     getTreeGETParameters: function (pathToNode) {
         return common.getParametersString({
-            project: constants.projectName,
             file: constants.fileName,
             method: this.method,
             class: this.class,
