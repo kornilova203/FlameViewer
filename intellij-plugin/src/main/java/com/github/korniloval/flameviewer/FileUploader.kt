@@ -6,8 +6,6 @@ import com.github.korniloval.flameviewer.converters.cflamegraph.CFlamegraphFileS
 import java.io.*
 import java.nio.file.Paths
 
-private const val partSize = 1_000_000 * 100 // 100MB
-
 class FileUploader {
     private val fileAccumulators = HashMap<String, FileAccumulator>()
 
@@ -89,7 +87,7 @@ class FileUploader {
         }
 
         private fun copyOnePart(outputStream: OutputStream, inputStream: InputStream) {
-            outputStream.write(inputStream.readBytes(partSize))
+            outputStream.write(inputStream.readBytes())
         }
 
         fun fullFileReceived(): Boolean = receivedParts.all { it } // all parts received

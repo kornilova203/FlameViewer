@@ -8,7 +8,6 @@ import org.jetbrains.annotations.TestOnly
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
-import java.net.URISyntaxException
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.text.SimpleDateFormat
@@ -39,7 +38,6 @@ object PluginFileManager {
     val tempFileSaver: FileSaver // save files before converting
     val logDirPath: Path // for tests
     private val uploadedFilesDir: File
-    private val staticDirPath: Path?
 
     init {
         val systemDirPath = PathManager.getSystemPath()
@@ -48,18 +46,6 @@ object PluginFileManager {
         createDirIfNotExist(pluginDir)
         logDirPath = Paths.get(pluginDir.toString(), LOG_DIR_NAME)
         createDirIfNotExist(logDirPath)
-        try {
-            val staticDirUrl = javaClass.getResource("/$STATIC_DIR_NAME")
-            if (staticDirUrl != null) {
-                staticDirPath = Paths.get(staticDirUrl.toURI())
-            } else {
-                /* happens when tests are run from IDE */
-                staticDirPath = null
-                LOG.warn("$pleaseReportIssue: Cannot find static dir. javaClass.getResource returned null")
-            }
-        } catch (e: URISyntaxException) {
-            throw AssertionError("$pleaseReportIssue: Cannot find static dir: ${javaClass.getResource("/$STATIC_DIR_NAME")}", e)
-        }
 
         val uploadedFilesPath = Paths.get(logDirPath.toString(), UPLOADED_FILES)
         createDirIfNotExist(uploadedFilesPath)
@@ -127,11 +113,15 @@ object PluginFileManager {
     }
 
     @Synchronized
-    fun getStaticFile(staticFileUri: String): File {
-        return Paths.get(
-                staticDirPath.toString(),
-                staticFileUri.substring(REQUEST_PREFIX.length, staticFileUri.length)
-        ).toFile()
+    fun getStaticFile(staticFileUri: String): ByteArray? {
+        val uri = staticFileUri.substring(REQUEST_PREFIX.length)
+        PluginFileManager::class.java.getResourceAsStream("/$STATIC_DIR_NAME/$uri").use { stream ->
+            val available = stream.available()
+            if (available == 0) return null
+            val bytes = ByteArray(available)
+            stream.read(bytes)
+            return bytes
+        }
     }
 
     @Synchronized

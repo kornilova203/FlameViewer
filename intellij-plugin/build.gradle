@@ -1,5 +1,5 @@
 plugins {
-    id 'org.jetbrains.intellij' version '0.1.10'
+    id 'org.jetbrains.intellij' version '0.4.7'
 }
 
 apply plugin: 'java'
@@ -13,7 +13,7 @@ configurations {
     intellij.updateSinceUntilBuild = false
     intellij.downloadSources = true
     intellij.pluginName = "FlameViewer"
-    intellij.version = "2018.2"
+    intellij.version = "2019.1"
 }
 
 dependencies {
