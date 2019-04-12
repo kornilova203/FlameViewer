@@ -4,7 +4,7 @@ import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree
 import com.github.korniloval.flameviewer.converters.trees.maximumNodesCount
 import com.github.korniloval.flameviewer.FlameLogger
 
-import com.github.korniloval.flameviewer.server.RequestHandler
+import com.github.korniloval.flameviewer.server.RequestHandlerBase
 import com.github.korniloval.flameviewer.server.ServerUtil.sendProto
 import com.sun.xml.internal.ws.handler.HandlerException
 import io.netty.channel.ChannelHandlerContext
@@ -14,11 +14,11 @@ import java.io.File
 import java.util.*
 
 
-abstract class TreeHandler(protected val logger: FlameLogger, private val findFile: FindFile) : RequestHandler {
+abstract class TreeHandler(protected val logger: FlameLogger, private val findFile: FindFile) : RequestHandlerBase() {
 
     abstract fun getTree(file: File, decoder: QueryStringDecoder): Tree?
 
-    final override fun process(request: HttpRequest, ctx: ChannelHandlerContext): Boolean {
+    final override fun processGet(request: HttpRequest, ctx: ChannelHandlerContext): Boolean {
         val decoder = QueryStringDecoder(request.uri())
         val file = findFile(getFileName(decoder)) ?: throw HandlerException("File not found. Uri: ${decoder.uri()}")
         doProcess(ctx, file, decoder)

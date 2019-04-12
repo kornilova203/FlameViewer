@@ -1,6 +1,6 @@
 package com.github.korniloval.flameviewer.server.handlers
 
-import com.github.korniloval.flameviewer.server.RequestHandler
+import com.github.korniloval.flameviewer.server.RequestHandlerBase
 import com.github.korniloval.flameviewer.server.RequestHandlingException
 import com.github.korniloval.flameviewer.server.ServerUtil.getParameter
 import com.github.korniloval.flameviewer.server.ServerUtil.sendBytes
@@ -10,8 +10,8 @@ import io.netty.channel.ChannelHandlerContext
 import io.netty.handler.codec.http.HttpRequest
 import io.netty.handler.codec.http.QueryStringDecoder
 
-object HtmlHandler : RequestHandler {
-    override fun process(request: HttpRequest, ctx: ChannelHandlerContext): Boolean {
+object HtmlHandler : RequestHandlerBase() {
+    override fun processGet(request: HttpRequest, ctx: ChannelHandlerContext): Boolean {
         val decoder = QueryStringDecoder(request.uri())
         val uri = getFileUri(decoder)
         sendBytes(
