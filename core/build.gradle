@@ -28,3 +28,4 @@ task compileFlatBuffers(type: FlatBuffers) {
 
 sourceSets.main.java.srcDir file('src/gen/java')
 idea { module { generatedSourceDirs += file('src/gen/java') } }
+sourceSets.main.resources.srcDirs "src/main/resources", "src/main/generated-resources"

@@ -8,7 +8,6 @@ import com.github.korniloval.flameviewer.converters.trees.TreesUtil
 import com.github.korniloval.flameviewer.converters.trees.maximumNodesCount
 import com.github.korniloval.flameviewer.server.ServerUtil.getParameter
 import com.github.korniloval.flameviewer.server.TreeManager
-import com.github.korniloval.flameviewer.server.FindFile
 import io.netty.handler.codec.http.QueryStringDecoder
 import java.io.File
 

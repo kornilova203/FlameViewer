@@ -11,9 +11,9 @@ import com.intellij.openapi.extensions.ExtensionPointName
 import com.intellij.openapi.util.io.FileUtilRt.getExtension
 import java.io.File
 
-object IntellijToCallTreeConverterFactory : ConverterFactory<TreesProtos.Trees> {
+object ToCallTreeConverterFactoryIntellij : ConverterFactory<TreesProtos.Trees> {
     private val EP_NAME = ExtensionPointName.create<ToCallTreeIdentifiedConverterFactory>("com.github.kornilovaL.flamegraphProfiler.fileToCallTreeConverterFactory")
-    private val LOG = Logger.getInstance(IntellijToCallTreeConverterFactory::class.java)
+    private val LOG = Logger.getInstance(ToCallTreeConverterFactoryIntellij::class.java)
 
     override fun create(file: File): Converter<out TreesProtos.Trees>? {
         val fierixConverter = checkFierix(file)

@@ -1,7 +1,7 @@
 package com.github.korniloval.flameviewer
 
 import com.github.korniloval.flameviewer.converters.calltree.FierixToCallTreeConverter
-import com.github.korniloval.flameviewer.server.NAME
+import com.github.korniloval.flameviewer.server.FileNameAndDate
 import com.intellij.openapi.application.PathManager
 import com.intellij.openapi.diagnostic.Logger
 import org.jetbrains.annotations.TestOnly
@@ -10,9 +10,7 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.nio.file.Path
 import java.nio.file.Paths
-import java.text.SimpleDateFormat
 import java.util.*
-import java.util.regex.Pattern
 
 /**
  * IDEA system dir
@@ -29,8 +27,6 @@ object PluginFileManager {
 
     private const val PLUGIN_DIR_NAME = "flamegraph-profiler"
     private const val LOG_DIR_NAME = "log"
-    private const val STATIC_DIR_NAME = "static"
-    private const val REQUEST_PREFIX = "/$NAME/"
     private const val UPLOADED_FILES = "uploaded-files"
     private const val DELETED_FILES = "deleted"
     private const val NOT_CONVERTED = "not-converted"
@@ -110,18 +106,6 @@ object PluginFileManager {
         files.sortedBy { it.lastModified() }
                 .mapTo(fileNames) { FileNameAndDate(it) }
         return fileNames
-    }
-
-    @Synchronized
-    fun getStaticFile(staticFileUri: String): ByteArray? {
-        val uri = staticFileUri.substring(REQUEST_PREFIX.length)
-        PluginFileManager::class.java.getResourceAsStream("/$STATIC_DIR_NAME/$uri").use { stream ->
-            val available = stream.available()
-            if (available == 0) return null
-            val bytes = ByteArray(available)
-            stream.read(bytes)
-            return bytes
-        }
     }
 
     @Synchronized
@@ -223,40 +207,6 @@ object PluginFileManager {
         val newFile = Paths.get(dir.toString(), fileName).toFile()
         if (!file.renameTo(newFile))
             LOG.error("Cannot move file $file to $converterId directory.")
-    }
-
-    class FileNameAndDate(file: File) {
-        private val name: String
-        private val fullName: String = file.name
-        private val date: String
-        /**
-         * id is used as css id
-         */
-        private val id: String
-
-        init {
-            val stringBuilder = StringBuilder()
-            for (i in 0 until file.name.length) {
-                val c = file.name[i]
-                if (c in 'A'..'Z' || c in 'a'..'z' || c in '0'..'9' || c == '-' || c == '_') { // if allowed by css
-                    stringBuilder.append(c)
-                } else {
-                    stringBuilder.append('_')
-                }
-            }
-            this.id = "id-$stringBuilder"
-            val matcher = nameWithoutDate.matcher(this.fullName)
-            if (matcher.find()) {
-                this.name = matcher.group()
-            } else {
-                this.name = fullName
-            }
-            this.date = SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(Date(file.lastModified()))
-        }
-
-        companion object {
-            private val nameWithoutDate = Pattern.compile(".*(?=-\\d\\d\\d\\d-\\d\\d-\\d\\d-\\d\\d_\\d\\d_\\d\\d(.*)?)")
-        }
     }
 
     class FileSaver internal constructor(private val dir: Path) {

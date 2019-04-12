@@ -9,38 +9,11 @@ import com.github.korniloval.flameviewer.converters.trees.TreeType
 import com.github.korniloval.flameviewer.converters.trees.TreesSet
 import com.github.korniloval.flameviewer.converters.trees.hotspots.HotSpot
 import java.io.File
-import java.util.concurrent.atomic.AtomicLong
 import java.util.concurrent.atomic.AtomicReference
 
-class TreeManager(private val toTreesSetConverterFactory: ToTreesSetConverterFactory) {
-    private val currentFile = AtomicReference<File?>()
-    private val currentTreesSet = AtomicReference<TreesSet?>()
-    private val lastUpdate = AtomicLong(0)
-    private val timeDelta = 1000 * 60 * 2
-
-    init {
-        val watchLastUpdate = Thread {
-            while (true) {
-                try {
-                    Thread.sleep(10000)
-                } catch (e: InterruptedException) {
-                    e.printStackTrace()
-                }
-                checkLastUpdate()
-            }
-        }
-        watchLastUpdate.isDaemon = true
-        watchLastUpdate.start()
-    }
-
-    @Synchronized
-    private fun checkLastUpdate() {
-        if (System.currentTimeMillis() - lastUpdate.get() >= timeDelta) {
-            currentTreesSet.set(null)
-            currentFile.set(null)
-            lastUpdate.set(System.currentTimeMillis())
-        }
-    }
+open class TreeManager(private val toTreesSet: ToTreesSetConverterFactory) {
+    protected val currentFile = AtomicReference<File?>()
+    protected val currentTreesSet = AtomicReference<TreesSet?>()
 
     @Synchronized
     fun getCallTree(file: File,
@@ -50,13 +23,12 @@ class TreeManager(private val toTreesSetConverterFactory: ToTreesSetConverterFac
         return currentTreesSet.get()?.getCallTree(filter, threadsIds)
     }
 
-    private fun updateTreesSet(file: File) {
+    protected open fun updateTreesSet(file: File) {
         val curFile = currentFile.get()
         if (curFile == null || file.absolutePath != curFile.absolutePath) {
             currentFile.set(file)
-            currentTreesSet.set(toTreesSetConverterFactory.create(file)?.convert())
+            currentTreesSet.set(toTreesSet.create(file)?.convert())
         }
-        updateLastTime()
     }
 
     @Synchronized
@@ -76,11 +48,6 @@ class TreeManager(private val toTreesSetConverterFactory: ToTreesSetConverterFac
     fun getHotSpots(file: File): List<HotSpot> {
         updateTreesSet(file)
         return currentTreesSet.get()?.getHotSpots() ?: emptyList()
-    }
-
-    @Synchronized
-    fun updateLastTime() {
-        lastUpdate.set(System.currentTimeMillis())
     }
 
     @Synchronized

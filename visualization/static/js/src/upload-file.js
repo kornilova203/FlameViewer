@@ -66,12 +66,11 @@ class FileUploader {
 
     endFileUpload(success) {
         common.hideLoader();
-        const that = this;
         if (success) {
             console.log("File was sent");
             common.doCallbackIfFileExists(this.file.name,
                 () => {
-                    redirectToFile(that.file.name); // reload to new file
+                    redirectToFile(this.file.name);
                 },
                 () => {
                     common.showError("File format is unsupported");
@@ -100,7 +99,7 @@ class JfrUploader extends FileUploader {
  * @param name
  */
 function redirectToFile(name) {
-    window.location.href = `${serverNames.MAIN_NAME}/${constants.pageName}?file=${encodeURIComponent(name)}}`
+    window.location.href = `${serverNames.MAIN_NAME}/${constants.pageName}?file=${encodeURIComponent(name)}`
 }
 
 /**

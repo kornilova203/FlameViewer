@@ -1,22 +1,24 @@
-package com.github.korniloval.flameviewer.handlers
+package com.github.korniloval.flameviewer.server.handlers
 
-import com.github.korniloval.flameviewer.PluginFileManager
 import com.github.korniloval.flameviewer.server.RequestHandler
 import com.github.korniloval.flameviewer.server.RequestHandlingException
 import com.github.korniloval.flameviewer.server.ServerUtil.getParameter
 import com.github.korniloval.flameviewer.server.ServerUtil.sendBytes
+import com.github.korniloval.flameviewer.server.handlers.CoreUtil.findResource
+import com.github.korniloval.flameviewer.server.handlers.StaticHandler.Companion.getFileUri
 import io.netty.channel.ChannelHandlerContext
-import io.netty.handler.codec.http.FullHttpRequest
+import io.netty.handler.codec.http.HttpRequest
 import io.netty.handler.codec.http.QueryStringDecoder
 
 object HtmlHandler : RequestHandler {
-    override fun process(request: FullHttpRequest, ctx: ChannelHandlerContext): Boolean {
+    override fun process(request: HttpRequest, ctx: ChannelHandlerContext): Boolean {
         val decoder = QueryStringDecoder(request.uri())
+        val uri = getFileUri(decoder)
         sendBytes(
                 ctx,
                 "text/html",
                 renderPage(
-                        "${decoder.path()}.html",
+                        "$uri.html",
                         getParameter(decoder, "file"),
                         getParameter(decoder, "include"),
                         getParameter(decoder, "exclude")
@@ -25,12 +27,12 @@ object HtmlHandler : RequestHandler {
         return true
     }
 
-    private fun renderPage(htmlFilePath: String,
+    private fun renderPage(uri: String,
                            fileName: String?,
                            include: String?,
                            exclude: String?): ByteArray {
-        val bytes = PluginFileManager.getStaticFile(htmlFilePath)
-                ?: throw RequestHandlingException("Cannot render page $htmlFilePath file $fileName include $include exclude $exclude")
+        val bytes = findResource(uri)
+                ?: throw RequestHandlingException("Cannot render page $uri file $fileName include $include exclude $exclude")
         val fileContent = String(bytes)
         val filterParameters = getFilterAsGetParameters(include, exclude)
         val replacement = if (fileName == null) "" else "file=$fileName&"

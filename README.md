@@ -98,7 +98,7 @@ If you have a suggestions or found a bug [open an issue]
 If only want to use plugin then you should simply install ready-to-use [jar](https://plugins.jetbrains.com/plugin/10305-flamegraph-profiler).
 
 ```bash
-./gradlew :intellij-plugin:copyStatic
+./gradlew :visualization:copyStatic
 ./gradlew :intellij-plugin:runIdea
 ```
 

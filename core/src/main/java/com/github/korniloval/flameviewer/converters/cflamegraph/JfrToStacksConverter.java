@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class JfrToStacksConverter implements Converter<Map<String, Integer>> {
+    public static final String EXTENSION = "jfr";
     private final File file;
 
     public JfrToStacksConverter(File file) {

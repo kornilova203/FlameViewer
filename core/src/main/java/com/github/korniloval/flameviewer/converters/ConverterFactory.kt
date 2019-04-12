@@ -9,4 +9,6 @@ interface ConverterFactory<out T> {
      * @param file will be deleted after calling this method
      */
     fun create(file: File): Converter<out T>?
+
+    fun isSupported(file: File): Boolean = true
 }

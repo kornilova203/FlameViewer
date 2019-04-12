@@ -20,9 +20,3 @@ dependencies {
     compile project(':core')
     testCompile group: 'com.squareup.okhttp3', name: 'okhttp', version: '3.11.0'
 }
-
-task copyStatic(type: Copy, dependsOn: [':visualization:browserify', ':visualization:moveGeneratedTemplates']) {
-    from '../visualization/static'
-    into 'src/main/generated-resources/static'
-}
-sourceSets.main.resources.srcDirs "src/main/resources", "src/main/generated-resources"

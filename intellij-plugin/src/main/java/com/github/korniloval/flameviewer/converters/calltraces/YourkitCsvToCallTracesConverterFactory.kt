@@ -1,6 +1,6 @@
 package com.github.korniloval.flameviewer.converters.calltraces
 
-import com.github.korniloval.flameviewer.converters.cflamegraph.YourkitCsvToCFlamegraphConverterFactory.Companion.isYourkitCsv
+import com.github.korniloval.flameviewer.converters.cflamegraph.isYourkitCsv
 import java.io.File
 
 
@@ -9,6 +9,7 @@ import java.io.File
 class YourkitCsvToCallTracesConverterFactory : ToCallTracesIdentifiedConverterFactory {
     override val id = "yourkit"
 
+    @Override
     override fun isSupported(file: File): Boolean = isYourkitCsv(file)
 
     override fun create(file: File) = YourkitToCallTracesConverter(file)

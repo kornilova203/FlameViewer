@@ -1,16 +1,17 @@
-package com.github.korniloval.flameviewer.handlers
+package com.github.korniloval.flameviewer.server.handlers
 
-import com.github.korniloval.flameviewer.FileUploader
 import com.github.korniloval.flameviewer.FlameLogger
+import com.github.korniloval.flameviewer.server.FileUploader
 import com.github.korniloval.flameviewer.server.RequestHandler
 import com.github.korniloval.flameviewer.server.ServerUtil.sendStatus
 import io.netty.buffer.ByteBuf
+import io.netty.buffer.ByteBufHolder
 import io.netty.channel.ChannelHandlerContext
-import io.netty.handler.codec.http.FullHttpRequest
+import io.netty.handler.codec.http.HttpRequest
 import io.netty.handler.codec.http.HttpResponseStatus
 
 class PostFileHandler(private val fileUploader: FileUploader, private val logger: FlameLogger) : RequestHandler {
-    override fun process(request: FullHttpRequest, ctx: ChannelHandlerContext): Boolean {
+    override fun process(request: HttpRequest, ctx: ChannelHandlerContext): Boolean {
         val fileName = request.headers().get("File-Name")
         val fileParts = getFileParts(request)
         if (fileParts == null) {
@@ -20,7 +21,7 @@ class PostFileHandler(private val fileUploader: FileUploader, private val logger
         val currentPart = fileParts[0]
         val totalPartsCount = fileParts[1]
         logger.info("Got file: $fileName")
-        val bytes = getBytes(request.content())
+        val bytes = getBytes((request as ByteBufHolder).content())
         fileUploader.upload(fileName, bytes, currentPart, totalPartsCount)
         sendStatus(HttpResponseStatus.OK, ctx.channel(), "File part was successfully uploaded")
         return true
@@ -35,7 +36,7 @@ class PostFileHandler(private val fileUploader: FileUploader, private val logger
     /**
      * @return information about what part was sent
      */
-    private fun getFileParts(request: FullHttpRequest): IntArray? {
+    private fun getFileParts(request: HttpRequest): IntArray? {
         val filePartsString = request.headers().get("File-Part")
         val fileParts = filePartsString.split("/".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
         if (fileParts.size != 2) {

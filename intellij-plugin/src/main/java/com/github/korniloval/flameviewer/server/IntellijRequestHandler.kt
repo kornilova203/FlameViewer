@@ -1,12 +1,12 @@
-package com.github.korniloval.flameviewer
+package com.github.korniloval.flameviewer.server
 
-import com.github.korniloval.flameviewer.converters.calltraces.IntellijToCallTracesConverterFactory
-import com.github.korniloval.flameviewer.converters.calltree.IntellijToCallTreeConverterFactory
+import com.github.korniloval.flameviewer.LoggerAdapter
+import com.github.korniloval.flameviewer.PluginFileManager
+import com.github.korniloval.flameviewer.converters.calltraces.ToCallTracesConverterFactoryIntellij
+import com.github.korniloval.flameviewer.converters.calltree.ToCallTreeConverterFactoryIntellij
 import com.github.korniloval.flameviewer.converters.trees.ToTreesSetConverterFactory
 import com.github.korniloval.flameviewer.converters.trees.TreeType.BACK_TRACES
 import com.github.korniloval.flameviewer.converters.trees.TreeType.CALL_TRACES
-import com.github.korniloval.flameviewer.handlers.*
-import com.github.korniloval.flameviewer.server.*
 import com.github.korniloval.flameviewer.server.handlers.*
 import com.intellij.openapi.diagnostic.Logger
 import io.netty.channel.ChannelHandlerContext
@@ -17,10 +17,11 @@ import org.jetbrains.ide.HttpRequestHandler
 
 class IntellijRequestHandler : HttpRequestHandler() {
     private val logger = LoggerAdapter(Logger.getInstance(IntellijRequestHandler::class.java))
-    private val treeManager = TreeManager(ToTreesSetConverterFactory(IntellijToCallTreeConverterFactory, IntellijToCallTracesConverterFactory))
+    private val treeManager = IntellijTreeManager(ToTreesSetConverterFactory(ToCallTreeConverterFactoryIntellij, ToCallTracesConverterFactoryIntellij))
     private val findFile: FindFile = { name -> PluginFileManager.getLogFile(name) }
+
     private val handler = DelegatingRequestHandler(
-            mapOf(FILE_LIST to FileListHandler(logger),
+            mapOf(FILE_LIST to IntellijFileListHandler(logger),
                     HOT_SPOTS_JSON to HotSpotsHandler(treeManager, logger, findFile),
                     SERIALIZED_CALL_TREE to CallTreeHandler(treeManager, logger, findFile),
                     CALL_TREE_PREVIEW to TreesPreviewHandler(treeManager, logger, findFile),
@@ -29,7 +30,7 @@ class IntellijRequestHandler : HttpRequestHandler() {
                     CALL_TREE_COUNT to CallTreeCountMethods(treeManager, logger, findFile),
                     CALL_TRACES_COUNT to AccumulativeTreesCountMethods(treeManager, CALL_TRACES, logger, findFile),
                     BACK_TRACES_COUNT to AccumulativeTreesCountMethods(treeManager, BACK_TRACES, logger, findFile),
-                    DOES_FILE_EXIST to DoesFileExistHandler,
+                    DOES_FILE_EXIST to DoesFileExistHandler(findFile),
 
                     CALL_TREE_PAGE to HtmlHandler,
                     CALL_TRACES_PAGE to HtmlHandler,

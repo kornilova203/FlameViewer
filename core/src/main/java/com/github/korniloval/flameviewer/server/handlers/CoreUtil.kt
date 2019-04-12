@@ -5,6 +5,8 @@ import com.github.korniloval.flameviewer.converters.trees.Filter
 import com.github.korniloval.flameviewer.server.RequestHandlingException
 import com.github.korniloval.flameviewer.server.ServerUtil.getParameter
 import io.netty.handler.codec.http.QueryStringDecoder
+import org.apache.commons.io.IOUtils
+import java.io.File
 
 @Throws(RequestHandlingException::class)
 fun getFileName(decoder: QueryStringDecoder): String {
@@ -21,3 +23,20 @@ fun getFilter(urlDecoder: QueryStringDecoder, logger: FlameLogger): Filter? {
     }
     return null
 }
+
+typealias FindFile = (name: String) -> File?
+typealias FindResource = (uri: String) -> ByteArray?
+
+object CoreUtil {
+    val findResource: FindResource = { uri ->
+        try {
+            CoreUtil::class.java.getResourceAsStream("/static/$uri").use { stream ->
+                IOUtils.toByteArray(stream)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
+}
+

@@ -20,4 +20,8 @@ class FlamegraphToCallTracesConverter(private val file: File) : Converter<TreePr
         }
         return tree
     }
+
+    companion object {
+        const val EXTENSION = "flamegraph"
+    }
 }

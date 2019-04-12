@@ -14,5 +14,6 @@ class FierixToCallTreeConverterFactory : ToCallTreeIdentifiedConverterFactory {
 
     override fun create(file: File) = FierixToCallTreeConverter(file, logger)
 
+    @Override
     override fun isSupported(file: File): Boolean = isFierixExtension(PathUtil.getFileExtension(file.name))
 }

@@ -1,5 +1,6 @@
 package com.github.korniloval.flameviewer.converters.calltraces;
 
+import com.github.korniloval.flameviewer.FlameLogger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -8,6 +9,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Pattern;
+
+import static com.github.korniloval.flameviewer.converters.ConvertersUtilKt.getBytes;
 
 public class StacksParser {
     private static final Pattern flamegraphLinePattern = Pattern.compile(".* \\d+");
@@ -32,7 +35,9 @@ public class StacksParser {
         return null;
     }
 
-    public static boolean isFlamegraph(@NotNull byte[] bytes) {
+    public static boolean isFlamegraph(@NotNull File file, @NotNull FlameLogger logger) {
+        byte[] bytes = getBytes(file, logger);
+        if (bytes == null) return false;
         boolean hasValidLine = false;
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(
                 new ByteArrayInputStream(bytes)

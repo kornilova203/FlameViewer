@@ -1,5 +1,8 @@
 package com.github.korniloval.flameviewer.converters.calltraces
 
+import com.github.korniloval.flameviewer.converters.calltraces.CFlamegraphToCallTracesConverter.Companion.EXTENSION
+import com.github.korniloval.flameviewer.converters.calltraces.CFlamegraphToCallTracesConverter.Companion.getCFlamegraphTree
+import com.github.korniloval.flameviewer.converters.calltraces.CFlamegraphToCallTracesConverter.Companion.toCFlamegraph
 import com.intellij.openapi.util.text.StringUtil
 import com.intellij.util.PathUtil
 import java.io.File
@@ -52,9 +55,6 @@ import java.io.File
  * YourkitCsvToCFlamegraphConverter merges unmerged stacktraces.
  */
 class CFlamegraphToCallTracesConverterFactory : ToCallTracesIdentifiedConverterFactory {
-    companion object {
-        const val EXTENSION = "cflamegraph"
-    }
 
     override val id = EXTENSION
 
@@ -66,5 +66,5 @@ class CFlamegraphToCallTracesConverterFactory : ToCallTracesIdentifiedConverterF
         return StringUtil.equalsIgnoreCase(PathUtil.getFileExtension(file.name), EXTENSION)
     }
 
-    override fun create(file: File) = CFlamegraphToCallTracesConverter(file)
+    override fun create(file: File) = CFlamegraphToCallTracesConverter(getCFlamegraphTree(file).toCFlamegraph())
 }

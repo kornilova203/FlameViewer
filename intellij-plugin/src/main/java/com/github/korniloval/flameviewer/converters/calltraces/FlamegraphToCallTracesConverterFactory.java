@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 
-import static com.github.korniloval.flameviewer.converters.ConvertersUtilKt.getBytes;
+import static com.github.korniloval.flameviewer.converters.calltraces.FlamegraphToCallTracesConverter.EXTENSION;
 import static com.github.korniloval.flameviewer.converters.calltraces.StacksParser.isFlamegraph;
 
 /**
@@ -23,17 +23,15 @@ import static com.github.korniloval.flameviewer.converters.calltraces.StacksPars
  */
 public class FlamegraphToCallTracesConverterFactory implements ToCallTracesIdentifiedConverterFactory {
     private static final FlameLogger logger = new LoggerAdapter(Logger.getInstance(FlamegraphToCallTracesConverterFactory.class));
-    private static final String EXTENSION = "flamegraph";
 
     @NotNull
     public String getId() {
         return EXTENSION;
     }
 
+    @Override
     public boolean isSupported(@NotNull File file) {
-        byte[] bytes = getBytes(file, logger);
-        if (bytes == null) return false;
-        return isFlamegraph(bytes);
+        return isFlamegraph(file, logger);
     }
 
     @NotNull

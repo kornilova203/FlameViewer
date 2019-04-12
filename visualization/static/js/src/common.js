@@ -250,11 +250,12 @@ const constants = {
  * @param {string} href
  */
 function parsePageName(href) {
+    const question = href.lastIndexOf("?");
+    if (question !== -1) {
+        href = href.substring(0, question)
+    }
     const lastSlash = href.lastIndexOf("/");
     if (lastSlash === -1) console.error("Cannot parse page name", href);
-
-    const question = href.lastIndexOf("?");
-    if (question > lastSlash) return href.substring(lastSlash + 1, question);
     return href.substring(lastSlash + 1);
 }
 

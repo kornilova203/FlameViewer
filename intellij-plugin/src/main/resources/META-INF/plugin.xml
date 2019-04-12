@@ -66,12 +66,12 @@ Detailed description at <a href="https://github.com/kornilova-l/FlameViewer">git
     </extensionPoints>
 
     <extensions defaultExtensionNs="com.intellij">
-        <httpRequestHandler implementation="com.github.korniloval.flameviewer.IntellijRequestHandler"/>
+        <httpRequestHandler implementation="com.github.korniloval.flameviewer.server.IntellijRequestHandler"/>
     </extensions>
 
     <extensions defaultExtensionNs="com.github.kornilovaL.flamegraphProfiler">
         <toCFlamegraphConverterFactory
-                implementation="com.github.korniloval.flameviewer.converters.cflamegraph.JfrToCFlamegraphConverterFactory"/>
+                implementation="com.github.korniloval.flameviewer.converters.cflamegraph.JfrToCFlamegraphConverterFactoryIntellij"/>
         <toCFlamegraphConverterFactory
                 implementation="com.github.korniloval.flameviewer.converters.cflamegraph.YourkitCsvToCFlamegraphConverterFactory"/>
         <toCallTracesConverterFactory

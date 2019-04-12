@@ -1,7 +1,8 @@
-package com.github.korniloval.flameviewer
+package com.github.korniloval.flameviewer.server
 
-import com.github.korniloval.flameviewer.converters.calltraces.IntellijToCallTracesConverterFactory
-import com.github.korniloval.flameviewer.converters.calltree.IntellijToCallTreeConverterFactory
+import com.github.korniloval.flameviewer.PluginFileManager
+import com.github.korniloval.flameviewer.converters.calltraces.ToCallTracesConverterFactoryIntellij
+import com.github.korniloval.flameviewer.converters.calltree.ToCallTreeConverterFactoryIntellij
 import com.github.korniloval.flameviewer.converters.cflamegraph.CFlamegraphFileSaver
 import java.io.*
 import java.nio.file.Paths
@@ -27,7 +28,7 @@ class FileUploader {
                 if (tryToConvertFileToAnotherFile(file)) { // this moves file to right place
                     return
                 }
-                val converterId = IntellijToCallTracesConverterFactory.getConverterId(file) ?: IntellijToCallTreeConverterFactory.getConverterId(file) // if this format is supported
+                val converterId = ToCallTracesConverterFactoryIntellij.getConverterId(file) ?: ToCallTreeConverterFactoryIntellij.getConverterId(file) // if this format is supported
                 if (converterId != null) { // if supported
                     /* move file to needed directory. */
                     PluginFileManager.moveFileToUploadedFiles(converterId, fileName, file)
@@ -111,7 +112,7 @@ abstract class FileToFileConverterFileSaver {
     }
 
     /**
-     * Extension must be supported by IntellijToCallTracesConverterFactory
+     * Extension must be supported by ToCallTracesConverterFactoryIntellij
      */
     abstract val extension: String
 

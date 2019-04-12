@@ -1,21 +1,21 @@
 package com.github.korniloval.flameviewer.converters.cflamegraph
 
-import com.github.korniloval.flameviewer.FileToFileConverterFileSaver
 import com.github.korniloval.flameviewer.cflamegraph.Names
 import com.github.korniloval.flameviewer.cflamegraph.Node
 import com.github.korniloval.flameviewer.cflamegraph.Tree
 import com.github.korniloval.flameviewer.converters.ConversionException
-import com.github.korniloval.flameviewer.converters.calltraces.CFlamegraphToCallTracesConverterFactory
+import com.github.korniloval.flameviewer.converters.calltraces.CFlamegraphToCallTracesConverter
+import com.github.korniloval.flameviewer.server.FileToFileConverterFileSaver
 import com.google.flatbuffers.FlatBufferBuilder
 import java.io.File
 import java.io.FileOutputStream
 
 class CFlamegraphFileSaver : FileToFileConverterFileSaver() {
-    override val extension = CFlamegraphToCallTracesConverterFactory.EXTENSION
+    override val extension = CFlamegraphToCallTracesConverter.EXTENSION
 
     @Throws(ConversionException::class)
     override fun tryToConvert(file: File): Boolean {
-        val cFlamegraph = IntellijToCFlamegraphConverterFactory.create(file)?.convert() ?: return false
+        val cFlamegraph = ToCFlamegraphConverterFactoryIntellij.create(file)?.convert() ?: return false
         val builder = FlatBufferBuilder(1024)
 
         val classNamesOffsets = IntArray(cFlamegraph.classNames.size)

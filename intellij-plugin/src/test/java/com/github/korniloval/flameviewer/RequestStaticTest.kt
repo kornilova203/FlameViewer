@@ -3,9 +3,7 @@ package com.github.korniloval.flameviewer
 import com.github.korniloval.flameviewer.server.CALL_TRACES_NAME
 import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase
 import junit.framework.TestCase
-import java.io.ByteArrayInputStream
 import java.net.HttpURLConnection
-import java.util.*
 
 class RequestStaticTest : LightPlatformCodeInsightFixtureTestCase() {
     fun testRequestHtml() = doTest(CALL_TRACES_NAME, "Call Traces")
@@ -22,14 +20,7 @@ class RequestStaticTest : LightPlatformCodeInsightFixtureTestCase() {
         connection.requestMethod = "GET"
 
         val bytes = UploadFileUtil.getResponse(connection)
-        ByteArrayInputStream(bytes).use { stream ->
-            val scanner = Scanner(stream)
-            val sb = StringBuilder()
-            while (scanner.hasNextLine()) {
-                sb.append(scanner.nextLine()).append("\n")
-            }
-            val res = sb.toString()
-            TestCase.assertTrue(res, res.contains(resultContains))
-        }
+        val res = String(bytes)
+        TestCase.assertTrue(res, res.contains(resultContains))
     }
 }
