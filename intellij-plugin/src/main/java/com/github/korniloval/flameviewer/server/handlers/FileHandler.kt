@@ -1,6 +1,7 @@
 package com.github.korniloval.flameviewer.server.handlers
 
 import com.github.korniloval.flameviewer.FlameLogger
+import com.github.korniloval.flameviewer.PluginFileManager
 import com.github.korniloval.flameviewer.server.FileUploader
 import com.github.korniloval.flameviewer.server.RequestHandlerBase
 import com.github.korniloval.flameviewer.server.ServerUtil.sendStatus
@@ -10,7 +11,7 @@ import io.netty.channel.ChannelHandlerContext
 import io.netty.handler.codec.http.HttpRequest
 import io.netty.handler.codec.http.HttpResponseStatus
 
-class PostFileHandler(private val fileUploader: FileUploader, private val logger: FlameLogger) : RequestHandlerBase() {
+class FileHandler(private val fileManager: PluginFileManager, private val fileUploader: FileUploader, private val logger: FlameLogger) : RequestHandlerBase() {
     override fun processPost(request: HttpRequest, ctx: ChannelHandlerContext): Boolean {
         val fileName = request.headers().get("File-Name")
         val fileParts = getFileParts(request)
@@ -24,6 +25,14 @@ class PostFileHandler(private val fileUploader: FileUploader, private val logger
         val bytes = getBytes((request as ByteBufHolder).content())
         fileUploader.upload(fileName, bytes, currentPart, totalPartsCount)
         sendStatus(HttpResponseStatus.OK, ctx.channel(), "File part was successfully uploaded")
+        return true
+    }
+
+    override fun processDelete(request: HttpRequest, ctx: ChannelHandlerContext): Boolean {
+        val fileName = request.headers().get("File-Name")
+        logger.info("Delete file: $fileName")
+        fileManager.deleteFile(fileName)
+        sendStatus(HttpResponseStatus.OK, ctx.channel())
         return true
     }
 

@@ -25,9 +25,8 @@ const val FILE_LIST = "$MAIN_NAME/file-list"
 const val CONNECTION_ALIVE = "$MAIN_NAME/trees/alive"
 const val HOT_SPOTS_PAGE = "$MAIN_NAME/hot-spots"
 const val HOT_SPOTS_JSON = "$MAIN_NAME/hot-spots-json"
-const val UPLOAD_FILE = "$MAIN_NAME/upload-file"
 const val DOES_FILE_EXIST = "$MAIN_NAME/does-file-exist"
-const val DELETE_FILE = "$MAIN_NAME/delete-file"
+const val FILE = "$MAIN_NAME/file"
 const val UNDO_DELETE_FILE = "$MAIN_NAME/undo-delete-file"
 
 @JvmField val CSS_PATTERN = Pattern.compile("$MAIN_NAME/css.+css$")!!

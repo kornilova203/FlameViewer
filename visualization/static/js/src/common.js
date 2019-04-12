@@ -271,9 +271,8 @@ const serverNames = {
     BACK_TRACES: _MAIN_NAME + "/back-traces",
     CONNECTION_ALIVE: _MAIN_NAME + "/trees/alive",
     HOT_SPOTS_JS_REQUEST: _MAIN_NAME + "/hot-spots-json",
-    UPLOAD_FILE: _MAIN_NAME + "/upload-file",
+    FILE: _MAIN_NAME + "/file",
     DOES_FILE_EXIST: _MAIN_NAME + "/does-file-exist",
-    DELETE_FILE: _MAIN_NAME + "/delete-file",
     UNDO_DELETE_FILE: _MAIN_NAME + "/undo-delete-file"
 };
 

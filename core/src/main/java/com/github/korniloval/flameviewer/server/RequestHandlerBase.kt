@@ -13,11 +13,13 @@ abstract class RequestHandlerBase : RequestHandler {
         when (request.method()) {
             HttpMethod.GET -> return processGet(request, ctx)
             HttpMethod.POST -> return processPost(request, ctx)
+            HttpMethod.DELETE -> return processDelete(request, ctx)
         }
         return false
     }
 
     protected open fun processGet(request: HttpRequest, ctx: ChannelHandlerContext): Boolean = false
     protected open fun processPost(request: HttpRequest, ctx: ChannelHandlerContext): Boolean = false
+    protected open fun processDelete(request: HttpRequest, ctx: ChannelHandlerContext): Boolean = false
 
 }

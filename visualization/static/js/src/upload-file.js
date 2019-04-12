@@ -54,7 +54,7 @@ class FileUploader {
                         that.endFileUpload(success)
                     }
                 };
-                request.open("POST", serverNames.UPLOAD_FILE, true);
+                request.open("POST", serverNames.FILE, true);
                 request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
                 request.setRequestHeader('File-Name', that.file.name);
                 request.setRequestHeader('File-Part', (i + 1) + "/" + partsCount);

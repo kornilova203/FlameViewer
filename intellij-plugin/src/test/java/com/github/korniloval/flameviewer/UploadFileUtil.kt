@@ -1,7 +1,7 @@
 package com.github.korniloval.flameviewer
 
+import com.github.korniloval.flameviewer.server.FILE
 import com.github.korniloval.flameviewer.server.NAME
-import com.github.korniloval.flameviewer.server.UPLOAD_FILE
 import okhttp3.HttpUrl
 import org.jetbrains.ide.BuiltInServerManager
 import java.io.DataOutputStream
@@ -22,7 +22,7 @@ object UploadFileUtil {
         val list = if (reverseOrder) partsCount - 1 downTo 0 else 0 until partsCount
         for (i in list) {
             //Create connection
-            val url = URL("http://localhost:${BuiltInServerManager.getInstance().port}$UPLOAD_FILE")
+            val url = URL("http://localhost:${BuiltInServerManager.getInstance().port}$FILE")
             val connection = url.openConnection() as HttpURLConnection
             connection.requestMethod = "POST"
             connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded")

@@ -38,8 +38,7 @@ class IntellijRequestHandler : HttpRequestHandler() {
                     HOT_SPOTS_PAGE to HtmlHandler,
 
                     CONNECTION_ALIVE to ConnectionAliveHandler(treeManager),
-                    UPLOAD_FILE to PostFileHandler(FileUploader(), logger),
-                    DELETE_FILE to DeleteFileHandler(PluginFileManager, logger),
+                    FILE to FileHandler(PluginFileManager, FileUploader(), logger),
                     UNDO_DELETE_FILE to UndoDeleteFileHandler(PluginFileManager, logger)),
 
             listOf(CSS_PATTERN to StaticHandler("text/css"),
@@ -51,7 +50,10 @@ class IntellijRequestHandler : HttpRequestHandler() {
         return handler.process(request, context)
     }
 
-    override fun isSupported(request: FullHttpRequest): Boolean {
-        return request.method() == HttpMethod.POST || request.method() == HttpMethod.GET
+    override fun isSupported(request: FullHttpRequest): Boolean = when (request.method()) {
+        HttpMethod.POST -> true
+        HttpMethod.GET -> true
+        HttpMethod.DELETE -> true
+        else -> false
     }
 }

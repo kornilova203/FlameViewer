@@ -65,7 +65,7 @@ class FilesListManager {
             FilesListManager.removeFromLists($list, selectedFilesIds, filesArray);
             for (let i = 0; i < fileNames.length; i++) {
                 const request = new XMLHttpRequest();
-                request.open("POST", serverNames.DELETE_FILE, true);
+                request.open("DELETE", serverNames.FILE, true);
                 request.setRequestHeader('File-Name', fileNames[i]);
                 request.send();
             }
