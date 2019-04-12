@@ -14,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 
+import static com.github.korniloval.flameviewer.cli.CliUtilKt.encodeFileName;
 import static com.github.korniloval.flameviewer.server.ServerNamesKt.CALL_TRACES_PAGE;
 
 class HttpServer {
@@ -30,7 +31,7 @@ class HttpServer {
                     .channel(NioServerSocketChannel.class);
 
             Channel ch = bootstrap.bind(PORT).sync().channel();
-            System.out.println("http://localhost:" + PORT + CALL_TRACES_PAGE + "?file=" + file.getCanonicalPath());
+            System.out.println("http://localhost:" + PORT + CALL_TRACES_PAGE + "?file=" + encodeFileName(file.getCanonicalPath()));
             ch.closeFuture().sync();
         } finally {
             eventLoopGroup.shutdownGracefully();
