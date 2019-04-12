@@ -26,12 +26,14 @@ class CliRequestHandler : SimpleChannelInboundHandler<HttpRequest>() {
                     CALL_TREE_COUNT to CallTreeCountMethods(treeManager, logger, findFile),
                     CALL_TRACES_COUNT to AccumulativeTreesCountMethods(treeManager, TreeType.CALL_TRACES, logger, findFile),
                     BACK_TRACES_COUNT to AccumulativeTreesCountMethods(treeManager, TreeType.BACK_TRACES, logger, findFile),
-                    DOES_FILE_EXIST to DoesFileExistHandler(findFile),
+                    DOES_FILE_EXIST to DoesFileExistHandler(findFile, logger),
 
                     CALL_TREE_PAGE to HtmlHandler,
                     CALL_TRACES_PAGE to HtmlHandler,
                     BACK_TRACES_PAGE to HtmlHandler,
-                    HOT_SPOTS_PAGE to HtmlHandler),
+                    HOT_SPOTS_PAGE to HtmlHandler,
+
+                    SUPPORTS_CLEARING_CACHES to BooleanResultHandler(false, logger)),
 
             listOf(CSS_PATTERN to StaticHandler("text/css"),
                     JS_PATTERN to StaticHandler("text/javascript"),

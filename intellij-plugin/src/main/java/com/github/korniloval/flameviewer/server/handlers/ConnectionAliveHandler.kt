@@ -9,7 +9,7 @@ import io.netty.handler.codec.http.HttpResponseStatus
 
 
 class ConnectionAliveHandler(private val treeManager: IntellijTreeManager) : RequestHandlerBase() {
-    override fun processGet(request: HttpRequest, ctx: ChannelHandlerContext): Boolean {
+    override fun processPost(request: HttpRequest, ctx: ChannelHandlerContext): Boolean {
         treeManager.updateLastTime()
         sendStatus(HttpResponseStatus.OK, ctx.channel())
         return true

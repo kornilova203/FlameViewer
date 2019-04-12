@@ -30,7 +30,7 @@ class IntellijRequestHandler : HttpRequestHandler() {
                     CALL_TREE_COUNT to CallTreeCountMethods(treeManager, logger, findFile),
                     CALL_TRACES_COUNT to AccumulativeTreesCountMethods(treeManager, CALL_TRACES, logger, findFile),
                     BACK_TRACES_COUNT to AccumulativeTreesCountMethods(treeManager, BACK_TRACES, logger, findFile),
-                    DOES_FILE_EXIST to DoesFileExistHandler(findFile),
+                    DOES_FILE_EXIST to DoesFileExistHandler(findFile, logger),
 
                     CALL_TREE_PAGE to HtmlHandler,
                     CALL_TRACES_PAGE to HtmlHandler,
@@ -38,6 +38,7 @@ class IntellijRequestHandler : HttpRequestHandler() {
                     HOT_SPOTS_PAGE to HtmlHandler,
 
                     CONNECTION_ALIVE to ConnectionAliveHandler(treeManager),
+                    SUPPORTS_CLEARING_CACHES to BooleanResultHandler(true, logger),
                     FILE to FileHandler(PluginFileManager, FileUploader(), logger),
                     UNDO_DELETE_FILE to UndoDeleteFileHandler(PluginFileManager, logger)),
 

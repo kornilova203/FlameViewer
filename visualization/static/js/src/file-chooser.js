@@ -425,7 +425,7 @@ $(window).on("load", () => {
     /* check for new files */
     setInterval(() => {
         filesListManager.updateFilesList();
-    }, 1000);
+    }, 5000);
 
     if (constants.fileName === undefined) {
         showChooseFile();

@@ -161,27 +161,57 @@ const common = {
      * @param {Function} callbackIfDoesNotExist
      */
     doCallbackIfFileExists: (fileName, callbackIfExists, callbackIfDoesNotExist) => {
-        const request = new XMLHttpRequest();
-        request.onload = () => {
-            if (request.status === 302) { // if was found
-                callbackIfExists();
-            } else {
-                if (callbackIfDoesNotExist != null) {
-                    callbackIfDoesNotExist();
-                }
-            }
-        };
-        request.open("GET", serverNames.DOES_FILE_EXIST, true);
+        common.doIfTrue(
+            serverNames.DOES_FILE_EXIST,
+            {'File-Name': fileName},
+            callbackIfExists,
+            callbackIfDoesNotExist
+        );
+    },
+
+    /**
+     * @param {String} url
+     * @param {Object} headers
+     * @param {Function} callbackIfTrue
+     * @param {Function|undefined} callbackIfFalse
+     */
+    doIfTrue: (url, headers, callbackIfTrue, callbackIfFalse = undefined) => {
         try {
-            request.setRequestHeader('File-Name', fileName);
-        } catch (err) {
-            common.showError("File name should contain only ascii characters");
-            setTimeout(() => { // it does not work without timeout. I do know why
-                constants.$loaderBackground.hide();
-            }, 50);
-            return; // do not send request
+            const request = new XMLHttpRequest();
+            request.open("GET", url, true);
+            request.responseType = "json";
+
+            const headerKeys = Object.keys(headers);
+            for (let i = 0; i < headerKeys.length; i++) {
+                let header = headerKeys[i];
+                request.setRequestHeader(header, headers[header]);
+            }
+
+            request.onload = () => {
+                if (request.status === 200) {
+                    let res = request.response.result;
+                    if (res === true) callbackIfTrue();
+                    else if (res === false && callbackIfFalse !== undefined) callbackIfFalse()
+                }
+            };
+            request.send();
+        } catch (e) {
+            common._handleError(e);
         }
-        request.send();
+    },
+
+    _handleError: (e) => {
+        console.error(e);
+        const msg = "" + e;
+        if (msg.indexOf("Value is not a valid ByteString") !== -1) {
+            common.showError("File name should contain only ascii characters");
+        }
+        else {
+            common.showError(msg);
+        }
+        setTimeout(() => { // it does not work without timeout
+            constants.$loaderBackground.hide();
+        }, 50);
     },
 
     /**
@@ -269,7 +299,8 @@ const serverNames = {
     CALL_TREE_PREVIEW_JS_REQUEST: _CALL_TREE_JS_REQUEST + "/preview",
     CALL_TRACES: _MAIN_NAME + "/call-traces",
     BACK_TRACES: _MAIN_NAME + "/back-traces",
-    CONNECTION_ALIVE: _MAIN_NAME + "/trees/alive",
+    CONNECTION_ALIVE: _MAIN_NAME + "/alive",
+    SUPPORTS_CLEARING_CACHES: _MAIN_NAME + "/supports-clearing-caches",
     HOT_SPOTS_JS_REQUEST: _MAIN_NAME + "/hot-spots-json",
     FILE: _MAIN_NAME + "/file",
     DOES_FILE_EXIST: _MAIN_NAME + "/does-file-exist",
@@ -287,15 +318,16 @@ $(window).on("load", () => {
     constants.$fullFileName = $(".full-file-name");
 });
 
-/**
- * Each 10 seconds tell server that
- * it should not remove trees from memory
- */
-setInterval(() => {
-    const request = new XMLHttpRequest();
-    request.open("POST", serverNames.CONNECTION_ALIVE, true);
-    request.onload = () => {
-
-    };
-    request.send();
-}, 10000);
+common.doIfTrue(serverNames.SUPPORTS_CLEARING_CACHES, {}, () => {
+    /**
+     * Each 30 seconds tell server that
+     * it should not remove trees from memory
+     */
+    setInterval(() => {
+        const request = new XMLHttpRequest();
+        request.open("POST", serverNames.CONNECTION_ALIVE, true);
+        request.onload = () => {
+        };
+        request.send();
+    }, 30000);
+});
