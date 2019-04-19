@@ -124,31 +124,23 @@ function setMethodsCount(nodesCount) {
  * @param {String} excludingInputText
  */
 function countMethodsForFilter(includingInputText, excludingInputText) {
-    const request = new XMLHttpRequest();
-    request.open("GET",
-        serverNames.MAIN_NAME + "/trees/" + constants.pageName + "/count?" +
-        getParametersWithFilter(includingInputText, excludingInputText), true);
-    request.responseType = "json";
-    request.onload = () => {
-        const nodesCount = request.response.nodesCount;
-        setMethodsCount(nodesCount);
-    };
-    request.send();
+    let url = serverNames.MAIN_NAME + "/trees/" + constants.pageName + "/count?" + getParametersWithFilter(includingInputText, excludingInputText);
+
+    common.sendGetRequest(url, "json")
+        .then(response => {
+            setMethodsCount(response.nodesCount);
+        });
 }
 
 
 function countMethodsInCurrentTree() {
-    const request = new XMLHttpRequest();
-    request.open("GET",
-        serverNames.MAIN_NAME + "/trees/" + constants.pageName + "/count?" +
-        getParametersWithFilter(CURRENT_INCLUDED, CURRENT_EXCLUDED), true);
-    request.responseType = "json";
-    request.onload = () => {
-        const nodesCount = request.response.nodesCount;
-        methodsCountInCurrentTree = nodesCount;
-        setMethodsCount(nodesCount);
-    };
-    request.send();
+    const url = serverNames.MAIN_NAME + "/trees/" + constants.pageName + "/count?" + getParametersWithFilter(CURRENT_INCLUDED, CURRENT_EXCLUDED);
+    common.sendGetRequest(url, "json")
+        .then(response => {
+            const nodesCount = response.nodesCount;
+            methodsCountInCurrentTree = nodesCount;
+            setMethodsCount(nodesCount);
+        });
 }
 
 /**

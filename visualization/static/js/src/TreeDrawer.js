@@ -683,20 +683,8 @@ module.exports.TreeDrawer = class TreeDrawer {
      */
     _getCanvasWidthForSection() {
         return window.innerWidth -
-            TreeDrawer._getElementWidth(this.$fileMenu) -
+            common.getElementWidth(this.$fileMenu) -
             constants.CANVAS_PADDING * 2;
-    }
-
-    /**
-     * @param $element
-     * @return {number}
-     */
-    static _getElementWidth($element) {
-        /**
-         * @type {String}
-         */
-        const string = $element.css("width");
-        return Number.parseInt(string.substring(0, string.length - 2));
     }
 
     _enableResizeZoomedCanvas() {
@@ -831,9 +819,8 @@ module.exports.TreeDrawer = class TreeDrawer {
     _setNodeZoomed(node) {
         this.zoomedNode = node;
         this.currentCanvasWidth = TreeDrawer._getCanvasWidth(this.$section.find(".canvas-zoomed"));
-        common.showLoader(constants.loaderMessages.drawing, () => {
-            this._doSetNodeZoomed(node);
-        });
+        const msg = constants.loaderMessages.drawing;
+        common.showLoader(msg.msg, msg.width, () => this._doSetNodeZoomed(node));
     }
 
     _doSetNodeZoomed(node) {

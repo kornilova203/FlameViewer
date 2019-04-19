@@ -17,8 +17,7 @@ class CliRequestHandler : SimpleChannelInboundHandler<HttpRequest>() {
     private val treeManager = TreeManager(ToTreesSetConverterFactory(ToCallTreeConverterFactoryCli, ToCallTracesConverterFactoryCli))
     private val findFile = cliFindFile
     private val handler = DelegatingRequestHandler(
-            mapOf(FILE_LIST to CliFileListHandler(),
-                    HOT_SPOTS_JSON to HotSpotsHandler(treeManager, logger, findFile),
+            mapOf(HOT_SPOTS_JSON to HotSpotsHandler(treeManager, logger, findFile),
                     SERIALIZED_CALL_TREE to CallTreeHandler(treeManager, logger, findFile),
                     SERIALIZED_CALL_TRACES to CallTracesHandler(treeManager, logger, findFile),
                     SERIALIZED_BACK_TRACES to BackTracesHandler(treeManager, logger, findFile),
@@ -33,7 +32,8 @@ class CliRequestHandler : SimpleChannelInboundHandler<HttpRequest>() {
                     BACK_TRACES_PAGE to HtmlHandler,
                     HOT_SPOTS_PAGE to HtmlHandler,
 
-                    SUPPORTS_CLEARING_CACHES to BooleanResultHandler(false, logger)),
+                    SUPPORTS_CLEARING_CACHES to BooleanResultHandler(false, logger),
+                    SUPPORTS_FILE_LIST to BooleanResultHandler(false, logger)),
 
             listOf(CSS_PATTERN to StaticHandler("text/css"),
                     JS_PATTERN to StaticHandler("text/javascript"),

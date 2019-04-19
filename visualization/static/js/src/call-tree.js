@@ -7,24 +7,21 @@ const CallTreeDrawer = require('./CallTreeDrawer');
  * @param {Number} threadId
  */
 common.showCallTree = (threadId) => {
-    const request = new XMLHttpRequest();
     const parameters = window.location.href.split("?")[1];
-    request.open("GET", serverNames.CALL_TREE_JS_REQUEST + "?threads=" + threadId + "&" + parameters, true);
-    request.responseType = "arraybuffer";
-    request.onload = () => {
-        const arrayBuffer = request.response;
-        const byteArray = new Uint8Array(arrayBuffer);
-        const trees = deserializer.deserializeTrees(byteArray).getTreesList();
-        drawTrees(trees);
-    };
-    request.send();
+    const url = serverNames.CALL_TREE_JS_REQUEST + "?threads=" + threadId + "&" + parameters;
+    common.sendGetRequest(url, "arraybuffer")
+        .then(response => {
+            const byteArray = new Uint8Array(response);
+            const trees = deserializer.deserializeTrees(byteArray).getTreesList();
+            drawTrees(trees);
+        });
 };
 
 /**
  * @param {Array<Trees>} trees
  */
 function drawTrees(trees) {
-    common.showLoader(constants.loaderMessages.drawing, () => {
+    common.showLoader(constants.loaderMessages.drawing.msg, constants.loaderMessages.drawing.width, () => {
         $('.call-tree-wrapper').show();
         for (let i = 0; i < trees.length; i++) {
             const drawer = new CallTreeDrawer.CallTreeDrawer(trees[i], i);

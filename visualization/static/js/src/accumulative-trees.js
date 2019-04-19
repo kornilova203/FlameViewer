@@ -49,7 +49,8 @@ function drawCallTraces(tree, className, methodName, desc, percent) {
  * @param {Number} percent
  */
 function drawAndShowLoader(drawer, className, methodName, desc, percent) {
-    common.showLoader(constants.loaderMessages.drawing, () => {
+    let msg = constants.loaderMessages.drawing;
+    common.showLoader(msg.msg, msg.width, () => {
         drawer.draw();
         common.hideLoader();
     });
@@ -82,20 +83,20 @@ function sendRequestForTree() {
     console.log("prepare request");
     const request = new XMLHttpRequest();
     const parameters = window.location.href.split("?")[1];
+    request.open("GET", `${serverNames.MAIN_NAME}/trees/${constants.pageName}?${parameters}`, true);
+    request.responseType = "arraybuffer";
+
     let className, methodName, desc;
-    if (parameters.indexOf("method=") === -1) {
-        request.open("GET", `${serverNames.MAIN_NAME}/trees/${constants.pageName}?${parameters}`, true);
-    } else {
-        request.open("GET", `${serverNames.MAIN_NAME}/trees/${constants.pageName}?${parameters}`, true);
+    if (parameters.indexOf("method=") !== -1) {
         className = common.getParameter("class");
         methodName = common.getParameter("method");
         desc = decodeURIComponent(common.getParameter("desc"));
     }
-    request.responseType = "arraybuffer";
 
     request.onload = function () {
         common.hideLoader(0);
-        common.showLoader(constants.loaderMessages.deserialization, () => {
+        const msg = constants.loaderMessages.deserialization;
+        common.showLoader(msg.msg, msg.width, () => {
             console.log("got response");
             if (constants.pageName === "back-traces" && request.status === 400) { // tree contains too many nodes
                 common.hideLoader();
@@ -116,7 +117,6 @@ function sendRequestForTree() {
                 common.hideLoader();
                 showNoDataFound();
             }
-            common.resizeLoaderBackground();
         });
     };
     console.log("send request");
@@ -124,17 +124,19 @@ function sendRequestForTree() {
 }
 
 $(window).on("load", function () {
-    if (constants.fileName !== undefined) {
-        common.showLoader(constants.loaderMessages.buildingTree, () => {
-            common.doCallbackIfFileExists(
-                constants.fileName,
-                sendRequestForTree,
-                () => { // if does not exist
-                    common.redirect({})
-                }
-            );
-        });
-    } else {
+    if (constants.fileName === undefined) {
         console.log("File is not specified.");
+        return;
     }
+    const msg = constants.loaderMessages.buildingTree;
+    common.showLoader(msg.msg, msg.width, () => {
+        common.doCallbackIfFileExists(
+            constants.fileName,
+            sendRequestForTree,
+            () => {
+                common.showError("File does not exist " + constants.fileName);
+                common.hideLoader()
+            }
+        );
+    });
 });

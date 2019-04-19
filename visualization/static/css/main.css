@@ -353,13 +353,15 @@ nav ul li a:focus {
     z-index: 1;
     float: left;
     height: 100%;
-    width: 250px;
+    /*width: 250px;*/
+    width: 0;
     top: 0;
     left: 0;
     background-color: #e5e5e5;
     color: #282828;
     transition: width 200ms;
     position: relative;
+    display: none;
 }
 
 .search-form {
@@ -437,8 +439,8 @@ button {
     border-radius: 5px;
     position: fixed;
     top: calc(50% - 25px);
-    width: 280px;
-    left: calc((100vw - 250px) / 2 + 250px - 140px);
+    width: 0;
+    left: 0;
     padding: 15px;
     box-sizing: border-box;
     opacity: 0.9;
@@ -710,6 +712,7 @@ button:focus {
     color: #333;
     margin-bottom: 0;
     line-height: 18px;
+    overflow-wrap: break-word;
 }
 
 #search-method-form input {
@@ -723,7 +726,6 @@ button:focus {
 }
 
 .original-canvas {
-    margin-bottom: 100px;
     position: absolute;
 }
 
@@ -857,13 +859,14 @@ canvas {
 .error-message-block {
     position: absolute;
     bottom: 25px;
-    left: 260px;
-    width: 300px;
+    left: 10px;
+    width: 400px;
     background-color: #e5e5e5;
     padding: 15px 20px;
     opacity: 0;
     pointer-events: none;
     transition: opacity 300ms;
+    overflow-wrap: break-word;
 }
 
 .error-message-block p {

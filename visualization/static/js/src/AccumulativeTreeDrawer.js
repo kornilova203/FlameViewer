@@ -65,12 +65,13 @@ module.exports.AccumulativeTreeDrawer = class AccumulativeTreeDrawer extends Tre
     _doSetNodeZoomed(node) {
         if (this.isFullyVisible) {
             super._doSetNodeZoomed(node);
-        } else {
-            const pathToNode = AccumulativeTreeDrawer._getPathToNode(node);
-            const treeRequest = this._createTreeRequest(pathToNode);
-            treeRequest.onload = () => {
-                const arrayBuffer = treeRequest.response;
-                const byteArray = new Uint8Array(arrayBuffer);
+            return;
+        }
+        const pathToNode = AccumulativeTreeDrawer._getPathToNode(node);
+        const url = `${serverNames.MAIN_NAME}/trees/${this._getTreeType()}?` + this.getTreeGETParameters(pathToNode);
+        common.sendGetRequest(url, "arraybuffer")
+            .then(response => {
+                const byteArray = new Uint8Array(response);
                 const zoomedTree = deserializer.deserializeTree(byteArray);
                 const zoomedNode = zoomedTree.getBaseNode().getNodesList()[0];
                 this._buildPackageListRecursively(zoomedNode);
@@ -82,9 +83,7 @@ module.exports.AccumulativeTreeDrawer = class AccumulativeTreeDrawer extends Tre
                 zoomedNode.index = node.index;
                 zoomedNode.parent = node.parent;
                 super._doSetNodeZoomed(zoomedNode);
-            };
-            treeRequest.send();
-        }
+            });
     }
 
     /**
@@ -147,18 +146,6 @@ module.exports.AccumulativeTreeDrawer = class AccumulativeTreeDrawer extends Tre
      */
     _getTreeType() {
 
-    }
-
-    /**
-     * @param {Array<number>} pathToNode
-     * @return {XMLHttpRequest}
-     * @private
-     */
-    _createTreeRequest(pathToNode) {
-        const request = new XMLHttpRequest();
-        request.open("GET", `${serverNames.MAIN_NAME}/trees/${this._getTreeType()}?` + this.getTreeGETParameters(pathToNode));
-        request.responseType = "arraybuffer";
-        return request;
     }
 
     /**

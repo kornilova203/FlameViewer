@@ -28,6 +28,9 @@ module.exports.MethodCallTracesDrawer = class MethodCallTracesDrawer extends Cal
         $header.addClass("header-call-traces");
     }
 
+    /**
+     * @override
+     */
     getTreeGETParameters(pathToNode) {
         return methodFunctions.getTreeGETParameters.call(this, pathToNode);
     }

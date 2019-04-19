@@ -14,6 +14,9 @@ module.exports.MethodBackTracesDrawer = class MethodBackTracesDrawer extends Bac
         $header.insertBefore(this.$section.find(".canvas-wrapper"));
     }
 
+    /**
+     * @override
+     */
     getTreeGETParameters(pathToNode) {
         return methodFunctions.getTreeGETParameters.call(this, pathToNode);
     }

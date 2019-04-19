@@ -10,43 +10,35 @@ function sendRequestForTreesPreview() {
 }
 
 $(window).on("load", function () {
-    if (constants.fileName !== undefined) {
-        common.doCallbackIfFileExists(
-            constants.fileName,
-            sendRequestForTreesPreview,
-            () => { // if does not exist
-                common.redirect({})
-            }
-        );
-    }
+    if (constants.fileName === undefined) return;
+    common.doCallbackIfFileExists(
+        constants.fileName,
+        sendRequestForTreesPreview,
+        () => common.hideLoader()
+    );
 });
 
 function getAndShowTreesPreview() {
-    common.showLoader(constants.loaderMessages.buildingTrees, () => {
-        const request = new XMLHttpRequest();
+    const msg = constants.loaderMessages.buildingTrees;
+    common.showLoader(msg.msg, msg.width, () => {
         const parameters = window.location.href.split("?")[1];
-        request.open("GET", serverNames.CALL_TREE_PREVIEW_JS_REQUEST + "?" + parameters, true);
-        request.responseType = "arraybuffer";
+        let url = serverNames.CALL_TREE_PREVIEW_JS_REQUEST + "?" + parameters;
 
-        request.onload = function () {
-            common.hideLoader(0);
-            if (request.status === 400) { // if file was not found
-                common.showMessage(constants.pageMessages.chooseFile);
-                return;
-            }
-            common.showLoader(constants.loaderMessages.deserialization, () => {
-                const arrayBuffer = request.response;
-                const byteArray = new Uint8Array(arrayBuffer);
-                const treesPreview = deserializer.deserializeTreesPreview(byteArray);
+        common.sendGetRequest(url, "arraybuffer")
+            .then(response => {
                 common.hideLoader(0);
-                if (treesPreview.getTreesPreviewList().length !== 0) {
-                    drawTreesPreview(treesPreview);
-                } else {
-                    showNoDataFound();
-                }
+                const msg = constants.loaderMessages.deserialization;
+                common.showLoader(msg.msg, msg.width, () => {
+                    const byteArray = new Uint8Array(response);
+                    const treesPreview = deserializer.deserializeTreesPreview(byteArray);
+                    common.hideLoader(0);
+                    if (treesPreview.getTreesPreviewList().length !== 0) {
+                        drawTreesPreview(treesPreview);
+                    } else {
+                        showNoDataFound();
+                    }
+                });
             });
-        };
-        request.send();
     });
 }
 
@@ -54,7 +46,8 @@ function getAndShowTreesPreview() {
  * @param {Object} treesPreview
  */
 function drawTreesPreview(treesPreview) {
-    common.showLoader(constants.loaderMessages.drawing, () => {
+    const msg = constants.loaderMessages.drawing;
+    common.showLoader(msg.msg, msg.width, () => {
         const treesPreviewList = treesPreview.getTreesPreviewList();
         for (let i = 0; i < treesPreviewList.length; i++) {
             const drawer = new PreviewDrawer(

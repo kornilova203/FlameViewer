@@ -12,20 +12,19 @@ function getRequestAddress() {
 }
 
 function loadHotSpots() {
-    common.showLoader(constants.loaderMessages.countingTime, () => {
-        const request = new XMLHttpRequest();
-        request.open("GET", getRequestAddress(), true);
-        request.responseType = "json";
-
-        request.onload = function () {
-            hotSpots = request.response;
-            if (hotSpots !== undefined && hotSpots.length > 0) {
-                appendHotSpots();
-            }
-            common.hideLoader();
-        };
-        request.send();
-    });
+    const msg = constants.loaderMessages.countingTime;
+    common.showLoader(msg.msg, msg.width,
+        () => {
+            common.sendGetRequest(getRequestAddress(), "json")
+                .then(response => {
+                    hotSpots = response;
+                    if (hotSpots !== undefined && hotSpots.length > 0) {
+                        appendHotSpots();
+                    }
+                    common.hideLoader();
+                })
+                .catch(() => common.hideLoader());
+        });
 }
 
 function appendHotSpots() {

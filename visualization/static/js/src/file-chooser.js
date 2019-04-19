@@ -185,16 +185,11 @@ class FilesListManager {
      * appends new files to list of files
      */
     updateFilesList() {
-        const request = new XMLHttpRequest();
-        request.open("GET", serverNames.FILE_LIST, true);
-        request.responseType = "json";
-
-        request.onload = () => {
-            const fileNames = request.response;
-            this.appendToList(fileNames);
-            this.highlightCurrentFile();
-        };
-        request.send();
+        common.sendGetRequest(serverNames.FILE_LIST, "json")
+            .then(response => {
+                this.appendToList(response);
+                this.highlightCurrentFile();
+            });
     }
 
     showFullNameOnHover($file) {
@@ -419,18 +414,26 @@ class FilesListManager {
 }
 
 $(window).on("load", () => {
-    const filesListManager = new FilesListManager($(".file-list"));
-    filesListManager.updateFilesList();
+    common.sendGetRequest(serverNames.SUPPORTS_FILE_LIST, "json")
+        .then(response => {
+            if (response.result !== true) return;
+            const filesListManager = new FilesListManager($(".file-list"));
+            filesListManager.updateFilesList();
 
-    /* check for new files */
-    setInterval(() => {
-        filesListManager.updateFilesList();
-    }, 5000);
+            /* check for new files */
+            setInterval(() => {
+                filesListManager.updateFilesList();
+            }, 5000);
 
-    if (constants.fileName === undefined) {
-        showChooseFile();
-    }
-    enableHideFilesList();
+            if (constants.fileName === undefined) {
+                showChooseFile();
+            }
+            enableHideFilesList();
+            let $fileMenu = $(".file-menu");
+            $fileMenu.css("width", constants.FILE_MENU_WIDTH + "px");
+            $fileMenu.css("display", "initial");
+            $(".error-message-block").css("left", (constants.FILE_MENU_WIDTH + 10) + "px");
+        });
 });
 
 /**

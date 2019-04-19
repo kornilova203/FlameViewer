@@ -89,7 +89,7 @@ module.exports.CallTreeDrawer = class CallTreeDrawer extends TreeDrawer.TreeDraw
     draw() {
         this.$section = this._createSection();
         this._prepareDraw();
-        this.availableWidth = Math.max(this.canvasWidth, CallTreeDrawer._getElementWidth(this.$section));
+        this.availableWidth = Math.max(this.canvasWidth, common.getElementWidth(this.$section));
 
         this._createPopup();
 

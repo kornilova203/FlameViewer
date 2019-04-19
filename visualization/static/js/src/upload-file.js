@@ -1,5 +1,3 @@
-const JFR = "jfr";
-
 class FileUploader {
     /**
      * @param {File} file
@@ -9,10 +7,6 @@ class FileUploader {
          * @type {File}
          */
         this.file = file;
-        /**
-         * @type {String}
-         */
-        this.loaderMessage = constants.loaderMessages.uploadingFile;
     }
 
     tryToUploadFile() {
@@ -22,13 +16,11 @@ class FileUploader {
         }
         const that = this;
         /* upload file if it was not previously uploaded */
-        common.doCallbackIfFileExists(this.file.name,
-            () => {
-                common.showError("File already exists");
-            },
-            () => {
-                FileUploader.uploadFile(that);
-            });
+        common.doCallbackIfFileExists(
+            this.file.name,
+            () => common.showError("File already exists"),
+            () => FileUploader.uploadFile(that)
+        );
     }
 
     /**
@@ -37,8 +29,8 @@ class FileUploader {
     static uploadFile(that) {
         const bytesInMB = 1000000;
         const fileSizeMegabytes = that.file.size / bytesInMB;
-        common.resizeLoaderBackground(700);
-        common.showLoader(that.loaderMessage + that.file.name, () => {
+        const msg = constants.loaderMessages.uploadingFile;
+        common.showLoader(msg.msg + that.file.name, msg.width, () => {
             /* send file by 100MB parts because IDEA server does not allow to send large files */
             const partsCount = Math.ceil(fileSizeMegabytes / 100);
             let countFilesSent = 0; // how many parts were received by server
@@ -61,36 +53,22 @@ class FileUploader {
                 request.send(that.file.slice(i * bytesInMB * 100, Math.min((i + 1) * bytesInMB * 100, that.file.size)));
             }
         });
-
     }
 
     endFileUpload(success) {
         common.hideLoader();
-        if (success) {
-            console.log("File was sent");
-            common.doCallbackIfFileExists(this.file.name,
-                () => {
-                    redirectToFile(this.file.name);
-                },
-                () => {
-                    common.showError("File format is unsupported");
-                    console.error("File was not uploaded");
-                }
-            );
-        } else {
+        if (!success) {
             common.showError("File was not sent");
             console.error("File was not sent");
+            return;
         }
-    }
-}
-
-class JfrUploader extends FileUploader {
-    /**
-     * @param {File} file
-     */
-    constructor(file) {
-        super(file);
-        this.loaderMessage = constants.loaderMessages.convertingFile;
+        console.log("File was sent");
+        common.doCallbackIfFileExists(this.file.name,
+            () => redirectToFile(this.file.name),
+            () => {
+                common.showError("File format is unsupported");
+                console.error("File was not uploaded");
+            });
     }
 }
 
@@ -106,11 +84,7 @@ function redirectToFile(name) {
  * @param {File} file
  */
 function sendToServer(file) {
-    if (common.getExtension(file.name) === JFR) {
-        new JfrUploader(file).tryToUploadFile();
-    } else {
-        new FileUploader(file).tryToUploadFile();
-    }
+    new FileUploader(file).tryToUploadFile();
 }
 
 function showSupportedFormats($input) {

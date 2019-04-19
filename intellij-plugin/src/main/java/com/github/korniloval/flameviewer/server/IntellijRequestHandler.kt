@@ -38,9 +38,11 @@ class IntellijRequestHandler : HttpRequestHandler() {
                     HOT_SPOTS_PAGE to HtmlHandler,
 
                     CONNECTION_ALIVE to ConnectionAliveHandler(treeManager),
-                    SUPPORTS_CLEARING_CACHES to BooleanResultHandler(true, logger),
                     FILE to FileHandler(PluginFileManager, FileUploader(), logger),
-                    UNDO_DELETE_FILE to UndoDeleteFileHandler(PluginFileManager, logger)),
+                    UNDO_DELETE_FILE to UndoDeleteFileHandler(PluginFileManager, logger),
+
+                    SUPPORTS_CLEARING_CACHES to BooleanResultHandler(true, logger),
+                    SUPPORTS_FILE_LIST to BooleanResultHandler(true, logger)),
 
             listOf(CSS_PATTERN to StaticHandler("text/css"),
                     JS_PATTERN to StaticHandler("text/javascript"),
