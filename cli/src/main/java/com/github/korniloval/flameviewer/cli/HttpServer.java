@@ -13,6 +13,8 @@ import io.netty.handler.logging.LoggingHandler;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.BindException;
 
 import static com.github.korniloval.flameviewer.cli.CliUtilKt.encodeFileName;
 import static com.github.korniloval.flameviewer.server.ServerNamesKt.CALL_TRACES_PAGE;
@@ -21,6 +23,10 @@ class HttpServer {
     private static final int PORT = 8080;
 
     static void start(@NotNull File file) throws Throwable {
+        tryStart(file, PORT);
+    }
+
+    private static void tryStart(File file, int port) throws InterruptedException, IOException {
         EventLoopGroup eventLoopGroup = new NioEventLoopGroup();
 
         try {
@@ -30,9 +36,11 @@ class HttpServer {
                     .childHandler(new HttpServerInitializer())
                     .channel(NioServerSocketChannel.class);
 
-            Channel ch = bootstrap.bind(PORT).sync().channel();
-            System.out.println("http://localhost:" + PORT + CALL_TRACES_PAGE + "?file=" + encodeFileName(file.getCanonicalPath()));
+            Channel ch = bootstrap.bind(port).sync().channel();
+            System.out.println("http://localhost:" + port + CALL_TRACES_PAGE + "?file=" + encodeFileName(file.getCanonicalPath()));
             ch.closeFuture().sync();
+        } catch (BindException e) {
+            tryStart(file, port + 1);
         } finally {
             eventLoopGroup.shutdownGracefully();
         }
