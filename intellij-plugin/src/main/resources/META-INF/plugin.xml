@@ -74,6 +74,8 @@ Detailed description at <a href="https://github.com/kornilova-l/FlameViewer">git
                 implementation="com.github.korniloval.flameviewer.converters.cflamegraph.JfrToCFlamegraphConverterFactoryIntellij"/>
         <toCFlamegraphConverterFactory
                 implementation="com.github.korniloval.flameviewer.converters.cflamegraph.YourkitCsvToCFlamegraphConverterFactory"/>
+        <toCFlamegraphConverterFactory
+                implementation="com.github.korniloval.flameviewer.converters.cflamegraph.FlamegraphToCFlamegraphConverterFactoryIntellij"/>
         <toCallTracesConverterFactory
                 implementation="com.github.korniloval.flameviewer.converters.calltraces.YourkitCsvToCallTracesConverterFactory"/>
         <toCallTracesConverterFactory

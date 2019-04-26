@@ -1,0 +1,70 @@
+tree_info {
+  nodes_count: 9
+}
+base_node {
+  nodes {
+    width: 12
+    node_info {
+      method_name: "a"
+    }
+    nodes {
+      width: 2
+      node_info {
+        method_name: "f"
+      }
+    }
+  }
+  nodes {
+    offset: 12
+    width: 28
+    node_info {
+      method_name: "b"
+      description: "()"
+    }
+    nodes {
+      offset: 12
+      width: 13
+      node_info {
+        method_name: "c"
+        description: "(a, b)ret"
+      }
+      nodes {
+        offset: 12
+        width: 10
+        node_info {
+          method_name: "a"
+        }
+        nodes {
+          offset: 12
+          width: 6
+          node_info {
+            method_name: "a"
+          }
+          nodes {
+            offset: 12
+            width: 6
+            node_info {
+              method_name: "d"
+            }
+          }
+        }
+      }
+    }
+    nodes {
+      offset: 25
+      width: 13
+      node_info {
+        method_name: "e"
+      }
+      nodes {
+        offset: 25
+        width: 5
+        node_info {
+          method_name: "a"
+        }
+      }
+    }
+  }
+}
+depth: 5
+width: 40

@@ -9,10 +9,11 @@ import java.io.File
 /**
  * @author Liudmila Kornilova
  **/
+@Deprecated("Use FlamegraphToCFlamegraphConverter instead")
 class FlamegraphToCallTracesConverter(private val file: File) : Converter<TreeProtos.Tree> {
     @Throws(ConversionException::class)
     override fun convert(): TreeProtos.Tree {
-        val stacks = getStacks(file) ?: throw ConversionException("Cannot get stacks from file")
+        val stacks = getStacks(file) ?: throw ConversionException("Cannot get stacks from file $file")
         val tree: TreeProtos.Tree?
         tree = StacksToTreeBuilder(stacks).tree
         if (tree == null) {

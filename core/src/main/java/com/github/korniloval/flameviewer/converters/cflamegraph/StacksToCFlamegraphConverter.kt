@@ -19,7 +19,9 @@ class StacksToCFlamegraphConverter(private val stacks: Map<String, Int>) : Conve
         stacksList.sortBy { it.first }
         val splitStacks = stacksList.map { Pair(it.first.split(";"), it.second) }
 
-        buildCFlamegraph(splitStacks, NodeCoordinates(0, splitStacks.size, 0), cflamegraphLines, classNames, methodNames, descriptions)
+        splitStacks.forEachChild(NodeCoordinates(0, splitStacks.size, -1)) { childCoord ->
+            buildCFlamegraph(splitStacks, childCoord, cflamegraphLines, classNames, methodNames, descriptions)
+        }
 
         return CFlamegraph(
                 cflamegraphLines,
@@ -102,5 +104,5 @@ class StacksToCFlamegraphConverter(private val stacks: Map<String, Int>) : Conve
         processor(NodeCoordinates(childStart, coordinates.end, childDepth))
     }
 
-    private data class NodeCoordinates(internal val start: Int, internal val end: Int, internal val depth: Int)
+    private data class NodeCoordinates(val start: Int, val end: Int, val depth: Int)
 }

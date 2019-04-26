@@ -4,6 +4,7 @@ import com.github.kornilova_l.flamegraph.proto.TreeProtos;
 import com.github.korniloval.flameviewer.FlameLogger;
 import com.github.korniloval.flameviewer.LoggerAdapter;
 import com.github.korniloval.flameviewer.converters.Converter;
+import com.github.korniloval.flameviewer.converters.cflamegraph.FlamegraphToCFlamegraphConverter;
 import com.intellij.openapi.diagnostic.Logger;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,6 +21,9 @@ import static com.github.korniloval.flameviewer.converters.calltraces.StacksPars
  * a() 5
  * a() 5
  * Second line will be ignored.
+ *
+ * @deprecated this converter supports flamegraph files that were uploaded before {@link FlamegraphToCFlamegraphConverter}
+ *             was implemented
  */
 public class FlamegraphToCallTracesConverterFactory implements ToCallTracesIdentifiedConverterFactory {
     private static final FlameLogger logger = new LoggerAdapter(Logger.getInstance(FlamegraphToCallTracesConverterFactory.class));

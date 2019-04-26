@@ -5,18 +5,22 @@ import com.github.korniloval.flameviewer.PluginFileManager
 import com.github.korniloval.flameviewer.converters.ConverterTestCase
 import com.github.korniloval.flameviewer.converters.ResultType.CALLTRACES
 import com.github.korniloval.flameviewer.converters.TreeGenerator
+import com.github.korniloval.flameviewer.converters.trees.maximumNodesCount
 import java.io.ByteArrayInputStream
 import java.io.File
 
 class FlamegraphToCallTracesConverterTest : ConverterTestCase("flamegraph", CALLTRACES) {
 
+    fun testSimple() = doTest()
     fun testOneStacktrace() = doTest()
+    fun testBiggerTree() = doTest()
+    fun testMultipleOccurrenceInStack() = doTest()
 
     fun testNodesCountBiggerThanLimit() {
         PluginFileManager.deleteAllUploadedFiles()
         val tempFile = File("${getProfilerFilesPath()}/nodesCountBiggerThanLimit.flamegraph")
         try {
-            val nodesCount = 20_000 // it is more than maximumNodesCount
+            val nodesCount = maximumNodesCount + 5_000
             TreeGenerator(nodesCount).outputFlamegraph(tempFile)
             val bytes = getTreeBytes()
             val tree = TreeProtos.Tree.parseFrom(ByteArrayInputStream(bytes))
