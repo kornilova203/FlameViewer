@@ -1,7 +1,7 @@
 package com.github.korniloval.flameviewer.converters.cflamegraph
 
 import com.github.korniloval.flameviewer.cli.CliLogger
-import com.github.korniloval.flameviewer.converters.calltraces.StacksParser.isFlamegraph
+import com.github.korniloval.flameviewer.converters.isFlamegraph
 import java.io.File
 
 object FlamegraphToCFlamegraphConverterFactoryCli : ToCFlamegraphConverterFactory {

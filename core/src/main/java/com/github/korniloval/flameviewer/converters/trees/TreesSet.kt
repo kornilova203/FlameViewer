@@ -6,14 +6,14 @@ import com.github.kornilova_l.flamegraph.proto.TreesPreviewProtos.TreesPreview
 import com.github.kornilova_l.flamegraph.proto.TreesProtos
 import com.github.korniloval.flameviewer.converters.trees.TreeType.BACK_TRACES
 import com.github.korniloval.flameviewer.converters.trees.TreeType.CALL_TRACES
-import com.github.korniloval.flameviewer.converters.trees.hotspots.HotSpot
-import com.github.korniloval.flameviewer.converters.trees.hotspots.HotSpotsBuilder
 import com.github.korniloval.flameviewer.converters.trees.backtraces.BackTracesBuilder
 import com.github.korniloval.flameviewer.converters.trees.backtraces.BackTracesMethodBuilder
+import com.github.korniloval.flameviewer.converters.trees.hotspots.HotSpot
+import com.github.korniloval.flameviewer.converters.trees.hotspots.HotSpotsBuilder
 import java.util.*
 
 
-const val maximumNodesCount = 15_000 // amount of visible nodes
+const val maximumNodesCount = 25_000 // amount of visible nodes
 
 abstract class TreesSet {
     private var hotSpots: ArrayList<HotSpot>? = null

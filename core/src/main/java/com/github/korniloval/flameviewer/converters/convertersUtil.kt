@@ -2,9 +2,8 @@ package com.github.korniloval.flameviewer.converters
 
 import com.github.korniloval.flameviewer.FlameLogger
 import org.apache.commons.io.IOUtils
-import java.io.File
-import java.io.FileInputStream
-import java.io.IOException
+import java.io.*
+import java.util.regex.Pattern
 
 object FramesParsingUtil {
     fun getLastSpacePosBeforeParams(name: String, openBracketPos: Int): Int {
@@ -17,12 +16,13 @@ object FramesParsingUtil {
     }
 
     /**
+     * @param lastSpacePosBeforeParams is -1 if there is no last space
      * We do not know if name contains return value.
      * It may even not contain class name
      */
     fun getClassName(name: String, parametersPos: Int, lastSpacePosBeforeParams: Int): String? {
         var lastDot = -1
-        for (i in parametersPos - 1 downTo 0) {
+        for (i in parametersPos - 1 downTo Math.max(0, lastSpacePosBeforeParams)) {
             if (name[i] == '.') {
                 lastDot = i
                 break
@@ -68,3 +68,27 @@ fun getBytes(file: File, logger: FlameLogger): ByteArray? {
     return null
 }
 
+private val F_LINE_PATTERN = Pattern.compile("[^\\s].* \\d+")
+private const val F_LINES_TO_CHECK = 10_000
+
+/**
+ * @return true if there is at least one flamegraph line
+ */
+fun isFlamegraph(file: File, logger: FlameLogger): Boolean {
+    val bytes = getBytes(file, logger) ?: return false
+    try {
+        BufferedReader(InputStreamReader(ByteArrayInputStream(bytes))).use { reader ->
+            var line: String? = reader.readLine()
+            var i = 0
+            while (line != null && i < F_LINES_TO_CHECK) {
+                if (F_LINE_PATTERN.matcher(line).matches()) return true
+                line = reader.readLine()
+                i++
+            }
+        }
+    } catch (e: IOException) {
+        e.printStackTrace()
+    }
+
+    return false
+}

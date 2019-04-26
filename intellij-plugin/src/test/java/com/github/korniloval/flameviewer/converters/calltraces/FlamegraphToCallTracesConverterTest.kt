@@ -15,6 +15,7 @@ class FlamegraphToCallTracesConverterTest : ConverterTestCase("flamegraph", CALL
     fun testOneStacktrace() = doTest()
     fun testBiggerTree() = doTest()
     fun testMultipleOccurrenceInStack() = doTest()
+    fun testAsyncProfiler() = doTest()
 
     fun testNodesCountBiggerThanLimit() {
         PluginFileManager.deleteAllUploadedFiles()

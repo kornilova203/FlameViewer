@@ -1,20 +1,13 @@
 package com.github.korniloval.flameviewer.converters.calltraces;
 
-import com.github.korniloval.flameviewer.FlameLogger;
-import org.jetbrains.annotations.NotNull;
+import com.github.korniloval.flameviewer.converters.trees.TreesUtil;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
-import java.util.regex.Pattern;
-
-import static com.github.korniloval.flameviewer.converters.ConvertersUtilKt.getBytes;
 
 public class StacksParser {
-    private static final Pattern flamegraphLinePattern = Pattern.compile(".* \\d+");
-
     @Nullable
     public static Map<String, Integer> getStacks(File convertedFile) {
         try (BufferedReader reader = new BufferedReader(
@@ -22,39 +15,18 @@ public class StacksParser {
         )) {
             Map<String, Integer> stacks = new HashMap<>();
             reader.lines()
-                    .filter(line -> !line.isEmpty())
-                    .forEach(line -> stacks.put(
-                            line.substring(0, line.lastIndexOf(" ")),
-                            Integer.parseInt(line.substring(
-                                    line.lastIndexOf(" ") + 1
-                            ))));
+                    .forEach(line -> {
+                        if (line.isEmpty()) return;
+                        int idx = line.lastIndexOf(" ");
+                        if (idx == -1) return;
+                        Integer width = TreesUtil.INSTANCE.parsePositiveInt(line, idx + 1, line.length());
+                        if (width != null) stacks.put(line.substring(0, idx), width);
+                    });
             return stacks;
         } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
-    }
-
-    public static boolean isFlamegraph(@NotNull File file, @NotNull FlameLogger logger) {
-        byte[] bytes = getBytes(file, logger);
-        if (bytes == null) return false;
-        boolean hasValidLine = false;
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(
-                new ByteArrayInputStream(bytes)
-        ))) {
-            String line = reader.readLine();
-            while (line != null && !Objects.equals(line, "")) {
-                if (!flamegraphLinePattern.matcher(line).matches()) {
-                    return false;
-                } else {
-                    hasValidLine = true;
-                }
-                line = reader.readLine();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return hasValidLine;
     }
 
     public static boolean writeTo(Map<String, Integer> stacks, File file) {

@@ -50,17 +50,13 @@ class YourkitToCallTracesConverter(private val file: File) : Converter<TreeProto
         }
         var time = -1L
         var newDepth = -1
-        try {
-            /* find next delimiter */
-            for (i in delimPos + 1 until line.length - 2) {
-                if (line[i] == '"' && line[i + 1] == ',' && line[i + 2] == '"') {
-                    time = parsePositiveLong(line, delimPos + 3, i)
-                    newDepth = parsePositiveInt(line, i + 3, line.length - 1)
-                    break
-                }
+        /* find next delimiter */
+        for (i in delimPos + 1 until line.length - 2) {
+            if (line[i] == '"' && line[i + 1] == ',' && line[i + 2] == '"') {
+                time = parsePositiveLong(line, delimPos + 3, i) ?: return
+                newDepth = parsePositiveInt(line, i + 3, line.length - 1) ?: return
+                break
             }
-        } catch (e: NumberFormatException) {
-            e.printStackTrace()
         }
         if (time == -1L || newDepth == -1) {
             return

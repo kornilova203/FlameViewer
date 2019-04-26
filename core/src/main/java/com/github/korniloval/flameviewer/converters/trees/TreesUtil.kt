@@ -182,25 +182,21 @@ object TreesUtil {
      * so I decided to implement method that parses integer without need to
      * create substring
      */
-    fun parsePositiveInt(line: String, startIndex: Int, endIndex: Int): Int {
+    fun parsePositiveInt(line: String, startIndex: Int, endIndex: Int): Int? {
         var res = 0
         for (i in startIndex until endIndex) {
             val c = line[i]
-            if (c !in '0'..'9') {
-                throw NumberFormatException("Cannot parse number. Line: $line startIndex: $startIndex. endIndex $endIndex")
-            }
+            if (c !in '0'..'9') return null
             res = res * 10 + (c - '0')
         }
         return res
     }
 
-    fun parsePositiveLong(line: String, startIndex: Int, endIndex: Int): Long {
+    fun parsePositiveLong(line: String, startIndex: Int, endIndex: Int): Long? {
         var res = 0L
         for (i in startIndex until endIndex) {
             val c = line[i]
-            if (c !in '0'..'9') {
-                throw NumberFormatException("Cannot parse number. Line: $line startIndex: $startIndex. endIndex $endIndex")
-            }
+            if (c !in '0'..'9') return null
             res = res * 10 + (c - '0')
         }
         return res

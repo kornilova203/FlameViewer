@@ -1,7 +1,7 @@
 package com.github.korniloval.flameviewer.converters.cflamegraph
 
 import com.github.korniloval.flameviewer.LoggerAdapter
-import com.github.korniloval.flameviewer.converters.calltraces.StacksParser.isFlamegraph
+import com.github.korniloval.flameviewer.converters.isFlamegraph
 import com.intellij.openapi.diagnostic.Logger
 import java.io.File
 

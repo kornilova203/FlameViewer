@@ -47,8 +47,8 @@ class YourkitCsvToCFlamegraphConverter(private val file: File) : Converter<CFlam
             /* find next delimiter */
             for (i in delimPos + 1 until line.length - 2) {
                 if (line[i] == '"' && line[i + 1] == ',' && line[i + 2] == '"') {
-                    width = parsePositiveInt(line, delimPos + 3, i)
-                    depth = parsePositiveInt(line, i + 3, line.length - 1)
+                    width = parsePositiveInt(line, delimPos + 3, i) ?: return
+                    depth = parsePositiveInt(line, i + 3, line.length - 1) ?: return
                     break
                 }
             }

@@ -10,8 +10,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 
+import static com.github.korniloval.flameviewer.converters.ConvertersUtilKt.isFlamegraph;
 import static com.github.korniloval.flameviewer.converters.calltraces.FlamegraphToCallTracesConverter.EXTENSION;
-import static com.github.korniloval.flameviewer.converters.calltraces.StacksParser.isFlamegraph;
 
 /**
  * Converts file in flamegraph format to call traces.

@@ -17,7 +17,7 @@ class StacksToCFlamegraphConverter(private val stacks: Map<String, Int>) : Conve
 
         val stacksList = stacks.entries.mapTo(ArrayList()) { Pair(it.key, it.value) }
         stacksList.sortBy { it.first }
-        val splitStacks = stacksList.map { Pair(it.first.split(";"), it.second) }
+        val splitStacks = stacksList.map { Pair(splitAndRemoveThreadId(it.first), it.second) }
 
         splitStacks.forEachChild(NodeCoordinates(0, splitStacks.size, -1)) { childCoord ->
             buildCFlamegraph(splitStacks, childCoord, cflamegraphLines, classNames, methodNames, descriptions)
@@ -29,6 +29,15 @@ class StacksToCFlamegraphConverter(private val stacks: Map<String, Int>) : Conve
                 toArray(methodNames),
                 toArray(descriptions)
         )
+    }
+
+    private fun splitAndRemoveThreadId(stack: String): List<String> {
+        val stacks = stack.split(";")
+        if (stacks.size > 1 && stacks[0].startsWith('[') && stacks[0].endsWith(']')) {
+            // async-profiler thread id
+            return stacks.subList(1, stacks.size)
+        }
+        return stacks
     }
 
     /**
@@ -51,8 +60,7 @@ class StacksToCFlamegraphConverter(private val stacks: Map<String, Int>) : Conve
         val openBracketPos = frame.indexOf('(')
         val parametersPos = if (openBracketPos == -1) frame.length else openBracketPos // call.length if no parameters
         val lastSpacePosBeforeParams = FramesParsingUtil.getLastSpacePosBeforeParams(frame, parametersPos) // -1 if no space
-
-        val className = getClassName(frame, parametersPos, lastSpacePosBeforeParams)
+        val className = getClassName(frame, parametersPos, lastSpacePosBeforeParams)?.replace('/', '.')
         val classNameId = if (className == null) null else getId(classNames, className)
         val methodName = getMethodName(frame, parametersPos)
         val methodNameId = getId(methodNames, methodName)
@@ -101,7 +109,7 @@ class StacksToCFlamegraphConverter(private val stacks: Map<String, Int>) : Conve
                 currentFrame = frame
             }
         }
-        processor(NodeCoordinates(childStart, coordinates.end, childDepth))
+        if (currentFrame != null) processor(NodeCoordinates(childStart, coordinates.end, childDepth))
     }
 
     private data class NodeCoordinates(val start: Int, val end: Int, val depth: Int)
