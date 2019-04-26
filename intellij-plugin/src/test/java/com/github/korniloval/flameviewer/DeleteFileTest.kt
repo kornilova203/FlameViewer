@@ -38,7 +38,7 @@ class DeleteFileTest : LightPlatformCodeInsightFixtureTestCase() {
         assertNotNull(file) // file was sent
         assertTrue(file!!.exists())
 
-        doTestDelete(file, fileName, "flamegraph")
+        doTestDelete(file, fileName, "cflamegraph")
 
         doTestUndoDelete(file, fileName)
     }

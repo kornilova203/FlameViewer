@@ -4,7 +4,6 @@ import com.github.korniloval.flameviewer.UploadFileUtil.bytesInMB
 import com.github.korniloval.flameviewer.UploadFileUtil.sendFile
 import com.github.korniloval.flameviewer.server.DOES_FILE_EXIST
 import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase
-import io.netty.handler.codec.http.HttpResponseStatus
 import org.jetbrains.ide.BuiltInServerManager
 import java.io.File
 import java.net.HttpURLConnection
@@ -37,26 +36,26 @@ class FilesUploaderTest : LightPlatformCodeInsightFixtureTestCase() {
 
     fun testGetNonExistingFiles() {
         PluginFileManager.deleteAllUploadedFiles()
-        var responseCode = sendRequestDoesFileExist("file-does-not-exist.txt")
-        assertEquals(HttpResponseStatus.NOT_FOUND.code(), responseCode)
+        var res = sendRequestDoesFileExist("file-does-not-exist.txt")
+        assertEquals("{\"result\": false}", res)
 
         sendFile("not-supported-file.txt", ByteArray(100))
-        responseCode = sendRequestDoesFileExist("not-supported-file.txt")
-        assertEquals(HttpResponseStatus.NOT_FOUND.code(), responseCode)
+        res = sendRequestDoesFileExist("not-supported-file.txt")
+        assertEquals("{\"result\": false}", res)
 
         sendFile("supported-file.ser", ByteArray(100))
-        responseCode = sendRequestDoesFileExist("supported-file.ser")
-        assertEquals(HttpResponseStatus.FOUND.code(), responseCode)
+        res = sendRequestDoesFileExist("supported-file.ser")
+        assertEquals("{\"result\": true}", res)
     }
 
-    private fun sendRequestDoesFileExist(fileName: String): Int {
+    private fun sendRequestDoesFileExist(fileName: String): String {
         val url = URL("http://localhost:${BuiltInServerManager.getInstance().port}$DOES_FILE_EXIST")
         val connection = url.openConnection() as HttpURLConnection
         connection.requestMethod = "GET"
 
         connection.setRequestProperty("File-Name", fileName)
 
-        return connection.responseCode
+        return String(UploadFileUtil.getResponse(connection))
     }
 
     /**
