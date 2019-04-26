@@ -38,6 +38,7 @@ section header {
     position: relative;
     top: 30px;
     height: 80px;
+    min-width: 200px;
 }
 
 .header-call-traces {

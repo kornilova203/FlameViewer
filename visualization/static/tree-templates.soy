@@ -42,7 +42,9 @@
  */
 {template .methodHeader}
   <header>
-    <div class="class-name"><img src="img/class.png"/><code>{$className}</code></div>
+    {if $className.length > 0}
+      <div class="class-name"><img src="img/class.png"/><code>{$className}</code></div>
+    {/if}
     <h2>
       <img src="img/method.png"/>
       <code class="return-value">{$returnValue} </code>
