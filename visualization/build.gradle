@@ -43,9 +43,11 @@ task moveGeneratedTemplates(dependsOn: buildSoy) {
     }
 }
 
-task copyStatic(dependsOn: [':visualization:browserify', ':visualization:moveGeneratedTemplates']) << {
-    copy {
-        from 'static'
-        into '../core/src/main/generated-resources/static'
+task copyStatic(dependsOn: [':visualization:browserify', ':visualization:moveGeneratedTemplates']) {
+    doLast {
+        copy {
+            from 'static'
+            into '../core/src/main/generated-resources/static'
+        }
     }
 }
