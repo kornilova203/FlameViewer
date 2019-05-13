@@ -61,13 +61,13 @@ abstract class TreeHandler(protected val logger: FlameLogger, private val findFi
             return w
         }
 
-        internal fun decreaseDetailing(node: Node, nodeBuilder: Node.Builder, maxAllowedWidth: Long) {
+        internal fun decreaseDetailing(node: Node, nodeBuilder: Node.Builder, maxAllowedWidth: Long, first: Boolean = true) {
             for (child in node.nodesList) {
-                if (child.width < maxAllowedWidth) continue
+                if (!first && child.width < maxAllowedWidth) continue // don't skip first layer
                 // don't copy subtree of child
                 nodeBuilder.addNodes(copyNode(child))
                 val addedChild = nodeBuilder.getNodesBuilder(nodeBuilder.nodesBuilderList.size - 1)
-                decreaseDetailing(child, addedChild, maxAllowedWidth)
+                decreaseDetailing(child, addedChild, maxAllowedWidth, false)
             }
         }
 
