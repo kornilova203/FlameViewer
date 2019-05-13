@@ -20,14 +20,4 @@ module.exports.MethodBackTracesDrawer = class MethodBackTracesDrawer extends Bac
     getTreeGETParameters(pathToNode) {
         return methodFunctions.getTreeGETParameters.call(this, pathToNode);
     }
-
-    /**
-     * @override
-     * @param visibleLayersCount
-     * @return {number}
-     */
-    _moveSectionUp(visibleLayersCount) {
-        this.$fog.css("top", visibleLayersCount * (constants.LAYER_HEIGHT + constants.LAYER_GAP) + 59 + constants.METHOD_HEADER_HEIGHT);
-        return 0;
-    }
 };

@@ -11,6 +11,7 @@ base_node {
   nodes {
     offset: 10
     width: 15
+    index: 1
     node_info {
       method_name: "b"
     }
@@ -25,6 +26,7 @@ base_node {
   nodes {
     offset: 25
     width: 15
+    index: 2
     node_info {
       method_name: "c"
     }
@@ -38,6 +40,7 @@ base_node {
     nodes {
       offset: 30
       width: 5
+      index: 1
       node_info {
         method_name: "b"
       }
@@ -52,6 +55,7 @@ base_node {
     nodes {
       offset: 35
       width: 5
+      index: 2
       node_info {
         method_name: "d"
       }
@@ -67,6 +71,7 @@ base_node {
   nodes {
     offset: 40
     width: 1
+    index: 3
     node_info {
       method_name: "d"
     }
@@ -81,6 +86,7 @@ base_node {
   nodes {
     offset: 41
     width: 5
+    index: 4
     node_info {
       method_name: "e"
     }
@@ -88,6 +94,7 @@ base_node {
   nodes {
     offset: 46
     width: 5
+    index: 5
     node_info {
       method_name: "f"
     }
@@ -116,6 +123,7 @@ base_node {
   nodes {
     offset: 51
     width: 5
+    index: 6
     node_info {
       method_name: "g"
     }

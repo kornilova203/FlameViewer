@@ -28,6 +28,7 @@ base_node {
     nodes {
       offset: 100
       width: 24
+      index: 1
       node_info {
         method_name: "connect"
         class_name: "java.net.SocksSocketImpl"

@@ -29,6 +29,7 @@ base_node {
   nodes {
     offset: 100
     width: 22
+    index: 1
     node_info {
       method_name: "premain"
       class_name: "com.intellij.rt.execution.application.AppMainV2$Agent"

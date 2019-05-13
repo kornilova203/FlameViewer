@@ -6,14 +6,16 @@ import com.github.kornilova_l.flamegraph.proto.TreesPreviewProtos.TreesPreview
 import com.github.kornilova_l.flamegraph.proto.TreesProtos
 import com.github.korniloval.flameviewer.converters.trees.TreeType.BACK_TRACES
 import com.github.korniloval.flameviewer.converters.trees.TreeType.CALL_TRACES
+import com.github.korniloval.flameviewer.converters.trees.TreesUtil.copyNode
 import com.github.korniloval.flameviewer.converters.trees.backtraces.BackTracesBuilder
 import com.github.korniloval.flameviewer.converters.trees.backtraces.BackTracesMethodBuilder
 import com.github.korniloval.flameviewer.converters.trees.hotspots.HotSpot
 import com.github.korniloval.flameviewer.converters.trees.hotspots.HotSpotsBuilder
+import com.github.korniloval.flameviewer.server.handlers.treeBuilder
 import java.util.*
 
 
-const val maximumNodesCount = 25_000 // amount of visible nodes
+const val maximumNodesCount = 2_000 // amount of visible nodes
 
 abstract class TreesSet {
     private var hotSpots: ArrayList<HotSpot>? = null
@@ -33,19 +35,11 @@ abstract class TreesSet {
                 filter: Filter?): Tree? {
         getTree(CALL_TRACES, null) // tree will be filtered later
         val callTraces = callTraces ?: return null
-        val tree: Tree? = when (treeType) {
-            CALL_TRACES -> {
-                CallTracesMethodBuilder(callTraces, className, methodName, desc).tree
-            }
-            BACK_TRACES -> {
-                BackTracesMethodBuilder(callTraces, className, methodName, desc).tree
-            }
+        val tree = when (treeType) {
+            CALL_TRACES -> CallTracesMethodBuilder(callTraces, className, methodName, desc).tree
+            BACK_TRACES -> BackTracesMethodBuilder(callTraces, className, methodName, desc).tree
         }
-        return if (filter == null) {
-            tree
-        } else {
-            filterTree(tree, filter, false)
-        }
+        return if (filter == null) tree else filterTree(tree, filter, false)
     }
 
     abstract fun getCallTree(filter: Filter?): TreesProtos.Trees?
@@ -62,16 +56,16 @@ abstract class TreesSet {
         return hotSpots
     }
 
-    protected fun filterTree(tree: Tree?,
+    protected fun filterTree(tree: Tree,
                              filter: Filter,
                              isCallTree: Boolean): Tree? {
-        val filteredTree = Tree.newBuilder()
+        val filteredTree = treeBuilder().setVisibleDepth(tree.visibleDepth)
         filteredTree.setBaseNode(Node.newBuilder())
         if (isCallTree) {
-            filteredTree.treeInfo = tree!!.treeInfo
+            filteredTree.treeInfo = tree.treeInfo
             buildFilteredCallTreeRecursively(filteredTree.baseNodeBuilder, tree.baseNode, filter)
         } else {
-            buildFilteredTreeRecursively(filteredTree.baseNodeBuilder, tree!!.baseNode, filter)
+            buildFilteredTreeRecursively(filteredTree.baseNodeBuilder, tree.baseNode, filter)
         }
         if (filteredTree.baseNodeBuilder.nodesCount == 0) {
             return null
@@ -146,10 +140,8 @@ abstract class TreesSet {
 
         for (child in node.nodesList) {
             if (filter.isNodeIncluded(child)) {
-                var newNode = copyNode(child)
-                newNode.offset = child.offset
-                nodeBuilder.addNodes(newNode)
-                newNode = nodeBuilder.nodesBuilderList[nodeBuilder.nodesBuilderList.size - 1]
+                nodeBuilder.addNodes(copyNode(child))
+                val newNode = nodeBuilder.nodesBuilderList[nodeBuilder.nodesBuilderList.size - 1]
                 buildFilteredCallTreeRecursively(
                         newNode,
                         child,
@@ -160,19 +152,9 @@ abstract class TreesSet {
         }
     }
 
-    private fun copyNode(node: Node): Node.Builder {
-        val nodeBuilder = Node.newBuilder()
-        nodeBuilder.width = node.width
-        nodeBuilder.nodeInfo = node.nodeInfo
-        return nodeBuilder
-    }
-
     protected fun getCallTracesMaybeFiltered(filter: Filter?): Tree? {
-        return if (filter == null) {
-            callTraces
-        } else {
-            filterTree(callTraces, filter, false)
-        }
+        val callTraces = callTraces ?: return null
+        return if (filter == null) callTraces else  filterTree(callTraces, filter, false)
     }
 
     protected fun getBackTracesMaybeFiltered(filter: Filter?): Tree? {
@@ -180,14 +162,8 @@ abstract class TreesSet {
         if (callTraces.treeInfo.nodesCount > maximumNodesCount) {
             throw IllegalArgumentException("Calltraces must contain less than $maximumNodesCount nodes")
         }
-        if (backTraces == null) {
-            backTraces = BackTracesBuilder(callTraces).tree
-        }
-        return if (filter == null) {
-            backTraces
-        } else {
-            filterTree(backTraces, filter, false)
-        }
+        val backTraces = if (backTraces != null) backTraces!! else BackTracesBuilder(callTraces).tree
+        return if (filter == null) backTraces else filterTree(backTraces, filter, false)
     }
 
     companion object {

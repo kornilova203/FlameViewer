@@ -9,30 +9,7 @@ module.exports.AccumulativeTreeDrawer = class AccumulativeTreeDrawer extends Tre
         super(tree);
         this.isFullyVisible = this.tree.getVisibleDepth() === 0;
         this.visibleDepth = this.tree.getVisibleDepth();
-        this.$fog = $(".fog");
         this.initialCanvasShift = this.canvasHeight; // see _moveSectionUp method
-        if (!this.isFullyVisible) { // if some nodes are hidden
-            this._assignChildIndexRecursively(tree.getBaseNode());
-        }
-    }
-
-    draw() {
-        super.draw();
-        if (!this.isFullyVisible) {
-            this._toggleFog(this.tree.getVisibleDepth(), this.tree.getDepth());
-        }
-    }
-
-    /**
-     * Indices are needed to get hidden nodes when node is zoomed.
-     * @param node
-     */
-    _assignChildIndexRecursively(node) {
-        const children = node.getNodesList();
-        for (let i = 0; i < children.length; i++) {
-            children[i].index = i;
-            this._assignChildIndexRecursively(children[i]);
-        }
     }
 
     /**
@@ -67,7 +44,7 @@ module.exports.AccumulativeTreeDrawer = class AccumulativeTreeDrawer extends Tre
             super._doSetNodeZoomed(node);
             return;
         }
-        const pathToNode = AccumulativeTreeDrawer._getPathToNode(node);
+        const pathToNode = AccumulativeTreeDrawer._getPathToNode(node, this.tree.getBaseNode());
         const url = `${serverNames.MAIN_NAME}/trees/${this._getTreeType()}?` + this.getTreeGETParameters(pathToNode);
         common.sendGetRequest(url, "arraybuffer")
             .then(response => {
@@ -77,27 +54,11 @@ module.exports.AccumulativeTreeDrawer = class AccumulativeTreeDrawer extends Tre
                 this._buildPackageListRecursively(zoomedNode);
                 this._setPackageColors();
                 this._prepareTree(zoomedTree, node.depth - 1);
-                this._assignChildIndexRecursively(zoomedTree.getBaseNode());
-                this._moveSectionUp(zoomedTree.getVisibleDepth() + node.depth - 1);
-                this._toggleFog(zoomedTree.getVisibleDepth(), zoomedTree.getDepth());
-                zoomedNode.index = node.index;
+                const subTreeDepth = zoomedTree.getVisibleDepth() === 0 ? zoomedTree.getDepth() : zoomedTree.getVisibleDepth();
+                this._moveSectionUp(subTreeDepth + node.depth - 1);
                 zoomedNode.parent = node.parent;
                 super._doSetNodeZoomed(zoomedNode);
             });
-    }
-
-    /**
-     * Hide fog if top nodes does not have children
-     * @param visibleLayersCount
-     * @param layersCount
-     * @private
-     */
-    _toggleFog(visibleLayersCount, layersCount) {
-        if (visibleLayersCount === layersCount) {
-            this.$fog.css("opacity", 0)
-        } else {
-            this.$fog.css("opacity", 1)
-        }
     }
 
     /**
@@ -107,7 +68,6 @@ module.exports.AccumulativeTreeDrawer = class AccumulativeTreeDrawer extends Tre
         super._resetZoom();
         if (this.visibleDepth !== 0) { // if only part of tree displayed
             this._moveSectionUp(this.tree.getVisibleDepth());
-            this._toggleFog(this.tree.getVisibleDepth(), this.tree.getDepth());
         }
     }
 
@@ -117,12 +77,10 @@ module.exports.AccumulativeTreeDrawer = class AccumulativeTreeDrawer extends Tre
      * Each element of path is an index of child
      * @private
      */
-    static _getPathToNode(node) {
+    static _getPathToNode(node, baseNode) {
         const reversedPath = [];
-        while (node !== undefined) {
-            if (node.index !== undefined) { // index of base node is undefined
-                reversedPath.push(node.index);
-            }
+        while (node !== baseNode) {
+            reversedPath.push(node.getIndex());
             node = node.parent;
         }
         return AccumulativeTreeDrawer._reverseList(reversedPath);
@@ -148,6 +106,7 @@ module.exports.AccumulativeTreeDrawer = class AccumulativeTreeDrawer extends Tre
 
     }
 
+    // noinspection JSMethodCanBeStatic
     /**
      * @param {Array<number>} pathToNode
      * @return {string}

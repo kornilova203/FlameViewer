@@ -20,6 +20,7 @@ base_node {
     nodes {
       offset: 1
       width: 2
+      index: 1
       node_info {
         method_name: "parseLongs"
         class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.CheckAllKt"
@@ -235,6 +236,7 @@ base_node {
       nodes {
         offset: 2
         width: 1
+        index: 1
         node_info {
           method_name: "hasNextLong"
           class_name: "java.util.Scanner"
@@ -317,6 +319,7 @@ base_node {
     nodes {
       offset: 3
       width: 1
+      index: 2
       node_info {
         method_name: "toSetOfVertexRules"
         class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.CheckAllKt"
@@ -497,6 +500,7 @@ base_node {
     nodes {
       offset: 4
       width: 612
+      index: 3
       node_info {
         method_name: "tryToFindSolutionForEachRulesSet$default"
         class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.TwoOrThreeNeighboursKt"
@@ -564,6 +568,7 @@ base_node {
               nodes {
                 offset: 5
                 width: 1
+                index: 1
                 node_info {
                   method_name: "iterator"
                   class_name: "kotlin.ranges.LongProgression"
@@ -573,6 +578,7 @@ base_node {
               nodes {
                 offset: 6
                 width: 1
+                index: 2
                 node_info {
                   method_name: "set"
                   class_name: "org.apache.lucene.util.OpenBitSet"
@@ -583,6 +589,7 @@ base_node {
             nodes {
               offset: 13
               width: 5
+              index: 1
               node_info {
                 method_name: "getIfAlreadyCreated"
                 class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.tiles.collections.DirectedGraph"
@@ -624,6 +631,7 @@ base_node {
                     nodes {
                       offset: 15
                       width: 1
+                      index: 1
                       node_info {
                         method_name: "getTreeNode"
                         class_name: "java.util.HashMap$TreeNode"
@@ -652,6 +660,7 @@ base_node {
                   nodes {
                     offset: 17
                     width: 1
+                    index: 1
                     node_info {
                       method_name: "hash"
                       class_name: "java.util.HashMap"
@@ -682,6 +691,7 @@ base_node {
             nodes {
               offset: 18
               width: 5
+              index: 2
               node_info {
                 method_name: "add"
                 class_name: "java.util.HashSet"
@@ -737,6 +747,7 @@ base_node {
           nodes {
             offset: 23
             width: 5
+            index: 1
             node_info {
               method_name: "<init>"
               class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.tiles.collections.TileSet"
@@ -763,6 +774,7 @@ base_node {
             nodes {
               offset: 26
               width: 1
+              index: 1
               node_info {
                 method_name: "nextInt"
                 class_name: "java.util.Scanner"
@@ -836,6 +848,7 @@ base_node {
           nodes {
             offset: 28
             width: 588
+            index: 2
             node_info {
               method_name: "tryToFindSolution"
               class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.vertex_set_generator.VertexSetSolverKt"
@@ -887,6 +900,7 @@ base_node {
                 nodes {
                   offset: 53
                   width: 1
+                  index: 1
                   node_info {
                     method_name: "<clinit>"
                     class_name: "jnisat.JPicoSat"
@@ -1049,6 +1063,7 @@ base_node {
                 nodes {
                   offset: 54
                   width: 2
+                  index: 2
                   node_info {
                     method_name: "addClause"
                     class_name: "jnisat.JPicoSat"
@@ -1060,6 +1075,7 @@ base_node {
             nodes {
               offset: 56
               width: 560
+              index: 1
               node_info {
                 method_name: "toDimacs"
                 class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.vertex_set_generator.VertexSetSolverKt"
@@ -1112,6 +1128,7 @@ base_node {
                 nodes {
                   offset: 90
                   width: 79
+                  index: 1
                   node_info {
                     method_name: "contains"
                     class_name: "gnu.trove.impl.hash.TIntHash"
@@ -1139,6 +1156,7 @@ base_node {
                 nodes {
                   offset: 169
                   width: 1
+                  index: 2
                   node_info {
                     method_name: "add"
                     class_name: "gnu.trove.list.array.TIntArrayList"
@@ -1148,6 +1166,7 @@ base_node {
                 nodes {
                   offset: 170
                   width: 114
+                  index: 3
                   node_info {
                     method_name: "addAll"
                     class_name: "gnu.trove.list.array.TIntArrayList"
@@ -1174,6 +1193,7 @@ base_node {
                   nodes {
                     offset: 186
                     width: 64
+                    index: 1
                     node_info {
                       method_name: "next"
                       class_name: "gnu.trove.set.hash.TIntHashSet$TIntHashIterator"
@@ -1202,6 +1222,7 @@ base_node {
                 nodes {
                   offset: 284
                   width: 28
+                  index: 4
                   node_info {
                     method_name: "<init>"
                     class_name: "gnu.trove.set.hash.TIntHashSet"
@@ -1301,6 +1322,7 @@ base_node {
                 nodes {
                   offset: 312
                   width: 13
+                  index: 5
                   node_info {
                     method_name: "add"
                     class_name: "gnu.trove.set.hash.TIntHashSet"
@@ -1318,6 +1340,7 @@ base_node {
                   nodes {
                     offset: 313
                     width: 12
+                    index: 1
                     node_info {
                       method_name: "insertKey"
                       class_name: "gnu.trove.impl.hash.TIntHash"
@@ -1337,6 +1360,7 @@ base_node {
                 nodes {
                   offset: 325
                   width: 117
+                  index: 6
                   node_info {
                     method_name: "next"
                     class_name: "java.util.HashMap$KeyIterator"
@@ -1355,6 +1379,7 @@ base_node {
                 nodes {
                   offset: 442
                   width: 59
+                  index: 7
                   node_info {
                     method_name: "get"
                     class_name: "java.util.HashMap"
@@ -1373,6 +1398,7 @@ base_node {
                 nodes {
                   offset: 501
                   width: 17
+                  index: 8
                   node_info {
                     method_name: "iterator"
                     class_name: "java.util.HashSet"
@@ -1410,6 +1436,7 @@ base_node {
               nodes {
                 offset: 597
                 width: 16
+                index: 1
                 node_info {
                   method_name: "reverseRules"
                   class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.vertex_set_generator.rule.UtilKt"
@@ -1460,6 +1487,7 @@ base_node {
     nodes {
       offset: 616
       width: 1
+      index: 4
       node_info {
         method_name: "loadClass"
         class_name: "java.lang.ClassLoader"

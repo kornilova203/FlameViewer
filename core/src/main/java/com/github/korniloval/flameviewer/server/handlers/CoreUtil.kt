@@ -1,5 +1,6 @@
 package com.github.korniloval.flameviewer.server.handlers
 
+import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree
 import com.github.korniloval.flameviewer.FlameLogger
 import com.github.korniloval.flameviewer.converters.trees.Filter
 import com.github.korniloval.flameviewer.server.RequestHandlingException
@@ -22,6 +23,36 @@ fun getFilter(urlDecoder: QueryStringDecoder, logger: FlameLogger): Filter? {
         return Filter(includingConfigsString, excludingConfigsString, logger)
     }
     return null
+}
+
+fun treeBuilder(baseNode: Tree.Node.Builder): Tree.Builder = Tree.newBuilder().setBaseNode(baseNode)
+
+fun treeBuilder(): Tree.Builder = Tree.newBuilder()
+
+fun dfs(node: Tree.Node, action: (Tree.Node) -> Unit) {
+    action(node)
+    for (child in node.nodesList) {
+        dfs(child, action)
+    }
+}
+
+fun dfs(node: Tree.Node.Builder, action: (Tree.Node.Builder) -> Unit) {
+    action(node)
+    for (child in node.nodesBuilderList) {
+        dfs(child, action)
+    }
+}
+
+fun countNodes(node: Tree.Node.Builder): Int {
+    var count = 0
+    dfs(node) { count++ }
+    return count
+}
+
+fun countNodes(node: Tree.Node): Int {
+    var count = 0
+    dfs(node) { count++ }
+    return count
 }
 
 typealias FindFile = (name: String) -> File?

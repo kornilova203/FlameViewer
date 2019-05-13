@@ -1,11 +1,13 @@
 package com.github.korniloval.flameviewer.converters.calltraces
 
 import com.github.kornilova_l.flamegraph.proto.TreeProtos
+import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node
 import com.github.korniloval.flameviewer.cflamegraph.Tree
 import com.github.korniloval.flameviewer.converters.Converter
 import com.github.korniloval.flameviewer.converters.cflamegraph.CFlamegraph
 import com.github.korniloval.flameviewer.converters.cflamegraph.CFlamegraphLine
 import com.github.korniloval.flameviewer.converters.trees.TreesUtil
+import com.github.korniloval.flameviewer.server.handlers.treeBuilder
 import java.io.File
 import java.nio.ByteBuffer
 import java.util.*
@@ -15,9 +17,9 @@ class CFlamegraphToCallTracesConverter(private val cf: CFlamegraph) : Converter<
     private var maxDepth = 0
 
     override fun convert(): TreeProtos.Tree {
-        val tree = createEmptyTree()
+        val tree = treeBuilder(Node.newBuilder())
 
-        val currentStack = ArrayList<TreeProtos.Tree.Node.Builder>()
+        val currentStack = ArrayList<Node.Builder>()
         currentStack.add(tree.baseNodeBuilder)
 
         for (line in cf.lines) {
@@ -26,12 +28,13 @@ class CFlamegraphToCallTracesConverter(private val cf: CFlamegraph) : Converter<
 
         tree.depth = maxDepth
         TreesUtil.setNodesOffsetRecursively(tree.baseNodeBuilder, 0)
+        TreesUtil.setNodesIndices(tree.baseNodeBuilder)
         TreesUtil.setTreeWidth(tree)
         TreesUtil.setNodesCount(tree)
         return tree.build()
     }
 
-    private fun processLine(line: CFlamegraphLine, currentStack: ArrayList<TreeProtos.Tree.Node.Builder>) {
+    private fun processLine(line: CFlamegraphLine, currentStack: ArrayList<Node.Builder>) {
         validateLine(line)
 
         while (line.depth < currentStack.size) { // if some calls are finished
@@ -59,12 +62,6 @@ class CFlamegraphToCallTracesConverter(private val cf: CFlamegraph) : Converter<
         require(line.depth > 0) { "node depth must be bigger than 0." }
         require(line.width > 0) { "node width must be bigger than 0." }
         require(line.methodNameId >= 0) { "node method name id must be set." }
-    }
-
-    private fun createEmptyTree(): TreeProtos.Tree.Builder {
-        val tree = TreeProtos.Tree.newBuilder()
-        tree.setBaseNode(TreeProtos.Tree.Node.newBuilder())
-        return tree
     }
 
     companion object {

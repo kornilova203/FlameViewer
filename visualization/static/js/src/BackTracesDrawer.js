@@ -34,13 +34,4 @@ module.exports.BackTracesDrawer = class BackTracesDrawer extends AccumulativeTre
             .css("left", offsetX)
             .css("margin-top", -this.canvasHeight + BackTracesDrawer._calcNormaOffsetY(depth + 1) - constants.POPUP_MARGIN)
     }
-
-    /**
-     * Do not move section. Move only fog
-     * @override
-     */
-    _moveSectionUp(visibleLayersCount) {
-        this.$fog.css("top", visibleLayersCount * (constants.LAYER_HEIGHT + constants.LAYER_GAP) + 59);
-        return 0;
-    }
 };

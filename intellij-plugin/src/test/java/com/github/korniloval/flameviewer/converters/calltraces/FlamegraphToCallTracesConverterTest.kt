@@ -21,7 +21,7 @@ class FlamegraphToCallTracesConverterTest : ConverterTestCase("flamegraph", CALL
         PluginFileManager.deleteAllUploadedFiles()
         val tempFile = File("${getProfilerFilesPath()}/nodesCountBiggerThanLimit.flamegraph")
         try {
-            val nodesCount = maximumNodesCount + 5_000
+            val nodesCount = maximumNodesCount + 10_000
             TreeGenerator(nodesCount).outputFlamegraph(tempFile)
             val bytes = getTreeBytes()
             val tree = TreeProtos.Tree.parseFrom(ByteArrayInputStream(bytes))

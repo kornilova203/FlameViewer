@@ -74,6 +74,7 @@ base_node {
   nodes {
     offset: 4
     width: 5
+    index: 1
     node_info {
       method_name: "InterpreterRuntime::newarray"
       description: "(JavaThread*, BasicType, int)"
@@ -98,6 +99,7 @@ base_node {
   nodes {
     offset: 9
     width: 10
+    index: 2
     node_info {
       method_name: "InterpreterRuntime::prepare_native_call"
       description: "(JavaThread*, Method*)"
@@ -180,6 +182,7 @@ base_node {
   nodes {
     offset: 19
     width: 3
+    index: 3
     node_info {
       method_name: "run"
       class_name: "com.intellij.rt.execution.application.AppMainV2$1"
@@ -353,6 +356,7 @@ base_node {
       nodes {
         offset: 20
         width: 2
+        index: 1
         node_info {
           method_name: "<init>"
           class_name: "java.net.InetSocketAddress"
@@ -440,6 +444,7 @@ base_node {
           nodes {
             offset: 21
             width: 1
+            index: 1
             node_info {
               method_name: "doPrivileged"
               class_name: "java.security.AccessController"
@@ -600,6 +605,7 @@ base_node {
   nodes {
     offset: 22
     width: 1
+    index: 4
     node_info {
       method_name: "<clinit>"
       class_name: "java.lang.Shutdown"
@@ -712,6 +718,7 @@ base_node {
   nodes {
     offset: 23
     width: 2
+    index: 5
     node_info {
       method_name: "<clinit>"
       class_name: "java.lang.invoke.MethodHandle"
@@ -837,6 +844,7 @@ base_node {
     nodes {
       offset: 24
       width: 1
+      index: 1
       node_info {
         method_name: "<clinit>"
         class_name: "java.lang.invoke.MethodHandleImpl"
@@ -947,6 +955,7 @@ base_node {
   nodes {
     offset: 25
     width: 1
+    index: 6
     node_info {
       method_name: "<clinit>"
       class_name: "sun.instrument.InstrumentationImpl"
@@ -1003,6 +1012,7 @@ base_node {
   nodes {
     offset: 26
     width: 35
+    index: 7
     node_info {
       method_name: "loadClassAndCallPremain"
       class_name: "sun.instrument.InstrumentationImpl"
@@ -1255,6 +1265,7 @@ base_node {
                                     nodes {
                                       offset: 27
                                       width: 11
+                                      index: 1
                                       node_info {
                                         method_name: "<init>"
                                         class_name: "sun.misc.URLClassPath$JarLoader"
@@ -1293,6 +1304,7 @@ base_node {
                                       nodes {
                                         offset: 28
                                         width: 1
+                                        index: 1
                                         node_info {
                                           method_name: "toString"
                                           class_name: "java.lang.StringBuilder"
@@ -1301,6 +1313,7 @@ base_node {
                                       nodes {
                                         offset: 29
                                         width: 9
+                                        index: 2
                                         node_info {
                                           method_name: "ensureOpen"
                                           class_name: "sun.misc.URLClassPath$JarLoader"
@@ -1366,6 +1379,7 @@ base_node {
                                                     nodes {
                                                       offset: 30
                                                       width: 2
+                                                      index: 1
                                                       node_info {
                                                         method_name: "addMapping"
                                                         class_name: "sun.misc.JarIndex"
@@ -1404,6 +1418,7 @@ base_node {
                                                         nodes {
                                                           offset: 31
                                                           width: 1
+                                                          index: 1
                                                           node_info {
                                                             method_name: "add"
                                                             class_name: "java.util.LinkedList"
@@ -1425,6 +1440,7 @@ base_node {
                                               nodes {
                                                 offset: 32
                                                 width: 6
+                                                index: 1
                                                 node_info {
                                                   method_name: "access$800"
                                                   class_name: "sun.misc.URLClassPath$JarLoader"
@@ -1547,6 +1563,7 @@ base_node {
                                                   nodes {
                                                     offset: 33
                                                     width: 5
+                                                    index: 1
                                                     node_info {
                                                       method_name: "<init>"
                                                       class_name: "java.util.jar.JarFile"
@@ -1738,6 +1755,7 @@ base_node {
                                                         nodes {
                                                           offset: 34
                                                           width: 4
+                                                          index: 1
                                                           node_info {
                                                             method_name: "<init>"
                                                             class_name: "java.util.zip.ZipFile"
@@ -1961,6 +1979,7 @@ base_node {
                                                           nodes {
                                                             offset: 35
                                                             width: 1
+                                                            index: 1
                                                             node_info {
                                                               method_name: "lastModified"
                                                               class_name: "java.io.File"
@@ -1984,6 +2003,7 @@ base_node {
                                                           nodes {
                                                             offset: 36
                                                             width: 1
+                                                            index: 2
                                                             node_info {
                                                               method_name: "open"
                                                               class_name: "java.util.zip.ZipFile"
@@ -2013,6 +2033,7 @@ base_node {
                                                           nodes {
                                                             offset: 37
                                                             width: 1
+                                                            index: 3
                                                             node_info {
                                                               method_name: "getZipFileOpenTime"
                                                               class_name: "sun.misc.PerfCounter"
@@ -2246,6 +2267,7 @@ base_node {
             nodes {
               offset: 38
               width: 20
+              index: 1
               node_info {
                 method_name: "findClass"
                 class_name: "java.net.URLClassLoader"
@@ -2452,6 +2474,7 @@ base_node {
                                 nodes {
                                   offset: 39
                                   width: 1
+                                  index: 1
                                   node_info {
                                     method_name: "add"
                                     class_name: "java.security.Permissions"
@@ -2568,6 +2591,7 @@ base_node {
                                 nodes {
                                   offset: 40
                                   width: 1
+                                  index: 2
                                   node_info {
                                     method_name: "getPermissions"
                                     class_name: "java.security.SecureClassLoader"
@@ -2688,6 +2712,7 @@ base_node {
                         nodes {
                           offset: 41
                           width: 8
+                          index: 1
                           node_info {
                             method_name: "getByteBuffer"
                             class_name: "sun.misc.Resource"
@@ -2842,6 +2867,7 @@ base_node {
                                   nodes {
                                     offset: 42
                                     width: 7
+                                    index: 1
                                     node_info {
                                       method_name: "<clinit>"
                                       class_name: "sun.security.util.SignatureFileVerifier"
@@ -2975,6 +3001,7 @@ base_node {
                                         nodes {
                                           offset: 43
                                           width: 1
+                                          index: 1
                                           node_info {
                                             method_name: "compile"
                                             class_name: "java.util.regex.Pattern"
@@ -3104,6 +3131,7 @@ base_node {
                                       nodes {
                                         offset: 44
                                         width: 5
+                                        index: 1
                                         node_info {
                                           method_name: "<init>"
                                           class_name: "sun.security.util.DisabledAlgorithmConstraints"
@@ -3219,6 +3247,7 @@ base_node {
                                         nodes {
                                           offset: 45
                                           width: 3
+                                          index: 1
                                           node_info {
                                             method_name: "getAlgorithms"
                                             class_name: "sun.security.util.AbstractAlgorithmConstraints"
@@ -3362,6 +3391,7 @@ base_node {
                                                   nodes {
                                                     offset: 46
                                                     width: 2
+                                                    index: 1
                                                     node_info {
                                                       method_name: "doPrivileged"
                                                       class_name: "java.security.AccessController"
@@ -3452,6 +3482,7 @@ base_node {
                                                             nodes {
                                                               offset: 47
                                                               width: 1
+                                                              index: 1
                                                               node_info {
                                                                 method_name: "load"
                                                                 class_name: "java.util.Properties"
@@ -3540,6 +3571,7 @@ base_node {
                                         nodes {
                                           offset: 48
                                           width: 1
+                                          index: 2
                                           node_info {
                                             method_name: "<init>"
                                             class_name: "sun.security.util.DisabledAlgorithmConstraints$Constraints"
@@ -3664,6 +3696,7 @@ base_node {
                         nodes {
                           offset: 49
                           width: 2
+                          index: 2
                           node_info {
                             method_name: "getManifest"
                             class_name: "sun.misc.URLClassPath$JarLoader$2"
@@ -3801,6 +3834,7 @@ base_node {
                               nodes {
                                 offset: 50
                                 width: 1
+                                index: 1
                                 node_info {
                                   method_name: "<init>"
                                   class_name: "java.util.jar.Manifest"
@@ -3930,6 +3964,7 @@ base_node {
                     nodes {
                       offset: 51
                       width: 7
+                      index: 1
                       node_info {
                         method_name: "getResource"
                         class_name: "sun.misc.URLClassPath"
@@ -4017,6 +4052,7 @@ base_node {
                                     nodes {
                                       offset: 52
                                       width: 5
+                                      index: 1
                                       node_info {
                                         method_name: "ensureOpen"
                                         class_name: "sun.misc.URLClassPath$JarLoader"
@@ -4101,6 +4137,7 @@ base_node {
                                             nodes {
                                               offset: 54
                                               width: 3
+                                              index: 1
                                               node_info {
                                                 method_name: "access$800"
                                                 class_name: "sun.misc.URLClassPath$JarLoader"
@@ -4166,6 +4203,7 @@ base_node {
                                                         nodes {
                                                           offset: 55
                                                           width: 2
+                                                          index: 1
                                                           node_info {
                                                             method_name: "open"
                                                             class_name: "java.util.zip.ZipFile"
@@ -4205,6 +4243,7 @@ base_node {
                                     nodes {
                                       offset: 57
                                       width: 1
+                                      index: 2
                                       node_info {
                                         method_name: "decode"
                                         class_name: "sun.net.www.ParseUtil"
@@ -4236,6 +4275,7 @@ base_node {
       nodes {
         offset: 58
         width: 1
+        index: 1
         node_info {
           method_name: "getDeclaredMethod"
           class_name: "java.lang.Class"
@@ -4328,6 +4368,7 @@ base_node {
       nodes {
         offset: 59
         width: 2
+        index: 2
         node_info {
           method_name: "invoke"
           class_name: "java.lang.reflect.Method"
@@ -4459,6 +4500,7 @@ base_node {
         nodes {
           offset: 60
           width: 1
+          index: 1
           node_info {
             method_name: "invoke"
             class_name: "sun.reflect.DelegatingMethodAccessorImpl"
@@ -4595,6 +4637,7 @@ base_node {
   nodes {
     offset: 61
     width: 2
+    index: 8
     node_info {
       method_name: "checkAndLoadMain"
       class_name: "sun.launcher.LauncherHelper"
@@ -4729,6 +4772,7 @@ base_node {
     nodes {
       offset: 62
       width: 1
+      index: 1
       node_info {
         method_name: "loadClass"
         class_name: "java.lang.ClassLoader"
@@ -4905,6 +4949,7 @@ base_node {
   nodes {
     offset: 63
     width: 15
+    index: 9
     node_info {
       method_name: "thread_start"
     }
@@ -4943,6 +4988,7 @@ base_node {
             nodes {
               offset: 64
               width: 1
+              index: 1
               node_info {
                 method_name: "Threads::create_vm"
                 description: "(JavaVMInitArgs*, bool*)"
@@ -5079,6 +5125,7 @@ base_node {
         nodes {
           offset: 65
           width: 13
+          index: 1
           node_info {
             method_name: "java_start"
             description: "(Thread*)"
@@ -5157,6 +5204,7 @@ base_node {
                             nodes {
                               offset: 66
                               width: 1
+                              index: 1
                               node_info {
                                 method_name: "CompileWrapper::CompileWrapper"
                                 description: "(Compile*)"
@@ -5189,6 +5237,7 @@ base_node {
                             nodes {
                               offset: 67
                               width: 1
+                              index: 2
                               node_info {
                                 method_name: "NodeHash::NodeHash"
                                 description: "(Arena*, unsigned int)"
@@ -5209,6 +5258,7 @@ base_node {
                   nodes {
                     offset: 68
                     width: 1
+                    index: 1
                     node_info {
                       method_name: "Compiler::initialize"
                       description: "()"
@@ -5289,6 +5339,7 @@ base_node {
                 nodes {
                   offset: 69
                   width: 7
+                  index: 1
                   node_info {
                     method_name: "CompileBroker::invoke_compiler_on_method"
                     description: "(CompileTask*)"
@@ -5342,6 +5393,7 @@ base_node {
                       nodes {
                         offset: 70
                         width: 2
+                        index: 1
                         node_info {
                           method_name: "Compile::Optimize"
                           description: "()"
@@ -5381,6 +5433,7 @@ base_node {
                         nodes {
                           offset: 71
                           width: 1
+                          index: 1
                           node_info {
                             method_name: "SuperWord::SuperWord"
                             description: "(PhaseIdealLoop*)"
@@ -5392,6 +5445,7 @@ base_node {
                   nodes {
                     offset: 72
                     width: 4
+                    index: 1
                     node_info {
                       method_name: "Compiler::compile_method"
                       description: "(ciEnv*, ciMethod*, int)"
@@ -5579,6 +5633,7 @@ base_node {
                           nodes {
                             offset: 73
                             width: 2
+                            index: 1
                             node_info {
                               method_name: "Compilation::emit_lir"
                               description: "()"
@@ -5618,6 +5673,7 @@ base_node {
                             nodes {
                               offset: 74
                               width: 1
+                              index: 1
                               node_info {
                                 method_name: "LinearScan::assign_reg_num"
                                 description: "()"
@@ -5628,6 +5684,7 @@ base_node {
                         nodes {
                           offset: 75
                           width: 1
+                          index: 1
                           node_info {
                             method_name: "ciMethod::break_at_execute"
                             description: "()"
@@ -5640,6 +5697,7 @@ base_node {
                 nodes {
                   offset: 76
                   width: 1
+                  index: 2
                   node_info {
                     method_name: "CompileQueue::get"
                     description: "()"
@@ -5679,6 +5737,7 @@ base_node {
                 nodes {
                   offset: 77
                   width: 1
+                  index: 3
                   node_info {
                     method_name: "ciObjectFactory::initialize"
                     description: "()"

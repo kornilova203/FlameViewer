@@ -29,6 +29,7 @@ base_node {
     nodes {
       offset: 5
       width: 5
+      index: 1
       node_info {
         method_name: "c"
       }
@@ -43,6 +44,7 @@ base_node {
     nodes {
       offset: 10
       width: 5
+      index: 2
       node_info {
         method_name: "e"
       }

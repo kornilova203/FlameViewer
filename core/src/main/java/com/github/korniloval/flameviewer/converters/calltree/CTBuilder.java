@@ -1,10 +1,10 @@
 package com.github.korniloval.flameviewer.converters.calltree;
 
-import com.github.korniloval.flameviewer.converters.trees.TreesSet;
-import com.github.korniloval.flameviewer.converters.trees.TreesUtil;
 import com.github.kornilova_l.flamegraph.proto.EventProtos;
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree;
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node;
+import com.github.korniloval.flameviewer.converters.trees.TreesSet;
+import com.github.korniloval.flameviewer.converters.trees.TreesUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,6 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static com.github.korniloval.flameviewer.converters.trees.DescriptionConverter.getBeautifulDesc;
+import static com.github.korniloval.flameviewer.server.handlers.CoreUtilKt.treeBuilder;
 
 class CTBuilder {
     private final String threadName;
@@ -120,7 +121,7 @@ class CTBuilder {
 
     @NotNull
     private Tree.Builder initTreeBuilder(long startTimeOfFirstThread) {
-        return Tree.newBuilder()
+        return treeBuilder()
                 .setTreeInfo(
                         Tree.TreeInfo.newBuilder()
                                 .setStartTime(threadStartTime - startTimeOfFirstThread)

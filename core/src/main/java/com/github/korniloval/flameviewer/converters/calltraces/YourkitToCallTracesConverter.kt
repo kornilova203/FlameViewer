@@ -1,11 +1,12 @@
 package com.github.korniloval.flameviewer.converters.calltraces
 
-import com.github.kornilova_l.flamegraph.proto.TreeProtos
+import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree
 import com.github.korniloval.flameviewer.converters.Converter
 import com.github.korniloval.flameviewer.converters.trees.TreesUtil
 import com.github.korniloval.flameviewer.converters.trees.TreesUtil.parsePositiveInt
 import com.github.korniloval.flameviewer.converters.trees.TreesUtil.parsePositiveLong
 import com.github.korniloval.flameviewer.converters.trees.UniqueStringsKeeper
+import com.github.korniloval.flameviewer.server.handlers.treeBuilder
 import java.io.BufferedReader
 import java.io.File
 import java.io.FileReader
@@ -14,15 +15,15 @@ import java.util.*
 
 @Deprecated("When a new csv file is added it's converted with YourkitCsvToCFlamegraphConverterFactory. " +
         "This converter is to support already uploaded csv files.")
-class YourkitToCallTracesConverter(private val file: File) : Converter<TreeProtos.Tree> {
+class YourkitToCallTracesConverter(private val file: File) : Converter<Tree> {
     private val uniqueStringsClassName = UniqueStringsKeeper()
     private val uniqueStringsMethodName = UniqueStringsKeeper()
     private val uniqueStringsDesc = UniqueStringsKeeper()
     private var maxDepth = 0
 
-    override fun convert(): TreeProtos.Tree {
-        val tree = createEmptyTree()
-        val currentStack = ArrayList<TreeProtos.Tree.Node.Builder>()
+    override fun convert(): Tree {
+        val tree = treeBuilder(Tree.Node.newBuilder())
+        val currentStack = ArrayList<Tree.Node.Builder>()
         currentStack.add(tree.baseNodeBuilder)
         BufferedReader(FileReader(file), 1000 * 8192).use { reader ->
             var line = reader.readLine()
@@ -33,13 +34,13 @@ class YourkitToCallTracesConverter(private val file: File) : Converter<TreeProto
         }
         tree.depth = maxDepth
         TreesUtil.setNodesOffsetRecursively(tree.baseNodeBuilder, 0)
+        TreesUtil.setNodesIndices(tree.baseNodeBuilder)
         TreesUtil.setTreeWidth(tree)
         TreesUtil.setNodesCount(tree)
         return tree.build()
     }
 
-    private fun processLine(line: String,
-                            currentStack: ArrayList<TreeProtos.Tree.Node.Builder>) {
+    private fun processLine(line: String, currentStack: ArrayList<Tree.Node.Builder>) {
         val delimPos = line.indexOf("\",\"")
         if (delimPos == -1) {
             return
@@ -105,12 +106,6 @@ class YourkitToCallTracesConverter(private val file: File) : Converter<TreeProto
             }
         }
         return name.substring(lastDot + 1, parametersPos)
-    }
-
-    private fun createEmptyTree(): TreeProtos.Tree.Builder {
-        val tree = TreeProtos.Tree.newBuilder()
-        tree.setBaseNode(TreeProtos.Tree.Node.newBuilder())
-        return tree
     }
 
     private fun getCleanName(name: String): String {

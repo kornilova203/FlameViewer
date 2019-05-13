@@ -5,6 +5,8 @@ import com.github.korniloval.flameviewer.FlameLogger
 import com.github.korniloval.flameviewer.converters.trees.TreeType
 import com.github.korniloval.flameviewer.converters.trees.TreesSet.Companion.getMaxDepthRecursively
 import com.github.korniloval.flameviewer.converters.trees.TreesUtil
+import com.github.korniloval.flameviewer.converters.trees.TreesUtil.copyNode
+import com.github.korniloval.flameviewer.converters.trees.TreesUtil.countMaxDepth
 import com.github.korniloval.flameviewer.converters.trees.maximumNodesCount
 import com.github.korniloval.flameviewer.server.ServerUtil.getParameter
 import com.github.korniloval.flameviewer.server.TreeManager
@@ -38,28 +40,19 @@ abstract class AccumulativeTreeHandler(protected val treeManager: TreeManager, l
      * But it means that there will be a duplicate of tree, this duplicate might be really large)
      */
     private fun getSubTree(tree: Tree, path: List<Int>): Tree? {
-        var currentNode = tree.baseNode
-        for (index in path) {
-            currentNode = currentNode.getNodes(index)
-        }
-        val subTree = Tree.newBuilder()
-        if (tree.treeInfo.nodesCount > maximumNodesCount) {
-            val lastAcceptedLayer = getLastAcceptedLayerIndex(currentNode)
-            val base = Tree.Node.newBuilder()
-                    .setWidth(currentNode.width)
-                    .setOffset(currentNode.offset)
-                    .setNodeInfo(currentNode.nodeInfo)
-            subTree.baseNodeBuilder.addNodes(base)
-            val addedBase = subTree.baseNodeBuilder.getNodesBuilder(subTree.baseNodeBuilder.nodesBuilderList.size - 1)
-            cutTree(currentNode, addedBase, 1, lastAcceptedLayer)
-            subTree.visibleDepth = lastAcceptedLayer + 1 // + 1 because currentNode was not counted
+        val newBaseNode = path.fold(tree.baseNode) { n, i -> n.getNodes(i) }
+        val subTree = treeBuilder()
+        if (countNodes(newBaseNode) > maximumNodesCount) {
+            val maxAllowedWidth = getMaxAllowedWidth(newBaseNode, maximumNodesCount)
+            subTree.baseNodeBuilder.addNodes(copyNode(newBaseNode))
+            val addedBaseNode = subTree.baseNodeBuilder.getNodesBuilder(subTree.baseNodeBuilder.nodesBuilderList.size - 1)
+            decreaseDetailing(newBaseNode, addedBaseNode, maxAllowedWidth)
+            subTree.visibleDepth = countMaxDepth(subTree.baseNodeBuilder)
         } else {
-            logger.warn("There is no need to send sub-tree request if tree contains less than $maximumNodesCount nodes")
-            subTree.baseNodeBuilder.addNodes(currentNode)
-            subTree.visibleDepth = getMaxDepthRecursively(subTree.baseNodeBuilder, 0)
+            subTree.baseNodeBuilder.addNodes(newBaseNode)
         }
 
-        subTree.depth = getMaxDepthRecursively(currentNode, 1) // first element in path chooses one of trees of base node
+        subTree.depth = getMaxDepthRecursively(newBaseNode, 1) // first element in path chooses one of trees of base node
 
         TreesUtil.setNodesOffsetRecursively(subTree.baseNodeBuilder, 0)
         TreesUtil.setTreeWidth(subTree)

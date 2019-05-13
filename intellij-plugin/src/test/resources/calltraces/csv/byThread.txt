@@ -108,6 +108,7 @@ base_node {
     nodes {
       offset: 42736
       width: 19
+      index: 1
       node_info {
         method_name: "<init>"
         class_name: "java.net.Socket"
@@ -154,6 +155,7 @@ base_node {
   nodes {
     offset: 42774
     width: 1
+    index: 1
     node_info {
       method_name: "run"
       class_name: "java.lang.Thread"

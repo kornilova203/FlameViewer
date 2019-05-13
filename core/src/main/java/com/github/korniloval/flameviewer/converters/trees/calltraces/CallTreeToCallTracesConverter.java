@@ -1,21 +1,23 @@
 package com.github.korniloval.flameviewer.converters.trees.calltraces;
 
+import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree;
+import com.github.kornilova_l.flamegraph.proto.TreesProtos;
 import com.github.korniloval.flameviewer.converters.trees.TreeBuilder;
 import com.github.korniloval.flameviewer.converters.trees.TreesUtil;
-import com.github.kornilova_l.flamegraph.proto.TreeProtos;
-import com.github.kornilova_l.flamegraph.proto.TreesProtos;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import static com.github.korniloval.flameviewer.server.handlers.CoreUtilKt.treeBuilder;
+
 public final class CallTreeToCallTracesConverter implements TreeBuilder {
-    private TreeProtos.Tree.Builder treeBuilder;
+    private Tree.Builder treeBuilder;
     @Nullable
-    private final TreeProtos.Tree tree;
+    private final Tree tree;
     private int maxDepth = 0;
 
     public CallTreeToCallTracesConverter(@NotNull TreesProtos.Trees callTrees) {
         initTreeBuilder();
-        for (TreeProtos.Tree callTree : callTrees.getTreesList()) {
+        for (Tree callTree : callTrees.getTreesList()) {
             addTree(treeBuilder.getBaseNodeBuilder(), callTree.getBaseNode());
         }
         if (treeBuilder.getBaseNode().getNodesCount() == 0) {
@@ -23,6 +25,7 @@ public final class CallTreeToCallTracesConverter implements TreeBuilder {
             return;
         }
         TreesUtil.INSTANCE.setNodesOffsetRecursively(treeBuilder.getBaseNodeBuilder(), 0);
+        TreesUtil.INSTANCE.setNodesIndices(treeBuilder.getBaseNodeBuilder());
         TreesUtil.INSTANCE.setTreeWidth(treeBuilder);
         TreesUtil.INSTANCE.setNodesCount(treeBuilder);
         treeBuilder.setDepth(maxDepth);
@@ -30,31 +33,30 @@ public final class CallTreeToCallTracesConverter implements TreeBuilder {
     }
 
     @Nullable
-    public TreeProtos.Tree getTree() {
+    public Tree getTree() {
         return tree;
     }
 
     private void initTreeBuilder() {
-        treeBuilder = TreeProtos.Tree.newBuilder()
-                .setBaseNode(TreeProtos.Tree.Node.newBuilder());
+        treeBuilder = treeBuilder(Tree.Node.newBuilder());
     }
 
-    private void addTree(TreeProtos.Tree.Node.Builder baseNodeInOC,
-                         TreeProtos.Tree.Node baseNodeInCT) {
-        for (TreeProtos.Tree.Node childNodeInCT : baseNodeInCT.getNodesList()) {
+    private void addTree(Tree.Node.Builder baseNodeInOC,
+                         Tree.Node baseNodeInCT) {
+        for (Tree.Node childNodeInCT : baseNodeInCT.getNodesList()) {
             addNodesRecursively(baseNodeInOC, childNodeInCT, 0);
         }
     }
 
-    private void addNodesRecursively(TreeProtos.Tree.Node.Builder nodeBuilder, // where to append child
-                                     TreeProtos.Tree.Node node, // from where get method and it's width
+    private void addNodesRecursively(Tree.Node.Builder nodeBuilder, // where to append child
+                                     Tree.Node node, // from where get method and it's width
                                      int depth) {
         depth++;
         if (depth > maxDepth) {
             maxDepth = depth;
         }
         nodeBuilder = TreesUtil.INSTANCE.updateNodeList(nodeBuilder, node);
-        for (TreeProtos.Tree.Node childNode : node.getNodesList()) {
+        for (Tree.Node childNode : node.getNodesList()) {
             addNodesRecursively(nodeBuilder, childNode, depth);
         }
     }

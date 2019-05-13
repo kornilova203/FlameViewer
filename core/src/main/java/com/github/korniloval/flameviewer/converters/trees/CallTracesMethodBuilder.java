@@ -2,6 +2,8 @@ package com.github.korniloval.flameviewer.converters.trees;
 
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree;
 
+import static com.github.korniloval.flameviewer.server.handlers.CoreUtilKt.treeBuilder;
+
 public class CallTracesMethodBuilder implements TreeBuilder {
     private final Tree tree;
     private final String className;
@@ -21,6 +23,7 @@ public class CallTracesMethodBuilder implements TreeBuilder {
         initTreeBuilder();
         traverseTreeAndFind(sourceTree.getBaseNode());
         TreesUtil.INSTANCE.setNodesOffsetRecursively(treeBuilder.getBaseNodeBuilder(), 0);
+        TreesUtil.INSTANCE.setNodesIndices(treeBuilder.getBaseNodeBuilder());
         TreesUtil.INSTANCE.setTreeWidth(treeBuilder);
         TreesUtil.INSTANCE.setNodesCount(treeBuilder);
         setTimePercent(sourceTree);
@@ -88,8 +91,7 @@ public class CallTracesMethodBuilder implements TreeBuilder {
                                         desc
                                 )
                         ));
-        treeBuilder = Tree.newBuilder()
-                .setBaseNode(baseNode);
+        treeBuilder = treeBuilder(baseNode);
         wantedMethodNode = treeBuilder.getBaseNodeBuilder().getNodesBuilder(0);
     }
 }

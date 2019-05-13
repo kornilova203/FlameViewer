@@ -664,7 +664,7 @@ module.exports.TreeDrawer = class TreeDrawer {
     /**
      * @param tree
      * @param {number} initialDepth
-     * @private
+     * @protected
      */
     _prepareTree(tree, initialDepth) {
         this._assignParentsAndDepthRecursively(tree.getBaseNode(), initialDepth);

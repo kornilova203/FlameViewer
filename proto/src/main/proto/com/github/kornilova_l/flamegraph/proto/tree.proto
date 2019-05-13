@@ -9,15 +9,16 @@ import "com/github/kornilova_l/flamegraph/proto/event.proto";
 message Tree {
     TreeInfo tree_info = 1;
     Node base_node = 2;
-    uint32 depth = 3;
-    uint32 visible_depth = 4; // is null if tree was not cut
+    int32 depth = 3;
+    int32 visible_depth = 4; // 0 if all nodes are visible
     int64 width = 5;
 
     message Node {
         int64 offset = 1; // how much time passed since start of tree
         int64 width = 2; // how much time did node take
-        NodeInfo node_info = 3;
-        repeated Node nodes = 4;
+        int32 index = 3;
+        NodeInfo node_info = 4;
+        repeated Node nodes = 5;
 
         message NodeInfo {
             string method_name = 1;

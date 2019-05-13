@@ -5,6 +5,7 @@ import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node
 import com.github.korniloval.flameviewer.converters.trees.TreeBuilder
 import com.github.korniloval.flameviewer.converters.trees.TreesUtil
 import com.github.korniloval.flameviewer.converters.trees.TreesUtil.getSelfTime
+import com.github.korniloval.flameviewer.server.handlers.treeBuilder
 import java.util.*
 
 /**
@@ -14,10 +15,10 @@ class BackTracesBuilder(callTraces: TreeProtos.Tree) : TreeBuilder {
     private val backTraces: TreeProtos.Tree
 
     init {
-        val treeBuilder = TreeProtos.Tree.newBuilder()
-                .setBaseNode(Node.newBuilder())
+        val treeBuilder = treeBuilder(Node.newBuilder())
         buildTreeRecursively(callTraces.baseNode, treeBuilder.baseNodeBuilder, ArrayList(callTraces.depth))
         TreesUtil.setNodesOffsetRecursively(treeBuilder.baseNodeBuilder, 0)
+        TreesUtil.setNodesIndices(treeBuilder.baseNodeBuilder)
         TreesUtil.setTreeWidth(treeBuilder)
         TreesUtil.setNodesCount(treeBuilder)
         treeBuilder.depth = callTraces.depth

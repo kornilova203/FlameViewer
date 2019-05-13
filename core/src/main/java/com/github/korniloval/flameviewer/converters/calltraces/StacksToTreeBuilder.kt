@@ -11,10 +11,11 @@ import com.github.korniloval.flameviewer.converters.trees.TreesUtil.setNodesCoun
 import com.github.korniloval.flameviewer.converters.trees.TreesUtil.setNodesOffsetRecursively
 import com.github.korniloval.flameviewer.converters.trees.TreesUtil.updateNodeList
 import com.github.korniloval.flameviewer.converters.trees.UniqueStringsKeeper
+import com.github.korniloval.flameviewer.server.handlers.treeBuilder
 
 
 class StacksToTreeBuilder(stacks: Map<String, Int>) : TreeBuilder {
-    private val treeBuilder: Tree.Builder = Tree.newBuilder()
+    private val treeBuilder = treeBuilder()
     private val tree: Tree
     private var maxDepth = 0
     private val uniqueStrings = UniqueStringsKeeper()
@@ -27,6 +28,7 @@ class StacksToTreeBuilder(stacks: Map<String, Int>) : TreeBuilder {
         treeBuilder.setBaseNode(Tree.Node.newBuilder())
         processStacks(stacks)
         setNodesOffsetRecursively(treeBuilder.baseNodeBuilder, 0)
+        TreesUtil.setNodesIndices(treeBuilder.baseNodeBuilder)
         TreesUtil.setTreeWidth(treeBuilder)
         setNodesCount(treeBuilder)
         treeBuilder.depth = maxDepth

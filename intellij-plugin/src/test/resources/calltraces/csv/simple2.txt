@@ -25,6 +25,7 @@ base_node {
     nodes {
       offset: 95
       width: 1
+      index: 1
       node_info {
         method_name: "fun4"
         description: "()"
@@ -34,6 +35,7 @@ base_node {
   nodes {
     offset: 110
     width: 10
+    index: 1
     node_info {
       method_name: "fun5"
       description: "()"
