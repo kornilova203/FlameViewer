@@ -2,10 +2,7 @@ package com.github.korniloval.flameviewer.converters.calltraces
 
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree
 import com.github.korniloval.flameviewer.converters.Converter
-import com.github.korniloval.flameviewer.converters.trees.TreesUtil
-import com.github.korniloval.flameviewer.converters.trees.TreesUtil.parsePositiveInt
-import com.github.korniloval.flameviewer.converters.trees.TreesUtil.parsePositiveLong
-import com.github.korniloval.flameviewer.converters.trees.UniqueStringsKeeper
+import com.github.korniloval.flameviewer.converters.trees.*
 import com.github.korniloval.flameviewer.server.handlers.treeBuilder
 import java.io.BufferedReader
 import java.io.File
@@ -33,10 +30,10 @@ class YourkitToCallTracesConverter(private val file: File) : Converter<Tree> {
             }
         }
         tree.depth = maxDepth
-        TreesUtil.setNodesOffsetRecursively(tree.baseNodeBuilder, 0)
-        TreesUtil.setNodesIndices(tree.baseNodeBuilder)
-        TreesUtil.setTreeWidth(tree)
-        TreesUtil.setNodesCount(tree)
+        setNodesOffsetRecursively(tree.baseNodeBuilder, 0)
+        setNodesIndices(tree.baseNodeBuilder)
+        setTreeWidth(tree)
+        setNodesCount(tree)
         return tree.build()
     }
 
@@ -68,7 +65,7 @@ class YourkitToCallTracesConverter(private val file: File) : Converter<Tree> {
             currentStack.removeAt(currentStack.size - 1)
         }
         val parametersPos = name.indexOf('(')
-        val newNode = TreesUtil.updateNodeList(
+        val newNode = updateNodeList(
                 currentStack[currentStack.size - 1],
                 uniqueStringsClassName.getUniqueString(getClassName(name, parametersPos)),
                 uniqueStringsMethodName.getUniqueString(getMethodName(name, parametersPos)),

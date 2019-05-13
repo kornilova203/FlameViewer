@@ -1,7 +1,7 @@
 package com.github.korniloval.flameviewer.converters.trees.hotspots
 
-import com.github.korniloval.flameviewer.converters.trees.TreesUtil.getSelfTime
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree
+import com.github.korniloval.flameviewer.converters.trees.getSelfTime
 import java.util.*
 import kotlin.Comparator
 import kotlin.collections.ArrayList

@@ -2,6 +2,7 @@ package com.github.korniloval.flameviewer.converters.trees;
 
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree;
 
+import static com.github.korniloval.flameviewer.converters.trees.TreesUtilKt.*;
 import static com.github.korniloval.flameviewer.server.handlers.CoreUtilKt.treeBuilder;
 
 public class CallTracesMethodBuilder implements TreeBuilder {
@@ -22,10 +23,10 @@ public class CallTracesMethodBuilder implements TreeBuilder {
         this.desc = desc;
         initTreeBuilder();
         traverseTreeAndFind(sourceTree.getBaseNode());
-        TreesUtil.INSTANCE.setNodesOffsetRecursively(treeBuilder.getBaseNodeBuilder(), 0);
-        TreesUtil.INSTANCE.setNodesIndices(treeBuilder.getBaseNodeBuilder());
-        TreesUtil.INSTANCE.setTreeWidth(treeBuilder);
-        TreesUtil.INSTANCE.setNodesCount(treeBuilder);
+        setNodesOffsetRecursively(treeBuilder.getBaseNodeBuilder(), 0);
+        setNodesIndices(treeBuilder.getBaseNodeBuilder());
+        setTreeWidth(treeBuilder);
+        setNodesCount(treeBuilder);
         setTimePercent(sourceTree);
         treeBuilder.setDepth(maxDepth);
         tree = treeBuilder.build();
@@ -41,7 +42,7 @@ public class CallTracesMethodBuilder implements TreeBuilder {
     }
 
     private long calculateTimeOfMethodRecursively(Tree.Node node) {
-        if (TreesUtil.INSTANCE.isSameMethod(wantedMethodNode, node.getNodeInfo().getClassName(), node.getNodeInfo().getMethodName(),
+        if (isSameMethod(wantedMethodNode, node.getNodeInfo().getClassName(), node.getNodeInfo().getMethodName(),
                 node.getNodeInfo().getDescription())) {
             /* do not go deeper. We do not want to add up time of recursive calls */
             return node.getWidth();
@@ -59,7 +60,7 @@ public class CallTracesMethodBuilder implements TreeBuilder {
 
     private void traverseTreeAndFind(Tree.Node node) {
 
-        if (TreesUtil.INSTANCE.isSameMethod(wantedMethodNode, node.getNodeInfo().getClassName(), node.getNodeInfo().getMethodName(),
+        if (isSameMethod(wantedMethodNode, node.getNodeInfo().getClassName(), node.getNodeInfo().getMethodName(),
                 node.getNodeInfo().getDescription())) {
             addNodesRecursively(treeBuilder.getBaseNodeBuilder(), node, 0);
         }
@@ -75,7 +76,7 @@ public class CallTracesMethodBuilder implements TreeBuilder {
         if (depth > maxDepth) {
             maxDepth = depth;
         }
-        nodeBuilder = TreesUtil.INSTANCE.updateNodeList(nodeBuilder, node);
+        nodeBuilder = updateNodeList(nodeBuilder, node);
         for (Tree.Node childNode : node.getNodesList()) {
             addNodesRecursively(nodeBuilder, childNode, depth);
         }
@@ -85,7 +86,7 @@ public class CallTracesMethodBuilder implements TreeBuilder {
         Tree.Node.Builder baseNode = Tree.Node.newBuilder()
                 .addNodes(Tree.Node.newBuilder()
                         .setNodeInfo(
-                                TreesUtil.INSTANCE.createNodeInfo(
+                                createNodeInfo(
                                         className,
                                         methodName,
                                         desc

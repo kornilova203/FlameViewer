@@ -3,10 +3,10 @@ package com.github.korniloval.flameviewer.converters.trees.calltraces;
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree;
 import com.github.kornilova_l.flamegraph.proto.TreesProtos;
 import com.github.korniloval.flameviewer.converters.trees.TreeBuilder;
-import com.github.korniloval.flameviewer.converters.trees.TreesUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import static com.github.korniloval.flameviewer.converters.trees.TreesUtilKt.*;
 import static com.github.korniloval.flameviewer.server.handlers.CoreUtilKt.treeBuilder;
 
 public final class CallTreeToCallTracesConverter implements TreeBuilder {
@@ -24,10 +24,10 @@ public final class CallTreeToCallTracesConverter implements TreeBuilder {
             tree = null;
             return;
         }
-        TreesUtil.INSTANCE.setNodesOffsetRecursively(treeBuilder.getBaseNodeBuilder(), 0);
-        TreesUtil.INSTANCE.setNodesIndices(treeBuilder.getBaseNodeBuilder());
-        TreesUtil.INSTANCE.setTreeWidth(treeBuilder);
-        TreesUtil.INSTANCE.setNodesCount(treeBuilder);
+        setNodesOffsetRecursively(treeBuilder.getBaseNodeBuilder(), 0);
+        setNodesIndices(treeBuilder.getBaseNodeBuilder());
+        setTreeWidth(treeBuilder);
+        setNodesCount(treeBuilder);
         treeBuilder.setDepth(maxDepth);
         tree = treeBuilder.build();
     }
@@ -55,7 +55,7 @@ public final class CallTreeToCallTracesConverter implements TreeBuilder {
         if (depth > maxDepth) {
             maxDepth = depth;
         }
-        nodeBuilder = TreesUtil.INSTANCE.updateNodeList(nodeBuilder, node);
+        nodeBuilder = updateNodeList(nodeBuilder, node);
         for (Tree.Node childNode : node.getNodesList()) {
             addNodesRecursively(nodeBuilder, childNode, depth);
         }

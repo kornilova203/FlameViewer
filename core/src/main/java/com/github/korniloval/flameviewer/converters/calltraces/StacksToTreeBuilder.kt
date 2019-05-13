@@ -5,12 +5,7 @@ import com.github.korniloval.flameviewer.converters.FramesParsingUtil.getClassNa
 import com.github.korniloval.flameviewer.converters.FramesParsingUtil.getDescription
 import com.github.korniloval.flameviewer.converters.FramesParsingUtil.getLastSpacePosBeforeParams
 import com.github.korniloval.flameviewer.converters.FramesParsingUtil.getMethodName
-import com.github.korniloval.flameviewer.converters.trees.TreeBuilder
-import com.github.korniloval.flameviewer.converters.trees.TreesUtil
-import com.github.korniloval.flameviewer.converters.trees.TreesUtil.setNodesCount
-import com.github.korniloval.flameviewer.converters.trees.TreesUtil.setNodesOffsetRecursively
-import com.github.korniloval.flameviewer.converters.trees.TreesUtil.updateNodeList
-import com.github.korniloval.flameviewer.converters.trees.UniqueStringsKeeper
+import com.github.korniloval.flameviewer.converters.trees.*
 import com.github.korniloval.flameviewer.server.handlers.treeBuilder
 
 
@@ -28,8 +23,8 @@ class StacksToTreeBuilder(stacks: Map<String, Int>) : TreeBuilder {
         treeBuilder.setBaseNode(Tree.Node.newBuilder())
         processStacks(stacks)
         setNodesOffsetRecursively(treeBuilder.baseNodeBuilder, 0)
-        TreesUtil.setNodesIndices(treeBuilder.baseNodeBuilder)
-        TreesUtil.setTreeWidth(treeBuilder)
+        setNodesIndices(treeBuilder.baseNodeBuilder)
+        setTreeWidth(treeBuilder)
         setNodesCount(treeBuilder)
         treeBuilder.depth = maxDepth
         return treeBuilder.build()

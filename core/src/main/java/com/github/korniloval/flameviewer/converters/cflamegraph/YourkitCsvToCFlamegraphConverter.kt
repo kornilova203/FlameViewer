@@ -5,7 +5,7 @@ import com.github.korniloval.flameviewer.converters.FramesParsingUtil.getClassNa
 import com.github.korniloval.flameviewer.converters.FramesParsingUtil.getDescription
 import com.github.korniloval.flameviewer.converters.FramesParsingUtil.getLastSpacePosBeforeParams
 import com.github.korniloval.flameviewer.converters.FramesParsingUtil.getMethodName
-import com.github.korniloval.flameviewer.converters.trees.TreesUtil.parsePositiveInt
+import com.github.korniloval.flameviewer.converters.trees.parsePositiveInt
 import java.io.BufferedReader
 import java.io.File
 import java.io.FileReader

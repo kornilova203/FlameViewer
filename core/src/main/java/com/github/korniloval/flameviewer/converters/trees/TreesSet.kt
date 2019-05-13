@@ -6,7 +6,6 @@ import com.github.kornilova_l.flamegraph.proto.TreesPreviewProtos.TreesPreview
 import com.github.kornilova_l.flamegraph.proto.TreesProtos
 import com.github.korniloval.flameviewer.converters.trees.TreeType.BACK_TRACES
 import com.github.korniloval.flameviewer.converters.trees.TreeType.CALL_TRACES
-import com.github.korniloval.flameviewer.converters.trees.TreesUtil.copyNode
 import com.github.korniloval.flameviewer.converters.trees.backtraces.BackTracesBuilder
 import com.github.korniloval.flameviewer.converters.trees.backtraces.BackTracesMethodBuilder
 import com.github.korniloval.flameviewer.converters.trees.hotspots.HotSpot
@@ -72,12 +71,12 @@ abstract class TreesSet {
         }
         val maxDepth = getMaxDepthRecursively(filteredTree.baseNodeBuilder, 0)
         if (!isCallTree) {
-            TreesUtil.setNodesOffsetRecursively(filteredTree.baseNodeBuilder, 0)
+            setNodesOffsetRecursively(filteredTree.baseNodeBuilder, 0)
         } else {
             updateOffset(filteredTree)
         }
-        TreesUtil.setTreeWidth(filteredTree)
-        TreesUtil.setNodesCount(filteredTree)
+        setTreeWidth(filteredTree)
+        setNodesCount(filteredTree)
         filteredTree.depth = maxDepth
         return filteredTree.build()
     }
@@ -118,7 +117,7 @@ abstract class TreesSet {
 
         for (child in node.nodesList) {
             if (filter.isNodeIncluded(child)) {
-                val newNode = TreesUtil.updateNodeList(nodeBuilder, child.nodeInfo, child.width)
+                val newNode = updateNodeList(nodeBuilder, child.nodeInfo, child.width)
                 buildFilteredTreeRecursively(
                         newNode,
                         child,

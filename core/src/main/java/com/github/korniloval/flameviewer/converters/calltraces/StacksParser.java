@@ -1,11 +1,12 @@
 package com.github.korniloval.flameviewer.converters.calltraces;
 
-import com.github.korniloval.flameviewer.converters.trees.TreesUtil;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.github.korniloval.flameviewer.converters.trees.TreesUtilKt.parsePositiveInt;
 
 public class StacksParser {
     @Nullable
@@ -19,7 +20,7 @@ public class StacksParser {
                         if (line.isEmpty()) return;
                         int idx = line.lastIndexOf(" ");
                         if (idx == -1) return;
-                        Integer width = TreesUtil.INSTANCE.parsePositiveInt(line, idx + 1, line.length());
+                        Integer width = parsePositiveInt(line, idx + 1, line.length());
                         if (width != null) stacks.put(line.substring(0, idx), width);
                     });
             return stacks;

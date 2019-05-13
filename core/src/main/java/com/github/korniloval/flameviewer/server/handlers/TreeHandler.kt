@@ -3,8 +3,8 @@ package com.github.korniloval.flameviewer.server.handlers
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node
 import com.github.korniloval.flameviewer.FlameLogger
-import com.github.korniloval.flameviewer.converters.trees.TreesUtil.copyNode
-import com.github.korniloval.flameviewer.converters.trees.TreesUtil.countMaxDepth
+import com.github.korniloval.flameviewer.converters.trees.copyNode
+import com.github.korniloval.flameviewer.converters.trees.countMaxDepth
 import com.github.korniloval.flameviewer.converters.trees.maximumNodesCount
 import com.github.korniloval.flameviewer.server.RequestHandlerBase
 import com.github.korniloval.flameviewer.server.RequestHandlingException

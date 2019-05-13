@@ -6,7 +6,7 @@ import com.github.korniloval.flameviewer.cflamegraph.Tree
 import com.github.korniloval.flameviewer.converters.Converter
 import com.github.korniloval.flameviewer.converters.cflamegraph.CFlamegraph
 import com.github.korniloval.flameviewer.converters.cflamegraph.CFlamegraphLine
-import com.github.korniloval.flameviewer.converters.trees.TreesUtil
+import com.github.korniloval.flameviewer.converters.trees.*
 import com.github.korniloval.flameviewer.server.handlers.treeBuilder
 import java.io.File
 import java.nio.ByteBuffer
@@ -27,10 +27,10 @@ class CFlamegraphToCallTracesConverter(private val cf: CFlamegraph) : Converter<
         }
 
         tree.depth = maxDepth
-        TreesUtil.setNodesOffsetRecursively(tree.baseNodeBuilder, 0)
-        TreesUtil.setNodesIndices(tree.baseNodeBuilder)
-        TreesUtil.setTreeWidth(tree)
-        TreesUtil.setNodesCount(tree)
+        setNodesOffsetRecursively(tree.baseNodeBuilder, 0)
+        setNodesIndices(tree.baseNodeBuilder)
+        setTreeWidth(tree)
+        setNodesCount(tree)
         return tree.build()
     }
 
@@ -45,7 +45,7 @@ class CFlamegraphToCallTracesConverter(private val cf: CFlamegraph) : Converter<
             throw AssertionError("depth of line cannot increase by 2 or more.")
         }
 
-        val newNode = TreesUtil.updateNodeList(
+        val newNode = updateNodeList(
                 currentStack[currentStack.size - 1],
                 if (line.classNameId != null && line.classNameId >= 0) cf.classNames[line.classNameId] else "",
                 cf.methodNames[line.methodNameId],

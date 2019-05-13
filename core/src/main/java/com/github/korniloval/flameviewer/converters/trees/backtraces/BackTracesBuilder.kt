@@ -2,9 +2,7 @@ package com.github.korniloval.flameviewer.converters.trees.backtraces
 
 import com.github.kornilova_l.flamegraph.proto.TreeProtos
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node
-import com.github.korniloval.flameviewer.converters.trees.TreeBuilder
-import com.github.korniloval.flameviewer.converters.trees.TreesUtil
-import com.github.korniloval.flameviewer.converters.trees.TreesUtil.getSelfTime
+import com.github.korniloval.flameviewer.converters.trees.*
 import com.github.korniloval.flameviewer.server.handlers.treeBuilder
 import java.util.*
 
@@ -17,10 +15,10 @@ class BackTracesBuilder(callTraces: TreeProtos.Tree) : TreeBuilder {
     init {
         val treeBuilder = treeBuilder(Node.newBuilder())
         buildTreeRecursively(callTraces.baseNode, treeBuilder.baseNodeBuilder, ArrayList(callTraces.depth))
-        TreesUtil.setNodesOffsetRecursively(treeBuilder.baseNodeBuilder, 0)
-        TreesUtil.setNodesIndices(treeBuilder.baseNodeBuilder)
-        TreesUtil.setTreeWidth(treeBuilder)
-        TreesUtil.setNodesCount(treeBuilder)
+        setNodesOffsetRecursively(treeBuilder.baseNodeBuilder, 0)
+        setNodesIndices(treeBuilder.baseNodeBuilder)
+        setTreeWidth(treeBuilder)
+        setNodesCount(treeBuilder)
         treeBuilder.depth = callTraces.depth
         backTraces = treeBuilder.build()
     }
@@ -44,7 +42,7 @@ class BackTracesBuilder(callTraces: TreeProtos.Tree) : TreeBuilder {
         var currentBuilder = baseNode
         for (i in currentStack.size - 1 downTo 1) { // first node is base node
             val nodeInfo = currentStack[i].nodeInfo
-            currentBuilder = TreesUtil.updateNodeList(currentBuilder, nodeInfo.className,
+            currentBuilder = updateNodeList(currentBuilder, nodeInfo.className,
                     nodeInfo.methodName, nodeInfo.description, width)
         }
     }

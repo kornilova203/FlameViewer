@@ -4,7 +4,6 @@ import com.github.kornilova_l.flamegraph.proto.EventProtos;
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree;
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node;
 import com.github.korniloval.flameviewer.converters.trees.TreesSet;
-import com.github.korniloval.flameviewer.converters.trees.TreesUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,6 +11,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static com.github.korniloval.flameviewer.converters.trees.DescriptionConverter.getBeautifulDesc;
+import static com.github.korniloval.flameviewer.converters.trees.TreesUtilKt.setNodesCount;
+import static com.github.korniloval.flameviewer.converters.trees.TreesUtilKt.setTreeWidth;
 import static com.github.korniloval.flameviewer.server.handlers.CoreUtilKt.treeBuilder;
 
 class CTBuilder {
@@ -101,8 +102,8 @@ class CTBuilder {
         }
         treeBuilder.setBaseNode(baseNode);
         subtractOffsetRecursively(treeBuilder.getBaseNodeBuilder(), threadStartTime);
-        TreesUtil.INSTANCE.setTreeWidth(treeBuilder);
-        TreesUtil.INSTANCE.setNodesCount(treeBuilder);
+        setTreeWidth(treeBuilder);
+        setNodesCount(treeBuilder);
         treeBuilder.getTreeInfoBuilder().setStartTime(
                 threadStartTime - startTimeOfFirstThread
         );

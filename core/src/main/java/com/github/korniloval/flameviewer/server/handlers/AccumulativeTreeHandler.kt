@@ -2,12 +2,8 @@ package com.github.korniloval.flameviewer.server.handlers
 
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree
 import com.github.korniloval.flameviewer.FlameLogger
-import com.github.korniloval.flameviewer.converters.trees.TreeType
+import com.github.korniloval.flameviewer.converters.trees.*
 import com.github.korniloval.flameviewer.converters.trees.TreesSet.Companion.getMaxDepthRecursively
-import com.github.korniloval.flameviewer.converters.trees.TreesUtil
-import com.github.korniloval.flameviewer.converters.trees.TreesUtil.copyNode
-import com.github.korniloval.flameviewer.converters.trees.TreesUtil.countMaxDepth
-import com.github.korniloval.flameviewer.converters.trees.maximumNodesCount
 import com.github.korniloval.flameviewer.server.ServerUtil.getParameter
 import com.github.korniloval.flameviewer.server.TreeManager
 import io.netty.handler.codec.http.QueryStringDecoder
@@ -54,9 +50,9 @@ abstract class AccumulativeTreeHandler(protected val treeManager: TreeManager, l
 
         subTree.depth = getMaxDepthRecursively(newBaseNode, 1) // first element in path chooses one of trees of base node
 
-        TreesUtil.setNodesOffsetRecursively(subTree.baseNodeBuilder, 0)
-        TreesUtil.setTreeWidth(subTree)
-        TreesUtil.setNodesCount(subTree)
+        setNodesOffsetRecursively(subTree.baseNodeBuilder, 0)
+        setTreeWidth(subTree)
+        setNodesCount(subTree)
 
         return subTree.build()
     }
