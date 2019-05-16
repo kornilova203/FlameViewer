@@ -15,19 +15,13 @@ class Filter(include: String?, exclude: String?, private val logger: FlameLogger
     }
 
     private fun compilePattern(patternString: String?): Pattern? {
-        if (patternString != null) {
-            return try {
-                Pattern.compile(
-                        patternString.replace(".", """\.""")
-                                .replace("*", ".*")
-                                .replace("$", """\$""")
-                )
-            } catch (e: PatternSyntaxException) {
-                logger.warn("Failed to compile filter pattern", e)
-                null
-            }
+        patternString ?: return null
+        return try {
+            Pattern.compile(patternString)
+        } catch (e: PatternSyntaxException) {
+            logger.warn("Failed to compile filter pattern", e)
+            null
         }
-        return null
     }
 
     fun isNodeIncluded(node: Node): Boolean {

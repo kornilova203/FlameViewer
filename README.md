@@ -59,10 +59,8 @@ Click on a rectangle to zoom in on it.
 ![](screenshots/zoom.png)
 
 ### Filtering
-If you want to see method that are located in some particular package you can apply filter.  
-![](screenshots/filter.png)
-
-Wildcards are supported with `*` and multiple filters can be specified using the pipe `|` character.
+Regexp for filtering method calls e.g. `my\.package.*|another\.package.*`.  
+![](screenshots/filter.png)  
 ![](screenshots/multiple_filters.png)
 
 ### Search

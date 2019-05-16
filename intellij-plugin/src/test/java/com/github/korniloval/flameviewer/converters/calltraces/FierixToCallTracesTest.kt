@@ -10,10 +10,10 @@ class FierixToCallTracesTest : ConverterTestCase("fierix", CALLTRACES) {
     }
 
     fun testTwoThreads() {
-        doTest(include = "*")
-        doTest(exclude = "*")
-        doTest(include = "*run")
-        doTest(include = "*fun*")
-        doTest(include = "*fun4")
+        doTest(include = ".*")
+        doTest(exclude = ".*")
+        doTest(include = ".*run")
+        doTest(include = ".*fun.*")
+        doTest(include = ".*fun4")
     }
 }

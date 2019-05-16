@@ -17,6 +17,7 @@ class FlamegraphToCallTracesConverterTest : ConverterTestCase("flamegraph", CALL
     fun testMultipleOccurrenceInStack() = doTest()
     fun testAsyncProfiler() = doTest()
 
+    // flaky :(
     fun testNodesCountBiggerThanLimit() {
         PluginFileManager.deleteAllUploadedFiles()
         val tempFile = File("${getProfilerFilesPath()}/nodesCountBiggerThanLimit.flamegraph")
