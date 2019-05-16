@@ -77,7 +77,7 @@ section header .class-name {
 
 .file-form {
     width: 100%;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
 }
 
 .call-tree {
@@ -175,13 +175,13 @@ section header .class-name {
     color: white;
     background-color: #0887d7;
     width: 120px;
-    height: 35px;
+    height: 30px;
     font-size: 14px;
     display: flex;
     justify-content: center;
     align-items: center;
     font-weight: bold;
-    margin: 0 auto 10px;
+    margin: 0 auto 0;
 }
 
 .inputfile + label:hover {
@@ -198,7 +198,7 @@ section header .class-name {
 
 nav {
     padding: 0;
-    height: 45px;
+    height: 30px;
     background-color: #f3f3f3;
     width: 100vw;
 }
@@ -225,7 +225,6 @@ nav ul li {
 
 .current-link a {
     color: white;
-    font-weight: bold;
 }
 
 nav ul li a, .choose-file-header a {
@@ -233,13 +232,13 @@ nav ul li a, .choose-file-header a {
     text-transform: uppercase;
     font-family: "Gotham Pro", sans-serif;
     font-weight: normal;
-    font-size: 14px;
+    font-size: 12px;
     text-decoration: none;
     display: flex;
     height: 100%;
     vertical-align: baseline;
     align-items: center;
-    padding: 0 40px;
+    padding: 0 20px;
 }
 
 nav ul li:hover {
@@ -371,18 +370,18 @@ nav ul li a:focus {
     opacity: 0;
 }
 
-/*noinspection CssOptimizeSimilarProperties*/
+/*noinspection ALL*/
 .search-form input {
-    background: url(../img/search-icon-black.png) no-repeat 4px 5px;
+    background: url(../img/search-icon-black.png) no-repeat 6px 5px;
     background-size: 18px;
     background-color: #d5d5d5;
     font-size: 14px;
     color: #6a6a6a;
-    width: 170px;
-    padding: 6px 0 6px 25px;
+    padding: 4px 0 6px 28px;
     border-width: 0;
-    margin-top: 10px;
     transition: opacity 300ms;
+    height: 30px;
+    box-sizing: border-box;
 }
 
 .search-form input:focus {
@@ -475,17 +474,7 @@ button {
 #search-method-form {
     position: fixed;
     right: 100px;
-    top: 3px;
     z-index: 10;
-}
-
-.search-white-bg {
-    z-index: -1;
-    position: fixed;
-    background-color: white;
-    right: 92px;
-    width: 210px;
-    height: 50px;
 }
 
 #hide-file-list-button {
@@ -536,7 +525,7 @@ button:focus {
 .remove-files-button {
     opacity: 0.2;
     margin-left: 7px;
-    top: 4px;
+    top: -3px;
 }
 
 #search-file-form {
@@ -548,7 +537,7 @@ button:focus {
 }
 
 #search-file-form input {
-    width: 165px;
+    width: 190px;
 }
 
 .active-gray-button {
@@ -589,7 +578,7 @@ button:focus {
 .filter {
     position: fixed;
     width: 80px;
-    height: 45px;
+    height: 30px;
     background-color: #d0d0d0;
     right: 0;
     top: 0;
@@ -617,7 +606,7 @@ button:focus {
     background-color: #e3e3e3;
     width: 300px;
     height: 170px;
-    top: 45px;
+    top: 30px;
     right: 0;
     display: none;
     padding: 20px;
@@ -717,8 +706,8 @@ button:focus {
 }
 
 #search-method-form input {
-    margin-top: 5px;
     background-color: #ddd;
+    width: 170px;
 }
 
 .canvas-zoomed {
@@ -889,7 +878,7 @@ canvas {
     width: 24px;
     height: 24px;
     position: absolute;
-    top: 22px;
+    top: 19px;
     left: 200px;
 }
 

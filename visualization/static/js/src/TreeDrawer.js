@@ -74,6 +74,10 @@ module.exports.TreeDrawer = class TreeDrawer {
         return this.canvasHeight - y - constants.LAYER_HEIGHT;
     };
 
+    // noinspection JSMethodCanBeStatic
+    /**
+     * @protected
+     */
     _createSection() {
         const sectionContent = templates.tree.getAccumulativeTreeSection({}).content;
         return $(sectionContent).appendTo($("main"));
