@@ -26,7 +26,7 @@ public class MethodsCounter {
 
     private static void countMethodsRecursively(TreeProtos.Tree.Node node, Set<String> methods, @Nullable Filter filter) {
         for (TreeProtos.Tree.Node child : node.getNodesList()) {
-            if (filter == null || filter.isNodeIncluded(child)) {
+            if (filter == null || filter.isIncluded(child)) {
                 methods.add(child.getNodeInfo().getClassName() + child.getNodeInfo().getMethodName());
             }
             countMethodsRecursively(child, methods, filter);

@@ -6,8 +6,6 @@ let $backTracesA;
 let $filteredNodesCountSpan;
 let CURRENT_INCLUDED = common.getParameter("include");
 CURRENT_INCLUDED = CURRENT_INCLUDED === undefined ? "" : CURRENT_INCLUDED;
-let CURRENT_EXCLUDED = common.getParameter("exclude");
-CURRENT_EXCLUDED = CURRENT_EXCLUDED === undefined ? "" : CURRENT_EXCLUDED;
 let methodsCountInCurrentTree = null;
 
 $(window).on("load", () => {
@@ -36,26 +34,21 @@ $(window).on("load", () => {
     });
 
     $filterContent.find(".cancel-filter").click(() => {
-        setValueFromParameters($includedInput, $excludedInput);
+        setValueFromParameters($includedInput);
         $filterContent.toggle();
         setButtonInactive($applyAnchor);
     });
 
     const $includedInput = $filterContent.find("#included-input");
-    const $excludedInput = $filterContent.find("#excluded-input");
 
-    setValueFromParameters($includedInput, $excludedInput);
+    setValueFromParameters($includedInput);
     updateFilterButton();
 
     $includedInput.on('change keyup copy paste cut', common.updateRareDecorator(500, () => {
         console.log("update");
-        updateFilterLink($applyAnchor, $includedInput.val(), $excludedInput.val());
+        updateFilterLink($applyAnchor, $includedInput.val());
     }));
-    $excludedInput.on('change keyup copy paste cut', common.updateRareDecorator(1000, () => {
-        console.log("update");
-        updateFilterLink($applyAnchor, $includedInput.val(), $excludedInput.val());
-    }));
-    setClearAction($filterContent.find(".clear-filter"), $includedInput, $excludedInput, $applyAnchor);
+    setClearAction($filterContent.find(".clear-filter"), $includedInput, $applyAnchor);
 });
 
 function setCurrentPrefix() {
@@ -65,32 +58,27 @@ function setCurrentPrefix() {
 /**
  * @param $clearFilterButton
  * @param $includedInput
- * @param $excludedInput
  * @param $applyAnchor
  */
-function setClearAction($clearFilterButton, $includedInput, $excludedInput, $applyAnchor) {
+function setClearAction($clearFilterButton, $includedInput, $applyAnchor) {
     $clearFilterButton.click(() => {
         $includedInput.val("");
-        $excludedInput.val("");
-        updateFilterLink($applyAnchor, $includedInput.val(), $excludedInput.val());
+        updateFilterLink($applyAnchor, $includedInput.val());
     })
 }
 
-function setValueFromParameters($includedInput, $excludedInput) {
+function setValueFromParameters($includedInput) {
     $includedInput.val(decodeURIComponent(CURRENT_INCLUDED));
-    $excludedInput.val(decodeURIComponent(CURRENT_EXCLUDED));
 }
 
 function updateFilterButton() {
-    if (CURRENT_INCLUDED !== "" ||
-        CURRENT_EXCLUDED !== "") {
+    if (CURRENT_INCLUDED !== "") {
         $(".filter").addClass("filter-applied");
     }
 }
 
-function isApplyActive(includingInputText, excludingInputText) {
-    return CURRENT_INCLUDED !== includingInputText ||
-        CURRENT_EXCLUDED !== excludingInputText
+function isApplyActive(includingInputText) {
+    return CURRENT_INCLUDED !== includingInputText
 }
 
 function setButtonInactive($applyAnchor) {
@@ -100,18 +88,13 @@ function setButtonInactive($applyAnchor) {
 
 /**
  * @param {String} include
- * @param {String} exclude
  * @return {String}
  */
-function getParametersWithFilter(include, exclude) {
-    let link = parametersWithoutFilter;
-    if (include !== "" && include !== undefined) {
-        link += "&include=" + encodeURIComponent(include);
+function getParametersWithFilter(include) {
+    if (include === "" || include === undefined) {
+        return parametersWithoutFilter;
     }
-    if (exclude !== "" && exclude !== undefined) {
-        link += "&exclude=" + encodeURIComponent(exclude);
-    }
-    return link;
+    return parametersWithoutFilter + "&include=" + encodeURIComponent(include);
 }
 
 function setMethodsCount(nodesCount) {
@@ -121,10 +104,9 @@ function setMethodsCount(nodesCount) {
 /**
  * Send request to server to count how much nodes will be in tree with filter
  * @param {String} includingInputText
- * @param {String} excludingInputText
  */
-function countMethodsForFilter(includingInputText, excludingInputText) {
-    let url = serverNames.MAIN_NAME + "/trees/" + constants.pageName + "/count?" + getParametersWithFilter(includingInputText, excludingInputText);
+function countMethodsForFilter(includingInputText) {
+    let url = serverNames.MAIN_NAME + "/trees/" + constants.pageName + "/count?" + getParametersWithFilter(includingInputText);
 
     common.sendGetRequest(url, "json")
         .then(response => {
@@ -134,7 +116,7 @@ function countMethodsForFilter(includingInputText, excludingInputText) {
 
 
 function countMethodsInCurrentTree() {
-    const url = serverNames.MAIN_NAME + "/trees/" + constants.pageName + "/count?" + getParametersWithFilter(CURRENT_INCLUDED, CURRENT_EXCLUDED);
+    const url = serverNames.MAIN_NAME + "/trees/" + constants.pageName + "/count?" + getParametersWithFilter(CURRENT_INCLUDED);
     common.sendGetRequest(url, "json")
         .then(response => {
             const nodesCount = response.nodesCount;
@@ -146,12 +128,11 @@ function countMethodsInCurrentTree() {
 /**
  * @param {Object} $applyAnchor
  * @param {String} includingInputText
- * @param {String} excludingInputText
  */
-function updateFilterLink($applyAnchor, includingInputText, excludingInputText) {
-    countMethodsForFilter(includingInputText, excludingInputText);
-    if (isApplyActive(includingInputText, excludingInputText)) {
-        let link = CURRENT_PREFIX + "?" + getParametersWithFilter(includingInputText, excludingInputText);
+function updateFilterLink($applyAnchor, includingInputText) {
+    countMethodsForFilter(includingInputText);
+    if (isApplyActive(includingInputText)) {
+        let link = CURRENT_PREFIX + "?" + getParametersWithFilter(includingInputText);
         $applyAnchor.attr("href", link);
         $applyAnchor.find("button").addClass("active-apply")
     } else {
@@ -166,8 +147,7 @@ function getParametersWithoutFilter() {
     const parametersString = window.location.href.split("?")[1];
     const parameters = parametersString.split("&");
     for (let i = 0; i < parameters.length; i++) {
-        if (parameters[i].startsWith("include") ||
-            parameters[i].startsWith("exclude")) {
+        if (parameters[i].startsWith("include")) {
             parameters.splice(i, 1);
             i--;
         }

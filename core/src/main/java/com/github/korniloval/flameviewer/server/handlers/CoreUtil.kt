@@ -17,12 +17,8 @@ fun getFileName(decoder: QueryStringDecoder): String {
 
 @Throws(RequestHandlingException::class)
 fun getFilter(urlDecoder: QueryStringDecoder, logger: FlameLogger): Filter? {
-    if (urlDecoder.parameters().containsKey("include") || urlDecoder.parameters().containsKey("exclude")) {
-        val includingConfigsString = getParameter(urlDecoder, "include")
-        val excludingConfigsString = getParameter(urlDecoder, "exclude")
-        return Filter(includingConfigsString, excludingConfigsString, logger)
-    }
-    return null
+    val includePattern = getParameter(urlDecoder, "include") ?: return null
+    return Filter.tryCreate(includePattern, logger)
 }
 
 fun treeBuilder(baseNode: Tree.Node.Builder): Tree.Builder = Tree.newBuilder().setBaseNode(baseNode)

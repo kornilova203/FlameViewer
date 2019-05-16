@@ -116,7 +116,7 @@ abstract class TreesSet {
                                              filter: Filter) {
 
         for (child in node.nodesList) {
-            if (filter.isNodeIncluded(child)) {
+            if (filter.isIncluded(child)) {
                 val newNode = updateNodeList(nodeBuilder, child.nodeInfo, child.width)
                 buildFilteredTreeRecursively(
                         newNode,
@@ -138,7 +138,7 @@ abstract class TreesSet {
                                                  filter: Filter) {
 
         for (child in node.nodesList) {
-            if (filter.isNodeIncluded(child)) {
+            if (filter.isIncluded(child)) {
                 nodeBuilder.addNodes(copyNode(child))
                 val newNode = nodeBuilder.nodesBuilderList[nodeBuilder.nodesBuilderList.size - 1]
                 buildFilteredCallTreeRecursively(

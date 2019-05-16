@@ -5,47 +5,25 @@ import com.github.korniloval.flameviewer.FlameLogger
 import java.util.regex.Pattern
 import java.util.regex.PatternSyntaxException
 
-class Filter(include: String?, exclude: String?, private val logger: FlameLogger) {
-    private val include: Pattern?
-    private val exclude: Pattern?
+class Filter(private val include: Pattern) {
 
-    init {
-        this.include = compilePattern(include)
-        this.exclude = compilePattern(exclude)
-    }
+    fun isIncluded(node: Node): Boolean = isIncluded(getNodeString(node))
 
-    private fun compilePattern(patternString: String?): Pattern? {
-        patternString ?: return null
-        return try {
-            Pattern.compile(patternString)
-        } catch (e: PatternSyntaxException) {
-            logger.warn("Failed to compile filter pattern", e)
-            null
-        }
-    }
-
-    fun isNodeIncluded(node: Node): Boolean {
-        val nodeString = getNodeString(node)
-        return isIncluded(nodeString) && !isExcluded(nodeString)
-    }
-
-    private fun isIncluded(nodeString: String): Boolean {
-        if (include == null) {
-            return true
-        }
-        return include.matcher(nodeString).matches()
-    }
-
-    private fun isExcluded(nodeString: String): Boolean {
-        if (exclude == null) {
-            return false
-        }
-        return exclude.matcher(nodeString).matches()
-    }
-
+    private fun isIncluded(nodeString: String): Boolean = include.matcher(nodeString).matches()
 
     private fun getNodeString(node: Node): String {
         val nodeInfo = node.nodeInfo
         return nodeInfo.className + nodeInfo.methodName
+    }
+
+    companion object {
+        fun tryCreate(includePattern: String, logger: FlameLogger): Filter? {
+            return try {
+                Filter(Pattern.compile(includePattern))
+            } catch (e: PatternSyntaxException) {
+                logger.warn("Failed to compile filter pattern", e)
+                null
+            }
+        }
     }
 }

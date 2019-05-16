@@ -9,7 +9,6 @@ class FierixToCallTreeTest : ConverterTestCase("fierix", CALLTREE) {
     fun testSimpleTree() {
         doTest()
         doTest(include = ".*")
-        doTest(exclude = ".*")
         doTest(include = ".*run")
         doTest(include = ".*fun.*")
         doTest(include = ".*fun5")
@@ -18,7 +17,6 @@ class FierixToCallTreeTest : ConverterTestCase("fierix", CALLTREE) {
     fun testTwoThreads() {
         doTest()
         doTest(include = ".*")
-        doTest(exclude = ".*")
         doTest(include = ".*run")
         doTest(include = ".*fun.*")
         doTest(include = ".*fun4")
