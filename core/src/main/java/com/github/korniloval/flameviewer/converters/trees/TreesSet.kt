@@ -14,8 +14,6 @@ import com.github.korniloval.flameviewer.server.handlers.treeBuilder
 import java.util.*
 
 
-const val maximumNodesCount = 2_000 // amount of visible nodes
-
 abstract class TreesSet {
     private var hotSpots: ArrayList<HotSpot>? = null
     protected var callTree: TreesProtos.Trees? = null
@@ -158,9 +156,6 @@ abstract class TreesSet {
 
     protected fun getBackTracesMaybeFiltered(filter: Filter?): Tree? {
         val callTraces = callTraces ?: return null
-        if (callTraces.treeInfo.nodesCount > maximumNodesCount) {
-            throw IllegalArgumentException("Calltraces must contain less than $maximumNodesCount nodes")
-        }
         val backTraces = if (backTraces != null) backTraces!! else BackTracesBuilder(callTraces).tree
         return if (filter == null) backTraces else filterTree(backTraces, filter, false)
     }

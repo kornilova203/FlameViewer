@@ -94,4 +94,14 @@ public class ServerUtil {
         if (index < 0) return null;
         return name.substring(index + 1);
     }
+
+    @Nullable
+    public static Integer validateMaxNumOfVisibleNodes(@Nullable Integer maxNumOfVisibleNodes, @NotNull FlameLogger logger) {
+        if (maxNumOfVisibleNodes == null) return null;
+        if (maxNumOfVisibleNodes <= 0) {
+            logger.warn("Maximum number of visible nodes must be bigger than 0. Actual value: " + maxNumOfVisibleNodes, null);
+            return null;
+        }
+        return maxNumOfVisibleNodes;
+    }
 }

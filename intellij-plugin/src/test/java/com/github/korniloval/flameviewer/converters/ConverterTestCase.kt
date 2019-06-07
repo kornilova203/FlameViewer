@@ -6,7 +6,10 @@ import com.github.kornilova_l.flamegraph.proto.TreesProtos
 import com.github.korniloval.flameviewer.PluginFileManager
 import com.github.korniloval.flameviewer.UploadFileUtil
 import com.github.korniloval.flameviewer.converters.ResultType.*
+import com.github.korniloval.flameviewer.server.DEFAULT_MAX_NUM_OF_VISIBLE_NODES
+import com.github.korniloval.flameviewer.server.IntellijRequestHandler
 import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase
+import org.jetbrains.ide.HttpRequestHandler
 import java.io.ByteArrayInputStream
 import java.io.File
 import java.net.HttpURLConnection
@@ -23,9 +26,9 @@ abstract class ConverterTestCase(private val fileExtension: String, private val 
         return "$commonSourceFilesPath/$fileExtension"
     }
 
-    protected fun getTreeBytes(path: List<Int> = ArrayList(), className: String? = null,
-                               methodName: String? = null, description: String? = null, fileName: String? = null,
-                               include: String? = null, exclude: String? = null): ByteArray {
+    protected fun getTreeBytes(path: List<Int> = ArrayList(), className: String? = null, methodName: String? = null,
+                               description: String? = null, fileName: String? = null, include: String? = null,
+                               exclude: String? = null, maxNumOfVisibleNodes: Int? = null): ByteArray {
         PluginFileManager.deleteAllUploadedFiles()
 
         val name = fileName ?: getTestName(true)
@@ -34,17 +37,18 @@ abstract class ConverterTestCase(private val fileExtension: String, private val 
 
         PluginFileManager.deleteAllUploadedFiles()
         UploadFileUtil.sendFile(fileToUpload.name, fileToUpload.readBytes())
-        val bytes = sendRequestForTree(fileToUpload.name, path, className, methodName, description, include, exclude)
+        val bytes = withMaxNumOfVisibleNodes(maxNumOfVisibleNodes) {
+            sendRequestForTree(fileToUpload.name, path, className, methodName, description, include, exclude)
+        }
         assertNotNull(bytes)
 
         return bytes
     }
 
-    protected fun doTest(path: List<Int> = ArrayList(), className: String? = null,
-                         methodName: String? = null, description: String? = null,
-                         fileName: String? = null, include: String? = null, exclude: String? = null) {
-
-        val bytes = getTreeBytes(path, className, methodName, description, fileName, include, exclude)
+    protected fun doTest(path: List<Int> = ArrayList(), className: String? = null, methodName: String? = null,
+                         description: String? = null, fileName: String? = null, include: String? = null,
+                         exclude: String? = null, maxNumOfVisibleNodes: Int? = null) {
+        val bytes = getTreeBytes(path, className, methodName, description, fileName, include, exclude, maxNumOfVisibleNodes)
 
         val actual = when (resultType) {
             CALLTREE -> TreesProtos.Trees.parseFrom(ByteArrayInputStream(bytes)).toString()
@@ -69,6 +73,27 @@ abstract class ConverterTestCase(private val fileExtension: String, private val 
         }
 
         assertSameLinesWithFile(File("$expectedCallTracesName.txt").absolutePath, actual)
+    }
+
+    private fun <T> withMaxNumOfVisibleNodes(maxNumOfVisibleNodes: Int?, action: () -> T): T {
+        if (maxNumOfVisibleNodes == null) {
+            return action()
+        }
+        setMaxNumOfVisibleNodes(maxNumOfVisibleNodes)
+        try {
+            return action()
+        } finally {
+            setMaxNumOfVisibleNodes(DEFAULT_MAX_NUM_OF_VISIBLE_NODES)
+        }
+    }
+
+    private fun setMaxNumOfVisibleNodes(maxNumOfVisibleNodes: Int) {
+        for (handler in HttpRequestHandler.EP_NAME.extensions()) {
+            if (handler !is IntellijRequestHandler) continue
+            handler.setMaxNumOfVisibleNodes(maxNumOfVisibleNodes)
+            return
+        }
+        throw AssertionError("${IntellijRequestHandler::class.java.simpleName} not found")
     }
 
     private fun sendRequestForTree(fileName: String, path: List<Int>, className: String?,

@@ -1,5 +1,7 @@
 package com.github.korniloval.flameviewer.cli;
 
+import com.github.korniloval.flameviewer.server.ServerOptions;
+import com.github.korniloval.flameviewer.server.ServerOptionsProviderImpl;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
@@ -22,38 +24,43 @@ import static com.github.korniloval.flameviewer.server.ServerNamesKt.CALL_TRACES
 class HttpServer {
     private static final int PORT = 8080;
 
-    static void start(@NotNull File file) throws Throwable {
-        tryStart(file, PORT);
+    static void start(@NotNull File file, @NotNull ServerOptions options) throws Throwable {
+        tryStart(file, PORT, options);
     }
 
-    private static void tryStart(File file, int port) throws InterruptedException, IOException {
+    private static void tryStart(File file, int port, @NotNull ServerOptions options) throws InterruptedException, IOException {
         EventLoopGroup eventLoopGroup = new NioEventLoopGroup();
 
         try {
             ServerBootstrap bootstrap = new ServerBootstrap()
                     .group(eventLoopGroup)
                     .handler(new LoggingHandler(LogLevel.INFO))
-                    .childHandler(new HttpServerInitializer())
+                    .childHandler(new HttpServerInitializer(options))
                     .channel(NioServerSocketChannel.class);
 
             Channel ch = bootstrap.bind(port).sync().channel();
             System.out.println("http://localhost:" + port + CALL_TRACES_PAGE + "?file=" + encodeFileName(file.getCanonicalPath()));
             ch.closeFuture().sync();
         } catch (BindException e) {
-            tryStart(file, port + 1);
+            tryStart(file, port + 1, options);
         } finally {
             eventLoopGroup.shutdownGracefully();
         }
     }
 
-    public static class HttpServerInitializer extends ChannelInitializer<Channel> {
+    static class HttpServerInitializer extends ChannelInitializer<Channel> {
+        private ServerOptions options;
+
+        HttpServerInitializer(@NotNull ServerOptions options) {
+            this.options = options;
+        }
 
         @Override
         protected void initChannel(Channel ch) {
             ChannelPipeline pipeline = ch.pipeline();
 
             pipeline.addLast(new HttpServerCodec());
-            pipeline.addLast(new CliRequestHandler());
+            pipeline.addLast(new CliRequestHandler(new ServerOptionsProviderImpl(options)));
         }
     }
 }

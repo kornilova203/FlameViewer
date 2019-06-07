@@ -1,5 +1,8 @@
 package com.github.korniloval.flameviewer.cli
 
+import com.github.korniloval.flameviewer.server.DEFAULT_MAX_NUM_OF_VISIBLE_NODES
+import com.github.korniloval.flameviewer.server.ServerOptions
+import com.github.korniloval.flameviewer.server.ServerUtil.validateMaxNumOfVisibleNodes
 import org.apache.commons.cli.DefaultParser
 import org.apache.commons.cli.HelpFormatter
 import org.apache.commons.cli.Option
@@ -10,10 +13,12 @@ import java.util.logging.Logger
 
 private val help = Option("help",  "show help message")
 private val log = Option("log", true, "logger level e.g. off, info, warning, severe (default is warning)")
+private val maxNumOfVisibleNodes = Option("maxNumOfVisibleNodes", true, "Maximum number of nodes that will be seen at any zoom level. Default is $DEFAULT_MAX_NUM_OF_VISIBLE_NODES")
 private val defaultLogLevel = Level.WARNING
 private val options = Options()
         .addOption(help)
         .addOption(log)
+        .addOption(maxNumOfVisibleNodes)
 
 private val helpFormatter = HelpFormatter()
 private const val usage = "java -jar FlameViewerCli.jar <file>"
@@ -37,8 +42,10 @@ fun main(args: Array<String>) {
     }
     val logLevel = getLogLevel(cl.getOptionValue(log.opt))
     Logger.getLogger("io.netty").level = logLevel
+    val maxVisible = validateMaxNumOfVisibleNodes(cl.getOptionValue(maxNumOfVisibleNodes.opt)?.toIntOrNull(), CliLogger())
+            ?: DEFAULT_MAX_NUM_OF_VISIBLE_NODES
     try {
-        HttpServer.start(file)
+        HttpServer.start(file, ServerOptions(maxVisible))
     } catch (throwable: Throwable) {
         throwable.printStackTrace()
     }

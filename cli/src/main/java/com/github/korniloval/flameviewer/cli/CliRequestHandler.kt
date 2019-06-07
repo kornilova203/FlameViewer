@@ -11,7 +11,7 @@ import io.netty.channel.SimpleChannelInboundHandler
 import io.netty.handler.codec.http.HttpRequest
 import io.netty.handler.codec.http.HttpResponseStatus
 
-class CliRequestHandler : SimpleChannelInboundHandler<HttpRequest>() {
+class CliRequestHandler(optionsProvider: ServerOptionsProvider) : SimpleChannelInboundHandler<HttpRequest>() {
 
     private val logger = CliLogger()
     private val treeManager = TreeManager(ToTreesSetConverterFactory(ToCallTreeConverterFactoryCli, ToCallTracesConverterFactoryCli))
@@ -19,8 +19,8 @@ class CliRequestHandler : SimpleChannelInboundHandler<HttpRequest>() {
     private val handler = DelegatingRequestHandler(
             mapOf(HOT_SPOTS_JSON to HotSpotsHandler(treeManager, logger, findFile),
                     SERIALIZED_CALL_TREE to CallTreeHandler(treeManager, logger, findFile),
-                    SERIALIZED_CALL_TRACES to CallTracesHandler(treeManager, logger, findFile),
-                    SERIALIZED_BACK_TRACES to BackTracesHandler(treeManager, logger, findFile),
+                    SERIALIZED_CALL_TRACES to CallTracesHandler(treeManager, logger, optionsProvider, findFile),
+                    SERIALIZED_BACK_TRACES to BackTracesHandler(treeManager, logger, optionsProvider, findFile),
                     CALL_TREE_PREVIEW to TreesPreviewHandler(treeManager, logger, findFile),
                     CALL_TREE_COUNT to CallTreeCountMethods(treeManager, logger, findFile),
                     CALL_TRACES_COUNT to AccumulativeTreesCountMethods(treeManager, TreeType.CALL_TRACES, logger, findFile),

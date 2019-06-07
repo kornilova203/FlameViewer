@@ -13,20 +13,22 @@ import io.netty.channel.ChannelHandlerContext
 import io.netty.handler.codec.http.FullHttpRequest
 import io.netty.handler.codec.http.HttpMethod
 import io.netty.handler.codec.http.QueryStringDecoder
+import org.jetbrains.annotations.TestOnly
 import org.jetbrains.ide.HttpRequestHandler
 
 class IntellijRequestHandler : HttpRequestHandler() {
     private val logger = LoggerAdapter(Logger.getInstance(IntellijRequestHandler::class.java))
     private val treeManager = IntellijTreeManager(ToTreesSetConverterFactory(ToCallTreeConverterFactoryIntellij, ToCallTracesConverterFactoryIntellij))
     private val findFile: FindFile = { name -> PluginFileManager.getLogFile(name) }
+    private var optionsProvider: ServerOptionsProviderImpl = ServerOptionsProviderImpl(ServerOptions(DEFAULT_MAX_NUM_OF_VISIBLE_NODES))
 
     private val handler = DelegatingRequestHandler(
             mapOf(FILE_LIST to IntellijFileListHandler(logger),
                     HOT_SPOTS_JSON to HotSpotsHandler(treeManager, logger, findFile),
                     SERIALIZED_CALL_TREE to CallTreeHandler(treeManager, logger, findFile),
                     CALL_TREE_PREVIEW to TreesPreviewHandler(treeManager, logger, findFile),
-                    SERIALIZED_CALL_TRACES to CallTracesHandler(treeManager, logger, findFile),
-                    SERIALIZED_BACK_TRACES to BackTracesHandler(treeManager, logger, findFile),
+                    SERIALIZED_CALL_TRACES to CallTracesHandler(treeManager, logger, optionsProvider, findFile),
+                    SERIALIZED_BACK_TRACES to BackTracesHandler(treeManager, logger, optionsProvider, findFile),
                     CALL_TREE_COUNT to CallTreeCountMethods(treeManager, logger, findFile),
                     CALL_TRACES_COUNT to AccumulativeTreesCountMethods(treeManager, CALL_TRACES, logger, findFile),
                     BACK_TRACES_COUNT to AccumulativeTreesCountMethods(treeManager, BACK_TRACES, logger, findFile),
@@ -58,5 +60,10 @@ class IntellijRequestHandler : HttpRequestHandler() {
         HttpMethod.GET -> true
         HttpMethod.DELETE -> true
         else -> false
+    }
+
+    @TestOnly
+    fun setMaxNumOfVisibleNodes(value: Int) {
+        optionsProvider.options = optionsProvider.options.copy(maxNumOfVisibleNodes = value)
     }
 }

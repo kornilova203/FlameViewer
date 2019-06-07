@@ -5,9 +5,9 @@ import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node
 import com.github.korniloval.flameviewer.FlameLogger
 import com.github.korniloval.flameviewer.converters.trees.copyNode
 import com.github.korniloval.flameviewer.converters.trees.countMaxDepth
-import com.github.korniloval.flameviewer.converters.trees.maximumNodesCount
 import com.github.korniloval.flameviewer.server.RequestHandlerBase
 import com.github.korniloval.flameviewer.server.RequestHandlingException
+import com.github.korniloval.flameviewer.server.ServerOptionsProvider
 import com.github.korniloval.flameviewer.server.ServerUtil.sendProto
 import io.netty.channel.ChannelHandlerContext
 import io.netty.handler.codec.http.HttpRequest
@@ -15,7 +15,7 @@ import io.netty.handler.codec.http.QueryStringDecoder
 import java.io.File
 
 
-abstract class TreeHandler(protected val logger: FlameLogger, private val findFile: FindFile) : RequestHandlerBase() {
+abstract class TreeHandler(protected val logger: FlameLogger, protected val optionsProvider: ServerOptionsProvider, private val findFile: FindFile) : RequestHandlerBase() {
 
     abstract fun getTree(file: File, decoder: QueryStringDecoder): Tree?
 
@@ -29,8 +29,9 @@ abstract class TreeHandler(protected val logger: FlameLogger, private val findFi
 
     protected open fun doProcess(ctx: ChannelHandlerContext, file: File, decoder: QueryStringDecoder) {
         val tree = getTree(file, decoder)
-        if (tree != null && tree.treeInfo.nodesCount > maximumNodesCount) {
-            val cutTree = decreaseDetailing(tree, maximumNodesCount)
+        val maxNumOfVisibleNodes = optionsProvider.getServerOptions().maxNumOfVisibleNodes
+        if (tree != null && tree.treeInfo.nodesCount > maxNumOfVisibleNodes) {
+            val cutTree = decreaseDetailing(tree, maxNumOfVisibleNodes)
             sendProto(ctx, cutTree, logger)
         } else {
             sendProto(ctx, tree, logger)
