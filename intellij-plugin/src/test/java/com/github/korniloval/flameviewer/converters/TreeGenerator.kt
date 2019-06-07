@@ -9,14 +9,14 @@ import kotlin.collections.ArrayList
  * @param nodesCount number of nodes in generated tree
  * @param numberOfMethodNames number of different method names in the tree
  */
-class TreeGenerator(nodesCount: Int, numberOfMethodNames: Int = 100) {
+class TreeGenerator(nodesCount: Int, seed: Long, numberOfMethodNames: Int = 100) {
     val root: Node
 
     init {
         if (numberOfMethodNames < 1) {
             throw IllegalArgumentException("Number of method names must be bigger that 1. It is $numberOfMethodNames")
         }
-        val random = Random()
+        val random = Random(seed)
         val nodes = ArrayList<Node>()
         root = Node("")
         nodes.add(root)

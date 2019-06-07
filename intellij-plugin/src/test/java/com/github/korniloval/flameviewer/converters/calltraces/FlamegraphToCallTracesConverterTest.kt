@@ -10,6 +10,7 @@ import java.io.ByteArrayInputStream
 import java.io.File
 
 class FlamegraphToCallTracesConverterTest : ConverterTestCase("flamegraph", CALLTRACES) {
+    private val seed = 0L
 
     fun testSimple() = doTest()
     fun testOneStacktrace() = doTest()
@@ -17,13 +18,12 @@ class FlamegraphToCallTracesConverterTest : ConverterTestCase("flamegraph", CALL
     fun testMultipleOccurrenceInStack() = doTest()
     fun testAsyncProfiler() = doTest()
 
-    // flaky :(
     fun testNodesCountBiggerThanLimit() {
         PluginFileManager.deleteAllUploadedFiles()
         val tempFile = File("${getProfilerFilesPath()}/nodesCountBiggerThanLimit.flamegraph")
         try {
             val nodesCount = maximumNodesCount + 10_000
-            TreeGenerator(nodesCount).outputFlamegraph(tempFile)
+            TreeGenerator(nodesCount, seed).outputFlamegraph(tempFile)
             val bytes = getTreeBytes()
             val tree = TreeProtos.Tree.parseFrom(ByteArrayInputStream(bytes))
 
@@ -41,7 +41,7 @@ class FlamegraphToCallTracesConverterTest : ConverterTestCase("flamegraph", CALL
         val tempFile = File("${getProfilerFilesPath()}/zoomedPartOfBigTree.flamegraph")
         try {
             val nodesCount = 50_000 // it is more than maximumNodesCount
-            val treeGenerator = TreeGenerator(nodesCount)
+            val treeGenerator = TreeGenerator(nodesCount, seed)
             treeGenerator.outputFlamegraph(tempFile)
 
             val path = ArrayList<Int>()
