@@ -1,13 +1,11 @@
 package com.github.korniloval.flameviewer.converters
 
-import com.github.korniloval.flameviewer.PluginFileManager
-import com.github.korniloval.flameviewer.UploadFileUtil
 import com.github.kornilova_l.flamegraph.proto.TreeProtos
 import com.github.kornilova_l.flamegraph.proto.TreesPreviewProtos
 import com.github.kornilova_l.flamegraph.proto.TreesProtos
-import com.github.korniloval.flameviewer.converters.ResultType.CALLTREE
-import com.github.korniloval.flameviewer.converters.ResultType.PREVIEW
-import com.github.korniloval.flameviewer.converters.ResultType.HOTSPOTS
+import com.github.korniloval.flameviewer.PluginFileManager
+import com.github.korniloval.flameviewer.UploadFileUtil
+import com.github.korniloval.flameviewer.converters.ResultType.*
 import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase
 import java.io.ByteArrayInputStream
 import java.io.File
@@ -70,7 +68,7 @@ abstract class ConverterTestCase(private val fileExtension: String, private val 
             expectedCallTracesName += "-exclude=$exclude"
         }
 
-        assertSameLinesWithFile("$expectedCallTracesName.txt", actual)
+        assertSameLinesWithFile(File("$expectedCallTracesName.txt").absolutePath, actual)
     }
 
     private fun sendRequestForTree(fileName: String, path: List<Int>, className: String?,
