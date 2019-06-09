@@ -126,7 +126,7 @@ const common = {
                 for (let i = 0; i < value.length; i++) {
                     string += `&${encodeURIComponent(key)}=${encodeURIComponent(value[i])}`;
                 }
-            } else {
+            } else if (value !== undefined) {
                 string += `&${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
             }
         }
@@ -239,6 +239,14 @@ const common = {
         if ($element.css("display") === "none") return 0;
         const string = $element.css("width");
         return Number.parseInt(string.substring(0, string.length - 2));
+    },
+
+    nullize: (str) => {
+        return str === "" ? undefined : str;
+    },
+
+    notNullize: (str) => {
+        return str === undefined ? "" : str;
     }
 };
 

@@ -18,7 +18,7 @@ abstract class CountMethodsHandlerBase(private val logger: FlameLogger, private 
         val decoder = QueryStringDecoder(request.uri())
         val file = findFile(getFileName(decoder))
                 ?: throw RequestHandlingException("File not found. Uri: ${decoder.uri()}")
-        val filter = getFilter(decoder, logger)
+        val filter = getFilter(decoder, logger, true)
         val methodsCount = countMethods(file, filter, decoder)
         ServerUtil.sendJson(ctx, Gson().toJson(MethodsCounter.NodesCount(methodsCount)), logger)
         return true

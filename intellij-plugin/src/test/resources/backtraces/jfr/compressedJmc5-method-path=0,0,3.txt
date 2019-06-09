@@ -1,0 +1,137 @@
+tree_info {
+  nodes_count: 15
+}
+base_node {
+  nodes {
+    width: 53
+    index: 3
+    node_info {
+      method_name: "get"
+      class_name: "org.apache.commons.collections4.bidimap.AbstractDualBidiMap"
+      description: "(Object)Object"
+    }
+    nodes {
+      width: 2
+      node_info {
+        method_name: "getIfAlreadyCreated"
+        class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.tiles.collections.DirectedGraph"
+        description: "(Tile)Tile"
+      }
+      nodes {
+        width: 2
+        node_info {
+          method_name: "<init>"
+          class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.tiles.collections.DirectedGraph"
+          description: "(TileSet)void"
+        }
+        nodes {
+          width: 2
+          node_info {
+            method_name: "useFileToFindSolutions"
+            class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.TwoOrThreeNeighboursKt"
+            description: "(List, File, Writer, Set, int, int, int)void"
+          }
+          nodes {
+            width: 2
+            node_info {
+              method_name: "tryToFindSolutionForEachRulesSet"
+              class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.TwoOrThreeNeighboursKt"
+              description: "(List, Writer)Set"
+            }
+            nodes {
+              width: 2
+              node_info {
+                method_name: "tryToFindSolutionForEachRulesSet$default"
+                class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.TwoOrThreeNeighboursKt"
+                description: "(List, Writer, int, Object)Set"
+              }
+              nodes {
+                width: 2
+                node_info {
+                  method_name: "main"
+                  class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.CheckAllKt"
+                  description: "(String[])void"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    nodes {
+      offset: 2
+      width: 51
+      index: 1
+      node_info {
+        method_name: "isIncluded"
+        class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.vertex_set_generator.rule.VertexRule"
+        description: "(POSITION)boolean"
+      }
+      nodes {
+        offset: 2
+        width: 51
+        node_info {
+          method_name: "formClause"
+          class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.vertex_set_generator.VertexSetSolverKt"
+          description: "(DirectedGraph$Neighbourhood, Set, List)void"
+        }
+        nodes {
+          offset: 2
+          width: 51
+          node_info {
+            method_name: "toDimacs"
+            class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.vertex_set_generator.VertexSetSolverKt"
+            description: "(DirectedGraph, Set)List"
+          }
+          nodes {
+            offset: 2
+            width: 51
+            node_info {
+              method_name: "tryToFindSolution"
+              class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.vertex_set_generator.VertexSetSolverKt"
+              description: "(Set, DirectedGraph)LabelingFunction"
+            }
+            nodes {
+              offset: 2
+              width: 51
+              node_info {
+                method_name: "useFileToFindSolutions"
+                class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.TwoOrThreeNeighboursKt"
+                description: "(List, File, Writer, Set, int, int, int)void"
+              }
+              nodes {
+                offset: 2
+                width: 51
+                node_info {
+                  method_name: "tryToFindSolutionForEachRulesSet"
+                  class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.TwoOrThreeNeighboursKt"
+                  description: "(List, Writer)Set"
+                }
+                nodes {
+                  offset: 2
+                  width: 51
+                  node_info {
+                    method_name: "tryToFindSolutionForEachRulesSet$default"
+                    class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.TwoOrThreeNeighboursKt"
+                    description: "(List, Writer, int, Object)Set"
+                  }
+                  nodes {
+                    offset: 2
+                    width: 51
+                    node_info {
+                      method_name: "main"
+                      class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.CheckAllKt"
+                      description: "(String[])void"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+depth: 9
+width: 53

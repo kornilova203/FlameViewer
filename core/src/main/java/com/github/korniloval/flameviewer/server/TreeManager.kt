@@ -32,15 +32,15 @@ open class TreeManager(private val toTreesSet: ToTreesSetConverterFactory) {
     }
 
     @Synchronized
-    fun getTree(logFile: File, treeType: TreeType, filter: Filter?): TreeProtos.Tree? {
+    fun getTree(logFile: File, treeType: TreeType): TreeProtos.Tree? {
         updateTreesSet(logFile)
-        return currentTreesSet.get()?.getTree(treeType, filter)
+        return currentTreesSet.get()?.getTree(treeType)
     }
 
     @Synchronized
-    fun getTree(logFile: File, treeType: TreeType, className: String, methodName: String, desc: String, filter: Filter?): TreeProtos.Tree? {
+    fun getTree(logFile: File, treeType: TreeType, className: String, methodName: String, desc: String): TreeProtos.Tree? {
         updateTreesSet(logFile)
-        return currentTreesSet.get()?.getTree(treeType, className, methodName, desc, filter)
+        return currentTreesSet.get()?.getTree(treeType, className, methodName, desc)
 
     }
 

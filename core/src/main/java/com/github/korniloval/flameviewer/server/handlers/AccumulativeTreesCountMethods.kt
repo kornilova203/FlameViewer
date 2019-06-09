@@ -25,9 +25,9 @@ class AccumulativeTreesCountMethods(private val treeManager: TreeManager, privat
         val className = getParameter(decoder, "class")
         val desc = getParameter(decoder, "desc")
         return if (methodName != null && className != null && desc != null) {
-            treeManager.getTree(file, type, className, methodName, desc, null)
+            treeManager.getTree(file, type, className, methodName, desc)
         } else {
-            treeManager.getTree(file, type, null)
+            treeManager.getTree(file, type)
         }
     }
 }

@@ -16,26 +16,30 @@ fun getFileName(decoder: QueryStringDecoder): String {
 }
 
 @Throws(RequestHandlingException::class)
-fun getFilter(urlDecoder: QueryStringDecoder, logger: FlameLogger): Filter? {
-    val includePattern = getParameter(urlDecoder, "include") ?: return null
-    return Filter.tryCreate(includePattern, logger)
+fun getFilter(urlDecoder: QueryStringDecoder, logger: FlameLogger, ignoreParseErrors: Boolean = false): Filter? {
+    val includePattern = nullize(getParameter(urlDecoder, "include")) ?: return null
+    return Filter.tryCreate(includePattern, logger, ignoreParseErrors)
+}
+
+fun nullize(str: String?): String? {
+    return if (str == null || str.isBlank()) null else str
 }
 
 fun treeBuilder(baseNode: Tree.Node.Builder): Tree.Builder = Tree.newBuilder().setBaseNode(baseNode)
 
 fun treeBuilder(): Tree.Builder = Tree.newBuilder()
 
-fun dfs(node: Tree.Node, action: (Tree.Node) -> Unit) {
-    action(node)
+fun dfs(node: Tree.Node, skipFirst: Boolean = true, action: (Tree.Node) -> Unit) {
+    if (!skipFirst) action(node)
     for (child in node.nodesList) {
-        dfs(child, action)
+        dfs(child, false, action)
     }
 }
 
-fun dfs(node: Tree.Node.Builder, action: (Tree.Node.Builder) -> Unit) {
-    action(node)
+fun dfs(node: Tree.Node.Builder, skipFirst: Boolean = true, action: (Tree.Node.Builder) -> Unit) {
+    if (!skipFirst) action(node)
     for (child in node.nodesBuilderList) {
-        dfs(child, action)
+        dfs(child, false, action)
     }
 }
 

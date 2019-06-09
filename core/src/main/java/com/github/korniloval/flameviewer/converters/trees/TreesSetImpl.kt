@@ -20,13 +20,13 @@ class TreesSetImpl : TreesSet {
         return TreePreviewBuilder(callTree).treesPreview
     }
 
-    override fun getTree(treeType: TreeType, filter: Filter?): TreeProtos.Tree? {
+    override fun getTree(treeType: TreeType): TreeProtos.Tree? {
         if (callTraces == null) {
             callTraces = CallTreeToCallTracesConverter(callTree!!).tree
         }
         return when (treeType) {
-            TreeType.BACK_TRACES -> getBackTracesMaybeFiltered(filter)
-            TreeType.CALL_TRACES -> getCallTracesMaybeFiltered(filter)
+            TreeType.BACK_TRACES -> getBackTraces()
+            TreeType.CALL_TRACES -> callTraces
         }
     }
 

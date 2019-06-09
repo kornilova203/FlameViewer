@@ -26,29 +26,26 @@ abstract class ConverterTestCase(private val fileExtension: String, private val 
         return "$commonSourceFilesPath/$fileExtension"
     }
 
-    protected fun getTreeBytes(path: List<Int> = ArrayList(), className: String? = null, methodName: String? = null,
-                               description: String? = null, fileName: String? = null, include: String? = null,
-                               exclude: String? = null, maxNumOfVisibleNodes: Int? = null): ByteArray {
+    protected fun getTreeBytes(options: ConvertTestOptions): ByteArray {
         PluginFileManager.deleteAllUploadedFiles()
 
-        val name = fileName ?: getTestName(true)
+        val name = options.fileName ?: getTestName(true)
 
         val fileToUpload = File("${getProfilerFilesPath()}/$name.$fileExtension")
 
         PluginFileManager.deleteAllUploadedFiles()
         UploadFileUtil.sendFile(fileToUpload.name, fileToUpload.readBytes())
-        val bytes = withMaxNumOfVisibleNodes(maxNumOfVisibleNodes) {
-            sendRequestForTree(fileToUpload.name, path, className, methodName, description, include, exclude)
+        val bytes = withMaxNumOfVisibleNodes(options.maxNumOfVisibleNodes) {
+            sendRequestForTree(fileToUpload.name, options.path, options.className, options.methodName,
+                    options.description, options.include, options.exclude)
         }
         assertNotNull(bytes)
 
         return bytes
     }
 
-    protected fun doTest(path: List<Int> = ArrayList(), className: String? = null, methodName: String? = null,
-                         description: String? = null, fileName: String? = null, include: String? = null,
-                         exclude: String? = null, maxNumOfVisibleNodes: Int? = null) {
-        val bytes = getTreeBytes(path, className, methodName, description, fileName, include, exclude, maxNumOfVisibleNodes)
+    protected fun doTest(options: ConvertTestOptions = opt()) {
+        val bytes = getTreeBytes(options)
 
         val actual = when (resultType) {
             CALLTREE -> TreesProtos.Trees.parseFrom(ByteArrayInputStream(bytes)).toString()
@@ -57,22 +54,29 @@ abstract class ConverterTestCase(private val fileExtension: String, private val 
             else -> TreeProtos.Tree.parseFrom(ByteArrayInputStream(bytes)).toString()
         }
 
-        val name = fileName ?: getTestName(true)
-        var expectedCallTracesName = "$testDataPath/$name"
-        if (className != null && methodName != null && description != null) {
-            expectedCallTracesName += "-method"
-        }
-        if (path.isNotEmpty()) {
-            expectedCallTracesName += "-zoomed"
-        }
-        if (include != null) {
-            expectedCallTracesName += "-include=$include"
-        }
-        if (exclude != null) {
-            expectedCallTracesName += "-exclude=$exclude"
-        }
+        val expectedFileName = getFileName(options)
+        assertSameLinesWithFile(File("$expectedFileName.txt").absolutePath, actual)
+    }
 
-        assertSameLinesWithFile(File("$expectedCallTracesName.txt").absolutePath, actual)
+    private fun getFileName(options: ConvertTestOptions): String {
+        val name = options.fileName ?: getTestName(true)
+        val fileName = StringBuilder("$testDataPath/$name")
+        if (options.className != null && options.methodName != null && options.description != null) {
+            fileName.append("-method")
+        }
+        if (options.path.isNotEmpty()) {
+            fileName.append("-path=").append(options.path.joinToString(separator = ","))
+        }
+        if (options.include != null) {
+            fileName.append("-include=").append(options.include)
+        }
+        if (options.exclude != null) {
+            fileName.append("-exclude=").append(options.exclude)
+        }
+        if (options.maxNumOfVisibleNodes != null) {
+            fileName.append("-visible=").append(options.maxNumOfVisibleNodes)
+        }
+        return fileName.toString()
     }
 
     private fun <T> withMaxNumOfVisibleNodes(maxNumOfVisibleNodes: Int?, action: () -> T): T {
@@ -125,5 +129,4 @@ abstract class ConverterTestCase(private val fileExtension: String, private val 
         return UploadFileUtil.getResponse(connection)
 
     }
-
 }

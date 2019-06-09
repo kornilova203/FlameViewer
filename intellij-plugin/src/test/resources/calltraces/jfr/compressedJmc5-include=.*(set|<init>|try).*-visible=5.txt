@@ -1,0 +1,53 @@
+tree_info {
+  nodes_count: 32
+}
+base_node {
+  nodes {
+    width: 645
+    node_info {
+      method_name: "tryToFindSolutionForEachRulesSet$default"
+      class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.TwoOrThreeNeighboursKt"
+      description: "(List, Writer, int, Object)Set"
+    }
+    nodes {
+      width: 645
+      node_info {
+        method_name: "tryToFindSolutionForEachRulesSet"
+        class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.TwoOrThreeNeighboursKt"
+        description: "(List, Writer)Set"
+      }
+      nodes {
+        offset: 29
+        width: 614
+        index: 2
+        node_info {
+          method_name: "tryToFindSolution"
+          class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.vertex_set_generator.VertexSetSolverKt"
+          description: "(Set, DirectedGraph)LabelingFunction"
+        }
+        nodes {
+          offset: 59
+          width: 584
+          index: 1
+          node_info {
+            method_name: "toDimacs"
+            class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.vertex_set_generator.VertexSetSolverKt"
+            description: "(DirectedGraph, Set)List"
+          }
+          nodes {
+            offset: 59
+            width: 567
+            node_info {
+              method_name: "formClause"
+              class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.vertex_set_generator.VertexSetSolverKt"
+              description: "(DirectedGraph$Neighbourhood, Set, List)void"
+            }
+          }
+        }
+      }
+    }
+  }
+}
+depth: 13
+visible_depth: 6
+width: 645

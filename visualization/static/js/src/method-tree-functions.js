@@ -12,6 +12,7 @@ const methodFunctions = {
             method: this.method,
             class: this.class,
             desc: this.desc,
+            include: CURRENT_INCLUDED,
             path: pathToNode
         });
     }

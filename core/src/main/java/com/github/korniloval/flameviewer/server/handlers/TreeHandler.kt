@@ -1,7 +1,6 @@
 package com.github.korniloval.flameviewer.server.handlers
 
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree
-import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node
 import com.github.korniloval.flameviewer.FlameLogger
 import com.github.korniloval.flameviewer.converters.trees.copyNode
 import com.github.korniloval.flameviewer.converters.trees.countMaxDepth
@@ -28,49 +27,52 @@ abstract class TreeHandler(protected val logger: FlameLogger, protected val opti
     }
 
     protected open fun doProcess(ctx: ChannelHandlerContext, file: File, decoder: QueryStringDecoder) {
-        val tree = getTree(file, decoder)
-        val maxNumOfVisibleNodes = optionsProvider.getServerOptions().maxNumOfVisibleNodes
-        if (tree != null && tree.treeInfo.nodesCount > maxNumOfVisibleNodes) {
-            val cutTree = decreaseDetailing(tree, maxNumOfVisibleNodes)
-            sendProto(ctx, cutTree, logger)
-        } else {
-            sendProto(ctx, tree, logger)
+        var tree = getTree(file, decoder)
+        if (tree == null) {
+            sendProto(ctx, null, logger)
+            return
         }
+        val maxNumOfVisibleNodes = optionsProvider.opt().maxNumOfVisibleNodes
+        if (tree.treeInfo.nodesCount > maxNumOfVisibleNodes) {
+            val path = decoder.parameters()["path"]
+            val simplifiedTree = simplifyTree(tree, maxNumOfVisibleNodes, path != null)
+            simplifiedTree.visibleDepth = countMaxDepth(simplifiedTree.baseNodeBuilder)
+            tree = simplifiedTree.build()
+        }
+        sendProto(ctx, tree, logger)
     }
 
-    private fun decreaseDetailing(tree: Tree, maximumNodesCount: Int): Tree {
+    private fun simplifyTree(tree: Tree, maximumNodesCount: Int, isZoomed: Boolean): Tree.Builder {
         val treeBuilder = treeBuilder()
-        decreaseDetailing(tree.baseNode, treeBuilder.baseNodeBuilder, getMaxAllowedWidth(tree.baseNode, maximumNodesCount))
-        @Suppress("UsePropertyAccessSyntax")
+        val baseNode = if (isZoomed) tree.baseNode.nodesList[0] else tree.baseNode
+        var baseNodeBuilder = treeBuilder.baseNodeBuilder
+        if (isZoomed) {
+            baseNodeBuilder.addNodes(copyNode(baseNode))
+            baseNodeBuilder = baseNodeBuilder.nodesBuilderList[0]
+        }
+        val minAllowedWidth = getMinAllowedWidth(baseNode, maximumNodesCount)
+        simplifyTree(baseNode, baseNodeBuilder, minAllowedWidth)
         treeBuilder.setTreeInfo(tree.treeInfo)
                 .setDepth(tree.depth)
                 .setWidth(tree.width)
                 .setVisibleDepth(countMaxDepth(treeBuilder.baseNodeBuilder))
-        return treeBuilder.build()
+        return treeBuilder
     }
 
-    companion object {
+    private fun getMinAllowedWidth(node: Tree.Node, maximumNodesCount: Int): Long {
+        val widths = mutableListOf<Long>()
+        dfs(node) { widths.add(it.width) }
+        widths.sortDescending()
+        return widths[Math.min(maximumNodesCount - 1, widths.size - 1)]
+    }
 
-        fun getMaxAllowedWidth(node: Node, maximumNodesCount: Int): Long {
-            val widths = mutableListOf<Long>()
-            dfs(node) { widths.add(it.width) }
-            widths.sortDescending()
-            val w = widths[maximumNodesCount - 1]
-            for (i in maximumNodesCount - 1 downTo 0) {
-                if (widths[i] != w) return widths[i]
-            }
-            return w
+    private fun simplifyTree(node: Tree.Node, nodeBuilder: Tree.Node.Builder, minAllowedWidth: Long, first: Boolean = true) {
+        for (child in node.nodesList) {
+            if (!first && child.width < minAllowedWidth) continue // don't skip first layer
+            // don't copy subtree of child
+            nodeBuilder.addNodes(copyNode(child))
+            val addedChild = nodeBuilder.getNodesBuilder(nodeBuilder.nodesBuilderList.size - 1)
+            simplifyTree(child, addedChild, minAllowedWidth, false)
         }
-
-        internal fun decreaseDetailing(node: Node, nodeBuilder: Node.Builder, maxAllowedWidth: Long, first: Boolean = true) {
-            for (child in node.nodesList) {
-                if (!first && child.width < maxAllowedWidth) continue // don't skip first layer
-                // don't copy subtree of child
-                nodeBuilder.addNodes(copyNode(child))
-                val addedChild = nodeBuilder.getNodesBuilder(nodeBuilder.nodesBuilderList.size - 1)
-                decreaseDetailing(child, addedChild, maxAllowedWidth, false)
-            }
-        }
-
     }
 }

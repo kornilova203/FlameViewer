@@ -1,0 +1,35 @@
+tree_info {
+  nodes_count: 57
+}
+base_node {
+  nodes {
+    width: 614
+    index: 2
+    node_info {
+      method_name: "tryToFindSolution"
+      class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.vertex_set_generator.VertexSetSolverKt"
+      description: "(Set, DirectedGraph)LabelingFunction"
+    }
+    nodes {
+      width: 30
+      node_info {
+        method_name: "solve"
+        class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.vertex_set_generator.SatSolverProcessManagerKt"
+        description: "(List, int)List"
+      }
+    }
+    nodes {
+      offset: 30
+      width: 584
+      index: 1
+      node_info {
+        method_name: "toDimacs"
+        class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.vertex_set_generator.VertexSetSolverKt"
+        description: "(DirectedGraph, Set)List"
+      }
+    }
+  }
+}
+depth: 15
+visible_depth: 3
+width: 614

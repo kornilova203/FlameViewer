@@ -4,8 +4,7 @@ let $callTreeA;
 let $callTracesA;
 let $backTracesA;
 let $filteredNodesCountSpan;
-let CURRENT_INCLUDED = common.getParameter("include");
-CURRENT_INCLUDED = CURRENT_INCLUDED === undefined ? "" : CURRENT_INCLUDED;
+const CURRENT_INCLUDED = common.nullize(common.getParameter("include")); // may be undefined
 let methodsCountInCurrentTree = null;
 
 $(window).on("load", () => {
@@ -68,17 +67,17 @@ function setClearAction($clearFilterButton, $includedInput, $applyAnchor) {
 }
 
 function setValueFromParameters($includedInput) {
-    $includedInput.val(decodeURIComponent(CURRENT_INCLUDED));
+    $includedInput.val(decodeURIComponent(common.notNullize(CURRENT_INCLUDED)));
 }
 
 function updateFilterButton() {
-    if (CURRENT_INCLUDED !== "") {
+    if (CURRENT_INCLUDED !== "" && CURRENT_INCLUDED !== undefined) {
         $(".filter").addClass("filter-applied");
     }
 }
 
 function isApplyActive(includingInputText) {
-    return CURRENT_INCLUDED !== includingInputText
+    return common.notNullize(CURRENT_INCLUDED) !== includingInputText
 }
 
 function setButtonInactive($applyAnchor) {

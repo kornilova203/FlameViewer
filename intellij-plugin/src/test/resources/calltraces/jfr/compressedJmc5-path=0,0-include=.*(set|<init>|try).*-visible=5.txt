@@ -1,0 +1,120 @@
+tree_info {
+  nodes_count: 31
+}
+base_node {
+  nodes {
+    width: 645
+    node_info {
+      method_name: "tryToFindSolutionForEachRulesSet"
+      class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.TwoOrThreeNeighboursKt"
+      description: "(List, Writer)Set"
+    }
+    nodes {
+      width: 24
+      node_info {
+        method_name: "<init>"
+        class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.tiles.collections.DirectedGraph"
+        description: "(TileSet)void"
+      }
+    }
+    nodes {
+      offset: 24
+      width: 5
+      index: 1
+      node_info {
+        method_name: "<init>"
+        class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.tiles.collections.TileSet"
+        description: "(File)void"
+      }
+    }
+    nodes {
+      offset: 29
+      width: 614
+      index: 2
+      node_info {
+        method_name: "tryToFindSolution"
+        class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.vertex_set_generator.VertexSetSolverKt"
+        description: "(Set, DirectedGraph)LabelingFunction"
+      }
+      nodes {
+        offset: 59
+        width: 584
+        index: 1
+        node_info {
+          method_name: "toDimacs"
+          class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.vertex_set_generator.VertexSetSolverKt"
+          description: "(DirectedGraph, Set)List"
+        }
+        nodes {
+          offset: 59
+          width: 567
+          node_info {
+            method_name: "formClause"
+            class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.vertex_set_generator.VertexSetSolverKt"
+            description: "(DirectedGraph$Neighbourhood, Set, List)void"
+          }
+          nodes {
+            offset: 110
+            width: 76
+            index: 1
+            node_info {
+              method_name: "next"
+              class_name: "gnu.trove.set.hash.TIntHashSet$TIntHashIterator"
+              description: "()int"
+            }
+          }
+          nodes {
+            offset: 186
+            width: 69
+            index: 2
+            node_info {
+              method_name: "<init>"
+              class_name: "gnu.trove.set.hash.TIntHashSet"
+              description: "()void"
+            }
+            nodes {
+              offset: 186
+              width: 69
+              node_info {
+                method_name: "<init>"
+                class_name: "gnu.trove.impl.hash.TIntHash"
+                description: "()void"
+              }
+              nodes {
+                offset: 186
+                width: 69
+                node_info {
+                  method_name: "<init>"
+                  class_name: "gnu.trove.impl.hash.TPrimitiveHash"
+                  description: "()void"
+                }
+                nodes {
+                  offset: 186
+                  width: 69
+                  node_info {
+                    method_name: "<init>"
+                    class_name: "gnu.trove.impl.hash.THash"
+                    description: "()void"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    nodes {
+      offset: 643
+      width: 2
+      index: 3
+      node_info {
+        method_name: "rotateRuleSet$default"
+        class_name: "com.github.kornilova_l.algorithm_synthesis.grid2D.vertex_set_generator.rule.VertexRuleKt"
+        description: "(Set, int, int, Object)Set"
+      }
+    }
+  }
+}
+depth: 12
+visible_depth: 9
+width: 645

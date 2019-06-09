@@ -1,0 +1,22 @@
+tree_info {
+  nodes_count: 11
+}
+base_node {
+  nodes {
+    width: 41
+    node_info {
+      method_name: "a"
+    }
+  }
+  nodes {
+    offset: 41
+    width: 15
+    index: 1
+    node_info {
+      method_name: "e"
+    }
+  }
+}
+depth: 4
+visible_depth: 2
+width: 56

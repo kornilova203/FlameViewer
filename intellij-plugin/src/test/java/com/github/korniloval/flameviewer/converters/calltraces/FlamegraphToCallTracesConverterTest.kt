@@ -5,6 +5,7 @@ import com.github.korniloval.flameviewer.PluginFileManager
 import com.github.korniloval.flameviewer.converters.ConverterTestCase
 import com.github.korniloval.flameviewer.converters.ResultType.CALLTRACES
 import com.github.korniloval.flameviewer.converters.TreeGenerator
+import com.github.korniloval.flameviewer.converters.opt
 import com.github.korniloval.flameviewer.server.handlers.countNodes
 import java.io.ByteArrayInputStream
 import java.io.File
@@ -15,7 +16,16 @@ class FlamegraphToCallTracesConverterTest : ConverterTestCase("flamegraph", CALL
 
     fun testSimple() = doTest()
     fun testOneStacktrace() = doTest()
-    fun testBiggerTree() = doTest()
+    fun testBiggerTree() {
+        doTest()
+        doTest(opt(include = "")) // should not apply filter
+        doTest(opt(maxNumOfVisibleNodes = 1))
+        doTest(opt(maxNumOfVisibleNodes = 1, path = listOf(0)))
+        doTest(opt(include = "(a|d)"))
+        doTest(opt(include = "(a|d)", path = listOf(0)))
+        doTest(opt(maxNumOfVisibleNodes = 4, path = listOf(0, 2)))
+    }
+
     fun testMultipleOccurrenceInStack() = doTest()
     fun testAsyncProfiler() = doTest()
 
@@ -34,10 +44,10 @@ class FlamegraphToCallTracesConverterTest : ConverterTestCase("flamegraph", CALL
         try {
             val nodesCount = maxNumOfVisibleNodes * 5
             TreeGenerator(nodesCount, seed).outputFlamegraph(tempFile)
-            val bytes = getTreeBytes(fileName = fileName, maxNumOfVisibleNodes = maxNumOfVisibleNodes)
+            val bytes = getTreeBytes(opt(maxNumOfVisibleNodes = maxNumOfVisibleNodes))
             val tree = TreeProtos.Tree.parseFrom(ByteArrayInputStream(bytes))
 
-            val actualNodesCount = countNodes(tree.baseNode) - 1 // don't count base node
+            val actualNodesCount = countNodes(tree.baseNode)
             assertNotEquals(nodesCount, actualNodesCount)
             assertTrue(tree.visibleDepth != 0)
             assertEquals(nodesCount, tree.treeInfo.nodesCount)
@@ -60,7 +70,7 @@ class FlamegraphToCallTracesConverterTest : ConverterTestCase("flamegraph", CALL
             path.add(childCount - 1) // last child in first layer
             val zoomedNode = treeGenerator.root.children[childCount - 1] // get last
 
-            val bytes = getTreeBytes(path = path, fileName = fileName, maxNumOfVisibleNodes = maxNumOfVisibleNodes)
+            val bytes = getTreeBytes(opt(path = path, maxNumOfVisibleNodes = maxNumOfVisibleNodes))
             val tree = TreeProtos.Tree.parseFrom(ByteArrayInputStream(bytes))
 
             assertEquals(1, tree.baseNode.nodesCount) // only zoomed node

@@ -1,0 +1,20 @@
+tree_info {
+  nodes_count: 2
+}
+base_node {
+  nodes {
+    width: 6
+    index: 2
+    node_info {
+      method_name: "d"
+    }
+    nodes {
+      width: 5
+      node_info {
+        method_name: "c"
+      }
+    }
+  }
+}
+depth: 2
+width: 6

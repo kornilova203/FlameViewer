@@ -17,11 +17,11 @@ class Filter(private val include: Pattern) {
     }
 
     companion object {
-        fun tryCreate(includePattern: String, logger: FlameLogger): Filter? {
+        fun tryCreate(includePattern: String, logger: FlameLogger, ignoreParseErrors: Boolean): Filter? {
             return try {
                 Filter(Pattern.compile(includePattern))
             } catch (e: PatternSyntaxException) {
-                logger.warn("Failed to compile filter pattern", e)
+                if (!ignoreParseErrors) logger.warn("Failed to compile filter pattern", e)
                 null
             }
         }

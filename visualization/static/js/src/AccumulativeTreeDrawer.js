@@ -114,6 +114,7 @@ module.exports.AccumulativeTreeDrawer = class AccumulativeTreeDrawer extends Tre
     getTreeGETParameters(pathToNode) {
         return common.getParametersString({
             file: constants.fileName,
+            include: CURRENT_INCLUDED,
             path: pathToNode
         });
     }

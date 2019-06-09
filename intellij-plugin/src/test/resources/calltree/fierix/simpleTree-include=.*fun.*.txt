@@ -26,6 +26,7 @@ trees {
       nodes {
         offset: 20
         width: 5
+        index: 1
         node_info {
           method_name: "fun3"
           class_name: "com.github.kornilova_l.flamegraph.plugin.server.trees.generate_test_data.SimpleTree"
@@ -38,6 +39,7 @@ trees {
     nodes {
       offset: 60
       width: 5
+      index: 1
       node_info {
         method_name: "fun4"
         class_name: "com.github.kornilova_l.flamegraph.plugin.server.trees.generate_test_data.SimpleTree"
@@ -49,6 +51,7 @@ trees {
     nodes {
       offset: 90
       width: 5
+      index: 2
       node_info {
         method_name: "fun5"
         class_name: "com.github.kornilova_l.flamegraph.plugin.server.trees.generate_test_data.SimpleTree"

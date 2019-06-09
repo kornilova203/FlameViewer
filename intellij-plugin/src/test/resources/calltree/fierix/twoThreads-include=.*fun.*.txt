@@ -27,6 +27,7 @@ trees {
     nodes {
       offset: 30
       width: 15
+      index: 1
       node_info {
         method_name: "fun3"
         class_name: "com.github.kornilova_l.flamegraph.plugin.server.trees.generate_test_data.MyTask"
@@ -80,6 +81,7 @@ trees {
     nodes {
       offset: 30
       width: 15
+      index: 1
       node_info {
         method_name: "fun3"
         class_name: "com.github.kornilova_l.flamegraph.plugin.server.trees.generate_test_data.MyTask"

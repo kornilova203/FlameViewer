@@ -20,11 +20,14 @@ abstract class AccumulativeTreeHandler(protected val treeManager: TreeManager, l
         val methodName = getParameter(decoder, "method")
         val className = getParameter(decoder, "class")
         val desc = getParameter(decoder, "desc")
-        val tree = if (methodName != null && className != null && desc != null) {
-            treeManager.getTree(file, type, className, methodName, desc, filter)
+        var tree = if (methodName != null && className != null && desc != null) {
+            treeManager.getTree(file, type, className, methodName, desc)
         } else {
-            treeManager.getTree(file, type, filter)
+            treeManager.getTree(file, type)
         } ?: return null
+        if (filter != null) {
+            tree = filterTree(tree, filter, false) ?: return null
+        }
         val path = decoder.parameters()["path"] ?: return tree
         return getSubTree(tree, path.map { Integer.parseInt(it) })
     }
@@ -33,7 +36,7 @@ abstract class AccumulativeTreeHandler(protected val treeManager: TreeManager, l
      * At one moment there are only [ServerOptions.maxNumOfVisibleNodes] visible nodes.
      * When node is zoomed, client send request to server and specifies path to the node.
      * @param path to first node of subtree. Each number in path - index of child
-     * @return subtree that contains less than maxNumOfVisibleNodes
+     * @return subtree that contains less than [ServerOptions.maxNumOfVisibleNodes]
      * (Note: it would be more convenient to return a subtree that contains more than maxNumOfVisibleNodes, so it will be
      * cut in [TreeHandler].
      * But it means that there will be a duplicate of tree, this duplicate might be really large)
@@ -41,16 +44,7 @@ abstract class AccumulativeTreeHandler(protected val treeManager: TreeManager, l
     private fun getSubTree(tree: Tree, path: List<Int>): Tree? {
         val newBaseNode = path.fold(tree.baseNode) { n, i -> n.getNodes(i) }
         val subTree = treeBuilder()
-        val maxNumOfVisibleNodes = optionsProvider.getServerOptions().maxNumOfVisibleNodes
-        if (countNodes(newBaseNode) > maxNumOfVisibleNodes) {
-            val maxAllowedWidth = getMaxAllowedWidth(newBaseNode, maxNumOfVisibleNodes)
-            subTree.baseNodeBuilder.addNodes(copyNode(newBaseNode))
-            val addedBaseNode = subTree.baseNodeBuilder.getNodesBuilder(subTree.baseNodeBuilder.nodesBuilderList.size - 1)
-            decreaseDetailing(newBaseNode, addedBaseNode, maxAllowedWidth)
-            subTree.visibleDepth = countMaxDepth(subTree.baseNodeBuilder)
-        } else {
-            subTree.baseNodeBuilder.addNodes(newBaseNode)
-        }
+        subTree.baseNodeBuilder.addNodes(newBaseNode)
 
         subTree.depth = getMaxDepthRecursively(newBaseNode, 1) // first element in path chooses one of trees of base node
 

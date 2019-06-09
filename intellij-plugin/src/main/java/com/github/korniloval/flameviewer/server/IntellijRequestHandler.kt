@@ -7,6 +7,7 @@ import com.github.korniloval.flameviewer.converters.calltree.ToCallTreeConverter
 import com.github.korniloval.flameviewer.converters.trees.ToTreesSetConverterFactory
 import com.github.korniloval.flameviewer.converters.trees.TreeType.BACK_TRACES
 import com.github.korniloval.flameviewer.converters.trees.TreeType.CALL_TRACES
+import com.github.korniloval.flameviewer.server.ServerUtil.validateMaxNumOfVisibleNodes
 import com.github.korniloval.flameviewer.server.handlers.*
 import com.intellij.openapi.diagnostic.Logger
 import io.netty.channel.ChannelHandlerContext
@@ -64,6 +65,7 @@ class IntellijRequestHandler : HttpRequestHandler() {
 
     @TestOnly
     fun setMaxNumOfVisibleNodes(value: Int) {
-        optionsProvider.options = optionsProvider.options.copy(maxNumOfVisibleNodes = value)
+        val v = validateMaxNumOfVisibleNodes(value, logger) ?: return
+        optionsProvider.options = optionsProvider.options.copy(maxNumOfVisibleNodes = v)
     }
 }

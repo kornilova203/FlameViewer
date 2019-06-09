@@ -10,7 +10,6 @@ import com.github.korniloval.flameviewer.converters.trees.backtraces.BackTracesB
 import com.github.korniloval.flameviewer.converters.trees.backtraces.BackTracesMethodBuilder
 import com.github.korniloval.flameviewer.converters.trees.hotspots.HotSpot
 import com.github.korniloval.flameviewer.converters.trees.hotspots.HotSpotsBuilder
-import com.github.korniloval.flameviewer.server.handlers.treeBuilder
 import java.util.*
 
 
@@ -22,21 +21,17 @@ abstract class TreesSet {
 
     abstract fun getTreesPreview(filter: Filter?): TreesPreview?
 
-    abstract fun getTree(treeType: TreeType,
-                         filter: Filter?): Tree?
+    abstract fun getTree(treeType: TreeType): Tree?
 
     fun getTree(treeType: TreeType,
                 className: String,
                 methodName: String,
-                desc: String,
-                filter: Filter?): Tree? {
-        getTree(CALL_TRACES, null) // tree will be filtered later
-        val callTraces = callTraces ?: return null
-        val tree = when (treeType) {
+                desc: String): Tree? {
+        val callTraces = getTree(CALL_TRACES) ?: return null
+        return when (treeType) {
             CALL_TRACES -> CallTracesMethodBuilder(callTraces, className, methodName, desc).tree
             BACK_TRACES -> BackTracesMethodBuilder(callTraces, className, methodName, desc).tree
         }
-        return if (filter == null) tree else filterTree(tree, filter, false)
     }
 
     abstract fun getCallTree(filter: Filter?): TreesProtos.Trees?
@@ -46,118 +41,16 @@ abstract class TreesSet {
     fun getHotSpots(): List<HotSpot> {
         var hotSpots = hotSpots
         if (hotSpots == null) {
-            val callTraces = getTree(CALL_TRACES, null) ?: return ArrayList()
+            val callTraces = getTree(CALL_TRACES) ?: return ArrayList()
             hotSpots = HotSpotsBuilder(callTraces).hotSpots
         }
         this.hotSpots = hotSpots
         return hotSpots
     }
 
-    protected fun filterTree(tree: Tree,
-                             filter: Filter,
-                             isCallTree: Boolean): Tree? {
-        val filteredTree = treeBuilder().setVisibleDepth(tree.visibleDepth)
-        filteredTree.setBaseNode(Node.newBuilder())
-        if (isCallTree) {
-            filteredTree.treeInfo = tree.treeInfo
-            buildFilteredCallTreeRecursively(filteredTree.baseNodeBuilder, tree.baseNode, filter)
-        } else {
-            buildFilteredTreeRecursively(filteredTree.baseNodeBuilder, tree.baseNode, filter)
-        }
-        if (filteredTree.baseNodeBuilder.nodesCount == 0) {
-            return null
-        }
-        val maxDepth = getMaxDepthRecursively(filteredTree.baseNodeBuilder, 0)
-        if (!isCallTree) {
-            setNodesOffsetRecursively(filteredTree.baseNodeBuilder, 0)
-        } else {
-            updateOffset(filteredTree)
-        }
-        setTreeWidth(filteredTree)
-        setNodesCount(filteredTree)
-        filteredTree.depth = maxDepth
-        return filteredTree.build()
-    }
-
-    /**
-     * Subtract offset of first node from all offsets
-     *
-     * @param filteredTree tree
-     */
-    private fun updateOffset(filteredTree: Tree.Builder) {
-        if (filteredTree.baseNodeBuilder.nodesBuilderList.size == 0) {
-            return
-        }
-        val offset = filteredTree.baseNodeBuilder.getNodes(0).offset
-        if (offset == 0L) {
-            return
-        }
-        for (node in filteredTree.baseNodeBuilder.nodesBuilderList) {
-            updateOffsetRecursively(node, offset)
-        }
-    }
-
-    private fun updateOffsetRecursively(node: Node.Builder, offset: Long) {
-        node.offset = node.offset - offset
-        for (child in node.nodesBuilderList) {
-            updateOffsetRecursively(child, offset)
-        }
-    }
-
-    /**
-     * @param nodeBuilder to this node children will be added
-     * @param node        children of this node will be added to nodeBuilder
-     * @param filter      decides if child will be added
-     */
-    private fun buildFilteredTreeRecursively(nodeBuilder: Node.Builder,
-                                             node: Node,
-                                             filter: Filter) {
-
-        for (child in node.nodesList) {
-            if (filter.isIncluded(child)) {
-                val newNode = updateNodeList(nodeBuilder, child.nodeInfo, child.width)
-                buildFilteredTreeRecursively(
-                        newNode,
-                        child,
-                        filter)
-            } else {
-                buildFilteredTreeRecursively(nodeBuilder, child, filter)
-            }
-        }
-    }
-
-    /**
-     * @param nodeBuilder to this node children will be added
-     * @param node        children of this node will be added to nodeBuilder
-     * @param filter      decides if child will be added
-     */
-    private fun buildFilteredCallTreeRecursively(nodeBuilder: Node.Builder,
-                                                 node: Node,
-                                                 filter: Filter) {
-
-        for (child in node.nodesList) {
-            if (filter.isIncluded(child)) {
-                nodeBuilder.addNodes(copyNode(child))
-                val newNode = nodeBuilder.nodesBuilderList[nodeBuilder.nodesBuilderList.size - 1]
-                buildFilteredCallTreeRecursively(
-                        newNode,
-                        child,
-                        filter)
-            } else {
-                buildFilteredCallTreeRecursively(nodeBuilder, child, filter)
-            }
-        }
-    }
-
-    protected fun getCallTracesMaybeFiltered(filter: Filter?): Tree? {
+    protected fun getBackTraces(): Tree? {
         val callTraces = callTraces ?: return null
-        return if (filter == null) callTraces else  filterTree(callTraces, filter, false)
-    }
-
-    protected fun getBackTracesMaybeFiltered(filter: Filter?): Tree? {
-        val callTraces = callTraces ?: return null
-        val backTraces = if (backTraces != null) backTraces!! else BackTracesBuilder(callTraces).tree
-        return if (filter == null) backTraces else filterTree(backTraces, filter, false)
+        return if (backTraces != null) backTraces!! else BackTracesBuilder(callTraces).tree
     }
 
     companion object {
