@@ -34,6 +34,7 @@ class YourkitToCallTracesConverter(private val file: File) : Converter<Tree> {
         setNodesIndices(tree.baseNodeBuilder)
         setTreeWidth(tree)
         setNodesCount(tree)
+        tree.treeInfoBuilder.timePercent = 1f
         return tree.build()
     }
 

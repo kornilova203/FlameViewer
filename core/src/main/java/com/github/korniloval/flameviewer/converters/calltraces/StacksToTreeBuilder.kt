@@ -26,6 +26,7 @@ class StacksToTreeBuilder(stacks: Map<String, Int>) : TreeBuilder {
         setNodesIndices(treeBuilder.baseNodeBuilder)
         setTreeWidth(treeBuilder)
         setNodesCount(treeBuilder)
+        treeBuilder.treeInfoBuilder.timePercent = 1f
         treeBuilder.depth = maxDepth
         return treeBuilder.build()
     }

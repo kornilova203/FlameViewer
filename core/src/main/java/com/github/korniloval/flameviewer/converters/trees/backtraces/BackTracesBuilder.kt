@@ -19,6 +19,7 @@ class BackTracesBuilder(callTraces: TreeProtos.Tree) : TreeBuilder {
         setNodesIndices(treeBuilder.baseNodeBuilder)
         setTreeWidth(treeBuilder)
         setNodesCount(treeBuilder)
+        treeBuilder.treeInfoBuilder.timePercent = 1f
         treeBuilder.depth = callTraces.depth
         backTraces = treeBuilder.build()
     }

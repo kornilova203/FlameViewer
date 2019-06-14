@@ -28,6 +28,7 @@ public final class CallTreeToCallTracesConverter implements TreeBuilder {
         setNodesIndices(treeBuilder.getBaseNodeBuilder());
         setTreeWidth(treeBuilder);
         setNodesCount(treeBuilder);
+        treeBuilder.getTreeInfoBuilder().setTimePercent(1f);
         treeBuilder.setDepth(maxDepth);
         tree = treeBuilder.build();
     }

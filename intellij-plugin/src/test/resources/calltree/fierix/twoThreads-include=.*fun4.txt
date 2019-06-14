@@ -1,6 +1,7 @@
 trees {
   tree_info {
     thread_name: "Thread-0"
+    time_percent: 0.07692308
     nodes_count: 1
   }
   base_node {
@@ -22,6 +23,7 @@ trees {
   tree_info {
     start_time: 15
     thread_name: "Thread-1"
+    time_percent: 0.07692308
     nodes_count: 1
   }
   base_node {

@@ -1,6 +1,7 @@
 package com.github.korniloval.flameviewer.converters.trees;
 
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree;
+import org.jetbrains.annotations.NotNull;
 
 import static com.github.korniloval.flameviewer.converters.trees.TreesUtilKt.*;
 import static com.github.korniloval.flameviewer.server.handlers.CoreUtilKt.treeBuilder;
@@ -27,7 +28,7 @@ public class CallTracesMethodBuilder implements TreeBuilder {
         setNodesIndices(treeBuilder.getBaseNodeBuilder());
         setTreeWidth(treeBuilder);
         setNodesCount(treeBuilder);
-        setTimePercent(sourceTree);
+        setTimePercent(treeBuilder, sourceTree, wantedMethodNode);
         treeBuilder.setDepth(maxDepth);
         tree = treeBuilder.build();
     }
@@ -35,13 +36,13 @@ public class CallTracesMethodBuilder implements TreeBuilder {
     /**
      * It calculates total time of method (not only self-time)
      */
-    private void setTimePercent(Tree sourceTree) {
-        treeBuilder.getTreeInfoBuilder().setTimePercent(
-                calculateTimeOfMethodRecursively(sourceTree.getBaseNode()) / (float) sourceTree.getWidth()
-        );
+    private static void setTimePercent(@NotNull Tree.Builder treeBuilder, @NotNull Tree sourceTree, @NotNull Tree.Node.Builder wantedMethodNode) {
+        long timeOfMethod = calculateTimeOfMethodRecursively(sourceTree.getBaseNode(), wantedMethodNode);
+        float timePercent = timeOfMethod / (float) sourceTree.getWidth();
+        treeBuilder.getTreeInfoBuilder().setTimePercent(timePercent);
     }
 
-    private long calculateTimeOfMethodRecursively(Tree.Node node) {
+    private static long calculateTimeOfMethodRecursively(@NotNull Tree.Node node, @NotNull Tree.Node.Builder wantedMethodNode) {
         if (isSameMethod(wantedMethodNode, node.getNodeInfo().getClassName(), node.getNodeInfo().getMethodName(),
                 node.getNodeInfo().getDescription())) {
             /* do not go deeper. We do not want to add up time of recursive calls */
@@ -49,7 +50,7 @@ public class CallTracesMethodBuilder implements TreeBuilder {
         }
         long time = 0;
         for (Tree.Node child : node.getNodesList()) {
-            time += calculateTimeOfMethodRecursively(child);
+            time += calculateTimeOfMethodRecursively(child, wantedMethodNode);
         }
         return time;
     }

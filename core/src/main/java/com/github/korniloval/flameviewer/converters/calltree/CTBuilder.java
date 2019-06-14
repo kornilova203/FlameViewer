@@ -104,6 +104,7 @@ class CTBuilder {
         subtractOffsetRecursively(treeBuilder.getBaseNodeBuilder(), threadStartTime);
         setTreeWidth(treeBuilder);
         setNodesCount(treeBuilder);
+        treeBuilder.getTreeInfoBuilder().setTimePercent(1f);
         treeBuilder.getTreeInfoBuilder().setStartTime(
                 threadStartTime - startTimeOfFirstThread
         );

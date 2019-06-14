@@ -1,6 +1,7 @@
 trees {
   tree_info {
     thread_name: "main"
+    time_percent: 1.0
     nodes_count: 1
   }
   base_node {

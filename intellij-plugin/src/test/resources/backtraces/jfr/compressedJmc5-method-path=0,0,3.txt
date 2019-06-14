@@ -1,4 +1,5 @@
 tree_info {
+  time_percent: 0.30495358
   nodes_count: 15
 }
 base_node {

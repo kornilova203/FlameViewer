@@ -31,6 +31,7 @@ class CFlamegraphToCallTracesConverter(private val cf: CFlamegraph) : Converter<
         setNodesIndices(tree.baseNodeBuilder)
         setTreeWidth(tree)
         setNodesCount(tree)
+        tree.treeInfoBuilder.timePercent = 1f
         return tree.build()
     }
 

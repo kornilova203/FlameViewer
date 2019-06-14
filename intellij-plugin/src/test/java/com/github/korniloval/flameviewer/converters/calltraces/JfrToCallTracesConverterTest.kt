@@ -17,6 +17,8 @@ class JfrToCallTracesConverterTest : ConverterTestCase("jfr", CALLTRACES) {
         doTest(opt(include = ".*(set|<init>|try).*"))
         doTest(opt(include = ".*(set|<init>|try).*", maxNumOfVisibleNodes = 5))
         doTest(opt(include = ".*(set|<init>|try).*", maxNumOfVisibleNodes = 5, path = listOf(0, 0)))
+        doTest(opt(className = "com.github.kornilova_l.algorithm_synthesis.grid2D.TwoOrThreeNeighboursKt", methodName = "tryToFindSolutionForEachRulesSet\$default", description = "(List, Writer, int, Object)Set"))
+        doTest(opt(className = "com.github.kornilova_l.algorithm_synthesis.grid2D.TwoOrThreeNeighboursKt", methodName = "tryToFindSolutionForEachRulesSet\$default", description = "(List, Writer, int, Object)Set", include = ".*"))
     }
 
     /* test file is too big to upload it to git.

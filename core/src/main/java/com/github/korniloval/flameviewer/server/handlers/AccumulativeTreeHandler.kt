@@ -51,6 +51,7 @@ abstract class AccumulativeTreeHandler(protected val treeManager: TreeManager, l
         setNodesOffsetRecursively(subTree.baseNodeBuilder, 0)
         setTreeWidth(subTree)
         setNodesCount(subTree)
+        subTree.treeInfoBuilder.timePercent = tree.treeInfo.timePercent
 
         return subTree.build()
     }

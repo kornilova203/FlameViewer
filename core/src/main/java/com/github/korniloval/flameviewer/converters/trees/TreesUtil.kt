@@ -249,8 +249,25 @@ fun filterTree(tree: Tree,
     setNodesIndices(filteredTree.baseNodeBuilder)
     setTreeWidth(filteredTree)
     setNodesCount(filteredTree)
+    filteredTree.treeInfoBuilder.timePercent = calcTime(filteredTree).toFloat() / calcTime(tree) * tree.treeInfo.timePercent
     filteredTree.depth = TreesSet.getMaxDepthRecursively(filteredTree.baseNodeBuilder, 0)
     return filteredTree.build()
+}
+
+fun calcTime(tree: Tree.Builder): Long {
+    var time = 0L
+    for (child in tree.baseNodeBuilder.nodesBuilderList) {
+        time += child.width
+    }
+    return time
+}
+
+fun calcTime(tree: Tree): Long {
+    var time = 0L
+    for (child in tree.baseNode.nodesList) {
+        time += child.width
+    }
+    return time
 }
 
 /**
