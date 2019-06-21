@@ -13,9 +13,9 @@ class ToTreesSetConverterFactory(private val toCallTree: ConverterFactory<TreesP
     override fun create(file: File): Converter<TreesSet>? {
         val toCallTreeConverter = toCallTree.create(file)
         if (toCallTreeConverter != null) {
-            return Converter { TreesSetImpl(toCallTreeConverter.convert()) }
+            return Converter { indicator -> TreesSetImpl(toCallTreeConverter.convert(indicator)) }
         }
         val toCallTracesConverter = toCallTraces.create(file) ?: return null
-        return Converter { TreesSetImpl(toCallTracesConverter.convert()) }
+        return Converter { indicator -> TreesSetImpl(toCallTracesConverter.convert(indicator)) }
     }
 }

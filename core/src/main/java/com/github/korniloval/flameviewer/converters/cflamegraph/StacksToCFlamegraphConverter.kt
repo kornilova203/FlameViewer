@@ -1,5 +1,6 @@
 package com.github.korniloval.flameviewer.converters.cflamegraph
 
+import com.github.korniloval.flameviewer.FlameIndicator
 import com.github.korniloval.flameviewer.converters.Converter
 import com.github.korniloval.flameviewer.converters.FramesParsingUtil
 import com.github.korniloval.flameviewer.converters.FramesParsingUtil.getClassName
@@ -9,7 +10,7 @@ import java.util.*
 
 class StacksToCFlamegraphConverter(private val stacks: Map<String, Int>) : Converter<CFlamegraph> {
 
-    override fun convert(): CFlamegraph {
+    override fun convert(indicator: FlameIndicator?): CFlamegraph {
         val cflamegraphLines = ArrayList<CFlamegraphLine>()
         val classNames = HashMap<String, Int>()
         val methodNames = HashMap<String, Int>()
@@ -17,9 +18,13 @@ class StacksToCFlamegraphConverter(private val stacks: Map<String, Int>) : Conve
 
         val stacksList = stacks.entries.mapTo(ArrayList()) { Pair(it.key, it.value) }
         stacksList.sortBy { it.first }
-        val splitStacks = stacksList.map { Pair(splitAndRemoveThreadId(it.first), it.second) }
+        val splitStacks = stacksList.map {
+            indicator?.checkCanceled()
+            Pair(splitAndRemoveThreadId(it.first), it.second)
+        }
 
         splitStacks.forEachChild(NodeCoordinates(0, splitStacks.size, -1)) { childCoord ->
+            indicator?.checkCanceled()
             buildCFlamegraph(splitStacks, childCoord, cflamegraphLines, classNames, methodNames, descriptions)
         }
 

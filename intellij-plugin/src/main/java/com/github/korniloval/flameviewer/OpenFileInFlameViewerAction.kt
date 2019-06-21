@@ -21,8 +21,10 @@ class OpenFileInFlameViewerAction : DumbAwareAction() {
 
         val task: () -> Unit = {
             val bytes = file.inputStream.readBytes()
-            val res = FileUploader().upload(file.name, bytes, 1, 1)
+            val indicator = ProgressManager.getInstance().progressIndicator
+            val res = FileUploader().upload(file.name, bytes, 1, 1, IntellijIndicator(indicator))
 
+            indicator.checkCanceled()
             if (res) {
                 val urlBuilder = getUrlBuilderBase()
                         .addPathSegments(CALL_TRACES_NAME)
@@ -38,7 +40,7 @@ class OpenFileInFlameViewerAction : DumbAwareAction() {
                 .runProcessWithProgressSynchronously(
                         task,
                         "Processing file ${file.name} for FlameViewer",
-                        false, project)
+                        true, project)
     }
 
     private fun getFile(e: AnActionEvent): VirtualFile? {

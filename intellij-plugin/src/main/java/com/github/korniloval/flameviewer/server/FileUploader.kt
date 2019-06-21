@@ -1,5 +1,6 @@
 package com.github.korniloval.flameviewer.server
 
+import com.github.korniloval.flameviewer.FlameIndicator
 import com.github.korniloval.flameviewer.PluginFileManager
 import com.github.korniloval.flameviewer.converters.calltraces.ToCallTracesConverterFactoryIntellij
 import com.github.korniloval.flameviewer.converters.calltree.ToCallTreeConverterFactoryIntellij
@@ -16,7 +17,7 @@ class FileUploader {
      * Client fairly quickly sends all parts of file. Method is synchronized
      * to avoid race condition.
      */
-    fun upload(fileName: String, bytes: ByteArray, currentPart: Int, partsCount: Int): Boolean {
+    fun upload(fileName: String, bytes: ByteArray, currentPart: Int, partsCount: Int, indicator: FlameIndicator?): Boolean {
         synchronized(this) {
             val fileAccumulator = fileAccumulators.computeIfAbsent(fileName) { FileAccumulator(fileName, partsCount) }
             fileAccumulator.add(bytes, currentPart - 1)
@@ -25,10 +26,11 @@ class FileUploader {
                  * client will send a request to check if file was saved/converted */
                 val file = fileAccumulator.getFile()
                 fileAccumulators.remove(fileName)
-                if (tryToConvertFileToAnotherFile(file)) { // this moves file to right place
+                if (tryToConvertFileToAnotherFile(file, indicator)) { // this moves file to right place
                     return true
                 }
-                val converterId = ToCallTracesConverterFactoryIntellij.getConverterId(file) ?: ToCallTreeConverterFactoryIntellij.getConverterId(file) // if this format is supported
+                val converterId = ToCallTracesConverterFactoryIntellij.getConverterId(file)
+                        ?: ToCallTreeConverterFactoryIntellij.getConverterId(file) // if this format is supported
                 if (converterId != null) { // if supported
                     /* move file to needed directory. */
                     PluginFileManager.moveFileToUploadedFiles(converterId, fileName, file)
@@ -40,9 +42,9 @@ class FileUploader {
         }
     }
 
-    private fun tryToConvertFileToAnotherFile(file: File): Boolean {
+    private fun tryToConvertFileToAnotherFile(file: File, indicator: FlameIndicator?): Boolean {
         for (fileSaver in FileToFileConverterFileSaver.registeredFileSavers) {
-            val res = fileSaver.tryToConvert(file)
+            val res = fileSaver.tryToConvert(file, indicator)
             if (res) {
                 PluginFileManager.moveFileToUploadedFiles(fileSaver.extension, file.name, file)
                 return true
@@ -121,5 +123,5 @@ abstract class FileToFileConverterFileSaver {
      * Try to convert file
      * If conversion was successful then overwrite content of file
      */
-    abstract fun tryToConvert(file: File): Boolean
+    abstract fun tryToConvert(file: File, indicator: FlameIndicator?): Boolean
 }

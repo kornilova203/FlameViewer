@@ -22,7 +22,7 @@ object ToCallTracesConverterFactoryCli : ConverterFactory<TreeProtos.Tree> {
     override fun create(file: File): Converter<out TreeProtos.Tree>? {
         for (factory in cflamegraphFactories) {
             val converter = factory.create(file)
-            if (converter != null) return Converter { CFlamegraphToCallTracesConverter(converter.convert()).convert() }
+            if (converter != null) return Converter { indicator -> CFlamegraphToCallTracesConverter(converter.convert(indicator)).convert(indicator) }
         }
         for (factory in factories) {
             val converter = factory.create(file)

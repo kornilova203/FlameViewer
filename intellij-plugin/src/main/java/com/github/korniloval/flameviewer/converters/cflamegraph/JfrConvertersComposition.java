@@ -1,6 +1,7 @@
 package com.github.korniloval.flameviewer.converters.cflamegraph;
 
 import com.github.kornilova_l.flight_parser.FlightParser;
+import com.github.korniloval.flameviewer.FlameIndicator;
 import com.github.korniloval.flameviewer.FlameLogger;
 import com.github.korniloval.flameviewer.LoggerAdapter;
 import com.github.korniloval.flameviewer.converters.ConversionException;
@@ -45,7 +46,7 @@ class JfrConvertersComposition implements Converter<CFlamegraph> {
 
     @NotNull
     @Override
-    public CFlamegraph convert() throws ConversionException {
+    public CFlamegraph convert(@Nullable FlameIndicator indicator) throws ConversionException {
         byte[] unzippedBytes = getUnzippedBytes(file);
         if (unzippedBytes == null) {
             throw new ConversionException("Failed to extract data from jfr file: " + file);
@@ -53,16 +54,16 @@ class JfrConvertersComposition implements Converter<CFlamegraph> {
         File unzippedFile = getFileNear(file);
         saveToFile(unzippedFile, unzippedBytes);
         if (unzippedBytes.length <= allowedSize) {
-            Map<String, Integer> stacks = new JfrToStacksConverter(file).convert();
-            return new StacksToCFlamegraphConverter(stacks).convert();
+            Map<String, Integer> stacks = new JfrToStacksConverter(file).convert(indicator);
+            return new StacksToCFlamegraphConverter(stacks).convert(indicator);
         }
         logger.info("File size is bigger than " + (allowedSize / 1000 * 1000) + "MB. It will be converted in separate process to avoid OutOfMemoryException. File: " + file);
         parseInSeparateProcess(unzippedFile);
-        Map<String, Integer> stacks = StacksParser.getStacks(unzippedFile);
+        Map<String, Integer> stacks = StacksParser.getStacks(unzippedFile, indicator);
         if (stacks == null) throw new ConversionException("Failed to parse stacks from file " + unzippedFile);
         boolean isDeleted = unzippedFile.delete();
         if (!isDeleted) logger.warn("File " + unzippedFile + " was not deleted", null);
-        return new StacksToCFlamegraphConverter(stacks).convert();
+        return new StacksToCFlamegraphConverter(stacks).convert(indicator);
     }
 
 

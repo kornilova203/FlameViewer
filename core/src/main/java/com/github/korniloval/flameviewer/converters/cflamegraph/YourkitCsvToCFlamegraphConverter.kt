@@ -1,5 +1,6 @@
 package com.github.korniloval.flameviewer.converters.cflamegraph
 
+import com.github.korniloval.flameviewer.FlameIndicator
 import com.github.korniloval.flameviewer.converters.Converter
 import com.github.korniloval.flameviewer.converters.FramesParsingUtil.getClassName
 import com.github.korniloval.flameviewer.converters.FramesParsingUtil.getDescription
@@ -18,8 +19,9 @@ class YourkitCsvToCFlamegraphConverter(private val file: File) : Converter<CFlam
     private val methodNames = HashMap<String, Int>()
     private val descriptions = HashMap<String, Int>()
 
-    override fun convert(): CFlamegraph {
+    override fun convert(indicator: FlameIndicator?): CFlamegraph {
         BufferedReader(FileReader(file), 1000 * 8192).use { reader ->
+            indicator?.checkCanceled()
             var line = reader.readLine()
             while (line != null) {
                 processLine(line)

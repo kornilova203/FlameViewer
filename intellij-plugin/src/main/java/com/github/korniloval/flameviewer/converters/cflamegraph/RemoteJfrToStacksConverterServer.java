@@ -19,7 +19,7 @@ public class RemoteJfrToStacksConverterServer {
             fileName = fileName.substring(1, fileName.length() - 1);
         }
         File file = new File(fileName);
-        Map<String, Integer> stacks = new JfrToStacksConverter(file).convert();
+        Map<String, Integer> stacks = new JfrToStacksConverter(file).convert(null);
         boolean res = StacksParser.writeTo(stacks, file);
         if (res) System.out.println("OK");
         else System.out.println("ERROR");

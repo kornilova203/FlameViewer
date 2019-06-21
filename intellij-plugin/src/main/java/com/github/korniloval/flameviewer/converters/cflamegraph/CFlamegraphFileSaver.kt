@@ -1,5 +1,6 @@
 package com.github.korniloval.flameviewer.converters.cflamegraph
 
+import com.github.korniloval.flameviewer.FlameIndicator
 import com.github.korniloval.flameviewer.cflamegraph.Names
 import com.github.korniloval.flameviewer.cflamegraph.Node
 import com.github.korniloval.flameviewer.cflamegraph.Tree
@@ -14,8 +15,8 @@ class CFlamegraphFileSaver : FileToFileConverterFileSaver() {
     override val extension = CFlamegraphToCallTracesConverter.EXTENSION
 
     @Throws(ConversionException::class)
-    override fun tryToConvert(file: File): Boolean {
-        val cFlamegraph = ToCFlamegraphConverterFactoryIntellij.create(file)?.convert() ?: return false
+    override fun tryToConvert(file: File, indicator: FlameIndicator?): Boolean {
+        val cFlamegraph = ToCFlamegraphConverterFactoryIntellij.create(file)?.convert(indicator) ?: return false
         val builder = FlatBufferBuilder(1024)
 
         val classNamesOffsets = IntArray(cFlamegraph.classNames.size)

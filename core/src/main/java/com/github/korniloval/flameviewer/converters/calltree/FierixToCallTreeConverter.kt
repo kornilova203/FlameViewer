@@ -2,6 +2,7 @@ package com.github.korniloval.flameviewer.converters.calltree
 
 import com.github.kornilova_l.flamegraph.proto.EventProtos
 import com.github.kornilova_l.flamegraph.proto.TreesProtos
+import com.github.korniloval.flameviewer.FlameIndicator
 import com.github.korniloval.flameviewer.FlameLogger
 import com.github.korniloval.flameviewer.converters.ConversionException
 import com.github.korniloval.flameviewer.converters.Converter
@@ -17,7 +18,7 @@ class FierixToCallTreeConverter(private val file: File, private val logger: Flam
     private val threadsNames = HashMap<Long, String>()
 
     @Throws(ConversionException::class)
-    override fun convert(): TreesProtos.Trees {
+    override fun convert(indicator: FlameIndicator?): TreesProtos.Trees {
         try {
             FileInputStream(file).use { inputStream ->
                 processEvents(inputStream)

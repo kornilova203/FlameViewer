@@ -27,7 +27,7 @@ open class TreeManager(private val toTreesSet: ToTreesSetConverterFactory) {
         val curFile = currentFile.get()
         if (curFile == null || file.absolutePath != curFile.absolutePath) {
             currentFile.set(file)
-            currentTreesSet.set(toTreesSet.create(file)?.convert())
+            currentTreesSet.set(toTreesSet.create(file)?.convert(null))
         }
     }
 

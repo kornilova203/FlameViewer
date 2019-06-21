@@ -1,7 +1,9 @@
 package com.github.korniloval.flameviewer.converters.cflamegraph;
 
 import com.github.kornilova_l.flight_parser.FlightParser;
+import com.github.korniloval.flameviewer.FlameIndicator;
 import com.github.korniloval.flameviewer.converters.Converter;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.HashMap;
@@ -16,10 +18,10 @@ public class JfrToStacksConverter implements Converter<Map<String, Integer>> {
     }
 
     @Override
-    public Map<String, Integer> convert() {
+    public Map<String, Integer> convert(@Nullable FlameIndicator indicator) {
         FlightParser flightParser = new FlightParser(file);
-        Map<String, Integer> stacks = flightParser.getStacksMap();
-        return removePackageInParameters(stacks);
+        if (indicator != null) indicator.checkCanceled();
+        return removePackageInParameters(flightParser.getStacksMap());
     }
 
     /**

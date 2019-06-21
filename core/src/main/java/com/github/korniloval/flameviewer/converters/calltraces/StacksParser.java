@@ -1,5 +1,6 @@
 package com.github.korniloval.flameviewer.converters.calltraces;
 
+import com.github.korniloval.flameviewer.FlameIndicator;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.*;
@@ -10,13 +11,14 @@ import static com.github.korniloval.flameviewer.converters.trees.TreesUtilKt.par
 
 public class StacksParser {
     @Nullable
-    public static Map<String, Integer> getStacks(File convertedFile) {
+    public static Map<String, Integer> getStacks(File convertedFile, @Nullable FlameIndicator indicator) {
         try (BufferedReader reader = new BufferedReader(
                 new FileReader(convertedFile)
         )) {
             Map<String, Integer> stacks = new HashMap<>();
             reader.lines()
                     .forEach(line -> {
+                        if (indicator != null) indicator.checkCanceled();
                         if (line.isEmpty()) return;
                         int idx = line.lastIndexOf(" ");
                         if (idx == -1) return;

@@ -10,9 +10,9 @@ object JfrToCFlamegraphConverterFactoryCli : ConverterFactory<CFlamegraph> {
     override fun isSupported(file: File): Boolean = EXTENSION == getFileExtension(file.name)?.toLowerCase()
     override fun create(file: File): Converter<out CFlamegraph>? {
         if (isSupported(file)) {
-            return Converter {
-                val stacks = JfrToStacksConverter(file).convert()
-                StacksToCFlamegraphConverter(stacks).convert()
+            return Converter { indicator ->
+                val stacks = JfrToStacksConverter(file).convert(indicator)
+                StacksToCFlamegraphConverter(stacks).convert(indicator)
             }
         }
         return null

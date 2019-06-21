@@ -2,6 +2,7 @@ package com.github.korniloval.flameviewer.converters.calltraces
 
 import com.github.kornilova_l.flamegraph.proto.TreeProtos
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node
+import com.github.korniloval.flameviewer.FlameIndicator
 import com.github.korniloval.flameviewer.cflamegraph.Tree
 import com.github.korniloval.flameviewer.converters.Converter
 import com.github.korniloval.flameviewer.converters.cflamegraph.CFlamegraph
@@ -16,7 +17,7 @@ import java.util.*
 class CFlamegraphToCallTracesConverter(private val cf: CFlamegraph) : Converter<TreeProtos.Tree> {
     private var maxDepth = 0
 
-    override fun convert(): TreeProtos.Tree {
+    override fun convert(indicator: FlameIndicator?): TreeProtos.Tree {
         val tree = treeBuilder(Node.newBuilder())
 
         val currentStack = ArrayList<Node.Builder>()

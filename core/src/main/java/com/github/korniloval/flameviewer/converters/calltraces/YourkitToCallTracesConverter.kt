@@ -1,6 +1,7 @@
 package com.github.korniloval.flameviewer.converters.calltraces
 
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree
+import com.github.korniloval.flameviewer.FlameIndicator
 import com.github.korniloval.flameviewer.converters.Converter
 import com.github.korniloval.flameviewer.converters.trees.*
 import com.github.korniloval.flameviewer.server.handlers.treeBuilder
@@ -18,7 +19,7 @@ class YourkitToCallTracesConverter(private val file: File) : Converter<Tree> {
     private val uniqueStringsDesc = UniqueStringsKeeper()
     private var maxDepth = 0
 
-    override fun convert(): Tree {
+    override fun convert(indicator: FlameIndicator?): Tree {
         val tree = treeBuilder(Tree.Node.newBuilder())
         val currentStack = ArrayList<Tree.Node.Builder>()
         currentStack.add(tree.baseNodeBuilder)

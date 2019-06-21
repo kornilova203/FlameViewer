@@ -23,7 +23,7 @@ class FileHandler(private val fileManager: PluginFileManager, private val fileUp
         val totalPartsCount = fileParts[1]
         logger.info("Got file: $fileName")
         val bytes = getBytes((request as ByteBufHolder).content())
-        fileUploader.upload(fileName, bytes, currentPart, totalPartsCount)
+        fileUploader.upload(fileName, bytes, currentPart, totalPartsCount, null)
         sendStatus(HttpResponseStatus.OK, ctx.channel(), "File part was successfully uploaded")
         return true
     }
