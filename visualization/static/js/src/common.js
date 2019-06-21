@@ -282,11 +282,8 @@ const constants = {
         uploadingFile: {msg: "Uploading file: ", width: 500}
     },
     pageMessages: {
-        backtracesTooBig: "Sorry... this tree contains too many nodes :(</br>" +
-            "But you can see back traces for any method, there are two ways to do it:</br>" +
-            "* Open Call Traces page, click on back traces icon on method popup</br>" +
-            "* Open Hot Spots page, click on back traces icon beside any method that you like",
         chooseOrUploadFile: "Choose or upload file",
+        errorOccurred: "Error occurred :(",
         noCallRegistered: "No call was registered or all methods took <1ms",
         callTreeUnavailable: "Call tree is unavailable for this file"
     }

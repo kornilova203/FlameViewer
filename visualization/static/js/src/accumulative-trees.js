@@ -98,9 +98,9 @@ function sendRequestForTree() {
         const msg = constants.loaderMessages.deserialization;
         common.showLoader(msg.msg, msg.width, () => {
             console.log("got response");
-            if (constants.pageName === "back-traces" && request.status === 400) { // tree contains too many nodes
+            if (request.status !== 200) {
                 common.hideLoader();
-                common.showMessage(constants.pageMessages.backtracesTooBig, "left");
+                common.showMessage(constants.pageMessages.errorOccurred, "left");
                 return;
             }
             const arrayBuffer = request.response;
@@ -123,11 +123,20 @@ function sendRequestForTree() {
     request.send();
 }
 
+function setTitle() {
+    let slash = constants.fileName.lastIndexOf('/');
+    if (slash === -1) slash = constants.fileName.lastIndexOf('\\');
+    document.title = slash === -1 || slash + 1 === constants.fileName.length ?
+        constants.fileName :
+        constants.fileName.substring(slash + 1);
+}
+
 $(window).on("load", function () {
     if (constants.fileName === undefined) {
         console.log("File is not specified.");
         return;
     }
+    setTitle();
     const msg = constants.loaderMessages.buildingTree;
     common.showLoader(msg.msg, msg.width, () => {
         common.doCallbackIfFileExists(
