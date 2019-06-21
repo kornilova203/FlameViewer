@@ -16,7 +16,7 @@ class FileUploader {
      * Client fairly quickly sends all parts of file. Method is synchronized
      * to avoid race condition.
      */
-    fun upload(fileName: String, bytes: ByteArray, currentPart: Int, partsCount: Int) {
+    fun upload(fileName: String, bytes: ByteArray, currentPart: Int, partsCount: Int): Boolean {
         synchronized(this) {
             val fileAccumulator = fileAccumulators.computeIfAbsent(fileName) { FileAccumulator(fileName, partsCount) }
             fileAccumulator.add(bytes, currentPart - 1)
@@ -26,16 +26,17 @@ class FileUploader {
                 val file = fileAccumulator.getFile()
                 fileAccumulators.remove(fileName)
                 if (tryToConvertFileToAnotherFile(file)) { // this moves file to right place
-                    return
+                    return true
                 }
                 val converterId = ToCallTracesConverterFactoryIntellij.getConverterId(file) ?: ToCallTreeConverterFactoryIntellij.getConverterId(file) // if this format is supported
                 if (converterId != null) { // if supported
                     /* move file to needed directory. */
                     PluginFileManager.moveFileToUploadedFiles(converterId, fileName, file)
-                    return // do not delete file
+                    return true // do not delete file
                 }
                 file.delete()
             }
+            return false
         }
     }
 

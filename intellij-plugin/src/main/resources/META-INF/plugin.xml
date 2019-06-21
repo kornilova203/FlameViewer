@@ -87,9 +87,13 @@ Detailed description at <a href="https://github.com/kornilova-l/FlameViewer">git
     </extensions>
 
     <actions>
-        <action class="com.github.korniloval.flameviewer.ShowUploadFilePageAction"
+        <action class="com.github.korniloval.flameviewer.OpenFlameViewerAction"
                 id="FlameViewer.UploadFile" text="Open FlameViewer..." icon="ProfilerIcons.flameIcon">
             <add-to-group group-id="ToolsMenu" anchor="last"/>
+        </action>
+        <action id="OpenFileInFlameviewerAction" class="com.github.korniloval.flameviewer.OpenFileInFlameViewerAction"
+                text="Open in FlameViewer..." description="Open File in FlameViewer">
+            <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
         </action>
     </actions>
 
