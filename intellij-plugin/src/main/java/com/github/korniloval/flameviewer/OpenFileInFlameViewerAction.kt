@@ -7,7 +7,9 @@ import com.intellij.ide.BrowserUtil
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.CommonDataKeys
 import com.intellij.openapi.diagnostic.Logger
+import com.intellij.openapi.progress.ProgressIndicator
 import com.intellij.openapi.progress.ProgressManager
+import com.intellij.openapi.progress.Task
 import com.intellij.openapi.project.DumbAwareAction
 import com.intellij.openapi.vfs.VirtualFile
 
@@ -19,28 +21,26 @@ class OpenFileInFlameViewerAction : DumbAwareAction() {
         val file = getFile(e) ?: return
         val project = e.project ?: return
 
-        val task: () -> Unit = {
-            val bytes = file.inputStream.readBytes()
-            val indicator = ProgressManager.getInstance().progressIndicator
-            val res = FileUploader().upload(file.name, bytes, 1, 1, IntellijIndicator(indicator))
-
-            indicator.checkCanceled()
-            if (res) {
-                val urlBuilder = getUrlBuilderBase()
-                        .addPathSegments(CALL_TRACES_NAME)
-                        .addQueryParameter("file", file.name)
-
-                BrowserUtil.browse(urlBuilder.build().url())
-            } else {
-                LOG.info("File format is unsupported")
-            }
-        }
         ProgressManager
                 .getInstance()
-                .runProcessWithProgressSynchronously(
-                        task,
-                        "Processing file ${file.name} for FlameViewer",
-                        true, project)
+                .run(object : Task.Backgroundable(project, "Processing file ${file.name} for FlameViewer", true) {
+                    override fun run(indicator: ProgressIndicator) {
+                        val bytes = file.inputStream.readBytes()
+                        indicator.isIndeterminate = true
+                        val res = FileUploader().upload(file.name, bytes, 1, 1, IntellijIndicator(indicator))
+
+                        indicator.checkCanceled()
+                        if (res) {
+                            val urlBuilder = getUrlBuilderBase()
+                                    .addPathSegments(CALL_TRACES_NAME)
+                                    .addQueryParameter("file", file.name)
+
+                            BrowserUtil.browse(urlBuilder.build().url())
+                        } else {
+                            LOG.info("File format is unsupported")
+                        }
+                    }
+                })
     }
 
     private fun getFile(e: AnActionEvent): VirtualFile? {
