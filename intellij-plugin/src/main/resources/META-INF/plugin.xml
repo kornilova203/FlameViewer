@@ -92,7 +92,7 @@ Detailed description at <a href="https://github.com/kornilova-l/FlameViewer">git
             <add-to-group group-id="ToolsMenu" anchor="last"/>
         </action>
         <action id="OpenFileInFlameviewerAction" class="com.github.korniloval.flameviewer.OpenFileInFlameViewerAction"
-                text="Open in FlameViewer..." description="Open File in FlameViewer">
+                text="Open in FlameViewer..." description="Open File in FlameViewer" icon="ProfilerIcons.flameIcon">
             <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
         </action>
     </actions>
