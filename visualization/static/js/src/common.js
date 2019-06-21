@@ -138,12 +138,13 @@ const common = {
      * @param {String} errorMessage
      */
     showError: (errorMessage) => {
-        const errorMessageBlock = $(".error-message-block");
-        errorMessageBlock.find("p").text(errorMessage);
-        errorMessageBlock.addClass("visible");
-        setTimeout(() => {
-            errorMessageBlock.removeClass("visible");
-        }, 5000);
+        const $errorMessageBlock = $(".error-message-block");
+        $errorMessageBlock.find("p").text(errorMessage);
+        $errorMessageBlock.addClass("visible");
+        const $closeIcon = $(".error-message-block .close-icon");
+        $closeIcon.click(() => {
+            $errorMessageBlock.removeClass("visible");
+        });
     },
 
     /**

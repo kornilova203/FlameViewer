@@ -852,7 +852,7 @@ canvas {
     left: 10px;
     width: 400px;
     background-color: #e5e5e5;
-    padding: 15px 20px;
+    padding: 15px 25px 15px 20px;
     opacity: 0;
     pointer-events: none;
     transition: opacity 300ms;
@@ -864,12 +864,20 @@ canvas {
     padding-left: 35px;
 }
 
-.error-message-block img {
+.error-message-block .error-icon {
     float: left;
     position: relative;
     top: -2px;
     margin-right: 8px;
     opacity: 0.6;
+}
+
+.error-message-block .close-icon {
+    position: absolute;
+    top: 10px;
+    opacity: 0.6;
+    right: 10px;
+    cursor: pointer;
 }
 
 .supported-formats-help {
