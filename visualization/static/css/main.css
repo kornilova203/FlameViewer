@@ -359,7 +359,6 @@ nav ul li a:focus {
     left: 0;
     background-color: #e5e5e5;
     color: #282828;
-    transition: width 200ms;
     position: relative;
     display: none;
 }
