@@ -228,24 +228,39 @@ fun countMaxDepth(node: Node.Builder): Int {
     return maxDepth + 1
 }
 
-fun filterTree(tree: Tree,
-               filter: Filter,
-               isCallTree: Boolean): Tree? {
+fun filterTree(tree: Tree, filter: Filter): Tree? {
     val filteredTree = treeBuilder().setVisibleDepth(tree.visibleDepth)
     filteredTree.setBaseNode(Node.newBuilder())
-    if (isCallTree) {
-        filteredTree.treeInfo = tree.treeInfo
-        buildFilteredCallTreeRecursively(filteredTree.baseNodeBuilder, tree.baseNode, filter)
-    } else {
-        buildFilteredTreeRecursively(filteredTree.baseNodeBuilder, tree.baseNode, filter)
+
+    for (child in tree.baseNode.nodesList) {
+        buildFilteredTreeRecursively(filteredTree.baseNodeBuilder, child, filter)
+    }
+
+    if (filteredTree.baseNodeBuilder.nodesCount == 0) {
+        return null
+    }
+
+    setNodesOffsetRecursively(filteredTree.baseNodeBuilder, 0)
+    setNodesIndices(filteredTree.baseNodeBuilder)
+    setTreeWidth(filteredTree)
+    setNodesCount(filteredTree)
+    filteredTree.treeInfoBuilder.timePercent = calcTime(filteredTree).toFloat() / calcTime(tree) * tree.treeInfo.timePercent
+    filteredTree.depth = TreesSet.getMaxDepthRecursively(filteredTree.baseNodeBuilder, 0)
+    return filteredTree.build()
+}
+
+fun filterCallTree(tree: Tree, filter: Filter): Tree? {
+    val filteredTree = treeBuilder().setVisibleDepth(tree.visibleDepth)
+    filteredTree.setBaseNode(Node.newBuilder())
+    filteredTree.treeInfo = tree.treeInfo
+    for (child in tree.baseNode.nodesList) {
+        buildFilteredCallTreeRecursively(filteredTree.baseNodeBuilder, child, filter)
     }
     if (filteredTree.baseNodeBuilder.nodesCount == 0) {
         return null
     }
 
-    if (!isCallTree) setNodesOffsetRecursively(filteredTree.baseNodeBuilder, 0)
-    else updateOffset(filteredTree)
-
+    updateOffset(filteredTree)
     setNodesIndices(filteredTree.baseNodeBuilder)
     setTreeWidth(filteredTree)
     setNodesCount(filteredTree)
@@ -297,45 +312,33 @@ private fun updateOffsetRecursively(node: Node.Builder, offset: Long) {
 
 /**
  * @param nodeBuilder to this node children will be added
- * @param node        children of this node will be added to nodeBuilder
+ * @param child       may be added to nodeBuilder if matches filter
  * @param filter      decides if child will be added
  */
-private fun buildFilteredTreeRecursively(nodeBuilder: Node.Builder,
-                                         node: Node,
-                                         filter: Filter) {
+private fun buildFilteredTreeRecursively(nodeBuilder: Node.Builder, child: Node, filter: Filter) {
+    val newNodeBuilder =
+            if (filter.isIncluded(child)) updateNodeList(nodeBuilder, child.nodeInfo, child.width)
+            else nodeBuilder
 
-    for (child in node.nodesList) {
-        if (filter.isIncluded(child)) {
-            val newNode = updateNodeList(nodeBuilder, child.nodeInfo, child.width)
-            buildFilteredTreeRecursively(
-                    newNode,
-                    child,
-                    filter)
-        } else {
-            buildFilteredTreeRecursively(nodeBuilder, child, filter)
-        }
+    for (child2 in child.nodesList) {
+        buildFilteredTreeRecursively(newNodeBuilder, child2, filter)
     }
 }
 
 /**
  * @param nodeBuilder to this node children will be added
- * @param node        children of this node will be added to nodeBuilder
+ * @param child       may be added to nodeBuilder if matches filter
  * @param filter      decides if child will be added
  */
-private fun buildFilteredCallTreeRecursively(nodeBuilder: Node.Builder,
-                                             node: Node,
-                                             filter: Filter) {
+private fun buildFilteredCallTreeRecursively(nodeBuilder: Node.Builder, child: Node, filter: Filter) {
+    val newNodeBuilder = if (filter.isIncluded(child)) {
+        nodeBuilder.addNodes(copyNode(child))
+        nodeBuilder.nodesBuilderList[nodeBuilder.nodesBuilderList.size - 1]
+    } else {
+        nodeBuilder
+    }
 
-    for (child in node.nodesList) {
-        if (filter.isIncluded(child)) {
-            nodeBuilder.addNodes(copyNode(child))
-            val newNode = nodeBuilder.nodesBuilderList[nodeBuilder.nodesBuilderList.size - 1]
-            buildFilteredCallTreeRecursively(
-                    newNode,
-                    child,
-                    filter)
-        } else {
-            buildFilteredCallTreeRecursively(nodeBuilder, child, filter)
-        }
+    for (child2 in child.nodesList) {
+        buildFilteredCallTreeRecursively(newNodeBuilder, child2, filter)
     }
 }

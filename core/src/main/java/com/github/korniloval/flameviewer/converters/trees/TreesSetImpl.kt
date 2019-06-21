@@ -39,7 +39,7 @@ class TreesSetImpl : TreesSet {
         }
         val filteredTrees = TreesProtos.Trees.newBuilder()
         for (tree in callTree!!.treesList) {
-            val filteredTree = filterTree(tree, filter, true)
+            val filteredTree = filterCallTree(tree, filter)
             if (filteredTree != null) {
                 filteredTrees.addTrees(filteredTree)
             }

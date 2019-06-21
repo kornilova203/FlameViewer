@@ -26,7 +26,7 @@ abstract class AccumulativeTreeHandler(protected val treeManager: TreeManager, l
             treeManager.getTree(file, type)
         } ?: return null
         if (filter != null) {
-            tree = filterTree(tree, filter, false) ?: return null
+            tree = filterTree(tree, filter) ?: return null
         }
         val path = decoder.parameters()["path"] ?: return tree
         return getSubTree(tree, path.map { Integer.parseInt(it) })
