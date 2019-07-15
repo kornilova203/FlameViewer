@@ -5,6 +5,7 @@ dependencies {
 }
 
 jar {
+    archivesBaseName = 'FlameViewer'
     manifest {
         attributes 'Main-Class': 'com.github.korniloval.flameviewer.cli.Main'
     }
