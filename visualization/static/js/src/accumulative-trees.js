@@ -31,9 +31,8 @@ function drawTree(tree, className, methodName, desc, percent) {
  */
 function drawCallTraces(tree, className, methodName, desc, percent) {
     let drawer;
-    if (className !== undefined && methodName !== undefined && desc !== undefined) {
-        drawer = new MethodCallTracesDrawer.MethodCallTracesDrawer(tree, decodeURIComponent(className), decodeURIComponent(methodName),
-            decodeURIComponent(desc), percent);
+    if (methodName !== undefined) {
+        drawer = new MethodCallTracesDrawer.MethodCallTracesDrawer(tree, className, methodName, desc, percent);
     } else {
         drawer = new CallTracesDrawer.CallTracesDrawer(tree);
     }
@@ -65,9 +64,8 @@ function drawAndShowLoader(drawer, className, methodName, desc, percent) {
  */
 function drawBackTraces(tree, className, methodName, desc, percent) {
     let drawer;
-    if (className !== undefined && methodName !== undefined && desc !== undefined) {
-        drawer = new MethodBackTracesDrawer.MethodBackTracesDrawer(tree, decodeURIComponent(className), decodeURIComponent(methodName),
-            decodeURIComponent(desc), percent);
+    if (methodName !== undefined) {
+        drawer = new MethodBackTracesDrawer.MethodBackTracesDrawer(tree, className, methodName, desc, percent);
     } else {
         drawer = new BackTracesDrawer.BackTracesDrawer(tree);
     }
@@ -82,15 +80,15 @@ function treeIsEmpty(tree) {
 function sendRequestForTree() {
     console.log("prepare request");
     const request = new XMLHttpRequest();
-    const parameters = window.location.href.split("?")[1];
+    const parameters = common.getParametersString(constants.urlParameters);
     request.open("GET", `${serverNames.MAIN_NAME}/trees/${constants.pageName}?${parameters}`, true);
     request.responseType = "arraybuffer";
 
     let className, methodName, desc;
-    if (parameters.indexOf("method=") !== -1) {
-        className = common.getParameter("class");
-        methodName = common.getParameter("method");
-        desc = decodeURIComponent(common.getParameter("desc"));
+    if (constants.urlParameters[constants.urlParametersKeys.method] !== undefined) {
+        className = constants.urlParameters[constants.urlParametersKeys.class];
+        methodName = constants.urlParameters[constants.urlParametersKeys.method];
+        desc = constants.urlParameters[constants.urlParametersKeys.desc];
     }
 
     request.onload = function () {

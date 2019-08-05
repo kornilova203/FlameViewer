@@ -20,8 +20,8 @@ abstract class AccumulativeTreeHandler(protected val treeManager: TreeManager, l
         val methodName = getParameter(decoder, "method")
         val className = getParameter(decoder, "class")
         val desc = getParameter(decoder, "desc")
-        var tree = if (methodName != null && className != null && desc != null) {
-            treeManager.getTree(file, type, className, methodName, desc)
+        var tree = if (methodName != null) {
+            treeManager.getTree(file, type, className ?: "", methodName, desc ?: "")
         } else {
             treeManager.getTree(file, type)
         } ?: return null

@@ -432,8 +432,8 @@ module.exports.TreeDrawer = class TreeDrawer {
      * @protected
      */
     _setPopupContent(node) {
-        const className = node.getNodeInfo().getClassName();
-        if (className !== "") {
+        const className = common.nullize(node.getNodeInfo().getClassName());
+        if (className !== undefined) {
             this.$popupClassIcon.show();
             this.$popupClassName.show();
             this.$popup.find(".class-name").text(className);
@@ -808,10 +808,10 @@ module.exports.TreeDrawer = class TreeDrawer {
 
     static _createHeader(className, methodName, desc, timePercent) {
         return $(templates.tree.methodHeader({
-            className: className,
+            className: common.notNullize(className),
             methodName: methodName,
-            returnValue: TreeDrawer._getReturnValue(desc),
-            parameters: TreeDrawer._getParameters(desc),
+            returnValue: TreeDrawer._getReturnValue(common.notNullize(desc)),
+            parameters: TreeDrawer._getParameters(common.notNullize(desc)),
             timePercent: timePercent
         }).content);
     }

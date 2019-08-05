@@ -41,28 +41,6 @@ const common = {
     },
 
     /**
-     * @param {String} parameterName
-     * @return {undefined|string}
-     */
-    getParameter: (parameterName) => {
-        const parametersString = window.location.href.split("?")[1];
-        if (parametersString === undefined) {
-            return undefined;
-        } else {
-            const parameters = parametersString.split("&");
-            for (let i = 0; i < parameters.length; i++) {
-                if (parameters[i].startsWith(parameterName + "=")) {
-                    return decodeURIComponent(parameters[i].substring(
-                        parameters[i].indexOf("=") + 1,
-                        parameters[i].length
-                    ));
-                }
-            }
-        }
-        return undefined;
-    },
-
-    /**
      * @param {string} message
      * @param {string} align
      */
@@ -254,7 +232,6 @@ const common = {
 const _LOADER_BACKGROUND_WIDTH = 160;
 
 
-// noinspection JSValidateTypes
 const constants = {
     $main: null,
     $treePreviewWrapper: null,
@@ -262,7 +239,6 @@ const constants = {
     $loaderMessageP: null,
     $arrowLeft: null,
     $arrowRight: null,
-    fileName: common.getParameter("file") === undefined ? undefined : decodeURIComponent(common.getParameter("file")),
     $removeFilesButton: null,
     $fullFileName: null,
     pageName: parsePageName(window.location.href),
@@ -286,8 +262,31 @@ const constants = {
         errorOccurred: "Error occurred :(",
         noCallRegistered: "No call was registered or all methods took <1ms",
         callTreeUnavailable: "Call tree is unavailable for this file"
+    },
+    urlParametersKeys: {
+        file: "file",
+        include: "include",
+        method: "method",
+        class: "class",
+        desc: "desc"
     }
 };
+constants.urlParameters = parseUrlParameters();
+constants.fileName = constants.urlParameters[constants.urlParametersKeys.file];
+
+/**
+ * @return {{}}
+ */
+function parseUrlParameters() {
+    const params = {};
+    const keys = Object.values(constants.urlParametersKeys);
+    new URLSearchParams(window.location.search).forEach((value, key, _) => {
+        if (keys.indexOf(key) > -1) {
+            params[key] = common.nullize(value);
+        }
+    });
+    return params;
+}
 
 /**
  * @param {string} href
