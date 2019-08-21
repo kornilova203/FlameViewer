@@ -37,7 +37,7 @@ abstract class ConverterTestCase(private val fileExtension: String, private val 
         UploadFileUtil.sendFile(fileToUpload.name, fileToUpload.readBytes())
         val bytes = withMaxNumOfVisibleNodes(options.maxNumOfVisibleNodes) {
             sendRequestForTree(fileToUpload.name, options.path, options.className, options.methodName,
-                    options.description, options.include)
+                    options.description, options.include, options.includeStacktrace)
         }
         assertNotNull(bytes)
 
@@ -67,11 +67,14 @@ abstract class ConverterTestCase(private val fileExtension: String, private val 
         if (options.path.isNotEmpty()) {
             fileName.append("-path=").append(options.path.joinToString(separator = ","))
         }
+        if (options.maxNumOfVisibleNodes != null) {
+            fileName.append("-visible=").append(options.maxNumOfVisibleNodes)
+        }
         if (options.include != null) {
             fileName.append("-include=").append(options.include)
         }
-        if (options.maxNumOfVisibleNodes != null) {
-            fileName.append("-visible=").append(options.maxNumOfVisibleNodes)
+        if (options.includeStacktrace != null) {
+            fileName.append("-includeStacktrace=").append(options.includeStacktrace)
         }
         return fileName.toString()
     }
@@ -98,7 +101,8 @@ abstract class ConverterTestCase(private val fileExtension: String, private val 
     }
 
     private fun sendRequestForTree(fileName: String, path: List<Int>, className: String?,
-                                   methodName: String?, description: String?, include: String?): ByteArray {
+                                   methodName: String?, description: String?, include: String?,
+                                   includeStacktrace: Boolean?): ByteArray {
         val urlBuilder = UploadFileUtil.getUrlBuilderBase()
                 .addPathSegments(resultType.url)
                 .addQueryParameter("file", fileName)
@@ -112,6 +116,9 @@ abstract class ConverterTestCase(private val fileExtension: String, private val 
 
         if (include != null) {
             urlBuilder.addQueryParameter("include", include)
+        }
+        if (includeStacktrace == true) {
+            urlBuilder.addQueryParameter("include-stacktrace", includeStacktrace.toString())
         }
 
         val url = urlBuilder.build().url()

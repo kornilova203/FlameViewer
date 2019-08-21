@@ -115,6 +115,7 @@ module.exports.AccumulativeTreeDrawer = class AccumulativeTreeDrawer extends Tre
         return common.getParametersString({
             file: constants.fileName,
             include: CURRENT_INCLUDED,
+            "include-stacktrace": CURRENT_INCLUDE_STACKTRACE,
             path: pathToNode
         });
     }

@@ -24,8 +24,10 @@ abstract class AccumulativeTreeHandler(protected val treeManager: TreeManager, l
         } else {
             treeManager.getTree(file, type)
         } ?: return null
+
         if (filter != null) {
-            tree = filterTree(tree, filter) ?: return null
+            val includeFullStacktrace = "true".equals(getParameter(decoder, "include-stacktrace"), true)
+            tree = filterTree(tree, filter, includeFullStacktrace) ?: return null
         }
         val path = decoder.parameters()["path"] ?: return tree
         return getSubTree(tree, path.map { Integer.parseInt(it) })

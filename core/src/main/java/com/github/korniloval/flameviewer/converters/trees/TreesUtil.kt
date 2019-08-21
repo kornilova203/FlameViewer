@@ -2,6 +2,7 @@ package com.github.korniloval.flameviewer.converters.trees
 
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node
+import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.NodeOrBuilder
 import com.github.korniloval.flameviewer.server.handlers.countNodes
 import com.github.korniloval.flameviewer.server.handlers.treeBuilder
 import kotlin.math.max
@@ -81,7 +82,7 @@ fun updateNodeList(nodeBuilder: Node.Builder,
     return addNodeToList(nodeBuilder, nodeInfo, time, childCount) // no such method and it is biggest
 }
 
-private fun getComparableName(node: Tree.NodeOrBuilder): String {
+private fun getComparableName(node: NodeOrBuilder): String {
     val nodeInfo = node.nodeInfo ?: return ""
     return nodeInfo.className + nodeInfo.methodName
 }
@@ -162,7 +163,7 @@ fun setNodesIndices(node: Node.Builder) {
     }
 }
 
-fun copyNode(node: Node): Node.Builder {
+fun copyNode(node: NodeOrBuilder): Node.Builder {
     val nodeBuilder = Node.newBuilder()
     nodeBuilder.width = node.width
     nodeBuilder.nodeInfo = node.nodeInfo
@@ -226,12 +227,16 @@ fun countMaxDepth(node: Tree.NodeOrBuilder): Int {
     return maxChildDepth + 1
 }
 
-fun filterTree(tree: Tree, filter: Filter): Tree? {
+fun filterTree(tree: Tree, filter: Filter, includeFullStacktrace: Boolean): Tree? {
     val filteredTree = treeBuilder().setVisibleDepth(tree.visibleDepth)
     filteredTree.setBaseNode(Node.newBuilder())
 
-    for (child in tree.baseNode.nodesList) {
-        buildFilteredTreeRecursively(filteredTree.baseNodeBuilder, child, filter)
+    if (includeFullStacktrace) {
+        buildFilteredTreeWithStacktrace(filteredTree.baseNodeBuilder, tree.baseNode, filter)
+    } else {
+        for (child in tree.baseNode.nodesList) {
+            buildFilteredTreeRecursively(filteredTree.baseNodeBuilder, child) { filter.isIncluded(it) }
+        }
     }
 
     if (filteredTree.baseNodeBuilder.nodesCount == 0) {
@@ -313,20 +318,46 @@ private fun updateOffsetRecursively(node: Node.Builder, offset: Long) {
  * @param child       may be added to nodeBuilder if matches filter
  * @param filter      decides if child will be added
  */
-private fun buildFilteredTreeRecursively(nodeBuilder: Node.Builder, child: Node, filter: Filter) {
+private fun buildFilteredTreeRecursively(nodeBuilder: Node.Builder, child: Node, isIncluded: (Node) -> Boolean) {
     val newNodeBuilder =
-            if (filter.isIncluded(child)) updateNodeList(nodeBuilder, child.nodeInfo, child.width)
+            if (isIncluded(child)) updateNodeList(nodeBuilder, child.nodeInfo, child.width)
             else nodeBuilder
 
     for (child2 in child.nodesList) {
-        buildFilteredTreeRecursively(newNodeBuilder, child2, filter)
+        buildFilteredTreeRecursively(newNodeBuilder, child2, isIncluded)
     }
+}
+
+private fun buildFilteredTreeWithStacktrace(nodeBuilder: Node.Builder, baseNode: Node, filter: Filter) {
+    val includedNodes = mutableSetOf<Node>()
+    baseNode.nodesList.forEach { findNodesToInclude(it, filter, includedNodes, false) }
+
+    baseNode.nodesList.forEach { child ->
+        buildFilteredTreeRecursively(nodeBuilder, child) { node ->
+            includedNodes.contains(node)
+        }
+    }
+}
+
+private fun findNodesToInclude(node: Node, filter: Filter,
+                               includedNodes: MutableSet<Node>,
+                               currentStackIncluded: Boolean): Boolean {
+    val childrenIncluded = currentStackIncluded || filter.isIncluded(node)
+    var included = childrenIncluded
+    for (child in node.nodesList) {
+        val childIncluded = findNodesToInclude(child, filter, includedNodes, childrenIncluded)
+        included = included || childIncluded
+    }
+    if (included) {
+        includedNodes.add(node)
+    }
+    return included
 }
 
 /**
  * @param nodeBuilder to this node children will be added
- * @param child       may be added to nodeBuilder if matches filter
- * @param filter      decides if child will be added
+ * @param child       may be added to nodeBuilder if matches isIncluded
+ * @param isIncluded  decides if child will be added
  */
 private fun buildFilteredCallTreeRecursively(nodeBuilder: Node.Builder, child: Node, filter: Filter) {
     val newNodeBuilder = if (filter.isIncluded(child)) {

@@ -1,0 +1,16 @@
+tree_info {
+  time_percent: 1.0
+  nodes_count: 1
+}
+base_node {
+  nodes {
+    width: 1
+    node_info {
+      method_name: "isEmpty"
+      class_name: "scala.collection.generic.TraversableForwarder$class"
+      description: "(TraversableForwarder)boolean"
+    }
+  }
+}
+depth: 1
+width: 1

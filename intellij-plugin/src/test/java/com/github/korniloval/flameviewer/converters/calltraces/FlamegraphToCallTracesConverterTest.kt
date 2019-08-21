@@ -15,19 +15,32 @@ class FlamegraphToCallTracesConverterTest : ConverterTestCase("flamegraph", CALL
     private val seed = 0L
 
     fun testSimple() = doTest()
-    fun testOneStacktrace() = doTest()
+    fun testOneStacktrace() {
+        doTest()
+        doTest(opt(include = ".*isEmpty.*"))
+        doTest(opt(include = ".*isEmpty.*", includeStacktrace = true))
+    }
     fun testBiggerTree() {
         doTest()
-        doTest(opt(include = "")) // should not apply filter
-        doTest(opt(maxNumOfVisibleNodes = 1))
-        doTest(opt(maxNumOfVisibleNodes = 1, path = listOf(0)))
         doTest(opt(include = "(a|d)"))
-        doTest(opt(include = "(a|d)", path = listOf(0)))
-        doTest(opt(maxNumOfVisibleNodes = 4, path = listOf(0, 2)))
+        doTest(opt(include = "(a|d)", includeStacktrace = true))
+        doTest(opt(include = "")) // should not apply filter
+        doTest(opt(path = listOf(0, 2), maxNumOfVisibleNodes = 4))
+        doTest(opt(path = listOf(0), include = "(a|d)"))
+        doTest(opt(path = listOf(0), include = "(a|d)", includeStacktrace = true))
+        doTest(opt(path = listOf(0), maxNumOfVisibleNodes = 1))
+        doTest(opt(path = listOf(0), maxNumOfVisibleNodes = 1, include = "f"))
+        doTest(opt(path = listOf(0), maxNumOfVisibleNodes = 1, include = "f", includeStacktrace = true))
+        doTest(opt(maxNumOfVisibleNodes = 1))
+        doTest(opt(maxNumOfVisibleNodes = 1, include = "f", includeStacktrace = true))
     }
 
     fun testMultipleOccurrenceInStack() = doTest()
-    fun testAsyncProfiler() = doTest()
+    fun testAsyncProfiler() {
+        doTest()
+        doTest(opt(include = ".*getJarIndex"))
+        doTest(opt(include = ".*getJarIndex", includeStacktrace = true))
+    }
 
     fun testNodesCountBiggerThanLimit1() = doTestNodesCountBiggerThanLimit(1)
     fun testNodesCountBiggerThanLimit100() = doTestNodesCountBiggerThanLimit(100)

@@ -221,11 +221,15 @@ const common = {
     },
 
     nullize: (str) => {
-        return str === "" ? undefined : str;
+        return str === "" || str === null ? undefined : str;
     },
 
     notNullize: (str) => {
         return str === undefined ? "" : str;
+    },
+
+    chooseNotNull: (p1, p2) => {
+        return p1 === null || p1 === undefined ? p2 : p1;
     }
 };
 
@@ -266,6 +270,7 @@ const constants = {
     urlParametersKeys: {
         file: "file",
         include: "include",
+        includeStacktrace: "include-stacktrace",
         method: "method",
         class: "class",
         desc: "desc"

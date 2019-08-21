@@ -12,9 +12,10 @@ import io.netty.channel.ChannelHandlerContext
 import io.netty.handler.codec.http.HttpRequest
 import io.netty.handler.codec.http.QueryStringDecoder
 import java.io.File
+import kotlin.math.min
 
 
-abstract class TreeHandler(protected val logger: FlameLogger, protected val optionsProvider: ServerOptionsProvider, private val findFile: FindFile) : RequestHandlerBase() {
+abstract class TreeHandler(protected val logger: FlameLogger, private val optionsProvider: ServerOptionsProvider, private val findFile: FindFile) : RequestHandlerBase() {
 
     abstract fun getTree(file: File, decoder: QueryStringDecoder): Tree?
 
@@ -63,7 +64,7 @@ abstract class TreeHandler(protected val logger: FlameLogger, protected val opti
         val widths = mutableListOf<Long>()
         dfs(node) { widths.add(it.width) }
         widths.sortDescending()
-        return widths[Math.min(maximumNodesCount - 1, widths.size - 1)]
+        return widths[min(maximumNodesCount - 1, widths.size - 1)]
     }
 
     private fun simplifyTree(node: Tree.Node, nodeBuilder: Tree.Node.Builder, minAllowedWidth: Long, first: Boolean = true) {

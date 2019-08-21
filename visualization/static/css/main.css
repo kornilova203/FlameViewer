@@ -604,7 +604,7 @@ button:focus {
     position: fixed;
     background-color: #e3e3e3;
     width: 300px;
-    height: 120px;
+    height: 155px;
     top: 30px;
     right: 0;
     display: none;
@@ -612,7 +612,7 @@ button:focus {
     z-index: 2;
 }
 
-.filter-content input {
+.include-pattern-input {
     width: 100%;
     box-sizing: border-box;
     height: 22px;
@@ -943,4 +943,13 @@ canvas {
 .visible {
     opacity: 1;
     pointer-events: auto;
+}
+
+.include-stacktrace-checkbox {
+    float: left;
+}
+
+.include-stacktrace-label {
+    padding-top: 4px;
+    padding-left: 25px;
 }

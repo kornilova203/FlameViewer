@@ -1,0 +1,440 @@
+tree_info {
+  time_percent: 0.44871795
+  nodes_count: 57
+}
+base_node {
+  nodes {
+    width: 35
+    node_info {
+      method_name: "loadClassAndCallPremain"
+      class_name: "sun.instrument.InstrumentationImpl"
+    }
+    nodes {
+      width: 35
+      node_info {
+        method_name: "loadClassAndStartAgent"
+        class_name: "sun.instrument.InstrumentationImpl"
+      }
+      nodes {
+        width: 32
+        node_info {
+          method_name: "loadClass"
+          class_name: "java.lang.ClassLoader"
+        }
+        nodes {
+          width: 32
+          node_info {
+            method_name: "loadClass"
+            class_name: "sun.misc.Launcher$AppClassLoader"
+          }
+          nodes {
+            width: 32
+            node_info {
+              method_name: "loadClass"
+              class_name: "java.lang.ClassLoader"
+            }
+            nodes {
+              width: 12
+              node_info {
+                method_name: "loadClass"
+                class_name: "java.lang.ClassLoader"
+              }
+              nodes {
+                width: 12
+                node_info {
+                  method_name: "findClass"
+                  class_name: "java.net.URLClassLoader"
+                }
+                nodes {
+                  width: 12
+                  node_info {
+                    method_name: "doPrivileged"
+                    class_name: "java.security.AccessController"
+                  }
+                  nodes {
+                    width: 12
+                    node_info {
+                      method_name: "run"
+                      class_name: "java.net.URLClassLoader$1"
+                    }
+                    nodes {
+                      width: 12
+                      node_info {
+                        method_name: "run"
+                        class_name: "java.net.URLClassLoader$1"
+                      }
+                      nodes {
+                        width: 12
+                        node_info {
+                          method_name: "getResource"
+                          class_name: "sun.misc.URLClassPath"
+                        }
+                        nodes {
+                          width: 12
+                          node_info {
+                            method_name: "getNextLoader"
+                            class_name: "sun.misc.URLClassPath"
+                          }
+                          nodes {
+                            width: 12
+                            node_info {
+                              method_name: "getLoader"
+                              class_name: "sun.misc.URLClassPath"
+                            }
+                            nodes {
+                              width: 12
+                              node_info {
+                                method_name: "getLoader"
+                                class_name: "sun.misc.URLClassPath"
+                              }
+                              nodes {
+                                width: 12
+                                node_info {
+                                  method_name: "doPrivileged"
+                                  class_name: "java.security.AccessController"
+                                }
+                                nodes {
+                                  width: 12
+                                  node_info {
+                                    method_name: "run"
+                                    class_name: "sun.misc.URLClassPath$3"
+                                  }
+                                  nodes {
+                                    width: 12
+                                    node_info {
+                                      method_name: "run"
+                                      class_name: "sun.misc.URLClassPath$3"
+                                    }
+                                    nodes {
+                                      width: 11
+                                      node_info {
+                                        method_name: "<init>"
+                                        class_name: "sun.misc.URLClassPath$JarLoader"
+                                      }
+                                      nodes {
+                                        width: 9
+                                        node_info {
+                                          method_name: "ensureOpen"
+                                          class_name: "sun.misc.URLClassPath$JarLoader"
+                                        }
+                                        nodes {
+                                          width: 9
+                                          node_info {
+                                            method_name: "doPrivileged"
+                                            class_name: "java.security.AccessController"
+                                          }
+                                          nodes {
+                                            width: 9
+                                            node_info {
+                                              method_name: "run"
+                                              class_name: "sun.misc.URLClassPath$JarLoader$1"
+                                            }
+                                            nodes {
+                                              width: 9
+                                              node_info {
+                                                method_name: "run"
+                                                class_name: "sun.misc.URLClassPath$JarLoader$1"
+                                              }
+                                              nodes {
+                                                width: 3
+                                                node_info {
+                                                  method_name: "getJarIndex"
+                                                  class_name: "sun.misc.JarIndex"
+                                                }
+                                                nodes {
+                                                  width: 3
+                                                  node_info {
+                                                    method_name: "<init>"
+                                                    class_name: "sun.misc.JarIndex"
+                                                  }
+                                                  nodes {
+                                                    width: 3
+                                                    node_info {
+                                                      method_name: "read"
+                                                      class_name: "sun.misc.JarIndex"
+                                                    }
+                                                    nodes {
+                                                      width: 1
+                                                      node_info {
+                                                        method_name: "readLine"
+                                                        class_name: "java.io.BufferedReader"
+                                                      }
+                                                      nodes {
+                                                        width: 1
+                                                        node_info {
+                                                          method_name: "readLine"
+                                                          class_name: "java.io.BufferedReader"
+                                                        }
+                                                      }
+                                                    }
+                                                    nodes {
+                                                      offset: 1
+                                                      width: 2
+                                                      index: 1
+                                                      node_info {
+                                                        method_name: "addMapping"
+                                                        class_name: "sun.misc.JarIndex"
+                                                      }
+                                                      nodes {
+                                                        offset: 1
+                                                        width: 2
+                                                        node_info {
+                                                          method_name: "addToList"
+                                                          class_name: "sun.misc.JarIndex"
+                                                        }
+                                                        nodes {
+                                                          offset: 1
+                                                          width: 1
+                                                          node_info {
+                                                            method_name: "put"
+                                                            class_name: "java.util.HashMap"
+                                                          }
+                                                          nodes {
+                                                            offset: 1
+                                                            width: 1
+                                                            node_info {
+                                                              method_name: "putVal"
+                                                              class_name: "java.util.HashMap"
+                                                            }
+                                                            nodes {
+                                                              offset: 1
+                                                              width: 1
+                                                              node_info {
+                                                                method_name: "newNode"
+                                                                class_name: "java.util.HashMap"
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                        nodes {
+                                                          offset: 2
+                                                          width: 1
+                                                          index: 1
+                                                          node_info {
+                                                            method_name: "add"
+                                                            class_name: "java.util.LinkedList"
+                                                          }
+                                                          nodes {
+                                                            offset: 2
+                                                            width: 1
+                                                            node_info {
+                                                              method_name: "linkLast"
+                                                              class_name: "java.util.LinkedList"
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+            nodes {
+              offset: 12
+              width: 20
+              index: 1
+              node_info {
+                method_name: "findClass"
+                class_name: "java.net.URLClassLoader"
+              }
+              nodes {
+                offset: 12
+                width: 20
+                node_info {
+                  method_name: "doPrivileged"
+                  class_name: "java.security.AccessController"
+                }
+                nodes {
+                  offset: 12
+                  width: 20
+                  node_info {
+                    method_name: "run"
+                    class_name: "java.net.URLClassLoader$1"
+                  }
+                  nodes {
+                    offset: 12
+                    width: 20
+                    node_info {
+                      method_name: "run"
+                      class_name: "java.net.URLClassLoader$1"
+                    }
+                    nodes {
+                      offset: 12
+                      width: 7
+                      node_info {
+                        method_name: "getResource"
+                        class_name: "sun.misc.URLClassPath"
+                      }
+                      nodes {
+                        offset: 12
+                        width: 7
+                        node_info {
+                          method_name: "getNextLoader"
+                          class_name: "sun.misc.URLClassPath"
+                        }
+                        nodes {
+                          offset: 12
+                          width: 7
+                          node_info {
+                            method_name: "getLoader"
+                            class_name: "sun.misc.URLClassPath"
+                          }
+                          nodes {
+                            offset: 12
+                            width: 7
+                            node_info {
+                              method_name: "getLoader"
+                              class_name: "sun.misc.URLClassPath"
+                            }
+                            nodes {
+                              offset: 12
+                              width: 7
+                              node_info {
+                                method_name: "doPrivileged"
+                                class_name: "java.security.AccessController"
+                              }
+                              nodes {
+                                offset: 12
+                                width: 7
+                                node_info {
+                                  method_name: "run"
+                                  class_name: "sun.misc.URLClassPath$3"
+                                }
+                                nodes {
+                                  offset: 12
+                                  width: 7
+                                  node_info {
+                                    method_name: "run"
+                                    class_name: "sun.misc.URLClassPath$3"
+                                  }
+                                  nodes {
+                                    offset: 12
+                                    width: 7
+                                    node_info {
+                                      method_name: "<init>"
+                                      class_name: "sun.misc.URLClassPath$JarLoader"
+                                    }
+                                    nodes {
+                                      offset: 12
+                                      width: 5
+                                      node_info {
+                                        method_name: "ensureOpen"
+                                        class_name: "sun.misc.URLClassPath$JarLoader"
+                                      }
+                                      nodes {
+                                        offset: 12
+                                        width: 5
+                                        node_info {
+                                          method_name: "doPrivileged"
+                                          class_name: "java.security.AccessController"
+                                        }
+                                        nodes {
+                                          offset: 12
+                                          width: 5
+                                          node_info {
+                                            method_name: "run"
+                                            class_name: "sun.misc.URLClassPath$JarLoader$1"
+                                          }
+                                          nodes {
+                                            offset: 12
+                                            width: 5
+                                            node_info {
+                                              method_name: "run"
+                                              class_name: "sun.misc.URLClassPath$JarLoader$1"
+                                            }
+                                            nodes {
+                                              offset: 12
+                                              width: 2
+                                              node_info {
+                                                method_name: "getJarIndex"
+                                                class_name: "sun.misc.JarIndex"
+                                              }
+                                              nodes {
+                                                offset: 12
+                                                width: 2
+                                                node_info {
+                                                  method_name: "<init>"
+                                                  class_name: "sun.misc.JarIndex"
+                                                }
+                                                nodes {
+                                                  offset: 12
+                                                  width: 2
+                                                  node_info {
+                                                    method_name: "read"
+                                                    class_name: "sun.misc.JarIndex"
+                                                  }
+                                                  nodes {
+                                                    offset: 12
+                                                    width: 2
+                                                    node_info {
+                                                      method_name: "addMapping"
+                                                      class_name: "sun.misc.JarIndex"
+                                                    }
+                                                    nodes {
+                                                      offset: 12
+                                                      width: 2
+                                                      node_info {
+                                                        method_name: "addToList"
+                                                        class_name: "sun.misc.JarIndex"
+                                                      }
+                                                      nodes {
+                                                        offset: 12
+                                                        width: 2
+                                                        node_info {
+                                                          method_name: "add"
+                                                          class_name: "java.util.LinkedList"
+                                                        }
+                                                        nodes {
+                                                          offset: 12
+                                                          width: 2
+                                                          node_info {
+                                                            method_name: "linkLast"
+                                                            class_name: "java.util.LinkedList"
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+depth: 30
+width: 35

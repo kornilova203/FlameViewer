@@ -1,0 +1,21 @@
+tree_info {
+  time_percent: 0.08928572
+  nodes_count: 2
+}
+base_node {
+  nodes {
+    width: 5
+    node_info {
+      method_name: "f"
+    }
+    nodes {
+      width: 5
+      node_info {
+        method_name: "f"
+      }
+    }
+  }
+}
+depth: 2
+visible_depth: 2
+width: 5

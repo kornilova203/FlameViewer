@@ -4,6 +4,7 @@ let $callTracesA;
 let $backTracesA;
 let $filteredNodesCountSpan;
 const CURRENT_INCLUDED = constants.urlParameters[constants.urlParametersKeys.include]; // may be undefined
+const CURRENT_INCLUDE_STACKTRACE = common.chooseNotNull(constants.urlParameters[constants.urlParametersKeys.includeStacktrace] === "true", false);
 let methodsCountInCurrentTree = null;
 
 $(window).on("load", () => {
@@ -30,21 +31,25 @@ $(window).on("load", () => {
     });
 
     $filterContent.find(".cancel-filter").click(() => {
-        setValueFromParameters($includedInput);
+        setValueFromParameters($includedInput, $includeStacktraceCheckbox);
         $filterContent.toggle();
         setButtonInactive($applyAnchor);
     });
 
     const $includedInput = $filterContent.find("#included-input");
+    const $includeStacktraceCheckbox = $filterContent.find("#include-stacktrace");
 
-    setValueFromParameters($includedInput);
+    setValueFromParameters($includedInput, $includeStacktraceCheckbox);
     updateFilterButton();
 
-    $includedInput.on('change keyup copy paste cut', common.updateRareDecorator(500, () => {
+    const update = () => {
         console.log("update");
         const includePattern = common.nullize($includedInput.val());
-        updateFilterLink($applyAnchor, includePattern);
-    }));
+        updateFilterLink($applyAnchor, includePattern, $includeStacktraceCheckbox.prop('checked'));
+    };
+
+    $includedInput.on('change keyup copy paste cut', common.updateRareDecorator(500, update));
+    $includeStacktraceCheckbox.click(common.updateRareDecorator(500, update));
     setClearAction($filterContent.find(".clear-filter"), $includedInput, $applyAnchor);
 });
 
@@ -60,12 +65,17 @@ function setCurrentPrefix() {
 function setClearAction($clearFilterButton, $includedInput, $applyAnchor) {
     $clearFilterButton.click(() => {
         $includedInput.val("");
-        updateFilterLink($applyAnchor, undefined);
+        updateFilterLink($applyAnchor, undefined, false);
     })
 }
 
-function setValueFromParameters($includedInput) {
+/**
+ * @param {Object} $includedInput
+ * @param {Object} $includeStacktraceCheckbox
+ */
+function setValueFromParameters($includedInput, $includeStacktraceCheckbox) {
     $includedInput.val(common.notNullize(CURRENT_INCLUDED));
+    $includeStacktraceCheckbox.prop('checked', CURRENT_INCLUDE_STACKTRACE);
 }
 
 function updateFilterButton() {
@@ -76,10 +86,11 @@ function updateFilterButton() {
 
 /**
  * @param {String|undefined} includePattern
+ * @param {Boolean} includeStacktrace
  * @return {boolean}
  */
-function isApplyActive(includePattern) {
-    return CURRENT_INCLUDED !== includePattern
+function isApplyActive(includePattern, includeStacktrace) {
+    return CURRENT_INCLUDED !== includePattern || CURRENT_INCLUDE_STACKTRACE !== includeStacktrace;
 }
 
 function setButtonInactive($applyAnchor) {
@@ -89,11 +100,13 @@ function setButtonInactive($applyAnchor) {
 
 /**
  * @param {String|undefined} includePattern
+ * @param {Boolean|undefined} includeStacktrace
  * @return {String}
  */
-function getParametersWithFilter(includePattern) {
+function getParametersWithFilter(includePattern, includeStacktrace) {
     const params = Object.assign({}, constants.urlParameters);
     params[constants.urlParametersKeys.include] = includePattern;
+    params[constants.urlParametersKeys.includeStacktrace] = includeStacktrace;
     return common.getParametersString(params);
 }
 
@@ -104,9 +117,10 @@ function setMethodsCount(nodesCount) {
 /**
  * Send request to server to count how much nodes will be in tree with filter
  * @param {String|undefined} includePattern
+ * @param {Boolean} includeStacktrace
  */
-function countMethodsForFilter(includePattern) {
-    const url = serverNames.MAIN_NAME + "/trees/" + constants.pageName + "/count?" + getParametersWithFilter(includePattern);
+function countMethodsForFilter(includePattern, includeStacktrace) {
+    const url = serverNames.MAIN_NAME + "/trees/" + constants.pageName + "/count?" + getParametersWithFilter(includePattern, includeStacktrace);
 
     common.sendGetRequest(url, "json")
         .then(response => {
@@ -116,7 +130,7 @@ function countMethodsForFilter(includePattern) {
 
 
 function countMethodsInCurrentTree() {
-    const url = serverNames.MAIN_NAME + "/trees/" + constants.pageName + "/count?" + getParametersWithFilter(CURRENT_INCLUDED);
+    const url = serverNames.MAIN_NAME + "/trees/" + constants.pageName + "/count?" + getParametersWithFilter(CURRENT_INCLUDED, CURRENT_INCLUDE_STACKTRACE);
     common.sendGetRequest(url, "json")
         .then(response => {
             const nodesCount = response.nodesCount;
@@ -128,11 +142,12 @@ function countMethodsInCurrentTree() {
 /**
  * @param {Object} $applyAnchor
  * @param {String|undefined} includePattern
+ * @param {Boolean} includeStacktrace
  */
-function updateFilterLink($applyAnchor, includePattern) {
-    countMethodsForFilter(includePattern);
-    if (isApplyActive(includePattern)) {
-        let parametersWithFilter = getParametersWithFilter(includePattern);
+function updateFilterLink($applyAnchor, includePattern, includeStacktrace) {
+    countMethodsForFilter(includePattern, includeStacktrace);
+    if (isApplyActive(includePattern, includeStacktrace)) {
+        let parametersWithFilter = getParametersWithFilter(includePattern, includeStacktrace);
         let link = CURRENT_PREFIX + "?" + parametersWithFilter;
         $applyAnchor.attr("href", link);
         $applyAnchor.find("button").addClass("active-apply")
