@@ -6,7 +6,6 @@ data class ConvertTestOptions(val path: List<Int>,
                               val description: String?,
                               val fileName: String?,
                               val include: String?,
-                              val exclude: String?,
                               val maxNumOfVisibleNodes: Int?)
 
 fun opt(path: List<Int> = ArrayList(),
@@ -15,5 +14,4 @@ fun opt(path: List<Int> = ArrayList(),
         description: String? = null,
         fileName: String? = null,
         include: String? = null,
-        exclude: String? = null,
-        maxNumOfVisibleNodes: Int? = null) = ConvertTestOptions(path, className, methodName, description, fileName, include, exclude, maxNumOfVisibleNodes)
+        maxNumOfVisibleNodes: Int? = null) = ConvertTestOptions(path, className, methodName, description, fileName, include, maxNumOfVisibleNodes)

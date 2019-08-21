@@ -37,7 +37,7 @@ abstract class ConverterTestCase(private val fileExtension: String, private val 
         UploadFileUtil.sendFile(fileToUpload.name, fileToUpload.readBytes())
         val bytes = withMaxNumOfVisibleNodes(options.maxNumOfVisibleNodes) {
             sendRequestForTree(fileToUpload.name, options.path, options.className, options.methodName,
-                    options.description, options.include, options.exclude)
+                    options.description, options.include)
         }
         assertNotNull(bytes)
 
@@ -70,9 +70,6 @@ abstract class ConverterTestCase(private val fileExtension: String, private val 
         if (options.include != null) {
             fileName.append("-include=").append(options.include)
         }
-        if (options.exclude != null) {
-            fileName.append("-exclude=").append(options.exclude)
-        }
         if (options.maxNumOfVisibleNodes != null) {
             fileName.append("-visible=").append(options.maxNumOfVisibleNodes)
         }
@@ -101,8 +98,7 @@ abstract class ConverterTestCase(private val fileExtension: String, private val 
     }
 
     private fun sendRequestForTree(fileName: String, path: List<Int>, className: String?,
-                                   methodName: String?, description: String?,
-                                   include: String?, exclude: String?): ByteArray {
+                                   methodName: String?, description: String?, include: String?): ByteArray {
         val urlBuilder = UploadFileUtil.getUrlBuilderBase()
                 .addPathSegments(resultType.url)
                 .addQueryParameter("file", fileName)
@@ -116,10 +112,6 @@ abstract class ConverterTestCase(private val fileExtension: String, private val 
 
         if (include != null) {
             urlBuilder.addQueryParameter("include", include)
-        }
-
-        if (exclude != null) {
-            urlBuilder.addQueryParameter("exclude", exclude)
         }
 
         val url = urlBuilder.build().url()
