@@ -36,7 +36,7 @@ abstract class TreeHandler(protected val logger: FlameLogger, protected val opti
         if (tree.treeInfo.nodesCount > maxNumOfVisibleNodes) {
             val path = decoder.parameters()["path"]
             val simplifiedTree = simplifyTree(tree, maxNumOfVisibleNodes, path != null)
-            simplifiedTree.visibleDepth = countMaxDepth(simplifiedTree.baseNodeBuilder)
+            simplifiedTree.visibleDepth = countMaxDepth(simplifiedTree.baseNodeBuilder) - 1
             tree = simplifiedTree.build()
         }
         sendProto(ctx, tree, logger)
@@ -55,7 +55,7 @@ abstract class TreeHandler(protected val logger: FlameLogger, protected val opti
         treeBuilder.setTreeInfo(tree.treeInfo)
                 .setDepth(tree.depth)
                 .setWidth(tree.width)
-                .setVisibleDepth(countMaxDepth(treeBuilder.baseNodeBuilder))
+                .setVisibleDepth(countMaxDepth(treeBuilder.baseNodeBuilder) - 1)
         return treeBuilder
     }
 

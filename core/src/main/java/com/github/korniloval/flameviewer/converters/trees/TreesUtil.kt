@@ -4,6 +4,7 @@ import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node
 import com.github.korniloval.flameviewer.server.handlers.countNodes
 import com.github.korniloval.flameviewer.server.handlers.treeBuilder
+import kotlin.math.max
 
 
 fun createNodeInfo(className: String,
@@ -220,12 +221,9 @@ fun getSelfTime(node: Node): Long {
     return node.width - childTime
 }
 
-fun countMaxDepth(node: Node.Builder): Int {
-    var maxDepth = 0
-    for (child in node.nodesBuilderList) {
-        maxDepth = Math.max(maxDepth, countMaxDepth(child))
-    }
-    return maxDepth + 1
+fun countMaxDepth(node: Tree.NodeOrBuilder): Int {
+    val maxChildDepth = node.nodesOrBuilderList.fold(0) { max, child -> max(max, countMaxDepth(child)) }
+    return maxChildDepth + 1
 }
 
 fun filterTree(tree: Tree, filter: Filter): Tree? {
@@ -245,7 +243,7 @@ fun filterTree(tree: Tree, filter: Filter): Tree? {
     setTreeWidth(filteredTree)
     setNodesCount(filteredTree)
     filteredTree.treeInfoBuilder.timePercent = calcTime(filteredTree).toFloat() / calcTime(tree) * tree.treeInfo.timePercent
-    filteredTree.depth = TreesSet.getMaxDepthRecursively(filteredTree.baseNodeBuilder, 0)
+    filteredTree.depth = countMaxDepth(filteredTree.baseNodeBuilder) - 1
     return filteredTree.build()
 }
 
@@ -265,7 +263,7 @@ fun filterCallTree(tree: Tree, filter: Filter): Tree? {
     setTreeWidth(filteredTree)
     setNodesCount(filteredTree)
     filteredTree.treeInfoBuilder.timePercent = calcTime(filteredTree).toFloat() / calcTime(tree) * tree.treeInfo.timePercent
-    filteredTree.depth = TreesSet.getMaxDepthRecursively(filteredTree.baseNodeBuilder, 0)
+    filteredTree.depth = countMaxDepth(filteredTree.baseNodeBuilder) - 1
     return filteredTree.build()
 }
 

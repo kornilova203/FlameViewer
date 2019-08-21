@@ -3,7 +3,6 @@ package com.github.korniloval.flameviewer.server.handlers
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree
 import com.github.korniloval.flameviewer.FlameLogger
 import com.github.korniloval.flameviewer.converters.trees.*
-import com.github.korniloval.flameviewer.converters.trees.TreesSet.Companion.getMaxDepthRecursively
 import com.github.korniloval.flameviewer.server.ServerOptions
 import com.github.korniloval.flameviewer.server.ServerOptionsProvider
 import com.github.korniloval.flameviewer.server.ServerUtil.getParameter
@@ -46,7 +45,7 @@ abstract class AccumulativeTreeHandler(protected val treeManager: TreeManager, l
         val subTree = treeBuilder()
         subTree.baseNodeBuilder.addNodes(newBaseNode)
 
-        subTree.depth = getMaxDepthRecursively(newBaseNode, 1) // first element in path chooses one of trees of base node
+        subTree.depth = countMaxDepth(newBaseNode)
 
         setNodesOffsetRecursively(subTree.baseNodeBuilder, 0)
         setTreeWidth(subTree)

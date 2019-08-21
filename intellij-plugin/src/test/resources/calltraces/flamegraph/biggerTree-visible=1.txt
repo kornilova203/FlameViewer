@@ -19,5 +19,5 @@ base_node {
   }
 }
 depth: 4
-visible_depth: 2
+visible_depth: 1
 width: 56

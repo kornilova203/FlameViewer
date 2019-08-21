@@ -1,7 +1,6 @@
 package com.github.korniloval.flameviewer.converters.trees
 
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree
-import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node
 import com.github.kornilova_l.flamegraph.proto.TreesPreviewProtos.TreesPreview
 import com.github.kornilova_l.flamegraph.proto.TreesProtos
 import com.github.korniloval.flameviewer.converters.trees.TreeType.BACK_TRACES
@@ -51,30 +50,5 @@ abstract class TreesSet {
     protected fun getBackTraces(): Tree? {
         val callTraces = callTraces ?: return null
         return if (backTraces != null) backTraces!! else BackTracesBuilder(callTraces).tree
-    }
-
-    companion object {
-
-        fun getMaxDepthRecursively(nodeBuilder: Node.Builder, currentDepth: Int): Int {
-            var maxDepth = currentDepth
-            for (child in nodeBuilder.nodesBuilderList) {
-                val newDepth = getMaxDepthRecursively(child, currentDepth + 1)
-                if (newDepth > maxDepth) {
-                    maxDepth = newDepth
-                }
-            }
-            return maxDepth
-        }
-
-        fun getMaxDepthRecursively(nodeBuilder: Node, currentDepth: Int): Int {
-            var maxDepth = currentDepth
-            for (child in nodeBuilder.nodesList) {
-                val newDepth = getMaxDepthRecursively(child, currentDepth + 1)
-                if (newDepth > maxDepth) {
-                    maxDepth = newDepth
-                }
-            }
-            return maxDepth
-        }
     }
 }

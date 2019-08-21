@@ -3,7 +3,6 @@ package com.github.korniloval.flameviewer.converters.calltree;
 import com.github.kornilova_l.flamegraph.proto.EventProtos;
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree;
 import com.github.kornilova_l.flamegraph.proto.TreeProtos.Tree.Node;
-import com.github.korniloval.flameviewer.converters.trees.TreesSet;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -11,8 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static com.github.korniloval.flameviewer.converters.trees.DescriptionConverter.getBeautifulDesc;
-import static com.github.korniloval.flameviewer.converters.trees.TreesUtilKt.setNodesCount;
-import static com.github.korniloval.flameviewer.converters.trees.TreesUtilKt.setTreeWidth;
+import static com.github.korniloval.flameviewer.converters.trees.TreesUtilKt.*;
 import static com.github.korniloval.flameviewer.server.handlers.CoreUtilKt.treeBuilder;
 
 class CTBuilder {
@@ -108,7 +106,7 @@ class CTBuilder {
         treeBuilder.getTreeInfoBuilder().setStartTime(
                 threadStartTime - startTimeOfFirstThread
         );
-        int maxDepth = TreesSet.Companion.getMaxDepthRecursively(treeBuilder.getBaseNodeBuilder(), 0);
+        int maxDepth = countMaxDepth(treeBuilder.getBaseNodeBuilder()) - 1;
         treeBuilder.setDepth(maxDepth);
         return treeBuilder.build();
     }
