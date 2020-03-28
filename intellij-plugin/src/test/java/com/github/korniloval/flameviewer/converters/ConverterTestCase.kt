@@ -123,7 +123,7 @@ abstract class ConverterTestCase(private val fileExtension: String, private val 
             urlBuilder.addQueryParameter("include-stacktrace", includeStacktrace.toString())
         }
 
-        val url = urlBuilder.build().url()
+        val url = urlBuilder.build().toUrl()
         val connection = url.openConnection() as HttpURLConnection
         connection.requestMethod = "GET"
 

@@ -21,7 +21,7 @@ class RequestStaticTest : BasePlatformTestCase() {
                 .addPathSegments(path)
                 .addQueryParameter("file", "some-file.cflamegraph")
 
-        val url = urlBuilder.build().url()
+        val url = urlBuilder.build().toUrl()
         val connection = url.openConnection() as HttpURLConnection
         connection.requestMethod = "GET"
 

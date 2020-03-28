@@ -1,6 +1,6 @@
 dependencies {
     compile project(":core")
-    compile group: 'io.netty', name: 'netty-all', version: '4.1.34.Final'
+    compile group: 'io.netty', name: 'netty-all', version: '4.1.47.Final'
     compile group: 'commons-cli', name: 'commons-cli', version: '1.4'
 }
 

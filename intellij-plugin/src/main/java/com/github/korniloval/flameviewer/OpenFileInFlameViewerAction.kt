@@ -35,7 +35,7 @@ class OpenFileInFlameViewerAction : DumbAwareAction() {
                                     .addPathSegments(CALL_TRACES_NAME)
                                     .addQueryParameter("file", file.name)
 
-                            BrowserUtil.browse(urlBuilder.build().url())
+                            BrowserUtil.browse(urlBuilder.build().toUrl())
                         } else {
                             LOG.info("File format is unsupported")
                         }
