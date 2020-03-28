@@ -1,4 +1,4 @@
-namespace com.github.korniloval.flameviewer.cflamegraph;
+namespace com.github.kornilova203.flameviewer.cflamegraph;
 
 // Contains the same information as flamegraph format
 

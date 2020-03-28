@@ -1,0 +1,6 @@
+package com.github.kornilova203.flameviewer.converters.calltree
+
+import com.github.kornilova203.flameviewer.converters.IdentifiedConverterFactory
+import com.github.kornilova_l.flamegraph.proto.TreesProtos
+
+interface ToCallTreeIdentifiedConverterFactory : IdentifiedConverterFactory<TreesProtos.Trees>

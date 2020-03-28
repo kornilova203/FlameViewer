@@ -58,41 +58,41 @@ Detailed description at <a href="https://github.com/kornilova-l/FlameViewer">git
 
     <extensionPoints>
         <extensionPoint name="toCFlamegraphConverterFactory"
-                        interface="com.github.korniloval.flameviewer.converters.cflamegraph.ToCFlamegraphConverterFactory"/>
+                        interface="com.github.kornilova203.flameviewer.converters.cflamegraph.ToCFlamegraphConverterFactory"/>
         <extensionPoint name="fileToCallTreeConverterFactory"
-                        interface="com.github.korniloval.flameviewer.converters.calltree.ToCallTreeIdentifiedConverterFactory"/>
+                        interface="com.github.kornilova203.flameviewer.converters.calltree.ToCallTreeIdentifiedConverterFactory"/>
         <extensionPoint name="toCallTracesConverterFactory"
-                        interface="com.github.korniloval.flameviewer.converters.calltraces.ToCallTracesIdentifiedConverterFactory"/>
+                        interface="com.github.kornilova203.flameviewer.converters.calltraces.ToCallTracesIdentifiedConverterFactory"/>
     </extensionPoints>
 
     <extensions defaultExtensionNs="com.intellij">
-        <httpRequestHandler implementation="com.github.korniloval.flameviewer.server.IntellijRequestHandler"/>
+        <httpRequestHandler implementation="com.github.kornilova203.flameviewer.server.IntellijRequestHandler"/>
     </extensions>
 
     <extensions defaultExtensionNs="com.github.kornilovaL.flamegraphProfiler">
         <toCFlamegraphConverterFactory
-                implementation="com.github.korniloval.flameviewer.converters.cflamegraph.JfrToCFlamegraphConverterFactoryIntellij"/>
+                implementation="com.github.kornilova203.flameviewer.converters.cflamegraph.JfrToCFlamegraphConverterFactoryIntellij"/>
         <toCFlamegraphConverterFactory
-                implementation="com.github.korniloval.flameviewer.converters.cflamegraph.YourkitCsvToCFlamegraphConverterFactory"/>
+                implementation="com.github.kornilova203.flameviewer.converters.cflamegraph.YourkitCsvToCFlamegraphConverterFactory"/>
         <toCFlamegraphConverterFactory
-                implementation="com.github.korniloval.flameviewer.converters.cflamegraph.FlamegraphToCFlamegraphConverterFactoryIntellij"/>
+                implementation="com.github.kornilova203.flameviewer.converters.cflamegraph.FlamegraphToCFlamegraphConverterFactoryIntellij"/>
         <toCallTracesConverterFactory
-                implementation="com.github.korniloval.flameviewer.converters.calltraces.YourkitCsvToCallTracesConverterFactory"/>
+                implementation="com.github.kornilova203.flameviewer.converters.calltraces.YourkitCsvToCallTracesConverterFactory"/>
         <toCallTracesConverterFactory
-                implementation="com.github.korniloval.flameviewer.converters.calltraces.FlamegraphToCallTracesConverterFactory"/>
+                implementation="com.github.kornilova203.flameviewer.converters.calltraces.FlamegraphToCallTracesConverterFactory"/>
         <toCallTracesConverterFactory
-                implementation="com.github.korniloval.flameviewer.converters.calltraces.CFlamegraphToCallTracesConverterFactory"/>
+                implementation="com.github.kornilova203.flameviewer.converters.calltraces.CFlamegraphToCallTracesConverterFactory"/>
         <fileToCallTreeConverterFactory
-                implementation="com.github.korniloval.flameviewer.converters.calltree.FierixToCallTreeConverterFactory"/>
+                implementation="com.github.kornilova203.flameviewer.converters.calltree.FierixToCallTreeConverterFactory"/>
     </extensions>
 
     <actions>
-        <action class="com.github.korniloval.flameviewer.OpenFlameViewerAction"
+        <action class="com.github.kornilova203.flameviewer.OpenFlameViewerAction"
                 id="FlameViewer.UploadFile" text="Open FlameViewer..." icon="ProfilerIcons.flameIcon">
             <add-to-group group-id="ToolsMenu" anchor="last"/>
         </action>
-        <action id="OpenFileInFlameviewerAction" class="com.github.korniloval.flameviewer.OpenFileInFlameViewerAction"
-                text="Open in FlameViewer..." description="Open File in FlameViewer" icon="ProfilerIcons.flameIcon">
+        <action id="OpenFileInFlameviewerAction" class="com.github.kornilova203.flameviewer.OpenFileInFlameViewerAction"
+                text="Open in FlameViewer..." description="Open file in flameViewer" icon="ProfilerIcons.flameIcon">
             <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
         </action>
     </actions>

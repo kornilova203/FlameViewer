@@ -7,7 +7,7 @@ dependencies {
 jar {
     archivesBaseName = 'FlameViewer'
     manifest {
-        attributes 'Main-Class': 'com.github.korniloval.flameviewer.cli.MainKt'
+        attributes 'Main-Class': 'com.github.kornilova203.flameviewer.cli.MainKt'
     }
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
