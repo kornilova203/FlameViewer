@@ -3,7 +3,7 @@ package com.github.korniloval.flameviewer
 import com.github.korniloval.flameviewer.UploadFileUtil.sendFile
 import com.github.korniloval.flameviewer.server.FILE
 import com.github.korniloval.flameviewer.server.UNDO_DELETE_FILE
-import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase
+import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import io.netty.handler.codec.http.HttpResponseStatus
 import org.jetbrains.ide.BuiltInServerManager
 import java.io.File
@@ -12,7 +12,14 @@ import java.net.URL
 import java.nio.file.Paths
 
 
-class DeleteFileTest : LightPlatformCodeInsightFixtureTestCase() {
+class DeleteFileTest : BasePlatformTestCase() {
+
+    override fun setUp() {
+        super.setUp()
+        BuiltInServerManager.getInstance().waitForStart()
+        PluginFileManager.deleteAllUploadedFiles()
+    }
+
     fun testDeleteSerFile() {
         // test legacy functionality
         PluginFileManager.deleteAllUploadedFiles()

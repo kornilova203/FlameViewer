@@ -8,13 +8,20 @@ import com.github.korniloval.flameviewer.UploadFileUtil
 import com.github.korniloval.flameviewer.converters.ResultType.*
 import com.github.korniloval.flameviewer.server.DEFAULT_MAX_NUM_OF_VISIBLE_NODES
 import com.github.korniloval.flameviewer.server.IntellijRequestHandler
-import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase
+import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.jetbrains.ide.BuiltInServerManager
 import org.jetbrains.ide.HttpRequestHandler
 import java.io.ByteArrayInputStream
 import java.io.File
 import java.net.HttpURLConnection
 
-abstract class ConverterTestCase(private val fileExtension: String, private val resultType: ResultType) : LightPlatformCodeInsightFixtureTestCase() {
+abstract class ConverterTestCase(private val fileExtension: String, private val resultType: ResultType) : BasePlatformTestCase() {
+
+    override fun setUp() {
+        super.setUp()
+        BuiltInServerManager.getInstance().waitForStart()
+        PluginFileManager.deleteAllUploadedFiles()
+    }
 
     private val commonSourceFilesPath = "src/test/resources/profiler-files"
 
@@ -27,13 +34,8 @@ abstract class ConverterTestCase(private val fileExtension: String, private val 
     }
 
     protected fun getTreeBytes(options: ConvertTestOptions): ByteArray {
-        PluginFileManager.deleteAllUploadedFiles()
-
         val name = options.fileName ?: getTestName(true)
-
         val fileToUpload = File("${getProfilerFilesPath()}/$name.$fileExtension")
-
-        PluginFileManager.deleteAllUploadedFiles()
         UploadFileUtil.sendFile(fileToUpload.name, fileToUpload.readBytes())
         val bytes = withMaxNumOfVisibleNodes(options.maxNumOfVisibleNodes) {
             sendRequestForTree(fileToUpload.name, options.path, options.className, options.methodName,

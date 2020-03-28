@@ -3,17 +3,22 @@ package com.github.korniloval.flameviewer
 import com.github.korniloval.flameviewer.UploadFileUtil.bytesInMB
 import com.github.korniloval.flameviewer.UploadFileUtil.sendFile
 import com.github.korniloval.flameviewer.server.DOES_FILE_EXIST
-import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase
+import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import org.jetbrains.ide.BuiltInServerManager
 import java.io.File
 import java.net.HttpURLConnection
 import java.net.URL
 
 
-class FilesUploaderTest : LightPlatformCodeInsightFixtureTestCase() {
+class FilesUploaderTest : BasePlatformTestCase() {
+
+    override fun setUp() {
+        super.setUp()
+        BuiltInServerManager.getInstance().waitForStart()
+        PluginFileManager.deleteAllUploadedFiles()
+    }
 
     fun testUploadBigFiles() {
-        PluginFileManager.deleteAllUploadedFiles()
         val bytes = createBytes(bytesInMB * 50)
         sendFile("big.ser", bytes)
         var expectedFile = PluginFileManager.tempFileSaver.save(bytes, "big.ser")!!
@@ -27,7 +32,6 @@ class FilesUploaderTest : LightPlatformCodeInsightFixtureTestCase() {
     }
 
     fun testUploadFierixFiles() {
-        PluginFileManager.deleteAllUploadedFiles()
         val bytes = createBytes(bytesInMB * 50)
         sendFile("my.fierix", bytes)
         val expectedFile = PluginFileManager.tempFileSaver.save(bytes, "my.fierix")!!
@@ -35,7 +39,6 @@ class FilesUploaderTest : LightPlatformCodeInsightFixtureTestCase() {
     }
 
     fun testGetNonExistingFiles() {
-        PluginFileManager.deleteAllUploadedFiles()
         var res = sendRequestDoesFileExist("file-does-not-exist.txt")
         assertEquals("{\"result\": false}", res)
 
