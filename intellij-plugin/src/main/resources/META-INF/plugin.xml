@@ -1,9 +1,9 @@
-<idea-plugin url="https://github.com/kornilova-l/FlameViewer">
+<idea-plugin url="https://github.com/kornilova203/FlameViewer">
     <id>com.github.kornilovaL.flamegraphProfiler</id>
     <name>FlameViewer</name>
     <version>0.8.2-SNAPSHOT</version>
 
-    <vendor url="https://github.com/kornilova-l" email="kornilova203@gmail.com"/>
+    <vendor url="https://github.com/kornilova203" email="kornilova203@gmail.com"/>
 
     <description><![CDATA[
 Flamegraph Viewer<br>
@@ -36,7 +36,7 @@ Fierix is a bundled instrumentation Java profiler that allows to save parameters
     <li>To open results click <strong>Tools | Fierix | Open Results...</strong></li>
 </ol>
 
-Detailed description at <a href="https://github.com/kornilova-l/FlameViewer">github.com/kornilova-l/FlameViewer</a>
+Detailed description at <a href="https://github.com/kornilova203/FlameViewer">github.com/kornilova203/FlameViewer</a>
     ]]></description>
 
     <change-notes><![CDATA[

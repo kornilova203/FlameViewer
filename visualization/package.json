@@ -10,7 +10,7 @@
   },
   "author": "Liudmila Kornilova",
   "license": "ISC",
-  "repository": "https://github.com/kornilova-l/FlameViewer",
+  "repository": "https://github.com/kornilova203/FlameViewer",
   "dependencies": {
     "google-protobuf": "3.5.0"
   },
