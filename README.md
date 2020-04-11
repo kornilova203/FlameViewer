@@ -100,4 +100,16 @@ If only want to use plugin then you should simply install ready-to-use [jar](htt
 ./gradlew :intellij-plugin:runIdea
 ```
 
+### Regenerate flatbuffers
+[cflamegraph_schema.fbs] has to be regenerated after [flatbuffers compiler] and [flatbuffers runtime library] are updated.
+```bash
+chmod +x ./scripts/install-flatbuffers.sh
+./scripts/install-flatbuffers.sh
+./gradlew :core:compileFlatBuffers
+```
+
+
  [open an issue]: https://github.com/kornilova203/FlameViewer/issues
+ [cflamegraph_schema.fbs]: core/src/main/flatbuffers/cflamegraph_schema.fbs
+ [flatbuffers compiler]: scripts/install-flatbuffers.sh
+ [flatbuffers runtime library]: core/build.gradle

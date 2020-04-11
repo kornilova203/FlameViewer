@@ -5,3 +5,4 @@ visualization/node_modules/
 /.idea/
 generated-resources/
 generated/
+/flatbuffers/

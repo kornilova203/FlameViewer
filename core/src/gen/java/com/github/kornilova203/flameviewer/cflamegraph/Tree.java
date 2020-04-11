@@ -9,35 +9,45 @@ import com.google.flatbuffers.*;
 
 @SuppressWarnings("unused")
 public final class Tree extends Table {
+  public static void ValidateVersion() { Constants.FLATBUFFERS_1_12_0(); }
   public static Tree getRootAsTree(ByteBuffer _bb) { return getRootAsTree(_bb, new Tree()); }
   public static Tree getRootAsTree(ByteBuffer _bb, Tree obj) { _bb.order(ByteOrder.LITTLE_ENDIAN); return (obj.__assign(_bb.getInt(_bb.position()) + _bb.position(), _bb)); }
-  public void __init(int _i, ByteBuffer _bb) { bb_pos = _i; bb = _bb; }
+  public void __init(int _i, ByteBuffer _bb) { __reset(_i, _bb); }
   public Tree __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public Names names() { return names(new Names()); }
-  public Names names(Names obj) { int o = __offset(4); return o != 0 ? obj.__assign(__indirect(o + bb_pos), bb) : null; }
-  public Node nodes(int j) { return nodes(new Node(), j); }
-  public Node nodes(Node obj, int j) { int o = __offset(6); return o != 0 ? obj.__assign(__vector(o) + j * 20, bb) : null; }
+  public com.github.kornilova203.flameviewer.cflamegraph.Names names() { return names(new com.github.kornilova203.flameviewer.cflamegraph.Names()); }
+  public com.github.kornilova203.flameviewer.cflamegraph.Names names(com.github.kornilova203.flameviewer.cflamegraph.Names obj) { int o = __offset(4); return o != 0 ? obj.__assign(__indirect(o + bb_pos), bb) : null; }
+  public com.github.kornilova203.flameviewer.cflamegraph.Node nodes(int j) { return nodes(new com.github.kornilova203.flameviewer.cflamegraph.Node(), j); }
+  public com.github.kornilova203.flameviewer.cflamegraph.Node nodes(com.github.kornilova203.flameviewer.cflamegraph.Node obj, int j) { int o = __offset(6); return o != 0 ? obj.__assign(__vector(o) + j * 20, bb) : null; }
   public int nodesLength() { int o = __offset(6); return o != 0 ? __vector_len(o) : 0; }
+  public com.github.kornilova203.flameviewer.cflamegraph.Node.Vector nodesVector() { return nodesVector(new com.github.kornilova203.flameviewer.cflamegraph.Node.Vector()); }
+  public com.github.kornilova203.flameviewer.cflamegraph.Node.Vector nodesVector(com.github.kornilova203.flameviewer.cflamegraph.Node.Vector obj) { int o = __offset(6); return o != 0 ? obj.__assign(__vector(o), 20, bb) : null; }
 
   public static int createTree(FlatBufferBuilder builder,
       int namesOffset,
       int nodesOffset) {
-    builder.startObject(2);
+    builder.startTable(2);
     Tree.addNodes(builder, nodesOffset);
     Tree.addNames(builder, namesOffset);
     return Tree.endTree(builder);
   }
 
-  public static void startTree(FlatBufferBuilder builder) { builder.startObject(2); }
+  public static void startTree(FlatBufferBuilder builder) { builder.startTable(2); }
   public static void addNames(FlatBufferBuilder builder, int namesOffset) { builder.addOffset(0, namesOffset, 0); }
   public static void addNodes(FlatBufferBuilder builder, int nodesOffset) { builder.addOffset(1, nodesOffset, 0); }
   public static void startNodesVector(FlatBufferBuilder builder, int numElems) { builder.startVector(20, numElems, 4); }
   public static int endTree(FlatBufferBuilder builder) {
-    int o = builder.endObject();
+    int o = builder.endTable();
     return o;
   }
   public static void finishTreeBuffer(FlatBufferBuilder builder, int offset) { builder.finish(offset); }
   public static void finishSizePrefixedTreeBuffer(FlatBufferBuilder builder, int offset) { builder.finishSizePrefixed(offset); }
+
+  public static final class Vector extends BaseVector {
+    public Vector __assign(int _vector, int _element_size, ByteBuffer _bb) { __reset(_vector, _element_size, _bb); return this; }
+
+    public Tree get(int j) { return get(new Tree(), j); }
+    public Tree get(Tree obj, int j) {  return obj.__assign(__indirect(__element(j), bb), bb); }
+  }
 }
 

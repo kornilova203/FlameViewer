@@ -1,23 +1,7 @@
 language: java
-sudo: required # to install flatbuffers
-jdk:
-  - openjdk8
-
-addons:
-  apt:
-    update: true
-    packages:
-    - git
-    - cmake
-    - make
-
-before_install:
-  - chmod +x ./scripts/install-flatbuffers.sh
-  - ./scripts/install-flatbuffers.sh
-
+jdk: oraclejdk8
 install: true
 
 script:
-  - ./gradlew prepareStaticAndAgent
- - ./gradlew test -x :agent-test:test
- - ./gradlew buildPlugin
+  - ./gradlew :visualization:copyStatic
+  - ./gradlew :intellij-plugin:test

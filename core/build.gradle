@@ -1,12 +1,12 @@
 import io.netifi.flatbuffers.plugin.tasks.FlatBuffers
 
 plugins {
-    id "io.netifi.flatbuffers" version "1.0.4"
+    id "io.netifi.flatbuffers" version "1.0.6"
 }
 
 dependencies {
     compile project(":proto")
-    compile group: 'com.github.davidmoten', name: 'flatbuffers-java', version: '1.10.0.2'
+    compile group: 'com.google.flatbuffers', name: 'flatbuffers-java', version: '1.12.0'
     compile fileTree(dir: 'lib', include: ['com.jrockit.mc.flightrecorder_5.5.1.172852.jar'])
     compile fileTree(dir: 'lib', include: ['com.jrockit.mc.common_5.5.1.172852.jar'])
     compile fileTree(dir: 'lib', include: ['flight-recorder-parser-for-java-9.jar'])
@@ -16,7 +16,7 @@ dependencies {
 }
 
 flatbuffers {
-    flatcPath = '/usr/local/bin/flatc'
+    flatcPath = '../flatbuffers/target/flatc'
     language = 'java'
 }
 

@@ -9,30 +9,37 @@ import com.google.flatbuffers.*;
 
 @SuppressWarnings("unused")
 public final class Names extends Table {
+  public static void ValidateVersion() { Constants.FLATBUFFERS_1_12_0(); }
   public static Names getRootAsNames(ByteBuffer _bb) { return getRootAsNames(_bb, new Names()); }
   public static Names getRootAsNames(ByteBuffer _bb, Names obj) { _bb.order(ByteOrder.LITTLE_ENDIAN); return (obj.__assign(_bb.getInt(_bb.position()) + _bb.position(), _bb)); }
-  public void __init(int _i, ByteBuffer _bb) { bb_pos = _i; bb = _bb; }
+  public void __init(int _i, ByteBuffer _bb) { __reset(_i, _bb); }
   public Names __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
   public String classNames(int j) { int o = __offset(4); return o != 0 ? __string(__vector(o) + j * 4) : null; }
   public int classNamesLength() { int o = __offset(4); return o != 0 ? __vector_len(o) : 0; }
+  public StringVector classNamesVector() { return classNamesVector(new StringVector()); }
+  public StringVector classNamesVector(StringVector obj) { int o = __offset(4); return o != 0 ? obj.__assign(__vector(o), 4, bb) : null; }
   public String methodNames(int j) { int o = __offset(6); return o != 0 ? __string(__vector(o) + j * 4) : null; }
   public int methodNamesLength() { int o = __offset(6); return o != 0 ? __vector_len(o) : 0; }
+  public StringVector methodNamesVector() { return methodNamesVector(new StringVector()); }
+  public StringVector methodNamesVector(StringVector obj) { int o = __offset(6); return o != 0 ? obj.__assign(__vector(o), 4, bb) : null; }
   public String descriptions(int j) { int o = __offset(8); return o != 0 ? __string(__vector(o) + j * 4) : null; }
   public int descriptionsLength() { int o = __offset(8); return o != 0 ? __vector_len(o) : 0; }
+  public StringVector descriptionsVector() { return descriptionsVector(new StringVector()); }
+  public StringVector descriptionsVector(StringVector obj) { int o = __offset(8); return o != 0 ? obj.__assign(__vector(o), 4, bb) : null; }
 
   public static int createNames(FlatBufferBuilder builder,
       int class_namesOffset,
       int method_namesOffset,
       int descriptionsOffset) {
-    builder.startObject(3);
+    builder.startTable(3);
     Names.addDescriptions(builder, descriptionsOffset);
     Names.addMethodNames(builder, method_namesOffset);
     Names.addClassNames(builder, class_namesOffset);
     return Names.endNames(builder);
   }
 
-  public static void startNames(FlatBufferBuilder builder) { builder.startObject(3); }
+  public static void startNames(FlatBufferBuilder builder) { builder.startTable(3); }
   public static void addClassNames(FlatBufferBuilder builder, int classNamesOffset) { builder.addOffset(0, classNamesOffset, 0); }
   public static int createClassNamesVector(FlatBufferBuilder builder, int[] data) { builder.startVector(4, data.length, 4); for (int i = data.length - 1; i >= 0; i--) builder.addOffset(data[i]); return builder.endVector(); }
   public static void startClassNamesVector(FlatBufferBuilder builder, int numElems) { builder.startVector(4, numElems, 4); }
@@ -43,8 +50,15 @@ public final class Names extends Table {
   public static int createDescriptionsVector(FlatBufferBuilder builder, int[] data) { builder.startVector(4, data.length, 4); for (int i = data.length - 1; i >= 0; i--) builder.addOffset(data[i]); return builder.endVector(); }
   public static void startDescriptionsVector(FlatBufferBuilder builder, int numElems) { builder.startVector(4, numElems, 4); }
   public static int endNames(FlatBufferBuilder builder) {
-    int o = builder.endObject();
+    int o = builder.endTable();
     return o;
+  }
+
+  public static final class Vector extends BaseVector {
+    public Vector __assign(int _vector, int _element_size, ByteBuffer _bb) { __reset(_vector, _element_size, _bb); return this; }
+
+    public Names get(int j) { return get(new Names(), j); }
+    public Names get(Names obj, int j) {  return obj.__assign(__indirect(__element(j), bb), bb); }
   }
 }
 
