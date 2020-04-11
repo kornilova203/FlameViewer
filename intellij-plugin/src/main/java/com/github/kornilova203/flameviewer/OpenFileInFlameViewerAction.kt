@@ -18,6 +18,7 @@ class OpenFileInFlameViewerAction : DumbAwareAction() {
     private val LOG = Logger.getInstance(OpenFileInFlameViewerAction::class.java)
 
     override fun actionPerformed(e: AnActionEvent) {
+        sendUsageUpdate()
         val file = getFile(e) ?: return
         val project = e.project ?: return
 
