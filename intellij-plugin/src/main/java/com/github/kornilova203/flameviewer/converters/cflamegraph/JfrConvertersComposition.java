@@ -6,7 +6,7 @@ import com.github.kornilova203.flameviewer.LoggerAdapter;
 import com.github.kornilova203.flameviewer.converters.ConversionException;
 import com.github.kornilova203.flameviewer.converters.Converter;
 import com.github.kornilova203.flameviewer.converters.calltraces.StacksParser;
-import com.github.kornilova_l.flight_parser.FlightParser;
+import com.github.kornilova203.flameviewer.flight_parser.FlightParser;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.configurations.SimpleJavaParameters;
