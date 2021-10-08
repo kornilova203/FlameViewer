@@ -2,7 +2,7 @@ package com.github.kornilova203.flameviewer.converters.cflamegraph;
 
 import com.github.kornilova203.flameviewer.FlameIndicator;
 import com.github.kornilova203.flameviewer.converters.Converter;
-import com.github.kornilova_l.flight_parser.FlightParser;
+import com.github.kornilova203.flameviewer.flight_parser.FlightParser;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
